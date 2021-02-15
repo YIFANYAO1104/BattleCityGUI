@@ -27,12 +27,12 @@ public enum EntityNames {
     public static String GetNameOfEntity(EntityNames e) {
         return e.toString();
     }
-    
+
     @Override
     public String toString() {
         return EntityNames.GetNameOfEntity(this.id);
     }
-    
+
     static public String GetNameOfEntity(int n) {
         return "(have no idea how to distinguish the item)";
     }

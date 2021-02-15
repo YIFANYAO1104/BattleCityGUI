@@ -5,7 +5,7 @@ import com.bham.bc.common.BaseGameEntity;
 import java.util.TreeSet;
 
 import static com.bham.bc.EntityManager.EntityMgr;
-import static com.bham.bc.EntityNames.GetNameOfEntity;
+
 import static com.bham.bc.common.Messaging.MessageTypes.MsgToStr;
 import static com.bham.bc.common.Time.CrudeTimer.Clock;
 
@@ -104,8 +104,8 @@ public class MessageDispatcher {
          */
         if (delay <= 0.0f) {
             System.out.println("\nInstant telegram dispatched at time: " + Clock.GetCurrentTime()
-                    + " by " + GetNameOfEntity(pSender.ID()) + " to "
-                    + GetNameOfEntity(pReceiver.ID())
+                    + " by " + pSender.toString() + " to "
+                    + pReceiver.toString()
                     + ". Msg is: " + MsgToStr(msg));
 
             /**
@@ -126,9 +126,9 @@ public class MessageDispatcher {
 
             PriorityQ.add(telegram);
 
-            System.out.println("\nDelayed telegram from " + GetNameOfEntity(pSender.ID())
+            System.out.println("\nDelayed telegram from " + pSender.toString()
                     + " recorded at time " + Clock.GetCurrentTime() + " for "
-                    + GetNameOfEntity(pReceiver.ID()) + ". Msg is " + MsgToStr(msg));
+                    + pReceiver.toString() + ". Msg is " + MsgToStr(msg));
         }
     }
 
@@ -159,7 +159,7 @@ public class MessageDispatcher {
             BaseGameEntity pReceiver = EntityMgr.GetEntityFromID(telegram.Receiver);
 
             System.out.println("\nQueued telegram ready for dispatch: Sent to "
-                    + GetNameOfEntity(pReceiver.ID()) + ". Msg is " + MsgToStr(telegram.Msg));
+                    + pReceiver.toString() + ". Msg is " + MsgToStr(telegram.Msg));
 
             Discharge(pReceiver, telegram);
             PriorityQ.remove(PriorityQ.last());
