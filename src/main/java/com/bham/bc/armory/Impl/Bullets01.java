@@ -5,6 +5,7 @@ import com.bham.bc.common.Constants;
 import com.bham.bc.common.Direction;
 
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,19 +43,12 @@ public class Bullets01 extends TankBullet {
 	 * A image Array to put bullet in different directions, should replace images later
 	 */
 	void initImages() {
+
 		entityImags = new Image[] {
-				tk.getImage(Bullets01.class.getClassLoader().getResource(
-						"images/bulletL.gif")),
-
-				tk.getImage(Bullets01.class.getClassLoader().getResource(
-						"images/bulletU.gif")),
-
-				tk.getImage(Bullets01.class.getClassLoader().getResource(
-						"images/bulletR.gif")),
-
-				tk.getImage(Bullets01.class.getClassLoader().getResource(
-						"images/bulletD.gif")),
-
+				tk.getImage("resources/Images/bulletL.gif"),
+				tk.getImage("resources/Images/bulletU.gif"),
+				tk.getImage("resources/Images/bulletR.gif"),
+				tk.getImage("resources/Images/bulletD.gif"),
 		};
 
 		imgs.put("L", entityImags[0]);
