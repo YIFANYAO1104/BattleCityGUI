@@ -171,14 +171,7 @@ abstract public class TankBullet extends MovingEntity {
     /**
      * If bullet is not alive, then Entity manager should remove this
      */
-    @Override
-    public void update() {
-        if(!live){
-            EntityMgr.RemoveEntity(this);
 
-        }
-
-    }
 
     @Override
     public void render(Graphics g) {

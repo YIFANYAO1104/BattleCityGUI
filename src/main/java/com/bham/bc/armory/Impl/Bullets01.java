@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.bham.bc.CenterController.centerController;
+import static com.bham.bc.EntityManager.EntityMgr;
 
 public class Bullets01 extends TankBullet {
 	/**
@@ -106,11 +107,6 @@ public class Bullets01 extends TankBullet {
 	 */
 	@Override
 	public void render(Graphics g) {
-		update();
-		if (!live) {
-			centerController.removeBullet(this);
-			return;
-		}
 
 		switch (direction) {
 		case L:
@@ -131,7 +127,21 @@ public class Bullets01 extends TankBullet {
 
 		}
 
+	}
+
+	@Override
+	public void update() {
+		if(!live){
+			EntityMgr.RemoveEntity(this);
+		}
+
 		move();
+
+		if (!live) {
+			centerController.removeBullet(this);
+			return;
+		}
+
 	}
 
 

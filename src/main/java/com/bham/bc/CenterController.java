@@ -164,6 +164,7 @@ public class CenterController extends BaseGameEntity {
          */
         for (int i = 0; i < bullets.size(); i++) {
             TankBullet m = bullets.get(i);
+            m.update();
             m.hitTanks(enemyTanks);
             m.hitTank(homeTank);
             for(int j=0;j<bullets.size();j++){
