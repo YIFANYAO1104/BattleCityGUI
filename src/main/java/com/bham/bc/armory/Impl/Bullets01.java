@@ -1,5 +1,6 @@
 package com.bham.bc.armory.Impl;
 
+import com.bham.bc.BombTank;
 import com.bham.bc.armory.TankBullet;
 import com.bham.bc.common.Constants;
 import com.bham.bc.common.Direction;
@@ -45,10 +46,10 @@ public class Bullets01 extends TankBullet {
 	void initImages() {
 
 		entityImags = new Image[] {
-				tk.getImage("resources/Images/bulletL.gif"),
-				tk.getImage("resources/Images/bulletU.gif"),
-				tk.getImage("resources/Images/bulletR.gif"),
-				tk.getImage("resources/Images/bulletD.gif"),
+				tk.getImage(BombTank.class.getResource("/Images/bulletL.gif")),
+				tk.getImage(BombTank.class.getResource("/Images/bulletU.gif")),
+				tk.getImage(BombTank.class.getResource("/Images/bulletR.gif")),
+				tk.getImage(BombTank.class.getResource("/Images/bulletD.gif")),
 		};
 
 		imgs.put("L", entityImags[0]);
