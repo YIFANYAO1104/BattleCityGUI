@@ -22,17 +22,17 @@ public class CenterController extends BaseGameEntity {
     /**
      * The message to indicate Victory Or Defeat
      */
-    public Boolean win=false,lose=false;
+    private Boolean win=false,lose=false;
     /** Initialize HomeTank(Player Tank)*/
-    public HomeTank homeTank;
+    private HomeTank homeTank;
     /** Initialize a Container of Enemy Tanks */
-    public List<Enemy> enemyTanks = new ArrayList<Enemy>();
+    private List<Enemy> enemyTanks = new ArrayList<Enemy>();
     /** Initialize a Container of Tanks that got bombed and hit*/
-    public List<BombTank> bombTanks = new ArrayList<BombTank>();
+    private List<BombTank> bombTanks = new ArrayList<BombTank>();
     /** Initialize a Container of All Bullets created by All Tanks*/
-    public List<TankBullet> bullets = new ArrayList<TankBullet>();
+    private List<TankBullet> bullets = new ArrayList<TankBullet>();
     /** Initialize an Object Of GameMap*/
-    public GameMap gameMap = new GameMap();
+    private GameMap gameMap = new GameMap();
 
 
     //These are functions that might be used by frontend----------------------------------------------------
