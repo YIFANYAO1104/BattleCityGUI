@@ -1,7 +1,7 @@
 package com.bham.bc.view;
 
-import com.bham.bc.common.Constants;
-import static com.bham.bc.CenterController.*;
+import com.bham.bc.utils.Constants;
+import static com.bham.bc.components.CenterController.*;
 
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
@@ -17,8 +17,8 @@ import javafx.stage.Stage;
  */
 public class GameViewManager {
 
-    private static final int GAME_WIDTH = Constants.WindowWidth;
-    private static final int GAME_HEIGHT = Constants.WindowHeight;
+    private static final int GAME_WIDTH = Constants.WINDOW_WIDTH;
+    private static final int GAME_HEIGHT = Constants.WINDOW_HEIGHT;
 
     private AnchorPane gamePane;
     private Scene gameScene;

@@ -3,7 +3,6 @@ package com.bham.bc.view;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -45,7 +44,7 @@ public class MenuViewManager {
 
     /**
      * returns the main stage used for the menu
-     * @return the main stage
+     * @return the menu stage
      */
     public Stage getMainStage() {
         return mainStage;
