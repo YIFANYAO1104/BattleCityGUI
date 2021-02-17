@@ -1,9 +1,4 @@
-/**
- * @author Petr (http://www.sallyx.org/)
- */
 package com.bham.bc.common.Messaging;
-
-
 
 /**
  * Class for building a telegram

@@ -4,8 +4,9 @@ import com.bham.bc.BombTank;
 import com.bham.bc.armory.TankBullet;
 import com.bham.bc.common.Constants;
 import com.bham.bc.common.Direction;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
-import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,8 +19,8 @@ public class Bullets01 extends TankBullet {
 	 * Static member to indicates the velocity of Bullet in horizontal and vertical
 	 * It's not redundant but other classes could simply reference them by Bullets01.speedX
 	 */
-	public static int speedX = 12;
-	public static int speedY = 12;
+	public static int speedX = 2;
+	public static int speedY = 2;
 	/**
 	 * Size of Bullet01
 	 * It's not redundant but other classes could simply reference them by Bullets01.width
@@ -46,20 +47,20 @@ public class Bullets01 extends TankBullet {
 	 */
 	void initImages() {
 
-		entityImags = new Image[] {
-				tk.getImage(BombTank.class.getResource("/Images/bulletL.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/bulletU.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/bulletR.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/bulletD.gif")),
+		entityImages = new Image[] {
+				new Image("file:src/main/resources/Images/bulletL.gif"),
+				new Image("file:src/main/resources//Images/bulletU.gif"),
+				new Image("file:src/main/resources//Images/bulletR.gif"),
+				new Image("file:src/main/resources//Images/bulletD.gif"),
 		};
 
-		imgs.put("L", entityImags[0]);
+		imgs.put("L", entityImages[0]);
 
-		imgs.put("U", entityImags[1]);
+		imgs.put("U", entityImages[1]);
 
-		imgs.put("R", entityImags[2]);
+		imgs.put("R", entityImages[2]);
 
-		imgs.put("D", entityImags[3]);
+		imgs.put("D", entityImages[3]);
 
 	}
 	/**
@@ -98,26 +99,26 @@ public class Bullets01 extends TankBullet {
 	/**
 	 * The method to draw the Bullet
 	 * Using bullet's Direction to Get the corresponding Pic to render
-	 * @param g
+	 * @param gc
 	 */
 	@Override
-	public void render(Graphics g) {
+	public void render(GraphicsContext gc) {
 
 		switch (direction) {
 		case L:
-			g.drawImage(imgs.get("L"), x, y, null);
+			gc.drawImage(imgs.get("L"), x, y);
 			break;
 
 		case U:
-			g.drawImage(imgs.get("U"), x, y, null);
+			gc.drawImage(imgs.get("U"), x, y);
 			break;
 
 		case R:
-			g.drawImage(imgs.get("R"), x, y, null);
+			gc.drawImage(imgs.get("R"), x, y);
 			break;
 
 		case D:
-			g.drawImage(imgs.get("D"), x, y, null);
+			gc.drawImage(imgs.get("D"), x, y);
 			break;
 
 		}

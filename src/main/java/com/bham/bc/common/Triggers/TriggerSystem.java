@@ -10,8 +10,8 @@ package com.bham.bc.common.Triggers;
 
 
 import com.bham.bc.tank.Tank;
+import javafx.scene.canvas.GraphicsContext;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -83,9 +83,9 @@ public class TriggerSystem<trigger_type extends Trigger> {
      * some triggers are required to be rendered (like giver-triggers for
      * example)
      */
-    public void render(Graphics g) {
+    public void render(GraphicsContext gc) {
         for (trigger_type curTrg : m_Triggers) {
-            curTrg.render(g);
+            curTrg.render(gc);
         }
     }
 

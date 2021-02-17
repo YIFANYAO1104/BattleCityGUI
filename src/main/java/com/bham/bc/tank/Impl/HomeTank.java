@@ -8,9 +8,13 @@ import com.bham.bc.common.Direction;
 import com.bham.bc.common.Messaging.Telegram;
 import com.bham.bc.common.MovingEntity;
 import com.bham.bc.tank.Tank;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.CenterController.centerController;
 
@@ -40,10 +44,7 @@ public class HomeTank extends Tank {
 	 * @param dir
 	 */
 	public HomeTank(int x, int y, Direction dir) {
-		super(6,6,
-				x,y,
-				35,35,
-				dir);
+		super(1,1, x,y,35,35,dir);
 		initImages();
 	}
 
@@ -51,75 +52,63 @@ public class HomeTank extends Tank {
 	 * List of images should be replaced later
 	 */
 	private void initImages() {
-		entityImags = new Image[] {
-				tk.getImage(BombTank.class.getResource("/Images/HtankD.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/HtankU.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/HtankL.gif")),
-				tk.getImage(BombTank.class.getResource("/Images/HtankR.gif")),
+		entityImages = new Image[] {
+				new Image("file:src/main/resources/Images/HtankD.gif"),
+				new Image("file:src/main/resources/Images/HtankU.gif"),
+				new Image("file:src/main/resources/Images/HtankL.gif"),
+				new Image("file:src/main/resources/Images/HtankR.gif"),
 		};
 	}
 
 
 	/**
 	 * Draw Blood Bar
-	 * @param g
+	 * @param gc
 	 */
-	private void renderBloodbBar(Graphics g) {
-		Color c = g.getColor();
-		g.setColor(Color.RED);
-		g.drawRect(375, 585, width, 10);
+	private void renderBloodbBar(GraphicsContext gc) {
+		Paint c = gc.getFill();
+		gc.setFill(Color.RED);
+		gc.fillRect(375, 585, width, 10);
 		int w = width * life / 200;
-		g.fillRect(375, 585, w, 10);
-		g.setColor(c);
+		gc.fillRect(375, 585, w, 10);
+		gc.setFill(c);
 	}
 
 	/**
 	 * Render Method
 	 * Use directions to determine the image of Player Tank
-	 * @param g
+	 * @param gc
 	 */
 	@Override
-	public void render(Graphics g) {
+	public void render(GraphicsContext gc) {
 
 		if (!live) return;
 
 		//It is covered by home currently. So you could not see it.
-		renderBloodbBar(g);
+		renderBloodbBar(gc);
 
 		switch (Kdirection) {
 			case D:
-				g.drawImage(entityImags[0], x, y, null);
+				gc.drawImage(entityImages[0], x, y);
 				break;
 			case U:
-				g.drawImage(entityImags[1], x, y, null);
+				gc.drawImage(entityImages[1], x, y);
 				break;
 			case L:
-				g.drawImage(entityImags[2], x, y, null);
+				gc.drawImage(entityImages[2], x, y);
 				break;
 			case R:
-				g.drawImage(entityImags[3], x, y, null);
+				gc.drawImage(entityImages[3], x, y);
 				break;
 		}
 	}
 
-	public void keyPressed(KeyEvent e) {  
-		int key = e.getKeyCode();
-		switch (key) {
-		case KeyEvent.VK_D:
-			bR = true;
-			break;
-			
-		case KeyEvent.VK_A:
-			bL = true;
-			break;
-		
-		case KeyEvent.VK_W:  
-			bU = true;
-			break;
-		
-		case KeyEvent.VK_S:
-			bD = true;
-			break;
+	public void keyPressed(KeyEvent e) {
+		switch (e.getCode()) {
+			case D: bR = true; break;
+			case A: bL = true; break;
+			case W: bU = true; break;
+			case S: bD = true; break;
 		}
 		decideDirection();
 	}
@@ -143,31 +132,13 @@ public class HomeTank extends Tank {
 			direction = Direction.STOP; 
 	}
 
-	public void keyReleased(KeyEvent e) {  
-		int key = e.getKeyCode();
-		switch (key) {
-		
-		case KeyEvent.VK_F:
-			fire();
-			break;
-			
-		case KeyEvent.VK_D:
-			bR = false;
-			break;
-		
-		case KeyEvent.VK_A:
-			bL = false;
-			break;
-		
-		case KeyEvent.VK_W:
-			bU = false;
-			break;
-		
-		case KeyEvent.VK_S:
-			bD = false;
-			break;
-			
-
+	public void keyReleased(KeyEvent e) {
+		switch (e.getCode()) {
+			case F: fire(); break;
+			case D: bR = false; break;
+			case A: bL = false; break;
+			case W: bU = false; break;
+			case S: bD = false; break;
 		}
 		decideDirection(); 
 	}
@@ -205,10 +176,6 @@ public class HomeTank extends Tank {
 		return m;
 	}
 
-	public Rectangle getRect() {
-		return new Rectangle(x, y, width, length);
-	}
-
 	public boolean isLive() {
 		return live;
 	}
@@ -231,7 +198,7 @@ public class HomeTank extends Tank {
 			MovingEntity t = tanks.get(i);
 			if (this != t) {
 				if (this.live && t.isLive()
-						&& this.getRect().intersects(t.getRect())) {
+						&& this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
 					this.changToOldDir();
 					t.changToOldDir();
 					return true;

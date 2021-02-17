@@ -8,11 +8,12 @@ package com.bham.bc.environment.triggers;
 import com.bham.bc.common.BaseGameEntity;
 import com.bham.bc.common.Messaging.Telegram;
 import com.bham.bc.common.Triggers.RespawningTrigger;
-import com.bham.bc.common.Triggers.Vector2D;
 import com.bham.bc.environment.Impl.CommonWall;
 import com.bham.bc.tank.Tank;
-
-import java.awt.*;
+import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.common.Constants.FrameRate;
 
@@ -31,14 +32,13 @@ public class HealthGiver extends RespawningTrigger<Tank> {
         this.health = health;
 
         //create this trigger's region of fluence
-        addRectangularTriggerRegion(new Vector2D(x, y), new Vector2D(width, length));
+        addRectangularTriggerRegion(new Point2D(x, y), new Point2D(width, length));
         setRespawnDelay(respawnSeconds * FrameRate);
         initImages();
     }
 
     private void initImages() {
-        entityImags = new Image[] { tk.getImage(CommonWall.class
-                .getResource("/Images/hp.png")), };
+        entityImages = new Image[] {new Image("file:src/main/resources/Images/hp.png"), };
     }
 
     //if triggered, the bot's health will be incremented
@@ -53,14 +53,14 @@ public class HealthGiver extends RespawningTrigger<Tank> {
 
     //draws a box with a red cross at the trigger's location
     @Override
-    public void render(Graphics g) {
+    public void render(GraphicsContext gc) {
         if (isActive()) {
-            g.drawImage(entityImags[0], this.x, this.y, null);
+            gc.drawImage(entityImages[0], this.x, this.y);
         }
     }
 
     @Override
-    public Rectangle getRect() {
+    public Rectangle getHitBox() {
         return null;
     }
 

@@ -1,8 +1,10 @@
 package com.bham.bc.common;
 
 import com.bham.bc.common.Messaging.Telegram;
-
-import java.awt.*;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.EntityManager.EntityMgr;
 
@@ -27,8 +29,7 @@ abstract public class BaseGameEntity {
     /**
      * tool for loading and storing Images
      */
-    protected static Toolkit tk = Toolkit.getDefaultToolkit();
-    protected Image[] entityImags = null;
+    protected Image[] entityImages = null;
 
 
     /**
@@ -73,10 +74,8 @@ abstract public class BaseGameEntity {
 
     abstract public void update();
 
-    //g.drawImage(wallImags[0], x, y, null);
-    abstract public void render(Graphics g);
-    //return new Rectangle(x, y, width, length);
-    abstract public Rectangle getRect();
+    abstract public void render(GraphicsContext gc);
+    abstract public Rectangle getHitBox();
     abstract public boolean handleMessage(Telegram msg);
     abstract public String toString();
 }

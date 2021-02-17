@@ -8,8 +8,9 @@ import com.bham.bc.environment.Impl.CommonWall;
 import com.bham.bc.environment.Impl.Home;
 import com.bham.bc.tank.Impl.Enemy;
 import com.bham.bc.tank.Impl.HomeTank;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
 import java.util.List;
 
 import static com.bham.bc.CenterController.centerController;
@@ -72,7 +73,7 @@ abstract public class TankBullet extends MovingEntity {
         //与敌人碰撞到了
         //敌人活着
         //子弹只作用在对方身上
-        if (this.live && this.getRect().intersects(t.getRect()) && t.isLive()) {
+        if (this.live && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal()) && t.isLive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
             centerController.addBombTank(e);
@@ -92,7 +93,7 @@ abstract public class TankBullet extends MovingEntity {
      */
     public boolean hitTank(HomeTank t) {
 
-        if (this.live && this.getRect().intersects(t.getRect()) && t.isLive()) {
+        if (this.live && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal()) && t.isLive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
 
@@ -121,7 +122,7 @@ abstract public class TankBullet extends MovingEntity {
      * @return
      */
     public boolean hitWall(CommonWall w) {
-        if (this.live && this.getRect().intersects(w.getRect())) {
+        if (this.live && this.getHitBox().intersects(w.getHitBox().getBoundsInLocal())) {
             this.live = false;
             centerController.removeWall(w);
             return true;
@@ -136,7 +137,7 @@ abstract public class TankBullet extends MovingEntity {
      * @return
      */
     public boolean hitBullet(TankBullet w){
-        if (this.live && this.getRect().intersects(w.getRect())){
+        if (this.live && this.getHitBox().intersects(w.getHitBox().getBoundsInLocal())){
             this.live=false;
             centerController.removeBullet(w);
             return true;
@@ -150,7 +151,7 @@ abstract public class TankBullet extends MovingEntity {
      * @return
      */
     public boolean hitHome(Home h) {
-        if (this.live && this.getRect().intersects(h.getRect())) {
+        if (this.live && this.getHitBox().intersects(h.getHitBox().getBoundsInLocal())) {
             this.live = false;
             h.setLive(false);
             return true;
@@ -159,7 +160,7 @@ abstract public class TankBullet extends MovingEntity {
     }
 
 
-    public Rectangle getRect() {
+    public Rectangle getHitBox() {
         return new Rectangle(x, y, width, length);
     }
 
@@ -174,7 +175,7 @@ abstract public class TankBullet extends MovingEntity {
 
 
     @Override
-    public void render(Graphics g) {
+    public void render(GraphicsContext gc) {
 
     }
 

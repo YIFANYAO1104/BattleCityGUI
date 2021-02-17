@@ -2,8 +2,9 @@ package com.bham.bc.environment.Impl;
 
 import com.bham.bc.common.Messaging.Telegram;
 import com.bham.bc.environment.MapObject2D;
-
-import java.awt.*;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Home (Or something we need to protect, can be modified later)
@@ -23,8 +24,7 @@ public class Home extends MapObject2D {
 	}
 
 	private void initImages() {
-		entityImags = new Image[] {
-				tk.getImage(CommonWall.class.getResource("/Images/home.jpg")), };
+		entityImages = new Image[] { new Image("file:src/main/resources/Images/home.jpg"), };
 	}
 
 
@@ -34,10 +34,10 @@ public class Home extends MapObject2D {
 	}
 	/**
 	 * Draw the Home
-	 * @param g
+	 * @param gc
 	 */
-	public void render(Graphics g) {
-		g.drawImage(entityImags[0], x, y, null);
+	public void render(GraphicsContext gc) {
+		gc.drawImage(entityImages[0], x, y);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class Home extends MapObject2D {
 	}
 
 	@Override
-	public Rectangle getRect() { 
+	public Rectangle getHitBox() {
 		return new Rectangle(x, y, width, length);
 	}
 

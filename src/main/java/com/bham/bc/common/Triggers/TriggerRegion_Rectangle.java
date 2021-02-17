@@ -5,14 +5,15 @@
  */
 package com.bham.bc.common.Triggers;
 
-import java.awt.*;
+import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
 
 public class TriggerRegion_Rectangle extends TriggerRegion {
 
     private Rectangle rectangle;
 
-    public TriggerRegion_Rectangle(Vector2D pos, Vector2D radius) {
-        rectangle = new Rectangle(pos.x, pos.y, radius.x, radius.y);
+    public TriggerRegion_Rectangle(Point2D pos, Point2D radius) {
+        rectangle = new Rectangle(pos.getX(), pos.getY(), radius.getX(), radius.getY());
     }
 
     /**
@@ -20,8 +21,8 @@ public class TriggerRegion_Rectangle extends TriggerRegion {
      * intersection test. Instead we'll just test the bounding box of the given
      * circle with the rectangle.
      */
-    public boolean isTouching(Vector2D pos, Vector2D EntityRadius) {
-        Rectangle r = new Rectangle(pos.x, pos.y, EntityRadius.x, EntityRadius.y);
-        return r.intersects(this.rectangle);
+    public boolean isTouching(Point2D pos, Point2D EntityRadius) {
+        Rectangle r = new Rectangle(pos.getX(), pos.getY(), EntityRadius.getX(), EntityRadius.getY());
+        return r.intersects(this.rectangle.getBoundsInLocal());
     }
 }

@@ -7,8 +7,10 @@ import com.bham.bc.common.Direction;
 import com.bham.bc.common.Messaging.Telegram;
 import com.bham.bc.common.MovingEntity;
 import com.bham.bc.tank.Tank;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
-import java.awt.*;
 import java.util.Random;
 
 import static com.bham.bc.CenterController.centerController;
@@ -42,10 +44,7 @@ public class Enemy extends Tank {
      *  a constructor of enemy tank,
      *  Create Enemy tank using coordinate ,direction and centerController as parameters */
     public Enemy(int x, int y, Direction dir) {
-        super(6,6,
-                x,y,
-                35,35,
-                dir);
+        super(1,1, x, y, 35,35, dir);
 
         initImages();
     }
@@ -53,17 +52,17 @@ public class Enemy extends Tank {
      * List of Enemy tank photos of different directions,should be replace Later
      */
     private void initImages() {
-        entityImags = new Image[] {
-                tk.getImage(BombTank.class.getResource("/Images/tankD.gif")),
-                tk.getImage(BombTank.class.getResource("/Images/tankU.gif")),
-                tk.getImage(BombTank.class.getResource("/Images/tankL.gif")),
-                tk.getImage(BombTank.class.getResource("/Images/tankR.gif")),
+        entityImages = new Image[] {
+                new Image("file:src/main/resources/Images/tankD.gif"),
+                new Image("file:src/main/resources/Images/tankU.gif"),
+                new Image("file:src/main/resources/Images/tankL.gif"),
+                new Image("file:src/main/resources/Images/tankR.gif"),
         };
     }
     /**This method  render all kinds of tanks needed by choosing the particular image in the entityImage list
      * After render the image of tank, this method calls move() and aimAndShoot() to update */
     @Override
-    public void render(Graphics g) {
+    public void render(GraphicsContext gc) {
 
         if (!live) {
             centerController.removeEnemy(this);
@@ -72,18 +71,18 @@ public class Enemy extends Tank {
 
         switch (Kdirection) {
             case D:
-                    g.drawImage(entityImags[0], x, y, null);
+                    gc.drawImage(entityImages[0], x, y);
                 break;
 
             case U:
-                    g.drawImage(entityImags[1], x, y, null);
+                    gc.drawImage(entityImages[1], x, y);
                 break;
             case L:
-                    g.drawImage(entityImags[2], x, y, null);
+                    gc.drawImage(entityImages[2], x, y);
                 break;
 
             case R:
-                    g.drawImage(entityImags[3], x, y, null);
+                    gc.drawImage(entityImages[3], x, y);
                 break;
         }
 
@@ -99,7 +98,7 @@ public class Enemy extends Tank {
         if((x-15)<0) rx=0;
         if((y-15)<0)ry=0;
         Rectangle a=new Rectangle(rx, ry,60,60);
-        if (this.live && a.intersects(centerController.getHomeRect())) {
+        if (this.live && a.intersects(centerController.getHomeHitBox().getBoundsInLocal())) {
             return true;
         }
         return false;
@@ -147,7 +146,7 @@ public class Enemy extends Tank {
             MovingEntity t = be.get(i);
             if (this != t) {
                 if (this.live && t.isLive()
-                        && this.getRect().intersects(t.getRect())) {
+                        && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
                     this.changToOldDir();
                     t.changToOldDir();
                     return true;

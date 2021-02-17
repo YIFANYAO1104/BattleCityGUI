@@ -2,9 +2,8 @@ package com.bham.bc.tank;
 
 import com.bham.bc.common.Direction;
 import com.bham.bc.common.MovingEntity;
-import com.bham.bc.common.Triggers.Vector2D;
-
-import java.awt.*;
+import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
 
 abstract public class Tank extends MovingEntity {
 
@@ -25,12 +24,16 @@ abstract public class Tank extends MovingEntity {
     }
 
     //Will be used by Triggers------------------------------------------------------------------------
-    public Vector2D getPosition() {
-        return new Vector2D(x,y);
+    public Point2D getPosition() {
+        return new Point2D(x,y);
     }
 
-    public Vector2D getRadius() {
-        return new Vector2D(width,length);
+    public Point2D getRadius() {
+        return new Point2D(width,length);
+    }
+
+    public Rectangle getHitBox() {
+        return new Rectangle(x, y, width, length);
     }
 
     abstract public void increaseHealth(int health);

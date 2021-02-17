@@ -1,6 +1,6 @@
 package com.bham.bc.common;
 
-import java.awt.*;
+import javafx.scene.shape.Rectangle;
 
 public abstract class MovingEntity extends BaseGameEntity{
 

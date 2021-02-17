@@ -8,6 +8,7 @@ package com.bham.bc.common.Triggers;
 
 
 import com.bham.bc.common.BaseGameEntity;
+import javafx.geometry.Point2D;
 
 abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGameEntity {
 
@@ -43,7 +44,7 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
      * returns true if the entity given by a position and bounding radius is
      * overlapping the trigger region
      */
-    protected boolean isTouchingTrigger(Vector2D EntityPos, Vector2D EntityRadius) {
+    protected boolean isTouchingTrigger(Point2D EntityPos, Point2D EntityRadius) {
         if (triggerRegion != null) {
             return triggerRegion.isTouching(EntityPos, EntityRadius);
         }
@@ -51,7 +52,7 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
     }
 
     //child classes use one of these methods to initialize the trigger region
-    protected void addRectangularTriggerRegion(Vector2D pos, Vector2D radius) {
+    protected void addRectangularTriggerRegion(Point2D pos, Point2D radius) {
         triggerRegion = new TriggerRegion_Rectangle(pos, radius);
     }
 

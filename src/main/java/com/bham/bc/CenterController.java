@@ -10,8 +10,10 @@ import com.bham.bc.environment.GameMap;
 import com.bham.bc.tank.Impl.Enemy;
 import com.bham.bc.tank.Impl.HomeTank;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.Rectangle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -177,7 +179,7 @@ public class CenterController extends BaseGameEntity {
     }
 
     @Override
-    public void render(Graphics g) {
+    public void render(GraphicsContext gc) {
         /**
          *  The order of Render does matter
          *  The latter render will cover the previous render
@@ -186,22 +188,22 @@ public class CenterController extends BaseGameEntity {
 
         for (int i = 0; i < bullets.size(); i++) {
             TankBullet t = bullets.get(i);
-            t.render(g);
+            t.render(gc);
         }
 
         //the blood bar is here. But it's covered currently
-        homeTank.render(g);
+        homeTank.render(gc);
         for (int i = 0; i < enemyTanks.size(); i++) {
             Enemy t = enemyTanks.get(i);
-            t.render(g);
+            t.render(gc);
         }
         for (int i = 0; i < bombTanks.size(); i++) {
             BombTank bt = bombTanks.get(i);
-            bt.render(g);
+            bt.render(gc);
         }
 
 
-        gameMap.renderAll(g);
+        gameMap.renderAll(gc);
 
 
     }
@@ -253,8 +255,8 @@ public class CenterController extends BaseGameEntity {
         return homeTank.getY();
     }
 
-    public Rectangle getHomeRect(){
-        return homeTank.getRect();
+    public Rectangle getHomeHitBox(){
+        return homeTank.getHitBox();
     }
 
     /**
@@ -275,7 +277,7 @@ public class CenterController extends BaseGameEntity {
     //These are functions that might be used by backend----------------------------------------------------
 
     @Override
-    public Rectangle getRect() {
+    public Rectangle getHitBox() {
         return null;
     }
 

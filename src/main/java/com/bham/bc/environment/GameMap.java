@@ -6,8 +6,10 @@ import com.bham.bc.environment.Impl.CommonWall;
 import com.bham.bc.environment.Impl.Home;
 import com.bham.bc.environment.triggers.HealthGiver;
 import com.bham.bc.tank.Tank;
+import javafx.geometry.Bounds;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Shape;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -113,27 +115,27 @@ public class GameMap {
     //renderers-------------------------------------------------------------------
     /**
      * The following methods calls all render methods of particular Objects
-     * @param g
+     * @param gc
      */
-    public void renderAll(Graphics g){
-        renderHome(g);
-        renderHomeWall(g);
-        renderTriggers(g);
+    public void renderAll(GraphicsContext gc){
+        renderHome(gc);
+        renderHomeWall(gc);
+        renderTriggers(gc);
     }
 
-    public void renderHome(Graphics g){
-        if (home != null) home.render(g);
+    public void renderHome(GraphicsContext gc){
+        if (home != null) home.render(gc);
     }
 
-    public void renderHomeWall(Graphics g){
+    public void renderHomeWall(GraphicsContext gc){
         for (int i = 0; i < homeWall.size(); i++) {
             CommonWall w = homeWall.get(i);
-            w.render(g);
+            w.render(gc);
         }
     }
 
-    public void renderTriggers(Graphics g){
-        triggerSystem.render(g);
+    public void renderTriggers(GraphicsContext gc){
+        triggerSystem.render(gc);
     }
 
     //renderers------------------------------------------------------
@@ -187,7 +189,7 @@ public class GameMap {
      * @param t
      */
     public void collideWithHome(Tank t){
-        if (t.isLive() && home.getRect().intersects(t.getRect())) {
+        if (t.isLive() && home.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
             centerController.changToOldDir(t);
         }
     }
@@ -199,7 +201,7 @@ public class GameMap {
     public void collideWithHomeWalls(Tank t){
         for (int i = 0; i < homeWall.size(); i++) {
             CommonWall w = homeWall.get(i);
-            if (t.isLive() && w.getRect().intersects(t.getRect())) {
+            if (t.isLive() && w.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
                 centerController.changToOldDir(t);
             }
         }

@@ -8,10 +8,12 @@
 package com.bham.bc.common.Triggers;
 
 
+import javafx.geometry.Point2D;
+
 abstract class TriggerRegion {
     /**
      * returns true if an entity of the given size and position is intersecting
      * the trigger region.
      */
-    abstract boolean isTouching(Vector2D EntityPos, Vector2D EntityRadius);
+    abstract boolean isTouching(Point2D EntityPos, Point2D EntityRadius);
 }

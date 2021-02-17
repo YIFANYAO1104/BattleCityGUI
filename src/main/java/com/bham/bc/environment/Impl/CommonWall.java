@@ -2,8 +2,9 @@ package com.bham.bc.environment.Impl;
 
 import com.bham.bc.common.Messaging.Telegram;
 import com.bham.bc.environment.MapObject2D;
-
-import java.awt.*;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 public class CommonWall extends MapObject2D {
 	/**
@@ -18,17 +19,16 @@ public class CommonWall extends MapObject2D {
 	}
 
 	private void initImages() {
-		entityImags = new Image[] {
-				tk.getImage(CommonWall.class.getResource("/Images/commonWall.gif")), };
+		entityImages = new Image[] {new Image("file:src/main/resources/Images/commonWall.gif"), };
 	}
 
 	@Override
-	public void render(Graphics g) {
-		g.drawImage(entityImags[0], x, y, null);
+	public void render(GraphicsContext gc) {
+		gc.drawImage(entityImages[0], x, y);
 	}
 
 	@Override
-	public Rectangle getRect() {  
+	public Rectangle getHitBox() {
 		return new Rectangle(x, y, width, length);
 	}
 
