@@ -93,14 +93,14 @@ public class GameMap {
      * Clear all objects on the map (up to what kind of objects is designed)
      */
     public void clearAll(){
-        clearHomeWalls();
+        clearObstacles();
         clearTriggers();
     }
 
     /**
      * Clean all home walls
      */
-    public void clearHomeWalls(){
+    public void clearObstacles(){
         obstacles.clear();
     }
 
