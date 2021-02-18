@@ -2,8 +2,15 @@ package com.bham.bc.view;
 
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
+import static com.bham.bc.view.Camera.*;
 
 import javafx.animation.AnimationTimer;
+import javafx.beans.Observable;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -121,9 +128,11 @@ public class GameViewManager {
             public void handle(long now) {
                 // Would be better to wrap rendering into one function
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
+
                 centerController.render(gc);                                      // Render backend content
                 renderScoreBoard();                                               // Render backend content
 
+                camera.update(gc);
                 centerController.update();                                        // Update backend content
 
                 // Would be better for the backend to trigger
