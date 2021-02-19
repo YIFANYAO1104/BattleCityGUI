@@ -186,7 +186,7 @@ public class GameMap {
      * @param t
      */
     public void collideWithHome(Tank t){
-        if (t.isLive() && home.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
+        if (t.isLive() && home.isIntersect(t)) {
             centerController.changToOldDir(t);
         }
     }
@@ -198,7 +198,7 @@ public class GameMap {
     public void collideWithHomeWalls(Tank t){
         for (int i = 0; i < homeWall.size(); i++) {
             CommonWall w = homeWall.get(i);
-            if (t.isLive() && w.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
+            if (t.isLive() && w.isIntersect(t)) {
                 centerController.changToOldDir(t);
             }
         }

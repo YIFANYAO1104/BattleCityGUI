@@ -291,4 +291,9 @@ public class CenterController extends BaseGameEntity {
     public String toString() {
         return "Centerctroller";
     }
+
+    @Override
+    public boolean isIntersect(BaseGameEntity b) {
+        return false;
+    }
 }

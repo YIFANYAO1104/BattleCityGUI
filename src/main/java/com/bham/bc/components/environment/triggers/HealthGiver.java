@@ -70,4 +70,9 @@ public class HealthGiver extends RespawnTrigger<Tank> {
     public String toString() {
         return null;
     }
+
+    @Override
+    public boolean isIntersect(BaseGameEntity b) {
+        return false;
+    }
 }

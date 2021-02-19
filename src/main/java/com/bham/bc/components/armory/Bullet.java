@@ -72,7 +72,7 @@ abstract public class Bullet extends MovingEntity {
         //与敌人碰撞到了
         //敌人活着
         //子弹只作用在对方身上
-        if (this.live && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal()) && t.isLive()) {
+        if (this.live && this.isIntersect(t) && t.isLive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
             centerController.addBombTank(e);
@@ -92,7 +92,7 @@ abstract public class Bullet extends MovingEntity {
      */
     public boolean hitTank(HomeTank t) {
 
-        if (this.live && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal()) && t.isLive()) {
+        if (this.live && this.isIntersect(t) && t.isLive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
 
@@ -121,7 +121,7 @@ abstract public class Bullet extends MovingEntity {
      * @return
      */
     public boolean hitWall(CommonWall w) {
-        if (this.live && this.getHitBox().intersects(w.getHitBox().getBoundsInLocal())) {
+        if (this.live && this.isIntersect(w)) {
             this.live = false;
             centerController.removeWall(w);
             return true;
@@ -136,7 +136,7 @@ abstract public class Bullet extends MovingEntity {
      * @return
      */
     public boolean hitBullet(Bullet w){
-        if (this.live && this.getHitBox().intersects(w.getHitBox().getBoundsInLocal())){
+        if (this.live && this.isIntersect(w)){
             this.live=false;
             centerController.removeBullet(w);
             return true;
@@ -150,7 +150,7 @@ abstract public class Bullet extends MovingEntity {
      * @return
      */
     public boolean hitHome(Home h) {
-        if (this.live && this.getHitBox().intersects(h.getHitBox().getBoundsInLocal())) {
+        if (this.live && this.isIntersect(h)) {
             this.live = false;
             h.setLive(false);
             return true;

@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment;
 
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -42,6 +43,12 @@ public class Home extends MapObject2D {
 	@Override
 	public boolean handleMessage(Telegram msg) {
 		return false;
+	}
+
+	@Override
+	public boolean isIntersect(BaseGameEntity b) {
+		Rectangle t = new Rectangle(x, y, width, length);
+		return t.intersects(b.getHitBox().getBoundsInLocal());
 	}
 
 	public boolean isLive() { 

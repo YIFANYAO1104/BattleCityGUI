@@ -146,7 +146,7 @@ public class Enemy extends Tank {
             MovingEntity t = be.get(i);
             if (this != t) {
                 if (this.live && t.isLive()
-                        && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
+                        && this.isIntersect(t)) {
                     this.changToOldDir();
                     t.changToOldDir();
                     return true;

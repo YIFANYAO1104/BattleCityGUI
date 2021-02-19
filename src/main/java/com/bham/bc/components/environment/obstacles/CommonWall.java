@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment.obstacles;
 
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.environment.MapObject2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -40,5 +41,11 @@ public class CommonWall extends MapObject2D {
 	@Override
 	public boolean handleMessage(Telegram msg) {
 		return false;
+	}
+
+	@Override
+	public boolean isIntersect(BaseGameEntity b) {
+		Rectangle t = new Rectangle(x, y, width, length);
+		return t.intersects(b.getHitBox().getBoundsInLocal());
 	}
 }
