@@ -51,7 +51,7 @@ public class GameViewManager {
         gamePane.getChildren().add(canvas);
 
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREEN);
-        cmr = new Camera(centerController.getHomeTank(), centerController.getHomeTank2());
+        cmr = new Camera(centerController.getHomeTank());
         gameScene.setCamera(cmr);
 
         gameStage = new Stage();

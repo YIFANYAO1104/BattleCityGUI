@@ -1,7 +1,6 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.HomeTank2;
 import com.bham.bc.components.characters.TrackableCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.Direction;
@@ -30,7 +29,6 @@ public class CenterController extends BaseGameEntity {
     private Boolean win=false,lose=false;
     /** Initialize HomeTank(Player Tank)*/
     private HomeTank homeTank;
-    private HomeTank2 homeTank2;
     /** Initialize a Container of Enemy Tanks */
     private List<Enemy> enemyTanks = new ArrayList<Enemy>();
     /** Initialize a Container of Tanks that got bombed and hit*/
@@ -80,7 +78,6 @@ public class CenterController extends BaseGameEntity {
      */
     public void keyReleased(KeyEvent e){
         homeTank.keyReleased(e);
-        homeTank2.keyReleased(e);
     }
     /**
      * A method to monitor the actions from keyBoard
@@ -89,7 +86,6 @@ public class CenterController extends BaseGameEntity {
      */
     public void keyPressed(KeyEvent e){
         homeTank.keyPressed(e);
-        homeTank2.keyPressed(e);
     }
     //These are functions that might be used by frontend----------------------------------------------------
 
@@ -112,7 +108,6 @@ public class CenterController extends BaseGameEntity {
     public CenterController(){
         super(GetNextValidID(),-1,-1);
         homeTank = new HomeTank(300, 560, Direction.STOP);
-        homeTank2 = new HomeTank2(500, 560, Direction.STOP);
         initEnemies();
     }
     /**
@@ -145,22 +140,19 @@ public class CenterController extends BaseGameEntity {
 
         //move-----------------
         homeTank.update();
-        homeTank2.update();
-        /*
+
         for (Enemy e : enemyTanks) {
             e.update();
         }
 
-         */
+
 
 
         //move-----------------
 
         //map----------------------------------
         gameMap.update(homeTank);
-        gameMap.update(homeTank2);
 
-        /*
         for (Enemy e : enemyTanks) {
             gameMap.update(e);
         }
@@ -177,8 +169,6 @@ public class CenterController extends BaseGameEntity {
             e.collideWithTanks(enemyTanks);
         }
 
-         */
-
 
         //tanks----------------------------------
         /**
@@ -190,7 +180,6 @@ public class CenterController extends BaseGameEntity {
          * 3.If Bullets hits environment Objects e.g Home and Wall (Updates game state)
          */
 
-        /*
         for (int i = 0; i < bullets.size(); i++) {
             Bullet m = bullets.get(i);
             m.update();
@@ -203,8 +192,6 @@ public class CenterController extends BaseGameEntity {
             }
             gameMap.update(m);
         }
-
-         */
 
 
 
@@ -219,18 +206,16 @@ public class CenterController extends BaseGameEntity {
          *  The latter render will cover the previous render
          *  For example,rending Tree at the end leads to successfully Shading
          */
-        /*
+
         for (int i = 0; i < bullets.size(); i++) {
             Bullet t = bullets.get(i);
             t.render(gc);
         }
 
-         */
 
         //the blood bar is here. But it's covered currently
         homeTank.render(gc);
-        homeTank2.render(gc);
-        /*
+
         for (int i = 0; i < enemyTanks.size(); i++) {
             Enemy t = enemyTanks.get(i);
             t.render(gc);
@@ -239,8 +224,6 @@ public class CenterController extends BaseGameEntity {
             BombTank bt = bombTanks.get(i);
             bt.render(gc);
         }
-
-         */
 
 
         gameMap.renderAll(gc);
@@ -301,10 +284,6 @@ public class CenterController extends BaseGameEntity {
 
     public TrackableCharacter getHomeTank() {
         return homeTank;
-    }
-
-    public TrackableCharacter getHomeTank2() {
-        return homeTank2;
     }
 
     /**
