@@ -3,10 +3,10 @@ package com.bham.bc.components.characters;
 
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
-import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.utils.Constants;
+import com.bham.bc.utils.messaging.Telegram;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,7 +16,7 @@ import javafx.scene.paint.Paint;
 
 import static com.bham.bc.components.CenterController.centerController;
 
-public class HomeTank extends Tank implements TrackableCharacter {
+public class HomeTank2 extends Tank implements TrackableCharacter {
 
 	public static int count = 0;
 	/**
@@ -44,7 +44,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 	 * @param y
 	 * @param dir
 	 */
-	public HomeTank(int x, int y, Direction dir) {
+	public HomeTank2(int x, int y, Direction dir) {
 		super(1,1, x,y,35,35,dir);
 		initImages();
 		initTrackableCoordinate();
@@ -107,10 +107,10 @@ public class HomeTank extends Tank implements TrackableCharacter {
 
 	public void keyPressed(KeyEvent e) {
 		switch (e.getCode()) {
-			case D: bR = true; break;
-			case A: bL = true; break;
-			case W: bU = true; break;
-			case S: bD = true; break;
+			case RIGHT: bR = true; break;
+			case LEFT: bL = true; break;
+			case UP: bU = true; break;
+			case DOWN: bD = true; break;
 		}
 		decideDirection();
 	}
@@ -137,10 +137,10 @@ public class HomeTank extends Tank implements TrackableCharacter {
 	public void keyReleased(KeyEvent e) {
 		switch (e.getCode()) {
 			case F: fire(); break;
-			case D: bR = false; break;
-			case A: bL = false; break;
-			case W: bU = false; break;
-			case S: bD = false; break;
+			case RIGHT: bR = false; break;
+			case LEFT: bL = false; break;
+			case UP: bU = false; break;
+			case DOWN: bD = false; break;
 		}
 		decideDirection(); 
 	}

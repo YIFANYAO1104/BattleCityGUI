@@ -2,15 +2,8 @@ package com.bham.bc.view;
 
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
-import static com.bham.bc.view.Camera.*;
 
 import javafx.animation.AnimationTimer;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -37,6 +30,8 @@ public class GameViewManager {
 
     private AnimationTimer gameTimer;
 
+    private Camera cmr;
+
     /**
      * Constructs the view manager
      */
@@ -49,13 +44,16 @@ public class GameViewManager {
      * initializes the game stage
      */
     private void initializeStage() {
-        canvas = new Canvas(GAME_WIDTH, GAME_HEIGHT);
+        canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
         gamePane = new AnchorPane();
         gamePane.getChildren().add(canvas);
 
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREEN);
+        cmr = new Camera(centerController.getHomeTank(), centerController.getHomeTank2());
+        gameScene.setCamera(cmr);
+
         gameStage = new Stage();
 
         gameStage.setScene(gameScene);
@@ -132,8 +130,9 @@ public class GameViewManager {
                 centerController.render(gc);                                      // Render backend content
                 renderScoreBoard();                                               // Render backend content
 
-                camera.update(gc);
+                cmr.update();
                 centerController.update();                                        // Update backend content
+
 
                 // Would be better for the backend to trigger
                 // this state so that less checks are performed
