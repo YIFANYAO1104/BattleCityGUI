@@ -2,6 +2,7 @@ package com.bham.bc.utils;
 
 import com.bham.bc.components.environment.MapObject2D;
 import com.bham.bc.components.environment.obstacles.Home;
+import com.bham.bc.entity.triggers.TriggerSystem;
 import javafx.embed.swing.JFXPanel;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -14,16 +15,9 @@ import java.util.List;
 
 public class MapLoader {
 
-    public List<MapObject2D> getObstacles() {
-        return obstacles;
-    }
+
 
     private List<MapObject2D> obstacles = new ArrayList<MapObject2D>();
-
-    public Home getHome() {
-        return home;
-    }
-
     private Home home;
 
     //private String resourceName = "/test.json";
@@ -93,5 +87,12 @@ public class MapLoader {
         for (MapObject2D l : ls) {
             System.out.println(l);
         }
+    }
+
+    public List<MapObject2D> getObstacles() {
+        return obstacles;
+    }
+    public Home getHome() {
+        return home;
     }
 }

@@ -3,6 +3,7 @@ package com.bham.bc.components.environment.obstacles;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.environment.MapObject2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -15,8 +16,8 @@ public class CommonWall extends MapObject2D {
 	/**
 	 * Size OF CommonWall (Common Wall can be destroyed )
 	 */
-	public static int width = 32;
-	public static int length = 32;
+	public static int width = Constants.TILE_WIDTH;
+	public static int length = Constants.TILE_WIDTH;
 
 	public CommonWall(int x, int y) {
 		super(x,y);

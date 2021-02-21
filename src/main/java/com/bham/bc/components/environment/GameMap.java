@@ -7,14 +7,11 @@ import com.bham.bc.components.environment.obstacles.CommonWall;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.utils.MapLoader;
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.bham.bc.components.CenterController.centerController;
 
 
 public class GameMap {
@@ -34,10 +31,6 @@ public class GameMap {
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
     public GameMap() {
-//        addHomeWall();
-//        addHome();
-//        addHealthGiver();
-       //new JFXPanel();
         MapLoader mapLoader = new MapLoader();
         try {
             mapLoader.loadMap("/test.json");
@@ -46,32 +39,11 @@ public class GameMap {
         }
         obstacles = mapLoader.getObstacles();
         home = mapLoader.getHome();
-    }
-
-    /**
-     * This method is used to generate home walls on the map
-     */
-    private void addHomeWall(){
-        for (int i = 0; i < 10; i++) {
-            if (i < 4)
-                obstacles.add(new CommonWall(350, 580 - 21 * i));
-            else if (i < 7)
-                obstacles.add(new CommonWall(372 + 22 * (i - 4), 517));
-            else
-                obstacles.add(new CommonWall(416, 538 + (i - 7) * 21));
-
-        }
-    }
-
-    /**
-     * Generate Home in the map
-     */
-    private void addHome() {
-        home = new Home(373, 557);
+        addHealthGiver();
     }
 
     private void addHealthGiver() {
-        HealthGiver hg = new HealthGiver(258, 413,34,30, 100,10);
+        HealthGiver hg = new HealthGiver(258, 413, 100,10);
         triggerSystem.register(hg);
     }
     //init only--------------------------------------------------------------
