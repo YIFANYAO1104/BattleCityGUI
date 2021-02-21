@@ -16,8 +16,8 @@ public class Bullets01 extends Bullet {
 	 * Static member to indicates the velocity of Bullet in horizontal and vertical
 	 * It's not redundant but other classes could simply reference them by Bullets01.speedX
 	 */
-	public static int speedX = 1;
-	public static int speedY = 1;
+	public static int speedX = 15;
+	public static int speedY = 15;
 	/**
 	 * Size of Bullet01
 	 * It's not redundant but other classes could simply reference them by Bullets01.width
