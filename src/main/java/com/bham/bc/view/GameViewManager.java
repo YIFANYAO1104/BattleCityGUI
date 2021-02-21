@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -47,10 +48,12 @@ public class GameViewManager {
         canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        gamePane = new AnchorPane();
-        gamePane.getChildren().add(canvas);
+        Rectangle rect = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
+        rect.setStroke(Color.RED);
+        rect.setStrokeWidth(5);
 
-        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREEN);
+        gamePane = new AnchorPane(canvas, rect);
+        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
         cmr = new Camera(centerController.getHomeTank());
         gameScene.setCamera(cmr);
 
