@@ -115,21 +115,6 @@ abstract public class Bullet extends MovingEntity {
     }
 
     /**
-     * A method to indicate if the bullet hits the wall
-     * If bullet hits the wall then we should remove the wall from centerController
-     * @param w
-     * @return
-     */
-    public boolean hitWall(CommonWall w) {
-        if (this.live && this.isIntersect(w)) {
-            this.live = false;
-            centerController.removeWall(w);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * A method to indicate if the bullet hits the bullet
      * If bullet hits the other bullet then it should be removed from bullet list(centerController will do that)
      * @param w
@@ -143,21 +128,6 @@ abstract public class Bullet extends MovingEntity {
         }
         return false;
     }
-    /**
-     * A method to indicate if the bullet hits  Home
-     * If bullet hits Home then Home should be set to dead
-     * @param h
-     * @return
-     */
-    public boolean hitHome(Home h) {
-        if (this.live && this.isIntersect(h)) {
-            this.live = false;
-            h.setLive(false);
-            return true;
-        }
-        return false;
-    }
-
 
     public Rectangle getHitBox() {
         return new Rectangle(x, y, width, length);

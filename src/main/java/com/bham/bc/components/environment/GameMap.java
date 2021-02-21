@@ -9,6 +9,7 @@ import com.bham.bc.components.characters.Tank;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static com.bham.bc.components.CenterController.centerController;
@@ -20,7 +21,7 @@ public class GameMap {
     /**
      * Creating container for Home Walls On Map
      */
-    private List<CommonWall> homeWall = new ArrayList<CommonWall>();
+    private List<MapObject2D> obstacles = new ArrayList<MapObject2D>();
     private Home home;
     private TriggerSystem triggerSystem = new TriggerSystem();
 
@@ -42,11 +43,11 @@ public class GameMap {
     private void addHomeWall(){
         for (int i = 0; i < 10; i++) {
             if (i < 4)
-                homeWall.add(new CommonWall(350, 580 - 21 * i));
+                obstacles.add(new CommonWall(350, 580 - 21 * i));
             else if (i < 7)
-                homeWall.add(new CommonWall(372 + 22 * (i - 4), 517));
+                obstacles.add(new CommonWall(372 + 22 * (i - 4), 517));
             else
-                homeWall.add(new CommonWall(416, 538 + (i - 7) * 21));
+                obstacles.add(new CommonWall(416, 538 + (i - 7) * 21));
 
         }
     }
@@ -83,7 +84,7 @@ public class GameMap {
      * @param w
      */
     public void removeHomeWall(CommonWall w){
-        homeWall.remove(w);
+        obstacles.remove(w);
     }
 
 
@@ -101,7 +102,7 @@ public class GameMap {
      * Clean all home walls
      */
     public void clearHomeWalls(){
-        homeWall.clear();
+        obstacles.clear();
     }
 
     public void clearTriggers(){
@@ -117,7 +118,7 @@ public class GameMap {
      */
     public void renderAll(GraphicsContext gc){
         renderHome(gc);
-        renderHomeWall(gc);
+        renderObstacles(gc);
         renderTriggers(gc);
     }
 
@@ -125,9 +126,9 @@ public class GameMap {
         if (home != null) home.render(gc);
     }
 
-    public void renderHomeWall(GraphicsContext gc){
-        for (int i = 0; i < homeWall.size(); i++) {
-            CommonWall w = homeWall.get(i);
+    public void renderObstacles(GraphicsContext gc){
+        for (int i = 0; i < obstacles.size(); i++) {
+            MapObject2D w = obstacles.get(i);
             w.render(gc);
         }
     }
@@ -145,8 +146,8 @@ public class GameMap {
      * To check if the Bullet hits Home also
      * @param m
      */
-    public void hitAll(Bullet m){
-        hitHomeWall(m);
+    public void update(Bullet m){
+        hitObstacles(m);
         hitHome(m);
     }
 
@@ -154,10 +155,10 @@ public class GameMap {
      * This method is to check if Bullet hits common walls
      * @param m
      */
-    public void hitHomeWall(Bullet m){
-        for (int j = 0; j < homeWall.size(); j++) {
-            CommonWall cw = homeWall.get(j);
-            m.hitWall(cw);
+    public void hitObstacles(Bullet m){
+        for (int j = 0; j < obstacles.size(); j++) {
+            MapObject2D cw = obstacles.get(j);
+            cw.beHitBy(m);
         }
     }
     /**
@@ -166,7 +167,19 @@ public class GameMap {
      * @param m
      */
     public void hitHome(Bullet m){
-        m.hitHome(home);
+        home.beHitBy(m);
+    }
+
+    public void updateObstacles() {
+        Iterator<MapObject2D> it = obstacles.iterator();
+        while (it.hasNext()) {
+            MapObject2D curObj = it.next();
+            if (curObj.isToBeRemoved()) {
+                it.remove();
+            } else {
+                curObj.update();
+            }
+        }
     }
     //hit--------------------------------------------------------------
 
@@ -177,9 +190,10 @@ public class GameMap {
      * To determine if a Tank Collides such Walls and need to turn back to it's previous position
      * @param t
      */
-    public void collideWithAll(Tank t){
+
+    public void update(Tank t){
         collideWithHome(t);
-        collideWithHomeWalls(t);
+        collideWithObstacles(t);
         collideWithTriggers(t);
     }
     /**
@@ -187,21 +201,17 @@ public class GameMap {
      * @param t
      */
     public void collideWithHome(Tank t){
-        if (t.isLive() && home.isIntersect(t)) {
-            centerController.changToOldDir(t);
-        }
+        home.collideWith(t);
     }
     /**
      * A method to loop all objects, and use as parameter for Collide Method
      * To determine if a Tank Collides such home Walls and need to turn back to it's previous position
      * @param t
      */
-    public void collideWithHomeWalls(Tank t){
-        for (int i = 0; i < homeWall.size(); i++) {
-            CommonWall w = homeWall.get(i);
-            if (t.isLive() && w.isIntersect(t)) {
-                centerController.changToOldDir(t);
-            }
+    public void collideWithObstacles(Tank t){
+        for (int i = 0; i < obstacles.size(); i++) {
+            MapObject2D w = obstacles.get(i);
+            w.collideWith(t);
         }
     }
 
