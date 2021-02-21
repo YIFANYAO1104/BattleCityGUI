@@ -5,7 +5,7 @@ import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.environment.obstacles.CommonWall;
-import com.bham.bc.components.environment.Home;
+import com.bham.bc.components.environment.obstacles.Home;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.HomeTank;
 import javafx.scene.canvas.GraphicsContext;

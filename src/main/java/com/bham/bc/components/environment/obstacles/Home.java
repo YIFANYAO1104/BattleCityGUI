@@ -1,5 +1,6 @@
-package com.bham.bc.components.environment;
+package com.bham.bc.components.environment.obstacles;
 
+import com.bham.bc.components.environment.MapObject2D;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;

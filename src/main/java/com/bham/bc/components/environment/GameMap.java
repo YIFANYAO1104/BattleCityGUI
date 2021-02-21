@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.obstacles.Home;
 import com.bham.bc.entity.triggers.TriggerSystem;
 import com.bham.bc.components.environment.obstacles.CommonWall;
 import com.bham.bc.components.environment.triggers.HealthGiver;
