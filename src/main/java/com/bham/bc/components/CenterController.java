@@ -145,9 +145,9 @@ public class CenterController extends BaseGameEntity {
         //move-----------------
 
         //map----------------------------------
-        gameMap.collideWithAll(homeTank);
+        gameMap.update(homeTank);
         for (Enemy e : enemyTanks) {
-            gameMap.collideWithAll(e);
+            gameMap.update(e);
         }
         //map----------------------------------
 
@@ -175,8 +175,9 @@ public class CenterController extends BaseGameEntity {
                 Bullet bts=bullets.get(j);
                 m.hitBullet(bts);
             }
-            gameMap.hitAll(m);
+            gameMap.update(m);
         }
+        gameMap.updateObstacles();
     }
 
     @Override
