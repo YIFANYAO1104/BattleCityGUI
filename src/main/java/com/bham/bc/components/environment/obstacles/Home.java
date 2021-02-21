@@ -1,7 +1,8 @@
-package com.bham.bc.components.environment;
+package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.environment.MapObject2D;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,8 +18,8 @@ public class Home extends MapObject2D {
 	/**
 	 * Size Of Home
 	 */
-	public static int width = 43;
-	public static int length = 43;
+	public static int width = 64;
+	public static int length = 64;
 
 	private boolean live = true;
 
