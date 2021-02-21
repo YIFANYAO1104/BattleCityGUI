@@ -6,6 +6,8 @@ import com.bham.bc.entity.triggers.TriggerSystem;
 import com.bham.bc.components.environment.obstacles.CommonWall;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.characters.Tank;
+import com.bham.bc.utils.MapLoader;
+import javafx.embed.swing.JFXPanel;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -32,9 +34,17 @@ public class GameMap {
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
     public GameMap() {
-        addHomeWall();
+//        addHomeWall();
         addHome();
-        addHealthGiver();
+//        addHealthGiver();
+       //new JFXPanel();
+        MapLoader mapLoader = new MapLoader();
+        try {
+            mapLoader.loadMap("/test.json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        obstacles = mapLoader.getObstacles();
     }
 
     /**

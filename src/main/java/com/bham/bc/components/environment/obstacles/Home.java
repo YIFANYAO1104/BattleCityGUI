@@ -44,7 +44,7 @@ public class Home extends MapObject2D {
 	}
 
 	private void initImages() {
-		entityImages = new Image[] { new Image("file:src/main/resources/img/home.jpg"), };
+		entityImages = new Image[] { new Image("file:src/main/resources/img/Map/home.bmp"), };
 	}
 
 
