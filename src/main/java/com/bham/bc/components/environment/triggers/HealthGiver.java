@@ -35,7 +35,7 @@ public class HealthGiver extends RespawnTrigger<Tank> {
     }
 
     private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/hp.png"), };
+        entityImages = new Image[] {new Image("file:src/main/resources/img/Map/hp.png"), };
     }
 
     //if triggered, the bot's health will be incremented

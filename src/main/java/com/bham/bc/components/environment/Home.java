@@ -13,8 +13,8 @@ public class Home extends MapObject2D {
 	/**
 	 * Size Of Home
 	 */
-	public static int width = 43;
-	public static int length = 43;
+	public static int width = 64;
+	public static int length = 64;
 
 	private boolean live = true;
 
@@ -24,7 +24,7 @@ public class Home extends MapObject2D {
 	}
 
 	private void initImages() {
-		entityImages = new Image[] { new Image("file:src/main/resources/img/home.jpg"), };
+		entityImages = new Image[] { new Image("file:src/main/resources/img/Map/home.bmp"), };
 	}
 
 

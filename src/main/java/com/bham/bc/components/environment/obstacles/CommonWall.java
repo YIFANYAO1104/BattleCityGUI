@@ -11,8 +11,8 @@ public class CommonWall extends MapObject2D {
 	/**
 	 * Size OF CommonWall (Common Wall can be destroyed )
 	 */
-	public static int width = 22;
-	public static int length = 21;
+	public static int width = 32;
+	public static int length = 32;
 
 	public CommonWall(int x, int y) {
 		super(x,y);
@@ -20,7 +20,7 @@ public class CommonWall extends MapObject2D {
 	}
 
 	private void initImages() {
-		entityImages = new Image[] {new Image("file:src/main/resources/img/commonWall.gif"), };
+		entityImages = new Image[] {new Image("file:src/main/resources/img/Map/commonWall.bmp"), };
 	}
 
 	@Override
