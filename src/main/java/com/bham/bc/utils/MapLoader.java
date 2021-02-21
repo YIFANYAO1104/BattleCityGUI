@@ -1,6 +1,7 @@
 package com.bham.bc.utils;
 
 import com.bham.bc.components.environment.MapObject2D;
+import com.bham.bc.components.environment.obstacles.Home;
 import javafx.embed.swing.JFXPanel;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -18,6 +19,12 @@ public class MapLoader {
     }
 
     private List<MapObject2D> obstacles = new ArrayList<MapObject2D>();
+
+    public Home getHome() {
+        return home;
+    }
+
+    private Home home;
 
     //private String resourceName = "/test.json";
     int mapWidth = 0;
@@ -45,28 +52,35 @@ public class MapLoader {
             //get class name and layout array
             JSONObject layer = layers.getJSONObject(i);
             String name = layer.getString("name");
-            if (name.equals("Home")) continue;
+
             System.out.println(name);
             JSONArray layout = layer.getJSONArray("data");
 
-            createMapObjects(name, layout);
+            List<MapObject2D> objs = createMapObjects(name, layout);
+            if (name.equals("Home")) {
+                home = (Home) objs.get(0);
+            } else {
+                obstacles.addAll(objs);
+            }
         }
     }
 
-    public void createMapObjects(String className, JSONArray layout) throws Exception {
+    public List<MapObject2D> createMapObjects(String className, JSONArray layout) throws Exception {
         //reflection
         Class cls = Class.forName("com.bham.bc.components.environment.obstacles."+className);
         Constructor constructor = cls.getConstructor(int.class, int.class);
 
+        List<MapObject2D> objs = new ArrayList<MapObject2D>();
         //get positions
         for (int j = 0; j < layout.length(); j++)
         {
             if(layout.getInt(j)>0){
                 int x= (j%mapWidth)*tileWidth;
                 int y = (j/mapWidth)*tileHeight;
-                obstacles.add((MapObject2D) constructor.newInstance(x,y));
+                objs.add((MapObject2D) constructor.newInstance(x,y));
             }
         }
+        return objs;
     }
 
 

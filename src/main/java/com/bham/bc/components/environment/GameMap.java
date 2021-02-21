@@ -35,7 +35,7 @@ public class GameMap {
      */
     public GameMap() {
 //        addHomeWall();
-        addHome();
+//        addHome();
 //        addHealthGiver();
        //new JFXPanel();
         MapLoader mapLoader = new MapLoader();
@@ -45,6 +45,7 @@ public class GameMap {
             e.printStackTrace();
         }
         obstacles = mapLoader.getObstacles();
+        home = mapLoader.getHome();
     }
 
     /**
