@@ -44,41 +44,10 @@ public class GameViewManager {
     /**
      * initializes the game stage
      */
-//    private void initializeStage() {
-////        canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
-////
-////        gc = canvas.getGraphicsContext2D();
-////
-////        gamePane = new AnchorPane();
-////        gamePane.getChildren().add(canvas);
-////
-////        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREEN);
-//
-//        canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
-//        gc = canvas.getGraphicsContext2D();
-//        Rectangle rect = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
-//        rect.setStroke(Color.RED);
-//        rect.setStrokeWidth(5);
-//        gamePane = new AnchorPane(canvas, rect);
-//        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
-//
-//        cmr = new Camera(centerController.getHomeTank());
-//        gameScene.setCamera(cmr);
-//
-//        gameStage = new Stage();
-//
-//        gameStage.setScene(gameScene);
-//        gameStage.setTitle("A very cool game");
-//        gameStage.setResizable(false);
-//    }
-
     private void initializeStage() {
         canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         gc = canvas.getGraphicsContext2D();
-        Rectangle rect = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
-        rect.setStroke(Color.RED);
-        rect.setStrokeWidth(5);
-        gamePane = new AnchorPane(canvas, rect);
+        gamePane = new AnchorPane(canvas);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
         cmr = new Camera(centerController.getHomeTank());
         gameScene.setCamera(cmr);
@@ -148,11 +117,14 @@ public class GameViewManager {
      * runs methods which update the state of the game
      */
     private void createGameLoop() {
+        double bc = 5; // border size
         gameTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
                 // Would be better to wrap rendering into one function
-                gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
+                gc.setFill(Color.RED);
+                gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                gc.clearRect(bc, bc, canvas.getWidth()-bc, canvas.getHeight()-bc);  // Clear canvas before every frame
 
                 centerController.render(gc);                                      // Render backend content
                 renderScoreBoard();                                               // Render backend content
