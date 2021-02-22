@@ -39,12 +39,7 @@ public class GameMap {
         }
         obstacles = mapLoader.getObstacles();
         home = mapLoader.getHome();
-        addHealthGiver();
-    }
-
-    private void addHealthGiver() {
-        HealthGiver hg = new HealthGiver(258, 413, 100,10);
-        triggerSystem.register(hg);
+        triggerSystem = mapLoader.getTriggerSystem();
     }
     //init only--------------------------------------------------------------
 
