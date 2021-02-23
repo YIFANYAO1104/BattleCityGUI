@@ -48,4 +48,19 @@ public class Vector2D {
         return (x * x + y * y);
     }
 
+    public double Distance(Vector2D v2) {
+        double ySeparation = v2.y - y;
+        double xSeparation = v2.x - x;
+
+        return Math.sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
+    }
+
+    public static double Vec2DDistance(Vector2D v1, Vector2D v2) {
+
+        double ySeparation = v2.y - v1.y;
+        double xSeparation = v2.x - v1.x;
+
+        return Math.sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
+    }
+
 }

@@ -1,5 +1,8 @@
 package com.bham.bc.utils.graph.edge;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import static com.bham.bc.utils.graph.NodeTypeEnum.invalid_node_index;
 
 public class GraphEdge {
@@ -68,4 +71,19 @@ public class GraphEdge {
                 && rhs.m_iTo == this.m_iTo
                 && rhs.m_dCost == this.m_dCost;
     }
+
+    //for reading and writing to streams.
+    public OutputStream print(OutputStream os) {
+        PrintStream ps = new PrintStream(os);
+        ps.print("m_iFrom: ");
+        ps.print(m_iFrom);
+        ps.print(" m_iTo: ");
+        ps.print(m_iTo);
+        ps.print(" m_dCost: ");
+        ps.print(m_dCost);
+        ps.println();
+        return os;
+    }
+
+
 }

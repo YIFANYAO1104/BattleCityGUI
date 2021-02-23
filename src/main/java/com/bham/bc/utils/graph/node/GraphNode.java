@@ -1,5 +1,8 @@
 package com.bham.bc.utils.graph.node;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
+
 import static com.bham.bc.utils.graph.NodeTypeEnum.invalid_node_index;
 
 public class GraphNode {
@@ -22,5 +25,14 @@ public class GraphNode {
 
     public void SetIndex(int NewIndex) {
         m_index = NewIndex;
+    }
+
+    //for reading and writing to streams.
+    public OutputStream print(OutputStream os) {
+        PrintStream ps = new PrintStream(os);
+        ps.print("Index: ");
+        ps.print(m_index);
+        ps.println();
+        return os;
     }
 }
