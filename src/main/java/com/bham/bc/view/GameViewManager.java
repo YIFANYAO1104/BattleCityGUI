@@ -76,6 +76,10 @@ public class GameViewManager {
         gameStage.show();
     }
 
+    public void show() {
+        gameStage.show();
+    }
+
     /**
      * creates the input listeners. Key presses are handled by the center controller class.
      */
