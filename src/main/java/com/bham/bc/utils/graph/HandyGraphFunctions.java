@@ -16,6 +16,7 @@ public class HandyGraphFunctions {
     }
 
     /**
+     * 111
      *  use to add he eight neighboring edges of a graph node that
      *  is positioned in a grid layout
      */
