@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 abstract public class StateMachine {
-    protected static State initialState;
-    protected static State currentState;
+    protected State initialState;
+    protected State currentState;
 
     /**
      * Constructor for a state machine
@@ -56,9 +56,7 @@ abstract public class StateMachine {
         Action[] exitPlusTrans = Stream.concat(Arrays.stream(exit), Arrays.stream(trans))
                 .toArray(Action[]::new);
 
-        Action[] actions = Stream.concat(Arrays.stream(exitPlusTrans), Arrays.stream(entry))
+        return Stream.concat(Arrays.stream(exitPlusTrans), Arrays.stream(entry))
                 .toArray(Action[]::new);
-
-        return actions;
     }
 }
