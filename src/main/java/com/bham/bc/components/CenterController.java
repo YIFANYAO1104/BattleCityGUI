@@ -4,6 +4,9 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.TrackableCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.Direction;
+import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.utils.graph.edge.GraphEdge;
+import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.environment.obstacles.CommonWall;
@@ -11,6 +14,7 @@ import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.HomeTank;
+import com.bham.bc.utils.graph.HandyGraphFunctions;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -197,6 +201,12 @@ public class CenterController extends BaseGameEntity {
 
 
         gameMap.updateObstacles();
+    }
+
+    private void unfoldMap(){
+        HandyGraphFunctions hgf = new HandyGraphFunctions();
+        SparseGraph<NavNode, GraphEdge> sg = new SparseGraph<NavNode, GraphEdge>(false);
+
     }
 
     @Override
