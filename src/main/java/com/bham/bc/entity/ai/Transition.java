@@ -1,24 +1,44 @@
 package com.bham.bc.entity.ai;
 
-/**
- * Base interface for Transitions
- */
-interface Transition {
+public class Transition{
+
+    private final Action[] actions;
+    private final State targetState;
+    private final Condition condition;
+
+    /**
+     * Constructor for a transition
+     * @param actions List of actions to be taken during the transition
+     * @param targetState The destination of the state machine after the transition
+     * @param condition The condition that causes the transition to occur
+     */
+    public Transition(Action[] actions, State targetState, Condition condition){
+        this.actions = actions;
+        this.targetState = targetState;
+        this.condition = condition;
+    }
+
     /**
      * Determines if the conditions for the transitions have been met
      * @return True is conditions have been met, False if not
      */
-    public boolean isTriggered();
+    public boolean isTriggered(){
+        return condition.test();
+    }
 
     /**
      * Returns the state which will be switched to after the transitions
      * @return The target state
      */
-    public State getTargetState();
+    public State getTargetState(){
+        return targetState;
+    }
 
     /**
      * Returns the actions that need to occur during the transition
      * @return list of transition actions
      */
-    public Action[] getActions();
+    public Action[] getActions(){
+        return actions;
+    }
 }

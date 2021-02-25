@@ -1,6 +1,7 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.TrackableCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
@@ -85,6 +86,10 @@ public class CenterController extends BaseGameEntity {
      */
     public void keyPressed(KeyEvent e){
         homeTank.keyPressed(e);
+    }
+
+    public TrackableCharacter getHomeTank(){
+        return homeTank;
     }
     //These are functions that might be used by frontend----------------------------------------------------
 
