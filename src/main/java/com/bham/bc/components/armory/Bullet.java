@@ -1,5 +1,6 @@
 package com.bham.bc.components.armory;
 
+import com.bham.bc.components.environment.obstacles.IceWall;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
@@ -132,6 +133,7 @@ abstract public class Bullet extends MovingEntity {
     public Rectangle getHitBox() {
         return new Rectangle(x, y, width, length);
     }
+
 
 
     public boolean isLive() {

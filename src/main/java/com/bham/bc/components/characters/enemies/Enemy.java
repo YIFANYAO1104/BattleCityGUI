@@ -1,6 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.armory.Bullets01;
+import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
@@ -146,7 +147,7 @@ public class Enemy extends Tank {
             MovingEntity t = be.get(i);
             if (this != t) {
                 if (this.live && t.isLive()
-                        && this.isIntersect(t)) {
+                        && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
                     this.changToOldDir();
                     t.changToOldDir();
                     return true;
@@ -296,4 +297,10 @@ public class Enemy extends Tank {
             this.life = 200;
         }
     }
+
+    @Override
+    public void switchWeapon(Weapon w) {
+
+    }
+
 }
