@@ -136,7 +136,6 @@ public class HomeTank extends Tank implements TrackableCharacter {
 
 	public void keyReleased(KeyEvent e) {
 		switch (e.getCode()) {
-			case F: fire(); break;
 			case D: bR = false; break;
 			case A: bL = false; break;
 			case W: bU = false; break;

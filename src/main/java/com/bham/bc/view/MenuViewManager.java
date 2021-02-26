@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import static com.bham.bc.audio.SFX.CLICK;
+
 /**
  * Class managing the behavior of the main menu
  */
@@ -35,6 +37,8 @@ public class MenuViewManager {
         Button startButton = new Button("Play");
 
         startButton.setOnAction(e -> {
+            CLICK.play();
+            // To do: add javafx concurrency in the background
            GameViewManager gameViewManager = new GameViewManager();
            gameViewManager.createNewGame(mainStage);
         });
