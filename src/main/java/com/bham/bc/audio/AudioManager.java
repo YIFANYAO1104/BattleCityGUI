@@ -3,8 +3,6 @@ package com.bham.bc.audio;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-import java.util.ArrayList;
-
 public class AudioManager {
     // Only one music for the menu, could be changed to a playlist
     public static final String MENU_MUSIC = "file:src/main/resources/audio/bg/bgm_0.mp3";
