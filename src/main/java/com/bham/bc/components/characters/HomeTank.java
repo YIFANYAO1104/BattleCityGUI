@@ -3,6 +3,7 @@ package com.bham.bc.components.characters;
 
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
@@ -32,6 +33,9 @@ public class HomeTank extends Tank {
 	 * The direction that will be set by KeyAction
 	 */
 	private boolean bL = false, bU = false, bR = false, bD = false;
+
+	//-----------------------------------------------------------------//
+	private Weapon currWeapon = null;
 
 
 
@@ -196,7 +200,7 @@ public class HomeTank extends Tank {
 			MovingEntity t = tanks.get(i);
 			if (this != t) {
 				if (this.live && t.isLive()
-						&& this.isIntersect(t)) {
+						&& this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
 					this.changToOldDir();
 					t.changToOldDir();
 					return true;
@@ -287,4 +291,13 @@ public class HomeTank extends Tank {
 			this.life = 200;
 		}
 	}
+
+	@Override
+	public void switchWeapon(Weapon w) {
+
+	}
+
+
+	//----------------------------------------------------------------------------------------//
+
 }
