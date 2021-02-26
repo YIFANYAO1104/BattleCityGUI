@@ -40,7 +40,7 @@ public class CommonWall extends MapObject2D {
 	}
 
 	private void initImages() {
-		entityImages = new Image[] {new Image("file:src/main/resources/img/Map/commonWall.bmp"), };
+		entityImages = new Image[] {new Image("file:src/main/resources/img/Map/CommonWall.bmp"), };
 	}
 
 	@Override
