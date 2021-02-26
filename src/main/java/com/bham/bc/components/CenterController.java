@@ -18,6 +18,7 @@ import com.bham.bc.utils.graph.HandyGraphFunctions;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
@@ -41,6 +42,8 @@ public class CenterController extends BaseGameEntity {
     private List<Bullet> bullets = new ArrayList<Bullet>();
     /** Initialize an Object Of GameMap*/
     private GameMap gameMap = new GameMap();
+
+    private SparseGraph sg;
 
 
     //These are functions that might be used by frontend----------------------------------------------------
@@ -113,6 +116,9 @@ public class CenterController extends BaseGameEntity {
         super(GetNextValidID(),-1,-1);
         homeTank = new HomeTank(300, 560, Direction.STOP);
         initEnemies();
+        System.out.println("start");
+        unfoldMap();
+        System.out.println("over");
     }
     /**
      * A method to generate certain number of Enemy Tanks
@@ -205,7 +211,10 @@ public class CenterController extends BaseGameEntity {
 
     private void unfoldMap(){
         HandyGraphFunctions hgf = new HandyGraphFunctions();
-        SparseGraph<NavNode, GraphEdge> sg = new SparseGraph<NavNode, GraphEdge>(false);
+        SparseGraph<NavNode, GraphEdge> shg = new SparseGraph<NavNode, GraphEdge>(true);
+        sg = shg;
+        hgf.GraphHelper_CreateGrid(sg,1200,1600,50,50);
+        sg.display();
 
     }
 
@@ -237,6 +246,9 @@ public class CenterController extends BaseGameEntity {
 
 
         gameMap.renderAll(gc);
+        sg.render(gc);
+
+
 
 
     }

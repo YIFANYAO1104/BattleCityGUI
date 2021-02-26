@@ -63,4 +63,18 @@ public class Vector2D {
         return Math.sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
     }
 
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    @Override
+    public String toString(){
+        String location = "x size is :"+x + " , y size is :"+y;
+        return location;
+    }
+
 }

@@ -51,7 +51,7 @@ public class EntityManager {
      */
     public void RegisterEntity(BaseGameEntity NewEntity) {
         m_EntityMap.put(NewEntity.ID(), NewEntity);
-        System.out.println("register id :"+NewEntity.ID()+" with type: "+ NewEntity.toString() );
+//        System.out.println("register id :"+NewEntity.ID()+" with type: "+ NewEntity.toString() );
     }
 
     /**
