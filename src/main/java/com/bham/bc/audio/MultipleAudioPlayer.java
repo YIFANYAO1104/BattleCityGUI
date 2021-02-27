@@ -10,6 +10,10 @@ public class MultipleAudioPlayer {
     private MediaPlayer currentTrack;
     private boolean isPlaying;
 
+    /**
+     * Constructs a sequential media player
+     * @param mediaFiles audio files to be put into playlist
+     */
     public MultipleAudioPlayer(ArrayList<Media> mediaFiles) {
         mediaPlayers = new ArrayList<>();
         for(Media media: mediaFiles) mediaPlayers.add(new MediaPlayer(media));
@@ -18,6 +22,9 @@ public class MultipleAudioPlayer {
         isPlaying = false;
     }
 
+    /**
+     * initializes a cyclic sequence of media players
+     */
     private void initPlaylist() {
         for(int i = 0; i < mediaPlayers.size(); i++) {
             final MediaPlayer curr = mediaPlayers.get(i);
@@ -31,23 +38,44 @@ public class MultipleAudioPlayer {
         }
     }
 
+    /**
+     * starts current track
+     */
     public void play() {
         if(currentTrack != null && !isPlaying) {
-            currentTrack.play();
+            new Thread(() -> currentTrack.play()).start();
+            isPlaying = true;
         }
     }
 
+    /**
+     * pauses current track
+     */
     public void pause() {
         if(currentTrack != null && isPlaying) {
-            currentTrack.pause();
+            new Thread(() -> currentTrack.pause()).start();
+            isPlaying = false;
         }
     }
 
+    /**
+     * stops current track
+     */
     public void stop() {
-        if(currentTrack != null && !isPlaying) {
-            currentTrack.stop();
+        if(currentTrack != null && isPlaying) {
+            new Thread(() -> currentTrack.stop()).start();
+            isPlaying = false;
         }
+    }
 
+    /**
+     * sets volume for all the players that make up a playlist
+     * @param volume volume to set
+     */
+    public void setVolume(double volume) {
+        for(MediaPlayer player: mediaPlayers) {
+            new Thread(() -> player.setVolume(volume)).start();
+        }
     }
 
 }
