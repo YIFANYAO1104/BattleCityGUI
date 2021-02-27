@@ -4,6 +4,7 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.MapObject2D;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -12,8 +13,8 @@ import javafx.scene.shape.Rectangle;
 import static com.bham.bc.components.CenterController.centerController;
 
 public class MetalWall extends MapObject2D {
-    public static int width = 35;
-    public static int length = 35;
+    public static int width = Constants.TILE_WIDTH;
+    public static int length = Constants.TILE_WIDTH;
     public MetalWall(int x , int y){
         super(x,y);
         initImages();
@@ -24,7 +25,7 @@ public class MetalWall extends MapObject2D {
         if (m.isLive() && this.getHitBox().intersects(m.getHitBox().getBoundsInLocal())) {
             m.setLive(false);
 
-                centerController.removeBullet(m);
+            centerController.removeBullet(m);
         }
     }
 
@@ -36,7 +37,7 @@ public class MetalWall extends MapObject2D {
     }
 
     private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/MetalWall.gif"), };
+        entityImages = new Image[] {new Image("file:src/main/resources/img/Map/metalWall.bmp"), };
     }
 
 

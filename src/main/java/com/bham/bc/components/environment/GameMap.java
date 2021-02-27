@@ -41,12 +41,12 @@ public class GameMap {
         obstacles = mapLoader.getObstacles();
         home = mapLoader.getHome();
         triggerSystem = mapLoader.getTriggerSystem();
-        addWeaponGenerator();
-        addIceWall();
-        addMetalWall();
-        addTree();
-        addRiver();
-        addCommonWall();
+//        addWeaponGenerator();
+//        addIceWall();
+//        addMetalWall();
+//        addTree();
+//        addRiver();
+//        addCommonWall();
 
 
         

@@ -18,7 +18,7 @@ import static com.bham.bc.components.CenterController.centerController;
 public class IceWall extends MapObject2D {
     public static int width = 22;
     public static int length = 21;
-    public static int durability ;
+    public int durability ;
 
     /**
      * The damage to durability is up to the damage of specific weapon(buller)

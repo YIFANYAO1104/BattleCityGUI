@@ -4,6 +4,7 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.MapObject2D;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,10 +17,10 @@ public class Tree extends MapObject2D {
     /**
      * Size OF trees
      */
-    public static final int width = 30;
-    public static final int length = 30;
+    public static final int width = Constants.TILE_WIDTH;
+    public static final int length = Constants.TILE_WIDTH;
     private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/tree.gif"), };
+        entityImages = new Image[] {new Image("file:src/main/resources/img/Map/tree.bmp"), };
     }
 
 
@@ -30,17 +31,17 @@ public class Tree extends MapObject2D {
 
     @Override
     public void beHitBy(Bullet m) {
-        if (m.isLive() && this.getHitBox().intersects(m.getHitBox().getBoundsInLocal())) {
-            m.setLive(false);
-            centerController.removeBullet(m);
-        }
+//        if (m.isLive() && this.getHitBox().intersects(m.getHitBox().getBoundsInLocal())) {
+//            m.setLive(false);
+//            centerController.removeBullet(m);
+//        }
     }
 
     @Override
     public void collideWith(Tank t) {
-        if(t.isLive()&& this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())){
-            centerController.changToOldDir(t);
-        }
+//        if(t.isLive()&& this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())){
+//            centerController.changToOldDir(t);
+//        }
     }
 
     @Override
@@ -55,7 +56,6 @@ public class Tree extends MapObject2D {
 
     @Override
     public Rectangle getHitBox() {
-
         return new Rectangle(x,y,width,length);
     }
 
@@ -66,7 +66,6 @@ public class Tree extends MapObject2D {
 
     @Override
     public boolean isIntersect(BaseGameEntity b) {
-
         Rectangle t = new Rectangle(x, y, width, length);
         return t.intersects(b.getHitBox().getBoundsInLocal());
     }
