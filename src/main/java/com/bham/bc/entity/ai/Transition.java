@@ -7,13 +7,24 @@ public class Transition{
     private final Condition condition;
 
     /**
-     * Constructor for a transition
+     * Default constructor for a transition
      * @param actions List of actions to be taken during the transition
      * @param targetState The destination of the state machine after the transition
      * @param condition The condition that causes the transition to occur
      */
     public Transition(Action[] actions, State targetState, Condition condition){
         this.actions = actions;
+        this.targetState = targetState;
+        this.condition = condition;
+    }
+
+    /**
+     *  Alternate constructor where there are no transition actions
+     * @param targetState The destination of the state machine after the transition
+     * @param condition The condition that causes the transition to occur
+     */
+    public Transition(State targetState, Condition condition){
+        this.actions = null;
         this.targetState = targetState;
         this.condition = condition;
     }

@@ -5,10 +5,10 @@ public class State{
     private final Action[] actions;
     private final Action[] entryActions;
     private final Action[] exitActions;
-    private final Transition[] transitions;
+    private Transition[] transitions;
 
     /**
-     * Constructor for a State
+     * Default constructor for a State
      * @param actions List of actions to be performed while the State is active
      * @param entryActions List of actions to be performed when the State is entered
      * @param exitActions List of actions to be performed when the State is exited
@@ -21,6 +21,19 @@ public class State{
         this.transitions = transitions;
     }
 
+    /**
+     * Alternate constructor for a State where there are no entry or exit actions
+     * @param actions List of actions to be performed while the State is active
+     * @param transitions List of transitions that can occur from this state
+     */
+    public State(Action[] actions, Transition[] transitions){
+        this.actions = actions;
+        this.entryActions = null;
+        this.exitActions = null;
+        this.transitions = transitions;
+    }
+
+    public void setTransitions(Transition[] newTransitions) { this.transitions = newTransitions;}
     /**
      * Returns the actions of the State
      * @return

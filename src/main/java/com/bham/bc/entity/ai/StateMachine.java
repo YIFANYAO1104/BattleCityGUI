@@ -1,15 +1,17 @@
 package com.bham.bc.entity.ai;
 
+import com.bham.bc.components.characters.Tank;
+
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-abstract public class StateMachine {
+public class StateMachine {
     protected State initialState;
     protected State currentState;
 
     /**
      * Constructor for a state machine
-     * @param initialState the beginning state of a machine, which is also its current state
+     * @param initialState The beginning state of a machine, which is also its current state
      */
     public StateMachine(State initialState){
         this.initialState = initialState;

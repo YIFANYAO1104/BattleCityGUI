@@ -3,7 +3,7 @@ package com.bham.bc.entity.ai;
 /**
  * Condition for inverting the result of another Condition
  */
-public class NotCondition {
+public class NotCondition implements Condition{
     private final Condition conditionA;
 
     /**
