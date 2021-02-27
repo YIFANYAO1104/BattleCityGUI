@@ -25,4 +25,10 @@ public interface AudioPlayer {
      * @param volume volume to set
      */
     void setVolume(double volume);
+
+    /**
+     * checks if audio player is playing
+     * @return
+     */
+    boolean isPlaying();
 }

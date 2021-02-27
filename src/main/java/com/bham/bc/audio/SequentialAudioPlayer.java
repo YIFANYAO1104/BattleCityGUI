@@ -5,8 +5,8 @@ import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
 
-public class MultipleAudioPlayer implements AudioPlayer {
-    private ArrayList<MediaPlayer> mediaPlayers;
+public class SequentialAudioPlayer implements AudioPlayer {
+    private ArrayList<MediaPlayer> players;
     private MediaPlayer currentTrack;
     private boolean isPlaying;
 
@@ -14,9 +14,9 @@ public class MultipleAudioPlayer implements AudioPlayer {
      * Constructs a sequential media player
      * @param mediaFiles audio files to be put into playlist
      */
-    public MultipleAudioPlayer(ArrayList<Media> mediaFiles) {
-        mediaPlayers = new ArrayList<>();
-        for(Media media: mediaFiles) mediaPlayers.add(new MediaPlayer(media));
+    public SequentialAudioPlayer(ArrayList<Media> mediaFiles) {
+        players = new ArrayList<>();
+        for(Media media: mediaFiles) players.add(new MediaPlayer(media));
 
         initPlaylist();
         isPlaying = false;
@@ -26,15 +26,21 @@ public class MultipleAudioPlayer implements AudioPlayer {
      * initializes a cyclic sequence of media players
      */
     private void initPlaylist() {
-        for(int i = 0; i < mediaPlayers.size(); i++) {
-            final MediaPlayer curr = mediaPlayers.get(i);
-            final MediaPlayer next = mediaPlayers.get((i+1) % mediaPlayers.size());
+        if(!players.isEmpty()) currentTrack = players.get(0);
 
-            curr.setOnEndOfMedia(() -> {
-                curr.stop();
-                currentTrack = next;
-                next.play();
-            });
+        if(players.size() == 1) {
+            currentTrack.setCycleCount(MediaPlayer.INDEFINITE);
+        } else {
+            for (int i = 0; i < players.size(); i++) {
+                MediaPlayer curr = players.get(i);
+                MediaPlayer next = players.get((i + 1) % players.size());
+
+                curr.setOnEndOfMedia(() -> {
+                    curr.stop();
+                    next.play();
+                    currentTrack = next;
+                });
+            }
         }
     }
 
@@ -64,8 +70,11 @@ public class MultipleAudioPlayer implements AudioPlayer {
 
     @Override
     public void setVolume(double volume) {
-        for(MediaPlayer player: mediaPlayers) {
+        for(MediaPlayer player: players) {
             new Thread(() -> player.setVolume(volume)).start();
         }
     }
+
+    @Override
+    public boolean isPlaying() { return isPlaying; }
 }

@@ -7,8 +7,13 @@ import java.util.ArrayList;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+/**
+ * Parallel player class to play multiple audio files at the same time
+ * The class is normally used to play multiple layers (stems) of some track which is needed to be analyzed
+ * NB Each layer must be of the same length and similar metadata
+ */
 public class ParallelAudioPlayer implements AudioPlayer {
-    private ArrayList<MediaPlayer> mediaPlayers;
+    private ArrayList<MediaPlayer> players;
     private boolean isPlaying;
     private CyclicBarrier gate;
 
@@ -17,8 +22,9 @@ public class ParallelAudioPlayer implements AudioPlayer {
      * @param mediaFiles audio files to be played as 1 audio
      */
     public ParallelAudioPlayer(ArrayList<Media> mediaFiles) {
-        mediaPlayers = new ArrayList<>();
-        for(Media media: mediaFiles) mediaPlayers.add(new MediaPlayer(media));
+        players = new ArrayList<>();
+        for(Media media: mediaFiles) players.add(new MediaPlayer(media));
+        //for(MediaPlayer p: players) while(!p.getStatus().equals(MediaPlayer.Status.READY));
 
         gate = new CyclicBarrier(mediaFiles.size());
         isPlaying = false;
@@ -26,8 +32,8 @@ public class ParallelAudioPlayer implements AudioPlayer {
 
     @Override
     public void play() {
-        if(!mediaPlayers.isEmpty() && !isPlaying) {
-            for(MediaPlayer player: mediaPlayers) {
+        if(!players.isEmpty() && !isPlaying) {
+            for(MediaPlayer player: players) {
                 new Thread(() -> {
                     try {
                         gate.await();
@@ -43,8 +49,8 @@ public class ParallelAudioPlayer implements AudioPlayer {
 
     @Override
     public void pause() {
-        if(!mediaPlayers.isEmpty() && isPlaying) {
-            for(MediaPlayer player: mediaPlayers) {
+        if(!players.isEmpty() && isPlaying) {
+            for(MediaPlayer player: players) {
                 new Thread(() -> {
                     try {
                         gate.await();
@@ -60,8 +66,8 @@ public class ParallelAudioPlayer implements AudioPlayer {
 
     @Override
     public void stop() {
-        if(!mediaPlayers.isEmpty() && isPlaying) {
-            for(MediaPlayer player: mediaPlayers) {
+        if(!players.isEmpty() && isPlaying) {
+            for(MediaPlayer player: players) {
                 new Thread(() -> {
                     try {
                         gate.await();
@@ -77,10 +83,13 @@ public class ParallelAudioPlayer implements AudioPlayer {
 
     @Override
     public void setVolume(double volume) {
-        if(!mediaPlayers.isEmpty()) {
-            for(MediaPlayer player: mediaPlayers) {
+        if(!players.isEmpty()) {
+            for(MediaPlayer player: players) {
                 new Thread(() -> player.setVolume(volume)).start();
             }
         }
     }
+
+    @Override
+    public boolean isPlaying() { return isPlaying; }
 }

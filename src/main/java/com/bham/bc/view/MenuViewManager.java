@@ -1,11 +1,13 @@
 package com.bham.bc.view;
 
+import com.bham.bc.audio.AudioManager;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import static com.bham.bc.audio.SFX.CLICK;
+
 
 /**
  * Class managing the behavior of the main menu
@@ -17,6 +19,7 @@ public class MenuViewManager {
     private AnchorPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
+    AudioManager am;
 
     /**
      * Constructs the menu view manager
@@ -26,6 +29,9 @@ public class MenuViewManager {
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
+
+        am = new AudioManager();
+
 
         createStartButton();
     }
@@ -37,10 +43,11 @@ public class MenuViewManager {
         Button startButton = new Button("Play");
 
         startButton.setOnAction(e -> {
-            CLICK.play();
+            //CLICK.play();
+            am.play();
             // To do: add javafx concurrency in the background
-           GameViewManager gameViewManager = new GameViewManager();
-           gameViewManager.createNewGame(mainStage);
+           //GameViewManager gameViewManager = new GameViewManager();
+           //gameViewManager.createNewGame(mainStage);
         });
 
         mainPane.getChildren().add(startButton);
