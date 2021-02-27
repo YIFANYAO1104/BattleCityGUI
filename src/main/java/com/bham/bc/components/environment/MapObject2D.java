@@ -3,6 +3,7 @@ package com.bham.bc.components.environment;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.entity.BaseGameEntity;
+import javafx.scene.shape.Rectangle;
 
 public abstract class MapObject2D extends BaseGameEntity {
     /**
@@ -41,4 +42,6 @@ public abstract class MapObject2D extends BaseGameEntity {
 
 
     abstract public void collideWith(Tank t);
+
+    abstract public void interactWith(int ID,int indexOfNode, Rectangle r1);
 }

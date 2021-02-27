@@ -7,6 +7,7 @@ import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.NavNode;
+import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.environment.obstacles.CommonWall;
@@ -23,6 +24,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class CenterController extends BaseGameEntity {
 
@@ -214,7 +216,13 @@ public class CenterController extends BaseGameEntity {
         SparseGraph<NavNode, GraphEdge> shg = new SparseGraph<NavNode, GraphEdge>(true);
         sg = shg;
         hgf.GraphHelper_CreateGrid(sg,1200,1600,50,50);
-        sg.display();
+        ArrayList<Vector2D> vectors11 = sg.getAllVector();
+//        sg.display();
+        for (int i = 0; i < vectors11.size(); i++) {
+            Vector2D vv1 = vectors11.get(i);
+            gameMap.collideWithRectangle(sg.ID(),i,new Rectangle(vv1.x,vv1.y,14.0,14.0));
+//            Rectangle rr1 = new Rectangle(vv1.x,vv1.y,14.0,14.0);
+        }
 
     }
 

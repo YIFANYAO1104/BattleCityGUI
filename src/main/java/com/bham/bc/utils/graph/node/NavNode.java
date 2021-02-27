@@ -15,6 +15,8 @@ public class NavNode extends GraphNode{
         super.finalize();
     }
 
+
+
     public Vector2D Pos() {
         return new Vector2D(m_vPosition);
     }

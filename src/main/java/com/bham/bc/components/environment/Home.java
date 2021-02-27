@@ -8,6 +8,9 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
+import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
+import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
 
 /**
  * Home (Or something we need to protect, can be modified later)
@@ -39,6 +42,12 @@ public class Home extends MapObject2D {
 		if (t.isLive() && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
 			centerController.changToOldDir(t);
 		}
+	}
+
+	@Override
+	public void interactWith(int ID, int indexOfNode, Rectangle r1) {
+		if(this.getHitBox().intersects(r1.getBoundsInLocal()))
+			Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.ID(),ID,Msg_interact,indexOfNode);
 	}
 
 	private void initImages() {

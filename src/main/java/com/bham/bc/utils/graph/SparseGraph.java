@@ -1,11 +1,15 @@
 package com.bham.bc.utils.graph;
 
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
+import com.bham.bc.utils.graph.node.Vector2D;
+import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.graph.NodeTypeEnum.invalid_node_index;
 
@@ -15,7 +19,7 @@ import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Scanner;
 
-public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> {
+public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> extends BaseGameEntity {
 
     private GraphEdge nh1;
 
@@ -90,30 +94,41 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     //ctor
     public SparseGraph(boolean digraph) {
+        super(GetNextValidID(),-1,-1);
         m_iNextNodeIndex = 0;
         m_bDigraph = digraph;
     }
 
-    public void display(){
-        System.out.println("size: "+ this.m_Nodes.size());
-        System.out.println("size: "+ this.m_Edges.size());
-        for(int i = 0; i < m_Nodes.size();i++){
-            NavNode n1 = (NavNode)this.m_Nodes.get(i);
-            System.out.println(n1.Pos().toString());
-        }
+//    public void display(){
+////        System.out.println("size: "+ this.m_Nodes.size());
+////        System.out.println("size: "+ this.m_Edges.size());
+//        for(int i = 0; i < m_Nodes.size();i++){
+//            NavNode n1 = (NavNode)this.m_Nodes.get(i);
+//
+////            System.out.println(n1.Pos().toString());
+//        }
 
+
+//    }
+
+    @Override
+    public void update() {
 
     }
 
     public void render(GraphicsContext gc){
-        System.out.println("size: "+ this.m_Nodes.size());
-        System.out.println("size: "+ this.m_Edges.size());
+//        System.out.println("size: "+ this.m_Nodes.size());
+//        System.out.println("size: "+ this.m_Edges.size());
         gc.setFill(Color.BLACK);
         for(int i = 0; i < m_Nodes.size();i++){
             NavNode n1 = (NavNode)this.m_Nodes.get(i);
+            if(n1.isValid()){
+                gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),2,2,1,1);
+//                System.out.println(n1.Pos().toString());
+            }else {
+                System.out.println("------------------------------is----------invallid----------------------------");
+            }
 
-            gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),2,2,1,1);
-            System.out.println(n1.Pos().toString());
         }
 //        for (int i = 0; i<m_Edges.size();i++){
 //            SparseGraph.EdgeList g1 = this.m_Edges.get(i);
@@ -131,6 +146,29 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 //            }
 //        }
 
+    }
+
+    @Override
+    public Rectangle getHitBox() {
+        return null;
+    }
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        switch (msg.Msg){
+            case Msg_interact :
+                System.out.println("Find invalid nodes, dealing");
+                m_Nodes.get((int)msg.ExtraInfo).setInvalid();
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
+    @Override
+    public String toString() {
+        return "Sparse Graph type";
     }
 
     /**
@@ -659,6 +697,18 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         public ConstNodeIterator(SparseGraph<node_type, edge_type> graph) {
             super(graph);
         }
+    }
+
+    public ArrayList<Vector2D> getAllVector(){
+        ArrayList<Vector2D> i1 = new ArrayList<Vector2D>();
+
+        for(Object n1 : this.m_Nodes){
+            NavNode nn1 = (NavNode)n1;
+            i1.add(nn1.Pos());
+        }
+
+        return i1;
+
     }
 
 }

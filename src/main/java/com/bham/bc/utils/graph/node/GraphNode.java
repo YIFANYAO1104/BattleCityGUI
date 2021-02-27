@@ -27,6 +27,12 @@ public class GraphNode {
         m_index = NewIndex;
     }
 
+    public boolean isValid(){
+        return m_index>0;
+    }
+    public void setInvalid(){
+        this.m_index = -1;
+    }
     //for reading and writing to streams.
     public OutputStream print(OutputStream os) {
         PrintStream ps = new PrintStream(os);

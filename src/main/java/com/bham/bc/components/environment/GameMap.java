@@ -6,6 +6,7 @@ import com.bham.bc.components.environment.obstacles.CommonWall;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.characters.Tank;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -211,6 +212,13 @@ public class GameMap {
         for (int i = 0; i < obstacles.size(); i++) {
             MapObject2D w = obstacles.get(i);
             w.collideWith(t);
+        }
+    }
+
+    public void collideWithRectangle(int ID,int indexOfNode, Rectangle r1){
+        for (int i = 0; i < obstacles.size(); i++) {
+            MapObject2D w = obstacles.get(i);
+            w.interactWith(ID,indexOfNode,r1);
         }
     }
 
