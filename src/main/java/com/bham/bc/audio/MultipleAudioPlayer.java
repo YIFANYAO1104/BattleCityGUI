@@ -5,7 +5,7 @@ import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
 
-public class MultipleAudioPlayer {
+public class MultipleAudioPlayer implements AudioPlayer {
     private ArrayList<MediaPlayer> mediaPlayers;
     private MediaPlayer currentTrack;
     private boolean isPlaying;
@@ -38,9 +38,7 @@ public class MultipleAudioPlayer {
         }
     }
 
-    /**
-     * starts current track
-     */
+    @Override
     public void play() {
         if(currentTrack != null && !isPlaying) {
             new Thread(() -> currentTrack.play()).start();
@@ -48,9 +46,7 @@ public class MultipleAudioPlayer {
         }
     }
 
-    /**
-     * pauses current track
-     */
+    @Override
     public void pause() {
         if(currentTrack != null && isPlaying) {
             new Thread(() -> currentTrack.pause()).start();
@@ -58,9 +54,7 @@ public class MultipleAudioPlayer {
         }
     }
 
-    /**
-     * stops current track
-     */
+    @Override
     public void stop() {
         if(currentTrack != null && isPlaying) {
             new Thread(() -> currentTrack.stop()).start();
@@ -68,14 +62,10 @@ public class MultipleAudioPlayer {
         }
     }
 
-    /**
-     * sets volume for all the players that make up a playlist
-     * @param volume volume to set
-     */
+    @Override
     public void setVolume(double volume) {
         for(MediaPlayer player: mediaPlayers) {
             new Thread(() -> player.setVolume(volume)).start();
         }
     }
-
 }

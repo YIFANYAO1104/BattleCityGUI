@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
-public class ParallelAudioPlayer {
+public class ParallelAudioPlayer implements AudioPlayer {
     private ArrayList<MediaPlayer> mediaPlayers;
     private boolean isPlaying;
     private CyclicBarrier gate;
@@ -24,9 +24,7 @@ public class ParallelAudioPlayer {
         isPlaying = false;
     }
 
-    /**
-     * plays the tracks
-     */
+    @Override
     public void play() {
         if(!mediaPlayers.isEmpty() && !isPlaying) {
             for(MediaPlayer player: mediaPlayers) {
@@ -43,9 +41,7 @@ public class ParallelAudioPlayer {
         }
     }
 
-    /**
-     * pauses the tracks
-     */
+    @Override
     public void pause() {
         if(!mediaPlayers.isEmpty() && isPlaying) {
             for(MediaPlayer player: mediaPlayers) {
@@ -62,9 +58,7 @@ public class ParallelAudioPlayer {
         }
     }
 
-    /**
-     * stops the tracks
-     */
+    @Override
     public void stop() {
         if(!mediaPlayers.isEmpty() && isPlaying) {
             for(MediaPlayer player: mediaPlayers) {
@@ -81,10 +75,7 @@ public class ParallelAudioPlayer {
         }
     }
 
-    /**
-     * sets the volume for all the layers that make up a track
-     * @param volume volume to set
-     */
+    @Override
     public void setVolume(double volume) {
         if(!mediaPlayers.isEmpty()) {
             for(MediaPlayer player: mediaPlayers) {
