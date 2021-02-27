@@ -5,9 +5,9 @@ import com.bham.bc.components.environment.obstacles.*;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.characters.Tank;
-import com.bham.bc.utils.MapLoader;
+import com.bham.bc.utils.maploaders.JsonMapLoader;
+import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -32,24 +32,16 @@ public class GameMap {
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
     public GameMap() {
-        MapLoader mapLoader = new MapLoader();
-        try {
-            mapLoader.loadMap("/test.json");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        MapLoader mapLoader = new JsonMapLoader("/test.json");
         obstacles = mapLoader.getObstacles();
         home = mapLoader.getHome();
         triggerSystem = mapLoader.getTriggerSystem();
 //        addWeaponGenerator();
-//        addIceWall();
+        addIceWall();
 //        addMetalWall();
 //        addTree();
 //        addRiver();
 //        addCommonWall();
-
-
-        
     }
     //init only--------------------------------------------------------------
 

@@ -4,6 +4,7 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.MapObject2D;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,8 +17,8 @@ import static com.bham.bc.components.CenterController.centerController;
  * e.g Destroyed after specific damage amount
  */
 public class IceWall extends MapObject2D {
-    public static int width = 22;
-    public static int length = 21;
+    public static int width = Constants.TILE_WIDTH;
+    public static int length = Constants.TILE_WIDTH;
     public int durability ;
 
     /**
@@ -59,7 +60,7 @@ public class IceWall extends MapObject2D {
      * Stilling looking for suitable images for this class
      */
     private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/icewall.jpg"), };
+        entityImages = new Image[] {new Image("file:src/main/resources/img/Map/icewall.jpg"), };
     }
 
 

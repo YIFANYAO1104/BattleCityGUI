@@ -1,11 +1,9 @@
-package com.bham.bc.utils;
+package com.bham.bc.utils.maploaders;
 
 import com.bham.bc.components.environment.MapObject2D;
 import com.bham.bc.components.environment.obstacles.Home;
 import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.entity.triggers.TriggerSystem;
 import javafx.embed.swing.JFXPanel;
-import javafx.scene.image.Image;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -13,17 +11,9 @@ import org.json.JSONTokener;
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class MapLoader {
-
-
-
-    private List<MapObject2D> obstacles = new ArrayList<MapObject2D>();
-    private Home home;
-    private TriggerSystem triggerSystem = new TriggerSystem();
+public class JsonMapLoader extends MapLoader {
 
     //private String resourceName = "/test.json";
     int mapWidth = 0;
@@ -31,7 +21,17 @@ public class MapLoader {
     int tileWidth = 0;
     int tileHeight = 0;
 
-    public void loadMap(String resourceName) throws Exception {
+    public JsonMapLoader(String resourceName){
+        super();
+        try {
+            this.loadMap("/test.json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void loadMap(String resourceName) throws Exception {
         InputStream is = MapLoader.class.getResourceAsStream(resourceName);
         if (is == null) {
             throw new NullPointerException("Cannot find resource file " + resourceName);
@@ -105,8 +105,6 @@ public class MapLoader {
         }
     }
 
-
-
     public List<MapObject2D> createMapObjects(String className, JSONArray layout) throws Exception {
         //reflection
         Class cls = Class.forName("com.bham.bc.components.environment.obstacles."+className);
@@ -129,22 +127,10 @@ public class MapLoader {
 
     public static void main(String[] args) throws Exception {
         new JFXPanel();
-        MapLoader mapLoader = new MapLoader();
-        mapLoader.loadMap("/test.json");
+        JsonMapLoader mapLoader = new JsonMapLoader("/test.json");
         List<MapObject2D> ls = mapLoader.getObstacles();
         for (MapObject2D l : ls) {
             System.out.println(l);
         }
-    }
-
-    public List<MapObject2D> getObstacles() {
-        return obstacles;
-    }
-    public Home getHome() {
-        return home;
-    }
-
-    public TriggerSystem getTriggerSystem() {
-        return triggerSystem;
     }
 }
