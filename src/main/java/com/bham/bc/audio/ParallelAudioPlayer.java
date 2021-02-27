@@ -10,10 +10,11 @@ import java.util.concurrent.CyclicBarrier;
 /**
  * Parallel player class to play multiple audio files at the same time
  * The class is normally used to play multiple layers (stems) of some track which is needed to be analyzed
- * NB Each layer must be of the same length and similar metadata
+ * NB Each layer must be of the same length and of similar metadata
  */
 public class ParallelAudioPlayer implements AudioPlayer {
     private ArrayList<MediaPlayer> players;
+    private ArrayList<AudioAnalyser> analysers;
     private boolean isPlaying;
     private CyclicBarrier gate;
 
@@ -23,11 +24,21 @@ public class ParallelAudioPlayer implements AudioPlayer {
      */
     public ParallelAudioPlayer(ArrayList<Media> mediaFiles) {
         players = new ArrayList<>();
+        analysers = new ArrayList<>();
+
         for(Media media: mediaFiles) players.add(new MediaPlayer(media));
-        //for(MediaPlayer p: players) while(!p.getStatus().equals(MediaPlayer.Status.READY));
+        for(MediaPlayer mp: players) analysers.add(new AudioAnalyser(mp,.06, 96));
 
         gate = new CyclicBarrier(mediaFiles.size());
         isPlaying = false;
+    }
+
+    /**
+     * gets array of arrays of frequencies for each layer for each band
+     * @return
+     */
+    public Float[] getFrequencies() {
+        return analysers.stream().map(AudioAnalyser::getFrequencies).toArray(Float[]::new);
     }
 
     @Override

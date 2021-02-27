@@ -13,7 +13,7 @@ public class AudioAnalyser {
      * Constructs 1 analyser for 1 media player
      * @param player media player to analyse
      * @param interval amount of time between checking frequency values
-     * @param numBands amount of frequency ranges
+     * @param numBands amount of frequency ranges (usually 128 or 256)
      */
     public AudioAnalyser(MediaPlayer player, double interval, int numBands) {
         frequencies = new float[numBands];

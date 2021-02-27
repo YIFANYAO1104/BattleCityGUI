@@ -3,7 +3,6 @@ package com.bham.bc.audio;
 import javafx.scene.media.Media;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AudioManager {
     private static final double INITIAL_VOLUME = 1;
@@ -16,14 +15,15 @@ public class AudioManager {
      */
     public AudioManager() {
         volume = INITIAL_VOLUME;
-        createSequentialPlayer(new ArrayList<>(Arrays.asList(TRACK.MENU)));
+        //createSequentialPlayer(TRACK.MENU);
+        createParallelPlayer(TRACK.STEM1, TRACK.STEM2);
     }
 
     /**
      * creates multiple audio player
      * @param tracks list of TRACK enums as audio sequences for the player
      */
-    public void createSequentialPlayer(ArrayList<TRACK> tracks) {
+    public void createSequentialPlayer(TRACK... tracks) {
         ArrayList<Media> mediaFiles = new ArrayList<>();
         for(TRACK track: tracks) mediaFiles.add(track.getMedia());
 
@@ -36,7 +36,7 @@ public class AudioManager {
      * creates parallel audio player
      * @param tracks list of TRACK enums as audio layers for the player
      */
-    public void createParallelPlayer(ArrayList<TRACK> tracks) {
+    public void createParallelPlayer(TRACK... tracks) {
         ArrayList<Media> mediaFiles = new ArrayList<>();
         for(TRACK track: tracks) mediaFiles.add(track.getMedia());
 
