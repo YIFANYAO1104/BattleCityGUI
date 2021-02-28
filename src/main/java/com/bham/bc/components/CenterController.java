@@ -2,6 +2,7 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.TrackableCharacter;
+import com.bham.bc.components.environment.obstacles.Home;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.graph.SparseGraph;
@@ -240,6 +241,7 @@ public class CenterController extends BaseGameEntity {
         gameMap.renderAll(gc);
 
         sg.render(gc);
+        sg.TrickingHomeTank(homeTank.getPositionV(),gc);
 
 
 

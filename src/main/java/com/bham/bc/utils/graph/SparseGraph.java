@@ -6,6 +6,7 @@ import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -14,10 +15,7 @@ import javafx.scene.shape.Rectangle;
 import static com.bham.bc.utils.graph.NodeTypeEnum.invalid_node_index;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.ListIterator;
-import java.util.Scanner;
+import java.util.*;
 
 public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> extends BaseGameEntity {
 
@@ -117,19 +115,21 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     public void render(GraphicsContext gc){
-//        System.out.println("size: "+ this.m_Nodes.size());
-//        System.out.println("size: "+ this.m_Edges.size());
+
         gc.setFill(Color.BLACK);
-        for(int i = 0; i < m_Nodes.size();i++){
+        for(int i = 0; i < m_Nodes.size() ;i++){
             NavNode n1 = (NavNode)this.m_Nodes.get(i);
             if(n1.isValid()){
                 gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),2,2,1,1);
 //                System.out.println(n1.Pos().toString());
             }else {
-                System.out.println("------------------------------is----------invallid----------------------------");
+//                System.out.println("------------------------------is----------invallid----------------------------");
             }
 
         }
+
+
+        // draw edges
 //        for (int i = 0; i<m_Edges.size();i++){
 //            SparseGraph.EdgeList g1 = this.m_Edges.get(i);
 //            for (int j = 0; j < g1.size();j++){
@@ -145,6 +145,24 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 //
 //            }
 //        }
+
+    }
+
+    public void TrickingHomeTank(Vector2D location ,GraphicsContext gc){
+        gc.setFill(Color.RED);
+        int i = (int) location.x / 24;
+        int j = (int) location.y / 32;
+        int c = j*50 + i;
+
+        NavNode n1 = (NavNode)this.m_Nodes.get(c);
+        System.out.println("1 size"+n1.Pos().toString());
+        if(n1.isValid()){
+            gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),8,8,1,1);
+        }
+        gc.setFill(Color.BLUE);
+        gc.fillRoundRect(location.getX(),location.getY(),4,4,1,1);
+
+
 
     }
 
