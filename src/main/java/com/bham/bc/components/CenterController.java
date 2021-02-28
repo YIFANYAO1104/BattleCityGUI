@@ -120,7 +120,7 @@ public class CenterController extends BaseGameEntity {
      */
     public CenterController(){
         super(GetNextValidID(),-1,-1);
-        homeTank = new HomeTank(250, 560, Direction.STOP);
+        homeTank = new HomeTank(300, 400, Direction.STOP);
         initEnemies();
         System.out.println("start");
         unfoldMap();
@@ -238,6 +238,7 @@ public class CenterController extends BaseGameEntity {
 
 
         gameMap.renderAll(gc);
+
         sg.render(gc);
 
 

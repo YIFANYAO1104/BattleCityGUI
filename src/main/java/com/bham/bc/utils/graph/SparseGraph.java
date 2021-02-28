@@ -171,6 +171,11 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         return "Sparse Graph type";
     }
 
+    @Override
+    public boolean isIntersect(BaseGameEntity b) {
+        return false;
+    }
+
     /**
      * method for obtaining a reference to a specific node
      *
