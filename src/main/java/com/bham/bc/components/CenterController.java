@@ -45,7 +45,8 @@ public class CenterController extends BaseGameEntity {
      * @return
      */
     public boolean isWin(){
-        return enemyTanks.isEmpty() && gameMap.isHomeLive() && homeTank.isLive();
+        return false;
+        //return enemyTanks.isEmpty() && gameMap.isHomeLive() && homeTank.isLive();
     }
 
     /**
@@ -112,7 +113,7 @@ public class CenterController extends BaseGameEntity {
     public CenterController(){
         super(GetNextValidID(),-1,-1);
         homeTank = new HomeTank(250, 560, Direction.STOP);
-        initEnemies();
+        //initEnemies();
     }
     /**
      * A method to generate certain number of Enemy Tanks

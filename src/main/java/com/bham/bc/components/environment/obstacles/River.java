@@ -48,7 +48,7 @@ public class River extends MapObject2D {
 
     @Override
     public void render(GraphicsContext gc) {
-        gc.drawImage(entityImages[0],x,y);
+        gc.drawImage(/*entityImages[0]*/TILESET.TILES.getTile(567),x,y);
 
     }
 
