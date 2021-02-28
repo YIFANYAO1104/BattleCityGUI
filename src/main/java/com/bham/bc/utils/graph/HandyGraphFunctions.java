@@ -27,6 +27,7 @@ public class HandyGraphFunctions {
                                                                                                int col,
                                                                                                int NumCellsX,
                                                                                                int NumCellsY) {
+
         for (int i = -1; i < 2; ++i) {
             for (int j = -1; j < 2; ++j) {
                 int nodeX = col + j;
@@ -74,6 +75,8 @@ public class HandyGraphFunctions {
                                                                                int cxSize,
                                                                                int NumCellsY,       //建立数量
                                                                                int NumCellsX) {
+
+        graph.SparseGraph(NumCellsX,NumCellsY,cxSize/NumCellsX,cySize/NumCellsY);
         //need some temporaries to help calculate each node center
         double CellWidth = (double) cySize / (double) NumCellsX;
         double CellHeight = (double) cxSize / (double) NumCellsY;

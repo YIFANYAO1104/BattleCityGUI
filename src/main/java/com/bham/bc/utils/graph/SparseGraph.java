@@ -20,6 +20,10 @@ import java.util.*;
 public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> extends BaseGameEntity {
 
     private GraphEdge nh1;
+    private int rowNums;
+    private int eachDisX;
+    private int eachDisY;
+    private int columnNums;
 
     //enable easy client access to the edge and node types used in the graph
     //typedef edge_type                EdgeType;
@@ -97,6 +101,13 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         m_bDigraph = digraph;
     }
 
+    public void SparseGraph(int rowNums, int columnNums, int eachDisX, int eachDisY) {
+        this.rowNums = rowNums;
+        this.columnNums = columnNums;
+        this.eachDisX =eachDisX;
+        this.eachDisY = eachDisY;
+    }
+
 //    public void display(){
 ////        System.out.println("size: "+ this.m_Nodes.size());
 ////        System.out.println("size: "+ this.m_Edges.size());
@@ -150,12 +161,12 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     public void TrickingHomeTank(Vector2D location ,GraphicsContext gc){
         gc.setFill(Color.RED);
-        int i = (int) location.x / 24;
-        int j = (int) location.y / 32;
-        int c = j*50 + i;
+        int i = (int) location.x /eachDisY;
+        int j = (int) location.y / eachDisX;
+        int c = j*rowNums + i;
 
         NavNode n1 = (NavNode)this.m_Nodes.get(c);
-        System.out.println("1 size"+n1.Pos().toString());
+//        System.out.println("1 size"+n1.Pos().toString());
         if(n1.isValid()){
             gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),8,8,1,1);
         }
