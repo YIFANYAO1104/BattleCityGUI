@@ -27,10 +27,21 @@ import java.nio.file.Paths;
 
 public class MainMenu extends Application {
 
+
     private GameMenu gameMenu;
 
+    /**The main entry point for all JavaFX applications. The start method is called after the init method has returned,
+     * and after the system is ready for the application to begin running.
+     NOTE: This method is called on the JavaFX Application Thread.
+     * @param primaryStage the primary stage for this application, onto which the application scene can be set.
+     *                     The primary stage will be embedded in the browser if the application was launched as an applet.
+     *                     Applications may create other stages, if needed, but they will not be primary stages and will not be embedded in the browser.
+     * @throws Exception The class Exception and its subclasses are a form of Throwable that indicates conditions that a reasonable application might want to catch.
+     */
     @Override
+
     public void start(Stage primaryStage) throws Exception {
+
         Pane root = new Pane();
         root.setPrefSize(800, 600);
 
@@ -45,8 +56,6 @@ public class MainMenu extends Application {
         ImageView imgView = new ImageView(img);
         imgView.setFitHeight(600);
         imgView.setFitWidth(800);
-        //imgView.setOpacity(0.9);
-
         gameMenu = new GameMenu();
         root.getChildren().addAll(imgView,gameMenu);
         root.getChildren().addAll(title);
@@ -56,7 +65,14 @@ public class MainMenu extends Application {
         primaryStage.show();
 
     }
-    private static class Title extends StackPane {
+
+    /**
+     *  The Class Title represents the title of the main menu and its style.
+     */
+    private static class Title extends StackPane{
+        /**
+         * @param name The game title
+         */
         public Title(String name) {
             Rectangle bg = new Rectangle(475, 60);
             bg.setStroke(Color.WHITE);
@@ -72,7 +88,15 @@ public class MainMenu extends Application {
             getChildren().addAll(bg,text);
         }
     }
+
+    /**
+     *  The GameMenu class imports the Parent class,
+     *  because the game menu contains several menus within the actual game menu.
+     */
     private class GameMenu extends Parent {
+        /**
+         *The GameMenu no arguments constructor.
+         */
         public GameMenu() {
             VBox menu0 = new VBox(15);
             VBox menu1 = new VBox(15);
@@ -86,13 +110,13 @@ public class MainMenu extends Application {
             final int offset = 400;
             menu1.setTranslateX(offset);
 
-            MenuButtin resumeBtn = new MenuButtin("RESUME");
+            MenuButton resumeBtn = new MenuButton("RESUME");
             resumeBtn.setOnMouseClicked(event -> {
 
             });
 
-            MenuButtin btnOpetion = new MenuButtin("OPITION");
-            btnOpetion.setOnMouseClicked(event -> {
+            MenuButton btnOption = new MenuButton("OPTION");
+            btnOption.setOnMouseClicked(event -> {
                 getChildren().add(menu1);
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25),menu0);
                 tt.setToX(menu0.getTranslateX()-offset);
@@ -106,12 +130,12 @@ public class MainMenu extends Application {
                     getChildren().remove(menu0);
                 });
             });
-            MenuButtin btnExit = new MenuButtin("EXIT");
+            MenuButton btnExit = new MenuButton("EXIT");
             btnExit.setOnMouseClicked(event -> {
                 System.exit(0);
             });
 
-            MenuButtin btnBack = new MenuButtin("BACK");
+            MenuButton btnBack = new MenuButton("BACK");
             btnBack.setOnMouseClicked(event -> {
                 getChildren().add(menu0);
                 TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25),menu1);
@@ -126,10 +150,10 @@ public class MainMenu extends Application {
                 });
             });
 
-            MenuButtin btnSound = new MenuButtin("SOUND");
-            MenuButtin btnVideo = new MenuButtin("VIDEO");
+            MenuButton btnSound = new MenuButton("SOUND");
+            MenuButton btnVideo = new MenuButton("VIDEO");
 
-            menu0.getChildren().addAll(resumeBtn, btnOpetion, btnExit);
+            menu0.getChildren().addAll(resumeBtn, btnOption, btnExit);
             menu1.getChildren().addAll(btnBack, btnSound, btnVideo);
 
             Rectangle bg = new Rectangle(800, 600);
@@ -139,10 +163,20 @@ public class MainMenu extends Application {
 
         }
     }
-    private static class MenuButtin extends StackPane {
+
+    /**
+     *The Class MenuButton imports StackPane which contains a single property named alignment.
+     * This property represents the alignment of the nodes within the stack pane.
+     * This class represents the the single menu buttons.
+     */
+    private static class MenuButton extends StackPane {
+
         private Text text;
 
-        public MenuButtin(String name) {
+        /**
+         * @param name The name of each button.
+         */
+        public MenuButton(String name) {
             text = new Text(name);
             text.setFont(text.getFont().font(20));
             text.setFill(Color.WHITE);
@@ -177,7 +211,9 @@ public class MainMenu extends Application {
             setOnMouseReleased(event -> setEffect(null));
         }
 
-
+        /**
+         * @param args
+         */
         public static void main(String[] args) {
             launch(args);
         }
