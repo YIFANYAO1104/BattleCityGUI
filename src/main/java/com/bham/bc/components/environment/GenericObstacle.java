@@ -16,10 +16,11 @@ public abstract class GenericObstacle extends BaseGameEntity {
 
     /**
      * Constructs an obstacle
+     *
      * @param x position in x axis
      * @param y position in y axis
      * @param tileset type of tileset
-     * @param tileIDs ID of a tile in case the obstacle is animated
+     * @param tileIDs IDs of tiles in case the obstacle is animated
      */
     public GenericObstacle(int x, int y, TILESET tileset, int... tileIDs) {
         super(GetNextValidID(), x, y);
