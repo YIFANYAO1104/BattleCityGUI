@@ -5,6 +5,7 @@ import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.MapObject2D;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.Constants;
+import com.bham.bc.components.environment.TILESET;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,7 +17,7 @@ public class River extends MapObject2D {
     public static final int width = Constants.TILE_WIDTH;
     public static final int length = Constants.TILE_WIDTH;
     private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/Map/river_01.jpg"), };
+        entityImages = new Image[] {/*new Image("file:src/main/resources/img/Map/river_01.jpg")*/TILESET.TILES.getTile(567), };
     }
 
 
@@ -48,7 +49,7 @@ public class River extends MapObject2D {
 
     @Override
     public void render(GraphicsContext gc) {
-        gc.drawImage(/*entityImages[0]*/TILESET.TILES.getTile(567),x,y);
+        gc.drawImage(entityImages[0],x,y);
 
     }
 

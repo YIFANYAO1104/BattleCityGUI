@@ -1,10 +1,12 @@
-package com.bham.bc.components.environment.obstacles;
+package com.bham.bc.components.environment;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+
+import java.util.Arrays;
 
 public enum TILESET {
     TILES("file:src/main/resources/img/tiles/ashlands.png", 16);
@@ -48,4 +50,11 @@ public enum TILESET {
      * @return image of tile at the specified index
      */
     public Image getTile(int i) { return tiles[i]; }
+
+    /**
+     * gets the specified tiles
+     * @param a array of indexes
+     * @return array of images at the specified indexes
+     */
+    public Image[] getTiles(int[] a) { return (Image[]) Arrays.stream(a).mapToObj(this::getTile).toArray(); }
 }
