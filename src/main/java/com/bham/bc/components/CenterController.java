@@ -96,6 +96,10 @@ public class CenterController extends BaseGameEntity {
     public void keyPressed(KeyEvent e){
         homeTank.keyPressed(e);
     }
+
+    public TrackableCharacter getHomeTank(){
+        return homeTank;
+    }
     //These are functions that might be used by frontend----------------------------------------------------
 
 
@@ -116,7 +120,7 @@ public class CenterController extends BaseGameEntity {
      */
     public CenterController(){
         super(GetNextValidID(),-1,-1);
-        homeTank = new HomeTank(300, 560, Direction.STOP);
+        homeTank = new HomeTank(250, 560, Direction.STOP);
         initEnemies();
         System.out.println("start");
         unfoldMap();
@@ -152,36 +156,23 @@ public class CenterController extends BaseGameEntity {
 
         //move-----------------
         homeTank.update();
-
         for (Enemy e : enemyTanks) {
             e.update();
         }
-
-
-
-
         //move-----------------
 
         //map----------------------------------
         gameMap.update(homeTank);
-
         for (Enemy e : enemyTanks) {
             gameMap.update(e);
         }
-
-
-
-
         //map----------------------------------
 
         //tanks----------------------------------
-
         homeTank.collideWithTanks(enemyTanks);
         for (Enemy e : enemyTanks) {
             e.collideWithTanks(enemyTanks);
         }
-
-
         //tanks----------------------------------
         /**
          * Use nested For Loop to update game state
@@ -191,7 +182,6 @@ public class CenterController extends BaseGameEntity {
          * 2.If Bullets hit Player (Updates game state)
          * 3.If Bullets hits environment Objects e.g Home and Wall (Updates game state)
          */
-
         for (int i = 0; i < bullets.size(); i++) {
             Bullet m = bullets.get(i);
             m.update();
@@ -204,10 +194,6 @@ public class CenterController extends BaseGameEntity {
             }
             gameMap.update(m);
         }
-
-
-
-
         gameMap.updateObstacles();
     }
 
@@ -239,10 +225,8 @@ public class CenterController extends BaseGameEntity {
             t.render(gc);
         }
 
-
         //the blood bar is here. But it's covered currently
         homeTank.render(gc);
-
         for (int i = 0; i < enemyTanks.size(); i++) {
             Enemy t = enemyTanks.get(i);
             t.render(gc);
@@ -312,10 +296,6 @@ public class CenterController extends BaseGameEntity {
         return homeTank.getHitBox();
     }
 
-    public TrackableCharacter getHomeTank() {
-        return homeTank;
-    }
-
     /**
      * Adding bullets to bullets list
      * @param m
@@ -346,5 +326,10 @@ public class CenterController extends BaseGameEntity {
     @Override
     public String toString() {
         return "Centerctroller";
+    }
+
+    @Override
+    public boolean isIntersect(BaseGameEntity b) {
+        return false;
     }
 }

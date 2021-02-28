@@ -88,4 +88,9 @@ public class BombTank extends BaseGameEntity {
 	public String toString() {
 		return "specially effect";
 	}
+
+	@Override
+	public boolean isIntersect(BaseGameEntity b) {
+		return false;
+	}
 }

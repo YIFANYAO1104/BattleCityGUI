@@ -1,10 +1,7 @@
-/**
- * Desc: If a bot runs over an instance of this class its health is increased.
- */
 package com.bham.bc.components.environment.triggers;
 
+import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.Tank;
@@ -15,47 +12,38 @@ import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class HealthGiver extends RespawnTrigger<Tank> {
+public class WeaponGenerator extends RespawnTrigger<Tank> {
+    private Weapon weapon;
 
-    public static int width = Constants.TILE_WIDTH;
-    public static int length = Constants.TILE_WIDTH;
-
-    /**
-     * the amount of health an entity receives when it runs over this trigger
-     */
-    private int health;
-
-    public HealthGiver(int x,int y, int health, int respawnCooldown) {
-
+    public WeaponGenerator(int x, int y,Weapon weapon,int width, int length,int respawnCooldown) {
         super(BaseGameEntity.GetNextValidID(), x, y);
-        this.health = health;
+        this.weapon = weapon;
 
-        //create this trigger's region of fluence
         addRectangularTriggerRegion(new Point2D(x, y), new Point2D(width, length));
         setRespawnDelay(respawnCooldown * FRAME_RATE);
         initImages();
     }
 
+
     private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/Map/hp.png"), };
+        entityImages = new Image[] {new Image("file:src/main/resources/img/tmp.jpg"), };
     }
-
-    //if triggered, the bot's health will be incremented
     @Override
-    public void tryTrigger(Tank tank) {
-        if (isActive() && isTouchingTrigger(tank.getPosition(), tank.getRadius())) {
-            tank.increaseHealth(health);
-
+    public void tryTrigger(Tank entity) {
+        if(isActive()&& isTouchingTrigger(entity.getPosition(),entity.getRadius())){
+            entity.switchWeapon(this.weapon);
             deactivate();
+
         }
+
     }
 
-    //draws a box with a red cross at the trigger's location
     @Override
     public void render(GraphicsContext gc) {
         if (isActive()) {
             gc.drawImage(entityImages[0], this.x, this.y);
         }
+
     }
 
     @Override
@@ -77,4 +65,6 @@ public class HealthGiver extends RespawnTrigger<Tank> {
     public boolean isIntersect(BaseGameEntity b) {
         return false;
     }
+
+
 }

@@ -1,7 +1,10 @@
-package com.bham.bc.components.environment;
+package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.environment.MapObject2D;
+import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -19,8 +22,8 @@ public class Home extends MapObject2D {
 	/**
 	 * Size Of Home
 	 */
-	public static int width = 43;
-	public static int length = 43;
+	public static int width = 2*Constants.TILE_WIDTH;
+	public static int length = 2*Constants.TILE_WIDTH;
 
 	private boolean live = true;
 
@@ -51,7 +54,7 @@ public class Home extends MapObject2D {
 	}
 
 	private void initImages() {
-		entityImages = new Image[] { new Image("file:src/main/resources/img/home.jpg"), };
+		entityImages = new Image[] { new Image("file:src/main/resources/img/Map/home.bmp"), };
 	}
 
 
@@ -70,6 +73,12 @@ public class Home extends MapObject2D {
 	@Override
 	public boolean handleMessage(Telegram msg) {
 		return false;
+	}
+
+	@Override
+	public boolean isIntersect(BaseGameEntity b) {
+		Rectangle t = new Rectangle(x, y, width, length);
+		return t.intersects(b.getHitBox().getBoundsInLocal());
 	}
 
 	public boolean isLive() { 

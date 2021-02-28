@@ -3,6 +3,7 @@ package com.bham.bc.components.characters;
 
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
@@ -35,6 +36,9 @@ public class HomeTank extends Tank implements TrackableCharacter {
 
 	private SimpleDoubleProperty trackableX;
 	private SimpleDoubleProperty trackableY;
+
+	//-----------------------------------------------------------------//
+	private Weapon currWeapon = null;
 
 
 
@@ -200,7 +204,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 			MovingEntity t = tanks.get(i);
 			if (this != t) {
 				if (this.live && t.isLive()
-						&& this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
+						&& this.isIntersect(t)) {
 					this.changToOldDir();
 					t.changToOldDir();
 					return true;
@@ -260,7 +264,6 @@ public class HomeTank extends Tank implements TrackableCharacter {
 
 
 		//guarantee the tank is in Frame
-
 		if (x < 0) x = 0;
 		if (y < 40) y = 40;
 		if (x + this.width > Constants.MAP_WIDTH) x = Constants.MAP_WIDTH - this.width;
@@ -309,4 +312,13 @@ public class HomeTank extends Tank implements TrackableCharacter {
 			this.life = 200;
 		}
 	}
+
+	@Override
+	public void switchWeapon(Weapon w) {
+
+	}
+
+
+	//----------------------------------------------------------------------------------------//
+
 }

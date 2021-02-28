@@ -73,6 +73,11 @@ public abstract class MovingEntity extends BaseGameEntity{
         return new Rectangle(x, y, width, length);
     }
 
+    public boolean isIntersect(BaseGameEntity b) {
+        Rectangle t = new Rectangle(x, y, width, length);
+        return t.intersects(b.getHitBox().getBoundsInLocal());
+    }
+
     public void changToOldDir() {
         x = oldX;
         y = oldY;

@@ -1,11 +1,12 @@
 package com.bham.bc.components.armory;
 
+import com.bham.bc.components.environment.obstacles.IceWall;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.environment.obstacles.CommonWall;
-import com.bham.bc.components.environment.Home;
+import com.bham.bc.components.environment.obstacles.Home;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.HomeTank;
 import javafx.scene.canvas.GraphicsContext;
@@ -72,7 +73,7 @@ abstract public class Bullet extends MovingEntity {
         //与敌人碰撞到了
         //敌人活着
         //子弹只作用在对方身上
-        if (this.live && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal()) && t.isLive()) {
+        if (this.live && this.isIntersect(t) && t.isLive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
             centerController.addBombTank(e);
@@ -92,7 +93,7 @@ abstract public class Bullet extends MovingEntity {
      */
     public boolean hitTank(HomeTank t) {
 
-        if (this.live && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal()) && t.isLive()) {
+        if (this.live && this.isIntersect(t) && t.isLive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
 
@@ -114,8 +115,6 @@ abstract public class Bullet extends MovingEntity {
         return false;
     }
 
-
-
     /**
      * A method to indicate if the bullet hits the bullet
      * If bullet hits the other bullet then it should be removed from bullet list(centerController will do that)
@@ -123,7 +122,7 @@ abstract public class Bullet extends MovingEntity {
      * @return
      */
     public boolean hitBullet(Bullet w){
-        if (this.live && this.getHitBox().intersects(w.getHitBox().getBoundsInLocal())){
+        if (this.live && this.isIntersect(w)){
             this.live=false;
             centerController.removeBullet(w);
             return true;
@@ -131,10 +130,10 @@ abstract public class Bullet extends MovingEntity {
         return false;
     }
 
-
     public Rectangle getHitBox() {
         return new Rectangle(x, y, width, length);
     }
+
 
 
     public boolean isLive() {
