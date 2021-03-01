@@ -2,6 +2,7 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.TrackableCharacter;
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.obstacles.SoftTile;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.Direction;
@@ -113,22 +114,17 @@ public class CenterController extends BaseGameEntity {
     public CenterController(){
         super(GetNextValidID(),-1,-1);
         homeTank = new HomeTank(16*32, 16*32, Direction.STOP);
-        //initEnemies();
+        initEnemies();
     }
     /**
      * A method to generate certain number of Enemy Tanks
      * Adding created Objects into enemyTanks(list)
      */
     private void initEnemies() {
-        for (int i = 0; i < 20; i++) {
-            if (i < 9){
-                enemyTanks.add(new Enemy(150 + 70 * i, 40,  Direction.D));
-            } else if (i < 15){
-                enemyTanks.add(new Enemy(700, 140 + 50 * (i - 6), Direction.D));
-            } else{
-                enemyTanks.add(new Enemy(10, 50 * (i - 12),  Direction.D));
-            }
-        }
+        enemyTanks.add(new Enemy(16*3, 16*3,  Direction.D));
+        enemyTanks.add(new Enemy(16*61, 16*3, Direction.D));
+        enemyTanks.add(new Enemy(16*3, 16*61,  Direction.D));
+        enemyTanks.add(new Enemy(16*61, 16*61,  Direction.D));
     }
 
 
@@ -193,7 +189,7 @@ public class CenterController extends BaseGameEntity {
          *  The latter render will cover the previous render
          *  For example,rending Tree at the end leads to successfully Shading
          */
-        gameMap.renderAll(gc);
+        gameMap.renderBottomLayer(gc);
         for (int i = 0; i < bullets.size(); i++) {
             Bullet t = bullets.get(i);
             t.render(gc);
@@ -210,11 +206,7 @@ public class CenterController extends BaseGameEntity {
             BombTank bt = bombTanks.get(i);
             bt.render(gc);
         }
-
-
-
-
-
+        gameMap.renderTopLayer(gc);
     }
 
 
@@ -237,7 +229,7 @@ public class CenterController extends BaseGameEntity {
     }
 
     public void removeEnemy(Enemy enemy){
-        enemyTanks.remove(enemy);
+        //enemyTanks.remove(enemy);
     }
 
     /**
@@ -283,6 +275,8 @@ public class CenterController extends BaseGameEntity {
     public void removeBullet(Bullet m){
         bullets.remove(m);
     }
+
+    public void removeObstacle(SoftTile go) { gameMap.removeHomeWall(go); }
     //These are functions that might be used by backend----------------------------------------------------
 
     @Override

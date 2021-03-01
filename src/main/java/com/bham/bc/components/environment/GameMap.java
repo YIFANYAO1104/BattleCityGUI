@@ -34,7 +34,6 @@ public class GameMap {
     public GameMap() {
         MapLoader mapLoader = new JsonMapLoader("/test4.json");
         obstacles = mapLoader.getObstacles();
-        //home = mapLoader.getHome();
         triggerSystem = mapLoader.getTriggerSystem();
     }
     //init only--------------------------------------------------------------
@@ -56,10 +55,10 @@ public class GameMap {
 
     /**
      * Remove the home wall from map
-     * @param w
+     * @param s
      */
-    public void removeHomeWall(SoftTile w){
-        //obstacles.remove(w);
+    public void removeHomeWall(SoftTile s){
+        obstacles.remove(s);
     }
 
 
@@ -91,20 +90,21 @@ public class GameMap {
      * The following methods calls all render methods of particular Objects
      * @param gc
      */
-    public void renderAll(GraphicsContext gc){
-        renderHome(gc);
-        renderObstacles(gc);
-        renderTriggers(gc);
-    }
 
     public void renderHome(GraphicsContext gc){
         //if (home != null) home.render(gc);
     }
 
-    public void renderObstacles(GraphicsContext gc){
-        for (int i = 0; i < obstacles.size(); i++) {
-            GenericObstacle w = obstacles.get(i);
-            w.render(gc);
+    public void renderBottomLayer(GraphicsContext gc) {
+        for(GenericObstacle go: obstacles) {
+            if(!go.renderTop()) go.render(gc);
+        }
+        renderTriggers(gc);
+    }
+
+    public void renderTopLayer(GraphicsContext gc) {
+        for(GenericObstacle go: obstacles) {
+            if(go.renderTop()) go.render(gc);
         }
     }
 

@@ -3,6 +3,7 @@ package com.bham.bc.components.environment;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.maploaders.TILESET;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -14,8 +15,7 @@ import javafx.scene.shape.Rectangle;
 public abstract class GenericObstacle extends BaseGameEntity {
 
     private int currentFrame;
-    //temp
-    int[] tileIDs = new int[]{};
+    protected boolean renderTop;
 
     /**
      * Constructs an obstacle
@@ -30,6 +30,8 @@ public abstract class GenericObstacle extends BaseGameEntity {
         currentFrame = 0;
         entityImages = tileIDs.length == 0 ? getDefaultImage() : tileset.getTiles(tileIDs);
     }
+
+    public boolean renderTop() { return renderTop; }
 
     /**
      * gets default image of a tile

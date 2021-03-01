@@ -1,4 +1,4 @@
-package com.bham.bc.components.environment;
+package com.bham.bc.utils.maploaders;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
@@ -9,9 +9,9 @@ import javafx.scene.paint.Color;
 import java.util.Arrays;
 
 public enum TILESET {
-    BASIC("file:src/main/resources/img/tiles/basic.png", 16),
     ASHLANDS("file:src/main/resources/img/tiles/ashlands.png", 16),
-    ATLANTIS("file:src/main/resources/img/tiles/atlantis.png", 16);
+    ATLANTIS("file:src/main/resources/img/tiles/atlantis.png", 16),
+    BASIC("file:src/main/resources/img/tiles/basic.png", 16);
 
     private Image[] tiles;
 

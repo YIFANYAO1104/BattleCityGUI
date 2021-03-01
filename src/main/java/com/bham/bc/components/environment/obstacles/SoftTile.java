@@ -3,7 +3,7 @@ package com.bham.bc.components.environment.obstacles;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.components.environment.TILESET;
+import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 
 import static com.bham.bc.components.CenterController.centerController;
@@ -27,6 +27,7 @@ public class SoftTile extends GenericObstacle {
      */
     public SoftTile(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
+        renderTop = false;
     }
 
     @Override
@@ -40,8 +41,7 @@ public class SoftTile extends GenericObstacle {
             b.setLive(false);
             centerController.removeBullet(b);
             // hp -= b.damage();
-            if(--hp <= 0) centerController.removeBullet(b);
-            // centerController.removeObstacle(this);
+            if(--hp <= 0) centerController.removeObstacle(this);
         }
     }
 

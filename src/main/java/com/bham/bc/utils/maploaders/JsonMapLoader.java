@@ -1,7 +1,6 @@
 package com.bham.bc.utils.maploaders;
 
 import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.components.environment.TILESET;
 import com.bham.bc.entity.triggers.Trigger;
 import org.json.JSONArray;
 import org.json.JSONObject;
