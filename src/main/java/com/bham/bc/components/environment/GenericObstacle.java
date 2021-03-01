@@ -25,7 +25,7 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public GenericObstacle(int x, int y, TILESET tileset/*, int... tileIDs*/) {
+    public GenericObstacle(int x, int y, TILESET tileset, int... tileIDs) {
         super(GetNextValidID(), x, y);
         currentFrame = 0;
         entityImages = tileIDs.length == 0 ? getDefaultImage() : tileset.getTiles(tileIDs);

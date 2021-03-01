@@ -25,8 +25,8 @@ public class SoftTile extends GenericObstacle {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public SoftTile(int x, int y, TILESET tileset/*, int... tileIDs*/) {
-        super(x, y, tileset/*, tileIDs*/);
+    public SoftTile(int x, int y, TILESET tileset, int... tileIDs) {
+        super(x, y, tileset, tileIDs);
     }
 
     @Override

@@ -21,8 +21,8 @@ public class ImpassableTile extends GenericObstacle {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public ImpassableTile(int x, int y, TILESET tileset/*, int... tileIDs*/) {
-        super(x, y, tileset/*, tileIDs*/);
+    public ImpassableTile(int x, int y, TILESET tileset, int... tileIDs) {
+        super(x, y, tileset, tileIDs);
     }
 
     @Override

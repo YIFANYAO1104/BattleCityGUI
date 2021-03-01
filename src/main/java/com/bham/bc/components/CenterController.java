@@ -193,13 +193,14 @@ public class CenterController extends BaseGameEntity {
          *  The latter render will cover the previous render
          *  For example,rending Tree at the end leads to successfully Shading
          */
-
+        gameMap.renderAll(gc);
         for (int i = 0; i < bullets.size(); i++) {
             Bullet t = bullets.get(i);
             t.render(gc);
         }
 
         //the blood bar is here. But it's covered currently
+
         homeTank.render(gc);
         for (int i = 0; i < enemyTanks.size(); i++) {
             Enemy t = enemyTanks.get(i);
@@ -211,7 +212,7 @@ public class CenterController extends BaseGameEntity {
         }
 
 
-        gameMap.renderAll(gc);
+
 
 
     }

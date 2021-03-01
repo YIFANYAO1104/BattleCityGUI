@@ -18,8 +18,8 @@ public class CoveringTile extends GenericObstacle {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public CoveringTile(int x, int y, TILESET tileset/*, int... tileIDs*/) {
-        super(x, y, tileset/*, tileIDs*/);
+    public CoveringTile(int x, int y, TILESET tileset, int... tileIDs) {
+        super(x, y, tileset, tileIDs);
     }
 
     @Override

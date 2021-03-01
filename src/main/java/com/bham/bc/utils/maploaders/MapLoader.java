@@ -7,16 +7,27 @@ import java.util.List;
 
 public abstract class MapLoader {
 
-    protected List<GenericObstacle> obstacles = new ArrayList<>();
-    protected TriggerSystem triggerSystem = new TriggerSystem();
+    protected List<GenericObstacle> obstacles;
+    protected TriggerSystem triggerSystem;
 
-
-
-    public List<GenericObstacle> getObstacles() {
-        return obstacles;
+    /**
+     * Constructs map loader with compulsory attributes
+     */
+    public MapLoader() {
+        obstacles = new ArrayList<>();
+        triggerSystem = new TriggerSystem();
     }
-    public TriggerSystem getTriggerSystem() {
-        return triggerSystem;
-    }
+
+    /**
+     * gets obstacle layer
+     * @return List of Generic Obstacles
+     */
+    public List<GenericObstacle> getObstacles() { return obstacles; }
+
+    /**
+     * gets trigger layer
+     * @return Trigger System
+     */
+    public TriggerSystem getTriggerSystem() { return triggerSystem; }
 
 }
