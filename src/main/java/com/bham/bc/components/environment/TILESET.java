@@ -58,5 +58,5 @@ public enum TILESET {
      * @param a array of indexes
      * @return array of images at the specified indexes
      */
-    public Image[] getTiles(int[] a) { return (Image[]) Arrays.stream(a).mapToObj(this::getTile).toArray(); }
+    public Image[] getTiles(int[] a) { return Arrays.stream(a).mapToObj(this::getTile).toArray(Image[]::new); }
 }

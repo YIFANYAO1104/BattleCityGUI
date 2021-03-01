@@ -112,7 +112,7 @@ public class CenterController extends BaseGameEntity {
      */
     public CenterController(){
         super(GetNextValidID(),-1,-1);
-        homeTank = new HomeTank(250, 560, Direction.STOP);
+        homeTank = new HomeTank(16*32, 16*32, Direction.STOP);
         //initEnemies();
     }
     /**

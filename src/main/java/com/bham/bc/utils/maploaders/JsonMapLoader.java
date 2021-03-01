@@ -6,6 +6,7 @@ import com.bham.bc.entity.triggers.Trigger;
 import javafx.embed.swing.JFXPanel;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONString;
 import org.json.JSONTokener;
 
 import java.io.InputStream;
@@ -23,15 +24,13 @@ public class JsonMapLoader extends MapLoader {
 
     private EnumMap<TILESET, Integer> offsets;
 
-    public JsonMapLoader(String resourceName){
+
+    public JsonMapLoader(String resourceName) {
         super();
         try { loadMap(resourceName); }
         catch (Exception e) { e.printStackTrace(); }
 
-        offsets = new EnumMap<>(TILESET.class);
-        offsets.put(TILESET.BASIC, 4061);
-        offsets.put(TILESET.ASHLANDS, 1);
-        offsets.put(TILESET.ATLANTIS, 1681);
+
     }
 
 
@@ -47,30 +46,51 @@ public class JsonMapLoader extends MapLoader {
         tileWidth = object.getInt("tilewidth");
         tileHeight = object.getInt("tileheight");
 
+        offsets = new EnumMap<>(TILESET.class);
+        offsets.put(TILESET.BASIC, 4061);
+        offsets.put(TILESET.ASHLANDS, 1);
+        offsets.put(TILESET.ATLANTIS, 1681);
 
-        JSONArray tilesets = object.getJSONArray("tilesets");
-        for(Object tileset: tilesets) {
 
-        }
+        //JSONArray tilesets = object.getJSONArray("tilesets");
+        //for(Object tileset: tilesets) {
+
+        //}
 
         // Each group represents 1 tileset
-        JSONArray groups = object.getJSONArray("layers");
 
-        for(int i = 0; i < groups.length(); i++) {
-            JSONObject lays = groups.getJSONObject(i);
+
+        JSONArray layerGroups = object.getJSONArray("layers");
+
+        for(int i = 0; i < layerGroups.length(); i++) {
+            JSONObject group = layerGroups.getJSONObject(i);
             int offset = 0;
 
-            if(lays.getString("name").equals("BASIC")){
+            if(group.getString("name").equals("BASIC")){
                 offset = 4061;
-            } else if (lays.getString("name").equals("ASHLANDS")) {
+            } else if (group.getString("name").equals("ASHLANDS")) {
                 offset = 1;
-            } else if (lays.getString("name").equals("ATLANTIS")) {
+            } else if (group.getString("name").equals("ATLANTIS")) {
                 offset = 1681;
             }
 
+            //System.out.println(group.toString());
+            String onamae = group.getString("name");
+            JSONArray lays = group.getJSONArray("layers");
 
             for(int j = 0; j < lays.length(); j++) {
-                //JSONObject lay = lays.getJSONObject(j);
+                JSONObject lay = lays.getJSONObject(j);
+
+                if (lay.has("data")) {  // If has obstacles
+                    String name = lay.getString("name");
+
+                    JSONArray obstacleArray = lay.getJSONArray("data");
+                    List<GenericObstacle> obs = createMapObjects(onamae, name, obstacleArray);
+                    obstacles.addAll(obs);
+
+                } else if(lay.has("objects")) { // If has properties for trigger
+                    createTriggers(lay.getString("name"), lay.getJSONArray("objects"));
+                }
             }
 
 
@@ -78,6 +98,7 @@ public class JsonMapLoader extends MapLoader {
 
 
         //1 layer represents 1 class type, layer name must be class name
+        /*
         JSONArray layers = object.getJSONArray("layers");
         for (int i = 0; i < layers.length(); i++)
         {
@@ -87,7 +108,6 @@ public class JsonMapLoader extends MapLoader {
             //for tile layer
             if(layer.has("data")) {
                 String name = layer.getString("name");
-                System.out.println(name);
 
                 JSONArray layout = layer.getJSONArray("data");
 
@@ -98,6 +118,8 @@ public class JsonMapLoader extends MapLoader {
             }
 
         }
+
+         */
     }
 
     public void createTriggers(String className, JSONArray objs) throws Exception {
@@ -133,10 +155,15 @@ public class JsonMapLoader extends MapLoader {
         }
     }
 
-    public List<GenericObstacle> createMapObjects(String className, JSONArray layout) throws Exception {
+    public List<GenericObstacle> createMapObjects(String tilesetName, String className, JSONArray layout) throws Exception {
         //reflection
+        TILESET tileset = TILESET.valueOf(tilesetName);
         Class cls = Class.forName("com.bham.bc.components.environment.obstacles."+className);
         Constructor constructor = cls.getConstructor(int.class, int.class, TILESET.class, int[].class);
+
+
+        System.out.println(tileset.toString() + " |||| " + cls.toString() + " ||| ");
+        System.out.println(layout.length());
 
         List<GenericObstacle> objs = new ArrayList<>();
         //get positions
@@ -145,7 +172,8 @@ public class JsonMapLoader extends MapLoader {
             if(layout.getInt(j)>0){
                 int x= (j%mapWidth)*tileWidth;
                 int y = (j/mapWidth)*tileHeight;
-                objs.add((GenericObstacle) constructor.newInstance(x,y, TILESET.ASHLANDS, new int[0]));
+                int idx = layout.getInt(j) - offsets.get(tileset);
+                objs.add((GenericObstacle) constructor.newInstance(x,y, tileset, new int[]{idx}));
             }
         }
         return objs;
