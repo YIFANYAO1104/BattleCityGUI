@@ -5,6 +5,7 @@ import com.bham.bc.components.characters.Tank;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -13,6 +14,8 @@ import javafx.scene.shape.Rectangle;
 public abstract class GenericObstacle extends BaseGameEntity {
 
     private int currentFrame;
+    //temp
+    int[] tileIDs = new int[]{};
 
     /**
      * Constructs an obstacle
@@ -22,11 +25,17 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public GenericObstacle(int x, int y, TILESET tileset, int... tileIDs) {
+    public GenericObstacle(int x, int y, TILESET tileset/*, int... tileIDs*/) {
         super(GetNextValidID(), x, y);
         currentFrame = 0;
-        entityImages = tileset.getTiles(tileIDs);
+        entityImages = tileIDs.length == 0 ? getDefaultImage() : tileset.getTiles(tileIDs);
     }
+
+    /**
+     * gets default image of a tile
+     * @return
+     */
+    abstract protected Image[] getDefaultImage();
 
     /**
      * handles bullet collision
@@ -38,7 +47,7 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * handles tank collision
      * @param t tank to handle
      */
-    abstract public void handleTank(Tank t);
+    abstract public void handleCharacter(Tank t);
 
     @Override
     public void update() { if(entityImages.length > 1) currentFrame = (++currentFrame) % entityImages.length; }

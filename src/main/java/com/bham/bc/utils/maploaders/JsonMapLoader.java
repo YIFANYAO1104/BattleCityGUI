@@ -1,7 +1,7 @@
 package com.bham.bc.utils.maploaders;
 
-import com.bham.bc.components.environment.MapObject2D;
-import com.bham.bc.components.environment.obstacles.Home;
+import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.TILESET;
 import com.bham.bc.entity.triggers.Trigger;
 import javafx.embed.swing.JFXPanel;
 import org.json.JSONArray;
@@ -24,7 +24,7 @@ public class JsonMapLoader extends MapLoader {
     public JsonMapLoader(String resourceName){
         super();
         try {
-            this.loadMap("/test.json");
+            this.loadMap(resourceName);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,12 +59,8 @@ public class JsonMapLoader extends MapLoader {
 
                 JSONArray layout = layer.getJSONArray("data");
 
-                List<MapObject2D> objs = createMapObjects(name, layout);
-                if (name.equals("Home")) {
-                    home = (Home) objs.get(0);
-                } else {
-                    obstacles.addAll(objs);
-                }
+                List<GenericObstacle> objs = createMapObjects(name, layout);
+                obstacles.addAll(objs);
             } else if (layer.has("objects")) {//for object layer
                 createTriggers(layer.getString("name"), layer.getJSONArray("objects"));
             }
@@ -105,19 +101,19 @@ public class JsonMapLoader extends MapLoader {
         }
     }
 
-    public List<MapObject2D> createMapObjects(String className, JSONArray layout) throws Exception {
+    public List<GenericObstacle> createMapObjects(String className, JSONArray layout) throws Exception {
         //reflection
         Class cls = Class.forName("com.bham.bc.components.environment.obstacles."+className);
-        Constructor constructor = cls.getConstructor(int.class, int.class);
+        Constructor constructor = cls.getConstructor(int.class, int.class, TILESET.class);
 
-        List<MapObject2D> objs = new ArrayList<MapObject2D>();
+        List<GenericObstacle> objs = new ArrayList<>();
         //get positions
         for (int j = 0; j < layout.length(); j++)
         {
             if(layout.getInt(j)>0){
                 int x= (j%mapWidth)*tileWidth;
                 int y = (j/mapWidth)*tileHeight;
-                objs.add((MapObject2D) constructor.newInstance(x,y));
+                objs.add((GenericObstacle) constructor.newInstance(x,y, TILESET.TILES));
             }
         }
         return objs;
@@ -128,8 +124,8 @@ public class JsonMapLoader extends MapLoader {
     public static void main(String[] args) throws Exception {
         new JFXPanel();
         JsonMapLoader mapLoader = new JsonMapLoader("/test.json");
-        List<MapObject2D> ls = mapLoader.getObstacles();
-        for (MapObject2D l : ls) {
+        List<GenericObstacle> ls = mapLoader.getObstacles();
+        for (GenericObstacle l : ls) {
             System.out.println(l);
         }
     }

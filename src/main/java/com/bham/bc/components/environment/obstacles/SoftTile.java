@@ -4,6 +4,7 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.TILESET;
+import javafx.scene.image.Image;
 
 import static com.bham.bc.components.CenterController.centerController;
 
@@ -12,6 +13,8 @@ import static com.bham.bc.components.CenterController.centerController;
  */
 public class SoftTile extends GenericObstacle {
 
+    // Use Switch statement and check tileID manually to determine how much hp each type of softTile has
+    // Alternatively, just set every tile equal to the same hp
     private int hp = 3;
 
     /**
@@ -22,8 +25,13 @@ public class SoftTile extends GenericObstacle {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public SoftTile(int x, int y, TILESET tileset, int... tileIDs) {
-        super(x, y, tileset, tileIDs);
+    public SoftTile(int x, int y, TILESET tileset/*, int... tileIDs*/) {
+        super(x, y, tileset/*, tileIDs*/);
+    }
+
+    @Override
+    protected Image[] getDefaultImage() {
+        return new Image[] {new Image("file:src/main/resources/img/Map/CommonWall.bmp") };
     }
 
     @Override
@@ -38,7 +46,7 @@ public class SoftTile extends GenericObstacle {
     }
 
     @Override
-    public void handleTank(Tank t) {
+    public void handleCharacter(Tank t) {
         if(t.isLive() && this.isIntersect(t)){
             centerController.changToOldDir(t);
         }

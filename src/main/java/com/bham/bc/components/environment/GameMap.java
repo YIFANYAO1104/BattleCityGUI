@@ -21,9 +21,9 @@ public class GameMap {
     /**
      * Creating container for Home Walls On Map
      */
-    private List<MapObject2D> obstacles = new ArrayList<MapObject2D>();
-    private Home home;
-    private TriggerSystem triggerSystem = new TriggerSystem();
+    private List<GenericObstacle> obstacles;
+    // private Home home;
+    private TriggerSystem triggerSystem;
 
 
 
@@ -32,16 +32,10 @@ public class GameMap {
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
     public GameMap() {
-        MapLoader mapLoader = new JsonMapLoader("/test.json");
+        MapLoader mapLoader = new JsonMapLoader("/test4.json");
         obstacles = mapLoader.getObstacles();
-        home = mapLoader.getHome();
+        //home = mapLoader.getHome();
         triggerSystem = mapLoader.getTriggerSystem();
-//        addWeaponGenerator();
-        addIceWall();
-//        addMetalWall();
-//        addTree();
-//        addRiver();
-//        addCommonWall();
     }
     //init only--------------------------------------------------------------
 
@@ -52,19 +46,20 @@ public class GameMap {
      * @return
      */
     public boolean isHomeLive(){
-        return home.isLive();
+        //return home.isLive();
+        return true;
     }
 
     public void setHomeLive(){
-        home.setLive(true);
+        //home.setLive(true);
     }
 
     /**
      * Remove the home wall from map
      * @param w
      */
-    public void removeHomeWall(CommonWall w){
-        obstacles.remove(w);
+    public void removeHomeWall(SoftTile w){
+        //obstacles.remove(w);
     }
 
 
@@ -103,12 +98,12 @@ public class GameMap {
     }
 
     public void renderHome(GraphicsContext gc){
-        if (home != null) home.render(gc);
+        //if (home != null) home.render(gc);
     }
 
     public void renderObstacles(GraphicsContext gc){
         for (int i = 0; i < obstacles.size(); i++) {
-            MapObject2D w = obstacles.get(i);
+            GenericObstacle w = obstacles.get(i);
             w.render(gc);
         }
     }
@@ -137,8 +132,8 @@ public class GameMap {
      */
     public void hitObstacles(Bullet m){
         for (int j = 0; j < obstacles.size(); j++) {
-            MapObject2D cw = obstacles.get(j);
-            cw.beHitBy(m);
+            GenericObstacle cw = obstacles.get(j);
+            cw.handleBullet(m);
         }
     }
     /**
@@ -147,18 +142,16 @@ public class GameMap {
      * @param m
      */
     public void hitHome(Bullet m){
-        home.beHitBy(m);
+        //home.handleBullet(m);
     }
 
     public void updateObstacles() {
-        Iterator<MapObject2D> it = obstacles.iterator();
+        Iterator<GenericObstacle> it = obstacles.iterator();
         while (it.hasNext()) {
-            MapObject2D curObj = it.next();
-            if (curObj.isToBeRemoved()) {
-                it.remove();
-            } else {
+            GenericObstacle curObj = it.next();
+
                 curObj.update();
-            }
+
         }
     }
     //hit--------------------------------------------------------------
@@ -186,7 +179,7 @@ public class GameMap {
      * @param t
      */
     public void collideWithHome(Tank t){
-        home.collideWith(t);
+        //home.handleCharacter(t);
     }
     /**
      * A method to loop all objects, and use as parameter for Collide Method
@@ -195,42 +188,9 @@ public class GameMap {
      */
     public void collideWithObstacles(Tank t){
         for (int i = 0; i < obstacles.size(); i++) {
-            MapObject2D w = obstacles.get(i);
-            w.collideWith(t);
+            GenericObstacle w = obstacles.get(i);
+            w.handleCharacter(t);
         }
-    }
-    private void addIceWall(){
-        for(int i = 0; i < 5 ; i++){
-            obstacles.add(new IceWall(390, 320-21*i));
-
-        }
-    }
-    private void addRiver(){
-        obstacles.add(new River(222,166));
-        obstacles.add(new River(298,166));
-
-    }
-    private void addTree(){
-
-            obstacles.add(new Tree(189,166));
-            obstacles.add(new Tree(150,166));
-
-    }
-    private void addMetalWall(){
-        for (int i = 0; i < 10; i++) {
-            if (i < 4)
-                obstacles.add(new MetalWall(230, 450-35*i));
-            else if (i < 7)
-                obstacles.add(new MetalWall(210 + 35 * (i - 4), 400));
-            else
-                obstacles.add(new MetalWall(88, 30 + (i - 7) * 35));
-
-        }
-    }
-    private void addCommonWall(){
-        obstacles.add(new CommonWall(380,166));
-        obstacles.add(new CommonWall(340,166));
-
     }
 
 

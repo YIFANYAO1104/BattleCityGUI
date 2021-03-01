@@ -2,11 +2,11 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.TrackableCharacter;
+import com.bham.bc.components.environment.obstacles.SoftTile;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.environment.obstacles.CommonWall;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
@@ -231,7 +231,7 @@ public class CenterController extends BaseGameEntity {
         t.changToOldDir();
     }
 
-    public void removeWall(CommonWall w){
+    public void removeWall(SoftTile w){
         gameMap.removeHomeWall(w);
     }
 
