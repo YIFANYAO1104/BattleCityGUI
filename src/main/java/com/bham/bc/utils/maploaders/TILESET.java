@@ -9,9 +9,9 @@ import javafx.scene.paint.Color;
 import java.util.Arrays;
 
 public enum TILESET {
-    ASHLANDS("file:src/main/resources/img/tiles/ashlands.png", 16),
-    ATLANTIS("file:src/main/resources/img/tiles/atlantis.png", 16),
-    BASIC("file:src/main/resources/img/tiles/basic.png", 16);
+    ASHLANDS("file:src/main/resources/img/tiles/tilesets/ashlands.png", 16),
+    ATLANTIS("file:src/main/resources/img/tiles/tilesets/atlantis.png", 16),
+    BASIC("file:src/main/resources/img/tiles/tilesets/basic.png", 16);
 
     private Image[] tiles;
 

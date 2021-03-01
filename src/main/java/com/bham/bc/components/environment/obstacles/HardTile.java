@@ -27,7 +27,7 @@ public class HardTile extends GenericObstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/Map/metalWall.bmp") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/metalWall.bmp") };
     }
 
     @Override

@@ -28,7 +28,7 @@ public class ImpassableTile extends GenericObstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/Map/river_01.jpg") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/river_01.jpg") };
     }
 
     @Override

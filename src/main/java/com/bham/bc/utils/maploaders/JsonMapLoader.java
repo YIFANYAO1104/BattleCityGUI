@@ -8,9 +8,7 @@ import org.json.JSONTokener;
 
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
+import java.util.*;
 
 public class JsonMapLoader extends MapLoader {
     private int mapWidth;
@@ -19,6 +17,7 @@ public class JsonMapLoader extends MapLoader {
     private int tileHeight;
 
     private EnumMap<TILESET, Integer> offsets;
+    private HashMap<Integer, int[]> animations;
 
     /**
      * Constructs JSON Map Loader
@@ -27,6 +26,7 @@ public class JsonMapLoader extends MapLoader {
     public JsonMapLoader(String resourceName) {
         super();
         offsets = new EnumMap<>(TILESET.class);
+        animations = new HashMap<>();
 
         try {
             loadMap(resourceName);
@@ -92,15 +92,32 @@ public class JsonMapLoader extends MapLoader {
         tileWidth = jsonObject.getInt("tilewidth");
         tileHeight = jsonObject.getInt("tileheight");
 
-        // Get all the tilesets that were were used to build the map
+        // Get all the tilesets that were used to build the map
         JSONArray tilesets = jsonObject.getJSONArray("tilesets");
 
         // Determine from where each tileset starts counting its tiles
+        // Determine animated tiles for each tileset
         for(int i = 0; i < tilesets.length(); i++) {
             JSONObject tilesetProperties = tilesets.getJSONObject(i);
+
             String tilesetName = tilesetProperties.getString("name").toUpperCase();
             int offset = tilesetProperties.getInt("firstgid");
             offsets.put(TILESET.valueOf(tilesetName), offset);
+
+            if(!tilesetProperties.has("tiles")) continue;
+
+            JSONArray tiles = tilesetProperties.getJSONArray("tiles");
+
+            for(int j = 0; j < tiles.length(); j++) {
+                if(tiles.getJSONObject(j).has("animation")) {
+                    int tileID = tiles.getJSONObject(j).getInt("id");
+                    JSONArray jsonTileSequence = tiles.getJSONObject(j).getJSONArray("animation");
+                    int[] tileSequence = new int[jsonTileSequence.length()];
+                    for(int k = 0; k < tileSequence.length; k++) tileSequence[k] = jsonTileSequence.getJSONObject(k).getInt("tileid");
+
+                    animations.put(tileID, tileSequence);
+                }
+            }
         }
     }
 
@@ -126,9 +143,11 @@ public class JsonMapLoader extends MapLoader {
             if(obstacleArray.getInt(i) > 0) {
                 int x= (i % mapWidth) * tileWidth;
                 int y = (i / mapWidth) * tileHeight;
-                int tileID = obstacleArray.getInt(i) - offsets.get(tileset);
 
-                obstacleInstances.add((GenericObstacle) constructor.newInstance(x, y, tileset, new int[]{ tileID }));
+                int tileID = obstacleArray.getInt(i) - offsets.get(tileset);
+                int[] tileIDs = animations.containsKey(tileID) ? animations.get(tileID) : new int[] {tileID};
+
+                obstacleInstances.add((GenericObstacle) constructor.newInstance(x, y, tileset, tileIDs));
             }
         }
         return obstacleInstances;

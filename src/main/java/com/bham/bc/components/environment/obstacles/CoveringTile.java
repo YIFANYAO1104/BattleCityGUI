@@ -25,7 +25,7 @@ public class CoveringTile extends GenericObstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/Map/tree.bmp") };
+        return new Image[] {new Image("file:src/main/resources/img/tiles/tree.bmp") };
     }
 
     @Override

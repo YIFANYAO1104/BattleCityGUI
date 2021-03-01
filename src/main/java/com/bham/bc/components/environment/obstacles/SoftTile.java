@@ -32,7 +32,7 @@ public class SoftTile extends GenericObstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/Map/CommonWall.bmp") };
+        return new Image[] {new Image("file:src/main/resources/img/tiles/softWall.bmp") };
     }
 
     @Override
