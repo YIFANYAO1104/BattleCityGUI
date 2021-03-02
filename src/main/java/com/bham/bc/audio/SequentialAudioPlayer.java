@@ -62,7 +62,7 @@ public class SequentialAudioPlayer implements AudioPlayer {
 
     @Override
     public void stop() {
-        if(currentTrack != null && isPlaying) {
+        if(currentTrack != null) {
             new Thread(() -> currentTrack.stop()).start();
             isPlaying = false;
         }

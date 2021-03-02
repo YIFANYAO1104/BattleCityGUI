@@ -35,10 +35,10 @@ public class ParallelAudioPlayer implements AudioPlayer {
 
     /**
      * gets array of arrays of frequencies for each layer for each band
-     * @return
+     * @return array of arrays of frequencies
      */
-    public Float[] getFrequencies() {
-        return analysers.stream().map(AudioAnalyser::getFrequencies).toArray(Float[]::new);
+    public float[][] getFrequencies() {
+        return analysers.stream().map(AudioAnalyser::getFrequencies).toArray(float[][]::new);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ParallelAudioPlayer implements AudioPlayer {
 
     @Override
     public void stop() {
-        if(!players.isEmpty() && isPlaying) {
+        if(!players.isEmpty()) {
             for(MediaPlayer player: players) {
                 new Thread(() -> {
                     try {

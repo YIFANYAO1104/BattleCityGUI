@@ -3,6 +3,7 @@ package com.bham.bc.components.characters.enemies;
 import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.ai.*;
@@ -340,5 +341,10 @@ public class EnemyFSMTest extends Tank {
         } else{
             this.life = 200;
         }
+    }
+
+    @Override
+    public void switchWeapon(Weapon w) {
+        return;
     }
 }

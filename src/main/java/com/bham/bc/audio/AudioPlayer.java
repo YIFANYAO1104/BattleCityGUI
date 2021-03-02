@@ -28,7 +28,7 @@ public interface AudioPlayer {
 
     /**
      * checks if audio player is playing
-     * @return
+     * @return true if player is playing and false otherwise
      */
     boolean isPlaying();
 }

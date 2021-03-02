@@ -16,7 +16,7 @@ public enum TRACK {
 
     /**
      * Constructs TRACK as Media object
-     * @param path to track
+     * @param path path to track
      */
     TRACK(String path) { media = new Media(new File(path).toURI().toString()); }
 

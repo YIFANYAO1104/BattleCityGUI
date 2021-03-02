@@ -12,7 +12,7 @@ public enum SFX {
 
     /**
      * Constructs SFX while utilizing AudioClip
-     * @param path to SFX file
+     * @param path path to SFX file
      */
     SFX(String path) { clip = new AudioClip(path); }
 
@@ -23,7 +23,7 @@ public enum SFX {
 
     /**
      * sets the volume of the sound effect on a separate thread
-     * @param value of the volume
+     * @param volume
      */
-    public void setVolume (double value) { new Thread(() -> clip.setVolume(value)).start(); }
+    public void setVolume (double volume) { new Thread(() -> clip.setVolume(volume)).start(); }
 }

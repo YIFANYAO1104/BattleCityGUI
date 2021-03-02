@@ -38,7 +38,5 @@ public class AudioAnalyser {
      * gets current frequency values
      * @return array of frequencies
      */
-    public float[] getFrequencies() {
-        return frequencies;
-    }
+    public float[] getFrequencies() { return frequencies; }
 }

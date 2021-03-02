@@ -45,6 +45,13 @@ public class AudioManager {
         player.setVolume(volume);
     }
 
+    /**
+     * gets the currently used player
+     * @return AudioPlayer object
+     */
+    public AudioPlayer getCurrentPlayer() { return player; }
+
+
     public void play() { player.play(); }
     public void pause() { player.pause(); }
     public void stop() { player.stop(); }
