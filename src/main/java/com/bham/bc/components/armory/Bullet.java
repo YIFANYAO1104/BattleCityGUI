@@ -1,11 +1,12 @@
 package com.bham.bc.components.armory;
 
+import com.bham.bc.components.environment.obstacles.IceWall;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.environment.obstacles.CommonWall;
-import com.bham.bc.components.environment.Home;
+import com.bham.bc.components.environment.obstacles.Home;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.HomeTank;
 import javafx.scene.canvas.GraphicsContext;
@@ -132,6 +133,7 @@ abstract public class Bullet extends MovingEntity {
     public Rectangle getHitBox() {
         return new Rectangle(x, y, width, length);
     }
+
 
 
     public boolean isLive() {

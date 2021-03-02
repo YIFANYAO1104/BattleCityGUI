@@ -8,7 +8,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.PerspectiveCamera;
 
 public class Camera extends PerspectiveCamera {
-    private static final double INITIAL_PERSPECTIVE = 0;    // Between 0 and -1000
+    //must be strictly less than 0. Or we'll se nothing.
+    private static final double INITIAL_PERSPECTIVE = -1;    // Between 0 and -1000
 
     private DoubleProperty x;
     private DoubleProperty y;
