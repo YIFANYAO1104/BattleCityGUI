@@ -1,17 +1,18 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.obstacles.*;
+import com.bham.bc.components.environment.triggers.Weapon;
+import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.components.environment.obstacles.CommonWall;
-import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.characters.Tank;
+import com.bham.bc.utils.maploaders.JsonMapLoader;
+import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.bham.bc.components.CenterController.centerController;
 
 
 public class GameMap {
@@ -31,36 +32,16 @@ public class GameMap {
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
     public GameMap() {
-        addHomeWall();
-        addHome();
-        addHealthGiver();
-    }
-
-    /**
-     * This method is used to generate home walls on the map
-     */
-    private void addHomeWall(){
-        for (int i = 0; i < 10; i++) {
-            if (i < 4)
-                obstacles.add(new CommonWall(350, 580 - 21 * i));
-            else if (i < 7)
-                obstacles.add(new CommonWall(372 + 22 * (i - 4), 517));
-            else
-                obstacles.add(new CommonWall(416, 538 + (i - 7) * 21));
-
-        }
-    }
-
-    /**
-     * Generate Home in the map
-     */
-    private void addHome() {
-        home = new Home(373, 557);
-    }
-
-    private void addHealthGiver() {
-        HealthGiver hg = new HealthGiver(258, 413,34,30, 100,10);
-        triggerSystem.register(hg);
+        MapLoader mapLoader = new JsonMapLoader("/test.json");
+        obstacles = mapLoader.getObstacles();
+        home = mapLoader.getHome();
+        triggerSystem = mapLoader.getTriggerSystem();
+//        addWeaponGenerator();
+        addIceWall();
+//        addMetalWall();
+//        addTree();
+//        addRiver();
+//        addCommonWall();
     }
     //init only--------------------------------------------------------------
 
@@ -181,6 +162,11 @@ public class GameMap {
         }
     }
     //hit--------------------------------------------------------------
+    private void addWeaponGenerator(){
+        WeaponGenerator w = new WeaponGenerator(466, 466, Weapon.ArmourGun, 30,30,30);
+        triggerSystem.register(w);
+
+    }
 
 
     //collide--------------------------------------------------------------
@@ -213,6 +199,40 @@ public class GameMap {
             w.collideWith(t);
         }
     }
+    private void addIceWall(){
+        for(int i = 0; i < 5 ; i++){
+            obstacles.add(new IceWall(390, 320-21*i));
+
+        }
+    }
+    private void addRiver(){
+        obstacles.add(new River(222,166));
+        obstacles.add(new River(298,166));
+
+    }
+    private void addTree(){
+
+            obstacles.add(new Tree(189,166));
+            obstacles.add(new Tree(150,166));
+
+    }
+    private void addMetalWall(){
+        for (int i = 0; i < 10; i++) {
+            if (i < 4)
+                obstacles.add(new MetalWall(230, 450-35*i));
+            else if (i < 7)
+                obstacles.add(new MetalWall(210 + 35 * (i - 4), 400));
+            else
+                obstacles.add(new MetalWall(88, 30 + (i - 7) * 35));
+
+        }
+    }
+    private void addCommonWall(){
+        obstacles.add(new CommonWall(380,166));
+        obstacles.add(new CommonWall(340,166));
+
+    }
+
 
     public void collideWithTriggers(Tank t){
         triggerSystem.update(t);

@@ -1,5 +1,6 @@
 package com.bham.bc.components.characters;
 
+import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
@@ -37,4 +38,8 @@ abstract public class Tank extends MovingEntity {
     }
 
     abstract public void increaseHealth(int health);
+
+
+    //------------------------------------------------------------//
+    abstract public void switchWeapon(Weapon w);
 }
