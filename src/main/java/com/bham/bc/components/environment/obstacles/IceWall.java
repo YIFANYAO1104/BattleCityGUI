@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment.obstacles;
 
+import com.bham.bc.components.BackendServices;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.MapObject2D;
@@ -10,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
 
 /**
  * We can design some properties for icewall
@@ -41,7 +42,7 @@ public class IceWall extends MapObject2D {
 
                 if(this.durability > 50) this.durability -=50;
                 else {
-                    centerController.removeBullet(m);
+                    backendServices.removeBullet(m);
                     setToBeRemovedFromMap();
                 }
 
@@ -51,7 +52,7 @@ public class IceWall extends MapObject2D {
     @Override
     public void collideWith(Tank t) {
             if(t.isLive()&& this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())){
-                centerController.changToOldDir(t);
+                backendServices.changToOldDir(t);
             }
 
     }

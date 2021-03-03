@@ -10,7 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
 
 public class CommonWall extends MapObject2D {
 	/**
@@ -27,7 +27,7 @@ public class CommonWall extends MapObject2D {
 	public void beHitBy(Bullet m) {
 		if (m.isLive() && this.getHitBox().intersects(m.getHitBox().getBoundsInLocal())) {
 			m.setLive(false);
-			centerController.removeBullet(m);
+			backendServices.removeBullet(m);
 			setToBeRemovedFromMap();
 		}
 	}
@@ -35,7 +35,7 @@ public class CommonWall extends MapObject2D {
 	@Override
 	public void collideWith(Tank t) {
 		if (t.isLive() && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
-			centerController.changToOldDir(t);
+			backendServices.changToOldDir(t);
 		}
 	}
 

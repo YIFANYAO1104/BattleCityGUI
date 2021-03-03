@@ -10,7 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
 
 /**
  * Home (Or something we need to protect, can be modified later)
@@ -40,7 +40,7 @@ public class Home extends MapObject2D {
 	@Override
 	public void collideWith(Tank t) {
 		if (t.isLive() && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
-			centerController.changToOldDir(t);
+			backendServices.changToOldDir(t);
 		}
 	}
 

@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment.obstacles;
 
+import com.bham.bc.components.BackendServices;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.MapObject2D;
@@ -10,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
 
 public class MetalWall extends MapObject2D {
     public static int width = Constants.TILE_WIDTH;
@@ -25,14 +26,14 @@ public class MetalWall extends MapObject2D {
         if (m.isLive() && this.getHitBox().intersects(m.getHitBox().getBoundsInLocal())) {
             m.setLive(false);
 
-            centerController.removeBullet(m);
+            backendServices.removeBullet(m);
         }
     }
 
     @Override
     public void collideWith(Tank t) {
         if(t.isLive()&& this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())){
-            centerController.changToOldDir(t);
+            backendServices.changToOldDir(t);
         }
     }
 

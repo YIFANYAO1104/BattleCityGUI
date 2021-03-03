@@ -18,10 +18,26 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CenterController extends BaseGameEntity {
+public abstract class CenterController extends BaseGameEntity implements FrontendServices,BackendServices{
 
 
-    public static CenterController centerController = new ChallengeController();
+    private static CenterController centerController;
+    public static FrontendServices frontendServices;
+    public static BackendServices backendServices;
+
+    public static void setMode(Mode mode){
+        switch (mode) {
+            case Survival:
+                centerController = new SurvivalController();
+                break;
+            case Challenge:
+                centerController = new ChallengeController();
+                break;
+        }
+        frontendServices = centerController;
+        backendServices = centerController;
+    }
+
     /**
      * The message to indicate Victory Or Defeat
      */

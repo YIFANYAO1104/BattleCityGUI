@@ -10,7 +10,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.CenterController.centerController;
 
 
 public class Tree extends MapObject2D {
