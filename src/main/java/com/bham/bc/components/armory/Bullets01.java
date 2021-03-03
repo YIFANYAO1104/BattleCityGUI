@@ -89,8 +89,8 @@ public class Bullets01 extends Bullet {
 			break;
 		}
 
-		if (x < 0 || y < 0 || x > Constants.WINDOW_WIDTH
-				|| y > Constants.WINDOW_HEIGHT) {
+		if (x < 0 || y < 0 || x > Constants.MAP_WIDTH
+				|| y > Constants.MAP_HEIGHT) {
 			live = false;
 		}
 	}

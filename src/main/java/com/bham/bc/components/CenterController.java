@@ -4,6 +4,7 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.Mode;
 import com.bham.bc.components.mode.SurvivalController;
+import com.bham.bc.components.characters.TrackableCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
@@ -97,6 +98,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         homeTank.keyPressed(e);
     }
 
+    public TrackableCharacter getHomeTank(){
+        return homeTank;
+    }
+    //These are functions that might be used by frontend----------------------------------------------------
 
 
     /**
@@ -136,10 +141,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void changToOldDir(MovingEntity t){
         t.changToOldDir();
     }
-
-//    public void removeWall(CommonWall w){
-//        gameMap.removeHomeWall(w);
-//    }
 
     public void removeEnemy(Enemy enemy){
         enemyTanks.remove(enemy);

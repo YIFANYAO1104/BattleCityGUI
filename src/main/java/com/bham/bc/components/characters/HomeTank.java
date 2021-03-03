@@ -8,7 +8,7 @@ import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.characters.Tank;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -17,7 +17,7 @@ import javafx.scene.paint.Paint;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
-public class HomeTank extends Tank {
+public class HomeTank extends Tank implements TrackableCharacter {
 
 	public static int count = 0;
 	/**
@@ -34,6 +34,9 @@ public class HomeTank extends Tank {
 	 */
 	private boolean bL = false, bU = false, bR = false, bD = false;
 
+	private SimpleDoubleProperty trackableX;
+	private SimpleDoubleProperty trackableY;
+
 	//-----------------------------------------------------------------//
 	private Weapon currWeapon = null;
 
@@ -48,6 +51,7 @@ public class HomeTank extends Tank {
 	public HomeTank(int x, int y, Direction dir) {
 		super(1,1, x,y,35,35,dir);
 		initImages();
+		initTrackableCoordinate();
 	}
 
 	/**
@@ -200,7 +204,7 @@ public class HomeTank extends Tank {
 			MovingEntity t = tanks.get(i);
 			if (this != t) {
 				if (this.live && t.isLive()
-						&& this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
+						&& this.isIntersect(t)) {
 					this.changToOldDir();
 					t.changToOldDir();
 					return true;
@@ -221,6 +225,8 @@ public class HomeTank extends Tank {
 	@Override
 	public void update() {
 		move();
+		trackableX.set(this.x + this.width/2);
+		trackableY.set(this.y + this.length/2);
 	}
 	/**
 	 * Method to implements the movement of Player tanks
@@ -260,8 +266,23 @@ public class HomeTank extends Tank {
 		//guarantee the tank is in Frame
 		if (x < 0) x = 0;
 		if (y < 40) y = 40;
-		if (x + this.width > Constants.WINDOW_WIDTH) x = Constants.WINDOW_WIDTH - this.width;
-		if (y + this.length > Constants.WINDOW_HEIGHT) y = Constants.WINDOW_HEIGHT - this.length;
+		if (x + this.width > Constants.MAP_WIDTH) x = Constants.MAP_WIDTH - this.width;
+		if (y + this.length > Constants.MAP_HEIGHT) y = Constants.MAP_HEIGHT - this.length;
+	}
+
+	@Override
+	public void initTrackableCoordinate() {
+		trackableX = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2);
+		trackableY = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2);
+	}
+
+	@Override
+	public SimpleDoubleProperty getTrackableCoordinateX() {
+		return trackableX;
+	}
+	@Override
+	public SimpleDoubleProperty getTrackableCoordinateY() {
+		return trackableY;
 	}
 
 	@Override
