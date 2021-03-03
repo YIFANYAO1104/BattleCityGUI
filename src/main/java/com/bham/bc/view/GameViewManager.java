@@ -1,6 +1,6 @@
 package com.bham.bc.view;
 
-import com.bham.bc.components.Mode;
+import com.bham.bc.components.mode.Mode;
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
 

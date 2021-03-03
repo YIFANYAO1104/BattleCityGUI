@@ -1,5 +1,6 @@
-package com.bham.bc.components;
+package com.bham.bc.components.mode;
 
+import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.HomeTank;
 import com.bham.bc.components.characters.enemies.Enemy;
@@ -7,7 +8,7 @@ import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
 import javafx.scene.canvas.GraphicsContext;
 
-public class ChallengeController extends CenterController{
+public class ChallengeController extends CenterController {
 
     @Override
     public boolean isWin() {
