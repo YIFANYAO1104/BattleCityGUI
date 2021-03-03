@@ -20,12 +20,11 @@ import java.util.List;
 
 public abstract class CenterController extends BaseGameEntity implements FrontendServices,BackendServices{
 
-
-    private static CenterController centerController;
     public static FrontendServices frontendServices;
     public static BackendServices backendServices;
 
     public static void setMode(Mode mode){
+        CenterController centerController = null;
         switch (mode) {
             case Survival:
                 centerController = new SurvivalController();

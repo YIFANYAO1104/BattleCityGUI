@@ -16,7 +16,7 @@ public class SurvivalController extends CenterController {
     public SurvivalController(){
         super();
         gameMap = new GameMap();
-        homeTank = new HomeTank(300, 560, Direction.STOP);
+        homeTank = new HomeTank(250, 560, Direction.STOP);
         initEnemies();
     }
 

@@ -38,7 +38,7 @@ public class GameViewManager {
      * Constructs the view manager
      */
     public GameViewManager() {
-        setMode(Mode.Survival);
+        setMode(Mode.Challenge);
         initializeStage();
         createKeyListeners();
     }
@@ -56,7 +56,7 @@ public class GameViewManager {
 
         gamePane = new AnchorPane(canvas, rect);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
-        cmr = new Camera(centerController.getHomeTank());
+        cmr = new Camera(frontendServices.getHomeTank());
         gameScene.setCamera(cmr);
 
         gameStage = new Stage();

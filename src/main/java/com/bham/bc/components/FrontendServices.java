@@ -1,9 +1,12 @@
 package com.bham.bc.components;
 
+import com.bham.bc.components.characters.TrackableCharacter;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 
 public interface FrontendServices {
+
+    TrackableCharacter getHomeTank();
     void update();
     void render(GraphicsContext gc);
 
