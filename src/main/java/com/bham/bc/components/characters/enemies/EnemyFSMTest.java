@@ -1,6 +1,6 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.CenterController;
+import com.bham.bc.components.BackendServices;
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.characters.Tank;
 import com.bham.bc.components.environment.triggers.Weapon;
@@ -15,7 +15,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.Random;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
 
 /**
  * THIS CLASS IS JUST A TEST TO SEE HOW AN FINITE STATE MACHINE COULD BE IMPLEMENTED, IT IS ONLY TEMPORARY.
@@ -59,7 +59,7 @@ public class EnemyFSMTest extends Tank {
     private IntCondition distanceToPlayer;
     /**
      *  a constructor of enemy tank,
-     *  Create Enemy tank using coordinate ,direction and centerController as parameter
+     *  Create Enemy tank using coordinate ,direction and backendServices as parameter
      *  It also creates the Finite State Machine for this enemy
      *  */
     public EnemyFSMTest(int x, int y, Direction dir) {
@@ -101,7 +101,7 @@ public class EnemyFSMTest extends Tank {
 
         if (!live) {
             // LINE BELOW IS COMMENTED OUT TO AVOID ERROR, THIS IS BECAUSE THIS FILE IS JUST A TEST ATM
-            //centerController.removeEnemy(this);
+            //backendServices.removeEnemy(this);
             return;
         }
 
@@ -134,7 +134,7 @@ public class EnemyFSMTest extends Tank {
         if((x-15)<0) rx=0;
         if((y-15)<0)ry=0;
         Rectangle a=new Rectangle(rx, ry,60,60);
-        if (this.live && a.intersects(centerController.getHomeHitBox().getBoundsInLocal())) {
+        if (this.live && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
             return true;
         }
         return false;
@@ -169,7 +169,7 @@ public class EnemyFSMTest extends Tank {
                 break;
         }
         Bullets01 m = new Bullets01(this.ID(),x, y, Kdirection);
-        centerController.addBullet(m);
+        backendServices.addBullet(m);
         return m;
     }
     /**
@@ -272,7 +272,7 @@ public class EnemyFSMTest extends Tank {
              * Else randomly choose direction to move forward
              */
             if (playertankaround()){
-                CenterController cC = centerController;
+                BackendServices cC = backendServices;
                 if(x==cC.getHomeTankX()){
                     if(y>cC.getHomeTankY()){
                         direction=directons[1];
