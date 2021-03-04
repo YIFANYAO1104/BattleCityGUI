@@ -45,9 +45,7 @@ public class MainMenu extends Application {
         Pane root = new Pane();
         root.setPrefSize(800, 600);
 
-        InputStream is = Files.newInputStream(Paths.get("res/images/img.gif"));
-        Image img = new Image(is);
-        is.close();
+        Image img = new Image("file:src/main/resources/img/menu/menuBG.gif");
 
         Title title = new Title ("T A N K 1 G A M E");
         title.setTranslateX(150);
