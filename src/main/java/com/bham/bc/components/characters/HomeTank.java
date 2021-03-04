@@ -265,7 +265,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 
 		//guarantee the tank is in Frame
 		if (x < 0) x = 0;
-		if (y < 40) y = 40;
+		if (y < 0) y = 0;
 		if (x + this.width > Constants.MAP_WIDTH) x = Constants.MAP_WIDTH - this.width;
 		if (y + this.length > Constants.MAP_HEIGHT) y = Constants.MAP_HEIGHT - this.length;
 	}
