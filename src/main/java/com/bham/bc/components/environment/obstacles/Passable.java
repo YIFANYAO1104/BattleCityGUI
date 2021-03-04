@@ -6,6 +6,9 @@ import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 
+/**
+ * Desc: Tile which can be passed by any game entity. It can act as a decoration
+ */
 public class Passable extends GenericObstacle {
     /**
      * Constructs an obstacle

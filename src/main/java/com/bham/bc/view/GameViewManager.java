@@ -38,7 +38,7 @@ public class GameViewManager {
      * Constructs the view manager
      */
     public GameViewManager() {
-        setMode(MODE.CHALLENGE);
+        setMode(MODE.SURVIVAL);
         initializeStage();
         createKeyListeners();
     }

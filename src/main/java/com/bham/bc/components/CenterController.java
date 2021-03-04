@@ -19,7 +19,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CenterController extends BaseGameEntity implements FrontendServices,BackendServices{
+public abstract class CenterController extends BaseGameEntity implements FrontendServices, BackendServices {
 
     public static FrontendServices frontendServices;
     public static BackendServices backendServices;
@@ -29,6 +29,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         switch (mode) {
             case SURVIVAL:
                 centerController = new SurvivalController();
+
                 break;
             case CHALLENGE:
                 centerController = new ChallengeController();
@@ -141,6 +142,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void changeToOldDir(MovingEntity t){
         t.changToOldDir();
     }
+
+    public void addEnemy(Enemy enemy) { return; }
 
     public void removeEnemy(Enemy enemy){
         enemies.remove(enemy);

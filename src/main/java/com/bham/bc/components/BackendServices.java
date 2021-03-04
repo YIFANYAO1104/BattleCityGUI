@@ -18,6 +18,12 @@ public interface BackendServices {
     void changeToOldDir(MovingEntity movingEntity);
 
     /**
+     * adds enemy to the game
+     * @param enemy Enemy object to be added
+     */
+    void addEnemy(Enemy enemy);
+
+    /**
      * removes enemy from the game
      * @param enemy Enemy object to be removed
      */

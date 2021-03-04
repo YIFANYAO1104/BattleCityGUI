@@ -9,7 +9,7 @@ import javafx.scene.image.Image;
 import static com.bham.bc.components.CenterController.backendServices;
 
 /**
- * Desc: Tile that is breakable, nothing can pass through it until it's destroyed
+ * Desc: Tile that is breakable, nothing can pass through it until it is destroyed
  */
 public class Soft extends GenericObstacle {
 
