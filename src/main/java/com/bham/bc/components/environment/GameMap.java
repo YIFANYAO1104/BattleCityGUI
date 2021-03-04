@@ -1,17 +1,16 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.triggers.Weapon;
+import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.components.environment.obstacles.CommonWall;
-import com.bham.bc.components.environment.triggers.HealthGiver;
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.characters.Character;
+import com.bham.bc.utils.maploaders.JsonMapLoader;
+import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.scene.canvas.GraphicsContext;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import static com.bham.bc.components.CenterController.centerController;
 
 
 public class GameMap {
@@ -20,9 +19,9 @@ public class GameMap {
     /**
      * Creating container for Home Walls On Map
      */
-    private List<MapObject2D> obstacles = new ArrayList<MapObject2D>();
-    private Home home;
-    private TriggerSystem triggerSystem = new TriggerSystem();
+    private List<GenericObstacle> obstacles;
+    // private Home home;
+    private TriggerSystem triggerSystem;
 
 
 
@@ -31,36 +30,9 @@ public class GameMap {
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
     public GameMap() {
-        addHomeWall();
-        addHome();
-        addHealthGiver();
-    }
-
-    /**
-     * This method is used to generate home walls on the map
-     */
-    private void addHomeWall(){
-        for (int i = 0; i < 10; i++) {
-            if (i < 4)
-                obstacles.add(new CommonWall(350, 580 - 21 * i));
-            else if (i < 7)
-                obstacles.add(new CommonWall(372 + 22 * (i - 4), 517));
-            else
-                obstacles.add(new CommonWall(416, 538 + (i - 7) * 21));
-
-        }
-    }
-
-    /**
-     * Generate Home in the map
-     */
-    private void addHome() {
-        home = new Home(373, 557);
-    }
-
-    private void addHealthGiver() {
-        HealthGiver hg = new HealthGiver(258, 413,34,30, 100,10);
-        triggerSystem.register(hg);
+        MapLoader mapLoader = new JsonMapLoader("/64x64.json");
+        obstacles = mapLoader.getObstacles();
+        triggerSystem = mapLoader.getTriggerSystem();
     }
     //init only--------------------------------------------------------------
 
@@ -71,19 +43,20 @@ public class GameMap {
      * @return
      */
     public boolean isHomeLive(){
-        return home.isLive();
+        //return home.isLive();
+        return true;
     }
 
     public void setHomeLive(){
-        home.setLive(true);
+        //home.setLive(true);
     }
 
     /**
      * Remove the home wall from map
-     * @param w
+     * @param obstacle obstacle to remove
      */
-    public void removeHomeWall(CommonWall w){
-        obstacles.remove(w);
+    public void removeObstacle(GenericObstacle obstacle){
+        obstacles.remove(obstacle);
     }
 
 
@@ -115,20 +88,21 @@ public class GameMap {
      * The following methods calls all render methods of particular Objects
      * @param gc
      */
-    public void renderAll(GraphicsContext gc){
-        renderHome(gc);
-        renderObstacles(gc);
+
+    public void renderHome(GraphicsContext gc){
+        //if (home != null) home.render(gc);
+    }
+
+    public void renderBottomLayer(GraphicsContext gc) {
+        for(GenericObstacle go: obstacles) {
+            if(!go.renderTop()) go.render(gc);
+        }
         renderTriggers(gc);
     }
 
-    public void renderHome(GraphicsContext gc){
-        if (home != null) home.render(gc);
-    }
-
-    public void renderObstacles(GraphicsContext gc){
-        for (int i = 0; i < obstacles.size(); i++) {
-            MapObject2D w = obstacles.get(i);
-            w.render(gc);
+    public void renderTopLayer(GraphicsContext gc) {
+        for(GenericObstacle go: obstacles) {
+            if(go.renderTop()) go.render(gc);
         }
     }
 
@@ -156,8 +130,8 @@ public class GameMap {
      */
     public void hitObstacles(Bullet m){
         for (int j = 0; j < obstacles.size(); j++) {
-            MapObject2D cw = obstacles.get(j);
-            cw.beHitBy(m);
+            GenericObstacle cw = obstacles.get(j);
+            cw.handleBullet(m);
         }
     }
     /**
@@ -166,21 +140,24 @@ public class GameMap {
      * @param m
      */
     public void hitHome(Bullet m){
-        home.beHitBy(m);
+        //home.handleBullet(m);
     }
 
     public void updateObstacles() {
-        Iterator<MapObject2D> it = obstacles.iterator();
+        Iterator<GenericObstacle> it = obstacles.iterator();
         while (it.hasNext()) {
-            MapObject2D curObj = it.next();
-            if (curObj.isToBeRemoved()) {
-                it.remove();
-            } else {
+            GenericObstacle curObj = it.next();
+
                 curObj.update();
-            }
+
         }
     }
     //hit--------------------------------------------------------------
+    private void addWeaponGenerator(){
+        WeaponGenerator w = new WeaponGenerator(466, 466, Weapon.ArmourGun, 30,30,30);
+        triggerSystem.register(w);
+
+    }
 
 
     //collide--------------------------------------------------------------
@@ -190,7 +167,7 @@ public class GameMap {
      * @param t
      */
 
-    public void update(Tank t){
+    public void update(Character t){
         collideWithHome(t);
         collideWithObstacles(t);
         collideWithTriggers(t);
@@ -199,22 +176,23 @@ public class GameMap {
      * To determine if a Tank Collides Home and need to turn back
      * @param t
      */
-    public void collideWithHome(Tank t){
-        home.collideWith(t);
+    public void collideWithHome(Character t){
+        //home.handleCharacter(t);
     }
     /**
      * A method to loop all objects, and use as parameter for Collide Method
      * To determine if a Tank Collides such home Walls and need to turn back to it's previous position
      * @param t
      */
-    public void collideWithObstacles(Tank t){
+    public void collideWithObstacles(Character t){
         for (int i = 0; i < obstacles.size(); i++) {
-            MapObject2D w = obstacles.get(i);
-            w.collideWith(t);
+            GenericObstacle w = obstacles.get(i);
+            w.handleCharacter(t);
         }
     }
 
-    public void collideWithTriggers(Tank t){
+
+    public void collideWithTriggers(Character t){
         triggerSystem.update(t);
     }
     //collide--------------------------------------------------------------

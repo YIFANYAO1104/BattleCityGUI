@@ -35,6 +35,7 @@ public class MenuViewManager {
         Button startButton = new Button("Play");
 
         startButton.setOnAction(e -> {
+            // To do: add javafx concurrency in the background
            GameViewManager gameViewManager = new GameViewManager();
            gameViewManager.createNewGame(mainStage);
         });

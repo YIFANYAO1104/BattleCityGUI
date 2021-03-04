@@ -8,7 +8,8 @@ import javafx.scene.image.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.bham.bc.components.CenterController.centerController;
+
+import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.EntityMgr;
 
 public class Bullets01 extends Bullet {
@@ -90,7 +91,7 @@ public class Bullets01 extends Bullet {
 
 		if (x < 0 || y < 0 || x > Constants.MAP_WIDTH
 				|| y > Constants.MAP_HEIGHT) {
-			live = false;
+			isAlive = false;
 		}
 	}
 	/**
@@ -124,14 +125,14 @@ public class Bullets01 extends Bullet {
 
 	@Override
 	public void update() {
-		if(!live){
+		if(!isAlive){
 			EntityMgr.RemoveEntity(this);
 		}
 
 		move();
 
-		if (!live) {
-			centerController.removeBullet(this);
+		if (!isAlive) {
+			backendServices.removeBullet(this);
 			return;
 		}
 
