@@ -2,7 +2,7 @@ package com.bham.bc.components.mode;
 
 import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.HomeTank;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
@@ -22,7 +22,7 @@ public class ChallengeController extends CenterController {
 
     public ChallengeController(){
         super();
-        homeTank = new HomeTank(300, 560, Direction.STOP);
+        player = new Player(16*32, 16*32, Direction.STOP);
         initEnemies();
     }
 
@@ -32,15 +32,10 @@ public class ChallengeController extends CenterController {
      * Adding created Objects into enemyTanks(list)
      */
     private void initEnemies() {
-        for (int i = 0; i < 20; i++) {
-            if (i < 9){
-                enemyTanks.add(new Enemy(150 + 70 * i, 40,  Direction.D));
-            } else if (i < 15){
-                enemyTanks.add(new Enemy(700, 140 + 50 * (i - 6), Direction.D));
-            } else{
-                enemyTanks.add(new Enemy(10, 50 * (i - 12),  Direction.D));
-            }
-        }
+        enemies.add(new Enemy(16*3, 16*3,  Direction.D));
+        enemies.add(new Enemy(16*61, 16*3,  Direction.D));
+        enemies.add(new Enemy(16*3, 16*61,  Direction.D));
+        enemies.add(new Enemy(16*61, 16*61,  Direction.D));
     }
 
     /**
@@ -50,18 +45,18 @@ public class ChallengeController extends CenterController {
     @Override
     public void update() {
 
-        if (enemyTanks.isEmpty()) initEnemies();
+        if (enemies.isEmpty()) initEnemies();
         //move-----------------
-        homeTank.update();
-        for (Enemy e : enemyTanks) {
+        player.update();
+        for (Enemy e : enemies) {
             e.update();
         }
         //move-----------------
 
         //tanks----------------------------------
-        homeTank.collideWithTanks(enemyTanks);
-        for (Enemy e : enemyTanks) {
-            e.collideWithTanks(enemyTanks);
+        player.collideWithTanks(enemies);
+        for (Enemy e : enemies) {
+            e.collideWithTanks(enemies);
         }
         //tanks----------------------------------
         /**
@@ -75,8 +70,8 @@ public class ChallengeController extends CenterController {
         for (int i = 0; i < bullets.size(); i++) {
             Bullet m = bullets.get(i);
             m.update();
-            m.hitTanks(enemyTanks);
-            m.hitTank(homeTank);
+            m.hitTanks(enemies);
+            m.hitTank(player);
             for(int j=0;j<bullets.size();j++){
                 if (i==j) continue;
                 Bullet bts=bullets.get(j);
@@ -99,9 +94,9 @@ public class ChallengeController extends CenterController {
         }
 
         //the blood bar is here. But it's covered currently
-        homeTank.render(gc);
-        for (int i = 0; i < enemyTanks.size(); i++) {
-            Enemy t = enemyTanks.get(i);
+        player.render(gc);
+        for (int i = 0; i < enemies.size(); i++) {
+            Enemy t = enemies.get(i);
             t.render(gc);
         }
         for (int i = 0; i < bombTanks.size(); i++) {

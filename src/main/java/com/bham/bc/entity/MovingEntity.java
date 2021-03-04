@@ -32,7 +32,7 @@ public abstract class MovingEntity extends BaseGameEntity{
     /**
      * the status to check if the object is alive or dead
      */
-    protected boolean live;
+    protected boolean isAlive;
 
     /**
      * the constructor of this class, will generate a valid ID using parent class's generating ID method
@@ -56,26 +56,21 @@ public abstract class MovingEntity extends BaseGameEntity{
         this.length = length;
 
         this.direction = direction;
-        live = true;
+        isAlive = true;
     }
 
     protected abstract void move();
 
-    public boolean isLive() {
-        return live;
+    public boolean isAlive() {
+        return isAlive;
     }
 
-    public void setLive(boolean live) {
-        this.live = live;
+    public void setAlive(boolean alive) {
+        this.isAlive = alive;
     }
 
-    public Rectangle getRect() {
+    public Rectangle getHitBox() {
         return new Rectangle(x, y, width, length);
-    }
-
-    public boolean isIntersect(BaseGameEntity b) {
-        Rectangle t = new Rectangle(x, y, width, length);
-        return t.intersects(b.getHitBox().getBoundsInLocal());
     }
 
     public void changToOldDir() {

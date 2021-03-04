@@ -2,36 +2,48 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * Desc: required backend services for any mode to properly work
+ */
 public interface BackendServices {
-    /** The calling from each other member must implements the centerController Interface*/
     /**
-     * Turn Back
-     * @param t
+     * changes direction of any entity to previous one
+     * @param movingEntity MovingEntity object to be changed
      */
-    void changToOldDir(MovingEntity t);
+    void changeToOldDir(MovingEntity movingEntity);
 
+    /**
+     * removes enemy from the game
+     * @param enemy Enemy object to be removed
+     */
     void removeEnemy(Enemy enemy);
 
     /**
      * Adding bombtank to bomb tank list
-     * @param b
+     * @param bombTank
      */
-    void addBombTank(BombTank b);
+    void addBombTank(BombTank bombTank);
 
     /**
      * Remove bomb tank from bomb tank list
-     * @param b
+     * @param bombTank
      */
-    void removeBombTank(BombTank b);
+    void removeBombTank(BombTank bombTank);
 
-    int getHomeTankX();
+    /**
+     * removes any obstacle from the map
+     * @param obstacle GenericObstacle object to be removed
+     */
+    void removeObstacle(GenericObstacle obstacle);
 
-    int getHomeTankY();
+    int getPlayerX();
+
+    int getPlayerY();
 
     Rectangle getHomeHitBox();
 

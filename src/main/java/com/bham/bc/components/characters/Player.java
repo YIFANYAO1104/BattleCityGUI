@@ -17,7 +17,7 @@ import javafx.scene.paint.Paint;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
-public class HomeTank extends Tank implements TrackableCharacter {
+public class Player extends Character implements TrackableCharacter {
 
 	public static int count = 0;
 	/**
@@ -28,7 +28,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 	private Direction Kdirection = Direction.U;
 	/**
 	 *  initialize the health of tank to 200 hp */
-	private int life = 200;
+	private int hp = 200;
 	/**
 	 * The direction that will be set by KeyAction
 	 */
@@ -48,10 +48,10 @@ public class HomeTank extends Tank implements TrackableCharacter {
 	 * @param y
 	 * @param dir
 	 */
-	public HomeTank(int x, int y, Direction dir) {
+	public Player(int x, int y, Direction dir) {
 		super(1,1, x,y,35,35,dir);
 		initImages();
-		initTrackableCoordinate();
+		initTrackableCoordinates();
 	}
 
 	/**
@@ -75,7 +75,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 		Paint c = gc.getFill();
 		gc.setFill(Color.RED);
 		gc.fillRect(375, 585, width, 10);
-		int w = width * life / 200;
+		int w = width * hp / 200;
 		gc.fillRect(375, 585, w, 10);
 		gc.setFill(c);
 	}
@@ -88,7 +88,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 	@Override
 	public void render(GraphicsContext gc) {
 
-		if (!live) return;
+		if (!isAlive) return;
 
 		//It is covered by home currently. So you could not see it.
 		renderBloodbBar(gc);
@@ -153,7 +153,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 	 * Add bullet to list of bullets
 	 */
 	public Bullets01 fire() {
-		if (!live)
+		if (!isAlive)
 			return null;
 		int x=0;
 		int y=0;
@@ -182,12 +182,12 @@ public class HomeTank extends Tank implements TrackableCharacter {
 		return m;
 	}
 
-	public boolean isLive() {
-		return live;
+	public boolean isAlive() {
+		return isAlive;
 	}
 
-	public void setLive(boolean live) {
-		this.live = live;
+	public void setAlive(boolean alive) {
+		this.isAlive = alive;
 	}
 
 	public boolean isUser() {
@@ -203,8 +203,8 @@ public class HomeTank extends Tank implements TrackableCharacter {
 		for (int i = 0; i < tanks.size(); i++) {
 			MovingEntity t = tanks.get(i);
 			if (this != t) {
-				if (this.live && t.isLive()
-						&& this.isIntersect(t)) {
+				if (this.isAlive && t.isAlive()
+						&& this.intersects(t)) {
 					this.changToOldDir();
 					t.changToOldDir();
 					return true;
@@ -214,12 +214,12 @@ public class HomeTank extends Tank implements TrackableCharacter {
 		return false;
 	}
 
-	public int getLife() {
-		return life;
+	public int getHp() {
+		return hp;
 	}
 
-	public void setLife(int life) {
-		this.life = life;
+	public void setHp(int hp) {
+		this.hp = hp;
 	}
 
 	@Override
@@ -271,7 +271,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 	}
 
 	@Override
-	public void initTrackableCoordinate() {
+	public void initTrackableCoordinates() {
 		trackableX = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2);
 		trackableY = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2);
 	}
@@ -306,10 +306,10 @@ public class HomeTank extends Tank implements TrackableCharacter {
 
 	@Override
 	public void increaseHealth(int health){
-		if(this.life+health<=200){
-			this.life = this.life+health;
+		if(this.hp +health<=200){
+			this.hp = this.hp +health;
 		} else{
-			this.life = 200;
+			this.hp = 200;
 		}
 	}
 

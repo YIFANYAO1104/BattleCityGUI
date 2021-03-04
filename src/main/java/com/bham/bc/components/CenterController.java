@@ -1,8 +1,9 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.mode.ChallengeController;
-import com.bham.bc.components.mode.Mode;
+import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.components.characters.TrackableCharacter;
 import com.bham.bc.entity.BaseGameEntity;
@@ -10,7 +11,7 @@ import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.characters.HomeTank;
+import com.bham.bc.components.characters.Player;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Rectangle;
@@ -23,13 +24,13 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public static FrontendServices frontendServices;
     public static BackendServices backendServices;
 
-    public static void setMode(Mode mode){
+    public static void setMode(MODE mode){
         CenterController centerController = null;
         switch (mode) {
-            case Survival:
+            case SURVIVAL:
                 centerController = new SurvivalController();
                 break;
-            case Challenge:
+            case CHALLENGE:
                 centerController = new ChallengeController();
                 break;
         }
@@ -42,9 +43,9 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     protected Boolean win=false,lose=false;
     /** Initialize HomeTank(Player Tank)*/
-    protected HomeTank homeTank;
+    protected Player player;
     /** Initialize a Container of Enemy Tanks */
-    protected List<Enemy> enemyTanks = new ArrayList<Enemy>();
+    protected List<Enemy> enemies = new ArrayList<Enemy>();
     /** Initialize a Container of Tanks that got bombed and hit*/
     protected List<BombTank> bombTanks = new ArrayList<BombTank>();
     /** Initialize a Container of All Bullets created by All Tanks*/
@@ -71,14 +72,14 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * @return
      */
     public int getEnemyNumber(){
-        return enemyTanks.size();
+        return enemies.size();
     }
     /**
      *
      * @return Current HP of Player Tank
      */
     public int getLife(){
-        return homeTank.getLife();
+        return player.getHp();
     }
     /**
      * A method to monitor the actions from keyBoard
@@ -86,7 +87,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * @param e
      */
     public void keyReleased(KeyEvent e){
-        homeTank.keyReleased(e);
+        player.keyReleased(e);
     }
     /**
      * A method to monitor the actions from keyBoard
@@ -94,11 +95,11 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * @param e
      */
     public void keyPressed(KeyEvent e){
-        homeTank.keyPressed(e);
+        player.keyPressed(e);
     }
 
     public TrackableCharacter getHomeTank(){
-        return homeTank;
+        return player;
     }
     //These are functions that might be used by frontend----------------------------------------------------
 
@@ -107,7 +108,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * Clear all objects on tht map
      */
     public void clear(){
-        enemyTanks.clear();
+        enemies.clear();
         bullets.clear();
         bombTanks.clear();
 //        homeTank.setLive(false);
@@ -137,12 +138,12 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * Turn Back
      * @param t
      */
-    public void changToOldDir(MovingEntity t){
+    public void changeToOldDir(MovingEntity t){
         t.changToOldDir();
     }
 
     public void removeEnemy(Enemy enemy){
-        enemyTanks.remove(enemy);
+        enemies.remove(enemy);
     }
 
     /**
@@ -161,16 +162,16 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         bombTanks.remove(b);
     }
 
-    public int getHomeTankX(){
-        return homeTank.getX();
+    public int getPlayerX(){
+        return player.getX();
     }
 
-    public int getHomeTankY(){
-        return homeTank.getY();
+    public int getPlayerY(){
+        return player.getY();
     }
 
     public Rectangle getHomeHitBox(){
-        return homeTank.getHitBox();
+        return player.getHitBox();
     }
 
     /**
@@ -188,7 +189,9 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void removeBullet(Bullet m){
         bullets.remove(m);
     }
-    //These are functions that might be used by backend----------------------------------------------------
+
+    @Override
+    public void removeObstacle(GenericObstacle go) {}
 
     @Override
     public Rectangle getHitBox() {
@@ -206,7 +209,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public boolean isIntersect(BaseGameEntity b) {
+    public boolean intersects(BaseGameEntity b) {
         return false;
     }
 }

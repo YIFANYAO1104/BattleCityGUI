@@ -90,7 +90,7 @@ public class BombTank extends BaseGameEntity {
 	}
 
 	@Override
-	public boolean isIntersect(BaseGameEntity b) {
+	public boolean intersects(BaseGameEntity b) {
 		return false;
 	}
 }

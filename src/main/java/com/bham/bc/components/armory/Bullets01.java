@@ -91,7 +91,7 @@ public class Bullets01 extends Bullet {
 
 		if (x < 0 || y < 0 || x > Constants.MAP_WIDTH
 				|| y > Constants.MAP_HEIGHT) {
-			live = false;
+			isAlive = false;
 		}
 	}
 	/**
@@ -125,13 +125,13 @@ public class Bullets01 extends Bullet {
 
 	@Override
 	public void update() {
-		if(!live){
+		if(!isAlive){
 			EntityMgr.RemoveEntity(this);
 		}
 
 		move();
 
-		if (!live) {
+		if (!isAlive) {
 			backendServices.removeBullet(this);
 			return;
 		}

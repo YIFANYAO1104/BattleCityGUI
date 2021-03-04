@@ -1,11 +1,10 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.environment.obstacles.*;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.characters.Character;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
 import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.scene.canvas.GraphicsContext;
@@ -54,10 +53,10 @@ public class GameMap {
 
     /**
      * Remove the home wall from map
-     * @param s
+     * @param obstacle obstacle to remove
      */
-    public void removeHomeWall(SoftTile s){
-        obstacles.remove(s);
+    public void removeObstacle(GenericObstacle obstacle){
+        obstacles.remove(obstacle);
     }
 
 
@@ -168,7 +167,7 @@ public class GameMap {
      * @param t
      */
 
-    public void update(Tank t){
+    public void update(Character t){
         collideWithHome(t);
         collideWithObstacles(t);
         collideWithTriggers(t);
@@ -177,7 +176,7 @@ public class GameMap {
      * To determine if a Tank Collides Home and need to turn back
      * @param t
      */
-    public void collideWithHome(Tank t){
+    public void collideWithHome(Character t){
         //home.handleCharacter(t);
     }
     /**
@@ -185,7 +184,7 @@ public class GameMap {
      * To determine if a Tank Collides such home Walls and need to turn back to it's previous position
      * @param t
      */
-    public void collideWithObstacles(Tank t){
+    public void collideWithObstacles(Character t){
         for (int i = 0; i < obstacles.size(); i++) {
             GenericObstacle w = obstacles.get(i);
             w.handleCharacter(t);
@@ -193,7 +192,7 @@ public class GameMap {
     }
 
 
-    public void collideWithTriggers(Tank t){
+    public void collideWithTriggers(Character t){
         triggerSystem.update(t);
     }
     //collide--------------------------------------------------------------

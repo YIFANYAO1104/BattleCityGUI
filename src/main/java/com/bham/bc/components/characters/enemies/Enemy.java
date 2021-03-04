@@ -7,7 +7,7 @@ import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.characters.Character;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -16,7 +16,7 @@ import java.util.Random;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
-public class Enemy extends Tank {
+public class Enemy extends Character {
     public static int count = 0;
     /**
      * the STABLE direction of the Player Tank
@@ -65,7 +65,7 @@ public class Enemy extends Tank {
     @Override
     public void render(GraphicsContext gc) {
 
-        if (!live) {
+        if (!isAlive) {
             backendServices.removeEnemy(this);
             return;
         }
@@ -99,7 +99,7 @@ public class Enemy extends Tank {
         if((x-15)<0) rx=0;
         if((y-15)<0)ry=0;
         Rectangle a=new Rectangle(rx, ry,60,60);
-        if (this.live && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
+        if (this.isAlive && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
             return true;
         }
         return false;
@@ -109,7 +109,7 @@ public class Enemy extends Tank {
      * Add bullet to list of bullets
      */
     public Bullets01 fire() {
-        if (!live)
+        if (!isAlive)
             return null;
         int x=0;
         int y=0;
@@ -146,7 +146,7 @@ public class Enemy extends Tank {
         for (int i = 0; i < be.size(); i++) {
             MovingEntity t = be.get(i);
             if (this != t) {
-                if (this.live && t.isLive()
+                if (this.isAlive && t.isAlive()
                         && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
                     this.changToOldDir();
                     t.changToOldDir();
@@ -228,16 +228,16 @@ public class Enemy extends Tank {
              */
             if (playertankaround()){
                 BackendServices cC = backendServices;
-                if(x==cC.getHomeTankX()){
-                    if(y>cC.getHomeTankY()){
+                if(x==cC.getPlayerX()){
+                    if(y>cC.getPlayerY()){
                         direction=directons[1];
-                    } else if (y<cC.getHomeTankY()){
+                    } else if (y<cC.getPlayerY()){
                         direction=directons[3];
                     }
-                }else if(y==cC.getHomeTankY()){
-                    if(x>cC.getHomeTankX()) {
+                }else if(y==cC.getPlayerY()){
+                    if(x>cC.getPlayerX()) {
                         direction=directons[0];
-                    } else if (x<cC.getHomeTankX()) {
+                    } else if (x<cC.getPlayerX()) {
                         direction=directons[2];
                     }
                 } else{ //change my direction

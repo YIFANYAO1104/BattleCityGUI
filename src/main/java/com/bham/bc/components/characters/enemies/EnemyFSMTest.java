@@ -2,7 +2,7 @@ package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.BackendServices;
 import com.bham.bc.components.armory.Bullets01;
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.MovingEntity;
@@ -22,7 +22,7 @@ import static com.bham.bc.components.CenterController.backendServices;
  * IT IS IDENTICAL TO enemy.java EXCEPT IN THE CONSTRUCTOR, THE update() FUNCTION AND CONTAINS NEW FUNCTION
  * createFSM() AND TWO ATTRIBUTES sM and distanceToPlayer
  */
-public class EnemyFSMTest extends Tank {
+public class EnemyFSMTest extends Character {
     public static int count = 0;
     /**
      * the STABLE direction of the Player Tank
@@ -99,7 +99,7 @@ public class EnemyFSMTest extends Tank {
     @Override
     public void render(GraphicsContext gc) {
 
-        if (!live) {
+        if (!isAlive) {
             // LINE BELOW IS COMMENTED OUT TO AVOID ERROR, THIS IS BECAUSE THIS FILE IS JUST A TEST ATM
             //backendServices.removeEnemy(this);
             return;
@@ -134,7 +134,7 @@ public class EnemyFSMTest extends Tank {
         if((x-15)<0) rx=0;
         if((y-15)<0)ry=0;
         Rectangle a=new Rectangle(rx, ry,60,60);
-        if (this.live && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
+        if (this.isAlive && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
             return true;
         }
         return false;
@@ -144,7 +144,7 @@ public class EnemyFSMTest extends Tank {
      * Add bullet to list of bullets
      */
     public Bullets01 fire() {
-        if (!live)
+        if (!isAlive)
             return null;
         int x=0;
         int y=0;
@@ -181,8 +181,8 @@ public class EnemyFSMTest extends Tank {
         for (int i = 0; i < be.size(); i++) {
             MovingEntity t = be.get(i);
             if (this != t) {
-                if (this.live && t.isLive()
-                        && this.isIntersect(t)) {
+                if (this.isAlive && t.isAlive()
+                        && this.intersects(t)) {
                     this.changToOldDir();
                     t.changToOldDir();
                     return true;
@@ -273,16 +273,16 @@ public class EnemyFSMTest extends Tank {
              */
             if (playertankaround()){
                 BackendServices cC = backendServices;
-                if(x==cC.getHomeTankX()){
-                    if(y>cC.getHomeTankY()){
+                if(x==cC.getPlayerX()){
+                    if(y>cC.getPlayerY()){
                         direction=directons[1];
-                    } else if (y<cC.getHomeTankY()){
+                    } else if (y<cC.getPlayerY()){
                         direction=directons[3];
                     }
-                }else if(y==cC.getHomeTankY()){
-                    if(x>cC.getHomeTankX()) {
+                }else if(y==cC.getPlayerY()){
+                    if(x>cC.getPlayerX()) {
                         direction=directons[0];
-                    } else if (x<cC.getHomeTankX()) {
+                    } else if (x<cC.getPlayerX()) {
                         direction=directons[2];
                     }
                 } else{ //change my direction

@@ -1,12 +1,17 @@
 package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 
-public class PassableTile extends GenericObstacle {
+import static com.bham.bc.components.CenterController.backendServices;
+
+/**
+ * Desc: Tile that is unbreakable, nothing can pass through it
+ */
+public class Hard extends GenericObstacle {
     /**
      * Constructs an obstacle
      *
@@ -15,23 +20,28 @@ public class PassableTile extends GenericObstacle {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public PassableTile(int x, int y, TILESET tileset, int... tileIDs) {
+    public Hard(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
         renderTop = false;
     }
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/tiles/icewall.jpg") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/metalWall.bmp") };
     }
 
     @Override
     public void handleBullet(Bullet b) {
-        return;
+        if (b.isAlive() && this.intersects(b)) {
+            b.setAlive(false);
+            backendServices.removeBullet(b);
+        }
     }
 
     @Override
-    public void handleCharacter(Tank t) {
-        return;
+    public void handleCharacter(Character t) {
+        if(t.isAlive() && this.intersects(t)){
+            backendServices.changeToOldDir(t);
+        }
     }
 }

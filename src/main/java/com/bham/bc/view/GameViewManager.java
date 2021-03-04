@@ -1,6 +1,6 @@
 package com.bham.bc.view;
 
-import com.bham.bc.components.mode.Mode;
+import com.bham.bc.components.mode.MODE;
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
 
@@ -38,7 +38,7 @@ public class GameViewManager {
      * Constructs the view manager
      */
     public GameViewManager() {
-        setMode(Mode.Challenge);
+        setMode(MODE.CHALLENGE);
         initializeStage();
         createKeyListeners();
     }

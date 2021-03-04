@@ -6,7 +6,7 @@ import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 
-abstract public class Tank extends MovingEntity {
+abstract public class Character extends MovingEntity {
 
     /**
      * the constructor of this class, will generate a valid ID using parent class's generating ID method
@@ -20,7 +20,7 @@ abstract public class Tank extends MovingEntity {
      * @param length
      * @param direction
      */
-    protected Tank(int speedX, int speedY, int x, int y, int width, int length, Direction direction) {
+    protected Character(int speedX, int speedY, int x, int y, int width, int length, Direction direction) {
         super(speedX, speedY, x, y, width, length, direction);
     }
 
