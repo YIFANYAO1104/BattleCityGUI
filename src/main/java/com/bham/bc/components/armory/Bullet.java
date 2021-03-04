@@ -11,7 +11,8 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
+
 
 abstract public class Bullet extends MovingEntity {
     /**
@@ -73,7 +74,7 @@ abstract public class Bullet extends MovingEntity {
         if (this.live && this.isIntersect(t) && t.isLive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
-            centerController.addBombTank(e);
+            backendServices.addBombTank(e);
             t.setLive(false);
             this.live = false;
 
@@ -94,7 +95,7 @@ abstract public class Bullet extends MovingEntity {
 
             BombTank e = new BombTank(t.getX(), t.getY());
 
-            centerController.addBombTank(e);
+            backendServices.addBombTank(e);
 
             if (t.isUser()) {
                 t.setLife(t.getLife() - 50);
@@ -121,7 +122,7 @@ abstract public class Bullet extends MovingEntity {
     public boolean hitBullet(Bullet w){
         if (this.live && this.isIntersect(w)){
             this.live=false;
-            centerController.removeBullet(w);
+            backendServices.removeBullet(w);
             return true;
         }
         return false;

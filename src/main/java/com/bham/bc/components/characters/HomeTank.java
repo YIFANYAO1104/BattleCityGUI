@@ -15,7 +15,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
 
 public class HomeTank extends Tank implements TrackableCharacter {
 
@@ -178,7 +178,7 @@ public class HomeTank extends Tank implements TrackableCharacter {
 				break;
 		}
 		Bullets01 m = new Bullets01(this.ID(),x, y, Kdirection);
-		centerController.addBullet(m);
+		backendServices.addBullet(m);
 		return m;
 	}
 

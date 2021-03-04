@@ -8,7 +8,8 @@ import javafx.scene.image.Image;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.bham.bc.components.CenterController.centerController;
+
+import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.EntityMgr;
 
 public class Bullets01 extends Bullet {
@@ -131,7 +132,7 @@ public class Bullets01 extends Bullet {
 		move();
 
 		if (!live) {
-			centerController.removeBullet(this);
+			backendServices.removeBullet(this);
 			return;
 		}
 

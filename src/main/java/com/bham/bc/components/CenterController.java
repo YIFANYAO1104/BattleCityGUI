@@ -1,43 +1,55 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.mode.ChallengeController;
+import com.bham.bc.components.mode.Mode;
+import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.components.characters.TrackableCharacter;
-import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.components.environment.obstacles.SoftTile;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.HomeTank;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CenterController extends BaseGameEntity {
+public abstract class CenterController extends BaseGameEntity implements FrontendServices,BackendServices{
 
+    public static FrontendServices frontendServices;
+    public static BackendServices backendServices;
 
-    public static CenterController centerController = new CenterController();
+    public static void setMode(Mode mode){
+        CenterController centerController = null;
+        switch (mode) {
+            case Survival:
+                centerController = new SurvivalController();
+                break;
+            case Challenge:
+                centerController = new ChallengeController();
+                break;
+        }
+        frontendServices = centerController;
+        backendServices = centerController;
+    }
+
     /**
      * The message to indicate Victory Or Defeat
      */
-    private Boolean win=false,lose=false;
+    protected Boolean win=false,lose=false;
     /** Initialize HomeTank(Player Tank)*/
-    private HomeTank homeTank;
+    protected HomeTank homeTank;
     /** Initialize a Container of Enemy Tanks */
-    private List<Enemy> enemyTanks = new ArrayList<Enemy>();
+    protected List<Enemy> enemyTanks = new ArrayList<Enemy>();
     /** Initialize a Container of Tanks that got bombed and hit*/
-    private List<BombTank> bombTanks = new ArrayList<BombTank>();
+    protected List<BombTank> bombTanks = new ArrayList<BombTank>();
     /** Initialize a Container of All Bullets created by All Tanks*/
-    private List<Bullet> bullets = new ArrayList<Bullet>();
-    /** Initialize an Object Of GameMap*/
-    private GameMap gameMap = new GameMap();
+    protected List<Bullet> bullets = new ArrayList<Bullet>();
+
 
 
     //These are functions that might be used by frontend----------------------------------------------------
@@ -45,19 +57,14 @@ public class CenterController extends BaseGameEntity {
      * Method to determine if player wins the game
      * @return
      */
-    public boolean isWin(){
-        return false;
-        //return enemyTanks.isEmpty() && gameMap.isHomeLive() && homeTank.isLive();
-    }
+    public abstract boolean isWin();
 
     /**
      * Status to indicates defeat
      * Home destroyed OR Player Tank dead
      * @return
      */
-    public boolean isLoss(){
-        return !gameMap.isHomeLive() || !homeTank.isLive();
-    }
+    public abstract boolean isLoss();
 
     /**
      * Get the number of enemy tanks from enemy tank list
@@ -100,115 +107,25 @@ public class CenterController extends BaseGameEntity {
      * Clear all objects on tht map
      */
     public void clear(){
-        gameMap.clearAll();
         enemyTanks.clear();
         bullets.clear();
         bombTanks.clear();
 //        homeTank.setLive(false);
     }
-
+    //These are functions that might be used by frontend----------------------------------------------------
 
     /**
      * Constructor of CenterController
      */
     public CenterController(){
         super(GetNextValidID(),-1,-1);
-        homeTank = new HomeTank(16*32, 16*32, Direction.STOP);
-        initEnemies();
     }
-    /**
-     * A method to generate certain number of Enemy Tanks
-     * Adding created Objects into enemyTanks(list)
-     */
-    private void initEnemies() {
-        enemyTanks.add(new Enemy(16*3, 16*3,  Direction.D));
-        enemyTanks.add(new Enemy(16*61, 16*3, Direction.D));
-        enemyTanks.add(new Enemy(16*3, 16*61,  Direction.D));
-        enemyTanks.add(new Enemy(16*61, 16*61,  Direction.D));
-    }
+
 
 
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Cloning not allowed");
     }
-
-    /**
-     /** Overriding Method to indicates Game Logic \
-     */
-
-    @Override
-    public void update() {
-
-        //move-----------------
-        homeTank.update();
-        for (Enemy e : enemyTanks) {
-            e.update();
-        }
-        //move-----------------
-
-        //map----------------------------------
-        gameMap.update(homeTank);
-        for (Enemy e : enemyTanks) {
-            gameMap.update(e);
-        }
-        //map----------------------------------
-
-        //tanks----------------------------------
-        homeTank.collideWithTanks(enemyTanks);
-        for (Enemy e : enemyTanks) {
-            e.collideWithTanks(enemyTanks);
-        }
-        //tanks----------------------------------
-        /**
-         * Use nested For Loop to update game state
-         * Keep Tracking Bullets to see if Bullets hit Bullets, and Updates game state (Inner Loop)
-         * Keep Tracking Bullets to see(Outer Loop):
-         * 1.If Bullets hit enemy Tanks(Updates game state)
-         * 2.If Bullets hit Player (Updates game state)
-         * 3.If Bullets hits environment Objects e.g Home and Wall (Updates game state)
-         */
-        for (int i = 0; i < bullets.size(); i++) {
-            Bullet m = bullets.get(i);
-            m.update();
-            m.hitTanks(enemyTanks);
-            m.hitTank(homeTank);
-            for(int j=0;j<bullets.size();j++){
-                if (i==j) continue;
-                Bullet bts=bullets.get(j);
-                m.hitBullet(bts);
-            }
-            gameMap.update(m);
-        }
-        gameMap.updateObstacles();
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        /**
-         *  The order of Render does matter
-         *  The latter render will cover the previous render
-         *  For example,rending Tree at the end leads to successfully Shading
-         */
-        gameMap.renderBottomLayer(gc);
-        for (int i = 0; i < bullets.size(); i++) {
-            Bullet t = bullets.get(i);
-            t.render(gc);
-        }
-
-        //the blood bar is here. But it's covered currently
-
-        homeTank.render(gc);
-        for (int i = 0; i < enemyTanks.size(); i++) {
-            Enemy t = enemyTanks.get(i);
-            t.render(gc);
-        }
-        for (int i = 0; i < bombTanks.size(); i++) {
-            BombTank bt = bombTanks.get(i);
-            bt.render(gc);
-        }
-        gameMap.renderTopLayer(gc);
-    }
-
 
 
     //These are functions that might be used by backend----------------------------------------------------
@@ -224,12 +141,8 @@ public class CenterController extends BaseGameEntity {
         t.changToOldDir();
     }
 
-    public void removeWall(SoftTile w){
-        gameMap.removeHomeWall(w);
-    }
-
     public void removeEnemy(Enemy enemy){
-        //enemyTanks.remove(enemy);
+        enemyTanks.remove(enemy);
     }
 
     /**
@@ -275,8 +188,6 @@ public class CenterController extends BaseGameEntity {
     public void removeBullet(Bullet m){
         bullets.remove(m);
     }
-
-    public void removeObstacle(SoftTile go) { gameMap.removeHomeWall(go); }
     //These are functions that might be used by backend----------------------------------------------------
 
     @Override

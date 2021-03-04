@@ -1,12 +1,12 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.BackendServices;
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.CenterController;
 import com.bham.bc.components.characters.Tank;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -14,7 +14,7 @@ import javafx.scene.shape.Rectangle;
 
 import java.util.Random;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
 
 public class Enemy extends Tank {
     public static int count = 0;
@@ -66,7 +66,7 @@ public class Enemy extends Tank {
     public void render(GraphicsContext gc) {
 
         if (!live) {
-            centerController.removeEnemy(this);
+            backendServices.removeEnemy(this);
             return;
         }
 
@@ -99,7 +99,7 @@ public class Enemy extends Tank {
         if((x-15)<0) rx=0;
         if((y-15)<0)ry=0;
         Rectangle a=new Rectangle(rx, ry,60,60);
-        if (this.live && a.intersects(centerController.getHomeHitBox().getBoundsInLocal())) {
+        if (this.live && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
             return true;
         }
         return false;
@@ -134,7 +134,7 @@ public class Enemy extends Tank {
                 break;
         }
         Bullets01 m = new Bullets01(this.ID(),x, y, Kdirection);
-        centerController.addBullet(m);
+        backendServices.addBullet(m);
         return m;
     }
     /**
@@ -227,7 +227,7 @@ public class Enemy extends Tank {
              * Else randomly choose direction to move forward
              */
             if (playertankaround()){
-                CenterController cC = centerController;
+                BackendServices cC = backendServices;
                 if(x==cC.getHomeTankX()){
                     if(y>cC.getHomeTankY()){
                         direction=directons[1];
