@@ -6,9 +6,11 @@ import com.bham.bc.components.environment.obstacles.Home;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.utils.graph.algrithem.Floodfill;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
+import com.bham.bc.utils.messaging.MessageDispatcher;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.environment.obstacles.CommonWall;
@@ -17,6 +19,7 @@ import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.HomeTank;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
+import com.bham.bc.utils.messaging.MessageTypes;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -26,6 +29,10 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+//import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
+import static com.bham.bc.utils.messaging.MessageDispatcher.*;
+import static com.bham.bc.utils.messaging.MessageTypes.*;
 
 public class CenterController extends BaseGameEntity {
 
@@ -121,10 +128,10 @@ public class CenterController extends BaseGameEntity {
      */
     public CenterController(){
         super(GetNextValidID(),-1,-1);
-        homeTank = new HomeTank(300, 400, Direction.STOP);
+        homeTank = new HomeTank(200, 400, Direction.STOP);
         initEnemies();
         System.out.println("start");
-        unfoldMap();
+        intialMap();
         System.out.println("over");
     }
     /**
@@ -198,18 +205,23 @@ public class CenterController extends BaseGameEntity {
         gameMap.updateObstacles();
     }
 
-    private void unfoldMap(){
+    private void intialMap(){
         HandyGraphFunctions hgf = new HandyGraphFunctions();
-        SparseGraph<NavNode, GraphEdge> shg = new SparseGraph<NavNode, GraphEdge>(true);
+        SparseGraph<NavNode, GraphEdge> shg = new SparseGraph<NavNode, GraphEdge>(false);
         sg = shg;
         hgf.GraphHelper_CreateGrid(sg,1200,1600,50,50);
         ArrayList<Vector2D> vectors11 = sg.getAllVector();
 //        sg.display();
         for (int i = 0; i < vectors11.size(); i++) {
             Vector2D vv1 = vectors11.get(i);
-            gameMap.collideWithRectangle(sg.ID(),i,new Rectangle(vv1.x,vv1.y,14.0,14.0));
+            gameMap.collideWithRectangle(sg.ID(),i,new Rectangle(vv1.getX(),vv1.getY(),14.0,14.0));
 //            Rectangle rr1 = new Rectangle(vv1.x,vv1.y,14.0,14.0);
         }
+
+
+        Floodfill fl = new Floodfill(sg.TrickingTank(homeTank.getPositionV()));
+
+        sg = fl.stratFLood(sg);
 
     }
 
@@ -239,9 +251,30 @@ public class CenterController extends BaseGameEntity {
 
 
         gameMap.renderAll(gc);
-
+        // -----------------------------------------------------------------------------------------------
         sg.render(gc);
-        sg.TrickingHomeTank(homeTank.getPositionV(),gc);
+        sg.TrickingTank(homeTank.getPositionV(),gc);
+        NavNode n1 = sg.TrickingTank(homeTank.getPositionV());
+        for (int i = 0; i < enemyTanks.size(); i++) {
+            Enemy t = enemyTanks.get(i);
+            sg.TrickingTank(t.getPositionV(),gc);
+            NavNode n2 = sg.TrickingTank(t.getPositionV());
+            Vector2D v3 = n1.Pos().mines(n2.Pos());
+            Direction d1 = Direction.STOP;
+            if(v3.getY()>1){
+                d1 = Direction.D;
+            }else if(v3.getY()<-1){
+                d1 = Direction.U;
+            }else if(v3.getX()>1){
+                d1 =Direction.R;
+            }else if(v3.getX()<-1){
+                d1 =Direction.L;
+            }else
+                d1 =Direction.STOP;
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,centerController.ID(),t.ID(),Msg_direction,d1);
+
+        }
+        //------------------------------------------------------------------------------------------
 
 
 

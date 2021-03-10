@@ -11,6 +11,9 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
+import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
+import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
 
 
 public class Tree extends MapObject2D {
@@ -68,5 +71,9 @@ public class Tree extends MapObject2D {
     public boolean isIntersect(BaseGameEntity b) {
         Rectangle t = new Rectangle(x, y, width, length);
         return t.intersects(b.getHitBox().getBoundsInLocal());
+    }
+    @Override
+    public void interactWith(int ID,int indexOfNode ,Rectangle r1) {
+
     }
 }

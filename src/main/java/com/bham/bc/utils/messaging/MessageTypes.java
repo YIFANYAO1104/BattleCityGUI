@@ -7,7 +7,8 @@ public enum MessageTypes {
 
     Msg_IfindYou(0),
     Msg_Gotta(1),
-    Msg_interact(2);
+    Msg_interact(2),
+    Msg_direction(3);
 
     final public int id;
 
@@ -45,6 +46,8 @@ public enum MessageTypes {
                 return "Gotta";
             case 2:
                 return "interactWith";
+            case 3:
+                return "direction";
             default:
                 return "Not recognized!";
         }

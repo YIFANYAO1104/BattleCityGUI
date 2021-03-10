@@ -6,6 +6,7 @@ import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.messaging.Telegram;
+import com.sun.javafx.geom.Edge;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -159,19 +160,33 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     }
 
-    public void TrickingHomeTank(Vector2D location ,GraphicsContext gc){
+    public int TrickingTank(Vector2D location ,GraphicsContext gc){
         gc.setFill(Color.RED);
-        int i = (int) location.x /eachDisY;
-        int j = (int) location.y / eachDisX;
-        int c = j*rowNums + i;
 
-        NavNode n1 = (NavNode)this.m_Nodes.get(c);
+
+        NavNode n1 = TrickingTank(location);
 //        System.out.println("1 size"+n1.Pos().toString());
-        if(n1.isValid()){
+        if(n1.isValid() ){
             gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),8,8,1,1);
         }
         gc.setFill(Color.BLUE);
         gc.fillRoundRect(location.getX(),location.getY(),4,4,1,1);
+
+       return n1.Index();
+
+
+    }
+
+
+
+    public NavNode TrickingTank(Vector2D location){
+        int i = (int) location.getX() /eachDisY;
+        int j = (int) location.getY() / eachDisX;
+        int c = j*rowNums + i;
+        NavNode n1 = (NavNode)this.m_Nodes.get(c);
+//        System.out.println("1 size"+n1.Pos().toString());
+        return n1;
+
 
 
 
@@ -337,10 +352,13 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             if (!m_bDigraph) {
                 //check to make sure the edge is unique before adding
                 if (UniqueEdge(edge.To(), edge.From())) {
-                    edge_type NewEdge = null;
+//                    edge_type NewEdge = null;
+                    GraphEdge NewEdge = null;
                     try {
-                        NewEdge = (edge_type) edge.getClass().getConstructor(edge.getClass()).newInstance(edge);
+//                        NewEdge = (edge_type) edge.getClass().getConstructor(edge.getClass()).newInstance(edge);
+                        NewEdge = new GraphEdge();
                     } catch (Exception ex) {
+
                         throw new RuntimeException(ex);
                     }
 
@@ -607,6 +625,29 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         ListIterator<EdgeList> it = m_Edges.listIterator();
         while (it.hasNext()) {
             it.next().clear();
+        }
+    }
+
+    /**
+     * Get nodes which is connected with this node
+     * @param n1
+     * @return the Integers of those nodes</>
+     */
+
+    public ArrayList<GraphNode> getAroundNodes(GraphNode n1){
+        EdgeList<GraphEdge> m1 = m_Edges.get(n1.Index());
+        ArrayList<GraphNode> temp1 = new ArrayList<GraphNode>();
+        for(GraphEdge e1:m1){
+            temp1.add(m_Nodes.get(e1.To()));
+        }
+        return temp1;
+    }
+
+    public void fitting(HashSet<GraphNode> m1){
+        for(GraphNode g1: m_Nodes){
+            if(!m1.contains(g1)){
+                g1.setInvalid();
+            }
         }
     }
 

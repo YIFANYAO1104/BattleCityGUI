@@ -1,8 +1,8 @@
 package com.bham.bc.utils.graph.node;
 
 public class Vector2D {
-    public double x;
-    public double y;
+    private double x;
+    private double y;
 
     public Vector2D() {
         x = 0.0;
@@ -61,6 +61,9 @@ public class Vector2D {
         double xSeparation = v2.x - v1.x;
 
         return Math.sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
+    }
+    public  Vector2D mines(Vector2D v2){
+        return new Vector2D(x- v2.getX(),y- v2.getY());
     }
 
     public double getX() {
