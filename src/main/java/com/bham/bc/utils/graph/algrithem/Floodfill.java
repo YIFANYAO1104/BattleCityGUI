@@ -12,10 +12,10 @@ import java.util.HashSet;
 public class Floodfill {
 
 
-    ArrayList<GraphNode> startNodes = new ArrayList<GraphNode>();
-    HashSet<GraphNode> registerset = new HashSet<GraphNode>();
+    private ArrayList<GraphNode> startNodes = new ArrayList<GraphNode>();
+    private HashSet<GraphNode> registerset = new HashSet<GraphNode>();
 
-    GraphNode startpoint;
+    private GraphNode startpoint;
 
     public Floodfill(GraphNode gh){
         this.startpoint = gh;

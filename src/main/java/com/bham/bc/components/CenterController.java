@@ -1,33 +1,23 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.TrackableCharacter;
-import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
+import com.bham.bc.components.characters.TrackableCharacter;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.utils.graph.HandyGraphFunctions;
-import com.bham.bc.utils.messaging.MessageTypes;
 import com.bham.bc.components.characters.Player;
 
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-
-//import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
-import static com.bham.bc.utils.messaging.MessageDispatcher.*;
-import static com.bham.bc.utils.messaging.MessageTypes.*;
 
 public abstract class CenterController extends BaseGameEntity implements FrontendServices, BackendServices {
 
@@ -61,8 +51,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected List<BombTank> bombTanks = new ArrayList<BombTank>();
     /** Initialize a Container of All Bullets created by All Tanks*/
     protected List<Bullet> bullets = new ArrayList<Bullet>();
-    //survival
-    protected SparseGraph sg;
+
 
 
     //These are functions that might be used by frontend----------------------------------------------------
@@ -132,7 +121,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     public CenterController(){
         super(GetNextValidID(),-1,-1);
-
     }
 
 
@@ -140,7 +128,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Cloning not allowed");
     }
-
 
 
     //These are functions that might be used by backend----------------------------------------------------
@@ -207,7 +194,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public void removeObstacle(GenericObstacle go) { return;}
+    public void removeObstacle(GenericObstacle go) {
+    }
 
     @Override
     public Rectangle getHitBox() {
@@ -228,8 +216,4 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public boolean intersects(BaseGameEntity b) {
         return false;
     }
-
-//    public void setGameMap(GameMap gm) {
-//        this.gameMap = gm;
-//    }
 }

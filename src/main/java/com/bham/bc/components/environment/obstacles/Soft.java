@@ -40,7 +40,7 @@ public class Soft extends GenericObstacle {
         if (b.isAlive() && this.intersects(b)) {
             b.setAlive(false);
             backendServices.removeBullet(b);
-            // hp -= b.damage();
+//             hp -= b.damage();
             if(--hp <= 0) backendServices.removeObstacle(this);
         }
     }

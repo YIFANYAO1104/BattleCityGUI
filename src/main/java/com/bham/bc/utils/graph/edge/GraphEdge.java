@@ -27,7 +27,7 @@ public class GraphEdge {
     }
 
     public GraphEdge() {
-        m_dCost = 1.0;
+        m_dCost = 16.0;                                      // should be the value between two points
         m_iFrom =invalid_node_index;                        // invalid_node_index;
         m_iTo = invalid_node_index ;                        //invalid_node_index;
     }

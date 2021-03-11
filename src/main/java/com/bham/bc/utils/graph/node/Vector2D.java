@@ -14,6 +14,10 @@ public class Vector2D extends Point2D {
         super(x,y);
     }
 
+    public Vector2D(Point2D p1){
+        super(p1.getX(),p1.getY());
+    }
+
     public Vector2D set(Vector2D v) {
         this.x = v.x;
         this.y = v.y;
