@@ -52,7 +52,7 @@ public class CenterController extends BaseGameEntity {
     private List<Bullet> bullets = new ArrayList<Bullet>();
     /** Initialize an Object Of GameMap*/
     private GameMap gameMap = new GameMap("/test.json");
-
+    //survival
     private SparseGraph sg;
 
 
@@ -206,19 +206,18 @@ public class CenterController extends BaseGameEntity {
     }
 
     private void intialMap(){
-        HandyGraphFunctions hgf = new HandyGraphFunctions();
-        SparseGraph<NavNode, GraphEdge> shg = new SparseGraph<NavNode, GraphEdge>(false);
-        sg = shg;
-        hgf.GraphHelper_CreateGrid(sg,1200,1600,50,50);
-        ArrayList<Vector2D> vectors11 = sg.getAllVector();
+        HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
+        sg = new SparseGraph<NavNode, GraphEdge>(false); //single direction
+        hgf.GraphHelper_CreateGrid(sg,1200,1600,50,50); //make network
+        ArrayList<Vector2D> vectors11 = sg.getAllVector(); //get all nodes
 //        sg.display();
-        for (int i = 0; i < vectors11.size(); i++) {
+        for (int i = 0; i < vectors11.size(); i++) { //remove invalid nodes
             Vector2D vv1 = vectors11.get(i);
             gameMap.collideWithRectangle(sg.ID(),i,new Rectangle(vv1.getX(),vv1.getY(),14.0,14.0));
 //            Rectangle rr1 = new Rectangle(vv1.x,vv1.y,14.0,14.0);
         }
 
-
+        //remove unreachale nodes
         Floodfill fl = new Floodfill(sg.TrickingTank(homeTank.getPositionV()));
 
         sg = fl.stratFLood(sg);
@@ -248,7 +247,6 @@ public class CenterController extends BaseGameEntity {
             BombTank bt = bombTanks.get(i);
             bt.render(gc);
         }
-
 
         gameMap.renderAll(gc);
         // -----------------------------------------------------------------------------------------------
