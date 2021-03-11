@@ -5,6 +5,7 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.utils.graph.SparseGraph;
@@ -42,6 +43,10 @@ public class SurvivalController extends CenterController {
     /**
      /** Overriding Method to indicates Game Logic \
      */
+
+    @Override
+    public void removeObstacle(GenericObstacle go) { gameMap.removeObstacle(go); }
+
 
     @Override
     public void update() {
