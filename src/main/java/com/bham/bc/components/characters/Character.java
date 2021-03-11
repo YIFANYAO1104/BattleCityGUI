@@ -30,7 +30,7 @@ abstract public class Character extends MovingEntity {
         return new Point2D(x,y);
     }
 
-    public Vector2D getPositionV(){return new Vector2D(x,y);}
+//    public Vector2D getPositionV(){return new Vector2D(x,y);}
 
     public Point2D getRadius() {
         return new Point2D(width,length);

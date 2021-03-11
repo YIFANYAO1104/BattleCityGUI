@@ -180,8 +180,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
 
     public NavNode TrickingTank(Vector2D location){
-        int i = (int) location.getX() /eachDisY;
-        int j = (int) location.getY() / eachDisX;
+        int i = (int) (location.getX() + 16.0) /eachDisY;
+        int j = (int) (location.getY() + 16.0) / eachDisX;
         int c = j*rowNums + i;
         NavNode n1 = (NavNode)this.m_Nodes.get(c);
 //        System.out.println("1 size"+n1.Pos().toString());
@@ -631,8 +631,12 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      */
 
     public ArrayList<GraphNode> getAroundNodes(GraphNode n1){
-        EdgeList<GraphEdge> m1 = m_Edges.get(n1.Index());
         ArrayList<GraphNode> temp1 = new ArrayList<GraphNode>();
+        if(!n1.isValid())
+            return temp1;
+        EdgeList<GraphEdge> m1 = m_Edges.get(n1.Index());
+
+
         for(GraphEdge e1:m1){
             temp1.add(m_Nodes.get(e1.To()));
         }

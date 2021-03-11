@@ -7,49 +7,25 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
-import com.bham.bc.utils.Constants;
-import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
-import com.bham.bc.utils.graph.algrithem.Floodfill;
-import com.bham.bc.utils.graph.edge.GraphEdge;
-import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.node.Vector2D;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
+
 
 import java.util.ArrayList;
 
 public class SurvivalController extends CenterController {
     /** Initialize an Object Of GameMap*/
     private GameMap gameMap;
+    private SparseGraph sg;
 
     public SurvivalController(){
         super();
         gameMap = new GameMap("/64x64.json");
         player = new Player(16*32, 16*32, Direction.STOP);
+        gameMap.initialGraph(player.getPosition());
         initEnemies();
-        System.out.println("start");
-        intialMap();
-        System.out.println("over");
-    }
-
-    private void intialMap(){
-        HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
-        sg = new SparseGraph<NavNode, GraphEdge>(false); //single direction
-        hgf.GraphHelper_CreateGrid(sg, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,50,50); //make network
-        ArrayList<Vector2D> vectors11 = sg.getAllVector(); //get all nodes
-//        sg.display();
-        for (int i = 0; i < vectors11.size(); i++) { //remove invalid nodes
-            Vector2D vv1 = vectors11.get(i);
-            gameMap.collideWithRectangle(sg.ID(),i,new Rectangle(vv1.getX(),vv1.getY(),14.0,14.0));
-//            Rectangle rr1 = new Rectangle(vv1.x,vv1.y,14.0,14.0);
-        }
-
-        //remove unreachale nodes
-        Floodfill fl = new Floodfill(sg.TrickingTank(player.getPositionV()));
-
-        sg = fl.stratFLood(sg);
-
     }
 
     /**
@@ -137,16 +113,20 @@ public class SurvivalController extends CenterController {
             bt.render(gc);
         }
         gameMap.renderTopLayer(gc);
+        gameMap.renderGraph(gc, allCharactersLocation());
+    }
 
-        // -----------------------------------------------------------------------------------------------
-        sg.render(gc);
-        sg.TrickingTank(player.getPositionV(),gc);
-        for (int i = 0; i < enemies.size(); i++) {
-            Enemy t = enemies.get(i);
-            sg.TrickingTank(t.getPositionV(),gc);
+    /**
+     *
+     * @return temp1 the list with all characters' location inlcuding player.
+     */
+    public ArrayList<Point2D> allCharactersLocation(){
+        ArrayList<Point2D> temp1 = new ArrayList<Point2D>();
+        temp1.add(player.getPosition());
+        for (Enemy e1 :enemies){
+            temp1.add(e1.getPosition());
         }
-        //------------------------------------------------------------------------------------------
-
+        return temp1;
     }
 
     /**

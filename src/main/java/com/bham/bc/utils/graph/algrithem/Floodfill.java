@@ -12,10 +12,10 @@ import java.util.HashSet;
 public class Floodfill {
 
 
-    ArrayList<GraphNode> startNodes = new ArrayList<GraphNode>();
-    HashSet<GraphNode> registerset = new HashSet<GraphNode>();
+    private ArrayList<GraphNode> startNodes = new ArrayList<GraphNode>();
+    private HashSet<GraphNode> registerset = new HashSet<GraphNode>();
 
-    GraphNode startpoint;
+    private GraphNode startpoint;
 
     public Floodfill(GraphNode gh){
         this.startpoint = gh;
@@ -25,10 +25,6 @@ public class Floodfill {
 
     public SparseGraph stratFLood(SparseGraph graph){
 
-//        for(GraphNode n1: startNodes){
-//            ArrayList<GraphNode> as1 = pickupNodes(graph.getAroundNodes(n1));
-//            startNodes.addAll(as1);
-//        }
         for(int i = 0; i<startNodes.size();i++){
             GraphNode n1 = startNodes.get(i);
             ArrayList<GraphNode> as1 = pickupNodes(graph.getAroundNodes(n1));
@@ -39,7 +35,7 @@ public class Floodfill {
         return graph;
     }
 
-    public ArrayList<GraphNode> pickupNodes(ArrayList<GraphNode> aa1){
+    private ArrayList<GraphNode> pickupNodes(ArrayList<GraphNode> aa1){
         ArrayList<GraphNode> temp1 = new ArrayList<GraphNode>();
         for(GraphNode g1: aa1){
             if(g1.isValid() && !registerset.contains(g1))

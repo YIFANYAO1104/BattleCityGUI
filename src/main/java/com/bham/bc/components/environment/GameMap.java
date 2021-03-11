@@ -1,15 +1,24 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
 import com.bham.bc.components.characters.Character;
+import com.bham.bc.utils.Constants;
+import com.bham.bc.utils.graph.HandyGraphFunctions;
+import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.utils.graph.edge.GraphEdge;
+import com.bham.bc.utils.graph.node.NavNode;
+import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
 import com.bham.bc.utils.maploaders.MapLoader;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +32,8 @@ public class GameMap {
     private List<GenericObstacle> obstacles;
     // private Home home;
     private TriggerSystem triggerSystem;
+
+    private SparseGraph graphSystem;
 
 
 
@@ -38,6 +49,19 @@ public class GameMap {
     //init only--------------------------------------------------------------
 
 
+    public void initialGraph(Point2D location){
+        HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
+        graphSystem = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
+        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,64,64); //make network
+        ArrayList<Vector2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
+        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
+            Vector2D vv1 = allNodesLocations.get(index);
+            collideWithRectangle(graphSystem.ID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32.0,32.0));
+        }
+
+        //removed unreachable nodes
+        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.TrickingTank(new Vector2D(location)));
+    }
 
     /**
      * Check if home is still alive or not
@@ -105,6 +129,13 @@ public class GameMap {
         for(GenericObstacle go: obstacles) {
             if(go.renderTop()) go.render(gc);
         }
+    }
+
+    public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
+        graphSystem.render(gc);     // render network on map
+
+        for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1),gc);
+        // tricking tanks on the map! with red points
     }
 
     public void renderTriggers(GraphicsContext gc){
