@@ -2,7 +2,6 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.TrackableCharacter;
-import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
@@ -13,21 +12,13 @@ import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.utils.graph.HandyGraphFunctions;
-import com.bham.bc.utils.messaging.MessageTypes;
 import com.bham.bc.components.characters.Player;
 
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
-
-//import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
-import static com.bham.bc.utils.messaging.MessageDispatcher.*;
-import static com.bham.bc.utils.messaging.MessageTypes.*;
 
 public abstract class CenterController extends BaseGameEntity implements FrontendServices, BackendServices {
 
@@ -132,6 +123,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     public CenterController(){
         super(GetNextValidID(),-1,-1);
+
 
     }
 
