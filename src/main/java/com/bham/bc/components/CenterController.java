@@ -254,31 +254,11 @@ public class CenterController extends BaseGameEntity {
         // -----------------------------------------------------------------------------------------------
         sg.render(gc);
         sg.TrickingTank(homeTank.getPositionV(),gc);
-        NavNode n1 = sg.TrickingTank(homeTank.getPositionV());
         for (int i = 0; i < enemyTanks.size(); i++) {
             Enemy t = enemyTanks.get(i);
             sg.TrickingTank(t.getPositionV(),gc);
-            NavNode n2 = sg.TrickingTank(t.getPositionV());
-            Vector2D v3 = n1.Pos().mines(n2.Pos());
-            Direction d1 = Direction.STOP;
-            if(v3.getY()>1){
-                d1 = Direction.D;
-            }else if(v3.getY()<-1){
-                d1 = Direction.U;
-            }else if(v3.getX()>1){
-                d1 =Direction.R;
-            }else if(v3.getX()<-1){
-                d1 =Direction.L;
-            }else
-                d1 =Direction.STOP;
-            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,centerController.ID(),t.ID(),Msg_direction,d1);
-
         }
         //------------------------------------------------------------------------------------------
-
-
-
-
     }
 
 
