@@ -1,6 +1,8 @@
 package com.bham.bc.utils.graph;
 
+import com.bham.bc.utils.graph.algrithem.Floodfill;
 import com.bham.bc.utils.graph.edge.GraphEdge;
+import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 
@@ -9,6 +11,8 @@ import java.util.ArrayList;
 import static com.bham.bc.utils.graph.node.Vector2D.Vec2DDistance;
 
 public class HandyGraphFunctions {
+
+
 
     /**
      * @return true if x,y is a valid position in the map
@@ -103,6 +107,20 @@ public class HandyGraphFunctions {
             }
         }
     }
+
+    /**
+     *
+     * @param sg the Sparse graph on the mao
+     * @param gn the node which tricking the player
+     * @return Sparse graph by using SparseGraph
+     */
+    public SparseGraph FLoodFill(SparseGraph sg, GraphNode gn){
+        Floodfill fl = new Floodfill(gn);
+
+        return fl.stratFLood(sg);
+    }
+
+
 
     /**
      * Given a cost value and an index to a valid node this function examines

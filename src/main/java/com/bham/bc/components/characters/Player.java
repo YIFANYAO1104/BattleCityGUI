@@ -49,7 +49,7 @@ public class Player extends Character implements TrackableCharacter {
 	 * @param dir
 	 */
 	public Player(int x, int y, Direction dir) {
-		super(1,1, x,y,35,35,dir);
+		super(1,1, x,y,32,32,dir);
 		initImages();
 		initTrackableCoordinates();
 	}
@@ -301,7 +301,7 @@ public class Player extends Character implements TrackableCharacter {
 
 	@Override
 	public String toString() {
-		return "HomeTank";
+		return "Player Type";
 	}
 
 	@Override
