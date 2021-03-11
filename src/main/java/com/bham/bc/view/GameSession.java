@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 /**
  * Class managing the animations of a running game
  */
-public class GameViewManager {
+public class GameSession {
 
     private static final int GAME_WIDTH = Constants.WINDOW_WIDTH;
     private static final int GAME_HEIGHT = Constants.WINDOW_HEIGHT;
@@ -37,7 +37,7 @@ public class GameViewManager {
     /**
      * Constructs the view manager
      */
-    public GameViewManager() {
+    public GameSession() {
         setMode(MODE.SURVIVAL);
         initializeStage();
         createKeyListeners();
