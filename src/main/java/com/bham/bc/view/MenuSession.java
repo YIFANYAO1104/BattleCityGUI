@@ -1,11 +1,11 @@
 package com.bham.bc.view;
 
+import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -22,7 +22,6 @@ public class MenuSession {
 
     private MainMenu mainMenu;
     private PauseMenu pauseMenu;
-    private EndMenu endMenu;
 
     /**
      * Constructs the menu view manager
@@ -33,49 +32,35 @@ public class MenuSession {
         mainStage = new Stage();
         mainStage.setScene(mainScene);
 
-        mainMenu = new MainMenu(WIDTH, HEIGHT);
+        mainMenu = new MainMenu(this, WIDTH, HEIGHT);
         pauseMenu = new PauseMenu();
-        endMenu = new EndMenu();
 
         initMainMenu();
-        createStartButton();
+        initPauseMenu();
     }
 
+    /**
+     * Creates the main menu from where the user can start a new game session
+     */
     private void initMainMenu() {
         MenuBackground menuBackground = new MenuBackground(WIDTH, HEIGHT);
-
         mainPane.getChildren().addAll(menuBackground, mainMenu);
     }
 
+    private void initPauseMenu() {}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    private MainMenu getMainMenu() { return mainMenu; }
+    private PauseMenu getPauseMenu() { return pauseMenu; }
+    private EndMenu getEndMenu(double score) { return new EndMenu(); }
 
 
     /**
-     * adds a default play button
+     * Creates a single Game Session based on a chosen MODE
+     * @param mode SURVIVAL or CHALLENGE mode to be set in Controller
      */
-    private void createStartButton() {
-        Button startButton = new Button("Play");
-
-        startButton.setOnAction(e -> {
-            // To do: add javafx concurrency in the background
-           GameSession gameSession = new GameSession();
-           gameSession.createNewGame(mainStage);
-        });
-
-        mainPane.getChildren().add(startButton);
+    public void createGameSession(MODE mode) {
+        GameSession gameSession = new GameSession(mode);
+        gameSession.createNewGame(mainStage);
     }
 
     /**

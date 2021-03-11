@@ -37,8 +37,8 @@ public class GameSession {
     /**
      * Constructs the view manager
      */
-    public GameSession() {
-        setMode(MODE.SURVIVAL);
+    public GameSession(MODE mode) {
+        setMode(mode);
         initializeStage();
         createKeyListeners();
     }

@@ -1,60 +1,61 @@
 package com.bham.bc.view.menu;
 
+import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
-import com.bham.bc.view.model.MenuScene;
-import javafx.animation.TranslateTransition;
+import com.bham.bc.view.model.SubMenu;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 /**
  * <h1>Main Menu</h1>
  *
- * <p>Represents the primary menu of the game. All the buttons, sub-scenes and their functionalities
- * are defined here. The class is created only once by {@link MenuSession} and
- * is observed whenever a game session is not active.</p>
+ * <p>Represents the primary menu of the game. All the buttons, sub-menus and their functionalities
+ * are defined here. The class is created only once by {@link MenuSession} and is observed whenever
+ * a game session is not active.</p>
  */
 public class MainMenu extends AnchorPane {
     
     private MenuSession menuSession;
-    
-    private MenuButton btnSolo;
-    private MenuButton btnCoop;
-    private MenuButton btnScores;
-    private MenuButton btnSettings;
-    private MenuButton btnQuit;
 
-    private MenuScene sceneMain;
-    private MenuScene sceneMode;
-    private MenuScene sceneScores;
-    private MenuScene sceneSettings;
+    private SubMenu subMenuMain;
+    private SubMenu subMenuMode;
+    private SubMenu subMenuScores;
+    private SubMenu subMenuSettings;
 
-    public MainMenu(double width, double height) {
+    /**
+     * Constructs an AnchorPane layout as the Main Menu
+     *
+     * @param menuSession the manager of the menus
+     * @param width       menu window's length
+     * @param height      menu window's height
+     */
+    public MainMenu(MenuSession menuSession, double width, double height) {
+        this.menuSession = menuSession;
         setWidth(width);
         setHeight(height);
 
         initBgDim();
         initTitle();
 
-        createSceneMain();
-        createSceneMode();
-        createSceneScores();
-        createSceneSettings();
+        createSubMenuMain();
+        createSubMenuMode();
+        createSubMenuScores();
+        createSubMenuSettings();
 
-        getChildren().addAll(sceneMain);
-        sceneMain.show();
+        getChildren().addAll(subMenuMain);
+        subMenuMain.show();
     }
 
+    /**
+     * Adds background dim to the menu
+     */
     private void initBgDim() {
         Rectangle bg = new Rectangle(getWidth(), getHeight());
         bg.setFill(Color.GRAY);
@@ -63,6 +64,9 @@ public class MainMenu extends AnchorPane {
         getChildren().add(bg);
     }
 
+    /**
+     * Adds title to the menu
+     */
     private void initTitle() {
         Title title = new Title("T A N K 1 G A M E");
         title.setTranslateY(100);
@@ -71,41 +75,66 @@ public class MainMenu extends AnchorPane {
         getChildren().add(title);
     }
 
-    private void createSceneMain() {
-        btnSolo = new MenuButton("SOLO");
-        btnCoop = new MenuButton("CO-OP");
-        btnScores = new MenuButton("HIGH-SCORES");
-        btnSettings = new MenuButton("SETTINGS");
-        btnQuit = new MenuButton("QUIT");
+    /**
+     * Creates the primary sub-menu for the main menu. This defines the behavior of all the
+     * necessary buttons to control the GUI actions and create corresponding sub-menus.
+     */
+    private void createSubMenuMain() {
+        MenuButton btnSolo = new MenuButton("SOLO");
+        MenuButton btnCoop = new MenuButton("CO-OP");
+        MenuButton btnScores = new MenuButton("HIGH-SCORES");
+        MenuButton btnSettings = new MenuButton("SETTINGS");
+        MenuButton btnQuit = new MenuButton("QUIT");
 
-        btnSolo.setOnMouseClicked(e -> { sceneMain.hide(); sceneMode.show(); });
-        btnCoop.setOnMouseClicked(e -> { sceneMain.hide(); sceneMode.show(); });
-        btnScores.setOnMouseClicked(e -> { sceneMain.hide(); sceneScores.show(); });
-        btnSettings.setOnMouseClicked(e -> { sceneMain.hide(); sceneSettings.show(); });
+        btnSolo.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMode.show(); });
+        btnCoop.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMode.show(); });
+        btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
+        btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
 
-        sceneMain = new MenuScene(this);
-        sceneMain.setWidth1(btnSolo.getWidth());
-        sceneMain.getChildren().addAll(btnSolo, btnCoop, btnScores, btnSettings, btnQuit);
-        System.out.println();
+        subMenuMain = new SubMenu(this);
+        subMenuMain.getChildren().addAll(btnSolo, btnCoop, btnScores, btnSettings, btnQuit);
     }
 
-    private void createSceneMode() {
-        sceneMode = new MenuScene(this);
-    }
-    private void createSceneScores() {
-        sceneScores = new MenuScene(this);
-    }
-    private void createSceneSettings() {
+    /**
+     * Creates the sub-menu for mode selection. This menu is observed whenever "SOLO" or
+     * "CO-OP" is clicked and asks {@link com.bham.bc.view.MenuSession} to initiate a
+     * single {@link com.bham.bc.view.GameSession} based on the selected parameters
+     */
+    private void createSubMenuMode() {
         MenuButton btnBack = new MenuButton("BACK");
-        MenuButton btnSound = new MenuButton("SOUND");
-        MenuButton btnVideo = new MenuButton("VIDEO");
+        MenuButton btnSurvival = new MenuButton("SURVIVAL");
+        MenuButton btnChallenge = new MenuButton("CHALLENGE");
 
-        btnBack.setOnMouseClicked(e -> { sceneSettings.hide(); sceneMain.show(); });
+        btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
+        btnSurvival.setOnMouseClicked(e -> menuSession.createGameSession(MODE.SURVIVAL));
+        btnChallenge.setOnMouseClicked(e -> menuSession.createGameSession(MODE.CHALLENGE));
 
-        sceneSettings = new MenuScene(this);
-        sceneSettings.setTranslateX(400);
-        sceneSettings.getChildren().addAll(btnBack, btnSound, btnVideo);
+        subMenuMode = new SubMenu(this);
+        subMenuMode.getChildren().addAll(btnBack, btnSurvival, btnChallenge);
+    }
+
+    /**
+     * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
+     * "HIGH-SCORES" is clicked and shows top 10 scores.
+     */
+    private void createSubMenuScores() {
+        subMenuScores = new SubMenu(this);
+    }
+
+    /**
+     * Creates a sub-menu for settings. This menu is observed whenever "SETTINGS" is clicked
+     * and allows the user to configure UI parameters, such as SFX or MUSIC volume
+     */
+    private void createSubMenuSettings() {
+        MenuButton btnBack = new MenuButton("BACK");
+        MenuButton btnSFX = new MenuButton("SFX VOLUME");
+        MenuButton btnMusic = new MenuButton("MUSIC VOLUME");
+
+        btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
+
+        subMenuSettings = new SubMenu(this);
+        subMenuSettings.getChildren().addAll(btnBack, btnSFX, btnMusic);
     }
 
 

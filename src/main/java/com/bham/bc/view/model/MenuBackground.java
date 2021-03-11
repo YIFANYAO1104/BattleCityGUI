@@ -12,10 +12,9 @@ import javafx.scene.shape.Rectangle;
  * <p>By default non of the menus have backgrounds, they only have a darker dim over the scene.
  * This class, however, is used as a separate JavaFX node as a background for the Main Menu.</p>
  */
-public class MenuBackground extends SubScene {
+public class MenuBackground extends AnchorPane {
 
     private static final String BG_PATH = "file:src/main/resources/img/menu/menuBG.gif";
-    private AnchorPane root;
 
     /**
      * Constructs a Stack Pane node with an animated background and particles
@@ -24,8 +23,8 @@ public class MenuBackground extends SubScene {
      * @param height the size of the menu's height
      */
     public MenuBackground(double width, double height) {
-        super(new AnchorPane(), width, height);
-        root = (AnchorPane) this.getRoot();
+        setWidth(width);
+        setHeight(height);
 
         initBackgroundAnimation();
         initParticleAnimation();
@@ -37,14 +36,10 @@ public class MenuBackground extends SubScene {
      */
     private void initBackgroundAnimation() {
         ImageView bgImage = new ImageView(new Image(BG_PATH));
-        bgImage.setFitWidth(root.getWidth());
-        bgImage.setFitHeight(root.getHeight());
+        bgImage.setFitWidth(getWidth());
+        bgImage.setFitHeight(getHeight());
 
-        root.getChildren().add(bgImage);
-
-        //BackgroundImage bgaImage = new BackgroundImage(new Image(BG_PATH, root.getWidth(), root.getHeight(), false, true), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, null, null);
-        //root.setBackground(new Background(bgaImage));
-
+        getChildren().add(bgImage);
     }
 
     /**

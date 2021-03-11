@@ -20,8 +20,8 @@ import javafx.scene.text.Text;
  */
 public class MenuButton extends StackPane {
 
-    private static final double WIDTH = 250;
-    private static final double HEIGHT = 30;
+    public static final double WIDTH = 250;
+    public static final double HEIGHT = 30;
     private Text text;
 
     /**
