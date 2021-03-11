@@ -61,6 +61,8 @@ public class GameMap {
 
         //removed unreachable nodes
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.TrickingTank(new Vector2D(location)));
+        Point2D aim = new Point2D(1000,1000);
+        hgf.Astar(graphSystem,location,aim);
     }
 
     /**

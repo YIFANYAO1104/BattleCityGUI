@@ -1,10 +1,13 @@
 package com.bham.bc.utils.graph;
 
+import com.bham.bc.utils.graph.algrithem.Astar;
 import com.bham.bc.utils.graph.algrithem.Floodfill;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
+import javafx.geometry.Point2D;
+
 
 import java.util.ArrayList;
 
@@ -120,6 +123,11 @@ public class HandyGraphFunctions {
         return fl.stratFLood(sg);
     }
 
+    public ArrayList<Integer> Astar(SparseGraph sg, Point2D root, Point2D goal){
+        Astar astar = new Astar(sg, new Vector2D(root), new Vector2D(goal));
+
+        return astar.search();
+    }
 
 
     /**

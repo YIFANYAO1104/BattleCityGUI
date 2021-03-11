@@ -187,9 +187,20 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 //        System.out.println("1 size"+n1.Pos().toString());
         return n1;
 
+    }
 
+    public LinkedList<NavNode> getNodeList(int n1){
+        LinkedList<NavNode> nodes = new LinkedList<>();
+        LinkedList<GraphEdge> edges = m_Edges.get(n1);
+        for (GraphEdge e1: edges){
+            NavNode nn1 = (NavNode) m_Nodes.get(e1.To());
+            if(nn1.isValid())
+                nodes.add(nn1);
+        }
 
-
+        if(nodes.isEmpty())
+            return null;
+        return nodes;
     }
 
     @Override
