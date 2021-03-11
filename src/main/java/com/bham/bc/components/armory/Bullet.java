@@ -1,20 +1,18 @@
 package com.bham.bc.components.armory;
 
-import com.bham.bc.components.environment.obstacles.IceWall;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.environment.obstacles.CommonWall;
-import com.bham.bc.components.environment.obstacles.Home;
 import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.characters.HomeTank;
+import com.bham.bc.components.characters.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
 
 import java.util.List;
 
-import static com.bham.bc.components.CenterController.centerController;
+import static com.bham.bc.components.CenterController.backendServices;
+
 
 abstract public class Bullet extends MovingEntity {
     /**
@@ -73,12 +71,12 @@ abstract public class Bullet extends MovingEntity {
         //与敌人碰撞到了
         //敌人活着
         //子弹只作用在对方身上
-        if (this.live && this.isIntersect(t) && t.isLive()) {
+        if (this.isAlive && this.intersects(t) && t.isAlive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
-            centerController.addBombTank(e);
-            t.setLive(false);
-            this.live = false;
+            backendServices.addBombTank(e);
+            t.setAlive(false);
+            this.isAlive = false;
 
             return true;
         }
@@ -91,24 +89,24 @@ abstract public class Bullet extends MovingEntity {
      * @param t
      * @return
      */
-    public boolean hitTank(HomeTank t) {
+    public boolean hitTank(Player t) {
 
-        if (this.live && this.isIntersect(t) && t.isLive()) {
+        if (this.isAlive && this.intersects(t) && t.isAlive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());
 
-            centerController.addBombTank(e);
+            backendServices.addBombTank(e);
 
             if (t.isUser()) {
-                t.setLife(t.getLife() - 50);
-                if (t.getLife() <= 0)
-                    t.setLive(false);
+                t.setHp(t.getHp() - 50);
+                if (t.getHp() <= 0)
+                    t.setAlive(false);
             } else {
-                t.setLive(false);
+                t.setAlive(false);
 
             }
 
-            this.live = false;
+            this.isAlive = false;
 
             return true;
         }
@@ -122,9 +120,9 @@ abstract public class Bullet extends MovingEntity {
      * @return
      */
     public boolean hitBullet(Bullet w){
-        if (this.live && this.isIntersect(w)){
-            this.live=false;
-            centerController.removeBullet(w);
+        if (this.isAlive && this.intersects(w)){
+            this.isAlive =false;
+            backendServices.removeBullet(w);
             return true;
         }
         return false;
@@ -136,8 +134,8 @@ abstract public class Bullet extends MovingEntity {
 
 
 
-    public boolean isLive() {
-        return live;
+    public boolean isAlive() {
+        return isAlive;
     }
 
     /**

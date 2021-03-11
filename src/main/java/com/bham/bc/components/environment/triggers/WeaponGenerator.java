@@ -3,8 +3,7 @@ package com.bham.bc.components.environment.triggers;
 import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.entity.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.characters.Character;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -12,7 +11,7 @@ import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class WeaponGenerator extends RespawnTrigger<Tank> {
+public class WeaponGenerator extends RespawnTrigger<Character> {
     private Weapon weapon;
 
     public WeaponGenerator(int x, int y,Weapon weapon,int width, int length,int respawnCooldown) {
@@ -29,7 +28,7 @@ public class WeaponGenerator extends RespawnTrigger<Tank> {
         entityImages = new Image[] {new Image("file:src/main/resources/img/tmp.jpg"), };
     }
     @Override
-    public void tryTrigger(Tank entity) {
+    public void tryTrigger(Character entity) {
         if(isActive()&& isTouchingTrigger(entity.getPosition(),entity.getRadius())){
             entity.switchWeapon(this.weapon);
             deactivate();
@@ -62,7 +61,7 @@ public class WeaponGenerator extends RespawnTrigger<Tank> {
     }
 
     @Override
-    public boolean isIntersect(BaseGameEntity b) {
+    public boolean intersects(BaseGameEntity b) {
         return false;
     }
 

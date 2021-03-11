@@ -77,5 +77,5 @@ abstract public class BaseGameEntity {
     abstract public Rectangle getHitBox();
     abstract public boolean handleMessage(Telegram msg);
     abstract public String toString();
-    abstract public boolean isIntersect(BaseGameEntity b);
+    public boolean intersects(BaseGameEntity b) {return this.getHitBox().intersects(b.getHitBox().getBoundsInLocal()); };
 }

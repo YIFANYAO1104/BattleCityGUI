@@ -1,5 +1,6 @@
 package com.bham.bc.view;
 
+import com.bham.bc.components.mode.MODE;
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
 
@@ -37,6 +38,7 @@ public class GameViewManager {
      * Constructs the view manager
      */
     public GameViewManager() {
+        setMode(MODE.SURVIVAL);
         initializeStage();
         createKeyListeners();
     }
@@ -48,11 +50,13 @@ public class GameViewManager {
         canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        gamePane = new AnchorPane();
-        gamePane.getChildren().add(canvas);
+        Rectangle rect = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
+        rect.setStroke(Color.RED);
+        rect.setStrokeWidth(5);
 
-        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GRAY);
-        cmr = new Camera(centerController.getHomeTank());
+        gamePane = new AnchorPane(canvas, rect);
+        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
+        cmr = new Camera(frontendServices.getHomeTank());
         gameScene.setCamera(cmr);
 
         gameStage = new Stage();
@@ -74,12 +78,16 @@ public class GameViewManager {
         gameStage.show();
     }
 
+    public void show() {
+        gameStage.show();
+    }
+
     /**
      * creates the input listeners. Key presses are handled by the center controller class.
      */
     private void createKeyListeners() {
-        gameScene.setOnKeyPressed(e -> centerController.keyPressed(e));
-        gameScene.setOnKeyReleased(e -> centerController.keyReleased(e));
+        gameScene.setOnKeyPressed(e -> frontendServices.keyPressed(e));
+        gameScene.setOnKeyReleased(e -> frontendServices.keyReleased(e));
     }
 
     /**
@@ -90,9 +98,9 @@ public class GameViewManager {
         gc.setFont(new Font("Times New Roman", 20));
 
         gc.fillText("Tanks left in the field: ", 200, 70);
-        gc.fillText("" + centerController.getEnemyNumber(), 400, 70);
+        gc.fillText("" + frontendServices.getEnemyNumber(), 400, 70);
         gc.fillText("Health: ", 580, 70);
-        gc.fillText("" + centerController.getLife(), 650, 70);
+        gc.fillText("" + frontendServices.getLife(), 650, 70);
     }
 
 
@@ -101,13 +109,13 @@ public class GameViewManager {
      * @returns true if game ended and false otherwise
      */
     private boolean gameEnded() {
-        if(centerController.isLoss()){
+        if(frontendServices.isLoss()){
             gc.setFill(Color.GREEN);
             gc.setFont(new Font("Times New Roman", 40));
             gc.fillText("Sowwy. You lose!", 200, 300);
 
             return true;
-        } else if(centerController.isWin()){
+        } else if(frontendServices.isWin()){
             gc.setFill(Color.GREEN);
             gc.setFont(new Font("Times New Roman", 40));
             gc.fillText("Congratulations!", 200, 300);
@@ -127,18 +135,15 @@ public class GameViewManager {
             public void handle(long now) {
                 // Would be better to wrap rendering into one function
                 gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
-
-                centerController.render(gc);                                      // Render backend content
+                frontendServices.render(gc);                                      // Render backend content
                 renderScoreBoard();                                               // Render backend content
-
                 cmr.update();
-                centerController.update();                                        // Update backend content
-
+                frontendServices.update();                                        // Update backend content
 
                 // Would be better for the backend to trigger
                 // this state so that less checks are performed
                 if(gameEnded()) {                                                 // Stop game loop if game ended
-                    centerController.clear();
+                    frontendServices.clear();
                     gameTimer.stop();
                 }
             }
