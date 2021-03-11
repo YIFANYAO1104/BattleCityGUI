@@ -35,12 +35,12 @@ public class SurvivalController extends CenterController {
 
     private void intialMap(){
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
-        sg = new SparseGraph<NavNode, GraphEdge>(false); //single direction
-        hgf.GraphHelper_CreateGrid(sg, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,28,28); //make network
-        ArrayList<Vector2D> allNodesLocations = sg.getAllVector(); //get all nodes
-        for (int i = 0; i < allNodesLocations.size(); i++) { //remove invalid nodes
-            Vector2D vv1 = allNodesLocations.get(i);
-            gameMap.collideWithRectangle(sg.ID(),i,new Rectangle(vv1.getX(),vv1.getY(),14.0,14.0));
+        sg = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
+        hgf.GraphHelper_CreateGrid(sg, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,64,64); //make network
+        ArrayList<Vector2D> allNodesLocations = sg.getAllVector(); //get all nodes location
+        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
+            Vector2D vv1 = allNodesLocations.get(index);
+            gameMap.collideWithRectangle(sg.ID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32.0,32.0));
         }
 
         //removed unreachable nodes

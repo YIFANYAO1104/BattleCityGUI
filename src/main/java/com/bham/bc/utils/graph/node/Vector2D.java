@@ -1,22 +1,17 @@
 package com.bham.bc.utils.graph.node;
 
-public class Vector2D {
+import javafx.geometry.Point2D;
+
+public class Vector2D extends Point2D {
     private double x;
     private double y;
 
-    public Vector2D() {
-        x = 0.0;
-        y = 0.0;
-    }
-
-    public Vector2D(double a, double b) {
-        x = a;
-        y = b;
-    }
-
     public Vector2D(Vector2D v) {
-        super();
-        this.set(v);
+        super(v.getX(),v.getY());
+    }
+
+    public Vector2D(double x, double y) {
+        super(x,y);
     }
 
     public Vector2D set(Vector2D v) {
@@ -66,13 +61,6 @@ public class Vector2D {
         return new Vector2D(x- v2.getX(),y- v2.getY());
     }
 
-    public double getX() {
-        return x;
-    }
-
-    public double getY() {
-        return y;
-    }
 
     @Override
     public String toString(){
