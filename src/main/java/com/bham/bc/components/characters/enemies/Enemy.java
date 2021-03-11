@@ -168,7 +168,7 @@ public class Enemy extends Character {
     @Override
     public void update() {
         move();
-        aimAtAndShoot();
+//        aimAtAndShoot();
     }
     /**
      * Method to implements the movement of enemy tanks
@@ -276,7 +276,10 @@ public class Enemy extends Character {
             case 0:
                 System.out.println("you are deafeated by id "+ msg.Sender);
                 return true;
-
+            case 3:
+                this.direction = (Direction) msg.ExtraInfo;
+                System.out.println("chang the direction");
+                return true;
             default:
                 System.out.println("no match");
                 return false;

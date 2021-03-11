@@ -9,6 +9,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
+import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
+import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
+import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
+
 /**
  * Class defining common properties for any obstacle
  */
@@ -50,6 +54,11 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * @param t tank to handle
      */
     abstract public void handleCharacter(Character t);
+
+    public void interactWith(int ID,int indexOfNode ,Rectangle r1) {
+        if(this.getHitBox().intersects(r1.getBoundsInLocal()))
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.ID(),ID,Msg_interact,indexOfNode);
+    }
 
     @Override
     public void update() { if(entityImages.length > 1) currentFrame = (++currentFrame) % entityImages.length; }
