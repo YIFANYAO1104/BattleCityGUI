@@ -7,7 +7,6 @@ import javafx.embed.swing.JFXPanel;
 import javafx.stage.Stage;
 import org.junit.Test;
 
-import static com.bham.bc.components.CenterController.centerController;
 
 public class GraphTest extends Application {
 
@@ -23,9 +22,9 @@ public class GraphTest extends Application {
 
     @Test
     public void test1(){
-        new JFXPanel();
-        GameMap gameMap = new GameMap("/floodMap1.json");
-        centerController.setGameMap(gameMap);
-        launch();
+//        new JFXPanel();
+//        GameMap gameMap = new GameMap("/floodMap1.json");
+//        centerController.setGameMap(gameMap);
+//        launch();
     }
 }

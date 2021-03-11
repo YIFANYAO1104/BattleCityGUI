@@ -2,12 +2,17 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.TrackableCharacter;
+import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.mode.ChallengeController;
+import com.bham.bc.components.mode.MODE;
+import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.characters.HomeTank;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.messaging.MessageTypes;
 import com.bham.bc.components.characters.Player;
@@ -56,12 +61,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected List<BombTank> bombTanks = new ArrayList<BombTank>();
     /** Initialize a Container of All Bullets created by All Tanks*/
     protected List<Bullet> bullets = new ArrayList<Bullet>();
-
-    private List<Bullet> bullets = new ArrayList<Bullet>();
-    /** Initialize an Object Of GameMap*/
-    private GameMap gameMap = new GameMap("/test.json");
     //survival
-    private SparseGraph sg;
+    protected SparseGraph sg;
 
 
     //These are functions that might be used by frontend----------------------------------------------------
@@ -131,121 +132,13 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     public CenterController(){
         super(GetNextValidID(),-1,-1);
-        homeTank = new HomeTank(200, 400, Direction.STOP);
-        initEnemies();
-        System.out.println("start");
-        intialMap();
-        System.out.println("over");
+
     }
 
 
 
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Cloning not allowed");
-    }
-
-    /**
-     /** Overriding Method to indicates Game Logic \
-     */
-
-    @Override
-    public void update() {
-
-        //move-----------------
-        homeTank.update();
-        for (Enemy e : enemyTanks) {
-            e.update();
-        }
-        //move-----------------
-
-        //map----------------------------------
-        gameMap.update(homeTank);
-        for (Enemy e : enemyTanks) {
-            gameMap.update(e);
-        }
-        //map----------------------------------
-
-        //tanks----------------------------------
-        homeTank.collideWithTanks(enemyTanks);
-        for (Enemy e : enemyTanks) {
-            e.collideWithTanks(enemyTanks);
-        }
-        //tanks----------------------------------
-        /**
-         * Use nested For Loop to update game state
-         * Keep Tracking Bullets to see if Bullets hit Bullets, and Updates game state (Inner Loop)
-         * Keep Tracking Bullets to see(Outer Loop):
-         * 1.If Bullets hit enemy Tanks(Updates game state)
-         * 2.If Bullets hit Player (Updates game state)
-         * 3.If Bullets hits environment Objects e.g Home and Wall (Updates game state)
-         */
-        for (int i = 0; i < bullets.size(); i++) {
-            Bullet m = bullets.get(i);
-            m.update();
-            m.hitTanks(enemyTanks);
-            m.hitTank(homeTank);
-            for(int j=0;j<bullets.size();j++){
-                if (i==j) continue;
-                Bullet bts=bullets.get(j);
-                m.hitBullet(bts);
-            }
-            gameMap.update(m);
-        }
-        gameMap.updateObstacles();
-    }
-
-    private void intialMap(){
-        HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
-        sg = new SparseGraph<NavNode, GraphEdge>(false); //single direction
-        hgf.GraphHelper_CreateGrid(sg,1200,1600,50,50); //make network
-        ArrayList<Vector2D> vectors11 = sg.getAllVector(); //get all nodes
-//        sg.display();
-        for (int i = 0; i < vectors11.size(); i++) { //remove invalid nodes
-            Vector2D vv1 = vectors11.get(i);
-            gameMap.collideWithRectangle(sg.ID(),i,new Rectangle(vv1.getX(),vv1.getY(),14.0,14.0));
-//            Rectangle rr1 = new Rectangle(vv1.x,vv1.y,14.0,14.0);
-        }
-
-        //remove unreachale nodes
-        Floodfill fl = new Floodfill(sg.TrickingTank(homeTank.getPositionV()));
-
-        sg = fl.stratFLood(sg);
-
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        /**
-         *  The order of Render does matter
-         *  The latter render will cover the previous render
-         *  For example,rending Tree at the end leads to successfully Shading
-         */
-
-        for (int i = 0; i < bullets.size(); i++) {
-            Bullet t = bullets.get(i);
-            t.render(gc);
-        }
-
-        //the blood bar is here. But it's covered currently
-        homeTank.render(gc);
-        for (int i = 0; i < enemyTanks.size(); i++) {
-            Enemy t = enemyTanks.get(i);
-            t.render(gc);
-        }
-        for (int i = 0; i < bombTanks.size(); i++) {
-            BombTank bt = bombTanks.get(i);
-            bt.render(gc);
-        }
-
-        gameMap.renderAll(gc);
-        // -----------------------------------------------------------------------------------------------
-        sg.render(gc);
-        sg.TrickingTank(homeTank.getPositionV(),gc);
-        for (int i = 0; i < enemyTanks.size(); i++) {
-            Enemy t = enemyTanks.get(i);
-            sg.TrickingTank(t.getPositionV(),gc);
-        }
-        //------------------------------------------------------------------------------------------
     }
 
 
@@ -314,7 +207,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public void removeObstacle(GenericObstacle go) {}
+    public void removeObstacle(GenericObstacle go) { return;}
 
     @Override
     public Rectangle getHitBox() {
@@ -336,7 +229,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         return false;
     }
 
-    public void setGameMap(GameMap gm) {
-        this.gameMap = gm;
-    }
+//    public void setGameMap(GameMap gm) {
+//        this.gameMap = gm;
+//    }
 }

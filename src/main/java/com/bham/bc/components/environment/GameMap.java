@@ -8,6 +8,7 @@ import com.bham.bc.components.characters.Character;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
 import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Rectangle;
 
 import java.util.Iterator;
 import java.util.List;
@@ -29,8 +30,8 @@ public class GameMap {
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
-    public GameMap() {
-        MapLoader mapLoader = new JsonMapLoader("/64x64.json");
+    public GameMap(String resourceName) {
+        MapLoader mapLoader = new JsonMapLoader(resourceName);
         obstacles = mapLoader.getObstacles();
         triggerSystem = mapLoader.getTriggerSystem();
     }
@@ -191,6 +192,12 @@ public class GameMap {
         }
     }
 
+    public void collideWithRectangle(int ID,int indexOfNode, Rectangle r1){
+        for (int i = 0; i < obstacles.size(); i++) {
+            GenericObstacle w = obstacles.get(i);
+            w.interactWith(ID,indexOfNode,r1);
+        }
+    }
 
     public void collideWithTriggers(Character t){
         triggerSystem.update(t);
