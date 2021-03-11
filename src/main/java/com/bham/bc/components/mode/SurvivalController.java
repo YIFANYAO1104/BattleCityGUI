@@ -7,6 +7,7 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.algrithem.Floodfill;
@@ -35,7 +36,7 @@ public class SurvivalController extends CenterController {
     private void intialMap(){
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         sg = new SparseGraph<NavNode, GraphEdge>(false); //single direction
-        hgf.GraphHelper_CreateGrid(sg,1200,1600,50,50); //make network
+        hgf.GraphHelper_CreateGrid(sg, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,50,50); //make network
         ArrayList<Vector2D> vectors11 = sg.getAllVector(); //get all nodes
 //        sg.display();
         for (int i = 0; i < vectors11.size(); i++) { //remove invalid nodes

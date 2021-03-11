@@ -5,6 +5,7 @@ import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 
 /**
  * Desc: Tile which covers anything that passes through it
@@ -33,4 +34,9 @@ public class Covering extends GenericObstacle {
 
     @Override
     public void handleCharacter(Character t) { return; }
+
+    @Override
+    public void interactWith(int ID, int indexOfNode , Rectangle r1) {
+        return;
+    }
 }
