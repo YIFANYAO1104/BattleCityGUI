@@ -24,7 +24,7 @@ public class JsonMapLoader extends MapLoader {
     public JsonMapLoader(String resourceName){
         super();
         try {
-            this.loadMap("/test.json");
+            this.loadMap(resourceName);
         } catch (Exception e) {
             e.printStackTrace();
         }

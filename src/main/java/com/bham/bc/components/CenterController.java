@@ -51,7 +51,7 @@ public class CenterController extends BaseGameEntity {
     /** Initialize a Container of All Bullets created by All Tanks*/
     private List<Bullet> bullets = new ArrayList<Bullet>();
     /** Initialize an Object Of GameMap*/
-    private GameMap gameMap = new GameMap();
+    private GameMap gameMap = new GameMap("/test.json");
 
     private SparseGraph sg;
 
@@ -367,5 +367,9 @@ public class CenterController extends BaseGameEntity {
     @Override
     public boolean isIntersect(BaseGameEntity b) {
         return false;
+    }
+
+    public void setGameMap(GameMap gm) {
+        this.gameMap = gm;
     }
 }

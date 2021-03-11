@@ -32,17 +32,12 @@ public class GameMap {
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
-    public GameMap() {
-        MapLoader mapLoader = new JsonMapLoader("/test.json");
+    public GameMap(String resourceName) {
+        //MapLoader mapLoader = new JsonMapLoader("/test.json");
+        MapLoader mapLoader = new JsonMapLoader(resourceName);
         obstacles = mapLoader.getObstacles();
         home = mapLoader.getHome();
         triggerSystem = mapLoader.getTriggerSystem();
-//        addWeaponGenerator();
-        addIceWall();
-//        addMetalWall();
-//        addTree();
-//        addRiver();
-//        addCommonWall();
     }
     //init only--------------------------------------------------------------
 
