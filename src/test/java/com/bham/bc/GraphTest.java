@@ -1,9 +1,8 @@
 package com.bham.bc;
 
-import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.view.GameViewManager;
+import com.bham.bc.components.mode.MODE;
+import com.bham.bc.view.GameSession;
 import javafx.application.Application;
-import javafx.embed.swing.JFXPanel;
 import javafx.stage.Stage;
 import org.junit.Test;
 
@@ -13,7 +12,7 @@ public class GraphTest extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            GameViewManager manager = new GameViewManager();
+            GameSession manager = new GameSession(MODE.SURVIVAL);
             manager.createNewGame(primaryStage);
         } catch(Exception e) {
             e.printStackTrace();
