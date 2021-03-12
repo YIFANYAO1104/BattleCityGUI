@@ -21,7 +21,7 @@ public class MenuSession {
     private Stage mainStage;
 
     private MainMenu mainMenu;
-    private PauseMenu pauseMenu;
+    public static PauseMenu pauseMenu;
 
     /**
      * Constructs the menu view manager
@@ -50,7 +50,7 @@ public class MenuSession {
     private void initPauseMenu() {}
 
     private MainMenu getMainMenu() { return mainMenu; }
-    private PauseMenu getPauseMenu() { return pauseMenu; }
+    public static PauseMenu getPauseMenu() { return pauseMenu; }
     private EndMenu getEndMenu(double score) { return new EndMenu(); }
 
 

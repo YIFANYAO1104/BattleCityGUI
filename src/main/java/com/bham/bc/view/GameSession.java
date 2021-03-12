@@ -4,15 +4,20 @@ import com.bham.bc.components.mode.MODE;
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
 
+import com.bham.bc.view.menu.CustomMenuSubscene;
 import javafx.animation.AnimationTimer;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * Class managing the animations of a running game
@@ -33,6 +38,11 @@ public class GameSession {
     private AnimationTimer gameTimer;
 
     private Camera cmr;
+
+
+
+    public static boolean isshown=false;
+
 
     /**
      * Constructs the view manager
@@ -64,6 +74,33 @@ public class GameSession {
         gameStage.setScene(gameScene);
         gameStage.setTitle("A very cool game");
         gameStage.setResizable(false);
+
+        //YIFAN part Start
+        //exit when close the game
+        gameStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                System.exit(0);
+            }
+        });
+        gameScene.getStylesheets().add(GameSession.class.getResource("../../../../GUIResources/Button.css").toExternalForm());
+
+        KeyCodeCombination keyCodeCombination=new KeyCodeCombination(KeyCode.ENTER);
+        gameScene.getAccelerators().put(keyCodeCombination, new Runnable() {
+            @Override
+            public void run() {
+                if (GameSession.isshown==false){
+                    CustomMenuSubscene customMenuSubscene =new CustomMenuSubscene();
+                    customMenuSubscene.getStage(gameStage);
+                    customMenuSubscene.getGameScene(gameScene);
+//                    customMenuSubscene.createDeafultSubscene();
+                    gamePane.getChildren().add(customMenuSubscene);
+                    GameSession.isshown=true;}
+
+            }
+        });
+
+        //YIFAN part end
     }
 
     /**
