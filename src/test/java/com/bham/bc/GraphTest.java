@@ -8,23 +8,22 @@ import javafx.stage.Stage;
 import org.junit.Test;
 
 
-public class GraphTest extends Application {
-
+public class GraphTest extends Application{
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
         try {
-            GameSession manager = new GameSession(MODE.SURVIVAL, MapType.Map1);
+            GameSession manager = new GameSession(MODE.SURVIVAL, MapType.TESTMap1);
             manager.createNewGame(primaryStage);
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
+
     @Test
     public void test1(){
-//        new JFXPanel();
-//        GameMap gameMap = new GameMap("/floodMap1.json");
-//        centerController.setGameMap(gameMap);
-//        launch();
+        launch();
     }
+
+
 }
