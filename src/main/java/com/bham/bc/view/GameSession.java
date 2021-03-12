@@ -1,5 +1,6 @@
 package com.bham.bc.view;
 
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
@@ -37,8 +38,8 @@ public class GameSession {
     /**
      * Constructs the view manager
      */
-    public GameSession(MODE mode) {
-        setMode(mode);
+    public GameSession(MODE mode, MapType mapType) {
+        setMode(mode, mapType);
         initializeStage();
         createKeyListeners();
     }

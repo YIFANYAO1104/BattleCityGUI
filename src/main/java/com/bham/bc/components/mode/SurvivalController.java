@@ -6,6 +6,7 @@ import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.utils.graph.SparseGraph;
@@ -21,9 +22,9 @@ public class SurvivalController extends CenterController {
     private GameMap gameMap;
     private SparseGraph sg;
 
-    public SurvivalController(){
+    public SurvivalController(MapType mapType){
         super();
-        gameMap = new GameMap("/64x64.json");
+        gameMap = new GameMap(mapType);
         player = new Player(16*32, 16*32, Direction.STOP);
         gameMap.initialGraph(player.getPosition());
         initEnemies();

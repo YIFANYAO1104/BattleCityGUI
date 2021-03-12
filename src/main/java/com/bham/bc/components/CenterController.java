@@ -2,6 +2,7 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
@@ -24,11 +25,11 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public static FrontendServices frontendServices;
     public static BackendServices backendServices;
 
-    public static void setMode(MODE mode){
+    public static void setMode(MODE mode, MapType mapType){
         CenterController centerController = null;
         switch (mode) {
             case SURVIVAL:
-                centerController = new SurvivalController();
+                centerController = new SurvivalController(mapType);
 
                 break;
             case CHALLENGE:

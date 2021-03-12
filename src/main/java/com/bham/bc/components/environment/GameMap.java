@@ -41,8 +41,8 @@ public class GameMap {
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
-    public GameMap(String resourceName) {
-        MapLoader mapLoader = new JsonMapLoader(resourceName);
+    public GameMap(MapType mapType) {
+        MapLoader mapLoader = new JsonMapLoader(mapType.getName());
         obstacles = mapLoader.getObstacles();
         triggerSystem = mapLoader.getTriggerSystem();
     }
