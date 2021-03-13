@@ -2,8 +2,14 @@ package com.bham.bc.components.environment.navigation.impl;
 
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
+import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAStar;
+import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAlgorithm;
+import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedDijkstras;
 import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.utils.graph.node.NavNode;
+import com.bham.bc.utils.graph.node.Vector2D;
 import javafx.geometry.Point2D;
+import com.bham.bc.components.characters.Character;
 
 import java.util.List;
 
@@ -21,7 +27,7 @@ public class PathPlanner implements NavigationService {
     /**
      * a pointer to an instance of the current graph search algorithm.
      */
-//    private Graph_SearchTimeSliced<?> curSearchTask;
+    private TimeSlicedAlgorithm curSearchTask;
     /**
      * a note only, being set when an request was created
      * being used when getPath() is called
@@ -31,7 +37,20 @@ public class PathPlanner implements NavigationService {
     public PathPlanner(Character owner, SparseGraph navGraph) {
         this.owner = owner;
         this.navGraph = navGraph;
+        curSearchTask =null;
     }
+
+    /**
+     * @return node index. -1 if no closest node found
+     */
+    private int getClosestNode(Point2D pos){
+        NavNode n1 = navGraph.TrickingTank(new Vector2D(pos));
+        if(n1.isValid() ){
+            return n1.Index();
+        }
+        return no_closest_node_found;
+    }
+
 
     /**
      * Create a path finding request and register it in the time slice service
@@ -41,10 +60,17 @@ public class PathPlanner implements NavigationService {
      */
     public boolean createRequest(ItemType itemType) {
         //unregister current search
+        curSearchTask = null;
         //find closest node around bot, if no return false
+        int closestNodeToPlayer = getClosestNode(owner.getPosition());
+        if (closestNodeToPlayer == no_closest_node_found){
+            return false;
+        }
         //create algorithm instance
+        //TODO: create Termination Condition - target
+        curSearchTask = new TimeSlicedDijkstras(navGraph,closestNodeToPlayer,0);
         //register task in time slice service
-        return false;
+        return true;
     }
 
     /**
@@ -56,18 +82,29 @@ public class PathPlanner implements NavigationService {
     public boolean createRequest(Point2D targetPos) {
 
         //unregister current search
+        curSearchTask = null;
         destinationPos = new Point2D(targetPos.getX(),targetPos.getY());
+
         //find closest node around bot, if no return false
+        int closestNodeToPlayer = getClosestNode(owner.getPosition());
+        if (closestNodeToPlayer == no_closest_node_found){
+            return false;
+        }
         //find closest node around target, if no return false
+        int closestNodeToTarget = getClosestNode(targetPos);
+        if (closestNodeToTarget == no_closest_node_found){
+            return false;
+        }
         //create algorithm instance
+        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
         //register task in time slice service
 
-        return false;
+        return true;
     }
 
     @Override
     public int peekRequestStatus() {
-        return 0;
+        return curSearchTask.cycleOnce();
     }
 
     /**
@@ -76,11 +113,27 @@ public class PathPlanner implements NavigationService {
      * @return a list of PathEdges
      */
     public List<PathEdge> getPath() {
+
         //fetch path list from 'task'
+        List<PathEdge> path = curSearchTask.getPathAsPathEdges();
         //get closest node around current position
+        int closest = 0;
         //add start and end node
+        path.add(0,
+                new PathEdge(owner.getPosition(), navGraph.GetNode(closest).Pos())
+        );
+
+        PathEdge lastEdge = path.get(path.size()-1);
+        if(!lastEdge.getDestination().equals(destinationPos)){//add end note if request is position
+            path.add(new PathEdge(path.get(path.size() - 1).getDestination(),
+                    this.destinationPos)
+            );
+        }
+
         //smooth path
-        return null;
+
+
+        return path;
     }
 
     /**
@@ -114,10 +167,8 @@ public class PathPlanner implements NavigationService {
      */
     public int cycleOnce() {
         //exec current search
-        //if not found, return no path ava
         //if found, notice agent by msg, also attach pointer to the target if there been a object
         //the agent will call getpath() after received the msg
-
         return 0;
     }
 }

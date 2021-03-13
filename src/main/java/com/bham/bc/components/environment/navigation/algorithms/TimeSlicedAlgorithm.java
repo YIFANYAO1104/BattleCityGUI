@@ -15,6 +15,7 @@ abstract public class TimeSlicedAlgorithm {
      * target_not_found, search_incomplete) indicating the status of the
      * search
      */
+
     public abstract int cycleOnce();
 
     /**
