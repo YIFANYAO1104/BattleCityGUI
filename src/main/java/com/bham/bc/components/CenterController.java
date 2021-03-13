@@ -1,6 +1,7 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
@@ -52,6 +53,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected List<BombTank> bombTanks = new ArrayList<BombTank>();
     /** Initialize a Container of All Bullets created by All Tanks*/
     protected List<Bullet> bullets = new ArrayList<Bullet>();
+    /** Initialize an Object Of GameMap*/
+    protected GameMap gameMap;
 
 
 
@@ -196,6 +199,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     @Override
     public void removeObstacle(GenericObstacle go) {
+        gameMap.removeObstacle(go);
     }
 
     @Override

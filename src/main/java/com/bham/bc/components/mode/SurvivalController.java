@@ -18,8 +18,8 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 
 public class SurvivalController extends CenterController {
-    /** Initialize an Object Of GameMap*/
-    private GameMap gameMap;
+
+
     private SparseGraph sg;
 
     public SurvivalController(MapType mapType){
@@ -44,9 +44,6 @@ public class SurvivalController extends CenterController {
     /**
      /** Overriding Method to indicates Game Logic \
      */
-
-    @Override
-    public void removeObstacle(GenericObstacle go) { gameMap.removeObstacle(go); }
 
 
     @Override
