@@ -130,7 +130,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
         gc.setFill(Color.BLACK);
         for(int i = 0; i < m_Nodes.size() ;i++){
-            NavNode n1 = (NavNode)this.m_Nodes.get(i);
+            NavNode n1 = GetNode(i);
             if(n1.isValid()){
                 gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),2,2,1,1);
 //                System.out.println(n1.Pos().toString());
@@ -160,6 +160,27 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     }
 
+    public void renderlines(GraphicsContext gc, ArrayList<GraphNode> a1){
+        ArrayList<GraphEdge> ee1 = new ArrayList<>();
+        for(int i =0;i<a1.size()-1;i++){
+            ee1.add(GetEdge(a1.get(i).Index(), a1.get(i+1).Index()));
+        }
+         //draw edges
+        for (int j = 0; j < ee1.size();j++){
+            GraphEdge nh1  = (GraphEdge)ee1.get(j);
+            NavNode n1 = (NavNode)this.m_Nodes.get(nh1.From());
+            NavNode n2 = (NavNode)this.m_Nodes.get(nh1.To());
+//                Line line1 = new Line(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
+
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(2.0);
+            gc.strokeLine(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
+
+
+        }
+
+    }
+
     public int TrickingTank(Vector2D location ,GraphicsContext gc){
         gc.setFill(Color.RED);
 
@@ -183,9 +204,9 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         int i = (int) (location.getX() + 16.0) /eachDisY;
         int j = (int) (location.getY() + 16.0) / eachDisX;
         int c = j*rowNums + i;
-        NavNode n1 = (NavNode)this.m_Nodes.get(c);
+
+        return GetNode(c);
 //        System.out.println("1 size"+n1.Pos().toString());
-        return n1;
 
     }
 
@@ -193,7 +214,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         LinkedList<NavNode> nodes = new LinkedList<>();
         LinkedList<GraphEdge> edges = m_Edges.get(n1);
         for (GraphEdge e1: edges){
-            NavNode nn1 = (NavNode) m_Nodes.get(e1.To());
+            NavNode nn1 = GetNode(e1.To());
             if(nn1.isValid())
                 nodes.add(nn1);
         }
@@ -212,7 +233,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     public boolean handleMessage(Telegram msg) {
         switch (msg.Msg){
             case Msg_interact :
-                System.out.println("Find invalid nodes, dealing");
+//                System.out.println("Find invalid nodes, dealing");
                 m_Nodes.get((int)msg.ExtraInfo).setInvalid();
                 return true;
             default:

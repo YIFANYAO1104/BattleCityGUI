@@ -10,6 +10,7 @@ import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
+import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
@@ -34,6 +35,8 @@ public class GameMap {
     private TriggerSystem triggerSystem;
 
     private SparseGraph graphSystem;
+
+    private ArrayList<GraphNode> a2; // temp value to render the graphlines
 
 
 
@@ -61,8 +64,9 @@ public class GameMap {
 
         //removed unreachable nodes
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.TrickingTank(new Vector2D(location)));
-        Point2D aim = new Point2D(1000,1000);
-        hgf.Astar(graphSystem,location,aim);
+        Point2D aim = new Point2D(450,550);
+        Point2D lloc = new Point2D(584,616);
+        a2 = hgf.Astar(graphSystem,location,aim);
     }
 
     /**
@@ -137,6 +141,8 @@ public class GameMap {
         graphSystem.render(gc);     // render network on map
 
         for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1),gc);
+
+        graphSystem.renderlines(gc,a2);
         // tricking tanks on the map! with red points
     }
 

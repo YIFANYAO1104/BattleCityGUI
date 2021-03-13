@@ -3,9 +3,8 @@ package com.bham.bc.utils.graph.node;
 import javafx.geometry.Point2D;
 
 public class Vector2D extends Point2D {
-    private double x;
-    private double y;
-
+    private double x =super.getX();
+    private double y = super.getY();
     public Vector2D(Vector2D v) {
         super(v.getX(),v.getY());
     }
@@ -52,6 +51,12 @@ public class Vector2D extends Point2D {
         double xSeparation = v2.x - x;
 
         return Math.sqrt(ySeparation * ySeparation + xSeparation * xSeparation);
+    }
+
+    public double ManHadunDis(Vector2D v2){
+        double ySeparation = v2.y - y;
+        double xSeparation = v2.x - x;
+        return ySeparation * ySeparation + xSeparation * xSeparation;
     }
 
     public static double Vec2DDistance(Vector2D v1, Vector2D v2) {
