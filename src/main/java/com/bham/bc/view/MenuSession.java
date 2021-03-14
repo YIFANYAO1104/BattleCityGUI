@@ -1,5 +1,6 @@
 package com.bham.bc.view;
 
+import com.bham.bc.audio.TRACK;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
@@ -9,6 +10,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import static com.bham.bc.audio.AudioManager.audioManager;
+
 /**
  * Class managing the behavior of the main menu
  */
@@ -16,6 +19,7 @@ public class MenuSession {
 
     private static final int HEIGHT = 768;
     private static final int WIDTH = 1024;
+
     private AnchorPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
@@ -43,8 +47,12 @@ public class MenuSession {
      * Creates the main menu from where the user can start a new game session
      */
     private void initMainMenu() {
+        audioManager.createSequentialPlayer(TRACK.BREAK);
+
         MenuBackground menuBackground = new MenuBackground(WIDTH, HEIGHT);
         mainPane.getChildren().addAll(menuBackground, mainMenu);
+
+        audioManager.play();
     }
 
     private void initPauseMenu() {}
@@ -59,8 +67,12 @@ public class MenuSession {
      * @param mode SURVIVAL or CHALLENGE mode to be set in Controller
      */
     public void createGameSession(MODE mode) {
+        audioManager.createSequentialPlayer(TRACK.CORRUPTION, TRACK.LEAD, TRACK.REVOLUTION);
+
         GameSession gameSession = new GameSession(mode);
         gameSession.createNewGame(mainStage);
+
+        audioManager.play();
     }
 
     /**
