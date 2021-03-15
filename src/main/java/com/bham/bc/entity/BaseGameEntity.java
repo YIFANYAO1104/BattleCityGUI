@@ -4,6 +4,7 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import static com.bham.bc.entity.EntityManager.EntityMgr;
 
@@ -74,7 +75,7 @@ abstract public class BaseGameEntity {
     abstract public void update();
 
     abstract public void render(GraphicsContext gc);
-    abstract public Rectangle getHitBox();
+    abstract public Shape getHitBox();
     abstract public boolean handleMessage(Telegram msg);
     abstract public String toString();
     public boolean intersects(BaseGameEntity b) {return this.getHitBox().intersects(b.getHitBox().getBoundsInLocal()); };

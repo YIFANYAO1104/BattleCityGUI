@@ -10,7 +10,7 @@ import javafx.scene.shape.Rectangle;
 abstract public class Character extends MovingEntity {
 
     /**
-     * the constructor of this class, will generate a valid ID using parent class's generating ID method
+     * The constructor of this class will generate a valid ID using parent class's generating ID method
      * The other attributes of an moving entity will be set
      *
      * @param speedX
@@ -29,8 +29,6 @@ abstract public class Character extends MovingEntity {
     public Point2D getPosition() {
         return new Point2D(x,y);
     }
-
-//    public Vector2D getPositionV(){return new Vector2D(x,y);}
 
     public Point2D getRadius() {
         return new Point2D(width,length);

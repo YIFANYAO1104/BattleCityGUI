@@ -131,20 +131,42 @@ public class GameSession {
      */
     private void createGameLoop() {
         gameTimer = new AnimationTimer() {
+            long lastTick = 0;
             @Override
             public void handle(long now) {
-                // Would be better to wrap rendering into one function
-                gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
-                frontendServices.render(gc);                                      // Render backend content
-                renderScoreBoard();                                               // Render backend content
-                cmr.update();
-                frontendServices.update();                                        // Update backend content
+                if(lastTick == 0) {
+                    lastTick = now;
+                    // Would be better to wrap rendering into one function
+                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
+                    frontendServices.render(gc);                                      // Render backend content
+                    renderScoreBoard();                                               // Render backend content
+                    cmr.update();
+                    frontendServices.update();                                        // Update backend content
 
-                // Would be better for the backend to trigger
-                // this state so that less checks are performed
-                if(gameEnded()) {                                                 // Stop game loop if game ended
-                    frontendServices.clear();
-                    gameTimer.stop();
+                    // Would be better for the backend to trigger
+                    // this state so that less checks are performed
+                    if (gameEnded()) {                                                 // Stop game loop if game ended
+                        frontendServices.clear();
+                        gameTimer.stop();
+                    }
+                    return;
+                }
+
+                if(now - lastTick > 1_000_000_000 / 20) {
+                    lastTick = now;
+                    // Would be better to wrap rendering into one function
+                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
+                    frontendServices.render(gc);                                      // Render backend content
+                    renderScoreBoard();                                               // Render backend content
+                    cmr.update();
+                    frontendServices.update();                                        // Update backend content
+
+                    // Would be better for the backend to trigger
+                    // this state so that less checks are performed
+                    if (gameEnded()) {                                                 // Stop game loop if game ended
+                        frontendServices.clear();
+                        gameTimer.stop();
+                    }
                 }
             }
 

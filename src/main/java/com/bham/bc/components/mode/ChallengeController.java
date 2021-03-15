@@ -22,7 +22,7 @@ public class ChallengeController extends CenterController {
 
     public ChallengeController(){
         super();
-        player = new Player(16*32, 16*32, Direction.STOP);
+        player = new Player(16*32, 16*32);
         initEnemies();
     }
 

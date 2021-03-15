@@ -24,7 +24,7 @@ public class SurvivalController extends CenterController {
     public SurvivalController(){
         super();
         gameMap = new GameMap("/64x64.json");
-        player = new Player(16*32, 16*32, Direction.STOP);
+        player = new Player(16*32, 16*32);
         gameMap.initialGraph(player.getPosition());
         initEnemies();
     }

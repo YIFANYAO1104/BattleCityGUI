@@ -9,36 +9,34 @@ import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.transform.Rotate;
+
+import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Optional;
 
 import static com.bham.bc.components.CenterController.backendServices;
+import static java.lang.Double.NaN;
+import static java.lang.Math.signum;
 
 public class Player extends Character implements TrackableCharacter {
 
-	public static int count = 0;
-	/**
-	 * the STABLE direction of the Player Tank
-	 * It's value should not be 'stop'
-	 * Mainly for renderer
-	 */
+	public static final int MAX_HP = 100;
 	private Direction Kdirection = Direction.U;
-	/**
-	 *  initialize the health of tank to 200 hp */
-	private int hp = 200;
-	/**
-	 * The direction that will be set by KeyAction
-	 */
-	private boolean bL = false, bU = false, bR = false, bD = false;
+	private int hp;
+
+	private EnumSet<Direction> directionSet;
+	private double angle;
 
 	private SimpleDoubleProperty trackableX;
 	private SimpleDoubleProperty trackableY;
 
-	//-----------------------------------------------------------------//
-	private Weapon currWeapon = null;
 
 
 
@@ -46,12 +44,13 @@ public class Player extends Character implements TrackableCharacter {
 	 * Constructor of Player Tank,also indicates which Player it is creating
 	 * @param x
 	 * @param y
-	 * @param dir
 	 */
-	public Player(int x, int y, Direction dir) {
-		super(1,1, x,y,32,32,dir);
+	public Player(int x, int y) {
+		super(5,5, x,y,32,32, Direction.U);
+		directionSet = EnumSet.noneOf(Direction.class);
 		initImages();
 		initTrackableCoordinates();
+		hp = MAX_HP;
 	}
 
 	/**
@@ -59,12 +58,12 @@ public class Player extends Character implements TrackableCharacter {
 	 */
 	private void initImages() {
 		entityImages = new Image[] {
-				new Image("file:src/main/resources/img/HtankD.gif"),
-				new Image("file:src/main/resources/img/HtankU.gif"),
-				new Image("file:src/main/resources/img/HtankL.gif"),
-				new Image("file:src/main/resources/img/HtankR.gif"),
+				new Image("file:src/main/resources/img/characters/player.png", 64, 64, true, false),
 		};
 	}
+
+
+
 
 
 	/**
@@ -80,6 +79,29 @@ public class Player extends Character implements TrackableCharacter {
 		gc.setFill(c);
 	}
 
+
+	/**
+	 * Draws an image on a graphics context.
+	 *
+	 * The image is drawn at (tlpx, tlpy) rotated by angle pivoted around the point:
+	 * (tlpx + image.getWidth() / 2, tlpy + image.getHeight() / 2)
+	 *
+	 * @param gc the graphics context the image is to be drawn on.
+	 * @param angle the angle of rotation.
+	 * @param tlpx the top left x co-ordinate where the image will be plotted (in canvas co-ordinates).
+	 * @param tlpy the top left y co-ordinate where the image will be plotted (in canvas co-ordinates).
+	 *
+	 * @see <a href="https://stackoverflow.com/questions/18260421/how-to-draw-image-rotated-on-javafx-canvas">stackoverflow.com</a>
+	 */
+	void drawRotatedImage(GraphicsContext gc, Image image, double angle, double tlpx, double tlpy) {
+		gc.save();
+		Rotate r = new Rotate(angle, tlpx + image.getWidth() / 2, tlpy + image.getHeight() / 2);
+		gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+		gc.drawImage(image, tlpx, tlpy);
+		gc.restore();
+	}
+
+
 	/**
 	 * Render Method
 	 * Use directions to determine the image of Player Tank
@@ -87,74 +109,51 @@ public class Player extends Character implements TrackableCharacter {
 	 */
 	@Override
 	public void render(GraphicsContext gc) {
-
 		if (!isAlive) return;
-
-		//It is covered by home currently. So you could not see it.
 		renderBloodbBar(gc);
-
-		switch (Kdirection) {
-			case D:
-				gc.drawImage(entityImages[0], x, y);
-				break;
-			case U:
-				gc.drawImage(entityImages[1], x, y);
-				break;
-			case L:
-				gc.drawImage(entityImages[2], x, y);
-				break;
-			case R:
-				gc.drawImage(entityImages[3], x, y);
-				break;
-		}
+		drawRotatedImage(gc, entityImages[0], angle, x, y);
 	}
 
 	public void keyPressed(KeyEvent e) {
 		switch (e.getCode()) {
-			case D: bR = true; break;
-			case A: bL = true; break;
-			case W: bU = true; break;
-			case S: bD = true; break;
+			case F: fire(); break;
+			case W: directionSet.add(Direction.U); break;
+			case A: directionSet.add(Direction.L); break;
+			case S: directionSet.add(Direction.D); break;
+			case D: directionSet.add(Direction.R); break;
 		}
-		decideDirection();
-	}
-	/**
-	 * Determine the direction Of Player Tank
-	 */
-	void decideDirection() {
-		if (!bL && !bU && bR && !bD) 
-			direction = Direction.R;
-
-		else if (bL && !bU && !bR && !bD) 
-			direction = Direction.L;
-
-		else if (!bL && bU && !bR && !bD) 
-			direction = Direction.U;
-
-		else if (!bL && !bU && !bR && bD) 
-			direction = Direction.D;
-
-		else if (!bL && !bU && !bR && !bD)
-			direction = Direction.STOP; 
 	}
 
 	public void keyReleased(KeyEvent e) {
 		switch (e.getCode()) {
-			case F: fire(); break;
-			case D: bR = false; break;
-			case A: bL = false; break;
-			case W: bU = false; break;
-			case S: bD = false; break;
+			case W: directionSet.remove(Direction.U); break;
+			case A: directionSet.remove(Direction.L); break;
+			case S: directionSet.remove(Direction.D); break;
+			case D: directionSet.remove(Direction.R); break;
 		}
-		decideDirection(); 
 	}
+
+	/**
+	 * Updates angle at which the player is facing
+	 *
+	 * <p>This method goes through every direction in the directionSet, coverts them to basis vectors,
+	 * adds them up to get a final direction vector and calculates the angle between it and (0, 1)</p>
+	 *
+	 * <b>Note:</b> the basis vector which is used for angle calculation must be (0, 1) as this is the
+	 * way the player in the image is facing (upwards)
+	 */
+	private void updateAngle() {
+		Optional<Point2D> directionPoint = directionSet.stream().map(Direction::toPoint).reduce(Point2D::add);
+		directionPoint.ifPresent(p -> { if(p.getX() != 0 || p.getY() != 0) angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1); });
+	}
+
+
 	/**This method create the firing bullet01
 	 * Use Kdirection to set the direction of Bullet
 	 * Add bullet to list of bullets
 	 */
 	public Bullets01 fire() {
-		if (!isAlive)
-			return null;
+		if (!isAlive) return null;
 		int x=0;
 		int y=0;
 		switch (Kdirection) {
@@ -223,51 +222,27 @@ public class Player extends Character implements TrackableCharacter {
 	}
 
 	@Override
+	public void increaseHealth(int health) { hp = Math.min(hp + health, MAX_HP); }
+
+	@Override
+	public void switchWeapon(Weapon w) { }
+
+
+	@Override
 	public void update() {
+		updateAngle();
 		move();
 		trackableX.set(this.x + this.width/2);
 		trackableY.set(this.y + this.length/2);
 	}
-	/**
-	 * Method to implements the movement of Player tanks
-	 * Record the current coordinate as old coordinates and move to the specific direction
-	 * Note: Always check the constraints of boundary:
-	 * x AND y coordinate of Player tank can not go outside of the frame
-	 */
+
+
 	@Override
 	protected void move() {
-
-		this.oldX = x;
-		this.oldY = y;
-
-		switch (direction) {
-			case L:
-				x -= speedX;
-				break;
-			case U:
-				y -= speedY;
-				break;
-			case R:
-				x += speedX;
-				break;
-			case D:
-				y += speedY;
-				break;
-			case STOP:
-				break;
+		if(!directionSet.isEmpty()) {
+			x += Math.sin(Math.toRadians(angle)) * speedX;
+			y -= Math.cos(Math.toRadians(angle)) * speedX;
 		}
-
-		if (this.direction != Direction.STOP) {
-			this.Kdirection = this.direction;
-		}
-
-
-
-		//guarantee the tank is in Frame
-		if (x < 0) x = 0;
-		if (y < 0) y = 0;
-		if (x + this.width > Constants.MAP_WIDTH) x = Constants.MAP_WIDTH - this.width;
-		if (y + this.length > Constants.MAP_HEIGHT) y = Constants.MAP_HEIGHT - this.length;
 	}
 
 	@Override
@@ -296,29 +271,8 @@ public class Player extends Character implements TrackableCharacter {
 				System.out.println("no match");
 				return false;
 		}
-
 	}
 
 	@Override
-	public String toString() {
-		return "Player Type";
-	}
-
-	@Override
-	public void increaseHealth(int health){
-		if(this.hp +health<=200){
-			this.hp = this.hp +health;
-		} else{
-			this.hp = 200;
-		}
-	}
-
-	@Override
-	public void switchWeapon(Weapon w) {
-
-	}
-
-
-	//----------------------------------------------------------------------------------------//
-
+	public String toString() { return "Player"; }
 }
