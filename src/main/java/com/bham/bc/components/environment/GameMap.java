@@ -1,7 +1,6 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
@@ -60,7 +59,7 @@ public class GameMap {
         }
 
         //removed unreachable nodes
-        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.TrickingTank(new Vector2D(location)));
+        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(new Vector2D(location)));
     }
 
     /**
@@ -134,7 +133,7 @@ public class GameMap {
     public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
         graphSystem.render(gc);     // render network on map
 
-        for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1),gc);
+        for(Point2D p1 : points)  graphSystem.renderTankPoints(new Vector2D(p1),gc);
         // tricking tanks on the map! with red points
     }
 
@@ -180,7 +179,7 @@ public class GameMap {
         while (it.hasNext()) {
             GenericObstacle curObj = it.next();
 
-                curObj.update();
+            curObj.update();
 
         }
     }

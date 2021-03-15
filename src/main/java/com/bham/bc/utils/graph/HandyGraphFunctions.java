@@ -6,8 +6,6 @@ import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 
-import java.util.ArrayList;
-
 import static com.bham.bc.utils.graph.node.Vector2D.Vec2DDistance;
 
 public class HandyGraphFunctions {
@@ -45,8 +43,8 @@ public class HandyGraphFunctions {
                 //check to see if this is a valid neighbour
                 if (ValidNeighbour(nodeX, nodeY, NumCellsX, NumCellsY)) {
                     //calculate the distance to this node
-                    Vector2D PosNode = graph.GetNode(row * NumCellsX + col).Pos();
-                    Vector2D PosNeighbour = graph.GetNode(nodeY * NumCellsX + nodeX).Pos();
+                    Vector2D PosNode = graph.getNode(row * NumCellsX + col).Pos();
+                    Vector2D PosNeighbour = graph.getNode(nodeY * NumCellsX + nodeX).Pos();
 
                     double dist = PosNode.Distance(PosNeighbour);
 
@@ -54,7 +52,7 @@ public class HandyGraphFunctions {
                     GraphEdge NewEdge = new GraphEdge(row * NumCellsX + col,
                             nodeY * NumCellsX + nodeX,
                             dist);
-                    graph.AddEdge(NewEdge);
+                    graph.addEdge(NewEdge);
 
                     //if graph is not a diagraph then an edge needs to be added going
                     //in the other direction
@@ -62,7 +60,7 @@ public class HandyGraphFunctions {
                         NewEdge = new GraphEdge(nodeY * NumCellsX + nodeX,
                                 row * NumCellsX + col,
                                 dist);
-                        graph.AddEdge(NewEdge);
+                        graph.addEdge(NewEdge);
                     }
                 }
             }
@@ -92,7 +90,7 @@ public class HandyGraphFunctions {
         //first create all the nodes
         for (int row = 0; row < NumCellsY; ++row) {
             for (int col = 0; col < NumCellsX; ++col) {
-                graph.AddNode(new NavNode(graph.GetNextFreeNodeIndex(),
+                graph.addNode(new NavNode(graph.getNextFreeNodeIndex(),
                         new Vector2D(midX + (col * CellWidth),
                                 midY + (row * CellHeight))));
 
@@ -130,7 +128,7 @@ public class HandyGraphFunctions {
     public static <graph_type extends SparseGraph>
     void WeightNavGraphNodeEdges(graph_type graph, int node, double weight) {
         //make sure the node is present
-        assert (node < graph.NumNodes());
+        assert (node < graph.numNodes());
 
         //set the cost for each edge
         graph_type.EdgeIterator ConstEdgeItr = new graph_type.EdgeIterator(graph, node);
@@ -138,15 +136,15 @@ public class HandyGraphFunctions {
              !ConstEdgeItr.end();
              pE = ConstEdgeItr.next()) {
             //calculate the distance between nodes
-            double dist = Vec2DDistance(graph.GetNode(pE.From()).Pos(),
-                    graph.GetNode(pE.To()).Pos());
+            double dist = Vec2DDistance(graph.getNode(pE.From()).Pos(),
+                    graph.getNode(pE.To()).Pos());
 
             //set the cost of this edge
-            graph.SetEdgeCost(pE.From(), pE.To(), dist * weight);
+            graph.setEdgeCost(pE.From(), pE.To(), dist * weight);
 
             //if not a digraph, set the cost of the parallel edge to be the same
             if (!graph.isDigraph()) {
-                graph.SetEdgeCost(pE.To(), pE.From(), dist * weight);
+                graph.setEdgeCost(pE.To(), pE.From(), dist * weight);
             }
         }
     }

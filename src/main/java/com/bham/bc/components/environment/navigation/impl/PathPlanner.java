@@ -44,7 +44,7 @@ public class PathPlanner implements NavigationService {
      * @return node index. -1 if no closest node found
      */
     private int getClosestNode(Point2D pos){
-        NavNode n1 = navGraph.TrickingTank(new Vector2D(pos));
+        NavNode n1 = navGraph.getClosestNodeForPlayer(new Vector2D(pos));
         if(n1.isValid() ){
             return n1.Index();
         }
@@ -120,7 +120,7 @@ public class PathPlanner implements NavigationService {
         int closest = 0;
         //add start and end node
         path.add(0,
-                new PathEdge(owner.getPosition(), navGraph.GetNode(closest).Pos())
+                new PathEdge(owner.getPosition(), navGraph.getNode(closest).Pos())
         );
 
         PathEdge lastEdge = path.get(path.size()-1);

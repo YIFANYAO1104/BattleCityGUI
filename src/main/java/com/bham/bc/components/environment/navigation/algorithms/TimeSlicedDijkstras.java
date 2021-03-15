@@ -4,10 +4,8 @@ import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Dijkstra's algorithm class modified to spread a search over multiple
@@ -16,15 +14,70 @@ import java.util.List;
 public class TimeSlicedDijkstras//<termination_condition extends TerminationCondition>
         extends TimeSlicedAlgorithm {
 
+    private final SparseGraph navGraph;
+    private int source;
+    private int target;
+    ArrayList<Integer> parent;
+    ArrayList<Double> distance;
+    Set<Integer> seen;
+    Queue<MyPairs> pq;
+
+
     public TimeSlicedDijkstras(final SparseGraph G,
-                                    int source,
-                                    int target
-                                    /*termination_condition TerminationCondition*/) {
+                               int source,
+                               int target
+            /*termination_condition TerminationCondition*/) {
+        this.navGraph = G;
+        this.source = source;
+        this.target = target;
+
+
+        int number = this.navGraph.numNodes();
+        this.parent = new ArrayList<Integer>(Collections.nCopies(number, null));
+        this.distance = new ArrayList<Double>(Collections.nCopies(number, Double.MAX_VALUE));
+        this.seen = new TreeSet<Integer>();
+        distance.set(source,0d);
+
+        Comparator<MyPairs> comparator = new Comparator<MyPairs>() {
+            @Override
+            public int compare(MyPairs a, MyPairs b) {
+                BigDecimal costA = new BigDecimal(a.getValue());
+                BigDecimal costB = new BigDecimal(b.getValue());
+                return costA.compareTo(costB);
+            }
+        };
+        this.pq = new PriorityQueue<MyPairs>(comparator);
+        pq.add(new MyPairs(source,0d));
     }
 
     @Override
     public int cycleOnce() {
+        while (!pq.isEmpty()){
+            MyPairs pair = pq.poll();
+            double dist = pair.getValue();
+            int node = pair.getKey();
+            seen.add(node);
+
+            SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(this.navGraph, node);
+
+            //for each edge connected to the next closest node
+            for (GraphEdge pE = ConstEdgeItr.begin(); !ConstEdgeItr.end(); pE = ConstEdgeItr.next()){
+                int tempNode = pE.To();
+                if (!seen.contains(tempNode)){
+                    double newCost = dist + pE.Cost();
+                    if (newCost < distance.get(tempNode)){
+                        pq.add(new MyPairs(tempNode,newCost));
+                        parent.set(tempNode,node);
+                        distance.set(tempNode,newCost);
+                    }
+                }
+            }
+        }
         return 0;
+    }
+
+    public double getDistance(int target) {
+        return distance.get(target);
     }
 
     @Override
@@ -45,5 +98,39 @@ public class TimeSlicedDijkstras//<termination_condition extends TerminationCond
     @Override
     public List<PathEdge> getPathAsPathEdges() {
         return null;
+    }
+
+    public static void main(String[] args) {
+        class MyPairs extends AbstractMap.SimpleEntry<Integer, Double>{
+            MyPairs(Integer i, Double d){
+                super(i,d);
+            }
+        }
+        Comparator<MyPairs> comparator = new Comparator<MyPairs>() {
+            @Override
+            public int compare(MyPairs a, MyPairs b) {
+                BigDecimal costA = new BigDecimal(a.getValue());
+                BigDecimal costB = new BigDecimal(b.getValue());
+                return costA.compareTo(costB);
+            }
+        };
+
+        Queue<MyPairs> queue1 = new PriorityQueue<MyPairs>(comparator);
+        queue1.add(new MyPairs(1,1.0));
+        queue1.add(new MyPairs(3,3.0));
+        queue1.add(new MyPairs(1,1.0));
+        queue1.add(new MyPairs(2,3.0));
+        queue1.add(new MyPairs(1,6.0));
+        queue1.add(new MyPairs(5,5.0));
+        queue1.add(new MyPairs(1,1.0));
+        while (!queue1.isEmpty()){
+            System.out.println(queue1.poll());
+        }
+    }
+
+    class MyPairs extends AbstractMap.SimpleEntry<Integer, Double>{
+        MyPairs(Integer node, Double cost){
+            super(node,cost);
+        }
     }
 }
