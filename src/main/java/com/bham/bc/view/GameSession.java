@@ -34,6 +34,8 @@ public class GameSession {
 
     private Camera cmr;
 
+    private AnchorPane hbPane;
+
     /**
      * Constructs the view manager
      */
@@ -50,11 +52,11 @@ public class GameSession {
         canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        Rectangle rect = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
-        rect.setStroke(Color.RED);
-        rect.setStrokeWidth(5);
+        hbPane = new AnchorPane();
+        hbPane.setPrefWidth(Constants.MAP_WIDTH);
+        hbPane.setPrefHeight(Constants.MAP_HEIGHT);
 
-        gamePane = new AnchorPane(canvas, rect);
+        gamePane = new AnchorPane(canvas, hbPane);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
         cmr = new Camera(frontendServices.getHomeTank());
         gameScene.setCamera(cmr);
@@ -139,6 +141,9 @@ public class GameSession {
                     // Would be better to wrap rendering into one function
                     gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
                     frontendServices.render(gc);                                      // Render backend content
+
+                    frontendServices.renderHitBoxes(hbPane);                                      // Render backend content
+
                     renderScoreBoard();                                               // Render backend content
                     cmr.update();
                     frontendServices.update();                                        // Update backend content
@@ -157,6 +162,7 @@ public class GameSession {
                     // Would be better to wrap rendering into one function
                     gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
                     frontendServices.render(gc);                                      // Render backend content
+                    frontendServices.renderHitBoxes(hbPane);
                     renderScoreBoard();                                               // Render backend content
                     cmr.update();
                     frontendServices.update();                                        // Update backend content

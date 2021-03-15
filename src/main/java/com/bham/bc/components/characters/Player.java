@@ -13,9 +13,13 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 import java.util.EnumSet;
 import java.util.HashSet;
@@ -58,13 +62,9 @@ public class Player extends Character implements TrackableCharacter {
 	 */
 	private void initImages() {
 		entityImages = new Image[] {
-				new Image("file:src/main/resources/img/characters/player.png", 64, 64, true, false),
+				new Image("file:src/main/resources/img/characters/player.png", 36, 36, true, false),
 		};
 	}
-
-
-
-
 
 	/**
 	 * Draw Blood Bar
@@ -101,6 +101,13 @@ public class Player extends Character implements TrackableCharacter {
 		gc.restore();
 	}
 
+	@Override
+	public Ellipse getHitBox() {
+		Ellipse el = new Ellipse(x + entityImages[0].getWidth()/2, y + entityImages[0].getHeight()/2, 12, 14);
+		el.getTransforms().addAll(new Rotate(angle, el.getCenterX(), el.getCenterY()), new Translate(0, 4));
+		return el;
+	}
+
 
 	/**
 	 * Render Method
@@ -111,7 +118,7 @@ public class Player extends Character implements TrackableCharacter {
 	public void render(GraphicsContext gc) {
 		if (!isAlive) return;
 		renderBloodbBar(gc);
-		drawRotatedImage(gc, entityImages[0], angle, x, y);
+		drawRotatedImage(gc, entityImages[0], angle, x,y);
 	}
 
 	public void keyPressed(KeyEvent e) {

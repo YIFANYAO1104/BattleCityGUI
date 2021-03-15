@@ -5,7 +5,7 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 /**
  * Desc: required backend services for any mode to properly work
@@ -51,7 +51,7 @@ public interface BackendServices {
 
     int getPlayerY();
 
-    Rectangle getHomeHitBox();
+    Shape getHomeHitBox();
 
     /**
      * Adding bullets to bullets list

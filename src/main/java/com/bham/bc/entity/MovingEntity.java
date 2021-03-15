@@ -1,6 +1,7 @@
 package com.bham.bc.entity;
 
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 public abstract class MovingEntity extends BaseGameEntity{
 
@@ -69,7 +70,7 @@ public abstract class MovingEntity extends BaseGameEntity{
         this.isAlive = alive;
     }
 
-    public Rectangle getHitBox() {
+    public Shape getHitBox() {
         return new Rectangle(x, y, width, length);
     }
 

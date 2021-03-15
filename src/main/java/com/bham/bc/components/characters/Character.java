@@ -6,6 +6,7 @@ import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.utils.graph.node.Vector2D;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 abstract public class Character extends MovingEntity {
 
@@ -34,7 +35,7 @@ abstract public class Character extends MovingEntity {
         return new Point2D(width,length);
     }
 
-    public Rectangle getHitBox() {
+    public Shape getHitBox() {
         return new Rectangle(x, y, width, length);
     }
 

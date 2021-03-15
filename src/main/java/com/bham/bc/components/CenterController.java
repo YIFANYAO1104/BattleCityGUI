@@ -7,6 +7,7 @@ import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.components.characters.TrackableCharacter;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
@@ -14,7 +15,11 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.Player;
 
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -102,6 +107,22 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public TrackableCharacter getHomeTank(){
         return player;
     }
+
+    @Override
+    public void renderHitBoxes(AnchorPane hitBoxPane) {
+        hitBoxPane.getChildren().clear();
+
+        Rectangle mapConstrain = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
+        mapConstrain.setStroke(Color.RED);
+        mapConstrain.setStrokeWidth(5);
+
+        Ellipse playerHitBox = player.getHitBox();
+        playerHitBox.setFill(Color.TRANSPARENT);
+        playerHitBox.setStroke(Color.RED);
+        playerHitBox.setStrokeWidth(2);
+
+        hitBoxPane.getChildren().addAll(playerHitBox, mapConstrain);
+    }
     //These are functions that might be used by frontend----------------------------------------------------
 
 
@@ -173,7 +194,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         return player.getY();
     }
 
-    public Rectangle getHomeHitBox(){
+    public Shape getHomeHitBox(){
         return player.getHitBox();
     }
 

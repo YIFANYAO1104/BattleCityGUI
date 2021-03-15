@@ -7,6 +7,7 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.AnchorPane;
 
 public class ChallengeController extends CenterController {
 
