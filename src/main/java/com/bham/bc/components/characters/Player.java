@@ -106,20 +106,21 @@ public class Player extends Character implements TrackableCharacter {
 	 * based on player's position and angle</p>
 	 *
 	 * @return instance of DefaultBullet
+	 * TODO: generalize to more bullet types
 	 */
 	public DefaultBullet fire() {
-		double centerBulletX = x + entityImages[0].getWidth()/2;
+		double centerBulletX = x + WIDTH/2;
 		double centerBulletY = y - DefaultBullet.HEIGHT/2;
 
-		Rotate rot = new Rotate(angle, x + entityImages[0].getWidth()/2, y + entityImages[0].getHeight()/2);
-		Point2D newBul = rot.transform(centerBulletX, centerBulletY);
+		Rotate rot = new Rotate(angle, x + WIDTH/2, y + HEIGHT/2);
+		Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
 
-		double topLeftBulletX = newBul.getX() - DefaultBullet.WIDTH/2;
-		double topLeftBulletY = newBul.getY() - DefaultBullet.HEIGHT/2;
+		double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
+		double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
 
-		DefaultBullet m = new DefaultBullet(this.getID(), topLeftBulletX, topLeftBulletY, angle);
-		backendServices.addBullet(m);
-		return m;
+		DefaultBullet b = new DefaultBullet(this.getID(), topLeftBulletX, topLeftBulletY, angle);
+		backendServices.addBullet(b);
+		return b;
 	}
 
 	/**

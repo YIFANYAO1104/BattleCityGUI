@@ -186,9 +186,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         bombTanks.remove(b);
     }
 
-    public Shape getHomeHitBox(){
-        return player.getHitBox();
-    }
+    @Override
+    public Shape getHomeHitBox(){ return player.getHitBox(); }
 
     /**
      * Adding bullets to bullets list

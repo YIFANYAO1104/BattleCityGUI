@@ -7,7 +7,6 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.physics.BombTank;
-import com.bham.bc.utils.graph.SparseGraph;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -46,6 +45,8 @@ public class SurvivalController extends CenterController {
 
 
     @Override
+    /**TODO: instead of using loops, ask entities to check map areas if they are free.
+     * TODO: If they are not free, then search through all the entities to find which one intersects it*/
     public void update() {
 
         player.update();
@@ -54,7 +55,7 @@ public class SurvivalController extends CenterController {
 
         //for (Enemy e : enemies) { gameMap.update(e); }
 
-        //player.collideWithTanks(enemies);
+        player.intersectsEnemies(enemies);
 
         //for (Enemy e : enemies) { e.collideWithTanks(enemies); }
         /**

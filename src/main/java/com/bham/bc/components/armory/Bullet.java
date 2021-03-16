@@ -14,37 +14,30 @@ import static com.bham.bc.components.CenterController.backendServices;
 
 
 abstract public class Bullet extends MovingEntity {
-    /**
-     * The Id of Player Tank that ownes the bullet
-     */
-    public int owner;
+    public int ownerID;
 
-/**
- * Constructor Of Tank_Bullet,Using an int ID to indicate which tank this Tank_bullet belongs to(OwnerTank)
- * @param owner
- * @param x
- * @param y
- * @param speed
- * */
-    public Bullet(int owner, double x, double y, double speed, double angle) {
+    /**
+     * Constructs a bullet using an ID to indicate the character that initiated it
+     *
+     * @param ownerID character ID this bullet belongs to
+     * @param x top left position in x axis
+     * @param y top left position in y axis
+     * @param speed velocity value at which the bullet will move
+     * @param angle angle at which the bullet will move
+     */
+    public Bullet(int ownerID, double x, double y, double speed, double angle) {
         super(x, y, speed);
-        this.owner = owner;
+        this.ownerID = ownerID;
         this.angle = angle;
     }
 
     /**
-     * A method to indicate if the Bullet has hit any tanks in the List Of tanks(enemyTanks)
-     * If it hit at least one tank then return True
-     * @param tanks
-     * @return
+     * Checks if the bullet intersects any of the enemies
+     * @param enemies list of all enemies in the game map
+     * @return true if the bullet intersects some enemy and false otherwise
      */
-    public boolean hitTanks(List<Enemy> tanks) {
-        for (int i = 0; i < tanks.size(); i++) {
-            if (hitEnemyTank(tanks.get(i))) {
-                return true;
-            }
-        }
-        return false;
+    public boolean intersectsEnemies(List<Enemy> enemies) {
+        return enemies.stream().anyMatch(this::intersects);
     }
     /**
      * A method to indicate if the Bullet has hit any specific Enemy Tank
@@ -53,19 +46,16 @@ abstract public class Bullet extends MovingEntity {
      * 2. The Enemy Tank is alive
      * 3. The bullet 's occupied size intersects with enemy's occupied size(Using getRect() to get size)
      * When it hits, we need to dispatch message (to Enemy Tank)
-     * @param t
+     * @param enemy
      * @return
+     * TODO: class should be instanciated in the controller, handled by physics package
      */
-    public boolean hitEnemyTank(Enemy t) {
-        if (this.exists && this.intersects(t) && t.exists()) {
-            /*
-            BombTank e = new BombTank(t.getX(), t.getY());
-            backendServices.addBombTank(e);
-            t.setAlive(false);
+    public boolean hitsEnemy(Enemy enemy) {
+        if(intersects(enemy)) {
+            BombTank bombEffect = new BombTank(enemy.getPosition().getX(), enemy.getPosition().getY());
+            backendServices.addBombTank(bombEffect);
             this.exists = false;
-
             return true;
-             */
         }
         return false;
     }
@@ -103,49 +93,23 @@ abstract public class Bullet extends MovingEntity {
     }
 
     /**
-     * A method to indicate if the bullet hits the bullet
-     * If bullet hits the other bullet then it should be removed from bullet list(centerController will do that)
-     * @param w
+     * Checks if the bullet hits another bullet
+     * @param b
      * @return
      */
-    public boolean hitBullet(Bullet w){
-        if (this.exists && this.intersects(w)){
-            this.exists =false;
-            backendServices.removeBullet(w);
+    @Deprecated
+    public boolean hitBullet(Bullet b) {
+        if (this.exists && this.intersects(b)){
+            this.exists = false;
+            backendServices.removeBullet(b);
             return true;
         }
         return false;
     }
 
-    public Rectangle getHitBox() {
-        return new Rectangle(x, y, 1, 1);
-    }
-
-
-
-    public boolean exists() { return exists; }
-
-    /**
-     * If bullet is not alive, then Entity manager should remove this
-     */
-
+    @Override
+    public boolean handleMessage(Telegram msg) { return false; }
 
     @Override
-    public void render(GraphicsContext gc) {
-
-    }
-
-    @Override
-    public boolean handleMessage(Telegram msg) {
-        return false;
-    }
-
-    @Override
-    protected void move() {
-    }
-
-    @Override
-    public String toString() {
-        return "Bullet type";
-    }
+    public String toString() { return "Bullet"; }
 }

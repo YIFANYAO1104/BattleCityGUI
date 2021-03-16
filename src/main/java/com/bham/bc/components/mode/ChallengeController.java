@@ -69,7 +69,7 @@ public class ChallengeController extends CenterController {
         for (int i = 0; i < bullets.size(); i++) {
             Bullet m = bullets.get(i);
             m.update();
-            m.hitTanks(enemies);
+            m.intersectsEnemies(enemies);
             m.hitTank(player);
             for(int j=0;j<bullets.size();j++){
                 if (i==j) continue;
