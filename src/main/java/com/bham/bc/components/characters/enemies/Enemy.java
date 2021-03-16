@@ -1,7 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.BackendServices;
-import com.bham.bc.components.armory.Bullets01;
+import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
@@ -44,8 +44,8 @@ public class Enemy extends Character {
     /**
      *  a constructor of enemy tank,
      *  Create Enemy tank using coordinate ,direction and centerController as parameters */
-    public Enemy(int x, int y, Direction dir) {
-        super(1,1, x, y, 35,35, dir);
+    public Enemy(int x, int y) {
+        super(x, y, 1, 35,35);
 
         initImages();
     }
@@ -54,10 +54,7 @@ public class Enemy extends Character {
      */
     private void initImages() {
         entityImages = new Image[] {
-                new Image("file:src/main/resources/img/tankD.gif"),
                 new Image("file:src/main/resources/img/tankU.gif"),
-                new Image("file:src/main/resources/img/tankL.gif"),
-                new Image("file:src/main/resources/img/tankR.gif"),
         };
     }
     /**This method  render all kinds of tanks needed by choosing the particular image in the entityImage list
@@ -70,24 +67,7 @@ public class Enemy extends Character {
             return;
         }
 
-        switch (Kdirection) {
-            case D:
-                    gc.drawImage(entityImages[0], x, y);
-                break;
-
-            case U:
-                    gc.drawImage(entityImages[1], x, y);
-                break;
-            case L:
-                    gc.drawImage(entityImages[2], x, y);
-                break;
-
-            case R:
-                    gc.drawImage(entityImages[3], x, y);
-                break;
-        }
-
-
+        drawRotatedImage(gc, entityImages[0], angle, x, y);
     }
 
 
@@ -95,7 +75,7 @@ public class Enemy extends Character {
      if they are in the same rectangle region then return true
      */
     public boolean playertankaround(){
-        int rx=x-15,ry=y-15;
+        double rx=x-15, ry=y-15;
         if((x-15)<0) rx=0;
         if((y-15)<0)ry=0;
         Rectangle a=new Rectangle(rx, ry,60,60);
@@ -108,32 +88,13 @@ public class Enemy extends Character {
      * Use Kdirection to set the direction of Bullet
      * Add bullet to list of bullets
      */
-    public Bullets01 fire() {
-        if (!isAlive)
-            return null;
-        int x=0;
-        int y=0;
-        switch (Kdirection) {
-            case D:
-                x = this.x + this.width / 2 - Bullets01.width / 2;
-                y = this.y + this.length;
-                break;
+    public DefaultBullet fire() {
+        if (!isAlive) return null;
 
-            case U:
-                x = this.x + this.width / 2 - Bullets01.width / 2;
-                y = this.y - Bullets01.length;
-                break;
-            case L:
-                x = this.x - Bullets01.width;
-                y = this.y + this.length / 2 - Bullets01.length / 2;
-                break;
+        double bulletX = Math.sin(angle) * (x + this.width/2);
+        double bulletY = Math.cos(angle) * y;
 
-            case R:
-                x = this.x + this.width;
-                y = this.y + this.length / 2 - Bullets01.length / 2;
-                break;
-        }
-        Bullets01 m = new Bullets01(this.ID(),x, y, Kdirection);
+        DefaultBullet m = new DefaultBullet(this.ID(), bulletX, bulletY, angle);
         backendServices.addBullet(m);
         return m;
     }
@@ -177,28 +138,9 @@ public class Enemy extends Character {
      * x AND y coordinate of enemy tank can not go outside of the frame
      */
     protected void move() {
-        this.oldX = x;
-        this.oldY = y;
-
-        switch (direction) {
-            case L:
-                x -= speedX;
-                break;
-            case U:
-                y -= speedY;
-                break;
-            case R:
-                x += speedX;
-                break;
-            case D:
-                y += speedY;
-                break;
-            case STOP:
-                break;
-        }
-
-        if (this.direction != Direction.STOP) {
-            this.Kdirection = this.direction;
+        if(!directionSet.isEmpty()) {
+            x += Math.sin(Math.toRadians(angle)) * speed;
+            y -= Math.cos(Math.toRadians(angle)) * speed;
         }
 
         //guarantee the tank is in Frame

@@ -47,9 +47,9 @@ public interface BackendServices {
      */
     void removeObstacle(GenericObstacle obstacle);
 
-    int getPlayerX();
+    double getPlayerX();
 
-    int getPlayerY();
+    double getPlayerY();
 
     Shape getHomeHitBox();
 

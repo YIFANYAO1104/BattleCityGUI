@@ -18,27 +18,19 @@ abstract public class Bullet extends MovingEntity {
     /**
      * The Id of Player Tank that ownes the bullet
      */
-    public int ownerTank;
+    public int owner;
 
 /**
  * Constructor Of Tank_Bullet,Using an int ID to indicate which tank this Tank_bullet belongs to(OwnerTank)
  * @param owner
  * @param x
  * @param y
- * @par
+ * @param speed
  * */
-    public Bullet(int owner,
-                  int speedX, int speedY,
-                  int x, int y,
-                  int width, int length,
-                  Direction dir) {
-
-        super(speedX,speedY,
-                x,y,
-                width,length,
-                dir);
-        this.ownerTank = owner;
-
+    public Bullet(int owner, double x, double y, double speed, int width, int length, double angle) {
+        super(x, y, speed, width, length);
+        this.owner = owner;
+        this.angle = angle;
     }
 
     /**
@@ -66,11 +58,6 @@ abstract public class Bullet extends MovingEntity {
      * @return
      */
     public boolean hitEnemyTank(Enemy t) {
-
-        //子弹活着
-        //与敌人碰撞到了
-        //敌人活着
-        //子弹只作用在对方身上
         if (this.isAlive && this.intersects(t) && t.isAlive()) {
 
             BombTank e = new BombTank(t.getX(), t.getY());

@@ -1,38 +1,20 @@
 package com.bham.bc.entity;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
-public abstract class MovingEntity extends BaseGameEntity{
+public abstract class MovingEntity extends BaseGameEntity {
+    protected double speed;
+    protected double angle;
 
-    /**
-     * the velocity of moving object( speed x in horizontal and speed y in vertical)
-     */
-    protected int speedX;
-    protected int speedY;
+    protected double oldX, oldY;
+    protected int width, length;
 
-    /**
-     * the record of the previous position of the moving object
-     * It is useful when it moves and intersects sth.
-     * In this situation, it will move back.
-     */
-    protected int oldX, oldY;
-
-    /**
-     * the length and width of the moving object
-     * It is somewhat wasting spaces, but this could be easier to develop. So we need them
-     */
-    protected int width;
-    protected int length;
-
-    /**
-     * the moving direction of the moving object
-     */
 
     protected Direction direction;
-    /**
-     * the status to check if the object is alive or dead
-     */
     protected boolean isAlive;
 
     /**
@@ -42,40 +24,62 @@ public abstract class MovingEntity extends BaseGameEntity{
      * the constructor of this class, will generate a valid ID using parent class's generating ID method
      * The other attributes of an moving entity will be set
      */
-    protected MovingEntity(int speedX,int speedY,
-                           int x, int y,
-                           int width, int length,
-                           Direction direction) {
-        super(GetNextValidID(),x,y);
-        this.speedX =speedX;
-        this.speedY = speedY;
+    protected MovingEntity(double x, double y, double speed, int width, int length) {
+        super(GetNextValidID(), x, y);
+        this.speed = speed;
+        this.angle = 0;
 
         this.oldX = x;
         this.oldY = y;
 
-        this.width =width;
+        this.width = width;
         this.length = length;
 
-        this.direction = direction;
         isAlive = true;
     }
 
+    /**
+     * Draws an image on a graphics context.
+     *
+     * The image is drawn at (tlpx, tlpy) rotated by angle pivoted around the point:
+     * (tlpx + image.getWidth() / 2, tlpy + image.getHeight() / 2)
+     *
+     * @param gc the graphics context the image is to be drawn on.
+     * @param angle the angle of rotation.
+     * @param tlpx the top left x co-ordinate where the image will be plotted (in canvas co-ordinates).
+     * @param tlpy the top left y co-ordinate where the image will be plotted (in canvas co-ordinates).
+     *
+     * @see <a href="https://stackoverflow.com/questions/18260421/how-to-draw-image-rotated-on-javafx-canvas">stackoverflow.com</a>
+     */
+    protected void drawRotatedImage(GraphicsContext gc, Image image, double angle, double tlpx, double tlpy) {
+        gc.save();
+        Rotate r = new Rotate(angle, tlpx + image.getWidth() / 2, tlpy + image.getHeight() / 2);
+        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+        gc.drawImage(image, tlpx, tlpy);
+        gc.restore();
+    }
+
+
+
+    public boolean isAlive() { return isAlive; }
+
+    public void setAlive(boolean alive) { this.isAlive = alive; }
+
+    public void changToOldDir() { x = oldX; y = oldY; }
+
+
+
+
+    /**
+     *
+     */
     protected abstract void move();
 
-    public boolean isAlive() {
-        return isAlive;
-    }
-
-    public void setAlive(boolean alive) {
-        this.isAlive = alive;
-    }
-
+    @Override
     public Shape getHitBox() {
-        return new Rectangle(x, y, width, length);
-    }
+        Rectangle hitBox = new Rectangle(x, y, width, length);
+        hitBox.getTransforms().add(new Rotate(angle, x + width/2, y + length/2));
 
-    public void changToOldDir() {
-        x = oldX;
-        y = oldY;
+        return hitBox;
     }
 }

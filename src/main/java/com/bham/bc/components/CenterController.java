@@ -116,7 +116,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         mapConstrain.setStroke(Color.RED);
         mapConstrain.setStrokeWidth(5);
 
-        Ellipse playerHitBox = player.getHitBox();
+        Shape playerHitBox = player.getHitBox();
         playerHitBox.setFill(Color.TRANSPARENT);
         playerHitBox.setStroke(Color.RED);
         playerHitBox.setStrokeWidth(2);
@@ -186,11 +186,11 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         bombTanks.remove(b);
     }
 
-    public int getPlayerX(){
+    public double getPlayerX(){
         return player.getX();
     }
 
-    public int getPlayerY(){
+    public double getPlayerY(){
         return player.getY();
     }
 

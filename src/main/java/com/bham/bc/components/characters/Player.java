@@ -1,7 +1,7 @@
 package com.bham.bc.components.characters;
 
 
-import com.bham.bc.components.armory.Bullets01;
+import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
@@ -13,29 +13,25 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
-import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.Optional;
 
 import static com.bham.bc.components.CenterController.backendServices;
-import static java.lang.Double.NaN;
 import static java.lang.Math.signum;
 
 public class Player extends Character implements TrackableCharacter {
 
+	public static final int WIDTH = 24;
+	public static final int HEIGHT = 35;
 	public static final int MAX_HP = 100;
-	private Direction Kdirection = Direction.U;
 	private int hp;
 
-	private EnumSet<Direction> directionSet;
+
 	private double angle;
 
 	private SimpleDoubleProperty trackableX;
@@ -49,12 +45,14 @@ public class Player extends Character implements TrackableCharacter {
 	 * @param x
 	 * @param y
 	 */
-	public Player(int x, int y) {
-		super(5,5, x,y,32,32, Direction.U);
-		directionSet = EnumSet.noneOf(Direction.class);
+	public Player(double x, double y) {
+		super(x, y, 5,32,32);
+
 		initImages();
 		initTrackableCoordinates();
+
 		hp = MAX_HP;
+
 	}
 
 	/**
@@ -81,35 +79,6 @@ public class Player extends Character implements TrackableCharacter {
 
 
 	/**
-	 * Draws an image on a graphics context.
-	 *
-	 * The image is drawn at (tlpx, tlpy) rotated by angle pivoted around the point:
-	 * (tlpx + image.getWidth() / 2, tlpy + image.getHeight() / 2)
-	 *
-	 * @param gc the graphics context the image is to be drawn on.
-	 * @param angle the angle of rotation.
-	 * @param tlpx the top left x co-ordinate where the image will be plotted (in canvas co-ordinates).
-	 * @param tlpy the top left y co-ordinate where the image will be plotted (in canvas co-ordinates).
-	 *
-	 * @see <a href="https://stackoverflow.com/questions/18260421/how-to-draw-image-rotated-on-javafx-canvas">stackoverflow.com</a>
-	 */
-	void drawRotatedImage(GraphicsContext gc, Image image, double angle, double tlpx, double tlpy) {
-		gc.save();
-		Rotate r = new Rotate(angle, tlpx + image.getWidth() / 2, tlpy + image.getHeight() / 2);
-		gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
-		gc.drawImage(image, tlpx, tlpy);
-		gc.restore();
-	}
-
-	@Override
-	public Ellipse getHitBox() {
-		Ellipse el = new Ellipse(x + entityImages[0].getWidth()/2, y + entityImages[0].getHeight()/2, 12, 14);
-		el.getTransforms().addAll(new Rotate(angle, el.getCenterX(), el.getCenterY()), new Translate(0, 4));
-		return el;
-	}
-
-
-	/**
 	 * Render Method
 	 * Use directions to determine the image of Player Tank
 	 * @param gc
@@ -118,7 +87,17 @@ public class Player extends Character implements TrackableCharacter {
 	public void render(GraphicsContext gc) {
 		if (!isAlive) return;
 		renderBloodbBar(gc);
-		drawRotatedImage(gc, entityImages[0], angle, x,y);
+		drawRotatedImage(gc, entityImages[0], angle, x, y);
+	}
+
+	@Override
+	public Ellipse getHitBox() {
+		Point2D hitBoxOffset = new Point2D(0, 4);
+		Ellipse hitBox = new Ellipse(x + entityImages[0].getWidth()/2, y + entityImages[0].getHeight()/2, 12, 14);
+		hitBox.getTransforms().add(new Rotate(angle, hitBox.getCenterX(), hitBox.getCenterY()));
+		hitBox.getTransforms().add(new Translate(hitBoxOffset.getX(), hitBoxOffset.getY()));
+
+		return hitBox;
 	}
 
 	public void keyPressed(KeyEvent e) {
@@ -159,31 +138,17 @@ public class Player extends Character implements TrackableCharacter {
 	 * Use Kdirection to set the direction of Bullet
 	 * Add bullet to list of bullets
 	 */
-	public Bullets01 fire() {
-		if (!isAlive) return null;
-		int x=0;
-		int y=0;
-		switch (Kdirection) {
-			case D:
-				x = this.x + this.width / 2 - Bullets01.width / 2;
-				y = this.y + this.length;
-				break;
+	public DefaultBullet fire() {
+		double centerBulletX = x + entityImages[0].getWidth()/2;
+		double centerBulletY = y - DefaultBullet.HEIGHT/2;
 
-			case U:
-				x = this.x + this.width / 2 - Bullets01.width / 2;
-				y = this.y - Bullets01.length;
-				break;
-			case L:
-				x = this.x - Bullets01.width;
-				y = this.y + this.length / 2 - Bullets01.length / 2;
-				break;
+		Rotate rot = new Rotate(angle, x + entityImages[0].getWidth()/2, y + entityImages[0].getHeight()/2);
+		Point2D newBul = rot.transform(centerBulletX, centerBulletY);
 
-			case R:
-				x = this.x + this.width;
-				y = this.y + this.length / 2 - Bullets01.length / 2;
-				break;
-		}
-		Bullets01 m = new Bullets01(this.ID(),x, y, Kdirection);
+		double topLeftBulletX = newBul.getX() - DefaultBullet.WIDTH/2;
+		double topLeftBulletY = newBul.getY() - DefaultBullet.HEIGHT/2;
+
+		DefaultBullet m = new DefaultBullet(this.ID(), topLeftBulletX, topLeftBulletY, angle);
 		backendServices.addBullet(m);
 		return m;
 	}
@@ -247,8 +212,8 @@ public class Player extends Character implements TrackableCharacter {
 	@Override
 	protected void move() {
 		if(!directionSet.isEmpty()) {
-			x += Math.sin(Math.toRadians(angle)) * speedX;
-			y -= Math.cos(Math.toRadians(angle)) * speedX;
+			x += Math.sin(Math.toRadians(angle)) * speed;
+			y -= Math.cos(Math.toRadians(angle)) * speed;
 		}
 	}
 

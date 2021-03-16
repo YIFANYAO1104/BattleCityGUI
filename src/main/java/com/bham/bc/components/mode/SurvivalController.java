@@ -34,10 +34,10 @@ public class SurvivalController extends CenterController {
      * Adding created Objects into enemyTanks(list)
      */
     private void initEnemies() {
-        enemies.add(new Enemy(16*3, 16*3,  Direction.D));
-        enemies.add(new Enemy(16*61, 16*3,  Direction.D));
-        enemies.add(new Enemy(16*3, 16*61,  Direction.D));
-        enemies.add(new Enemy(16*61, 16*61,  Direction.D));
+        enemies.add(new Enemy(16*3, 16*3));
+        enemies.add(new Enemy(16*61, 16*3));
+        enemies.add(new Enemy(16*3, 16*61));
+        enemies.add(new Enemy(16*61, 16*61));
     }
 
     /**
