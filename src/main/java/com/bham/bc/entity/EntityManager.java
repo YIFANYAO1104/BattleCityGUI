@@ -11,7 +11,7 @@ public class EntityManager {
     /**
      * Create EntityManager to provide Easy Access
      */
-    public static EntityManager EntityMgr = new EntityManager();
+    public static EntityManager entityManager = new EntityManager();
 
     /**
      * Private class that provides HashMap with <Integer,BaseGameEntity> as key-value Entry
@@ -40,8 +40,8 @@ public class EntityManager {
 //
 //   this class is a singleton
 //-----------------------------------------------------------------------------
-    public static EntityManager Instance() {
-        return EntityMgr;
+    public static EntityManager instance() {
+        return entityManager;
     }
 
     /**
@@ -50,7 +50,7 @@ public class EntityManager {
      * @param NewEntity
      */
     public void RegisterEntity(BaseGameEntity NewEntity) {
-        m_EntityMap.put(NewEntity.ID(), NewEntity);
+        m_EntityMap.put(NewEntity.getID(), NewEntity);
 //        System.out.println("register id :"+NewEntity.ID()+" with type: "+ NewEntity.toString() );
     }
 
@@ -75,6 +75,6 @@ public BaseGameEntity GetEntityFromID(int id) {
      */
     public void RemoveEntity(BaseGameEntity pEntity) {
         //m_EntityMap.erase(m_EntityMap.find(pEntity.ID()));
-        m_EntityMap.remove(pEntity.ID());
+        m_EntityMap.remove(pEntity.getID());
     }
 }

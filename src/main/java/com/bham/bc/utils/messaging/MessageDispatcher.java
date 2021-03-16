@@ -4,7 +4,7 @@ import com.bham.bc.entity.BaseGameEntity;
 
 import java.util.TreeSet;
 
-import static com.bham.bc.entity.EntityManager.EntityMgr;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 import static com.bham.bc.utils.messaging.MessageTypes.MsgToStr;
 import static com.bham.bc.utils.time.CrudeTimer.Clock;
@@ -82,8 +82,8 @@ public class MessageDispatcher {
         /**
          * Get the reference to the sender and receiver
          */
-        BaseGameEntity pSender = EntityMgr.GetEntityFromID(sender);
-        BaseGameEntity pReceiver = EntityMgr.GetEntityFromID(receiver);
+        BaseGameEntity pSender = entityManager.GetEntityFromID(sender);
+        BaseGameEntity pReceiver = entityManager.GetEntityFromID(receiver);
 
         /**
          * Make Sure Receiver is valid or it will printout warnings,and return
@@ -156,7 +156,7 @@ public class MessageDispatcher {
 
             final Telegram telegram = PriorityQ.last();
 
-            BaseGameEntity pReceiver = EntityMgr.GetEntityFromID(telegram.Receiver);
+            BaseGameEntity pReceiver = entityManager.GetEntityFromID(telegram.Receiver);
 
             System.out.println("\nQueued telegram ready for dispatch: Sent to "
                     + pReceiver.toString() + ". Msg is " + MsgToStr(telegram.Msg));

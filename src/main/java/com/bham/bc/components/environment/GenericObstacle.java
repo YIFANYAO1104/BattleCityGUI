@@ -57,7 +57,7 @@ public abstract class GenericObstacle extends BaseGameEntity {
 
     public void interactWith(int ID,int indexOfNode ,Rectangle r1) {
         if(this.getHitBox().intersects(r1.getBoundsInLocal()))
-            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.ID(),ID,Msg_interact,indexOfNode);
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.getID(),ID,Msg_interact,indexOfNode);
     }
 
     @Override

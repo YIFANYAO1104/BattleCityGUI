@@ -4,10 +4,8 @@ import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.AnchorPane;
 
 public class ChallengeController extends CenterController {
 
@@ -55,7 +53,7 @@ public class ChallengeController extends CenterController {
         //move-----------------
 
         //tanks----------------------------------
-        player.collideWithTanks(enemies);
+        player.intersectsEnemies(enemies);
         for (Enemy e : enemies) {
             e.collideWithTanks(enemies);
         }

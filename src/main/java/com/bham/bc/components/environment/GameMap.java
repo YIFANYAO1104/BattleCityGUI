@@ -1,7 +1,6 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
@@ -56,7 +55,7 @@ public class GameMap {
         ArrayList<Vector2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Vector2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.ID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32.0,32.0));
+            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32.0,32.0));
         }
 
         //removed unreachable nodes
@@ -113,10 +112,6 @@ public class GameMap {
      * The following methods calls all render methods of particular Objects
      * @param gc
      */
-
-    public void renderHome(GraphicsContext gc){
-        //if (home != null) home.render(gc);
-    }
 
     public void renderBottomLayer(GraphicsContext gc) {
         for(GenericObstacle go: obstacles) {

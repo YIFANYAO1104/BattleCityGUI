@@ -6,12 +6,10 @@ import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.utils.graph.SparseGraph;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Rectangle;
 
 
 import java.util.ArrayList;
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 public class SurvivalController extends CenterController {
     /** Initialize an Object Of GameMap*/
     private GameMap gameMap;
-    private SparseGraph sg;
 
     public SurvivalController(){
         super();
@@ -51,26 +48,15 @@ public class SurvivalController extends CenterController {
     @Override
     public void update() {
 
-        //move-----------------
         player.update();
-        for (Enemy e : enemies) {
-            e.update();
-        }
-        //move-----------------
-
-        //map----------------------------------
+        enemies.stream().forEach(Enemy::update);
         gameMap.update(player);
-        for (Enemy e : enemies) {
-            gameMap.update(e);
-        }
-        //map----------------------------------
 
-        //tanks----------------------------------
-        player.collideWithTanks(enemies);
-        for (Enemy e : enemies) {
-            e.collideWithTanks(enemies);
-        }
-        //tanks----------------------------------
+        //for (Enemy e : enemies) { gameMap.update(e); }
+
+        //player.collideWithTanks(enemies);
+
+        //for (Enemy e : enemies) { e.collideWithTanks(enemies); }
         /**
          * Use nested For Loop to update game state
          * Keep Tracking Bullets to see if Bullets hit Bullets, and Updates game state (Inner Loop)
@@ -82,7 +68,7 @@ public class SurvivalController extends CenterController {
         for (int i = 0; i < bullets.size(); i++) {
             Bullet m = bullets.get(i);
             m.update();
-            m.hitTanks(enemies);
+            //m.hitTanks(enemies);
             m.hitTank(player);
             for(int j=0;j<bullets.size();j++){
                 if (i==j) continue;
@@ -126,7 +112,7 @@ public class SurvivalController extends CenterController {
      * @return temp1 the list with all characters' location inlcuding player.
      */
     public ArrayList<Point2D> allCharactersLocation(){
-        ArrayList<Point2D> temp1 = new ArrayList<Point2D>();
+        ArrayList<Point2D> temp1 = new ArrayList<>();
         temp1.add(player.getPosition());
         for (Enemy e1 :enemies){
             temp1.add(e1.getPosition());
@@ -134,27 +120,20 @@ public class SurvivalController extends CenterController {
         return temp1;
     }
 
-    /**
-     * Method to determine if player wins the game
-     * @return
-     */
+
     @Override
     public boolean isWin(){
-        return enemies.isEmpty() && gameMap.isHomeLive() && player.isAlive();
+        return enemies.isEmpty() && gameMap.isHomeLive() && player.exists();
     }
 
-    /**
-     * Status to indicates defeat
-     * Home destroyed OR Player Tank dead
-     * @return
-     */
+
     @Override
     public boolean isLoss(){
-        return !gameMap.isHomeLive() || !player.isAlive();
+        return !gameMap.isHomeLive() || !player.exists();
     }
 
     /**
-     * Clear all objects on tht map
+     * Clear all objects on the map
      */
     public void clear(){
         super.clear();

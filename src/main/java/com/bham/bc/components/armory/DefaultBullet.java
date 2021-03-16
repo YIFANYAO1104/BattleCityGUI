@@ -1,18 +1,15 @@
 package com.bham.bc.components.armory;
 
 import com.bham.bc.utils.Constants;
-import com.bham.bc.entity.Direction;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 import static com.bham.bc.components.CenterController.backendServices;
-import static com.bham.bc.entity.EntityManager.EntityMgr;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 public class DefaultBullet extends Bullet {
+	public static final String IMAGE_PATH = "file:src/main/resources/img/armory/defaultBullet.png";
 	public static final double SPEED = 5;
 	public static final int WIDTH = 6;
 	public static final int HEIGHT = 12;
@@ -24,19 +21,14 @@ public class DefaultBullet extends Bullet {
 	 * @param y
 	 */
 	public DefaultBullet(int owner, double x, double y, double angle) {
-		super(owner, x, y, SPEED, WIDTH, HEIGHT, angle);
+		super(owner, x, y, SPEED, angle);
 		initImages();
 	}
 
 	/**
 	 * A image Array to put bullet in different directions, should replace images later
 	 */
-	void initImages() {
-
-		entityImages = new Image[] {
-				new Image("file:src/main/resources/img/armory/defaultBullet.png"),
-		};
-	}
+	void initImages() { entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) }; }
 	/**
 	 * Movement Of Bullet
 	 * The bullet can not go beyond the frame or it will be set to dead
@@ -47,7 +39,7 @@ public class DefaultBullet extends Bullet {
 		y -= Math.cos(Math.toRadians(angle)) * speed;
 
 		if (x < 0 || y < 0 || x > Constants.MAP_WIDTH || y > Constants.MAP_HEIGHT) {
-			isAlive = false;
+			exists = false;
 		}
 	}
 	/**
@@ -57,15 +49,15 @@ public class DefaultBullet extends Bullet {
 	 */
 	@Override
 	public void render(GraphicsContext gc) {
-		drawRotatedImage(gc, entityImages[0], angle, x, y);
+		drawRotatedImage(gc, entityImages[0], angle);
 	}
 
 	@Override
 	public void update() {
 		move();
 
-		if (!isAlive) {
-			EntityMgr.RemoveEntity(this);
+		if (!exists) {
+			entityManager.RemoveEntity(this);
 			backendServices.removeBullet(this);
 		}
 	}

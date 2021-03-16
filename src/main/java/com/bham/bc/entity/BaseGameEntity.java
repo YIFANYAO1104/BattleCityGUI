@@ -1,16 +1,16 @@
 package com.bham.bc.entity;
 
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
-import static com.bham.bc.entity.EntityManager.EntityMgr;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 abstract public class BaseGameEntity {
-    private static int m_iNextValidID = 0;
-    private  int m_ID;
+    private static int nextValidID = 0;
+    private int id;
 
     protected double x, y;
     protected Image[] entityImages;
@@ -24,10 +24,10 @@ abstract public class BaseGameEntity {
      */
     private void SetID(int id) {
         //make sure the val is equal to or greater than the next available ID
-        assert (id >= m_iNextValidID) : "<BaseGameEntity::SetID>: invalid ID";
+        assert (id >= nextValidID) : "<BaseGameEntity::SetID>: invalid ID";
 
-        m_ID = id;
-        m_iNextValidID = m_ID + 1;
+        this.id = id;
+        nextValidID = this.id + 1;
     }
 
     @Override
@@ -36,39 +36,41 @@ abstract public class BaseGameEntity {
 
     protected BaseGameEntity(int ID, double x, double y) {
         SetID(ID);
-        EntityMgr.RegisterEntity(this);
+        entityManager.RegisterEntity(this);
         this.x = x;
         this.y = y;
     }
 
-    public static int GetNextValidID() {
-        return m_iNextValidID;
-    }
-
     /**
      *
      * @return
      */
-    public int ID(){ return m_ID; }
+    public static int GetNextValidID() { return nextValidID; }
 
     /**
+     * Gets the ID of this entity
      *
-     * @return
+     * @return ID as an integer this entity was registered with
      */
-    public double getX() { return x; }
+    public int getID() { return id; }
+
+    public Point2D getPosition() { return new Point2D(x, y); }
+
+    public Point2D getRadius() { return new Point2D(entityImages[0].getWidth(), entityImages[0].getHeight()); }
 
     /**
-     *
-     * @return
-     */
-    public double getY() { return y; }
-
-    /**
+     * Checks whether the current entity intersects with the given one
      *
      * @param entity BaseGameEntity instance we want to check if the this instance is intersecting with
-     * @return true if the two entities intersect and false otherwise
+     * @return true if the hit-boxes of two entities intersect and false otherwise
      */
     public boolean intersects(BaseGameEntity entity) { return this.getHitBox().intersects(entity.getHitBox().getBoundsInLocal()); }
+
+    /**
+     *
+     * @return
+     */
+    abstract public Shape getHitBox();
 
     /**
      *
@@ -80,12 +82,6 @@ abstract public class BaseGameEntity {
      * @param gc
      */
     abstract public void render(GraphicsContext gc);
-
-    /**
-     *
-     * @return
-     */
-    abstract public Shape getHitBox();
 
     /**
      *

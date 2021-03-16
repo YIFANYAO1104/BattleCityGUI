@@ -2,84 +2,61 @@ package com.bham.bc.entity;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
+/**
+ * Represents any entity that can move in any angle
+ */
 public abstract class MovingEntity extends BaseGameEntity {
     protected double speed;
     protected double angle;
-
-    protected double oldX, oldY;
-    protected int width, length;
-
-
-    protected Direction direction;
-    protected boolean isAlive;
+    protected boolean exists;
 
     /**
-     * the constructor of this class, will generate a valid ID using parent class's generating ID method
+     * Constructs a single moving entity by default facing up (angle is set to 0) and generates a new valid ID for it
+     *
+     * @param x top left x coordinate of the entity and its image
+     * @param y top left y coordinate of the entity and its image
+     * @param speed value which defines the initial velocity
      */
-    /**
-     * the constructor of this class, will generate a valid ID using parent class's generating ID method
-     * The other attributes of an moving entity will be set
-     */
-    protected MovingEntity(double x, double y, double speed, int width, int length) {
+    protected MovingEntity(double x, double y, double speed) {
         super(GetNextValidID(), x, y);
         this.speed = speed;
         this.angle = 0;
-
-        this.oldX = x;
-        this.oldY = y;
-
-        this.width = width;
-        this.length = length;
-
-        isAlive = true;
+        exists = true;
     }
 
     /**
-     * Draws an image on a graphics context.
+     * Draws an image on a graphics context
      *
-     * The image is drawn at (tlpx, tlpy) rotated by angle pivoted around the point:
-     * (tlpx + image.getWidth() / 2, tlpy + image.getHeight() / 2)
+     * <p>The image is drawn at (x, y) rotated by angle pivoted around the point (centerX, centerY).
+     * It uses Rotate class form JavaFX which applies rotation using transform matrix.</p>
      *
-     * @param gc the graphics context the image is to be drawn on.
-     * @param angle the angle of rotation.
-     * @param tlpx the top left x co-ordinate where the image will be plotted (in canvas co-ordinates).
-     * @param tlpy the top left y co-ordinate where the image will be plotted (in canvas co-ordinates).
+     * @param gc graphics context the image is to be drawn on
+     * @param angle rotation angle
      *
      * @see <a href="https://stackoverflow.com/questions/18260421/how-to-draw-image-rotated-on-javafx-canvas">stackoverflow.com</a>
+     * @see <a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/transform/Rotate.html">docs.oracle.com</a>
      */
-    protected void drawRotatedImage(GraphicsContext gc, Image image, double angle, double tlpx, double tlpy) {
+    protected void drawRotatedImage(GraphicsContext gc, Image image, double angle) {
         gc.save();
-        Rotate r = new Rotate(angle, tlpx + image.getWidth() / 2, tlpy + image.getHeight() / 2);
+        Rotate r = new Rotate(angle, x + image.getWidth() / 2, y + image.getHeight() / 2);
         gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
-        gc.drawImage(image, tlpx, tlpy);
+        gc.drawImage(image, x, y);
         gc.restore();
     }
 
-
-
-    public boolean isAlive() { return isAlive; }
-
-    public void setAlive(boolean alive) { this.isAlive = alive; }
-
-    public void changToOldDir() { x = oldX; y = oldY; }
-
-
-
+    /**
+     * Checks if this entity exists
+     *
+     * @return true if it exists and false otherwise
+     *
+     * TODO: check if it is possible to simply remove the instance without any checks
+     */
+    public boolean exists() { return exists; }
 
     /**
-     *
+     * Defines how the position of the entity is updated on each frame
      */
     protected abstract void move();
-
-    @Override
-    public Shape getHitBox() {
-        Rectangle hitBox = new Rectangle(x, y, width, length);
-        hitBox.getTransforms().add(new Rotate(angle, x + width/2, y + length/2));
-
-        return hitBox;
-    }
 }

@@ -1,7 +1,6 @@
 package com.bham.bc.components.armory;
 
 import com.bham.bc.entity.physics.BombTank;
-import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.characters.enemies.Enemy;
@@ -27,8 +26,8 @@ abstract public class Bullet extends MovingEntity {
  * @param y
  * @param speed
  * */
-    public Bullet(int owner, double x, double y, double speed, int width, int length, double angle) {
-        super(x, y, speed, width, length);
+    public Bullet(int owner, double x, double y, double speed, double angle) {
+        super(x, y, speed);
         this.owner = owner;
         this.angle = angle;
     }
@@ -58,14 +57,15 @@ abstract public class Bullet extends MovingEntity {
      * @return
      */
     public boolean hitEnemyTank(Enemy t) {
-        if (this.isAlive && this.intersects(t) && t.isAlive()) {
-
+        if (this.exists && this.intersects(t) && t.exists()) {
+            /*
             BombTank e = new BombTank(t.getX(), t.getY());
             backendServices.addBombTank(e);
             t.setAlive(false);
-            this.isAlive = false;
+            this.exists = false;
 
             return true;
+             */
         }
         return false;
     }
@@ -78,8 +78,8 @@ abstract public class Bullet extends MovingEntity {
      */
     public boolean hitTank(Player t) {
 
-        if (this.isAlive && this.intersects(t) && t.isAlive()) {
-
+        if (this.exists && this.intersects(t) && t.exists()) {
+            /*
             BombTank e = new BombTank(t.getX(), t.getY());
 
             backendServices.addBombTank(e);
@@ -93,9 +93,11 @@ abstract public class Bullet extends MovingEntity {
 
             }
 
-            this.isAlive = false;
+            this.exists = false;
 
             return true;
+
+             */
         }
         return false;
     }
@@ -107,8 +109,8 @@ abstract public class Bullet extends MovingEntity {
      * @return
      */
     public boolean hitBullet(Bullet w){
-        if (this.isAlive && this.intersects(w)){
-            this.isAlive =false;
+        if (this.exists && this.intersects(w)){
+            this.exists =false;
             backendServices.removeBullet(w);
             return true;
         }
@@ -116,14 +118,12 @@ abstract public class Bullet extends MovingEntity {
     }
 
     public Rectangle getHitBox() {
-        return new Rectangle(x, y, width, length);
+        return new Rectangle(x, y, 1, 1);
     }
 
 
 
-    public boolean isAlive() {
-        return isAlive;
-    }
+    public boolean exists() { return exists; }
 
     /**
      * If bullet is not alive, then Entity manager should remove this

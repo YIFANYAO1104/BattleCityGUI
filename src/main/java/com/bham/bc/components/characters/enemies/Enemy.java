@@ -2,32 +2,23 @@ package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.BackendServices;
 import com.bham.bc.components.armory.DefaultBullet;
-import com.bham.bc.components.environment.triggers.Weapon;
-import com.bham.bc.utils.Constants;
-import com.bham.bc.entity.Direction;
+import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.characters.Character;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.util.Random;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
 public class Enemy extends Character {
-    public static int count = 0;
-    /**
-     * the STABLE direction of the Player Tank
-     * It's value should not be 'stop'
-     * Mainly for renderer
-     */
-    private Direction Kdirection = Direction.U;
-    /**
-     *  initialize the health of tank to 200 hp
-     *  */
-    private int life = 200;
+    public static final String IMAGE_PATH = "file:src/main/resources/img/tankU.gif";
+    public static final int MAX_HP = 100;
+    private int hp = 100;
 
     /**
      * Attribute to indicate if Enemy is near around
@@ -45,7 +36,7 @@ public class Enemy extends Character {
      *  a constructor of enemy tank,
      *  Create Enemy tank using coordinate ,direction and centerController as parameters */
     public Enemy(int x, int y) {
-        super(x, y, 1, 35,35);
+        super(x, y, 1);
 
         initImages();
     }
@@ -54,7 +45,7 @@ public class Enemy extends Character {
      */
     private void initImages() {
         entityImages = new Image[] {
-                new Image("file:src/main/resources/img/tankU.gif"),
+                new Image(IMAGE_PATH),
         };
     }
     /**This method  render all kinds of tanks needed by choosing the particular image in the entityImage list
@@ -62,12 +53,17 @@ public class Enemy extends Character {
     @Override
     public void render(GraphicsContext gc) {
 
-        if (!isAlive) {
+        if (!exists) {
             backendServices.removeEnemy(this);
             return;
         }
 
-        drawRotatedImage(gc, entityImages[0], angle, x, y);
+        drawRotatedImage(gc, entityImages[0], angle);
+    }
+
+    @Override
+    public Shape getHitBox() {
+        return null;
     }
 
 
@@ -79,7 +75,7 @@ public class Enemy extends Character {
         if((x-15)<0) rx=0;
         if((y-15)<0)ry=0;
         Rectangle a=new Rectangle(rx, ry,60,60);
-        if (this.isAlive && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
+        if (this.exists && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
             return true;
         }
         return false;
@@ -89,12 +85,12 @@ public class Enemy extends Character {
      * Add bullet to list of bullets
      */
     public DefaultBullet fire() {
-        if (!isAlive) return null;
+        if (!exists) return null;
 
-        double bulletX = Math.sin(angle) * (x + this.width/2);
-        double bulletY = Math.cos(angle) * y;
+        double bulletX = 0;
+        double bulletY = 0;
 
-        DefaultBullet m = new DefaultBullet(this.ID(), bulletX, bulletY, angle);
+        DefaultBullet m = new DefaultBullet(this.getID(), bulletX, bulletY, angle);
         backendServices.addBullet(m);
         return m;
     }
@@ -107,10 +103,10 @@ public class Enemy extends Character {
         for (int i = 0; i < be.size(); i++) {
             MovingEntity t = be.get(i);
             if (this != t) {
-                if (this.isAlive && t.isAlive()
+                if (this.exists && t.exists()
                         && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
-                    this.changToOldDir();
-                    t.changToOldDir();
+                    //this.changToOldDir();
+                    //t.changToOldDir();
                     return true;
                 }
             }
@@ -119,11 +115,11 @@ public class Enemy extends Character {
     }
 
     public int getLife() {
-        return life;
+        return hp;
     }
 
     public void setLife(int life) {
-        this.life = life;
+        this.hp = life;
     }
 
     @Override
@@ -142,12 +138,6 @@ public class Enemy extends Character {
             x += Math.sin(Math.toRadians(angle)) * speed;
             y -= Math.cos(Math.toRadians(angle)) * speed;
         }
-
-        //guarantee the tank is in Frame
-        if (x < 0) x = 0;
-        if (y < 40) y = 40;
-        if (x + this.width > Constants.MAP_WIDTH) x = Constants.MAP_WIDTH - this.width;
-        if (y + this.length > Constants.MAP_HEIGHT) y = Constants.MAP_HEIGHT - this.length;
     }
 
     private void aimAtAndShoot(){
@@ -156,7 +146,7 @@ public class Enemy extends Character {
          * After the tank changes direction, generate another random steps
          */
         if (step == 0) {
-            Direction[] directons = Direction.values();
+            DIRECTION[] directons = DIRECTION.values();
             //[3,14]
             step = r.nextInt(12) + 3;
             //[0,8]
@@ -168,6 +158,7 @@ public class Enemy extends Character {
              * If Player tank is found in the line, switch enemy tank's direction and chase Player Tank
              * Else randomly choose direction to move forward
              */
+            /*
             if (playertankaround()){
                 BackendServices cC = backendServices;
                 if(x==cC.getPlayerX()){
@@ -196,6 +187,7 @@ public class Enemy extends Character {
                     rate=1;
                 }
             }
+             */
         }
         step--;
 
@@ -219,7 +211,7 @@ public class Enemy extends Character {
                 System.out.println("you are deafeated by id "+ msg.Sender);
                 return true;
             case 3:
-                this.direction = (Direction) msg.ExtraInfo;
+                //this.direction = (DIRECTION) msg.ExtraInfo;
                 System.out.println("chang the direction");
                 return true;
             default:
@@ -234,18 +226,6 @@ public class Enemy extends Character {
         return "enemy type";
     }
 
-    @Override
-    public void increaseHealth(int health) {
-        if(this.life+health<=200){
-            this.life = this.life+health;
-        } else{
-            this.life = 200;
-        }
-    }
-
-    @Override
-    public void switchWeapon(Weapon w) {
-
-    }
+    public void increaseHP(int health) { hp = Math.min(hp + health, MAX_HP); }
 
 }

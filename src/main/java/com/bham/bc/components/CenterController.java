@@ -161,7 +161,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * @param t
      */
     public void changeToOldDir(MovingEntity t){
-        t.changToOldDir();
+        //t.changToOldDir();
     }
 
     public void addEnemy(Enemy enemy) { return; }
@@ -184,14 +184,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     public void removeBombTank(BombTank b){
         bombTanks.remove(b);
-    }
-
-    public double getPlayerX(){
-        return player.getX();
-    }
-
-    public double getPlayerY(){
-        return player.getY();
     }
 
     public Shape getHomeHitBox(){

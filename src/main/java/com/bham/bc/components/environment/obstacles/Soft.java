@@ -37,17 +37,16 @@ public class Soft extends GenericObstacle {
 
     @Override
     public void handleBullet(Bullet b) {
-        if (b.isAlive() && this.intersects(b)) {
-            b.setAlive(false);
+        if (b.exists() && this.intersects(b)) {
             backendServices.removeBullet(b);
-//             hp -= b.damage();
+            // hp -= b.damage();
             if(--hp <= 0) backendServices.removeObstacle(this);
         }
     }
 
     @Override
     public void handleCharacter(Character t) {
-        if(t.isAlive() && this.intersects(t)){
+        if(t.exists() && this.intersects(t)){
             backendServices.changeToOldDir(t);
         }
     }
