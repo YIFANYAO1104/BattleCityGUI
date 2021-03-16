@@ -41,8 +41,12 @@ public class HandyGraphFunctions {
                 int nodeX = col + j;
                 int nodeY = row + i;
 
-                //skip if equal to this node
-                if (!(i+j==1)) {                 ///changajhsdkjahadskjsdhkdshaksdahkjdsjkdshkjasdhkj!!
+
+//                if (!(i+j==1)) {                 ///now is 4 direction
+//                    continue;
+//                }
+
+                if ((i == 0) && (j == 0)) {         // It is 8 direction
                     continue;
                 }
 

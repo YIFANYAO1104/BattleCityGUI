@@ -43,4 +43,5 @@ public class Node implements Comparable<Node> {
     public double getDistance(){
         return distance;
     }
+    public Double getCost(){return cost;}
 }

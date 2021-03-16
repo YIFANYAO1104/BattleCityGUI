@@ -1,6 +1,8 @@
 package com.bham.bc.utils.graph.algrithem.astar;
 
 import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.utils.graph.edge.GraphEdge;
+import com.bham.bc.utils.graph.edge.NavEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.sun.glass.events.mac.NpapiEvent;
@@ -16,10 +18,12 @@ public class Astar {
     private Node root;
     private Node goal;
 
-    public Astar(GraphNode location, GraphNode goal, SparseGraph sg1){
+    public Astar(GraphNode location, GraphNode goal1, SparseGraph sg1){
+
         this.root =  new Node(location);
-        this.goal = new Node(goal);
+        this.goal = new Node(goal1);
         this.sg = sg1;
+        this.root =  new Node(root,null,0,getDistance(root));
     }
 
     public ArrayList<GraphNode> search(){
@@ -60,9 +64,9 @@ public class Astar {
     private void addNode(Node n1){
         for(Object gn1: sg.getNodeList(n1.getNode().Index())){
             Node nn1 = new Node((GraphNode)gn1);
-            double cost = getCost(nn1);
+            double cost = getCost(n1,nn1);
             double dis = getDistance(nn1);
-            Node nn2 = new Node(nn1, n1, cost, dis);
+            Node nn2 = new Node(nn1, n1, cost+n1.getCost(), dis);
             if(!register.contains(nn2.getNode())){
                 openList.add(nn2);
                 register.add(nn2.getNode());
@@ -76,15 +80,9 @@ public class Astar {
         return n2.Pos().ManHadunDis(n3.Pos());
     }
 
-    private double getCost(Node n1){
-        int count = 0;
-        Node n3 = n1;
-        while (n3.getParentNode()!=null){
-                n3 = n3.getParentNode();
-                count++;
-        }
-
-        return count * 16;              // 16 is the cost number which is defined in edge.cost
+    private double getCost(Node n1 , Node n2){
+        GraphEdge e1 = sg.GetEdge(n1.getNode().Index(), n2.getNode().Index());
+        return e1.Cost() * e1.Cost();
     }
 }
 
