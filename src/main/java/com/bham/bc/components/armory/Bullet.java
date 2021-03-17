@@ -1,5 +1,6 @@
 package com.bham.bc.components.armory;
 
+import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
@@ -11,99 +12,38 @@ import javafx.scene.shape.Rectangle;
 import java.util.List;
 
 import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 
 abstract public class Bullet extends MovingEntity {
-    public int ownerID;
+    public final SIDE side;
+    private int damage;
 
     /**
      * Constructs a bullet using an ID to indicate the character that initiated it
      *
-     * @param ownerID character ID this bullet belongs to
      * @param x top left position in x axis
      * @param y top left position in y axis
      * @param speed velocity value at which the bullet will move
      * @param angle angle at which the bullet will move
+     * @param side ALLY or ENEMY side the bullet belongs to
+     * @param damage amount of hp the bullet can take from an entity
      */
-    public Bullet(int ownerID, double x, double y, double speed, double angle) {
+    public Bullet(double x, double y, double speed, double angle, SIDE side, int damage) {
         super(x, y, speed);
-        this.ownerID = ownerID;
         this.angle = angle;
+        this.side = side;
+        this.damage = damage;
     }
 
-    /**
-     * Checks if the bullet intersects any of the enemies
-     * @param enemies list of all enemies in the game map
-     * @return true if the bullet intersects some enemy and false otherwise
-     */
-    public boolean intersectsEnemies(List<Enemy> enemies) { return enemies.stream().anyMatch(this::intersects); }
+    public int getDamage() { return damage; }
 
     /**
-     * A method to indicate if the Bullet has hit any specific Enemy Tank
-     * The prerequisites of HIT is :
-     * 1. The Bullet is alive
-     * 2. The Enemy Tank is alive
-     * 3. The bullet 's occupied size intersects with enemy's occupied size(Using getRect() to get size)
-     * When it hits, we need to dispatch message (to Enemy Tank)
-     * @param enemy
-     * @return
-     * TODO: class should be instanciated in the controller, handled by physics package
+     * TODO: for custom classes define custom destruction effects
      */
-    public boolean hitsEnemy(Enemy enemy) {
-        if(intersects(enemy)) {
-            BombTank bombEffect = new BombTank(enemy.getPosition().getX(), enemy.getPosition().getY());
-            backendServices.addBombTank(bombEffect);
-            this.exists = false;
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * A method to indicate if the Bullet has hit any specific HomeTank Tank
-     * If hit , the life of home tank minus 50.
-     * @param t
-     * @return
-     */
-    public boolean hitTank(Player t) {
-
-        if (this.exists && this.intersects(t) && t.exists()) {
-            /*
-            BombTank e = new BombTank(t.getX(), t.getY());
-
-            backendServices.addBombTank(e);
-
-            if (t.isUser()) {
-                t.setHp(t.getHp() - 50);
-                if (t.getHp() <= 0)
-                    t.setAlive(false);
-            } else {
-                t.setAlive(false);
-
-            }
-
-            this.exists = false;
-
-            return true;
-
-             */
-        }
-        return false;
-    }
-
-    /**
-     * Checks if the bullet hits another bullet
-     * @param b
-     * @return
-     */
-    @Deprecated
-    public boolean hitBullet(Bullet b) {
-        if (this.exists && this.intersects(b)){
-            this.exists = false;
-            backendServices.removeBullet(b);
-            return true;
-        }
-        return false;
+    public void destroy() {
+        exists = false;
+        entityManager.removeEntity(this);
     }
 
     @Override

@@ -1,11 +1,14 @@
 package com.bham.bc.components.characters;
 
+import static com.bham.bc.components.CenterController.backendServices;
+import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
 
 import java.util.EnumSet;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -13,6 +16,8 @@ import java.util.Optional;
  */
 abstract public class Character extends MovingEntity {
 
+    protected int hp;
+    protected SIDE side;
     protected EnumSet<DIRECTION> directionSet;
 
     /**
@@ -22,8 +27,10 @@ abstract public class Character extends MovingEntity {
      * @param y top left y coordinate of the character
      * @param speed value which defines the initial velocity
      */
-    protected Character(double x, double y, double speed) {
+    protected Character(double x, double y, double speed, int hp, SIDE side) {
         super(x, y, speed);
+        this.hp = hp;
+        this.side = side;
         directionSet = EnumSet.noneOf(DIRECTION.class);
     }
 
@@ -42,15 +49,45 @@ abstract public class Character extends MovingEntity {
     }
 
     public void switchWeapon(Weapon w) {}
-    public void increaseHP(int health) {}
+    public abstract void increaseHP(int health);
 
 
     /**
-     * Overload
-     * @param speedMultiplier
+     * Handles bullet collision
+     * @param bullet
+     */
+    protected void handleBullet(Bullet bullet) {
+        if(intersects(bullet)) {
+            if(bullet.side != side) {
+                hp -= bullet.getDamage();
+            }
+            bullet.destroy();
+        }
+    }
+
+    /**
+     * Handles character collision
+     * @param character
+     */
+    protected void handleCharacter(Character character) {
+        if(this != character && intersects(character)) {
+            move(-1, true);
+        }
+    }
+
+    public void handleAll(List<Character> characters, List<Bullet> bullets) {
+        characters.forEach(this::handleCharacter);
+        bullets.forEach(this::handleBullet);
+    }
+
+
+    /**
+     * Overloads basic <i>move()</i> method with extra parameters
+     *
+     * @param speedMultiplier number by which the speed will be multiplied (use negative to inverse movement)
      * @param force boolean indicating if the character should move even if the directionSet is empty
      */
-    protected void move(double speedMultiplier, boolean force) {
+    public void move(double speedMultiplier, boolean force) {
         double deltaX = Math.sin(Math.toRadians(angle)) * speed;
         double deltaY = Math.cos(Math.toRadians(angle)) * speed;
 
@@ -64,7 +101,7 @@ abstract public class Character extends MovingEntity {
     }
 
     @Override
-    protected void move() {
+    public void move() {
         if(!directionSet.isEmpty()) {
             x += Math.sin(Math.toRadians(angle)) * speed;
             y -= Math.cos(Math.toRadians(angle)) * speed;

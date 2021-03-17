@@ -1,6 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.armory.DefaultBullet;
+import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.characters.Character;
@@ -22,7 +23,7 @@ public class Enemy extends Character {
     private int hp = 100;
 
     public Enemy(int x, int y) {
-        super(x, y, 1);
+        super(x, y, 1, MAX_HP, SIDE.ENEMY);
 
         entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
     }
@@ -50,7 +51,7 @@ public class Enemy extends Character {
         double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
         double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
 
-        DefaultBullet b = new DefaultBullet(this.getID(), topLeftBulletX, topLeftBulletY, angle);
+        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
         backendServices.addBullet(b);
         return b;
     }
@@ -145,14 +146,6 @@ public class Enemy extends Character {
             if (r.nextInt(40) > 35) this.fire();
         }else if (r.nextInt(40) > 38) this.fire();
         */
-    }
-
-    @Override
-    protected void move() {
-        if(!directionSet.isEmpty()) {
-            x += Math.sin(Math.toRadians(angle)) * speed;
-            y -= Math.cos(Math.toRadians(angle)) * speed;
-        }
     }
 
     @Override

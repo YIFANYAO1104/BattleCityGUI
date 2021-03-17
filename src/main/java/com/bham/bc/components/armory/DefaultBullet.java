@@ -1,5 +1,6 @@
 package com.bham.bc.components.armory;
 
+import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.utils.Constants;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -12,27 +13,37 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 
 public class DefaultBullet extends Bullet {
 	public static final String IMAGE_PATH = "file:src/main/resources/img/armory/defaultBullet.png";
-	public static final double SPEED = 5;
 	public static final int WIDTH = 6;
 	public static final int HEIGHT = 12;
 
+	public static final double SPEED = 5;
+	public static final int DAMAGE = 25;
+
 	/**
 	 * Constructor of Bullet
-	 * @param owner
 	 * @param x
 	 * @param y
 	 */
-	public DefaultBullet(int owner, double x, double y, double angle) {
-		super(owner, x, y, SPEED, angle);
+	public DefaultBullet(double x, double y, double angle, SIDE side) {
+		super(x, y, SPEED, angle, side, DAMAGE);
 		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
 	}
 
+
+	public void move(double speedMultiplier) {
+		x += Math.sin(Math.toRadians(angle)) * speed * speedMultiplier;
+		y -= Math.cos(Math.toRadians(angle)) * speed * speedMultiplier;
+	}
+
 	@Override
-	protected void move() {
+	public void move() {
 		x += Math.sin(Math.toRadians(angle)) * speed;
 		y -= Math.cos(Math.toRadians(angle)) * speed;
 
-		if (x < 0 || y < 0 || x > Constants.MAP_WIDTH || y > Constants.MAP_HEIGHT) exists = false;
+		if (x < 0 || y < 0 || x > Constants.MAP_WIDTH || y > Constants.MAP_HEIGHT) {
+			entityManager.removeEntity(this);
+			exists = false;
+		}
 	}
 
 	@Override
@@ -47,12 +58,5 @@ public class DefaultBullet extends Bullet {
 	}
 
 	@Override
-	public void update() {
-		move();
-
-		if (!exists) {
-			entityManager.removeEntity(this);
-			backendServices.removeBullet(this);
-		}
-	}
+	public void update() { move(); }
 }

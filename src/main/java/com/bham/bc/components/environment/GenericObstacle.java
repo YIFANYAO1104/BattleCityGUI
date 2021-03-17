@@ -17,8 +17,8 @@ import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
  * Class defining common properties for any obstacle
  */
 public abstract class GenericObstacle extends BaseGameEntity {
-
-    private int currentFrame;
+    protected boolean exists;
+    protected int currentFrame;
     protected boolean renderTop;
 
     /**
@@ -31,11 +31,14 @@ public abstract class GenericObstacle extends BaseGameEntity {
      */
     public GenericObstacle(int x, int y, TILESET tileset, int... tileIDs) {
         super(GetNextValidID(), x, y);
+        exists = true;
         currentFrame = 0;
         entityImages = tileIDs.length == 0 ? getDefaultImage() : tileset.getTiles(tileIDs);
     }
 
     public boolean renderTop() { return renderTop; }
+
+    public boolean exists() { return exists; }
 
     /**
      * gets default image of a tile
@@ -47,13 +50,13 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * handles bullet collision
      * @param b bullet to handle
      */
-    abstract public void handleBullet(Bullet b);
+    public abstract void handleBullet(Bullet b);
 
     /**
      * handles tank collision
-     * @param t tank to handle
+     * @param c character to handle
      */
-    abstract public void handleCharacter(Character t);
+    public abstract void handleCharacter(Character c);
 
     public void interactWith(int ID,int indexOfNode ,Rectangle r1) {
         if(this.getHitBox().intersects(r1.getBoundsInLocal()))

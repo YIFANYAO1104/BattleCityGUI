@@ -49,12 +49,11 @@ public abstract class MovingEntity extends BaseGameEntity {
     /**
      * Checks if this entity exists
      * @return true if it exists and false otherwise
-     * TODO: check if it is possible to simply remove the instance without any checks
      */
     public boolean exists() { return exists; }
 
     /**
      * Defines how the position of the entity is updated on each frame
      */
-    protected abstract void move();
+    public abstract void move();
 }

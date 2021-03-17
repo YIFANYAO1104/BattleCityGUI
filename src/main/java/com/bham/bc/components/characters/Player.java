@@ -1,6 +1,7 @@
 package com.bham.bc.components.characters;
 
 
+import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.utils.Constants;
@@ -31,7 +32,6 @@ public class Player extends Character implements TrackableCharacter {
 	public static final int MAX_HP = 100;
 
 	private int hp;
-	private boolean stop;
 
 	private SimpleDoubleProperty trackableX;
 	private SimpleDoubleProperty trackableY;
@@ -43,9 +43,7 @@ public class Player extends Character implements TrackableCharacter {
 	 * @param y top left y coordinate of the player
 	 */
 	public Player(double x, double y) {
-		super(x, y, 5);
-		hp = MAX_HP;
-		stop = false;
+		super(x, y, 5, MAX_HP, SIDE.ALLY);
 
 		initTrackableCoordinates();
 		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
@@ -118,7 +116,7 @@ public class Player extends Character implements TrackableCharacter {
 		double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
 		double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
 
-		DefaultBullet b = new DefaultBullet(this.getID(), topLeftBulletX, topLeftBulletY, angle);
+		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
 		backendServices.addBullet(b);
 		return b;
 	}
@@ -144,7 +142,7 @@ public class Player extends Character implements TrackableCharacter {
 	@Override
 	public void update() {
 		updateAngle();
-		move(-1, false);
+		move();
 		trackableX.set(this.x + WIDTH/2);
 		trackableY.set(this.y + HEIGHT/2);
 	}

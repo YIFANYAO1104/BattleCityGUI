@@ -36,12 +36,6 @@ public interface BackendServices {
      */
     void removeBombTank(BombTank bombTank);
 
-    /**
-     * removes any obstacle from the map
-     * @param obstacle GenericObstacle object to be removed
-     */
-    void removeObstacle(GenericObstacle obstacle);
-
     Shape getPlayerHitBox();
 
     /**

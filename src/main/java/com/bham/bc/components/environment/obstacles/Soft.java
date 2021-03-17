@@ -6,7 +6,7 @@ import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
  * Desc: Tile that is breakable, nothing can pass through it until it is destroyed
@@ -15,7 +15,7 @@ public class Soft extends GenericObstacle {
 
     // Use Switch statement and check tileID manually to determine how much hp each type of softTile has
     // Alternatively, just set every tile equal to the same hp
-    private int hp = 3;
+    private int hp = 50;
 
     /**
      * Constructs an obstacle
@@ -32,19 +32,28 @@ public class Soft extends GenericObstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/tiles/softWall.bmp") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/softWall.bmp") };
     }
 
     @Override
     public void handleBullet(Bullet b) {
-        if (b.exists() && this.intersects(b)) {
-            backendServices.removeBullet(b);
-            // hp -= b.damage();
-            if(--hp <= 0) backendServices.removeObstacle(this);
+        if(intersects(b)) {
+            hp -= b.getDamage();
+            b.destroy();
+
+            System.out.println(hp);
+
+
+            if(hp <= 0) {
+                exists = false;
+                entityManager.removeEntity(this);
+            }
+            System.out.println(exists);
         }
     }
 
     @Override
-    public void handleCharacter(Character t) {
+    public void handleCharacter(Character c) {
+        if(intersects(c)) c.move(-1, true);
     }
 }

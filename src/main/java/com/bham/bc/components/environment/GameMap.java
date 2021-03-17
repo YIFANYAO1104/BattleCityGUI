@@ -1,8 +1,11 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
+import static com.bham.bc.entity.EntityManager.entityManager;
 import com.bham.bc.entity.triggers.TriggerSystem;
 import com.bham.bc.components.characters.Character;
 import com.bham.bc.utils.Constants;
@@ -59,15 +62,6 @@ public class GameMap {
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.TrickingTank(new Vector2D(location)));
     }
 
-
-    /**
-     * Removes an obstacle from the game map
-     * @param obstacle obstacle to remove
-     */
-    public void removeObstacle(GenericObstacle obstacle){ obstacles.remove(obstacle); }
-
-
-
     /**
      * Clears all obstacles in the map
      */
@@ -88,11 +82,11 @@ public class GameMap {
      */
 
     public void renderBottomLayer(GraphicsContext gc) {
-        obstacles.stream().forEach(o -> { if(!o.renderTop()) o.render(gc); });
+        obstacles.forEach(o -> { if(!o.renderTop()) o.render(gc); });
     }
 
     public void renderTopLayer(GraphicsContext gc) {
-        obstacles.stream().forEach(o -> { if(o.renderTop()) o.render(gc); });
+        obstacles.forEach(o -> { if(o.renderTop()) o.render(gc); });
     }
 
     public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
@@ -100,36 +94,14 @@ public class GameMap {
         for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1), gc);
     }
 
-    public void renderTriggers(GraphicsContext gc) {
-        triggerSystem.render(gc);
+    public void renderTriggers(GraphicsContext gc) { triggerSystem.render(gc); }
+
+
+
+    public void update() {
+        obstacles.removeIf(o -> !o.exists());
+        obstacles.forEach(GenericObstacle::update);
     }
-
-    //renderers------------------------------------------------------
-
-
-    //hit--------------------------------------------------------------
-    /**
-     * To Check if the Bullet hits the Wall
-     * To check if the Bullet hits Home also
-     * @param m
-     */
-    public void update(Bullet m){
-        hitObstacles(m);
-    }
-
-    /**
-     * This method is to check if Bullet hits common walls
-     * @param m
-     */
-    public void hitObstacles(Bullet m){
-        for (int j = 0; j < obstacles.size(); j++) {
-            GenericObstacle cw = obstacles.get(j);
-            cw.handleBullet(m);
-        }
-    }
-
-
-    public void updateObstacles() { obstacles.stream().forEach(GenericObstacle::update); }
 
     private void addWeaponGenerator(){
         WeaponGenerator w = new WeaponGenerator(466, 466, Weapon.ArmourGun, 30,30,30);
@@ -138,29 +110,17 @@ public class GameMap {
     }
 
 
-    //collide--------------------------------------------------------------
-    /**
-     * A method to loop all objects, and use as parameter for tanks's Collide Method
-     * To determine if a Tank Collides such Walls and need to turn back to it's previous position
-     * @param t
-     */
+    public void handleAll(Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
+        obstacles.forEach(obstacle -> {
+            obstacle.handleCharacter(player);
+            enemies.forEach(obstacle::handleCharacter);
+            bullets.forEach(obstacle::handleBullet);
+        });
 
-    public void update(Character t){
-        collideWithObstacles(t);
-        collideWithTriggers(t);
+        triggerSystem.update(player);
+        enemies.forEach(enemy -> triggerSystem.update(enemy));
     }
 
-    /**
-     * A method to loop all objects, and use as parameter for Collide Method
-     * To determine if a Tank Collides such home Walls and need to turn back to it's previous position
-     * @param t
-     */
-    public void collideWithObstacles(Character t){
-        for (int i = 0; i < obstacles.size(); i++) {
-            GenericObstacle w = obstacles.get(i);
-            w.handleCharacter(t);
-        }
-    }
 
     public void collideWithRectangle(int ID,int indexOfNode, Rectangle r1){
         for (int i = 0; i < obstacles.size(); i++) {
@@ -168,6 +128,4 @@ public class GameMap {
             w.interactWith(ID,indexOfNode,r1);
         }
     }
-
-    public void collideWithTriggers(Character character){ triggerSystem.update(character); }
 }

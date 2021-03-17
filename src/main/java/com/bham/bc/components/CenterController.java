@@ -14,6 +14,7 @@ import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.characters.Character;
 
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -35,9 +36,9 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected Boolean win = false, lose = false;
     protected GameMap gameMap;
     protected Player player;
-    protected List<Enemy> enemies = new ArrayList<>();
-    protected List<BombTank> bombTanks = new ArrayList<>();
-    protected List<Bullet> bullets = new ArrayList<>();
+    protected ArrayList<Enemy> enemies = new ArrayList<>();
+    protected ArrayList<BombTank> bombTanks = new ArrayList<>();
+    protected ArrayList<Bullet> bullets = new ArrayList<>();
 
     /**
      * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
@@ -63,7 +64,12 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         backendServices = centerController;
     }
 
+    public ArrayList<Character> getCharacters() {
+        ArrayList<Character> characters = new ArrayList<>(enemies);
+        characters.add(player);
 
+        return characters;
+    }
 
 
     /**
@@ -81,7 +87,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     @Override
     public void keyPressed(KeyEvent e){ player.keyPressed(e); }
 
-    public TrackableCharacter getHomeTank(){
+    public Player getHomeTank(){
         return player;
     }
 
@@ -121,11 +127,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public void removeObstacle(GenericObstacle go) {
-        gameMap.removeObstacle(go);
-    }
-
-    @Override
     public void addBombTank(BombTank b){
         bombTanks.add(b);
     }
@@ -142,7 +143,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void addBullet(Bullet bullet){ bullets.add(bullet); }
 
     @Override
-    public void removeBullet(Bullet bullet){
+    public void removeBullet(Bullet bullet) {
         entityManager.removeEntity(bullet);
         bullets.remove(bullet);
     }
@@ -158,9 +159,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public String toString() {
-        return "Center Controller";
-    }
+    public String toString() { return "Center Controller"; }
 
     @Override
     public boolean intersects(BaseGameEntity b) {
