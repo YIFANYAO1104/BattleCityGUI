@@ -5,6 +5,7 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
+import com.bham.bc.utils.graph.SparseGraph;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -64,4 +65,6 @@ public interface BackendServices {
      * @param m
      */
     void removeBullet(Bullet m);
+
+    SparseGraph getGraph();
 }

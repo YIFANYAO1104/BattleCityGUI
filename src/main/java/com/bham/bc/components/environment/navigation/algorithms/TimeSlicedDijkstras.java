@@ -97,7 +97,23 @@ public class TimeSlicedDijkstras//<termination_condition extends TerminationCond
 
     @Override
     public List<PathEdge> getPathAsPathEdges() {
-        return null;
+        List<PathEdge> path = new LinkedList<PathEdge>();
+
+        //just return an empty path if no target or no path found
+        if (target < 0) {
+            return path;
+        }
+
+        int nd = target;
+
+        while ((nd != source) && (parent.get(nd) != null)) {
+            path.add(0, 
+                    new PathEdge(navGraph.getNode(parent.get(nd)).Pos(), navGraph.getNode(nd).Pos()));
+
+            nd = parent.get(nd);
+        }
+
+        return path;
     }
 
     public static void main(String[] args) {

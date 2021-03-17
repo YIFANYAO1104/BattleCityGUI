@@ -80,20 +80,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      * iterates through all the edges in the graph and removes any that point to
      * an invalidated node
      */
-    private void CullInvalidEdges() {
-        ListIterator<EdgeList> edgeListIt = m_Edges.listIterator();
-        while (edgeListIt.hasNext()) {
-            EdgeList curEdgeList = edgeListIt.next();
-            ListIterator<edge_type> edgeIt = curEdgeList.listIterator();
-            while (edgeIt.hasNext()) {
-                edge_type curEdge = edgeIt.next();
-                if ((m_Nodes.get(curEdge.To())).Index() == invalid_node_index
-                        || m_Nodes.get(curEdge.From()).Index() == invalid_node_index) {
-                    curEdgeList.remove(curEdge);
-                }
-            }
-        }
-    }
+//    private void CullInvalidEdges()
 
     //ctor
     public SparseGraph(boolean digraph) {
@@ -110,10 +97,10 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
 //    public void display(){
-////        System.out.println("size: "+ this.m_Nodes.size());
+////        System.out.println("size: "+ this.nodeVector.size());
 ////        System.out.println("size: "+ this.m_Edges.size());
-//        for(int i = 0; i < m_Nodes.size();i++){
-//            NavNode n1 = (NavNode)this.m_Nodes.get(i);
+//        for(int i = 0; i < nodeVector.size();i++){
+//            NavNode n1 = (NavNode)this.nodeVector.get(i);
 //
 ////            System.out.println(n1.Pos().toString());
 //        }
@@ -144,8 +131,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 //            SparseGraph.EdgeList g1 = this.m_Edges.get(i);
 //            for (int j = 0; j < g1.size();j++){
 //                GraphEdge nh1  = (GraphEdge)g1.get(j);
-//                NavNode n1 = (NavNode)this.m_Nodes.get(nh1.From());
-//                NavNode n2 = (NavNode)this.m_Nodes.get(nh1.To());
+//                NavNode n1 = (NavNode)this.nodeVector.get(nh1.From());
+//                NavNode n2 = (NavNode)this.nodeVector.get(nh1.To());
 ////                Line line1 = new Line(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
 //
 //                gc.setStroke(Color.BLACK);
@@ -161,13 +148,13 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     public void renderlines(GraphicsContext gc, ArrayList<GraphNode> a1){
         ArrayList<GraphEdge> ee1 = new ArrayList<>();
         for(int i =0;i<a1.size()-1;i++){
-            ee1.add(GetEdge(a1.get(i).Index(), a1.get(i+1).Index()));
+            ee1.add(getEdge(a1.get(i).Index(), a1.get(i+1).Index()));
         }
          //draw edges
         for (int j = 0; j < ee1.size();j++){
             GraphEdge nh1  = (GraphEdge)ee1.get(j);
-            NavNode n1 = (NavNode)this.m_Nodes.get(nh1.From());
-            NavNode n2 = (NavNode)this.m_Nodes.get(nh1.To());
+            NavNode n1 = (NavNode)this.nodeVector.get(nh1.From());
+            NavNode n2 = (NavNode)this.nodeVector.get(nh1.To());
 //                Line line1 = new Line(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
 
             gc.setStroke(Color.RED);
@@ -178,8 +165,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
 
     }
-
-    public int TrickingTank(Vector2D location ,GraphicsContext gc){
+    
     public int renderTankPoints(Vector2D location , GraphicsContext gc){
         gc.setFill(Color.RED);
 
@@ -203,16 +189,16 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         int c = j*rowNums + i;
         NavNode n1 = (NavNode)this.nodeVector.get(c);
 
-        return GetNode(c);
+        return getNode(c);
 //        System.out.println("1 size"+n1.Pos().toString());
 
     }
 
     public LinkedList<NavNode> getNodeList(int n1){
         LinkedList<NavNode> nodes = new LinkedList<>();
-        LinkedList<GraphEdge> edges = m_Edges.get(n1);
+        LinkedList<GraphEdge> edges = edgeListVector.get(n1);
         for (GraphEdge e1: edges){
-            NavNode nn1 = GetNode(e1.To());
+            NavNode nn1 = getNode(e1.To());
             if(nn1.isValid())
                 nodes.add(nn1);
         }
@@ -221,24 +207,6 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             return null;
         return nodes;
     }
-
-    @Override
-    public Rectangle getHitBox() {
-        return null;
-    }
-
-    @Override
-    public boolean handleMessage(Telegram msg) {
-        switch (msg.Msg){
-            case Msg_interact :
-//                System.out.println("Find invalid nodes, dealing");
-                m_Nodes.get((int)msg.ExtraInfo).setInvalid();
-                return true;
-            default:
-                return false;
-        }
-
-
 
     /**
      * method for obtaining a reference to a specific node
@@ -257,18 +225,18 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     /**
      * const and non const methods for obtaining a reference to a specific edge
      */
-    public edge_type GetEdge(int from, int to) {
-        assert (from < m_Nodes.size())
+    public edge_type getEdge(int from, int to) {
+        assert (from < nodeVector.size())
                 && (from >= 0)
-                && m_Nodes.get(from).Index() != invalid_node_index :
+                && nodeVector.get(from).Index() != invalid_node_index :
                 "<SparseGraph::GetEdge>: invalid 'from' index";
 
-        assert (to < m_Nodes.size())
+        assert (to < nodeVector.size())
                 && (to >= 0)
-                && m_Nodes.get(to).Index() != invalid_node_index :
+                && nodeVector.get(to).Index() != invalid_node_index :
                 "<SparseGraph::GetEdge>: invalid 'to' index";
 
-        ListIterator<edge_type> it = m_Edges.get(from).listIterator();
+        ListIterator<edge_type> it = edgeListVector.get(from).listIterator();
         while (it.hasNext()) {
             edge_type curEdge = it.next();
             if (curEdge.To() == to) {
@@ -279,6 +247,11 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         assert false : "<SparseGraph::GetEdge>: edge does not exist";
         return null;
     }
+
+    /**
+     * const and non const methods for obtaining a reference to a specific edge
+     */
+//    public edge_type GetEdge(int from, int to)
 
     //retrieves the next free node index
     public int getNextFreeNodeIndex() {
@@ -316,36 +289,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     /**
      * Removes a node from the graph and removes any links to neighbouring nodes
      */
-    public void RemoveNode(int node) {
-        assert node < (int) m_Nodes.size() : "<SparseGraph::RemoveNode>: invalid node index";
-
-        //set this node's index to invalid_node_index
-        m_Nodes.get(node).SetIndex(invalid_node_index);
-
-        //if the graph is not directed remove all edges leading to this node and then
-        //clear the edges leading from the node
-        if (!m_bDigraph) {
-            //visit each neighbour and erase any edges leading to this node
-            ListIterator<edge_type> it = m_Edges.get(node).listIterator();
-            while (it.hasNext()) {
-                edge_type curEdge = it.next();
-                ListIterator<edge_type> itTo = m_Edges.get(curEdge.To()).listIterator();
-                while (itTo.hasNext()) {
-                    edge_type curE = itTo.next();
-                    if (curE.To() == node) {
-                        m_Edges.get(curEdge.To()).remove(curE);
-                        break;
-                    }
-                }
-            }
-
-            //finally, clear this node's edges
-            m_Edges.get(node).clear();
-        } //if a digraph remove the edges the slow way
-        else {
-            CullInvalidEdges();
-        }
-    }
+//    public void RemoveNode(int node)
 
 
     /**
@@ -398,32 +342,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      * digraph then the edge connecting the nodes in the opposite direction will
      * also be removed.
      */
-    public void RemoveEdge(int from, int to) {
-        assert (from < (int) m_Nodes.size()) && (to < (int) m_Nodes.size()) :
-                "<SparseGraph::RemoveEdge>:invalid node index";
-
-        ListIterator<edge_type> it;
-
-        if (!m_bDigraph) {
-            it = m_Edges.get(to).listIterator();
-            while (it.hasNext()) {
-                edge_type curEdge = it.next();
-                if (curEdge.To() == from) {
-                    m_Edges.get(to).remove(curEdge);
-                    break;
-                }
-            }
-        }
-
-        it = m_Edges.get(from).listIterator();
-        while (it.hasNext()) {
-            edge_type curEdge = it.next();
-            if (curEdge.To() == to) {
-                m_Edges.get(from).remove(curEdge);
-                break;
-            }
-        }
-    }
+//    public void RemoveEdge(int from, int to)
 
     /**
      * Sets the cost of a specific edge
@@ -458,8 +377,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     public int NumActiveNodes() {
         int count = 0;
 
-        for (int n = 0; n < m_Nodes.size(); ++n) {
-            if (m_Nodes.get(n).Index() != invalid_node_index) {
+        for (int n = 0; n < nodeVector.size(); ++n) {
+            if (nodeVector.get(n).Index() != invalid_node_index) {
                 ++count;
             }
         }
@@ -524,130 +443,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             return false;
         }
     }
-
-
-
-    //methods for loading and saving graphs from an open file stream or from
-    //a file name
-//-------------------------------- Save ---------------------------------------
-    public boolean Save(final String FileName) {
-        //open the file and make sure it's valid
-        OutputStream out;
-        try {
-            out = new FileOutputStream(FileName);
-        } catch (FileNotFoundException ex) {
-            throw new RuntimeException("Cannot open file: " + FileName, ex);
-        }
-
-        return Save(out);
-    }
-
-    //-------------------------------- Save ---------------------------------------
-    public boolean Save(OutputStream stream) {
-        PrintStream ps = new PrintStream(stream);
-        //save the number of nodes
-        ps.println(m_Nodes.size());
-
-        //iterate through the graph nodes and save them
-        ListIterator<GraphNode> curNode = m_Nodes.listIterator();
-        while (curNode.hasNext()) {
-            curNode.next().print(ps);
-        }
-
-        //save the number of edges
-        ps.println(NumEdges());
-
-
-        //iterate through the edges and save them
-        for (int nodeIdx = 0; nodeIdx < m_Nodes.size(); ++nodeIdx) {
-            ListIterator<edge_type> curEdge = m_Edges.get(nodeIdx).listIterator();
-            while (curEdge.hasNext()) {
-                curEdge.next().print(ps);
-            }
-        }
-
-        return true;
-    }
-
-
-    //------------------------------- Load ----------------------------------------
-//-----------------------------------------------------------------------------
-    public boolean Load(final String FileName, Class<? extends node_type> nodeCtor,
-                        Class<? extends edge_type> edgeCtor) {
-        //open file and make sure it's valid
-        InputStream in;
-        try {
-            in = new FileInputStream(FileName);
-        } catch (FileNotFoundException ex) {
-            throw new RuntimeException("Cannot open file: " + FileName, ex);
-        }
-
-        return Load(new Scanner(in), nodeCtor, edgeCtor);
-    }
-
-    //------------------------------- Load ----------------------------------------
-//-----------------------------------------------------------------------------
-    public boolean Load(Scanner in, Class<? extends node_type> nodeCtor,
-                        Class<? extends edge_type> edgeCtor) {
-        Clear();
-
-        //get the number of nodes and read them in
-        int NumNodes, NumEdges;
-
-        NumNodes = in.nextInt();
-
-        node_type NewNode;
-        for (int n = 0; n < NumNodes; ++n) {
-            try {
-                NewNode = nodeCtor.getConstructor(in.getClass()).newInstance(in);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-
-            //when editing graphs it's possible to end up with a situation where some
-            //of the nodes have been invalidated (their id's set to invalid_node_index). Therefore
-            //when a node of index invalid_node_index is encountered, it must still be added.
-            if (NewNode.Index() != invalid_node_index) {
-                AddNode(NewNode);
-            } else {
-                m_Nodes.add(NewNode);
-
-                //make sure an edgelist is added for each node
-                m_Edges.add(new EdgeList());
-
-                ++m_iNextNodeIndex;
-            }
-        }
-
-        //now add the edges
-        NumEdges = in.nextInt();
-        for (int e = 0; e < NumEdges; ++e) {
-            try {
-                edge_type NextEdge = edgeCtor.getConstructor(in.getClass()).newInstance(in);
-                AddEdge(NextEdge);
-            } catch (Exception ex) {
-                throw new RuntimeException(ex);
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * clears the graph ready for new node insertions
-     */
-    public void Clear() {
-        m_iNextNodeIndex = 0;
-        m_Nodes.clear();
-        m_Edges.clear();
-    }
-
-    public void RemoveEdges() {
-        ListIterator<EdgeList> it = m_Edges.listIterator();
-        while (it.hasNext()) {
-            it.next().clear();
-        }
-    }
+    
 
     /**
      * Get nodes which is connected with this node

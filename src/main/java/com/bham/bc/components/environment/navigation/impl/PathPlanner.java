@@ -6,11 +6,16 @@ import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAStar;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedDijkstras;
 import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.utils.graph.edge.GraphEdge;
+import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 import javafx.geometry.Point2D;
 import com.bham.bc.components.characters.Character;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PathPlanner implements NavigationService {
@@ -33,6 +38,9 @@ public class PathPlanner implements NavigationService {
      * being used when getPath() is called
      */
     private Point2D destinationPos;
+
+    // temp value to render the graphlines
+    List<PathEdge> a2 = new ArrayList<PathEdge>();
 
     public PathPlanner(Character owner, SparseGraph navGraph) {
         this.owner = owner;
@@ -96,7 +104,8 @@ public class PathPlanner implements NavigationService {
             return false;
         }
         //create algorithm instance
-        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
+//        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
+        curSearchTask = new TimeSlicedDijkstras(navGraph, closestNodeToPlayer, closestNodeToTarget);
         //register task in time slice service
 
         return true;
@@ -104,7 +113,12 @@ public class PathPlanner implements NavigationService {
 
     @Override
     public int peekRequestStatus() {
-        return curSearchTask.cycleOnce();
+        int result = curSearchTask.cycleOnce();
+        //System.out.println(a2);
+        if (result == 0){
+             a2 = getPath();
+        }
+        return result;
     }
 
     /**
@@ -117,7 +131,7 @@ public class PathPlanner implements NavigationService {
         //fetch path list from 'task'
         List<PathEdge> path = curSearchTask.getPathAsPathEdges();
         //get closest node around current position
-        int closest = 0;
+        int closest = getClosestNode(owner.getPosition());
         //add start and end node
         path.add(0,
                 new PathEdge(owner.getPosition(), navGraph.getNode(closest).Pos())
@@ -156,6 +170,18 @@ public class PathPlanner implements NavigationService {
         //if no trigger found, return -1
         //return cost
         return -1;
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        //draw edges
+        for (PathEdge graphEdge : a2) {
+            Point2D n1 = graphEdge.getSource();
+            Point2D n2 = graphEdge.getDestination();
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(2.0);
+            gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
+        }
     }
 
     /**

@@ -2,6 +2,7 @@ package com.bham.bc.components.environment.navigation;
 
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
 
 import java.util.List;
 
@@ -55,4 +56,6 @@ public interface NavigationService {
      * @return -1 if no active trigger found, otherwise the cost to the closest instance of the giver type
      */
     public double getCostToClosestItem(int GiverType);
+
+    public void render(GraphicsContext gc);
 }

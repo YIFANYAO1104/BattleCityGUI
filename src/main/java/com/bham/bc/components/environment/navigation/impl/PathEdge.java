@@ -34,7 +34,7 @@ public class PathEdge {
         destination = new Point2D(newDest.getX(),newDest.getY());
     }
 
-    public Point2D source() {
+    public Point2D getSource() {
         return new Point2D(source.getX(),source.getY());
     }
 

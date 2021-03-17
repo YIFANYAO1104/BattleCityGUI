@@ -10,6 +10,8 @@ import com.bham.bc.utils.graph.algrithem.astar.Astar;
 import javafx.geometry.Point2D;
 
 
+import java.util.ArrayList;
+
 import static com.bham.bc.utils.graph.node.Vector2D.Vec2DDistance;
 
 public class HandyGraphFunctions {
@@ -128,8 +130,8 @@ public class HandyGraphFunctions {
 
     public ArrayList<GraphNode> Astar(SparseGraph sg, Point2D root, Point2D goal){
 //        Astar astar = new Astar(sg, new Vector2D(root), new Vector2D(goal));
-        GraphNode root1 = sg.TrickingTank(new Vector2D(root) );
-        GraphNode goal1 = sg.TrickingTank(new Vector2D(goal) );
+        GraphNode root1 = sg.getClosestNodeForPlayer(new Vector2D(root) );
+        GraphNode goal1 = sg.getClosestNodeForPlayer(new Vector2D(goal) );
         Astar astar = new Astar(root1, goal1, sg);
         return astar.search();
 

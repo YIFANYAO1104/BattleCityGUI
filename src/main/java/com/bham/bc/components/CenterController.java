@@ -9,6 +9,7 @@ import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.components.characters.TrackableCharacter;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.BombTank;
@@ -220,5 +221,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     @Override
     public boolean intersects(BaseGameEntity b) {
         return false;
+    }
+
+    @Override
+    public SparseGraph getGraph(){
+        return gameMap.getGraph();
     }
 }

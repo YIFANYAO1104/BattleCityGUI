@@ -3,12 +3,16 @@ package com.bham.bc.components.characters;
 
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.navigation.NavigationService;
+import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -40,6 +44,8 @@ public class Player extends Character implements TrackableCharacter {
 	//-----------------------------------------------------------------//
 	private Weapon currWeapon = null;
 
+	private NavigationService navigationService;
+
 
 
 	/**
@@ -48,7 +54,7 @@ public class Player extends Character implements TrackableCharacter {
 	 * @param y
 	 * @param dir
 	 */
-	public Player(int x, int y, Direction dir) {
+	public Player(int x, int y, Direction dir, GameMap gm) {
 		super(1,1, x,y,32,32,dir);
 		initImages();
 		initTrackableCoordinates();
@@ -80,6 +86,15 @@ public class Player extends Character implements TrackableCharacter {
 		gc.setFill(c);
 	}
 
+	public void createNewRequest(GameMap gm){
+		navigationService = new PathPlanner(this,gm.getGraph());
+		Point2D aim = new Point2D(450,550);
+		navigationService.createRequest(aim);
+		if(navigationService.peekRequestStatus()==0){
+			// do sth
+		}
+	}
+
 	/**
 	 * Render Method
 	 * Use directions to determine the image of Player Tank
@@ -89,6 +104,8 @@ public class Player extends Character implements TrackableCharacter {
 	public void render(GraphicsContext gc) {
 
 		if (!isAlive) return;
+
+		if (navigationService!=null) navigationService.render(gc);
 
 		//It is covered by home currently. So you could not see it.
 		renderBloodbBar(gc);

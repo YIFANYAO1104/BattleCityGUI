@@ -2,10 +2,8 @@ package com.bham.bc.utils.graph.algrithem.astar;
 
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
-import com.bham.bc.utils.graph.edge.NavEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.sun.glass.events.mac.NpapiEvent;
 
 import java.util.*;
 
@@ -81,7 +79,7 @@ public class Astar {
     }
 
     private double getCost(Node n1 , Node n2){
-        GraphEdge e1 = sg.GetEdge(n1.getNode().Index(), n2.getNode().Index());
+        GraphEdge e1 = sg.getEdge(n1.getNode().Index(), n2.getNode().Index());
         return e1.Cost() * e1.Cost();
     }
 }

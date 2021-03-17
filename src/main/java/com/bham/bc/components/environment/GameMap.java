@@ -141,7 +141,7 @@ public class GameMap {
 
         for(Point2D p1 : points)  graphSystem.renderTankPoints(new Vector2D(p1),gc);
 
-        graphSystem.renderlines(gc,a2);
+//        graphSystem.renderlines(gc,a2);
         // tricking tanks on the map! with red points
     }
 
@@ -241,4 +241,8 @@ public class GameMap {
         triggerSystem.update(t);
     }
     //collide--------------------------------------------------------------
+
+    public SparseGraph getGraph(){
+        return this.graphSystem;
+    }
 }
