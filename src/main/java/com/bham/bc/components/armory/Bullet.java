@@ -36,9 +36,8 @@ abstract public class Bullet extends MovingEntity {
      * @param enemies list of all enemies in the game map
      * @return true if the bullet intersects some enemy and false otherwise
      */
-    public boolean intersectsEnemies(List<Enemy> enemies) {
-        return enemies.stream().anyMatch(this::intersects);
-    }
+    public boolean intersectsEnemies(List<Enemy> enemies) { return enemies.stream().anyMatch(this::intersects); }
+
     /**
      * A method to indicate if the Bullet has hit any specific Enemy Tank
      * The prerequisites of HIT is :

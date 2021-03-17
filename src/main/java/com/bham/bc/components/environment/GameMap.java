@@ -24,35 +24,32 @@ import java.util.List;
 
 public class GameMap {
 
-
-    /**
-     * Creating container for Home Walls On Map
-     */
     private List<GenericObstacle> obstacles;
-    // private Home home;
     private TriggerSystem triggerSystem;
-
     private SparseGraph graphSystem;
 
+    private int width;
+    private int height;
 
 
-    //init only--------------------------------------------------------------
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
     public GameMap(String resourceName) {
         MapLoader mapLoader = new JsonMapLoader(resourceName);
+        width = mapLoader.getMapWidth();
+        height = mapLoader.getMapHeight();
         obstacles = mapLoader.getObstacles();
         triggerSystem = mapLoader.getTriggerSystem();
     }
-    //init only--------------------------------------------------------------
 
 
-    public void initialGraph(Point2D location){
+    public void initGraph(Point2D location) {
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
-        graphSystem = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
-        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,64,64); //make network
+        graphSystem = new SparseGraph<>(false); //single direction turn off
+        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH, Constants.MAP_HEIGHT,64,64); //make network
         ArrayList<Vector2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
+
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Vector2D vv1 = allNodesLocations.get(index);
             collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32.0,32.0));
@@ -62,49 +59,26 @@ public class GameMap {
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.TrickingTank(new Vector2D(location)));
     }
 
-    /**
-     * Check if home is still alive or not
-     * @return
-     */
-    public boolean isHomeLive(){
-        //return home.isLive();
-        return true;
-    }
-
-    public void setHomeLive(){
-        //home.setLive(true);
-    }
 
     /**
-     * Remove the home wall from map
+     * Removes an obstacle from the game map
      * @param obstacle obstacle to remove
      */
-    public void removeObstacle(GenericObstacle obstacle){
-        obstacles.remove(obstacle);
-    }
+    public void removeObstacle(GenericObstacle obstacle){ obstacles.remove(obstacle); }
 
 
 
-    //clear-----------------------------------------------------------------------
     /**
-     * Clear all objects on the map (up to what kind of objects is designed)
+     * Clears all obstacles in the map
      */
-    public void clearAll(){
-        clearHomeWalls();
-        clearTriggers();
-    }
+    public void clearAll() { clearHomeWalls(); clearTriggers(); }
 
     /**
      * Clean all home walls
      */
-    public void clearHomeWalls(){
-        obstacles.clear();
-    }
+    public void clearHomeWalls() { obstacles.clear(); }
 
-    public void clearTriggers(){
-        triggerSystem.clear();
-    }
-    //clear-----------------------------------------------------------------------
+    public void clearTriggers() { triggerSystem.clear(); }
 
 
     //renderers-------------------------------------------------------------------
@@ -114,26 +88,19 @@ public class GameMap {
      */
 
     public void renderBottomLayer(GraphicsContext gc) {
-        for(GenericObstacle go: obstacles) {
-            if(!go.renderTop()) go.render(gc);
-        }
-        renderTriggers(gc);
+        obstacles.stream().forEach(o -> { if(!o.renderTop()) o.render(gc); });
     }
 
     public void renderTopLayer(GraphicsContext gc) {
-        for(GenericObstacle go: obstacles) {
-            if(go.renderTop()) go.render(gc);
-        }
+        obstacles.stream().forEach(o -> { if(o.renderTop()) o.render(gc); });
     }
 
     public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
         graphSystem.render(gc);     // render network on map
-
-        for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1),gc);
-        // tricking tanks on the map! with red points
+        for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1), gc);
     }
 
-    public void renderTriggers(GraphicsContext gc){
+    public void renderTriggers(GraphicsContext gc) {
         triggerSystem.render(gc);
     }
 
@@ -148,7 +115,6 @@ public class GameMap {
      */
     public void update(Bullet m){
         hitObstacles(m);
-        hitHome(m);
     }
 
     /**
@@ -161,25 +127,10 @@ public class GameMap {
             cw.handleBullet(m);
         }
     }
-    /**
-     * We use the Home Object as parameter for Bullet's hotHome Method
-     * To check if home gets hit
-     * @param m
-     */
-    public void hitHome(Bullet m){
-        //home.handleBullet(m);
-    }
 
-    public void updateObstacles() {
-        Iterator<GenericObstacle> it = obstacles.iterator();
-        while (it.hasNext()) {
-            GenericObstacle curObj = it.next();
 
-                curObj.update();
+    public void updateObstacles() { obstacles.stream().forEach(GenericObstacle::update); }
 
-        }
-    }
-    //hit--------------------------------------------------------------
     private void addWeaponGenerator(){
         WeaponGenerator w = new WeaponGenerator(466, 466, Weapon.ArmourGun, 30,30,30);
         triggerSystem.register(w);
@@ -195,17 +146,10 @@ public class GameMap {
      */
 
     public void update(Character t){
-        collideWithHome(t);
         collideWithObstacles(t);
         collideWithTriggers(t);
     }
-    /**
-     * To determine if a Tank Collides Home and need to turn back
-     * @param t
-     */
-    public void collideWithHome(Character t){
-        //home.handleCharacter(t);
-    }
+
     /**
      * A method to loop all objects, and use as parameter for Collide Method
      * To determine if a Tank Collides such home Walls and need to turn back to it's previous position
@@ -225,8 +169,5 @@ public class GameMap {
         }
     }
 
-    public void collideWithTriggers(Character t){
-        triggerSystem.update(t);
-    }
-    //collide--------------------------------------------------------------
+    public void collideWithTriggers(Character character){ triggerSystem.update(character); }
 }

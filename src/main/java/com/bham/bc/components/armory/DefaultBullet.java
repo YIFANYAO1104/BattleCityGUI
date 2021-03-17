@@ -4,7 +4,6 @@ import com.bham.bc.utils.Constants;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 
@@ -52,7 +51,7 @@ public class DefaultBullet extends Bullet {
 		move();
 
 		if (!exists) {
-			entityManager.RemoveEntity(this);
+			entityManager.removeEntity(this);
 			backendServices.removeBullet(this);
 		}
 	}

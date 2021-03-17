@@ -11,11 +11,6 @@ import javafx.scene.shape.Shape;
  * Desc: required backend services for any mode to properly work
  */
 public interface BackendServices {
-    /**
-     * changes direction of any entity to previous one
-     * @param movingEntity MovingEntity object to be changed
-     */
-    void changeToOldDir(MovingEntity movingEntity);
 
     /**
      * adds enemy to the game
@@ -47,17 +42,17 @@ public interface BackendServices {
      */
     void removeObstacle(GenericObstacle obstacle);
 
-    Shape getHomeHitBox();
+    Shape getPlayerHitBox();
 
     /**
-     * Adding bullets to bullets list
-     * @param m
+     * Adds a bullet to the bullet list
+     * @param bullet bullet to be added to the bullet list
      */
-    void addBullet(Bullet m);
+    void addBullet(Bullet bullet);
 
     /**
-     * Removing bullets to bullets list
-     * @param m
+     * Unregisters the bullet from the game
+     * @param bullet bullet to be removed from the bullet list
      */
-    void removeBullet(Bullet m);
+    void removeBullet(Bullet bullet);
 }

@@ -14,14 +14,12 @@ import javafx.scene.canvas.GraphicsContext;
 import java.util.ArrayList;
 
 public class SurvivalController extends CenterController {
-    /** Initialize an Object Of GameMap*/
-    private GameMap gameMap;
 
     public SurvivalController(){
         super();
         gameMap = new GameMap("/64x64.json");
-        player = new Player(16*32, 16*32);
-        gameMap.initialGraph(player.getPosition());
+        player = new Player(16*32 - Player.WIDTH/2, 16*32-Player.HEIGHT/2);
+        gameMap.initGraph(player.getPosition());
         initEnemies();
     }
 
@@ -124,13 +122,12 @@ public class SurvivalController extends CenterController {
 
     @Override
     public boolean isWin(){
-        return enemies.isEmpty() && gameMap.isHomeLive() && player.exists();
+        return enemies.isEmpty()  && player.exists();
     }
-
 
     @Override
     public boolean isLoss(){
-        return !gameMap.isHomeLive() || !player.exists();
+        return !player.exists();
     }
 
     /**

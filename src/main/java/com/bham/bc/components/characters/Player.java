@@ -142,17 +142,9 @@ public class Player extends Character implements TrackableCharacter {
 	}
 
 	@Override
-	protected void move() {
-		if(!directionSet.isEmpty() && !stop) {
-			x += Math.sin(Math.toRadians(angle)) * speed;
-			y -= Math.cos(Math.toRadians(angle)) * speed;
-		}
-	}
-
-	@Override
 	public void update() {
 		updateAngle();
-		move();
+		move(-1, false);
 		trackableX.set(this.x + WIDTH/2);
 		trackableY.set(this.y + HEIGHT/2);
 	}

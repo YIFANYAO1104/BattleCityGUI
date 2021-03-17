@@ -82,8 +82,8 @@ public class MessageDispatcher {
         /**
          * Get the reference to the sender and receiver
          */
-        BaseGameEntity pSender = entityManager.GetEntityFromID(sender);
-        BaseGameEntity pReceiver = entityManager.GetEntityFromID(receiver);
+        BaseGameEntity pSender = entityManager.getEntityFromID(sender);
+        BaseGameEntity pReceiver = entityManager.getEntityFromID(receiver);
 
         /**
          * Make Sure Receiver is valid or it will printout warnings,and return
@@ -156,7 +156,7 @@ public class MessageDispatcher {
 
             final Telegram telegram = PriorityQ.last();
 
-            BaseGameEntity pReceiver = entityManager.GetEntityFromID(telegram.Receiver);
+            BaseGameEntity pReceiver = entityManager.getEntityFromID(telegram.Receiver);
 
             System.out.println("\nQueued telegram ready for dispatch: Sent to "
                     + pReceiver.toString() + ". Msg is " + MsgToStr(telegram.Msg));

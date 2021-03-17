@@ -4,6 +4,7 @@ import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.physics.BombTank;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -22,19 +23,6 @@ public class ChallengeController extends CenterController {
     public ChallengeController(){
         super();
         player = new Player(16*32, 16*32);
-        initEnemies();
-    }
-
-
-    /**
-     * A method to generate certain number of Enemy Tanks
-     * Adding created Objects into enemyTanks(list)
-     */
-    private void initEnemies() {
-        enemies.add(new Enemy(16*3, 16*3));
-        enemies.add(new Enemy(16*61, 16*3));
-        enemies.add(new Enemy(16*3, 16*61));
-        enemies.add(new Enemy(16*61, 16*61));
     }
 
     /**
@@ -43,21 +31,7 @@ public class ChallengeController extends CenterController {
 
     @Override
     public void update() {
-
-        if (enemies.isEmpty()) initEnemies();
-        //move-----------------
         player.update();
-        for (Enemy e : enemies) {
-            e.update();
-        }
-        //move-----------------
-
-        //tanks----------------------------------
-        player.intersectsEnemies(enemies);
-        for (Enemy e : enemies) {
-            e.collideWithTanks(enemies);
-        }
-        //tanks----------------------------------
         /**
          * Use nested For Loop to update game state
          * Keep Tracking Bullets to see if Bullets hit Bullets, and Updates game state (Inner Loop)
@@ -69,7 +43,6 @@ public class ChallengeController extends CenterController {
         for (int i = 0; i < bullets.size(); i++) {
             Bullet m = bullets.get(i);
             m.update();
-            m.intersectsEnemies(enemies);
             m.hitTank(player);
             for(int j=0;j<bullets.size();j++){
                 if (i==j) continue;
@@ -81,26 +54,11 @@ public class ChallengeController extends CenterController {
 
     @Override
     public void render(GraphicsContext gc) {
-        /**
-         *  The order of Render does matter
-         *  The latter render will cover the previous render
-         *  For example,rending Tree at the end leads to successfully Shading
-         */
-
         for (int i = 0; i < bullets.size(); i++) {
             Bullet t = bullets.get(i);
             t.render(gc);
         }
 
-        //the blood bar is here. But it's covered currently
         player.render(gc);
-        for (int i = 0; i < enemies.size(); i++) {
-            Enemy t = enemies.get(i);
-            t.render(gc);
-        }
-        for (int i = 0; i < bombTanks.size(); i++) {
-            BombTank bt = bombTanks.get(i);
-            bt.render(gc);
-        }
     }
 }

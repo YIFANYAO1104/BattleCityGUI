@@ -36,8 +36,6 @@ public class Impassable extends GenericObstacle {
 
     @Override
     public void handleCharacter(Character c) {
-        if(intersects(c)){
-            backendServices.changeToOldDir(c);
-        }
+
     }
 }

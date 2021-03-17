@@ -11,8 +11,6 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 
 public class JsonMapLoader extends MapLoader {
-    private int mapWidth;
-    private int mapHeight;
     private int tileWidth;
     private int tileHeight;
 

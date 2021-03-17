@@ -40,8 +40,6 @@ public class Hard extends GenericObstacle {
 
     @Override
     public void handleCharacter(Character t) {
-        if(t.exists() && this.intersects(t)){
-            backendServices.changeToOldDir(t);
-        }
+
     }
 }

@@ -24,8 +24,7 @@ public class EntityManager {
      */
     private EntityMap m_EntityMap = new EntityMap();
 
-    public EntityManager() {
-    }
+    public EntityManager() { }
 
     //copy ctor and assignment should be private
     private EntityManager(EntityManager cs) {
@@ -49,7 +48,7 @@ public class EntityManager {
      * By create new EntityID-EntityObject paired Entry and put into HashMap
      * @param NewEntity
      */
-    public void RegisterEntity(BaseGameEntity NewEntity) {
+    public void registerEntity(BaseGameEntity NewEntity) {
         m_EntityMap.put(NewEntity.getID(), NewEntity);
 //        System.out.println("register id :"+NewEntity.ID()+" with type: "+ NewEntity.toString() );
     }
@@ -59,7 +58,7 @@ public class EntityManager {
      * @param id
      * @return
      */
-public BaseGameEntity GetEntityFromID(int id) {
+public BaseGameEntity getEntityFromID(int id) {
         //find the entity
         BaseGameEntity ent = m_EntityMap.get(id);
 
@@ -73,7 +72,7 @@ public BaseGameEntity GetEntityFromID(int id) {
      * Remove the EntityID-EntityObject paired entry from HashMap
      * @param pEntity
      */
-    public void RemoveEntity(BaseGameEntity pEntity) {
+    public void removeEntity(BaseGameEntity pEntity) {
         //m_EntityMap.erase(m_EntityMap.find(pEntity.ID()));
         m_EntityMap.remove(pEntity.getID());
     }

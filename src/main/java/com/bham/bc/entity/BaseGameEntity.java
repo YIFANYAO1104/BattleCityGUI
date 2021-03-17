@@ -36,7 +36,7 @@ abstract public class BaseGameEntity {
 
     protected BaseGameEntity(int ID, double x, double y) {
         SetID(ID);
-        entityManager.RegisterEntity(this);
+        entityManager.registerEntity(this);
         this.x = x;
         this.y = y;
     }

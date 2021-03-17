@@ -22,7 +22,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     protected MovingEntity(double x, double y, double speed) {
         super(GetNextValidID(), x, y);
         this.speed = speed;
-        this.angle = 0;
+        angle = 0;
         exists = true;
     }
 
@@ -48,9 +48,7 @@ public abstract class MovingEntity extends BaseGameEntity {
 
     /**
      * Checks if this entity exists
-     *
      * @return true if it exists and false otherwise
-     *
      * TODO: check if it is possible to simply remove the instance without any checks
      */
     public boolean exists() { return exists; }

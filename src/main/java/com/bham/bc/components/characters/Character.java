@@ -43,4 +43,31 @@ abstract public class Character extends MovingEntity {
 
     public void switchWeapon(Weapon w) {}
     public void increaseHP(int health) {}
+
+
+    /**
+     * Overload
+     * @param speedMultiplier
+     * @param force boolean indicating if the character should move even if the directionSet is empty
+     */
+    protected void move(double speedMultiplier, boolean force) {
+        double deltaX = Math.sin(Math.toRadians(angle)) * speed;
+        double deltaY = Math.cos(Math.toRadians(angle)) * speed;
+
+        if(force) {
+            x += deltaX * speedMultiplier;
+            y -= deltaY * speedMultiplier;
+        } else if(!directionSet.isEmpty()) {
+            x += deltaX * speedMultiplier;
+            y -= deltaY * speedMultiplier;
+        }
+    }
+
+    @Override
+    protected void move() {
+        if(!directionSet.isEmpty()) {
+            x += Math.sin(Math.toRadians(angle)) * speed;
+            y -= Math.cos(Math.toRadians(angle)) * speed;
+        }
+    }
 }

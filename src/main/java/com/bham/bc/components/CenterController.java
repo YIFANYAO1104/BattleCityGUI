@@ -1,6 +1,7 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
@@ -24,11 +25,29 @@ import javafx.scene.shape.Shape;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.bham.bc.entity.EntityManager.entityManager;
+
 public abstract class CenterController extends BaseGameEntity implements FrontendServices, BackendServices {
 
     public static FrontendServices frontendServices;
     public static BackendServices backendServices;
 
+    protected Boolean win = false, lose = false;
+    protected GameMap gameMap;
+    protected Player player;
+    protected List<Enemy> enemies = new ArrayList<>();
+    protected List<BombTank> bombTanks = new ArrayList<>();
+    protected List<Bullet> bullets = new ArrayList<>();
+
+    /**
+     * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
+     */
+    public CenterController(){ super(GetNextValidID(),-1,-1); }
+
+    /**
+     * Sets the mode of the game the user has chosen
+     * @param mode SURVIVAL or CHALLENGE value to be passed as a game mode
+     */
     public static void setMode(MODE mode){
         CenterController centerController = null;
         switch (mode) {
@@ -44,65 +63,23 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         backendServices = centerController;
     }
 
-    /**
-     * The message to indicate Victory Or Defeat
-     */
-    protected Boolean win=false,lose=false;
-    /** Initialize HomeTank(Player Tank)*/
-    protected Player player;
-    /** Initialize a Container of Enemy Tanks */
-    protected List<Enemy> enemies = new ArrayList<Enemy>();
-    /** Initialize a Container of Tanks that got bombed and hit*/
-    protected List<BombTank> bombTanks = new ArrayList<BombTank>();
-    /** Initialize a Container of All Bullets created by All Tanks*/
-    protected List<Bullet> bullets = new ArrayList<Bullet>();
 
 
-
-    //These are functions that might be used by frontend----------------------------------------------------
-    /**
-     * Method to determine if player wins the game
-     * @return
-     */
-    public abstract boolean isWin();
-
-    /**
-     * Status to indicates defeat
-     * Home destroyed OR Player Tank dead
-     * @return
-     */
-    public abstract boolean isLoss();
 
     /**
      * Get the number of enemy tanks from enemy tank list
      * @return
      */
-    public int getEnemyNumber(){
-        return enemies.size();
-    }
-    /**
-     *
-     * @return Current HP of Player Tank
-     */
-    public int getLife(){
-        return player.getHp();
-    }
-    /**
-     * A method to monitor the actions from keyBoard
-     * Which Key is released and use as Parameter to determine Player Tank's Action
-     * @param e
-     */
-    public void keyReleased(KeyEvent e){
-        player.keyReleased(e);
-    }
-    /**
-     * A method to monitor the actions from keyBoard
-     * Which Key is pressed and use as Parameter to determine Player Tank's Action
-     * @param e
-     */
-    public void keyPressed(KeyEvent e){
-        player.keyPressed(e);
-    }
+    public int getEnemyNumber(){ return enemies.size(); }
+
+    @Override
+    public int getLife() { return player.getHp(); }
+
+    @Override
+    public void keyReleased(KeyEvent e){ player.keyReleased(e); }
+
+    @Override
+    public void keyPressed(KeyEvent e){ player.keyPressed(e); }
 
     public TrackableCharacter getHomeTank(){
         return player;
@@ -123,90 +100,51 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
         hitBoxPane.getChildren().addAll(playerHitBox, mapConstrain);
     }
-    //These are functions that might be used by frontend----------------------------------------------------
 
 
     /**
-     * Clear all objects on tht map
+     * Clear all objects in the map
      */
     public void clear(){
         enemies.clear();
         bullets.clear();
         bombTanks.clear();
-//        homeTank.setLive(false);
-    }
-    //These are functions that might be used by frontend----------------------------------------------------
-
-    /**
-     * Constructor of CenterController
-     */
-    public CenterController(){
-        super(GetNextValidID(),-1,-1);
     }
 
-
-
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Cloning not allowed");
-    }
-
-
-    //These are functions that might be used by backend----------------------------------------------------
-    //For example, bullet created a bomb 'b', it will call addBombTank(b), but not bombTanks.add(b);
-    //By this, we could protect the memebers in CenterController
-
-    /** The calling from each other member must implements the centerController Interface*/
-    /**
-     * Turn Back
-     * @param t
-     */
-    public void changeToOldDir(MovingEntity t){
-        //t.changToOldDir();
-    }
-
+    @Override
     public void addEnemy(Enemy enemy) { return; }
 
-    public void removeEnemy(Enemy enemy){
+    @Override
+    public void removeEnemy(Enemy enemy) {
+        entityManager.removeEntity(enemy);
         enemies.remove(enemy);
     }
 
-    /**
-     * Adding bombtank to bomb tank list
-     * @param b
-     */
+    @Override
+    public void removeObstacle(GenericObstacle go) {
+        gameMap.removeObstacle(go);
+    }
+
+    @Override
     public void addBombTank(BombTank b){
         bombTanks.add(b);
     }
 
-    /**
-     * Remove bomb tank from bomb tank list
-     * @param b
-     */
+    @Override
     public void removeBombTank(BombTank b){
         bombTanks.remove(b);
     }
 
     @Override
-    public Shape getHomeHitBox(){ return player.getHitBox(); }
-
-    /**
-     * Adding bullets to bullets list
-     * @param m
-     */
-    public void addBullet(Bullet m){
-        bullets.add(m);
-    }
-
-    /**
-     * Removing bullets to bullets list
-     * @param m
-     */
-    public void removeBullet(Bullet m){
-        bullets.remove(m);
-    }
+    public Shape getPlayerHitBox() { return player.getHitBox(); }
 
     @Override
-    public void removeObstacle(GenericObstacle go) {
+    public void addBullet(Bullet bullet){ bullets.add(bullet); }
+
+    @Override
+    public void removeBullet(Bullet bullet){
+        entityManager.removeEntity(bullet);
+        bullets.remove(bullet);
     }
 
     @Override
@@ -221,7 +159,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     @Override
     public String toString() {
-        return "Centerctroller";
+        return "Center Controller";
     }
 
     @Override

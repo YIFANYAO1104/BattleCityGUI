@@ -3,7 +3,7 @@ package com.bham.bc.entity;
 import javafx.geometry.Point2D;
 
 /**
- * Represents 4 valid directions: up, down, left, right.
+ * Represents 4 valid directions: up, down, left, right
  */
 public enum DIRECTION {
 	U(0, 1),
@@ -23,7 +23,6 @@ public enum DIRECTION {
 
 	/**
 	 * Gets the value of enum as a point (basis vector)
-	 *
 	 * @return Point2D object with one coordinate in specific direction defined by this enum value
 	 */
 	public Point2D toPoint() { return point2D; }
