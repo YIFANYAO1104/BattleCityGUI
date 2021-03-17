@@ -3,8 +3,10 @@
  */
 package com.bham.bc.components.environment.triggers;
 
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.Constants;
+import com.bham.bc.utils.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.Character;
@@ -15,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class HealthGiver extends RespawnTrigger<Character> {
+public class HealthGiver extends RespawnTrigger<Character>{
 
     public static int width = Constants.TILE_WIDTH;
     public static int length = Constants.TILE_WIDTH;
@@ -37,7 +39,7 @@ public class HealthGiver extends RespawnTrigger<Character> {
     }
 
     private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/Map/hp.png"), };
+        entityImages = new Image[] {new Image("file:src/main/resources/img/tiles/hp.png"), };
     }
 
     //if triggered, the bot's health will be incremented
@@ -76,5 +78,10 @@ public class HealthGiver extends RespawnTrigger<Character> {
     @Override
     public boolean intersects(BaseGameEntity b) {
         return false;
+    }
+
+    @Override
+    public ItemType getItemType() {
+        return ItemType.health;
     }
 }

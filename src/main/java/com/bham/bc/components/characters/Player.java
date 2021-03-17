@@ -4,6 +4,7 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.components.environment.triggers.Weapon;
@@ -86,15 +87,21 @@ public class Player extends Character implements TrackableCharacter {
 		gc.setFill(c);
 	}
 
-	public void createNewRequest(GameMap gm){
+	public void createNewRequestItem(GameMap gm){
 		navigationService = new PathPlanner(this,gm.getGraph());
-		Point2D aim = new Point2D(450,550);
-		navigationService.createRequest(aim);
+		navigationService.createRequest(ItemType.health);
 		if(navigationService.peekRequestStatus()==0){
 			// do sth
 		}
 	}
 
+	public void createNewRequestAStar(GameMap gm){
+		navigationService = new PathPlanner(this,gm.getGraph());
+		navigationService.createRequest(new Point2D(0,0));
+		if(navigationService.peekRequestStatus()==0){
+			// do sth
+		}
+	}
 	/**
 	 * Render Method
 	 * Use directions to determine the image of Player Tank

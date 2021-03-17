@@ -6,9 +6,10 @@ package com.bham.bc.entity.triggers;
 
 
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.graph.ExtraInfo;
 import javafx.geometry.Point2D;
 
-abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGameEntity {
+abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGameEntity implements ExtraInfo {
 
     /**
      * Every trigger owns a trigger region. If an entity comes within this

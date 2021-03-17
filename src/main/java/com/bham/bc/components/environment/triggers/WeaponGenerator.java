@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment.triggers;
 
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
@@ -66,4 +67,8 @@ public class WeaponGenerator extends RespawnTrigger<Character> {
     }
 
 
+    @Override
+    public ItemType getItemType() {
+        return ItemType.weapon;
+    }
 }

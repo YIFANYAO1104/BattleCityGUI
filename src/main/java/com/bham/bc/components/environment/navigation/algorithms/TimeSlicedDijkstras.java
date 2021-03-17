@@ -1,5 +1,7 @@
 package com.bham.bc.components.environment.navigation.algorithms;
 
+import com.bham.bc.components.environment.navigation.ItemType;
+import com.bham.bc.components.environment.navigation.algorithms.terminationPolicies.TerminationCondition;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
@@ -11,25 +13,30 @@ import java.util.*;
  * Dijkstra's algorithm class modified to spread a search over multiple
  * update-steps
  */
-public class TimeSlicedDijkstras//<termination_condition extends TerminationCondition>
+public class TimeSlicedDijkstras<termination_condition extends TerminationCondition>
         extends TimeSlicedAlgorithm {
 
     private final SparseGraph navGraph;
     private int source;
     private int target;
+    private ItemType targetType;
     ArrayList<Integer> parent;
     ArrayList<Double> distance;
     Set<Integer> seen;
     Queue<MyPairs> pq;
 
+    termination_condition tm;
+
 
     public TimeSlicedDijkstras(final SparseGraph G,
                                int source,
-                               int target
-            /*termination_condition TerminationCondition*/) {
+                               ItemType targetType,
+                                termination_condition terminationCondition) {
         this.navGraph = G;
         this.source = source;
-        this.target = target;
+        this.target = -1;
+        this.targetType = targetType;
+        this.tm = terminationCondition;
 
 
         int number = this.navGraph.numNodes();
@@ -58,6 +65,11 @@ public class TimeSlicedDijkstras//<termination_condition extends TerminationCond
             int node = pair.getKey();
             seen.add(node);
 
+            if (tm.isSatisfied(navGraph, targetType, node)) {
+                target = node;
+                return 0;
+            }
+
             SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(this.navGraph, node);
 
             //for each edge connected to the next closest node
@@ -73,7 +85,7 @@ public class TimeSlicedDijkstras//<termination_condition extends TerminationCond
                 }
             }
         }
-        return 0;
+        return 1;
     }
 
     public double getDistance(int target) {

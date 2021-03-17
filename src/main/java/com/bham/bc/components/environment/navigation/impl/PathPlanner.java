@@ -5,6 +5,7 @@ import com.bham.bc.components.environment.navigation.NavigationService;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAStar;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedDijkstras;
+import com.bham.bc.components.environment.navigation.algorithms.terminationPolicies.FindActiveTrigger;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
@@ -76,7 +77,7 @@ public class PathPlanner implements NavigationService {
         }
         //create algorithm instance
         //TODO: create Termination Condition - target
-        curSearchTask = new TimeSlicedDijkstras(navGraph,closestNodeToPlayer,0);
+        curSearchTask = new TimeSlicedDijkstras(navGraph,closestNodeToPlayer,itemType,new FindActiveTrigger());
         //register task in time slice service
         return true;
     }
@@ -104,8 +105,7 @@ public class PathPlanner implements NavigationService {
             return false;
         }
         //create algorithm instance
-//        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
-        curSearchTask = new TimeSlicedDijkstras(navGraph, closestNodeToPlayer, closestNodeToTarget);
+        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
         //register task in time slice service
 
         return true;
@@ -137,12 +137,12 @@ public class PathPlanner implements NavigationService {
                 new PathEdge(owner.getPosition(), navGraph.getNode(closest).Pos())
         );
 
-        PathEdge lastEdge = path.get(path.size()-1);
-        if(!lastEdge.getDestination().equals(destinationPos)){//add end note if request is position
-            path.add(new PathEdge(path.get(path.size() - 1).getDestination(),
-                    this.destinationPos)
-            );
-        }
+//        PathEdge lastEdge = path.get(path.size()-1);
+//        if(!lastEdge.getDestination().equals(destinationPos)){//add end note if request is position
+//            path.add(new PathEdge(path.get(path.size() - 1).getDestination(),
+//                    this.destinationPos)
+//            );
+//        }
 
         //smooth path
 

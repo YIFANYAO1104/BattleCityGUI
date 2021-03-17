@@ -12,7 +12,6 @@ import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.utils.graph.SparseGraph;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Rectangle;
 
 
 import java.util.ArrayList;
@@ -48,7 +47,8 @@ public class SurvivalController extends CenterController {
     @Override
     public void removeObstacle(GenericObstacle go) {
         gameMap.removeObstacle(go);
-        player.createNewRequest(gameMap);
+        player.createNewRequestItem(gameMap);//每个pathpalnner只有一个任务
+//        player.createNewRequestAStar(gameMap);
         gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
     }
 

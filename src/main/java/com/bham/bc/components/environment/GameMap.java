@@ -1,8 +1,11 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
+import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.entity.triggers.TriggerSystem;
 import com.bham.bc.components.characters.Character;
 import com.bham.bc.utils.Constants;
@@ -35,7 +38,7 @@ public class GameMap {
 
     private SparseGraph graphSystem;
 
-    private ArrayList<GraphNode> a2; // temp value to render the graphlines
+//    private ArrayList<GraphNode> a2; // temp value to render the graphlines
 
 
 
@@ -47,9 +50,16 @@ public class GameMap {
         MapLoader mapLoader = new JsonMapLoader(mapType.getName());
         obstacles = mapLoader.getObstacles();
         triggerSystem = mapLoader.getTriggerSystem();
+        initTriggers();
     }
     //init only--------------------------------------------------------------
 
+    public void initTriggers(){
+        HealthGiver hg = new HealthGiver(400,400,10,100);
+        HealthGiver hg1 = new HealthGiver(800,400,10,100);
+        triggerSystem.register(hg);
+        triggerSystem.register(hg1);
+    }
 
     public void initialGraph(Point2D location){
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
@@ -65,7 +75,14 @@ public class GameMap {
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(new Vector2D(location)));
         Point2D aim = new Point2D(450,550);
         Point2D lloc = new Point2D(584,616);
-        a2 = hgf.Astar(graphSystem,location,aim);
+//        a2 = hgf.Astar(graphSystem,location,aim);
+
+        //let the corresponding navgraph node point to triggers object
+        ArrayList<Trigger> triggers = triggerSystem.getTriggers();
+        for (Trigger trigger : triggers) {
+            NavNode<Trigger<Character>> node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(new Vector2D(trigger.getX(),trigger.getY())).Index());
+            node.setExtraInfo(trigger);
+        }
     }
 
     /**
