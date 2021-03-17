@@ -45,6 +45,12 @@ public class SurvivalController extends CenterController {
      /** Overriding Method to indicates Game Logic \
      */
 
+    @Override
+    public void removeObstacle(GenericObstacle go) {
+        gameMap.removeObstacle(go);
+        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
+    }
+
 
     @Override
     public void update() {
@@ -90,6 +96,7 @@ public class SurvivalController extends CenterController {
             gameMap.update(m);
         }
         gameMap.updateObstacles();
+
     }
 
     @Override

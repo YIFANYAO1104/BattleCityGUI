@@ -1,10 +1,14 @@
 package com.bham.bc.utils.graph;
 
+
 import com.bham.bc.utils.graph.algrithem.Floodfill;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
+import com.bham.bc.utils.graph.algrithem.astar.Astar;
+import javafx.geometry.Point2D;
+
 
 import static com.bham.bc.utils.graph.node.Vector2D.Vec2DDistance;
 
@@ -35,8 +39,12 @@ public class HandyGraphFunctions {
                 int nodeX = col + j;
                 int nodeY = row + i;
 
-                //skip if equal to this node
-                if (!(i+j==1)) {                 ///changajhsdkjahadskjsdhkdshaksdahkjdsjkdshkjasdhkj!!
+
+//                if (!(i+j==1)) {                 ///now is 4 direction
+//                    continue;
+//                }
+
+                if ((i == 0) && (j == 0)) {         // It is 8 direction
                     continue;
                 }
 
@@ -118,6 +126,14 @@ public class HandyGraphFunctions {
         return fl.stratFLood(sg);
     }
 
+    public ArrayList<GraphNode> Astar(SparseGraph sg, Point2D root, Point2D goal){
+//        Astar astar = new Astar(sg, new Vector2D(root), new Vector2D(goal));
+        GraphNode root1 = sg.TrickingTank(new Vector2D(root) );
+        GraphNode goal1 = sg.TrickingTank(new Vector2D(goal) );
+        Astar astar = new Astar(root1, goal1, sg);
+        return astar.search();
+
+    }
 
 
     /**
