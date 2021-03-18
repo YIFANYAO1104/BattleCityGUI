@@ -56,7 +56,7 @@ public class GameMap {
 
     public void initTriggers(){
         HealthGiver hg = new HealthGiver(400,400,10,100);
-        HealthGiver hg1 = new HealthGiver(800,400,10,100);
+        HealthGiver hg1 = new HealthGiver(600,400,10,100);
         triggerSystem.register(hg);
         triggerSystem.register(hg1);
     }

@@ -2,13 +2,12 @@ package com.bham.bc.components.environment.navigation.impl;
 
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
+import com.bham.bc.components.environment.navigation.algorithms.SearchStatus;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAStar;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedDijkstras;
 import com.bham.bc.components.environment.navigation.algorithms.terminationPolicies.FindActiveTrigger;
 import com.bham.bc.utils.graph.SparseGraph;
-import com.bham.bc.utils.graph.edge.GraphEdge;
-import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 import javafx.geometry.Point2D;
@@ -40,13 +39,16 @@ public class PathPlanner implements NavigationService {
      */
     private Point2D destinationPos;
 
-    // temp value to render the graphlines
-    List<PathEdge> a2 = new ArrayList<PathEdge>();
+    private int taskStatus;
+
+    // temp value to render the graphlines and getPath
+    List<PathEdge> curPath = new ArrayList<PathEdge>();
 
     public PathPlanner(Character owner, SparseGraph navGraph) {
         this.owner = owner;
         this.navGraph = navGraph;
         curSearchTask =null;
+        taskStatus = SearchStatus.search_incomplete;
     }
 
     /**
@@ -78,6 +80,7 @@ public class PathPlanner implements NavigationService {
         //create algorithm instance
         //TODO: create Termination Condition - target
         curSearchTask = new TimeSlicedDijkstras(navGraph,closestNodeToPlayer,itemType,new FindActiveTrigger());
+        taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
         return true;
     }
@@ -106,6 +109,7 @@ public class PathPlanner implements NavigationService {
         }
         //create algorithm instance
         curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
+        taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
 
         return true;
@@ -113,12 +117,17 @@ public class PathPlanner implements NavigationService {
 
     @Override
     public int peekRequestStatus() {
+        //return status directly if the search is finished
+        if (taskStatus != SearchStatus.search_incomplete) return taskStatus;
+        //else carry on searching
         int result = curSearchTask.cycleOnce();
         //System.out.println(a2);
-        if (result == 0){
-             a2 = getPath();
-        }
         return result;
+    }
+
+    private Point2D getCenter(Point2D topLeft, Point2D radius){
+        //add used deepcopy
+        return topLeft.add(radius.multiply(0.5));
     }
 
     /**
@@ -127,14 +136,16 @@ public class PathPlanner implements NavigationService {
      * @return a list of PathEdges
      */
     public List<PathEdge> getPath() {
-
+        //return path directly if the search is finished
+        if (taskStatus != SearchStatus.search_incomplete) return curPath;
         //fetch path list from 'task'
-        List<PathEdge> path = curSearchTask.getPathAsPathEdges();
+        curPath = curSearchTask.getPathAsPathEdges();
         //get closest node around current position
         int closest = getClosestNode(owner.getPosition());
         //add start and end node
-        path.add(0,
-                new PathEdge(owner.getPosition(), navGraph.getNode(closest).Pos())
+
+        curPath.add(0,
+                new PathEdge(getCenter(owner.getPosition(),owner.getRadius()), navGraph.getNode(closest).Pos())
         );
 
 //        PathEdge lastEdge = path.get(path.size()-1);
@@ -147,7 +158,7 @@ public class PathPlanner implements NavigationService {
         //smooth path
 
 
-        return path;
+        return curPath;
     }
 
     /**
@@ -175,7 +186,7 @@ public class PathPlanner implements NavigationService {
     @Override
     public void render(GraphicsContext gc) {
         //draw edges
-        for (PathEdge graphEdge : a2) {
+        for (PathEdge graphEdge : curPath) {
             Point2D n1 = graphEdge.getSource();
             Point2D n2 = graphEdge.getDestination();
             gc.setStroke(Color.RED);

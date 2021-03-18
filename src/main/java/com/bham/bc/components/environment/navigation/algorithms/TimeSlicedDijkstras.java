@@ -75,6 +75,7 @@ public class TimeSlicedDijkstras<termination_condition extends TerminationCondit
             //for each edge connected to the next closest node
             for (GraphEdge pE = ConstEdgeItr.begin(); !ConstEdgeItr.end(); pE = ConstEdgeItr.next()){
                 int tempNode = pE.To();
+                if (!navGraph.getNode(tempNode).isValid()) continue;
                 if (!seen.contains(tempNode)){
                     double newCost = dist + pE.Cost();
                     if (newCost < distance.get(tempNode)){

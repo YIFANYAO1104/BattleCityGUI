@@ -91,7 +91,7 @@ public class Player extends Character implements TrackableCharacter {
 		navigationService = new PathPlanner(this,gm.getGraph());
 		navigationService.createRequest(ItemType.health);
 		if(navigationService.peekRequestStatus()==0){
-			// do sth
+			navigationService.getPath();
 		}
 	}
 
@@ -99,7 +99,7 @@ public class Player extends Character implements TrackableCharacter {
 		navigationService = new PathPlanner(this,gm.getGraph());
 		navigationService.createRequest(new Point2D(0,0));
 		if(navigationService.peekRequestStatus()==0){
-			// do sth
+			navigationService.getPath();
 		}
 	}
 	/**
