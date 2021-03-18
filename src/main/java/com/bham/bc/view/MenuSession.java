@@ -55,12 +55,16 @@ public class MenuSession {
         audioManager.play();
     }
 
-    public static void initPauseMenu(AnchorPane gamePane) {
-        gamePane.getChildren().addAll(pauseMenu);
+    public static void showPauseMenu(AnchorPane gamePane) {
+        if(gamePane.getChildren().contains(pauseMenu)) {
+            gamePane.getChildren().remove(pauseMenu);
+        } else {
+            gamePane.getChildren().add(pauseMenu);
+        }
+
     }
 
     private MainMenu getMainMenu() { return mainMenu; }
-    private PauseMenu getPauseMenu() { return pauseMenu; }
     private EndMenu getEndMenu(double score) { return new EndMenu(); }
 
 

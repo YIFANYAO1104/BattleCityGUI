@@ -1,34 +1,24 @@
 package com.bham.bc.view;
 
 import com.bham.bc.utils.Constants;
-import com.bham.bc.view.menu.CustomMenuSubscene;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.beans.value.ChangeListener;
-
-import java.io.File;
 
 
 /**
@@ -80,6 +70,7 @@ public class CustomStage {
         setMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
+                /*
                 if (GameSession.isshown==false){
                     CustomMenuSubscene customMenuSubscene =new CustomMenuSubscene();
                     customMenuSubscene.getStage(stage);
@@ -88,6 +79,7 @@ public class CustomStage {
                     gamePane.getChildren().add(customMenuSubscene);
                     GameSession.isshown=true;}
 
+                 */
             }
         });
         setMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -104,6 +96,7 @@ public class CustomStage {
         gamescene.getAccelerators().put(keyCodeCombination, new Runnable() {
             @Override
             public void run() {
+                /*
                 if (GameSession.isshown==false){
                     CustomMenuSubscene customMenuSubscene =new CustomMenuSubscene();
                     customMenuSubscene.getStage(stage);
@@ -111,6 +104,8 @@ public class CustomStage {
 //                    customMenuSubscene.createDeafultSubscene();
                     gamePane.getChildren().add(customMenuSubscene);
                     GameSession.isshown=true;}
+
+                 */
 
             }
         });

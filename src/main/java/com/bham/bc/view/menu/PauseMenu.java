@@ -36,8 +36,8 @@ public class PauseMenu extends AnchorPane{
         this.setLayoutX(250);
         this.setLayoutY(300);
 
-        createSubMenuPause();
         initBgDim();
+        createSubMenuPause();
         subMenuPause.show();
 
     }
@@ -53,7 +53,7 @@ public class PauseMenu extends AnchorPane{
         
         subMenuPause=new SubMenu(this);
         subMenuPause.getChildren().addAll(btnResume,btnSettings,btnEndGame);
-        subMenuPause.setOpacity(0.8);
+        //subMenuPause.setOpacity(0.8);
 
     }
     /**

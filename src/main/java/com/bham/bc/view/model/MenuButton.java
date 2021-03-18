@@ -1,6 +1,7 @@
 package com.bham.bc.view.model;
 
 import javafx.animation.FillTransition;
+import javafx.animation.Transition;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
@@ -13,6 +14,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+
+import static com.bham.bc.audio.SFX.SELECT;
 
 /**
  *The Class MenuButton imports StackPane which contains a single property named alignment.
@@ -31,8 +34,6 @@ public class MenuButton extends StackPane {
     /**
      * @param name The name of each button.
      */
-
-
     public MenuButton(String name) {
         LinearGradient gradient = new LinearGradient(
                 0, 0.5, 1, 0.5, true, CycleMethod.NO_CYCLE,
@@ -46,7 +47,7 @@ public class MenuButton extends StackPane {
                 bg1, Color.web("black", 0.2), Color.web("white", 0.3));
 
         ft.setAutoReverse(true);
-        ft.setCycleCount(Integer.MAX_VALUE);
+        ft.setCycleCount(Transition.INDEFINITE);
 
         hoverProperty().addListener((o, oldValue, isHovering) -> {
             if (isHovering) {
@@ -75,7 +76,10 @@ public class MenuButton extends StackPane {
         );
 
 
-        setOnMousePressed(e -> bg0.setFill(Color.LIGHTBLUE));
+        setOnMousePressed(e -> {
+            bg0.setFill(Color.LIGHTBLUE);
+            SELECT.play();
+        });
 
         setOnMouseReleased(e -> bg0.setFill(gradient));
 

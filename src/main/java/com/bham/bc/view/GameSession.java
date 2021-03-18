@@ -72,8 +72,8 @@ public class GameSession {
         gameScene.getAccelerators().put(keyCodeCombination, new Runnable() {
             @Override
             public void run() {
-                System.out.println("press initPauseMenu");
-                MenuSession.initPauseMenu(gamePane);
+                System.out.println("press showPauseMenu");
+                MenuSession.showPauseMenu(gamePane);
             }
         });
 
