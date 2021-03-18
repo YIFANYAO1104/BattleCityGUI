@@ -41,14 +41,10 @@ public class Soft extends GenericObstacle {
             hp -= b.getDamage();
             b.destroy();
 
-            System.out.println(hp);
-
-
             if(hp <= 0) {
                 exists = false;
                 entityManager.removeEntity(this);
             }
-            System.out.println(exists);
         }
     }
 

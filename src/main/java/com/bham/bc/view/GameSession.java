@@ -108,13 +108,7 @@ public class GameSession {
      * @returns true if game ended and false otherwise
      */
     private boolean gameEnded() {
-        if(frontendServices.isLoss()){
-            gc.setFill(Color.GREEN);
-            gc.setFont(new Font("Times New Roman", 40));
-            gc.fillText("Sowwy. You lose!", 200, 300);
-
-            return true;
-        } else if(frontendServices.isWin()){
+        if(frontendServices.isGameOver()){
             gc.setFill(Color.GREEN);
             gc.setFont(new Font("Times New Roman", 40));
             gc.fillText("Congratulations!", 200, 300);
@@ -123,6 +117,21 @@ public class GameSession {
         }
 
         return false;
+    }
+
+    private void tick() {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        frontendServices.render(gc);
+        frontendServices.renderHitBoxes(hbPane);
+        renderScoreBoard();
+
+        cmr.update();
+        backendServices.update();
+
+        if (gameEnded()) {
+            backendServices.clear();
+            gameTimer.stop();
+        }
     }
 
     /**
@@ -135,41 +144,13 @@ public class GameSession {
             public void handle(long now) {
                 if(lastTick == 0) {
                     lastTick = now;
-                    // Would be better to wrap rendering into one function
-                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
-                    frontendServices.render(gc);                                      // Render backend content
-
-                    frontendServices.renderHitBoxes(hbPane);                                      // Render backend content
-
-                    renderScoreBoard();                                               // Render backend content
-                    cmr.update();
-                    frontendServices.update();                                        // Update backend content
-
-                    // Would be better for the backend to trigger
-                    // this state so that less checks are performed
-                    if (gameEnded()) {                                                 // Stop game loop if game ended
-                        frontendServices.clear();
-                        gameTimer.stop();
-                    }
+                    tick();
                     return;
                 }
 
                 if(now - lastTick > 1_000_000_000 / 20) {
                     lastTick = now;
-                    // Would be better to wrap rendering into one function
-                    gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
-                    frontendServices.render(gc);                                      // Render backend content
-                    frontendServices.renderHitBoxes(hbPane);
-                    renderScoreBoard();                                               // Render backend content
-                    cmr.update();
-                    frontendServices.update();                                        // Update backend content
-
-                    // Would be better for the backend to trigger
-                    // this state so that less checks are performed
-                    if (gameEnded()) {                                                 // Stop game loop if game ended
-                        frontendServices.clear();
-                        gameTimer.stop();
-                    }
+                    tick();
                 }
             }
 

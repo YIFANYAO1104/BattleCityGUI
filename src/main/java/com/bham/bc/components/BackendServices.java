@@ -23,4 +23,9 @@ public interface BackendServices {
      * Updates all the entities: map, characters and armory elements
      */
     void update();
+
+    /**
+     * Clears all objects in the game
+     */
+    void clear();
 }

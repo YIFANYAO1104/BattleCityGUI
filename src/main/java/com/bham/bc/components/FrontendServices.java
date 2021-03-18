@@ -44,9 +44,4 @@ public interface FrontendServices {
      * @param gamePane layout where hit-boxes will be rendered
      */
     void renderHitBoxes(AnchorPane gamePane);
-
-    /**
-     * Clears all objects in the map
-     */
-    void clear();
 }
