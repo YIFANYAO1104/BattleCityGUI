@@ -9,6 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
+import javax.annotation.PreDestroy;
+
 import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
 import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
 import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
@@ -24,8 +26,8 @@ public abstract class GenericObstacle extends BaseGameEntity {
     /**
      * Constructs an obstacle
      *
-     * @param x position in x axis
-     * @param y position in y axis
+     * @param x       position in x axis
+     * @param y       position in y axis
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
@@ -36,31 +38,42 @@ public abstract class GenericObstacle extends BaseGameEntity {
         entityImages = tileIDs.length == 0 ? getDefaultImage() : tileset.getTiles(tileIDs);
     }
 
+    /**
+     * Checks if the tile has to be rendered on top of all other entities
+     * @return true if it needs to be in top layer and false otherwise
+     */
     public boolean renderTop() { return renderTop; }
 
+    /**
+     * Checks if the tile exists. Only for Soft obstacles it is possible to not exist
+     * @return true if obstacle exists and false otherwise
+     */
     public boolean exists() { return exists; }
 
     /**
-     * gets default image of a tile
-     * @return
+     * Gets default image of a tile
+     * @return array of type Image with one image
      */
     abstract protected Image[] getDefaultImage();
 
     /**
-     * handles bullet collision
+     * Handles bullet collision
      * @param b bullet to handle
      */
     public abstract void handleBullet(Bullet b);
 
     /**
-     * handles tank collision
+     * Handles character collision
      * @param c character to handle
      */
     public abstract void handleCharacter(Character c);
 
-    public void interactWith(int ID,int indexOfNode ,Rectangle r1) {
-        if(this.getHitBox().intersects(r1.getBoundsInLocal()))
-            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.getID(),ID,Msg_interact,indexOfNode);
+    @Deprecated
+    /** TODO: check if it is necessary to have this */
+    public void interactWith(int ID, int nodeID, Rectangle area) {
+        if(getHitBox().intersects(area.getBoundsInLocal())) {
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), ID, Msg_interact, nodeID);
+        }
     }
 
     @Override
@@ -76,5 +89,5 @@ public abstract class GenericObstacle extends BaseGameEntity {
     public boolean handleMessage(Telegram msg) { return false; }
 
     @Override
-    public String toString() { return "obstacle"; }
+    public String toString() { return "Obstacle"; }
 }

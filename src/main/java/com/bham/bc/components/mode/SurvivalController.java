@@ -3,19 +3,22 @@ package com.bham.bc.components.mode;
 import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.components.environment.GenericObstacle;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
+/**
+ * Represents a controller for the survival game mode
+ */
 public class SurvivalController extends CenterController {
 
+    /**
+     * Constructs the controller by selecting a specific map and creating components
+     */
     public SurvivalController(){
         super();
         gameMap = new GameMap("/64x64.json");
@@ -25,8 +28,7 @@ public class SurvivalController extends CenterController {
     }
 
     /**
-     * A method to generate certain number of Enemy Tanks
-     * Adding created Objects into enemyTanks(list)
+     * Spawns all the initial enemies
      */
     private void initEnemies() {
         enemies.add(new Enemy(16*3, 16*3));
@@ -35,9 +37,9 @@ public class SurvivalController extends CenterController {
         enemies.add(new Enemy(16*61, 16*61));
     }
 
-    @Override
-    /**TODO: instead of using loops, ask entities to check map areas if they are free.
+    /**TODO: instead of using loops, ask entities to check certain map areas if they are free.
      * TODO: If they are not free, then search through all the entities to find which one intersects it*/
+    @Override
     public void update() {
         gameMap.update();
         player.update();
@@ -66,8 +68,8 @@ public class SurvivalController extends CenterController {
     }
 
     /**
-     *
-     * @return temp1 the list with all characters' location inlcuding player.
+     * Gets the positions of all the characters in the game
+     * @return Point2D list with all character locations
      */
     public ArrayList<Point2D> allCharactersLocation() {
         //return (ArrayList<Point2D>) getCharacters().stream().map(Character::getPosition).collect(Collectors.toList());
@@ -79,20 +81,12 @@ public class SurvivalController extends CenterController {
         return temp1;
     }
 
-
     @Override
-    public boolean isWin(){
+    public boolean isGameOver() {
         return enemies.isEmpty()  && player.exists();
     }
 
     @Override
-    public boolean isLoss(){
-        return !player.exists();
-    }
-
-    /**
-     * Clear all objects on the map
-     */
     public void clear(){
         super.clear();
         gameMap.clearAll();

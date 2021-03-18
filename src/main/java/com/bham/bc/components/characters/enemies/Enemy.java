@@ -3,7 +3,6 @@ package com.bham.bc.components.characters.enemies;
 import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.characters.Character;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,33 +13,37 @@ import javafx.scene.transform.Rotate;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
+/**
+ * Represents a bot that is an enemy of a player
+ */
 public class Enemy extends Character {
+
     public static final String IMAGE_PATH = "file:src/main/resources/img/tankU.gif";
     public static final int WIDTH = 30;
     public static final int HEIGHT = 30;
     public static final int MAX_HP = 100;
 
-    private int hp = 100;
-
+    /**
+     * Constructs an enemy instance with initial speed value set to 1
+     *
+     * @param x top left x coordinate of the enemy
+     * @param y top left y coordinate of the enemy
+     */
     public Enemy(int x, int y) {
         super(x, y, 1, MAX_HP, SIDE.ENEMY);
-
         entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
     }
 
     /**
-     * Gets the HP of the enemy
-     * @return integer representing current HP
+     * Sample method for shooting a default bullet
+     *
+     * <p>This method creates a new instance of {@link com.bham.bc.components.armory.DefaultBullet}
+     * based on player's position and angle</p>
+     *
+     * TODO: generalize the method once weapon class is defined of more bullet types appear
+     *
+     * @return instance of DefaultBullet
      */
-    public int getHp() { return hp; }
-
-    /**
-     * Increases HP for the player
-     * @param health amount by which the enemy's HP is increased
-     */
-    public void increaseHP(int health) { hp = Math.min(hp + health, MAX_HP); }
-
-
     public DefaultBullet fire() {
         double centerBulletX = x + WIDTH/2;
         double centerBulletY = y - DefaultBullet.HEIGHT/2;
@@ -55,25 +58,7 @@ public class Enemy extends Character {
         backendServices.addBullet(b);
         return b;
     }
-    /**
-     * Since the tanks on the map was put into a list, we need to check if the this.tank collide
-     * with any of those tanks, if intersects, change both of tanks's coordinate to previous value
-     * so they can not go further
-     */
-    public boolean collideWithTanks(java.util.List<Enemy> be) {
-        for (int i = 0; i < be.size(); i++) {
-            MovingEntity t = be.get(i);
-            if (this != t) {
-                if (this.exists && t.exists()
-                        && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
-                    //this.changToOldDir();
-                    //t.changToOldDir();
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+
 
     /** TODO: replace this method */
     @Deprecated

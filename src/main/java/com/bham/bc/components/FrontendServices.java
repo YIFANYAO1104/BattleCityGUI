@@ -1,54 +1,52 @@
 package com.bham.bc.components;
 
-import com.bham.bc.components.characters.TrackableCharacter;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
+/**
+ * Interface defining the required frontend services for a mode to properly work
+ */
 public interface FrontendServices {
-
-    TrackableCharacter getHomeTank();
-    void update();
-    void render(GraphicsContext gc);
-    void renderHitBoxes(AnchorPane gamePane);
-
-
-    boolean isWin();
-
     /**
-     * Status to indicates defeat
-     * Home destroyed OR Player Tank dead
-     * @return
+     * Checks if the game has ended
+     * @return true if the game ended and false otherwise
      */
-    boolean isLoss();
+    boolean isGameOver();
 
     /**
-     * Get the number of enemy tanks from enemy tank list
-     * @return
+     * Gets player HP
+     * @return current HP
      */
-    int getEnemyNumber();
+    double getPlayerHP();
+
     /**
-     *
-     * @return Current HP of Player Tank
-     */
-    int getLife();
-    /**
-     * A method to monitor the actions from keyBoard
-     * Which Key is released and use as Parameter to determine Player Tank's Action
-     * @param e
-     */
-    void keyReleased(KeyEvent e);
-    /**
-     * A method to monitor the actions from keyBoard
-     * Which Key is pressed and use as Parameter to determine Player Tank's Action
-     * @param e
+     * Monitors the keyboard button presses and creates a corresponding GUI response
+     * @param e key to handle
      */
     void keyPressed(KeyEvent e);
 
-
+    /**
+     * Monitors the keyboard button releases and creates a corresponding GUI response
+     * @param e key to handle
+     */
+    void keyReleased(KeyEvent e);
 
     /**
-     * Clear all objects on tht map
+     * Renders backend content
+     * @param gc graphics context where things will be rendered
+     */
+    void render(GraphicsContext gc);
+
+    /**
+     * Renders hit-boxes of characters and armory
+     * <br>TODO: remove before release
+     * @param gamePane layout where hit-boxes will be rendered
+     */
+    void renderHitBoxes(AnchorPane gamePane);
+
+    /**
+     * Clears all objects in the map
      */
     void clear();
 }

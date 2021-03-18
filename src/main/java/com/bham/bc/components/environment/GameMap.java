@@ -26,13 +26,12 @@ import java.util.List;
 
 
 public class GameMap {
-
     private List<GenericObstacle> obstacles;
     private TriggerSystem triggerSystem;
     private SparseGraph graphSystem;
 
-    private int width;
-    private int height;
+    private static int width = Constants.MAP_WIDTH;
+    private static int height = Constants.MAP_HEIGHT;
 
 
     /**
@@ -40,11 +39,23 @@ public class GameMap {
      */
     public GameMap(String resourceName) {
         MapLoader mapLoader = new JsonMapLoader(resourceName);
-        width = mapLoader.getMapWidth();
-        height = mapLoader.getMapHeight();
+        //width = mapLoader.getMapWidth();
+        //height = mapLoader.getMapHeight();
         obstacles = mapLoader.getObstacles();
         triggerSystem = mapLoader.getTriggerSystem();
     }
+
+    /**
+     * Gets map's width (tileSize * amountInX)
+     * @return current map's width or 0 if no map is loaded
+     */
+    public static int getWidth() { return width; }
+
+    /**
+     * Gets map's height (tileSize * amountInY)
+     * @return current map's height or 0 if no map is loaded
+     */
+    public static int getHeight() {return height; }
 
 
     public void initGraph(Point2D location) {

@@ -1,65 +1,45 @@
 package com.bham.bc.components.characters;
 
-
-import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.armory.DefaultBullet;
-import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.entity.MovingEntity;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Ellipse;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
-import java.util.List;
-
 import static com.bham.bc.components.CenterController.backendServices;
-import static java.lang.Math.signum;
 
-public class Player extends Character implements TrackableCharacter {
+/**
+ * Represents the character controlled by the user
+ */
+public class Player extends Character {
 
 	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
 	public static final int WIDTH = 25;
 	public static final int HEIGHT = 35;
 	public static final int MAX_HP = 100;
 
-	private int hp;
+	private double hp;
 
-	private SimpleDoubleProperty trackableX;
-	private SimpleDoubleProperty trackableY;
+	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2);
+	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2);
 
 	/**
-	 * Constructs a player instance with default speed value set to 5
+	 * Constructs a player instance with initial speed value set to 5
 	 *
 	 * @param x top left x coordinate of the player
 	 * @param y top left y coordinate of the player
 	 */
 	public Player(double x, double y) {
 		super(x, y, 5, MAX_HP, SIDE.ALLY);
-
-		initTrackableCoordinates();
 		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
 	}
-
-	/**
-	 * Gets the HP of the player
-	 * @return integer representing current HP
-	 */
-	public int getHp() { return hp; }
-
-	/**
-	 * Increases HP for the player
-	 * @param health amount by which the player's HP is increased
-	 */
-	public void increaseHP(int health) { hp = Math.min(hp + health, MAX_HP); }
 
 	/**
 	 * Handles pressed key
@@ -103,8 +83,9 @@ public class Player extends Character implements TrackableCharacter {
 	 * <p>This method creates a new instance of {@link com.bham.bc.components.armory.DefaultBullet}
 	 * based on player's position and angle</p>
 	 *
+	 * TODO: generalize the method once weapon class is defined of more bullet types appear
+	 *
 	 * @return instance of DefaultBullet
-	 * TODO: generalize to more bullet types
 	 */
 	public DefaultBullet fire() {
 		double centerBulletX = x + WIDTH/2;
@@ -121,13 +102,6 @@ public class Player extends Character implements TrackableCharacter {
 		return b;
 	}
 
-	/**
-	 * Checks if the player intersects any of the enemies
-	 * @param enemies list of all enemies in the game map
-	 * @return true if the player intersects some enemy and false otherwise
-	 */
-	public boolean intersectsEnemies(List<Enemy> enemies) { return enemies.stream().anyMatch(this::intersects); }
-
 	@Override
 	public Ellipse getHitBox() {
 		Point2D hitBoxOffset = new Point2D(0, 4);
@@ -143,24 +117,12 @@ public class Player extends Character implements TrackableCharacter {
 	public void update() {
 		updateAngle();
 		move();
-		trackableX.set(this.x + WIDTH/2);
-		trackableY.set(this.y + HEIGHT/2);
+		TRACKABLE_X.set(x + WIDTH/2);
+		TRACKABLE_Y.set(y + HEIGHT/2);
 	}
 
 	@Override
 	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
-
-	@Override
-	public void initTrackableCoordinates() {
-		trackableX = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2);
-		trackableY = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2);
-	}
-
-	@Override
-	public SimpleDoubleProperty getTrackableCoordinateX() { return trackableX; }
-
-	@Override
-	public SimpleDoubleProperty getTrackableCoordinateY() { return trackableY; }
 
 	@Override
 	public boolean handleMessage(Telegram msg) {

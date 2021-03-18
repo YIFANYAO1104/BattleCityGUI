@@ -10,7 +10,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -58,7 +57,7 @@ public class GameSession {
 
         gamePane = new AnchorPane(canvas, hbPane);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
-        cmr = new Camera(frontendServices.getHomeTank());
+        cmr = new Camera();
         gameScene.setCamera(cmr);
 
         gameStage = new Stage();
@@ -99,10 +98,8 @@ public class GameSession {
         gc.setFill(Color.BLUE);
         gc.setFont(new Font("Times New Roman", 20));
 
-        gc.fillText("Tanks left in the field: ", 200, 70);
-        gc.fillText("" + frontendServices.getEnemyNumber(), 400, 70);
         gc.fillText("Health: ", 580, 70);
-        gc.fillText("" + frontendServices.getLife(), 650, 70);
+        gc.fillText("" + frontendServices.getPlayerHP(), 650, 70);
     }
 
 
