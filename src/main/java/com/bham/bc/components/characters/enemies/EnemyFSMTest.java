@@ -3,6 +3,7 @@ package com.bham.bc.components.characters.enemies;
 import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullets01;
 import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.ai.*;
@@ -199,6 +200,9 @@ public class EnemyFSMTest extends Tank {
         this.life = life;
     }
 
+    /**
+     * This is the FSM Update version, it applies all the test values for each condition, then responds with each action recieved from the FSM in order
+     */
     @Override
     public void update() {
         distanceToPlayer.setTestValue(10);
@@ -214,6 +218,84 @@ public class EnemyFSMTest extends Tank {
             }
         }
     }
+
+    /**
+     * AI behaviour to idly patrol around the map.
+     * They will move a certain distance, then randomly switch direction
+     */
+    protected void patrol() {
+        Direction[] directions = Direction.values();
+        if (step == 0){
+            direction = directions[r.nextInt(directions.length)];
+            step = r.nextInt(10)+ 5;
+        } else {
+            step--;
+            move();
+        }
+    }
+
+    /**
+     * In this behaviour the AI tries to get closer to the player.
+     * Once it has gotten close to the player it will try and shoot at the player
+     * It will use a pathfinding algorithm to navigate to the player
+     * This algorithm will not be used after each update as this could cause strain on the game
+     * Instead every so often the tank will update it's location of the player, and pathfind to it
+     */
+    protected void attackPlayer() {
+        //TODO
+    }
+
+    /**
+     * In this behaviour the AI will try to obtain a power-up close to it
+     * It will make use of pathfinding algorithm to obtain it.
+     * Since the power-up is a stationary item, it will not need continually re-update the pathfinding
+     */
+    protected void findPowerup(){
+        //TODO
+    }
+
+    /**
+     * In this behaviour the AI will try to maximise it's distance away from the player rather than get close to it
+     * It can do this by selecting a point on the map and pathfinding to that point.
+     * Very rarely it could update with the players new position to alter it's path if need be
+     */
+    protected void flee(){
+        //TODO
+    }
+
+    /**
+     * In this behaviour the AI will pathfind to the home base and try to attack it
+     */
+    protected void attackHomeBase(){
+        //TODO
+    }
+
+    /**
+     * In this behaviour the AI will pathfind to one of the players most common locations
+     * and lay a mine there.
+     */
+    protected void layTripmine(){
+        //TODO
+    }
+
+    /**
+     * In this behaviour the AI will communicate with other Formation AI's and attempt to position themselves in formation
+     * They will determine how many are in their formation and decide where each of them should be in that position
+     * They will then patrol whilst in formation
+     */
+    protected void getIntoFormation(){
+        //TODO
+    }
+
+    /**
+     * In this behaviour the AI's will work in formation to attack the player, surrounding them
+     * It will do this by pathfinding to certain points surrounding the player.
+     * Similar to the standard attack player method except involves the connection to other AI's in formation
+     */
+    protected void attackInFormation(){
+        //TODO
+    }
+
     /**
      * Method to implements the movement of enemy tanks
      * Record the current coordinate as old coordinates and move to the specific direction
@@ -340,5 +422,9 @@ public class EnemyFSMTest extends Tank {
         } else{
             this.life = 200;
         }
+    }
+
+    public void switchWeapon (Weapon weapon){
+        return;
     }
 }
