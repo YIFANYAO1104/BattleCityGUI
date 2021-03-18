@@ -8,6 +8,8 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -65,6 +67,16 @@ public class GameSession {
         gameStage.setScene(gameScene);
         gameStage.setTitle("A very cool game");
         gameStage.setResizable(false);
+
+        KeyCodeCombination keyCodeCombination=new KeyCodeCombination(KeyCode.ESCAPE);
+        gameScene.getAccelerators().put(keyCodeCombination, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("press initPauseMenu");
+                MenuSession.initPauseMenu(gamePane);
+            }
+        });
+
     }
 
     /**
