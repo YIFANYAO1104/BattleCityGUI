@@ -25,7 +25,7 @@ public class MenuSession {
     private Stage mainStage;
 
     private MainMenu mainMenu;
-    private PauseMenu pauseMenu;
+    private static PauseMenu pauseMenu;
 
     /**
      * Constructs the menu view manager
@@ -37,10 +37,10 @@ public class MenuSession {
         mainStage.setScene(mainScene);
 
         mainMenu = new MainMenu(this, WIDTH, HEIGHT);
-        pauseMenu = new PauseMenu();
+        pauseMenu = new PauseMenu(this);
 
         initMainMenu();
-        initPauseMenu();
+
     }
 
     /**
@@ -55,7 +55,9 @@ public class MenuSession {
         audioManager.play();
     }
 
-    private void initPauseMenu() {}
+    public static void initPauseMenu(AnchorPane gamePane) {
+        gamePane.getChildren().addAll(pauseMenu);
+    }
 
     private MainMenu getMainMenu() { return mainMenu; }
     private PauseMenu getPauseMenu() { return pauseMenu; }
