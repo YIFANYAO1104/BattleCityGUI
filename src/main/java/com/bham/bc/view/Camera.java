@@ -1,6 +1,6 @@
 package com.bham.bc.view;
 
-import com.bham.bc.components.characters.TrackableCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.utils.Constants;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -9,7 +9,7 @@ import javafx.scene.PerspectiveCamera;
 
 public class Camera extends PerspectiveCamera {
     //must be strictly less than 0. Or we'll se nothing.
-    private static final double INITIAL_PERSPECTIVE = -1;    // Between 0 and -1000
+    private static final double INITIAL_PERSPECTIVE = -500;    // Between -1 and -1000
 
     private DoubleProperty x;
     private DoubleProperty y;
@@ -17,25 +17,12 @@ public class Camera extends PerspectiveCamera {
 
     /**
      * Constructs camera which tracks 1 character
-     * @param c character to be followed
      */
-    public Camera(TrackableCharacter c) {
+    public Camera() {
         initCameraProperties();
 
-        x.bind(Bindings.subtract(c.getTrackableCoordinateX(), Constants.WINDOW_WIDTH/2));
-        y.bind(Bindings.subtract(c.getTrackableCoordinateY(), Constants.WINDOW_HEIGHT/2));
-    }
-
-    /**
-     * Constructs camera which tracks 2 characters
-     * @param c1 first character to be followed
-     * @param c2 second character to be followed
-     */
-    public Camera(TrackableCharacter c1, TrackableCharacter c2) {
-        initCameraProperties();
-
-        x.bind(Bindings.subtract(Bindings.divide(Bindings.add(c1.getTrackableCoordinateX(), c2.getTrackableCoordinateX()), 2), Constants.WINDOW_WIDTH/2));
-        y.bind(Bindings.subtract(Bindings.divide(Bindings.add(c1.getTrackableCoordinateY(), c2.getTrackableCoordinateY()), 2), Constants.WINDOW_HEIGHT/2));
+        x.bind(Bindings.subtract(Player.TRACKABLE_X, Constants.WINDOW_WIDTH/2));
+        y.bind(Bindings.subtract(Player.TRACKABLE_Y, Constants.WINDOW_HEIGHT/2));
     }
 
     /**

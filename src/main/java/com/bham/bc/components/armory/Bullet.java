@@ -1,166 +1,79 @@
 package com.bham.bc.components.armory;
 
-import com.bham.bc.components.environment.obstacles.IceWall;
-import com.bham.bc.entity.physics.BombTank;
-import com.bham.bc.entity.Direction;
+import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.environment.obstacles.CommonWall;
-import com.bham.bc.components.environment.obstacles.Home;
-import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.characters.HomeTank;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Rectangle;
-
-import java.util.List;
-
-import static com.bham.bc.components.CenterController.centerController;
-
-abstract public class Bullet extends MovingEntity {
-    /**
-     * The Id of Player Tank that ownes the bullet
-     */
-    public int ownerTank;
 
 /**
- * Constructor Of Tank_Bullet,Using an int ID to indicate which tank this Tank_bullet belongs to(OwnerTank)
- * @param owner
- * @param x
- * @param y
- * @par
- * */
-    public Bullet(int owner,
-                  int speedX, int speedY,
-                  int x, int y,
-                  int width, int length,
-                  Direction dir) {
+ * Represents any bullet and defines common bullet properties
+ * <p> TODO: add constrains / asserts / throw exceptions in setters
+ */
+abstract public class Bullet extends MovingEntity {
+    private SIDE side;
+    private double damage;
 
-        super(speedX,speedY,
-                x,y,
-                width,length,
-                dir);
-        this.ownerTank = owner;
-
+    /**
+     * Constructs a bullet using with a SIDE property to indicate which team the bullet can damage
+     *
+     * @param x      top left position in x axis
+     * @param y      top left position in y axis
+     * @param speed  velocity value at which the bullet will move
+     * @param angle  angle at which the bullet will move
+     * @param side   ALLY or ENEMY side the bullet belongs to
+     * @param damage amount of hp the bullet can take from an entity
+     */
+    public Bullet(double x, double y, double speed, double angle, SIDE side, double damage) {
+        super(x, y, speed);
+        this.angle = angle;
+        this.side = side;
+        this.damage = damage;
     }
 
     /**
-     * A method to indicate if the Bullet has hit any tanks in the List Of tanks(enemyTanks)
-     * If it hit at least one tank then return True
-     * @param tanks
-     * @return
+     * Gets bullet's speed
+     * @return velocity at which the bullet is moving
      */
-    public boolean hitTanks(List<Enemy> tanks) {
-        for (int i = 0; i < tanks.size(); i++) {
-            if (hitEnemyTank(tanks.get(i))) {
-                return true;
-            }
-        }
-        return false;
-    }
+    public double getSpeed() { return speed; }
+
     /**
-     * A method to indicate if the Bullet has hit any specific Enemy Tank
-     * The prerequisites of HIT is :
-     * 1. The Bullet is alive
-     * 2. The Enemy Tank is alive
-     * 3. The bullet 's occupied size intersects with enemy's occupied size(Using getRect() to get size)
-     * When it hits, we need to dispatch message (to Enemy Tank)
-     * @param t
-     * @return
+     * Gets bullet's damage
+     * @return amount of damage the bullet deals
      */
-    public boolean hitEnemyTank(Enemy t) {
+    public double getDamage() { return damage; }
 
-        //子弹活着
-        //与敌人碰撞到了
-        //敌人活着
-        //子弹只作用在对方身上
-        if (this.live && this.isIntersect(t) && t.isLive()) {
+    /**
+     * Gets bullet's side
+     * @return ALLY or ENEMY side the bullet belongs to
+     */
+    public SIDE getSide() { return side; }
 
-            BombTank e = new BombTank(t.getX(), t.getY());
-            centerController.addBombTank(e);
-            t.setLive(false);
-            this.live = false;
-
-            return true;
-        }
-        return false;
+    /**
+     * Sets bullet's speed
+     * <br><b>Note:</b> the speed must be in range [1, 20]
+     * <br>TODO: assert range
+     */
+    public void setSpeed(double speed) {
+        this.speed = speed;
     }
 
     /**
-     * A method to indicate if the Bullet has hit any specific HomeTank Tank
-     * If hit , the life of home tank minus 50.
-     * @param t
-     * @return
+     * Sets bullet's damage
+     *
+     * <br><b>Note:</b> the damage must be in range [-500, 500]
+     * <br>TODO: assert range
      */
-    public boolean hitTank(HomeTank t) {
-
-        if (this.live && this.isIntersect(t) && t.isLive()) {
-
-            BombTank e = new BombTank(t.getX(), t.getY());
-
-            centerController.addBombTank(e);
-
-            if (t.isUser()) {
-                t.setLife(t.getLife() - 50);
-                if (t.getLife() <= 0)
-                    t.setLive(false);
-            } else {
-                t.setLive(false);
-
-            }
-
-            this.live = false;
-
-            return true;
-        }
-        return false;
+    public void setDamage(double damage) {
+        this.damage = damage;
     }
 
     /**
-     * A method to indicate if the bullet hits the bullet
-     * If bullet hits the other bullet then it should be removed from bullet list(centerController will do that)
-     * @param w
-     * @return
+     * Unregisters and prepares to remove the bullet. Also runs any destruction effects
      */
-    public boolean hitBullet(Bullet w){
-        if (this.live && this.isIntersect(w)){
-            this.live=false;
-            centerController.removeBullet(w);
-            return true;
-        }
-        return false;
-    }
-
-    public Rectangle getHitBox() {
-        return new Rectangle(x, y, width, length);
-    }
-
-
-
-    public boolean isLive() {
-        return live;
-    }
-
-    /**
-     * If bullet is not alive, then Entity manager should remove this
-     */
-
+    public abstract void destroy();
 
     @Override
-    public void render(GraphicsContext gc) {
-
-    }
+    public boolean handleMessage(Telegram msg) { return false; }
 
     @Override
-    public boolean handleMessage(Telegram msg) {
-        return false;
-    }
-
-    @Override
-    protected void move() {
-    }
-
-    @Override
-    public String toString() {
-        return "Bullet type";
-    }
+    public String toString() { return "Bullet"; }
 }

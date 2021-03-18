@@ -1,34 +1,19 @@
 package com.bham.bc.entity;
 
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
-import static com.bham.bc.entity.EntityManager.EntityMgr;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 abstract public class BaseGameEntity {
+    private static int nextValidID = 0;
+    private int id;
 
-    /**
-     * each entity has a unique ID
-     */
-    private  int m_ID;
-
-    /**
-     * this is the next valid ID. Each time a BaseGameEntity is instantiated
-     * this value is updated
-     */
-    private static int m_iNextValidID = 0;
-
-    /**
-     * the position
-     */
-    protected int x, y;
-
-    /**
-     * tool for loading and storing Images
-     */
-    protected Image[] entityImages = null;
+    protected double x, y;
+    protected Image[] entityImages;
 
 
     /**
@@ -37,45 +22,78 @@ abstract public class BaseGameEntity {
      * equal to the next valid ID, before setting the ID and incrementing the
      * next valid ID
      */
-    private void SetID(int val) {
+    private void SetID(int id) {
         //make sure the val is equal to or greater than the next available ID
-        assert (val >= m_iNextValidID) : "<BaseGameEntity::SetID>: invalid ID";
+        assert (id >= nextValidID) : "<BaseGameEntity::SetID>: invalid ID";
 
-        m_ID = val;
-
-        m_iNextValidID = m_ID + 1;
+        this.id = id;
+        nextValidID = this.id + 1;
     }
 
     @Override
     protected void finalize() throws Throwable{super.finalize();}
 
-    public static int GetNextValidID() {
-        return m_iNextValidID;
-    }
 
-    public int ID(){return m_ID;}
-
-    protected BaseGameEntity(int ID, int x, int y) {
+    protected BaseGameEntity(int ID, double x, double y) {
         SetID(ID);
-        EntityMgr.RegisterEntity(this);
+        entityManager.registerEntity(this);
         this.x = x;
         this.y = y;
     }
 
-    //getters and setters are only for non-son classes
-    public int getX() {
-        return x;
-    }
+    /**
+     *
+     * @return
+     */
+    public static int GetNextValidID() { return nextValidID; }
 
-    public int getY() {
-        return y;
-    }
+    /**
+     * Gets the ID of this entity
+     *
+     * @return ID as an integer this entity was registered with
+     */
+    public int getID() { return id; }
 
+    public Point2D getPosition() { return new Point2D(x, y); }
+
+    public Point2D getRadius() { return new Point2D(entityImages[0].getWidth(), entityImages[0].getHeight()); }
+
+    /**
+     * Checks whether the current entity intersects with the given one
+     *
+     * @param entity BaseGameEntity instance we want to check if the this instance is intersecting with
+     * @return true if the hit-boxes of two entities intersect and false otherwise
+     */
+    public boolean intersects(BaseGameEntity entity) { return this.getHitBox().intersects(entity.getHitBox().getBoundsInLocal()); }
+
+    /**
+     *
+     * @return
+     */
+    abstract public Shape getHitBox();
+
+    /**
+     *
+     */
     abstract public void update();
 
+    /**
+     *
+     * @param gc
+     */
     abstract public void render(GraphicsContext gc);
-    abstract public Rectangle getHitBox();
+
+    /**
+     *
+     * @param msg
+     * @return
+     */
     abstract public boolean handleMessage(Telegram msg);
+
+    /**
+     *
+     * @return
+     */
     abstract public String toString();
-    abstract public boolean isIntersect(BaseGameEntity b);
+
 }

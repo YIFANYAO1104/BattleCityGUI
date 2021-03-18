@@ -7,7 +7,7 @@
 package com.bham.bc.entity.triggers;
 
 
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.characters.Character;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class TriggerSystem<trigger_type extends Trigger> {
      * *provided* the entity is alive and provided the entity is ready for a
      * trigger update.
      */
-    private void tryTriggers(Tank curEnt) {
+    private void tryTriggers(Character curEnt) {
         //test each entity against the triggers
 
         //an entity must be ready for its next trigger update and it must be
@@ -64,7 +64,7 @@ public class TriggerSystem<trigger_type extends Trigger> {
      * update the internal state odf the triggers and then try each entity
      * against each active trigger to test if any should be triggered.
      */
-    public void update(Tank entity) {
+    public void update(Character entity) {
         updateTriggers();
         tryTriggers(entity);
     }

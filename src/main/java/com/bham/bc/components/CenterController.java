@@ -1,305 +1,148 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.TrackableCharacter;
-import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.Direction;
-import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.environment.obstacles.CommonWall;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.mode.ChallengeController;
+import com.bham.bc.components.mode.MODE;
+import com.bham.bc.components.mode.SurvivalController;
+import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
+import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.physics.BombTank;
-import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.characters.HomeTank;
+import com.bham.bc.components.characters.enemies.DefaultEnemy;
+import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.characters.Character;
 
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class CenterController extends BaseGameEntity {
+/**
+ * Class defining the common elements and behavior for both survival and challenge controllers
+ */
+public abstract class CenterController extends BaseGameEntity implements FrontendServices, BackendServices {
 
+    public static FrontendServices frontendServices;
+    public static BackendServices backendServices;
 
-    public static CenterController centerController = new CenterController();
+    protected boolean isGameOver;
+    protected GameMap gameMap;
+    protected Player player;
+    protected ArrayList<DefaultEnemy> enemies = new ArrayList<>();
+    protected ArrayList<BombTank> bombTanks = new ArrayList<>();
+    protected ArrayList<Bullet> bullets = new ArrayList<>();
+
     /**
-     * The message to indicate Victory Or Defeat
+     * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
      */
-    private Boolean win=false,lose=false;
-    /** Initialize HomeTank(Player Tank)*/
-    private HomeTank homeTank;
-    /** Initialize a Container of Enemy Tanks */
-    private List<Enemy> enemyTanks = new ArrayList<Enemy>();
-    /** Initialize a Container of Tanks that got bombed and hit*/
-    private List<BombTank> bombTanks = new ArrayList<BombTank>();
-    /** Initialize a Container of All Bullets created by All Tanks*/
-    private List<Bullet> bullets = new ArrayList<Bullet>();
-    /** Initialize an Object Of GameMap*/
-    private GameMap gameMap = new GameMap();
+    public CenterController() { super(GetNextValidID(),-1,-1); }
 
-
-    //These are functions that might be used by frontend----------------------------------------------------
     /**
-     * Method to determine if player wins the game
-     * @return
+     * Sets the mode of the game the user has chosen
+     * @param mode SURVIVAL or CHALLENGE value to be passed as a game mode
      */
-    public boolean isWin(){
-        return enemyTanks.isEmpty() && gameMap.isHomeLive() && homeTank.isLive();
+    public static void setMode(MODE mode){
+        CenterController centerController = null;
+        switch (mode) {
+            case SURVIVAL:
+                centerController = new SurvivalController();
+
+                break;
+            case CHALLENGE:
+                centerController = new ChallengeController();
+                break;
+        }
+        frontendServices = centerController;
+        backendServices = centerController;
     }
 
     /**
-     * Status to indicates defeat
-     * Home destroyed OR Player Tank dead
-     * @return
+     * Gets all characters in the game
+     * @return list of all the characters in the game
      */
-    public boolean isLoss(){
-        return !gameMap.isHomeLive() || !homeTank.isLive();
+    public ArrayList<Character> getCharacters() {
+        ArrayList<Character> characters = new ArrayList<>(enemies);
+        characters.add(player);
+
+        return characters;
     }
 
-    /**
-     * Get the number of enemy tanks from enemy tank list
-     * @return
-     */
-    public int getEnemyNumber(){
-        return enemyTanks.size();
-    }
-    /**
-     *
-     * @return Current HP of Player Tank
-     */
-    public int getLife(){
-        return homeTank.getLife();
-    }
-    /**
-     * A method to monitor the actions from keyBoard
-     * Which Key is released and use as Parameter to determine Player Tank's Action
-     * @param e
-     */
-    public void keyReleased(KeyEvent e){
-        homeTank.keyReleased(e);
-    }
-    /**
-     * A method to monitor the actions from keyBoard
-     * Which Key is pressed and use as Parameter to determine Player Tank's Action
-     * @param e
-     */
-    public void keyPressed(KeyEvent e){
-        homeTank.keyPressed(e);
-    }
+    @Override
+    public boolean isGameOver() { return isGameOver; }
 
-    public TrackableCharacter getHomeTank(){
-        return homeTank;
-    }
-    //These are functions that might be used by frontend----------------------------------------------------
+    @Override
+    public double getPlayerHP() { return player.getHp(); }
+
+    @Override
+    public void keyReleased(KeyEvent e) { player.keyReleased(e); }
+
+    @Override
+    public void keyPressed(KeyEvent e) { player.keyPressed(e); }
 
 
-    /**
-     * Clear all objects on tht map
-     */
+    @Override
+    public void renderHitBoxes(AnchorPane hitBoxPane) {
+        hitBoxPane.getChildren().clear();
+
+        // Add map hit-box
+        Rectangle mapConstrain = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
+        mapConstrain.setStroke(Color.RED);
+        mapConstrain.setStrokeWidth(5);
+        hitBoxPane.getChildren().add(mapConstrain);
+
+        // Add player hit-box
+        Shape playerHitBox = player.getHitBox();
+        playerHitBox.setFill(Color.TRANSPARENT);
+        playerHitBox.setStroke(Color.RED);
+        playerHitBox.setStrokeWidth(2);
+        hitBoxPane.getChildren().add(playerHitBox);
+
+        // Add bullet hit-boxes
+        bullets.forEach(b -> {
+            Shape bulletHitBox = b.getHitBox();
+            bulletHitBox.setFill(Color.TRANSPARENT);
+            bulletHitBox.setStroke(Color.RED);
+            bulletHitBox.setStrokeWidth(1);
+            hitBoxPane.getChildren().add(bulletHitBox);
+        });
+
+        // Add enemy hit-boxes
+        enemies.forEach(e -> {
+            Shape enemyHitBox = e.getHitBox();
+            enemyHitBox.setFill(Color.TRANSPARENT);
+            enemyHitBox.setStroke(Color.RED);
+            enemyHitBox.setStrokeWidth(1);
+            hitBoxPane.getChildren().add(enemyHitBox);
+        });
+    }
+
+
+    @Override
+    public void addEnemy(DefaultEnemy enemy) { enemies.add(enemy); }
+
+    @Override
     public void clear(){
-        gameMap.clearAll();
-        enemyTanks.clear();
+        enemies.clear();
         bullets.clear();
         bombTanks.clear();
-//        homeTank.setLive(false);
-    }
-
-
-    /**
-     * Constructor of CenterController
-     */
-    public CenterController(){
-        super(GetNextValidID(),-1,-1);
-        homeTank = new HomeTank(250, 560, Direction.STOP);
-        initEnemies();
-    }
-    /**
-     * A method to generate certain number of Enemy Tanks
-     * Adding created Objects into enemyTanks(list)
-     */
-    private void initEnemies() {
-        for (int i = 0; i < 20; i++) {
-            if (i < 9){
-                enemyTanks.add(new Enemy(150 + 70 * i, 40,  Direction.D));
-            } else if (i < 15){
-                enemyTanks.add(new Enemy(700, 140 + 50 * (i - 6), Direction.D));
-            } else{
-                enemyTanks.add(new Enemy(10, 50 * (i - 12),  Direction.D));
-            }
-        }
-    }
-
-
-    protected Object clone() throws CloneNotSupportedException {
-        throw new CloneNotSupportedException("Cloning not allowed");
-    }
-
-    /**
-     /** Overriding Method to indicates Game Logic \
-     */
-
-    @Override
-    public void update() {
-
-        //move-----------------
-        homeTank.update();
-        for (Enemy e : enemyTanks) {
-            e.update();
-        }
-        //move-----------------
-
-        //map----------------------------------
-        gameMap.update(homeTank);
-        for (Enemy e : enemyTanks) {
-            gameMap.update(e);
-        }
-        //map----------------------------------
-
-        //tanks----------------------------------
-        homeTank.collideWithTanks(enemyTanks);
-        for (Enemy e : enemyTanks) {
-            e.collideWithTanks(enemyTanks);
-        }
-        //tanks----------------------------------
-        /**
-         * Use nested For Loop to update game state
-         * Keep Tracking Bullets to see if Bullets hit Bullets, and Updates game state (Inner Loop)
-         * Keep Tracking Bullets to see(Outer Loop):
-         * 1.If Bullets hit enemy Tanks(Updates game state)
-         * 2.If Bullets hit Player (Updates game state)
-         * 3.If Bullets hits environment Objects e.g Home and Wall (Updates game state)
-         */
-        for (int i = 0; i < bullets.size(); i++) {
-            Bullet m = bullets.get(i);
-            m.update();
-            m.hitTanks(enemyTanks);
-            m.hitTank(homeTank);
-            for(int j=0;j<bullets.size();j++){
-                if (i==j) continue;
-                Bullet bts=bullets.get(j);
-                m.hitBullet(bts);
-            }
-            gameMap.update(m);
-        }
-        gameMap.updateObstacles();
     }
 
     @Override
-    public void render(GraphicsContext gc) {
-        /**
-         *  The order of Render does matter
-         *  The latter render will cover the previous render
-         *  For example,rending Tree at the end leads to successfully Shading
-         */
-
-        for (int i = 0; i < bullets.size(); i++) {
-            Bullet t = bullets.get(i);
-            t.render(gc);
-        }
-
-        //the blood bar is here. But it's covered currently
-        homeTank.render(gc);
-        for (int i = 0; i < enemyTanks.size(); i++) {
-            Enemy t = enemyTanks.get(i);
-            t.render(gc);
-        }
-        for (int i = 0; i < bombTanks.size(); i++) {
-            BombTank bt = bombTanks.get(i);
-            bt.render(gc);
-        }
-
-
-        gameMap.renderAll(gc);
-
-
-    }
-
-
-
-    //These are functions that might be used by backend----------------------------------------------------
-    //For example, bullet created a bomb 'b', it will call addBombTank(b), but not bombTanks.add(b);
-    //By this, we could protect the memebers in CenterController
-
-    /** The calling from each other member must implements the centerController Interface*/
-    /**
-     * Turn Back
-     * @param t
-     */
-    public void changToOldDir(MovingEntity t){
-        t.changToOldDir();
-    }
-
-    public void removeWall(CommonWall w){
-        gameMap.removeHomeWall(w);
-    }
-
-    public void removeEnemy(Enemy enemy){
-        enemyTanks.remove(enemy);
-    }
-
-    /**
-     * Adding bombtank to bomb tank list
-     * @param b
-     */
-    public void addBombTank(BombTank b){
-        bombTanks.add(b);
-    }
-
-    /**
-     * Remove bomb tank from bomb tank list
-     * @param b
-     */
-    public void removeBombTank(BombTank b){
-        bombTanks.remove(b);
-    }
-
-    public int getHomeTankX(){
-        return homeTank.getX();
-    }
-
-    public int getHomeTankY(){
-        return homeTank.getY();
-    }
-
-    public Rectangle getHomeHitBox(){
-        return homeTank.getHitBox();
-    }
-
-    /**
-     * Adding bullets to bullets list
-     * @param m
-     */
-    public void addBullet(Bullet m){
-        bullets.add(m);
-    }
-
-    /**
-     * Removing bullets to bullets list
-     * @param m
-     */
-    public void removeBullet(Bullet m){
-        bullets.remove(m);
-    }
-    //These are functions that might be used by backend----------------------------------------------------
+    public void addBullet(Bullet bullet){ bullets.add(bullet); }
 
     @Override
-    public Rectangle getHitBox() {
-        return null;
-    }
+    public Rectangle getHitBox() { return null; }
 
     @Override
-    public boolean handleMessage(Telegram msg) {
-        return false;
-    }
+    public boolean intersects(BaseGameEntity b) { return false; }
 
     @Override
-    public String toString() {
-        return "Centerctroller";
-    }
+    public boolean handleMessage(Telegram msg) { return false; }
 
     @Override
-    public boolean isIntersect(BaseGameEntity b) {
-        return false;
-    }
+    public String toString() { return "Center Controller"; }
 }

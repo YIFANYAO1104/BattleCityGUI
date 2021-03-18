@@ -1,7 +1,5 @@
 package com.bham.bc.entity.ai;
 
-import com.bham.bc.components.characters.Tank;
-
 import java.util.Arrays;
 import java.util.stream.Stream;
 

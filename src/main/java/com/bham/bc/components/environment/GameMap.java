@@ -1,94 +1,84 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.environment.obstacles.*;
+import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.characters.enemies.DefaultEnemy;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.utils.Constants;
+import com.bham.bc.utils.graph.HandyGraphFunctions;
+import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
 import com.bham.bc.utils.maploaders.MapLoader;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
 public class GameMap {
+    private List<GenericObstacle> obstacles;
+    private TriggerSystem triggerSystem;
+    private SparseGraph graphSystem;
+
+    private static int width = Constants.MAP_WIDTH;
+    private static int height = Constants.MAP_HEIGHT;
 
 
-    /**
-     * Creating container for Home Walls On Map
-     */
-    private List<MapObject2D> obstacles = new ArrayList<MapObject2D>();
-    private Home home;
-    private TriggerSystem triggerSystem = new TriggerSystem();
-
-
-
-    //init only--------------------------------------------------------------
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
-    public GameMap() {
-        MapLoader mapLoader = new JsonMapLoader("/test.json");
+    public GameMap(String resourceName) {
+        MapLoader mapLoader = new JsonMapLoader(resourceName);
+        //width = mapLoader.getMapWidth();
+        //height = mapLoader.getMapHeight();
         obstacles = mapLoader.getObstacles();
-        home = mapLoader.getHome();
         triggerSystem = mapLoader.getTriggerSystem();
-//        addWeaponGenerator();
-        addIceWall();
-//        addMetalWall();
-//        addTree();
-//        addRiver();
-//        addCommonWall();
-    }
-    //init only--------------------------------------------------------------
-
-
-
-    /**
-     * Check if home is still alive or not
-     * @return
-     */
-    public boolean isHomeLive(){
-        return home.isLive();
-    }
-
-    public void setHomeLive(){
-        home.setLive(true);
     }
 
     /**
-     * Remove the home wall from map
-     * @param w
+     * Gets map's width (tileSize * amountInX)
+     * @return current map's width or 0 if no map is loaded
      */
-    public void removeHomeWall(CommonWall w){
-        obstacles.remove(w);
-    }
+    public static int getWidth() { return width; }
 
-
-
-    //clear-----------------------------------------------------------------------
     /**
-     * Clear all objects on the map (up to what kind of objects is designed)
+     * Gets map's height (tileSize * amountInY)
+     * @return current map's height or 0 if no map is loaded
      */
-    public void clearAll(){
-        clearHomeWalls();
-        clearTriggers();
+    public static int getHeight() {return height; }
+
+
+    public void initGraph(Point2D location) {
+        HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
+        graphSystem = new SparseGraph<>(false); //single direction turn off
+        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH, Constants.MAP_HEIGHT,64,64); //make network
+        ArrayList<Vector2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
+
+        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
+            Vector2D vv1 = allNodesLocations.get(index);
+            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32.0,32.0));
+        }
+
+        //removed unreachable nodes
+        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.TrickingTank(new Vector2D(location)));
     }
+
+    /**
+     * Clears all obstacles in the map
+     */
+    public void clearAll() { clearHomeWalls(); clearTriggers(); }
 
     /**
      * Clean all home walls
      */
-    public void clearHomeWalls(){
-        obstacles.clear();
-    }
+    public void clearHomeWalls() { obstacles.clear(); }
 
-    public void clearTriggers(){
-        triggerSystem.clear();
-    }
-    //clear-----------------------------------------------------------------------
+    public void clearTriggers() { triggerSystem.clear(); }
 
 
     //renderers-------------------------------------------------------------------
@@ -96,72 +86,29 @@ public class GameMap {
      * The following methods calls all render methods of particular Objects
      * @param gc
      */
-    public void renderAll(GraphicsContext gc){
-        renderHome(gc);
-        renderObstacles(gc);
-        renderTriggers(gc);
+
+    public void renderBottomLayer(GraphicsContext gc) {
+        obstacles.forEach(o -> { if(!o.renderTop()) o.render(gc); });
     }
 
-    public void renderHome(GraphicsContext gc){
-        if (home != null) home.render(gc);
+    public void renderTopLayer(GraphicsContext gc) {
+        obstacles.forEach(o -> { if(o.renderTop()) o.render(gc); });
     }
 
-    public void renderObstacles(GraphicsContext gc){
-        for (int i = 0; i < obstacles.size(); i++) {
-            MapObject2D w = obstacles.get(i);
-            w.render(gc);
-        }
+    public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
+        graphSystem.render(gc);     // render network on map
+        for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1), gc);
     }
 
-    public void renderTriggers(GraphicsContext gc){
-        triggerSystem.render(gc);
-    }
-
-    //renderers------------------------------------------------------
+    public void renderTriggers(GraphicsContext gc) { triggerSystem.render(gc); }
 
 
-    //hit--------------------------------------------------------------
-    /**
-     * To Check if the Bullet hits the Wall
-     * To check if the Bullet hits Home also
-     * @param m
-     */
-    public void update(Bullet m){
-        hitObstacles(m);
-        hitHome(m);
+
+    public void update() {
+        obstacles.removeIf(o -> !o.exists());
+        obstacles.forEach(GenericObstacle::update);
     }
 
-    /**
-     * This method is to check if Bullet hits common walls
-     * @param m
-     */
-    public void hitObstacles(Bullet m){
-        for (int j = 0; j < obstacles.size(); j++) {
-            MapObject2D cw = obstacles.get(j);
-            cw.beHitBy(m);
-        }
-    }
-    /**
-     * We use the Home Object as parameter for Bullet's hotHome Method
-     * To check if home gets hit
-     * @param m
-     */
-    public void hitHome(Bullet m){
-        home.beHitBy(m);
-    }
-
-    public void updateObstacles() {
-        Iterator<MapObject2D> it = obstacles.iterator();
-        while (it.hasNext()) {
-            MapObject2D curObj = it.next();
-            if (curObj.isToBeRemoved()) {
-                it.remove();
-            } else {
-                curObj.update();
-            }
-        }
-    }
-    //hit--------------------------------------------------------------
     private void addWeaponGenerator(){
         WeaponGenerator w = new WeaponGenerator(466, 466, Weapon.ArmourGun, 30,30,30);
         triggerSystem.register(w);
@@ -169,73 +116,22 @@ public class GameMap {
     }
 
 
-    //collide--------------------------------------------------------------
-    /**
-     * A method to loop all objects, and use as parameter for tanks's Collide Method
-     * To determine if a Tank Collides such Walls and need to turn back to it's previous position
-     * @param t
-     */
+    public void handleAll(Player player, ArrayList<DefaultEnemy> enemies, ArrayList<Bullet> bullets) {
+        obstacles.forEach(obstacle -> {
+            obstacle.handleCharacter(player);
+            enemies.forEach(obstacle::handleCharacter);
+            bullets.forEach(obstacle::handleBullet);
+        });
 
-    public void update(Tank t){
-        collideWithHome(t);
-        collideWithObstacles(t);
-        collideWithTriggers(t);
+        triggerSystem.update(player);
+        enemies.forEach(enemy -> triggerSystem.update(enemy));
     }
-    /**
-     * To determine if a Tank Collides Home and need to turn back
-     * @param t
-     */
-    public void collideWithHome(Tank t){
-        home.collideWith(t);
-    }
-    /**
-     * A method to loop all objects, and use as parameter for Collide Method
-     * To determine if a Tank Collides such home Walls and need to turn back to it's previous position
-     * @param t
-     */
-    public void collideWithObstacles(Tank t){
+
+
+    public void collideWithRectangle(int ID,int indexOfNode, Rectangle r1){
         for (int i = 0; i < obstacles.size(); i++) {
-            MapObject2D w = obstacles.get(i);
-            w.collideWith(t);
+            GenericObstacle w = obstacles.get(i);
+            w.interactWith(ID,indexOfNode,r1);
         }
     }
-    private void addIceWall(){
-        for(int i = 0; i < 5 ; i++){
-            obstacles.add(new IceWall(390, 320-21*i));
-
-        }
-    }
-    private void addRiver(){
-        obstacles.add(new River(222,166));
-        obstacles.add(new River(298,166));
-
-    }
-    private void addTree(){
-
-            obstacles.add(new Tree(189,166));
-            obstacles.add(new Tree(150,166));
-
-    }
-    private void addMetalWall(){
-        for (int i = 0; i < 10; i++) {
-            if (i < 4)
-                obstacles.add(new MetalWall(230, 450-35*i));
-            else if (i < 7)
-                obstacles.add(new MetalWall(210 + 35 * (i - 4), 400));
-            else
-                obstacles.add(new MetalWall(88, 30 + (i - 7) * 35));
-
-        }
-    }
-    private void addCommonWall(){
-        obstacles.add(new CommonWall(380,166));
-        obstacles.add(new CommonWall(340,166));
-
-    }
-
-
-    public void collideWithTriggers(Tank t){
-        triggerSystem.update(t);
-    }
-    //collide--------------------------------------------------------------
 }

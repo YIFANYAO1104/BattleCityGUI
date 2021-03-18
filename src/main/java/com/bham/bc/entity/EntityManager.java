@@ -11,7 +11,7 @@ public class EntityManager {
     /**
      * Create EntityManager to provide Easy Access
      */
-    public static EntityManager EntityMgr = new EntityManager();
+    public static EntityManager entityManager = new EntityManager();
 
     /**
      * Private class that provides HashMap with <Integer,BaseGameEntity> as key-value Entry
@@ -24,8 +24,7 @@ public class EntityManager {
      */
     private EntityMap m_EntityMap = new EntityMap();
 
-    public EntityManager() {
-    }
+    public EntityManager() { }
 
     //copy ctor and assignment should be private
     private EntityManager(EntityManager cs) {
@@ -40,8 +39,8 @@ public class EntityManager {
 //
 //   this class is a singleton
 //-----------------------------------------------------------------------------
-    public static EntityManager Instance() {
-        return EntityMgr;
+    public static EntityManager instance() {
+        return entityManager;
     }
 
     /**
@@ -49,9 +48,9 @@ public class EntityManager {
      * By create new EntityID-EntityObject paired Entry and put into HashMap
      * @param NewEntity
      */
-    public void RegisterEntity(BaseGameEntity NewEntity) {
-        m_EntityMap.put(NewEntity.ID(), NewEntity);
-        System.out.println("register id :"+NewEntity.ID()+" with type: "+ NewEntity.toString() );
+    public void registerEntity(BaseGameEntity NewEntity) {
+        m_EntityMap.put(NewEntity.getID(), NewEntity);
+//        System.out.println("register id :"+NewEntity.ID()+" with type: "+ NewEntity.toString() );
     }
 
     /**
@@ -59,7 +58,7 @@ public class EntityManager {
      * @param id
      * @return
      */
-public BaseGameEntity GetEntityFromID(int id) {
+public BaseGameEntity getEntityFromID(int id) {
         //find the entity
         BaseGameEntity ent = m_EntityMap.get(id);
 
@@ -73,8 +72,8 @@ public BaseGameEntity GetEntityFromID(int id) {
      * Remove the EntityID-EntityObject paired entry from HashMap
      * @param pEntity
      */
-    public void RemoveEntity(BaseGameEntity pEntity) {
+    public void removeEntity(BaseGameEntity pEntity) {
         //m_EntityMap.erase(m_EntityMap.find(pEntity.ID()));
-        m_EntityMap.remove(pEntity.ID());
+        m_EntityMap.remove(pEntity.getID());
     }
 }

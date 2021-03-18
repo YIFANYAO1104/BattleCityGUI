@@ -7,7 +7,7 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.Tank;
+import com.bham.bc.components.characters.Character;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -15,7 +15,7 @@ import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class HealthGiver extends RespawnTrigger<Tank> {
+public class HealthGiver extends RespawnTrigger<Character> {
 
     public static int width = Constants.TILE_WIDTH;
     public static int length = Constants.TILE_WIDTH;
@@ -42,9 +42,9 @@ public class HealthGiver extends RespawnTrigger<Tank> {
 
     //if triggered, the bot's health will be incremented
     @Override
-    public void tryTrigger(Tank tank) {
-        if (isActive() && isTouchingTrigger(tank.getPosition(), tank.getRadius())) {
-            tank.increaseHealth(health);
+    public void tryTrigger(Character character) {
+        if (isActive() && isTouchingTrigger(character.getPosition(), character.getRadius())) {
+            character.addHP(health);
 
             deactivate();
         }
@@ -74,7 +74,7 @@ public class HealthGiver extends RespawnTrigger<Tank> {
     }
 
     @Override
-    public boolean isIntersect(BaseGameEntity b) {
+    public boolean intersects(BaseGameEntity b) {
         return false;
     }
 }
