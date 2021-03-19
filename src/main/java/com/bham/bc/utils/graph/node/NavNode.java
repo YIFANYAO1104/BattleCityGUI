@@ -2,10 +2,10 @@ package com.bham.bc.utils.graph.node;
 
 import com.bham.bc.utils.graph.ExtraInfo;
 
-public class NavNode<extra_info extends ExtraInfo> extends GraphNode{
+public class NavNode extends GraphNode{
 
     protected Vector2D m_vPosition;
-    protected extra_info m_ExtraInfo;
+    protected ExtraInfo m_ExtraInfo;
 
     public NavNode(int idx, Vector2D pos){
         super(idx);
@@ -28,11 +28,11 @@ public class NavNode<extra_info extends ExtraInfo> extends GraphNode{
     }
 
 
-    public extra_info getExtraInfo() {
+    public ExtraInfo getExtraInfo() {
         return m_ExtraInfo;
     }
 
-    public void setExtraInfo(extra_info info) {
+    public void setExtraInfo(ExtraInfo info) {
         m_ExtraInfo = info;
     }
 }

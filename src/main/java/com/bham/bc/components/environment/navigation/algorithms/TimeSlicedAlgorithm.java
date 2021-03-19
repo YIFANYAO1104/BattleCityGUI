@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment.navigation.algorithms;
 
+import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 
@@ -16,7 +17,7 @@ abstract public class TimeSlicedAlgorithm {
      * search
      */
 
-    public abstract int cycleOnce();
+    public abstract SearchStatus cycleOnce();
 
     /**
      * returns the vector of edges that the algorithm has examined

@@ -6,7 +6,7 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
-import com.bham.bc.components.environment.navigation.algorithms.SearchStatus;
+import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;

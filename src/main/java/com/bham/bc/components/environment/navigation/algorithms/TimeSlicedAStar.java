@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment.navigation.algorithms;
 
 
+import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
@@ -25,9 +26,9 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     }
 
     @Override
-    public int cycleOnce() {
+    public SearchStatus cycleOnce() {
         /*TODO: FILL*/
-        return 0;
+        return SearchStatus.target_not_found;
     }
 
     @Override

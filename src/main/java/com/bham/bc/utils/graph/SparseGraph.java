@@ -544,7 +544,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     public boolean handleMessage(Telegram msg) {
         switch (msg.Msg){
             case Msg_interact :
-                System.out.println("Find invalid nodes, dealing");
+                //System.out.println("Find invalid nodes, dealing");
                 nodeVector.get((int)msg.ExtraInfo).setInvalid();
                 return true;
             default:

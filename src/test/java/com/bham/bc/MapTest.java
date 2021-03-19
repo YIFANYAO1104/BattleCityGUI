@@ -22,7 +22,7 @@ public class MapTest extends Application{
 
     @Test
     public void test1(){
-        launch();
+//        launch();
     }
 
 }

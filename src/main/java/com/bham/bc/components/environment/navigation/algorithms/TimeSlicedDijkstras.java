@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment.navigation.algorithms;
 
 import com.bham.bc.components.environment.navigation.ItemType;
+import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.algorithms.terminationPolicies.TerminationCondition;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.utils.graph.SparseGraph;
@@ -58,7 +59,7 @@ public class TimeSlicedDijkstras<termination_condition extends TerminationCondit
     }
 
     @Override
-    public int cycleOnce() {
+    public SearchStatus cycleOnce() {
         while (!pq.isEmpty()){
             MyPairs pair = pq.poll();
             double dist = pair.getValue();
@@ -67,7 +68,7 @@ public class TimeSlicedDijkstras<termination_condition extends TerminationCondit
 
             if (tm.isSatisfied(navGraph, targetType, node)) {
                 target = node;
-                return 0;
+                return SearchStatus.target_found;
             }
 
             SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(this.navGraph, node);
@@ -86,7 +87,7 @@ public class TimeSlicedDijkstras<termination_condition extends TerminationCondit
                 }
             }
         }
-        return 1;
+        return SearchStatus.target_not_found;
     }
 
     public double getDistance(int target) {
