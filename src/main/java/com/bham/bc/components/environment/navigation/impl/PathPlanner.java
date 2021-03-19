@@ -2,13 +2,11 @@ package com.bham.bc.components.environment.navigation.impl;
 
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
-import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAStar;
+import com.bham.bc.components.environment.navigation.algorithms.astar.TimeSlicedAStar;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedDijkstras;
 import com.bham.bc.components.environment.navigation.algorithms.terminationPolicies.FindActiveTrigger;
 import com.bham.bc.utils.graph.SparseGraph;
-import com.bham.bc.utils.graph.edge.GraphEdge;
-import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 import javafx.geometry.Point2D;
@@ -104,8 +102,9 @@ public class PathPlanner implements NavigationService {
         if (closestNodeToTarget == no_closest_node_found){
             return false;
         }
+
         //create algorithm instance
-        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
+        curSearchTask = new TimeSlicedAStar(navGraph, navGraph.getNode(closestNodeToPlayer), navGraph.getNode(closestNodeToTarget));
         //register task in time slice service
 
         return true;

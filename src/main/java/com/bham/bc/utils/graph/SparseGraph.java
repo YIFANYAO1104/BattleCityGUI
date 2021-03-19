@@ -165,7 +165,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
 
     }
-    
+
     public int renderTankPoints(Vector2D location , GraphicsContext gc){
         gc.setFill(Color.RED);
 
@@ -184,7 +184,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     public NavNode getClosestNodeForPlayer(Vector2D location){
-        int i = (int) (location.getX() + 16.0) /eachDisY;
+        int i = (int) (location.getX() + 16.0) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
         int j = (int) (location.getY() + 16.0) / eachDisX;
         int c = j*rowNums + i;
         NavNode n1 = (NavNode)this.nodeVector.get(c);
@@ -443,7 +443,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             return false;
         }
     }
-    
+
 
     /**
      * Get nodes which is connected with this node
