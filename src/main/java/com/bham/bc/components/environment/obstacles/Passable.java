@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
 import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
-import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
+import static com.bham.bc.utils.messaging.MessageTypes.*;
 
 /**
  * Desc: Tile which can be passed by any game entity. It can act as a decoration
@@ -41,6 +41,7 @@ public class Passable extends GenericObstacle {
 
     @Override
     public void interactWith(int ID, int indexOfNode , Rectangle r1) {
-        return;
+        if(this.getHitBox().intersects(r1.getBoundsInLocal()))
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.ID(),ID,Msg_interactWithPassable,indexOfNode);
     }
 }

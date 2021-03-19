@@ -544,9 +544,17 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     public boolean handleMessage(Telegram msg) {
         switch (msg.Msg){
             case Msg_interact :
-                System.out.println("Find invalid nodes, dealing");
+//                System.out.println("Find invalid nodes, dealing");
                 nodeVector.get((int)msg.ExtraInfo).setInvalid();
                 return true;
+            case Msg_interactWithPassable:
+                System.out.println("Set the nodes edges with max");
+                ArrayList<GraphNode> nodes1 = getAroundNodes(getNode((int) msg.ExtraInfo));
+                for(GraphNode node: nodes1){
+                    setEdgeCost((int)msg.ExtraInfo,node.Index(),100000.0 );
+                    return true;
+                }
+
             default:
                 return false;
         }
