@@ -4,9 +4,14 @@ import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+
+import java.util.ArrayList;
 
 public class ChallengeController extends CenterController {
 
@@ -20,9 +25,11 @@ public class ChallengeController extends CenterController {
         return false;
     }
 
-    public ChallengeController(){
+    public ChallengeController(MapType mapType){
         super();
-        player = new Player(16*32, 16*32, Direction.STOP,null);
+        gameMap = new GameMap(mapType);
+        gameMap.initialGraph(new Point2D(16*32, 16*32));
+        player = new Player(16*32, 16*32, Direction.STOP,gameMap);
         initEnemies();
     }
 
@@ -45,13 +52,19 @@ public class ChallengeController extends CenterController {
     @Override
     public void update() {
 
-        if (enemies.isEmpty()) initEnemies();
         //move-----------------
         player.update();
         for (Enemy e : enemies) {
             e.update();
         }
         //move-----------------
+
+        //map----------------------------------
+        gameMap.update(player);
+        for (Enemy e : enemies) {
+            gameMap.update(e);
+        }
+        //map----------------------------------
 
         //tanks----------------------------------
         player.collideWithTanks(enemies);
@@ -77,7 +90,9 @@ public class ChallengeController extends CenterController {
                 Bullet bts=bullets.get(j);
                 m.hitBullet(bts);
             }
+            gameMap.update(m);
         }
+        gameMap.updateObstacles();
     }
 
     @Override
@@ -87,7 +102,7 @@ public class ChallengeController extends CenterController {
          *  The latter render will cover the previous render
          *  For example,rending Tree at the end leads to successfully Shading
          */
-
+        gameMap.renderBottomLayer(gc);
         for (int i = 0; i < bullets.size(); i++) {
             Bullet t = bullets.get(i);
             t.render(gc);
@@ -103,5 +118,20 @@ public class ChallengeController extends CenterController {
             BombTank bt = bombTanks.get(i);
             bt.render(gc);
         }
+        gameMap.renderTopLayer(gc);
+        gameMap.renderGraph(gc, allCharactersLocation());
+    }
+
+    /**
+     *
+     * @return temp1 the list with all characters' location inlcuding player.
+     */
+    public ArrayList<Point2D> allCharactersLocation(){
+        ArrayList<Point2D> temp1 = new ArrayList<Point2D>();
+        temp1.add(player.getPosition());
+        for (Enemy e1 :enemies){
+            temp1.add(e1.getPosition());
+        }
+        return temp1;
     }
 }

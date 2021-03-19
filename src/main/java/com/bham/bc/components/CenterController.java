@@ -35,7 +35,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
                 break;
             case CHALLENGE:
-                centerController = new ChallengeController();
+                centerController = new ChallengeController(mapType);
                 break;
         }
         frontendServices = centerController;

@@ -25,6 +25,7 @@ public class JsonMapLoader extends MapLoader {
      */
     public JsonMapLoader(String resourceName) {
         super();
+        if (resourceName==null) return;
         offsets = new EnumMap<>(TILESET.class);
         animations = new HashMap<>();
 

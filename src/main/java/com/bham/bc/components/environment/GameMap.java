@@ -52,6 +52,7 @@ public class GameMap {
         triggerSystem = mapLoader.getTriggerSystem();
         initTriggers();
     }
+
     //init only--------------------------------------------------------------
 
     public void initTriggers(){

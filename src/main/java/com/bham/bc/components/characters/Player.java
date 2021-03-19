@@ -6,6 +6,7 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
+import com.bham.bc.components.environment.navigation.algorithms.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
@@ -59,6 +60,7 @@ public class Player extends Character implements TrackableCharacter {
 		super(1,1, x,y,32,32,dir);
 		initImages();
 		initTrackableCoordinates();
+		navigationService = new PathPlanner(this,gm.getGraph());
 	}
 
 	/**
@@ -87,18 +89,18 @@ public class Player extends Character implements TrackableCharacter {
 		gc.setFill(c);
 	}
 
-	public void createNewRequestItem(GameMap gm){
-		navigationService = new PathPlanner(this,gm.getGraph());
+	public void createNewRequestItem(){
+//		navigationService = new PathPlanner(this,gm.getGraph());
 		navigationService.createRequest(ItemType.health);
-		if(navigationService.peekRequestStatus()==0){
+		if(navigationService.peekRequestStatus()== SearchStatus.target_found){
 			navigationService.getPath();
 		}
 	}
 
-	public void createNewRequestAStar(GameMap gm){
-		navigationService = new PathPlanner(this,gm.getGraph());
+	public void createNewRequestAStar(){
+//		navigationService = new PathPlanner(this,gm.getGraph());
 		navigationService.createRequest(new Point2D(0,0));
-		if(navigationService.peekRequestStatus()==0){
+		if(navigationService.peekRequestStatus()== SearchStatus.target_found){
 			navigationService.getPath();
 		}
 	}
