@@ -1,9 +1,12 @@
 package com.bham.bc.view.menu;
 
+import com.bham.bc.utils.Constants;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.SubMenu;
+import javafx.geometry.Pos;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -31,10 +34,9 @@ public class PauseMenu extends AnchorPane{
     public PauseMenu(MenuSession menuSession) {
 
         this.menuSession = menuSession;
-        setWidth(500);
-        setHeight(300);
-        this.setLayoutX(250);
-        this.setLayoutY(300);
+
+        this.setLayoutX(0);
+        this.setLayoutY(0);
 
         initBgDim();
         createSubMenuPause();
@@ -43,16 +45,20 @@ public class PauseMenu extends AnchorPane{
     }
 
     private void createSubMenuPause() {
-        btnResume=new MenuButton("Resume");
-        btnSettings=new MenuButton("Settings");
-        btnEndGame=new MenuButton("Quit");
+        VBox vBox=new VBox(15,btnResume=new MenuButton("Resume"),
+        btnSettings=new MenuButton("Settings"),
+        btnEndGame=new MenuButton("Quit"));
+        vBox.setTranslateX(530);
+        vBox.setTranslateY(430);
+
 
         btnSettings.setOnMouseClicked(e->{});
         btnEndGame.setOnMouseClicked(e->{});
         btnResume.setOnMouseClicked(e->{});
         
         subMenuPause=new SubMenu(this);
-        subMenuPause.getChildren().addAll(btnResume,btnSettings,btnEndGame);
+        subMenuPause.getChildren().addAll(vBox);
+
         //subMenuPause.setOpacity(0.8);
 
     }
@@ -60,7 +66,7 @@ public class PauseMenu extends AnchorPane{
      * Adds background dim to the menu
      */
     private void initBgDim() {
-        Rectangle bg = new Rectangle(getWidth(), getHeight());
+        Rectangle bg = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         bg.setFill(Color.BLACK);
         bg.setOpacity(0.5);
         getChildren().add(bg);
