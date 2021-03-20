@@ -38,15 +38,16 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
 
     @Override
     public SearchStatus cycleOnce() {
-        Node n1 = start();
+//        Node n1 = start();
+        routine = search();
 
-        if(n1.getNode() == goal.getNode()){
-            System.out.println("SearchStatus.target_not_found");
-            return SearchStatus.target_not_found;
-        }
-        else{
+        if(routine.get(0) == goal.getNode()){
             System.out.println("SearchStatus.target_found");
             return SearchStatus.target_found;
+        }
+        else{
+            System.out.println("SearchStatus.target_not_found");
+            return SearchStatus.target_not_found;
         }
 
     }
@@ -71,29 +72,26 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     public List<PathEdge> getPathAsPathEdges() {
         /*TODO: FILL*/
         List<PathEdge> path = new LinkedList<PathEdge>();
-        Queue<Node> noddd = new LinkedList<>(openList);
 
 //        if(routine == null) return null;
 
-        for(Node nn:noddd){
-            if(nn.getParentNode() != null){
-                NavNode n1 = (NavNode) nn.getNode();
-                NavNode n2 = (NavNode) nn.getParentNode().getNode();
-                path.add(new PathEdge(n1.Pos(),n2.Pos()));
-            }
+        for(int i = routine.size()-1;i>0;i--){
+            NavNode n1 = routine.get(i);
+            NavNode n2 = routine.get(i-1);
+            path.add(new PathEdge(n1.Pos(),n2.Pos()));
         }
 
         return path;
     }
 
 
-    public ArrayList<GraphNode> search(){
+    public ArrayList<NavNode> search(){
         Node n1 = start();
-        ArrayList<GraphNode> temp = new ArrayList<>();
+        ArrayList<NavNode> temp = new ArrayList<>();
 
-        temp.add(n1.getNode());
+        temp.add((NavNode) n1.getNode());
         while (n1.getParentNode() != null){
-            temp.add(n1.getParentNode().getNode());
+            temp.add((NavNode) n1.getParentNode().getNode());
             n1 = n1.getParentNode();
         }
 
@@ -108,14 +106,18 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
             System.out.println("finding");
         }
         System.out.println("find that !");
+        while (!openList.isEmpty()){
+            if (openList.peek().getNode() == goal.getNode())
+                return openList.peek();
+            else
+                openList.poll();
+        }
 
-        return openList.peek();
+        return null;
     }
 
     private boolean isFinish(){
 
-//        if(openList.peek().getDistance() ==0.0)
-//            return false;
         if(register.contains(goal.getNode()))
             return false;
 

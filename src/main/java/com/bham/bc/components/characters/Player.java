@@ -99,7 +99,7 @@ public class Player extends Character implements TrackableCharacter {
 
 	public void createNewRequestAStar(){
 //		navigationService = new PathPlanner(this,gm.getGraph());
-		navigationService.createRequest(new Point2D(0,0));
+		navigationService.createRequest(new Point2D(440,550));
 		if(navigationService.peekRequestStatus()== SearchStatus.target_found){
 			navigationService.getPath();
 		}
