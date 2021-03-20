@@ -4,6 +4,7 @@ import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.entity.ai.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
@@ -26,7 +27,7 @@ public class Kamikaze extends Enemy {
     private IntCondition chargeRangeCondition;
     private IntCondition attackRangeCondition;
 
-    private int pid;
+    private int targetID;
 
     /**
      * Constructs a kamikaze type enemy
@@ -34,11 +35,11 @@ public class Kamikaze extends Enemy {
      * @param x     top left x coordinate of the character
      * @param y     top left y coordinate of the character
      */
-    public Kamikaze(double x, double y, int playerID) {
+    public Kamikaze(double x, double y, int targetID) {
         super(x, y, SPEED, MAX_HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
         //stateMachine = createFSM();
-        pid = playerID;
+        this.targetID = targetID;
         createFSM();
     }
 
@@ -50,7 +51,7 @@ public class Kamikaze extends Enemy {
 
         // Define all conditions required for to change any state
         chargeRangeCondition = new IntCondition(0, 200);
-        freePathCondition = new CollideCondition(getID(), pid);         // Pass this condition as second because it is more expensive
+        freePathCondition = new CollideCondition(getID(), targetID);         // Pass this condition as second because it is more expensive
         attackRangeCondition = new IntCondition(0, 10);
 
         //Transition detectChargeOption = new AndCondition();
@@ -59,14 +60,16 @@ public class Kamikaze extends Enemy {
 
     @Override
     public Shape getHitBox() {
-        Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
-        hitBox.getTransforms().add(new Rotate(angle, x + WIDTH/2,y + HEIGHT/2));
-
-        return hitBox;
+        Rectangle bottomHitbox = new Rectangle(x, y+HEIGHT/2.0, WIDTH, HEIGHT/2.0);
+        Circle topHitbox = new Circle(getCenterPosition().getX(), getCenterPosition().getY(), WIDTH/2.0);
+        bottomHitbox.getTransforms().add(new Rotate(angle, x + WIDTH/2.0,y + HEIGHT/2.0));
+        topHitbox.getTransforms().add(new Rotate(angle, x + WIDTH/2.0,y + HEIGHT/2.0));
+        //return Shape.union(topHitbox, bottomHitbox);
+        return topHitbox;
     }
 
     @Override
-    public Shape getLine() { return freePathCondition.getLine();}
+    public Shape getLine() { return freePathCondition.getLine(); }
 
     @Override
     public void update() {

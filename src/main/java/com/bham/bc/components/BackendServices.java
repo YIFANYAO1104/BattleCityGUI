@@ -37,6 +37,7 @@ public interface BackendServices {
     boolean intersectsObstacles(Shape hitBox);
     int getPlayerID();
     Point2D getPlayerCenterPosition();
+    Point2D getPlayerPosition();
 
     /**
      * Updates all the entities: map, characters and armory elements

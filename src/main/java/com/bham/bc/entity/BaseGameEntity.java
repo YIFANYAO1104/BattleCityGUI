@@ -4,6 +4,7 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
@@ -71,7 +72,11 @@ abstract public class BaseGameEntity {
      * @param entity BaseGameEntity instance we want to check if the this instance is intersecting with
      * @return true if the hit-boxes of two entities intersect and false otherwise
      */
-    public boolean intersects(BaseGameEntity entity) { return this.getHitBox().intersects(entity.getHitBox().getBoundsInLocal()); }
+    public boolean intersects(BaseGameEntity entity) { return intersectsShape(entity.getHitBox()); }
+
+    public boolean intersectsShape(Shape shape) {
+        return ((Path)Shape.intersect(this.getHitBox(), shape)).getElements().size() > 0;
+    }
 
     /**
      *

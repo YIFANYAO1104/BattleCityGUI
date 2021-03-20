@@ -79,9 +79,7 @@ public abstract class GenericObstacle extends BaseGameEntity {
     }
 
     public boolean handleHitBox(Shape hitBox) {
-        if(hitBox.intersects(getHitBox().getBoundsInParent())) {
-            System.out.println("Tile:" + getHitBox().getBoundsInParent());
-            System.out.println("Line:" + hitBox.getBoundsInParent());
+        if(hitBox.intersects(hitBox.sceneToLocal(getHitBox().localToScene(getHitBox().getBoundsInLocal())))) {
             c = new Color(1, 1, 0, 1);
             return true;
         }

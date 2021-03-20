@@ -40,7 +40,7 @@ public class CollideCondition implements Condition {
 
 
 
-        Rectangle hitBox = new Rectangle(pt1.getX(), pt1.getY(), pt1.distance(pt2), 3);
+        Rectangle hitBox = new Rectangle(pt1.getX(), pt1.getY(), pt1.distance(pt2), 1);
         hitBox.getTransforms().add(new Rotate(Math.toDegrees(an), pt1.getX(),pt1.getY()));
         rect = hitBox;
 

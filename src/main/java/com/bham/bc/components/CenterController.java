@@ -87,6 +87,11 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         return player.getCenterPosition();
     }
 
+    @Override
+    public Point2D getPlayerPosition() {
+        return player.getPosition();
+    }
+
     //------------------------------------------------------
 
     @Override
@@ -142,6 +147,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             enemyHitBox.setFill(Color.TRANSPARENT);
             enemyHitBox.setStroke(Color.RED);
             enemyHitBox.setStrokeWidth(1);
+            hitBoxPane.getChildren().add(enemyHitBox);
 
             Shape enemyLine = e.getLine();
             enemyLine.setStroke(Color.RED);
