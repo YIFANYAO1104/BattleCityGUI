@@ -6,16 +6,12 @@ import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.messaging.Telegram;
-import com.sun.javafx.geom.Edge;
-import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.graph.NodeTypeEnum.invalid_node_index;
 
-import java.io.*;
 import java.util.*;
 
 public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> extends BaseGameEntity {
@@ -62,6 +58,10 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     private int nextNodeIndex;
 
     private HashSet<NavNode> obstacleNodes = new HashSet<>();
+
+    private HashMap<Integer, ArrayList<NavNode>> obstacleId = new HashMap<>();
+
+    private ArrayList<NavNode> ooooNodes = new ArrayList<>();
 
     /**
      * @return true if the edge is not present in the graph. Used when adding
@@ -204,6 +204,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     public LinkedList<NavNode> getNodeList(int n1){
+//        if(getNode(n1).isValid()) return null;
         LinkedList<NavNode> nodes = new LinkedList<>();
         LinkedList<GraphEdge> edges = edgeListVector.get(n1);
         for (GraphEdge e1: edges){
@@ -566,6 +567,39 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         return i1;
 
     }
+    private void addToHashMap(int id, NavNode node){
+        if(!node.isValid()) return;
+        if(obstacleId.containsKey(id)){
+            ArrayList<NavNode> temp1 = obstacleId.get(id);
+            if(temp1.contains(node))
+                System.out.println("this node has been registered in graph HashMap");
+            else{
+                node.addNum();
+                temp1.add(node);
+            }
+
+
+        }else{
+            ArrayList<NavNode> temp2 = new ArrayList<>();
+            temp2.add(node);
+            node.addNum();
+            obstacleId.put(id,temp2);
+        }
+    }
+
+    private void removeObstacleInHashMap(int id){
+        if(obstacleId.containsKey(id)){
+            for(NavNode node: obstacleId.get(id)){
+                node.minesNum();
+                if(!node.isHit()){
+                    setNodeALLEdages(node.Index(),20.0);
+                }
+            }
+            obstacleId.remove(id);
+        }else {
+            System.out.println("no this key????");
+        }
+    }
 
     @Override
     public void update() {
@@ -586,11 +620,13 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 return true;
             case Msg_interactWithPassable:
 //                System.out.println("Set the nodes edges with max");
+                NavNode nn1 = getNode((int) msg.ExtraInfo);
+                addToHashMap(msg.Sender,nn1);
                 setNodeALLEdages((int) msg.ExtraInfo,10000.0);
                 return true;
-            case Msg_no_interact:
-                System.out.println("release the nodewa");
-                setNodeALLEdages((int) msg.ExtraInfo,20.0);
+            case Msg_removeSoft:
+//                System.out.println("release the nodewa");
+                removeObstacleInHashMap(msg.Sender);
                 return true;
 
             default:

@@ -9,7 +9,7 @@ public enum MessageTypes {
     Msg_Gotta(1),
     Msg_interact(2),
     Msg_interactWithPassable(3),
-    Msg_no_interact(4);
+    Msg_removeSoft(4);
 
     final public int id;
 

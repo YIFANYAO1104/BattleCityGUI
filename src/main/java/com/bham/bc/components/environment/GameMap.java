@@ -69,7 +69,7 @@ public class GameMap {
         ArrayList<Vector2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Vector2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.ID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32.0,32.0),true);
+            collideWithRectangle(graphSystem.ID(),index,new Rectangle(vv1.getX()-13,vv1.getY()-13,26,26));
         }
 
         //removed unreachable nodes
@@ -89,15 +89,13 @@ public class GameMap {
      * when remove the obstacle, travel all invalid nnodes to check the if hit with obstale and upate them
      */
 
-    public void updateGraph(){
-        for(Object n1 : graphSystem.getObstacleNodes()){
-            NavNode node = (NavNode) n1;
-            collideWithRectangle(
-                    graphSystem.ID(),node.Index(),new Rectangle(node.Pos().getX()-16,node.Pos().getY()-16,32.0,32.0),false);
-
-        }
-
-    }
+//    public void updateGraph(){
+//        for(Object n1 : graphSystem.getObstacleNodes()){
+//            NavNode node = (NavNode) n1;
+//
+//        }
+//
+//    }
 
     /**
      * Check if home is still alive or not
@@ -263,19 +261,12 @@ public class GameMap {
         }
     }
 
-    public void collideWithRectangle(int ID,int indexOfNode, Rectangle r1, Boolean flag){
-        if(flag){
-            for (int i = 0; i < obstacles.size(); i++) {
-                GenericObstacle w = obstacles.get(i);
-                w.interactWith(ID,indexOfNode,r1);
-            }
-        }else{
-            for (int i = 0; i < obstacles.size(); i++) {
-                GenericObstacle w = obstacles.get(i);
-                w.antiInteractWith(ID,indexOfNode,r1);
-            }
-        }
+    public void collideWithRectangle(int ID,int indexOfNode, Rectangle r1){
 
+        for (int i = 0; i < obstacles.size(); i++) {
+            GenericObstacle w = obstacles.get(i);
+            w.interactWith(ID,indexOfNode,r1);
+        }
     }
 
     public void collideWithTriggers(Character t){

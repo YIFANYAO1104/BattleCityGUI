@@ -6,6 +6,7 @@ public class NavNode extends GraphNode{
 
     protected Vector2D m_vPosition;
     protected ExtraInfo m_ExtraInfo;
+    protected int numWithObs = 0;
 
     public NavNode(int idx, Vector2D pos){
         super(idx);
@@ -18,6 +19,19 @@ public class NavNode extends GraphNode{
     }
 
 
+    public int getNumWithObs() {
+        return numWithObs;
+    }
+    public void addNum(){
+        numWithObs++;
+    }
+    public void minesNum(){
+        numWithObs--;
+    }
+    public boolean isHit(){
+        if(numWithObs > 0) return true;
+        return false;
+    }
 
     public Vector2D Pos() {
         return new Vector2D(m_vPosition);

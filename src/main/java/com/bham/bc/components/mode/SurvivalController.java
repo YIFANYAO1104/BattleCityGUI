@@ -20,8 +20,7 @@ import java.util.ArrayList;
 
 import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
 import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
-import static com.bham.bc.utils.messaging.MessageTypes.Msg_interactWithPassable;
-import static com.bham.bc.utils.messaging.MessageTypes.Msg_no_interact;
+import static com.bham.bc.utils.messaging.MessageTypes.Msg_removeSoft;
 
 public class SurvivalController extends CenterController {
 
@@ -60,7 +59,8 @@ public class SurvivalController extends CenterController {
 //        gameMap.updateGraph();
 //        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
         GraphNode g1 = gameMap.getGraph().getClosestNodeForPlayer(new Vector2D(go.getX(),go.getY()));
-        Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.ID(),gameMap.getGraph().ID(),Msg_no_interact,g1.Index());
+        if(g1.isValid())
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,go.ID(),gameMap.getGraph().ID(), Msg_removeSoft,g1.Index());
     }
 
 
