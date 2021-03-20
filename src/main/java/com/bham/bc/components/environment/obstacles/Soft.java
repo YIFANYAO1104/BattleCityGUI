@@ -6,6 +6,8 @@ import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 
+import java.util.EnumSet;
+
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -29,6 +31,9 @@ public class Soft extends GenericObstacle {
         super(x, y, tileset, tileIDs);
         renderTop = false;
     }
+
+    @Override
+    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.BREAKABLE); }
 
     @Override
     protected Image[] getDefaultImage() {

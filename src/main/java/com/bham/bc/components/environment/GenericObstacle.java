@@ -2,6 +2,7 @@ package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.environment.obstacles.ATTRIBUTE;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.maploaders.TILESET;
 import com.bham.bc.utils.messaging.Telegram;
@@ -9,7 +10,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-import javax.annotation.PreDestroy;
+import java.util.EnumSet;
 
 import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
 import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
@@ -41,8 +42,15 @@ public abstract class GenericObstacle extends BaseGameEntity {
     /**
      * Checks if the tile has to be rendered on top of all other entities
      * @return true if it needs to be in top layer and false otherwise
+     * TODO: remove because this is now an attribute
      */
     public boolean renderTop() { return renderTop; }
+
+    /**
+     * Gets all the important attributes described in {@link com.bham.bc.components.environment.obstacles.ATTRIBUTE} this obstacle has
+     * @return EnumSet containing all the attributes this obstacle possesses
+     */
+    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.noneOf(ATTRIBUTE.class); }
 
     /**
      * Checks if the tile exists. Only for Soft obstacles it is possible to not exist
