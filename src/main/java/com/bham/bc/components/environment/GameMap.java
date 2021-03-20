@@ -69,9 +69,8 @@ public class GameMap {
         ArrayList<Vector2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Vector2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.ID(),index,new Rectangle(vv1.getX()-13,vv1.getY()-13,26,26));
+            collideWithRectangle(graphSystem.ID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32,32));
         }
-
         //removed unreachable nodes
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(new Vector2D(location)));
 //        a2 = hgf.Astar(graphSystem,location,new Point2D(450,550));
@@ -89,13 +88,16 @@ public class GameMap {
      * when remove the obstacle, travel all invalid nnodes to check the if hit with obstale and upate them
      */
 
-//    public void updateGraph(){
+    public void updateGraph(Point2D location){
 //        for(Object n1 : graphSystem.getObstacleNodes()){
 //            NavNode node = (NavNode) n1;
 //
 //        }
-//
-//    }
+        NavNode nnnnn1 = graphSystem.getClosestNodeForPlayer(new Vector2D(location));
+
+//        NavNode nnn2 =  graphSystem.getNode(613);
+//        System.out.println("index of node is " + nnnnn1.isHit());
+    }
 
     /**
      * Check if home is still alive or not

@@ -133,6 +133,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             }
 
         }
+//        System.out.println(getNode(613).numWithObs);
 
 
         // draw edges
@@ -588,10 +589,10 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     private void removeObstacleInHashMap(int id){
-        if(obstacleId.containsKey(id)){
+    if(obstacleId.containsKey(id)){
             for(NavNode node: obstacleId.get(id)){
                 node.minesNum();
-                if(!node.isHit()){
+                if(node.isValid() && (!node.isHit()) ){
                     setNodeALLEdages(node.Index(),20.0);
                 }
             }

@@ -18,8 +18,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 
-import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
-import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
+import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import static com.bham.bc.utils.messaging.MessageTypes.Msg_removeSoft;
 
 public class SurvivalController extends CenterController {
@@ -56,11 +55,11 @@ public class SurvivalController extends CenterController {
 //        player.createNewRequestItem();//每个pathpalnner只有一个任务
         player.createNewRequestAStar();// 存在问题！～～～～
         // 当 obstacle 被消除， node 的 edge 需要被重新设置为正常
-//        gameMap.updateGraph();
+        gameMap.updateGraph(player.getPosition());
 //        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
-        GraphNode g1 = gameMap.getGraph().getClosestNodeForPlayer(new Vector2D(go.getX(),go.getY()));
-        if(g1.isValid())
-            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,go.ID(),gameMap.getGraph().ID(), Msg_removeSoft,g1.Index());
+//        GraphNode g1 = gameMap.getGraph().getClosestNodeForPlayer(new Vector2D(go.getX(),go.getY()));
+//        if(g1.isValid())
+        Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,go.ID(),gameMap.getGraph().ID(), Msg_removeSoft,NO_ADDITIONAL_INFO);
     }
 
 

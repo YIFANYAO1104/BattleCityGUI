@@ -6,7 +6,7 @@ public class NavNode extends GraphNode{
 
     protected Vector2D m_vPosition;
     protected ExtraInfo m_ExtraInfo;
-    protected int numWithObs = 0;
+    public int numWithObs = 0;
 
     public NavNode(int idx, Vector2D pos){
         super(idx);
