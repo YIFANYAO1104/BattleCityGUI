@@ -2,7 +2,8 @@ package com.bham.bc.components.environment.navigation.impl;
 
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
-import com.bham.bc.components.environment.navigation.algorithms.astar.TimeSlicedAStar;
+import com.bham.bc.components.environment.navigation.SearchStatus;
+import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAStar;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedDijkstras;
 import com.bham.bc.components.environment.navigation.algorithms.terminationPolicies.FindActiveTrigger;
@@ -38,13 +39,16 @@ public class PathPlanner implements NavigationService {
      */
     private Point2D destinationPos;
 
-    // temp value to render the graphlines
-    List<PathEdge> a2 = new ArrayList<PathEdge>();
+    private SearchStatus taskStatus;
+
+    // temp value to render the graphlines and getPath
+    List<PathEdge> curPath = new ArrayList<PathEdge>();
 
     public PathPlanner(Character owner, SparseGraph navGraph) {
         this.owner = owner;
         this.navGraph = navGraph;
         curSearchTask =null;
+        taskStatus = SearchStatus.search_incomplete;
     }
 
     /**
@@ -68,14 +72,15 @@ public class PathPlanner implements NavigationService {
     public boolean createRequest(ItemType itemType) {
         //unregister current search
         curSearchTask = null;
+        curPath.clear();
         //find closest node around bot, if no return false
         int closestNodeToPlayer = getClosestNode(owner.getPosition());
         if (closestNodeToPlayer == no_closest_node_found){
             return false;
         }
         //create algorithm instance
-        //TODO: create Termination Condition - target
         curSearchTask = new TimeSlicedDijkstras(navGraph,closestNodeToPlayer,itemType,new FindActiveTrigger());
+        taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
         return true;
     }
@@ -90,6 +95,7 @@ public class PathPlanner implements NavigationService {
 
         //unregister current search
         curSearchTask = null;
+        curPath.clear();
         destinationPos = new Point2D(targetPos.getX(),targetPos.getY());
 
         //find closest node around bot, if no return false
@@ -102,22 +108,26 @@ public class PathPlanner implements NavigationService {
         if (closestNodeToTarget == no_closest_node_found){
             return false;
         }
-
         //create algorithm instance
-        curSearchTask = new TimeSlicedAStar(navGraph, navGraph.getNode(closestNodeToPlayer), navGraph.getNode(closestNodeToTarget));
+        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
+        taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
 
         return true;
     }
 
     @Override
-    public int peekRequestStatus() {
-        int result = curSearchTask.cycleOnce();
-        //System.out.println(a2);
-        if (result == 0){
-             a2 = getPath();
+    public SearchStatus peekRequestStatus() {
+        //carry on searching if not finished
+        if (taskStatus == SearchStatus.search_incomplete){
+            taskStatus = curSearchTask.cycleOnce();
         }
-        return result;
+        return taskStatus;
+    }
+
+    private Point2D getCenter(Point2D topLeft, Point2D radius){
+        //add used deepcopy
+        return topLeft.add(radius.multiply(0.5));
     }
 
     /**
@@ -126,14 +136,19 @@ public class PathPlanner implements NavigationService {
      * @return a list of PathEdges
      */
     public List<PathEdge> getPath() {
+        //return empty path if search is not finished or path had already been fetched
+        if (taskStatus == SearchStatus.search_incomplete) return curPath;
+        //return path if it had already been fetched
+        if (!curPath.isEmpty()) return curPath;
 
         //fetch path list from 'task'
-        List<PathEdge> path = curSearchTask.getPathAsPathEdges();
+        curPath = curSearchTask.getPathAsPathEdges();
         //get closest node around current position
         int closest = getClosestNode(owner.getPosition());
         //add start and end node
-        path.add(0,
-                new PathEdge(owner.getPosition(), navGraph.getNode(closest).Pos())
+
+        curPath.add(0,
+                new PathEdge(getCenter(owner.getPosition(),owner.getRadius()), navGraph.getNode(closest).Pos())
         );
 
 //        PathEdge lastEdge = path.get(path.size()-1);
@@ -146,7 +161,7 @@ public class PathPlanner implements NavigationService {
         //smooth path
 
 
-        return path;
+        return curPath;
     }
 
     /**
@@ -174,7 +189,7 @@ public class PathPlanner implements NavigationService {
     @Override
     public void render(GraphicsContext gc) {
         //draw edges
-        for (PathEdge graphEdge : a2) {
+        for (PathEdge graphEdge : curPath) {
             Point2D n1 = graphEdge.getSource();
             Point2D n2 = graphEdge.getDestination();
             gc.setStroke(Color.RED);

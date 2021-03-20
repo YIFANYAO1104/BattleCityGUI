@@ -52,11 +52,12 @@ public class GameMap {
         triggerSystem = mapLoader.getTriggerSystem();
         initTriggers();
     }
+
     //init only--------------------------------------------------------------
 
     public void initTriggers(){
         HealthGiver hg = new HealthGiver(400,400,10,100);
-        HealthGiver hg1 = new HealthGiver(800,400,10,100);
+        HealthGiver hg1 = new HealthGiver(600,400,10,100);
         triggerSystem.register(hg);
         triggerSystem.register(hg1);
     }
@@ -78,7 +79,7 @@ public class GameMap {
         //let the corresponding navgraph node point to triggers object
         ArrayList<Trigger> triggers = triggerSystem.getTriggers();
         for (Trigger trigger : triggers) {
-            NavNode<Trigger<Character>> node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(new Vector2D(trigger.getX(),trigger.getY())).Index());
+            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(new Vector2D(trigger.getX(),trigger.getY())).Index());
             node.setExtraInfo(trigger);
         }
     }

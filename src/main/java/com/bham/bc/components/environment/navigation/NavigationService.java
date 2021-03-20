@@ -33,7 +33,7 @@ public interface NavigationService {
      * 1 if not found
      * 2 if the search is not completed;
      */
-    public int peekRequestStatus();
+    public SearchStatus peekRequestStatus();
 
     /**
      * called by an agent after it has been notified that a search has

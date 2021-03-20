@@ -12,7 +12,7 @@ public class MapTest extends Application{
     @Override
     public void start(Stage primaryStage) throws Exception {
         try {
-            GameSession manager = new GameSession(MODE.SURVIVAL, MapType.TESTMap1);
+            GameSession manager = new GameSession(MODE.CHALLENGE, MapType.EmptyMap);
             manager.createNewGame(primaryStage);
         } catch(Exception e) {
             e.printStackTrace();
