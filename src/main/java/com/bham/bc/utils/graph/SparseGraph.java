@@ -118,6 +118,13 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             NavNode n1 = getNode(i);
             if(n1.isValid()){
                 gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),2,2,1,1);
+                for(GraphNode nn1: getAroundNodes(n1)){
+                    if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).Cost() > 1000.0){
+                        gc.setFill(Color.BLUE);
+                        gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),4,4,2,2);
+                        gc.setFill(Color.BLACK);
+                    }
+                }
 //                System.out.println(n1.Pos().toString());
             }else {
 //                System.out.println("------------------------------is----------invallid----------------------------");
@@ -553,11 +560,10 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 for(GraphNode node: nodes1){
                     if(node.isValid()){
                         setEdgeCost((int)msg.ExtraInfo,node.Index(),10000.0 );
-                        setEdgeCost(node.Index(),(int)msg.ExtraInfo,10000.0 );
+//                        setEdgeCost(node.Index(),(int)msg.ExtraInfo,10000.0 );
                     }
-
-                    return true;
                 }
+                return true;
 
             default:
                 return false;

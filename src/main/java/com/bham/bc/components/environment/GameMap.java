@@ -85,6 +85,14 @@ public class GameMap {
     }
 
     /**
+     * when remove the obstacle, travel all invalid nnodes to check the if hit with obstale and upate them
+     */
+
+    public void updateGraph(){
+//        for()
+    }
+
+    /**
      * Check if home is still alive or not
      * @return
      */

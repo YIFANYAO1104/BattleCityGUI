@@ -49,6 +49,7 @@ public class SurvivalController extends CenterController {
         gameMap.removeObstacle(go);
 //        player.createNewRequestItem();//每个pathpalnner只有一个任务
         player.createNewRequestAStar();// 存在问题！～～～～
+        // 当 obstacle 被消除， node 的 edge 需要被重新设置为正常
 //        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
 
     }
