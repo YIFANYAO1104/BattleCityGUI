@@ -61,6 +61,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     //the index of the next node to be added
     private int nextNodeIndex;
 
+    private HashSet<NavNode> obstacleNodes = new HashSet<>();
+
     /**
      * @return true if the edge is not present in the graph. Used when adding
      * edges to prevent duplication
@@ -206,8 +208,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         LinkedList<GraphEdge> edges = edgeListVector.get(n1);
         for (GraphEdge e1: edges){
             NavNode nn1 = getNode(e1.To());
-            if(nn1.isValid())
-                nodes.add(nn1);
+            if(nn1.isValid()) nodes.add(nn1);
         }
 
         if(nodes.isEmpty())
@@ -368,6 +369,35 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 break;
             }
         }
+    }
+
+    public void setNodeALLEdages(int from, double newCost){
+
+        for(NavNode n1 :getNodeList(from)){
+            setEdgeCost(from,n1.Index(),newCost);
+        }
+
+        if(newCost> 1000.0) {
+            obstacleNodes.add(getNode(from));           //1000.0 is the stander
+            if(getNode(from).Index() == -1){
+                System.out.println("I am invalid");
+            }
+        }
+
+//        System.out.println("have added obstacle nodes");
+    }
+
+    public HashSet<NavNode> getObstacleNodes() {
+        return obstacleNodes;
+    }
+    public void freeInvalidObtsatcleNodes(){
+        HashSet<NavNode> temp = new HashSet<>();
+        for(NavNode node : obstacleNodes){
+            if(node.isValid()){
+                temp.add(node);
+            }
+        }
+        obstacleNodes = temp;
     }
 
     /**
@@ -552,17 +582,15 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         switch (msg.Msg){
             case Msg_interact :
 //                System.out.println("Find invalid nodes, dealing");
-                nodeVector.get((int)msg.ExtraInfo).setInvalid();
+                getNode((int)msg.ExtraInfo).setInvalid();
                 return true;
             case Msg_interactWithPassable:
-                System.out.println("Set the nodes edges with max");
-                ArrayList<GraphNode> nodes1 = getAroundNodes(getNode((int) msg.ExtraInfo));
-                for(GraphNode node: nodes1){
-                    if(node.isValid()){
-                        setEdgeCost((int)msg.ExtraInfo,node.Index(),10000.0 );
-//                        setEdgeCost(node.Index(),(int)msg.ExtraInfo,10000.0 );
-                    }
-                }
+//                System.out.println("Set the nodes edges with max");
+                setNodeALLEdages((int) msg.ExtraInfo,10000.0);
+                return true;
+            case Msg_no_interact:
+                System.out.println("release the nodewa");
+                setNodeALLEdages((int) msg.ExtraInfo,20.0);
                 return true;
 
             default:

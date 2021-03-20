@@ -10,6 +10,7 @@ import javafx.scene.shape.Rectangle;
 import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
 import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
+import static com.bham.bc.utils.messaging.MessageTypes.*;
 import static com.bham.bc.utils.messaging.MessageTypes.Msg_interactWithPassable;
 
 /**
@@ -61,4 +62,5 @@ public class Soft extends GenericObstacle {
         if(this.getHitBox().intersects(r1.getBoundsInLocal()))
             Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.ID(),ID,Msg_interactWithPassable,indexOfNode);
     }
+
 }

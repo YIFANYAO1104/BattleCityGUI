@@ -103,9 +103,9 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
 
         while (isFinish()){
             addNode(openList.poll());
-            System.out.println("finding");
+//            System.out.println("finding");
         }
-        System.out.println("find that !");
+//        System.out.println("find that !");
         while (!openList.isEmpty()){
             if (openList.peek().getNode() == goal.getNode())
                 return openList.peek();

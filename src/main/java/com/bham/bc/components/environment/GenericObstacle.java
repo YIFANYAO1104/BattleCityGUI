@@ -35,6 +35,7 @@ public abstract class GenericObstacle extends BaseGameEntity {
         entityImages = tileIDs.length == 0 ? getDefaultImage() : tileset.getTiles(tileIDs);
     }
 
+
     public boolean renderTop() { return renderTop; }
 
     /**
@@ -58,6 +59,9 @@ public abstract class GenericObstacle extends BaseGameEntity {
     public void interactWith(int ID,int indexOfNode ,Rectangle r1) {
         if(this.getHitBox().intersects(r1.getBoundsInLocal()))
             Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.ID(),ID,Msg_interact,indexOfNode);
+    }
+    public void antiInteractWith(int ID,int indexOfNode ,Rectangle r1) {
+        return;
     }
 
     @Override

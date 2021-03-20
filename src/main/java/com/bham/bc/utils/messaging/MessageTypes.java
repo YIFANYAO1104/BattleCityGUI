@@ -8,7 +8,8 @@ public enum MessageTypes {
     Msg_IfindYou(0),
     Msg_Gotta(1),
     Msg_interact(2),
-    Msg_interactWithPassable(3);
+    Msg_interactWithPassable(3),
+    Msg_no_interact(4);
 
     final public int id;
 
