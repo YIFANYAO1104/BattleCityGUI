@@ -4,9 +4,11 @@ import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.entity.ai.StateMachine;
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Shape;
 
+import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -14,6 +16,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  */
 public abstract class Enemy extends Character {
     private static StateMachine stateMachine;
+    //private ArrayList<PathEdge> pathEdges;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -25,6 +28,7 @@ public abstract class Enemy extends Character {
      */
     protected Enemy(double x, double y, double speed, double hp) {
         super(x, y, speed, hp, SIDE.ENEMY);
+        //navigationService = new PathPlanner(this, backendServices.getGraph());
     }
 
     /**
@@ -32,21 +36,6 @@ public abstract class Enemy extends Character {
      * @return The StateMachine for that specific enemy
      */
     protected abstract StateMachine createFSM();
-
-
-    /** TODO: replace this method */
-    @Deprecated
-    public boolean isPlayerClose() {
-        /*
-        double rx = x - 15 < 0 ? 0 : x - 15;
-        double ry = y - 15 < 0 ? 0 : y - 15;
-
-        Rectangle detectRegion = new Rectangle(rx, ry,60,60);
-        if (this.exists && detectRegion.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) return true;
-        */
-
-        return false;
-    }
 
     /** TODO: replace this method */
     @Deprecated
@@ -108,6 +97,22 @@ public abstract class Enemy extends Character {
     }
 
     @Override
+    public void updateAngle() {
+        /*
+        if(pathRequired) {
+            Point2D nearestAlly = backendServices.getClosestCharacter(SIDE.ALLY);
+            navigationService.createRequest(nearestAlly);
+            if(navigationService.peekRequestStatus() == SearchStatus.target_found) {
+                pathEdges = getPath();
+            }
+        } else if(!pathRequired && navigationService.peekRequestStatus() == SearchStatus.search_incomplete) {
+
+        }
+        */
+
+    }
+
+    @Override
     public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
 
     @Override
@@ -117,9 +122,8 @@ public abstract class Enemy extends Character {
         exists = false;
     }
 
-    // TODO: remove these, these are just for development
+    // TODO: remove this, this is just for development
     public Shape getLine() {return null;}
-    public Shape getExtra1() {return null;}
 
     @Override
     public boolean handleMessage(Telegram msg) {
@@ -191,7 +195,11 @@ public abstract class Enemy extends Character {
      * finding is required.
      */
     protected void charge() {
-
+        Point2D pt1 = getCenterPosition();
+        //Point2D pt2 = backendServices.getNearestCharacterCenterPosition(SIDE.ALLY);
+        Point2D pt2 = backendServices.getPlayerCenterPosition();
+        angle = Math.toDegrees(Math.atan2(pt2.getY() - pt1.getY(), pt2.getX() - pt1.getX())) + 90;
+        move(4, true);
     }
 
     /**

@@ -56,5 +56,5 @@ public class FreePathCondition implements Condition {
      * @return true if there are no obstacles in a way and false otherwise
      */
     @Override
-    public boolean test() { return backendServices.intersectsObstacles(path); }
+    public boolean test() { return !backendServices.intersectsObstacles(path); }
 }

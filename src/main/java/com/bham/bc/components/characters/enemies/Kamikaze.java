@@ -31,8 +31,6 @@ public class Kamikaze extends Enemy {
     private AndCondition chargeCondition;
     private IntCondition attackCondition;
 
-    boolean as =true;
-
     /**
      * Constructs a kamikaze type enemy
      *
@@ -42,7 +40,7 @@ public class Kamikaze extends Enemy {
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, MAX_HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-        //navigationService = new PathPlanner(this, backendServices.getGraph());
+
         stateMachine = createFSM();
     }
 
@@ -62,10 +60,10 @@ public class Kamikaze extends Enemy {
         State attackState = new State(new Action[]{ Action.AIMANDSHOOT }, null);
 
         // Define all conditions required to change any state
-        closeRadiusCondition = new IntCondition(0, 200);
+        closeRadiusCondition = new IntCondition(0, 100);
         noObstaclesCondition = new FreePathCondition();
         chargeCondition = new AndCondition(closeRadiusCondition, noObstaclesCondition);
-        attackCondition = new IntCondition(0, 10);
+        attackCondition = new IntCondition(0, 45);
 
         // Define all state transitions that could happen
         Transition searchPossibility = new Transition(searchState, new NotCondition(chargeCondition));
@@ -92,6 +90,7 @@ public class Kamikaze extends Enemy {
     @Override
     public void update() {
         double distanceToPlayer = getCenterPosition().distance(backendServices.getPlayerCenterPosition());
+
         attackCondition.setTestValue((int) distanceToPlayer);
         closeRadiusCondition.setTestValue((int) distanceToPlayer);
         noObstaclesCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
@@ -100,19 +99,22 @@ public class Kamikaze extends Enemy {
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case MOVE:
-                    //move();
+                    //move();sd
                     break;
                 case CHARGE:
-                    //charge();
+                    charge();
                     break;
                 case AIMANDSHOOT:
-                    //selfDestruct();
+                    destroy();
                     break;
             }
         });
     }
 
-    private class ExplosionTrigger extends Trigger<Character> {
+    /**
+     * Represents Kamikaze's explosion effect. This is created as a trigger because it affects player's HP
+     */
+    private static class ExplosionTrigger extends Trigger<Character> {
 
         public static final int SIZE = 60;
         private int currentFrame;
@@ -130,6 +132,9 @@ public class Kamikaze extends Enemy {
             initImages();
         }
 
+        /**
+         * Initializes all the images for the explosion
+         */
         private void initImages() {
             String baseUrl = "file:src/main/resources/img/characters/effects/blueRingExplosion";
             entityImages = new Image[19];
@@ -150,8 +155,6 @@ public class Kamikaze extends Enemy {
         public void render(GraphicsContext gc) {
             gc.drawImage(entityImages[currentFrame++ % 19], x, y);
         }
-
-
 
         @Override
         public void tryTrigger(Character character) {
