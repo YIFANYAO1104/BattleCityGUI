@@ -48,8 +48,9 @@ public class SurvivalController extends CenterController {
     public void removeObstacle(GenericObstacle go) {
         gameMap.removeObstacle(go);
         player.createNewRequestItem(gameMap);//每个pathpalnner只有一个任务
-//        player.createNewRequestAStar(gameMap);
-        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
+        player.createNewRequestAStar(gameMap);// 存在问题！～～～～
+//        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
+
     }
 
 

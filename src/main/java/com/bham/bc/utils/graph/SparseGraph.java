@@ -551,7 +551,11 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 System.out.println("Set the nodes edges with max");
                 ArrayList<GraphNode> nodes1 = getAroundNodes(getNode((int) msg.ExtraInfo));
                 for(GraphNode node: nodes1){
-                    setEdgeCost((int)msg.ExtraInfo,node.Index(),100000.0 );
+                    if(node.isValid()){
+                        setEdgeCost((int)msg.ExtraInfo,node.Index(),10000.0 );
+                        setEdgeCost(node.Index(),(int)msg.ExtraInfo,10000.0 );
+                    }
+
                     return true;
                 }
 

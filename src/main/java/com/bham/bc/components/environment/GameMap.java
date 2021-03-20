@@ -73,9 +73,7 @@ public class GameMap {
 
         //removed unreachable nodes
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(new Vector2D(location)));
-        Point2D aim = new Point2D(450,550);
-        Point2D lloc = new Point2D(584,616);
-//        a2 = hgf.Astar(graphSystem,location,aim);
+//        a2 = hgf.Astar(graphSystem,location,new Point2D(450,550));
 
         //let the corresponding navgraph node point to triggers object
         ArrayList<Trigger> triggers = triggerSystem.getTriggers();
@@ -158,7 +156,9 @@ public class GameMap {
 
         for(Point2D p1 : points)  graphSystem.renderTankPoints(new Vector2D(p1),gc);
 
-//        graphSystem.renderlines(gc,a2);
+//        HandyGraphFunctions hgf = new HandyGraphFunctions();
+//
+//        graphSystem.renderlines(gc,hgf.Astar(graphSystem,new Point2D(660,330),new Point2D(450,550)));
         // tricking tanks on the map! with red points
     }
 

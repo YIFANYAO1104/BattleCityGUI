@@ -23,7 +23,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     private SparseGraph sg;
     private Node root;
     private Node goal;
-    private ArrayList<GraphNode> routine;
+    private ArrayList<NavNode> routine;
 
     public TimeSlicedAStar(final SparseGraph sg1,
                                 GraphNode source,
@@ -38,18 +38,16 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     @Override
     public int cycleOnce() {
         Node n1 = start();
-        ArrayList<GraphNode> temp = new ArrayList<>();
 
-        temp.add(n1.getNode());
-        while (n1.getParentNode() != null){
-            temp.add(n1.getParentNode().getNode());
-            n1 = n1.getParentNode();
-        }
-        routine = temp;
-        if(temp.get(temp.size()-1) == goal.getNode())
+        if(n1.getNode() == goal.getNode()){
+            System.out.println("output 1");
             return 1;
-        else
+        }
+        else{
+            System.out.println("output 0");
             return 0;
+        }
+
     }
 
     @Override
@@ -71,6 +69,19 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     @Override
     public List<PathEdge> getPathAsPathEdges() {
         /*TODO: FILL*/
+        List<PathEdge> path = new LinkedList<PathEdge>();
+        Queue<Node> noddd = new LinkedList<>(openList);
+
+        if(routine == null) return null;
+
+        for(Node nn:noddd){
+            if(nn.getParentNode() != null){
+                NavNode n1 = (NavNode) nn.getNode();
+                NavNode n2 = (NavNode) nn.getParentNode().getNode();
+                path.add(new PathEdge(n1.Pos(),n2.Pos()));
+            }
+        }
+
         return null;
     }
 
