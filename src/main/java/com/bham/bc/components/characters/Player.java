@@ -60,6 +60,7 @@ public class Player extends Character implements TrackableCharacter {
 		super(1,1, x,y,32,32,dir);
 		initImages();
 		initTrackableCoordinates();
+		navigationService = new PathPlanner(this,gm.getGraph());
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment.navigation.algorithms.astar;
 
 
+import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.utils.graph.SparseGraph;
@@ -26,26 +27,26 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     private ArrayList<NavNode> routine;
 
     public TimeSlicedAStar(final SparseGraph sg1,
-                                GraphNode source,
-                                GraphNode target
+                                int source,
+                                int target
                                 /*heuristic h*/) {
-        this.root =  new Node(source);
-        this.goal = new Node(target);
+        this.root =  new Node(sg1.getNode(source));
+        this.goal = new Node(sg1.getNode(target));
         this.sg = sg1;
         this.root =  new Node(root,null,0,getDistance(root));
     }
 
     @Override
-    public int cycleOnce() {
+    public SearchStatus cycleOnce() {
         Node n1 = start();
 
         if(n1.getNode() == goal.getNode()){
-            System.out.println("output 0");
-            return 0;
+            System.out.println("SearchStatus.target_not_found");
+            return SearchStatus.target_not_found;
         }
         else{
-            System.out.println("output 1");
-            return 1;
+            System.out.println("SearchStatus.target_found");
+            return SearchStatus.target_found;
         }
 
     }
