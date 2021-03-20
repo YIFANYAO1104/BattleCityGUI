@@ -9,7 +9,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
@@ -24,8 +26,6 @@ public class Player extends Character {
 	public static final int WIDTH = 25;
 	public static final int HEIGHT = 35;
 	public static final int MAX_HP = 100;
-
-	private double hp;
 
 	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2);
 	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2);
@@ -100,6 +100,16 @@ public class Player extends Character {
 		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
 		backendServices.addBullet(b);
 		return b;
+	}
+
+	public Shape getImageHitbox() {
+		Point2D hitBoxOffset = new Point2D(0, 4);
+		double radius = Math.sqrt(WIDTH*WIDTH + HEIGHT*HEIGHT)/2;
+
+		Circle hitBox = new Circle(x + WIDTH/2, y + HEIGHT/2, radius);
+		//hitBox.getTransforms().add(new Rotate(angle, hitBox.getCenterX(), hitBox.getCenterY()));
+
+		return hitBox;
 	}
 
 	@Override

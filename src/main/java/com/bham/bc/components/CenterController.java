@@ -132,6 +132,12 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         playerHitBox.setStrokeWidth(2);
         hitBoxPane.getChildren().add(playerHitBox);
 
+        Shape playerHitBox2 = player.getImageHitbox();
+        playerHitBox2.setFill(Color.TRANSPARENT);
+        playerHitBox2.setStroke(Color.RED);
+        playerHitBox2.setStrokeWidth(2);
+        hitBoxPane.getChildren().add(playerHitBox2);
+
         // Add bullet hit-boxes
         bullets.forEach(b -> {
             Shape bulletHitBox = b.getHitBox();

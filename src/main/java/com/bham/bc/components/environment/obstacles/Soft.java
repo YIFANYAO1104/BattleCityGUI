@@ -50,6 +50,6 @@ public class Soft extends GenericObstacle {
 
     @Override
     public void handleCharacter(Character c) {
-        if(intersects(c)) c.move(-1, true);
+        if(intersectsShape(c.getImageHitbox())) c.move(-1, true);
     }
 }

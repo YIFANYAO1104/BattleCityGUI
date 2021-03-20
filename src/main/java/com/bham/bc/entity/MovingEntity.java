@@ -2,6 +2,8 @@ package com.bham.bc.entity;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 /**
@@ -45,6 +47,20 @@ public abstract class MovingEntity extends BaseGameEntity {
         gc.drawImage(image, x, y);
         gc.restore();
     }
+
+    public Shape getImageHitbox() {
+        double x = getPosition().getX();
+        double y = getPosition().getY();
+        double w = getRadius().getX();
+        double h = getRadius().getY();
+
+        Rectangle hitbox = new Rectangle(x, y, w, h);
+        Rotate r = new Rotate(angle, x + w/2, y + h/2);
+        hitbox.getTransforms().add(r);
+
+        return hitbox;
+    }
+
 
     /**
      * Checks if this entity exists

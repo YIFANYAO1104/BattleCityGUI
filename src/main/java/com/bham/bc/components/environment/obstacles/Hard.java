@@ -5,6 +5,7 @@ import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import static com.bham.bc.components.CenterController.backendServices;
@@ -39,10 +40,5 @@ public class Hard extends GenericObstacle {
     }
 
     @Override
-    public void handleCharacter(Character c) {
-        if(intersects(c)) c.move(-1, true);
-    }
-
-    @Override
-    public boolean handleHitBox(Shape hitBox) { return false; }
+    public void handleCharacter(Character c) { if(intersectsShape(c.getImageHitbox())) c.move(-1, true); }
 }
