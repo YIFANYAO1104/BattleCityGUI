@@ -37,6 +37,6 @@ public class Impassable extends GenericObstacle {
 
     @Override
     public void handleCharacter(Character c) {
-        if(intersectsShape(c.getImageHitbox())) c.move(-1, true);
+        if(intersects(c)) c.move(-1, true);
     }
 }

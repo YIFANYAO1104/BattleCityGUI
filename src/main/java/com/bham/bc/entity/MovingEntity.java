@@ -48,20 +48,6 @@ public abstract class MovingEntity extends BaseGameEntity {
         gc.restore();
     }
 
-    public Shape getImageHitbox() {
-        double x = getPosition().getX();
-        double y = getPosition().getY();
-        double w = getRadius().getX();
-        double h = getRadius().getY();
-
-        Rectangle hitbox = new Rectangle(x, y, w, h);
-        Rotate r = new Rotate(angle, x + w/2, y + h/2);
-        hitbox.getTransforms().add(r);
-
-        return hitbox;
-    }
-
-
     /**
      * Checks if this entity exists
      * @return true if it exists and false otherwise

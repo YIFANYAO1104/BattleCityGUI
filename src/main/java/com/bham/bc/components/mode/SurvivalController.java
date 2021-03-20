@@ -10,11 +10,9 @@ import com.bham.bc.components.characters.enemies.Kamikaze;
 import com.bham.bc.components.environment.GameMap;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Shape;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Represents a controller for the survival game mode
@@ -27,7 +25,7 @@ public class SurvivalController extends CenterController {
     public SurvivalController(){
         super();
         gameMap = new GameMap("/64x64.json");
-        player = new Player(16*32 - Player.WIDTH/2, 16*32-Player.HEIGHT/2);
+        player = new Player(16*32 - Player.WIDTH/2.0, 16*32-Player.HEIGHT/2.0);
         gameMap.initGraph(player.getPosition());
         initEnemies();
     }
@@ -36,7 +34,7 @@ public class SurvivalController extends CenterController {
      * Spawns all the initial enemies
      */
     private void initEnemies() {
-        enemies.add(new Kamikaze(16*28, 16*28, player.getID()));
+        enemies.add(new Kamikaze(16*28, 16*28));
         /*
         enemies.add(new DefaultEnemy(16*3, 16*3));
         enemies.add(new DefaultEnemy(16*61, 16*3));

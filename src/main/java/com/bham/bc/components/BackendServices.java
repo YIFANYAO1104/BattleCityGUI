@@ -33,7 +33,6 @@ public interface BackendServices {
     ArrayList<Character> getCharacters();
 
     /** TODO: move to physics, document or replace */
-    boolean intersectsCharacters(Shape hitBox, List<Character> characters);
     boolean intersectsObstacles(Shape hitBox);
     int getPlayerID();
     Point2D getPlayerCenterPosition();
