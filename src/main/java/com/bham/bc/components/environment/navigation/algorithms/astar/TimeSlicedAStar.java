@@ -40,12 +40,12 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         Node n1 = start();
 
         if(n1.getNode() == goal.getNode()){
-            System.out.println("output 1");
-            return 1;
-        }
-        else{
             System.out.println("output 0");
             return 0;
+        }
+        else{
+            System.out.println("output 1");
+            return 1;
         }
 
     }
@@ -72,7 +72,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         List<PathEdge> path = new LinkedList<PathEdge>();
         Queue<Node> noddd = new LinkedList<>(openList);
 
-        if(routine == null) return null;
+//        if(routine == null) return null;
 
         for(Node nn:noddd){
             if(nn.getParentNode() != null){
@@ -82,7 +82,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
             }
         }
 
-        return null;
+        return path;
     }
 
 
