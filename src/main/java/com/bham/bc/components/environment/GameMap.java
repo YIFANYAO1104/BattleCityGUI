@@ -3,6 +3,7 @@ package com.bham.bc.components.environment;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.DefaultEnemy;
+import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.TriggerSystem;
@@ -15,6 +16,7 @@ import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +118,7 @@ public class GameMap {
     }
 
 
-    public void handleAll(Player player, ArrayList<DefaultEnemy> enemies, ArrayList<Bullet> bullets) {
+    public void handleAll(Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
         obstacles.forEach(obstacle -> {
             obstacle.handleCharacter(player);
             enemies.forEach(obstacle::handleCharacter);
@@ -125,6 +127,10 @@ public class GameMap {
 
         triggerSystem.update(player);
         enemies.forEach(enemy -> triggerSystem.update(enemy));
+    }
+
+    public boolean intersectsObstacles(Shape hitBox) {
+        return obstacles.stream().anyMatch(o -> o.handleHitBox(hitBox));
     }
 
 

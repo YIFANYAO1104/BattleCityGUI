@@ -4,12 +4,17 @@ import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.DefaultEnemy;
+import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.characters.enemies.Kamikaze;
 import com.bham.bc.components.environment.GameMap;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Shape;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a controller for the survival game mode
@@ -31,10 +36,12 @@ public class SurvivalController extends CenterController {
      * Spawns all the initial enemies
      */
     private void initEnemies() {
+        enemies.add(new Kamikaze(16*28, 16*28, player.getID()));
+        /*
         enemies.add(new DefaultEnemy(16*3, 16*3));
         enemies.add(new DefaultEnemy(16*61, 16*3));
         enemies.add(new DefaultEnemy(16*3, 16*61));
-        enemies.add(new DefaultEnemy(16*61, 16*61));
+        enemies.add(new DefaultEnemy(16*61, 16*61));*/
     }
 
     /**TODO: instead of using loops, ask entities to check certain map areas if they are free.
@@ -43,7 +50,7 @@ public class SurvivalController extends CenterController {
     public void update() {
         gameMap.update();
         player.update();
-        enemies.forEach(DefaultEnemy::update);
+        enemies.forEach(Enemy::update);
         bullets.forEach(Bullet::update);
 
         gameMap.handleAll(player, enemies, bullets);
@@ -75,7 +82,7 @@ public class SurvivalController extends CenterController {
         //return (ArrayList<Point2D>) getCharacters().stream().map(Character::getPosition).collect(Collectors.toList());
         ArrayList<Point2D> temp1 = new ArrayList<>();
         temp1.add(player.getPosition());
-        for (DefaultEnemy e1 :enemies){
+        for (Enemy e1 :enemies){
             temp1.add(e1.getPosition());
         }
         return temp1;

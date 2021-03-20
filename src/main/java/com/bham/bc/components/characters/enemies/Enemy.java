@@ -1,25 +1,16 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.characters.SIDE;
-import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.entity.ai.StateMachine;
 import com.bham.bc.utils.messaging.Telegram;
-import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
 
-import static com.bham.bc.components.CenterController.backendServices;
-
+/**
+ * Represents a generic bot that is an enemy of a player
+ */
 public abstract class Enemy extends Character {
-
-    public static String IMAGE_PATH;
-    public static int WIDTH;
-    public static int HEIGHT;
-    public static int MAX_HP;
     private static StateMachine stateMachine;
 
     /**
@@ -28,11 +19,10 @@ public abstract class Enemy extends Character {
      * @param x     top left x coordinate of the character
      * @param y     top left y coordinate of the character
      * @param speed value which defines the initial velocity
-     * @param hp
-     * @param side
+     * @param hp    health points the enemy should have
      */
-    protected Enemy(double x, double y, double speed, double hp, SIDE side) {
-        super(x, y, speed, hp, side);
+    protected Enemy(double x, double y, double speed, double hp) {
+        super(x, y, speed, hp, SIDE.ENEMY);
     }
 
     /**
@@ -46,31 +36,6 @@ public abstract class Enemy extends Character {
      */
     @Override
     public abstract void update();
-
-    /**
-     * Sample method for shooting a default bullet
-     *
-     * <p>This method creates a new instance of {@link com.bham.bc.components.armory.DefaultBullet}
-     * based on player's position and angle</p>
-     *
-     * TODO: generalize the method once weapon class is defined of more bullet types appear
-     *
-     * @return instance of DefaultBullet
-     */
-    public DefaultBullet fire() {
-        double centerBulletX = x + WIDTH/2;
-        double centerBulletY = y - DefaultBullet.HEIGHT/2;
-
-        Rotate rot = new Rotate(angle, x + WIDTH/2, y + HEIGHT/2);
-        Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
-
-        double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
-        double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
-
-        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
-        backendServices.addBullet(b);
-        return b;
-    }
 
 
     /** TODO: replace this method */
@@ -149,13 +114,7 @@ public abstract class Enemy extends Character {
     @Override
     public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
 
-    @Override
-    public Shape getHitBox() {
-        Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
-        hitBox.getTransforms().add(new Rotate(angle, x + WIDTH/2,y + HEIGHT/2));
-
-        return hitBox;
-    }
+    public Shape getLine() {return null;}
 
     @Override
     public boolean handleMessage(Telegram msg) {
@@ -199,7 +158,7 @@ public abstract class Enemy extends Character {
      * This algorithm will not be used after each update as this could cause strain on the game
      * Instead every so often the tank will update it's location of the player, and pathfind to it
      */
-    protected void attackPlayer() {
+    protected void approachPlayer() {
         //TODO
     }
 
@@ -222,7 +181,16 @@ public abstract class Enemy extends Character {
     }
 
     /**
-     * In this behaviour the AI will pathfind to the home base and try to attack it
+     * In this behaviour the AI will try to minimise its distance between the player with increased speed.
+     * It can do this only if there are no obstacles in the way and the player is close enough so no path-
+     * finding is required.
+     */
+    protected void charge() {
+
+    }
+
+    /**
+     * In this behaviour the AI will pathfind to the home base and try to take it over
      */
     protected void attackHomeBase(){
         //TODO

@@ -56,6 +56,13 @@ abstract public class BaseGameEntity {
 
     public Point2D getPosition() { return new Point2D(x, y); }
 
+    public Point2D getCenterPosition() {
+        double width = getRadius().getX();
+        double height = getRadius().getY();
+
+        return new Point2D(x + width/2, y + height/2);
+    }
+
     public Point2D getRadius() { return new Point2D(entityImages[0].getWidth(), entityImages[0].getHeight()); }
 
     /**

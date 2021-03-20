@@ -1,6 +1,7 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
@@ -13,6 +14,7 @@ import com.bham.bc.components.characters.enemies.DefaultEnemy;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Character;
 
+import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -20,6 +22,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class defining the common elements and behavior for both survival and challenge controllers
@@ -32,7 +35,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected boolean isGameOver;
     protected GameMap gameMap;
     protected Player player;
-    protected ArrayList<DefaultEnemy> enemies = new ArrayList<>();
+    protected ArrayList<Enemy> enemies = new ArrayList<>();
     protected ArrayList<BombTank> bombTanks = new ArrayList<>();
     protected ArrayList<Bullet> bullets = new ArrayList<>();
 
@@ -60,10 +63,33 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         backendServices = centerController;
     }
 
-    /**
-     * Gets all characters in the game
-     * @return list of all the characters in the game
-     */
+    //-----------------------------------------
+
+    // TODO: move to physics
+    @Override
+    public boolean intersectsCharacters(Shape hitBox, List<Character> characters) {
+        return characters.stream().anyMatch(c -> c.getHitBox().intersects(hitBox.getBoundsInLocal()));
+    }
+
+    // TODO: move to physics
+    @Override
+    public boolean intersectsObstacles(Shape hitBox) {
+        return gameMap.intersectsObstacles(hitBox);
+    }
+
+    @Override
+    public int getPlayerID() {
+        return player.getID();
+    }
+
+    @Override
+    public Point2D getPlayerCenterPosition() {
+        return player.getCenterPosition();
+    }
+
+    //------------------------------------------------------
+
+    @Override
     public ArrayList<Character> getCharacters() {
         ArrayList<Character> characters = new ArrayList<>(enemies);
         characters.add(player);
@@ -116,13 +142,17 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             enemyHitBox.setFill(Color.TRANSPARENT);
             enemyHitBox.setStroke(Color.RED);
             enemyHitBox.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(enemyHitBox);
+
+            Shape enemyLine = e.getLine();
+            enemyLine.setStroke(Color.RED);
+            enemyLine.setStrokeWidth(1);
+            hitBoxPane.getChildren().add(enemyLine);
         });
     }
 
 
     @Override
-    public void addEnemy(DefaultEnemy enemy) { enemies.add(enemy); }
+    public void addEnemy(Enemy enemy) { enemies.add(enemy); }
 
     @Override
     public void clear(){

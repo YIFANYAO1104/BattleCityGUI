@@ -6,10 +6,7 @@ import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
-
-import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
-import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
-import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
+import javafx.scene.shape.Shape;
 
 /**
  * Desc: Tile which can be passed by any game entity. It can act as a decoration
@@ -38,6 +35,9 @@ public class Passable extends GenericObstacle {
 
     @Override
     public void handleCharacter(Character t) { return; }
+
+    @Override
+    public boolean handleHitBox(Shape hitBox) { return false; }
 
     @Override
     public void interactWith(int ID, int indexOfNode , Rectangle r1) {
