@@ -6,6 +6,7 @@ import com.bham.bc.components.characters.enemies.DefaultEnemy;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
+import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.entity.triggers.TriggerSystem;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
@@ -53,6 +54,8 @@ public class GameMap {
      * @return current map's height or 0 if no map is loaded
      */
     public static int getHeight() {return height; }
+
+    public SparseGraph getGraph() { return graphSystem; }
 
 
     public void initGraph(Point2D location) {
@@ -115,6 +118,10 @@ public class GameMap {
         WeaponGenerator w = new WeaponGenerator(466, 466, Weapon.ArmourGun, 30,30,30);
         triggerSystem.register(w);
 
+    }
+
+    public void addTrigget(Trigger t) {
+        triggerSystem.register(t);
     }
 
 

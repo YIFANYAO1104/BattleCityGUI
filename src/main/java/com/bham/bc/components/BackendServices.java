@@ -4,6 +4,8 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.enemies.DefaultEnemy;
 import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.entity.triggers.Trigger;
+import com.bham.bc.utils.graph.SparseGraph;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Shape;
 
@@ -33,10 +35,10 @@ public interface BackendServices {
     ArrayList<Character> getCharacters();
 
     /** TODO: move to physics, document or replace */
-    boolean intersectsObstacles(Shape hitBox);
-    int getPlayerID();
+    boolean intersectsObstacles(Shape hitbox);
     Point2D getPlayerCenterPosition();
-    Point2D getPlayerPosition();
+    SparseGraph getGraph();
+    void addTrigger(Trigger t);
 
     /**
      * Updates all the entities: map, characters and armory elements

@@ -5,5 +5,6 @@ package com.bham.bc.entity.ai;
  */
 public enum Action{
     MOVE,
+    CHARGE,
     AIMANDSHOOT
 }

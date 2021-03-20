@@ -7,6 +7,8 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Shape;
 
+import static com.bham.bc.entity.EntityManager.entityManager;
+
 /**
  * Represents a generic bot that is an enemy of a player
  */
@@ -30,12 +32,6 @@ public abstract class Enemy extends Character {
      * @return The StateMachine for that specific enemy
      */
     protected abstract StateMachine createFSM();
-
-    /**
-     * Abstract method which all chile classes must fill depending on their Finite State Machine
-     */
-    @Override
-    public abstract void update();
 
 
     /** TODO: replace this method */
@@ -114,7 +110,16 @@ public abstract class Enemy extends Character {
     @Override
     public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
 
+    @Override
+    // TODO: MAKE this abstract, i.e. compulsory in every child
+    public void destroy() {
+        entityManager.removeEntity(this);
+        exists = false;
+    }
+
+    // TODO: remove these, these are just for development
     public Shape getLine() {return null;}
+    public Shape getExtra1() {return null;}
 
     @Override
     public boolean handleMessage(Telegram msg) {

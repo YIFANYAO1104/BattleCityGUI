@@ -69,6 +69,7 @@ public class SurvivalController extends CenterController {
         bombTanks.forEach(bombTank -> bombTank.render(gc));
 
         gameMap.renderTopLayer(gc);
+        gameMap.renderTriggers(gc);
         gameMap.renderGraph(gc, allCharactersLocation());
     }
 
@@ -88,7 +89,7 @@ public class SurvivalController extends CenterController {
 
     @Override
     public boolean isGameOver() {
-        return enemies.isEmpty()  && player.exists();
+        return false;/*enemies.isEmpty() && player.exists();*/
     }
 
     @Override

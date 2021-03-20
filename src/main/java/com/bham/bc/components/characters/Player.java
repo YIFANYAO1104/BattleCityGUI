@@ -104,6 +104,9 @@ public class Player extends Character {
 	}
 
 	@Override
+	public void destroy() {}
+
+	@Override
 	public Circle getHitBox() { return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0); }
 
 	@Override

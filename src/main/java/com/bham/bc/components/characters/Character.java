@@ -55,12 +55,18 @@ abstract public class Character extends MovingEntity {
     public double getHp() { return hp; }
 
     /**
+     * Gets character's side
+     * @return ALLY or ENEMY side the character belongs to
+     */
+    public SIDE getSide() { return side; }
+
+    /**
      * Increases or decreases HP for the player
      * @param health amount by which the player's HP is changed
      */
     public void addHP(double health) {
         hp = Math.min(hp + health, MAX_HP);
-        if(hp <= 0) exists = false;
+        if(hp <= 0) destroy();
     }
 
     @Deprecated
@@ -127,4 +133,6 @@ abstract public class Character extends MovingEntity {
             y -= Math.cos(Math.toRadians(angle)) * speed;
         }
     }
+
+    protected abstract void destroy();
 }

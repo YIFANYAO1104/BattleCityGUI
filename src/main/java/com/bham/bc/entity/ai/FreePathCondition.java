@@ -17,7 +17,7 @@ public class FreePathCondition implements Condition {
 
     /**
      * Constructs a condition by representing its path property as a rectangle
-     * TODO: crate a constructor which takes 2 points/ check if testing on empty rectangle doesn't throw an error
+     * <br>TODO: crate a constructor which takes 2 points/ check if testing on empty rectangle doesn't throw an error
      */
     public FreePathCondition() { path = new Rectangle(); }
 
@@ -37,6 +37,8 @@ public class FreePathCondition implements Condition {
      * between them, creates a rectangle of the same length as the distance and rotates it appropriately to
      * connect the 2 points. The height of the rectangle is 1 so path's width is not considered, however this
      * is enough to satisfy the behavior of the AI character.</p>
+     *
+     * <br>TODO: Optimise this by putting all the calculations in the test method. So that they are done only during testing.
      *
      * @param pt1 coordinate of the first entity
      * @param pt2 coordinate of the second entity

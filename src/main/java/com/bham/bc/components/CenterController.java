@@ -7,7 +7,9 @@ import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.utils.Constants;
+import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.DefaultEnemy;
@@ -71,18 +73,16 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public int getPlayerID() {
-        return player.getID();
-    }
-
-    @Override
     public Point2D getPlayerCenterPosition() {
         return player.getCenterPosition();
     }
 
     @Override
-    public Point2D getPlayerPosition() {
-        return player.getPosition();
+    public SparseGraph getGraph() {return gameMap.getGraph();}
+
+    @Override
+    public void addTrigger(Trigger t) {
+        gameMap.addTrigget(t);
     }
 
     //------------------------------------------------------
