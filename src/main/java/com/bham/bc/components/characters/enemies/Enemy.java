@@ -19,8 +19,8 @@ import static com.bham.bc.components.CenterController.backendServices;
 public class Enemy extends Character {
 
     public static final String IMAGE_PATH = "file:src/main/resources/img/tankU.gif";
-    public static final int WIDTH = 30;
-    public static final int HEIGHT = 30;
+    public static final int WIDTH = 32;
+    public static final int HEIGHT = 32;
     public static final int MAX_HP = 100;
 
     /**

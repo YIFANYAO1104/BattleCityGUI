@@ -64,15 +64,14 @@ public class GameMap {
     public void initialGraph(Point2D location){
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         graphSystem = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
-        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,64,64); //make network
+        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,Constants.GRAPH_NUM_CELLS_Y,Constants.GRAPH_NUM_CELLS_X); //make network
         ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Point2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32,32));
+            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-Enemy.WIDTH/2,vv1.getY()-Enemy.HEIGHT/2,Enemy.WIDTH,Enemy.HEIGHT));
         }
         //removed unreachable nodes
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(location));
-//        a2 = hgf.Astar(graphSystem,location,new Point2D(450,550));
 
         //let the corresponding navgraph node point to triggers object
         ArrayList<Trigger> triggers = triggerSystem.getTriggers();

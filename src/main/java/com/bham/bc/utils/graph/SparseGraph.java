@@ -1,6 +1,7 @@
 package com.bham.bc.utils.graph;
 
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
@@ -593,7 +594,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             for(NavNode node: obstacleId.get(id)){
                 node.minesNum();
                 if(node.isValid() && (!node.isHit()) ){
-                    setNodeALLEdages(node.Index(),20.0);
+                    setNodeALLEdages(node.Index(),16.0);
                 }
             }
             obstacleId.remove(id);
@@ -623,7 +624,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 //                System.out.println("Set the nodes edges with max");
                 NavNode nn1 = getNode((int) msg.ExtraInfo);
                 addToHashMap(msg.Sender,nn1);
-                setNodeALLEdages((int) msg.ExtraInfo,10000.0);
+                setNodeALLEdages((int) msg.ExtraInfo, Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST);
                 return true;
             case Msg_removeSoft:
 //                System.out.println("release the nodewa");
