@@ -3,6 +3,7 @@ package com.bham.bc.components;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.entity.physics.BombTank;
+import com.bham.bc.utils.graph.SparseGraph;
 
 /**
  * Interface defining the required backend services for a mode to properly work
@@ -31,4 +32,10 @@ public interface BackendServices {
     void clear();
 
     void addBombTank(BombTank b);
+
+    SparseGraph getNavigationGraph();
+
+     void testAStar();
+
+     void testDjistra();
 }

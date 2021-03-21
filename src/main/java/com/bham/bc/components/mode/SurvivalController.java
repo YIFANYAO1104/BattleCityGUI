@@ -49,21 +49,6 @@ public class SurvivalController extends CenterController {
         enemies.add(new Enemy(16*61, 16*61));
     }
 
-    /**TODO: instead of using loops, ask entities to check certain map areas if they are free.
-     * TODO: If they are not free, then search through all the entities to find which one intersects it*/
-//    @Override
-//    public void removeObstacle(GenericObstacle go) {
-//        gameMap.removeObstacle(go);
-////        player.createNewRequestItem();//每个pathpalnner只有一个任务
-//        player.createNewRequestAStar();// 存在问题！～～～～
-//        // 当 obstacle 被消除， node 的 edge 需要被重新设置为正常
-//        gameMap.updateGraph(player.getPosition());
-////        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
-////        GraphNode g1 = gameMap.getGraph().getClosestNodeForPlayer(new Vector2D(go.getX(),go.getY()));
-////        if(g1.isValid())
-//        Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,go.ID(),gameMap.getGraph().ID(), Msg_removeSoft,NO_ADDITIONAL_INFO);
-//    }
-
     @Override
     public boolean isGameOver() {
         return enemies.isEmpty()  && player.exists();

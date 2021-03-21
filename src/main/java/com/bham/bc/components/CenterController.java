@@ -8,6 +8,7 @@ import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.Constants;
+import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
@@ -50,6 +51,18 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     public void addBombTank(BombTank b){
         bombTanks.add(b);
+    }
+
+    public SparseGraph getNavigationGraph(){
+        return gameMap.getGraph();
+    }
+
+    public void testAStar() {
+        player.createNewRequestAStar();
+    }
+
+    public void testDjistra() {
+        player.createNewRequestItem();
     }
 
     /**

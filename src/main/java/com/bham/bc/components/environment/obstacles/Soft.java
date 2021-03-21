@@ -8,8 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.components.CenterController.backendServices;
-import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
-import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
+import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import static com.bham.bc.utils.messaging.MessageTypes.*;
 import static com.bham.bc.utils.messaging.MessageTypes.Msg_interactWithPassable;
 import java.util.EnumSet;
@@ -53,6 +52,12 @@ public class Soft extends GenericObstacle {
             b.destroy();
 
             if(hp <= 0) {
+                //------------for testing---------------------------------------
+                backendServices.testAStar();
+                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
+                        backendServices.getNavigationGraph().getID(),
+                        Msg_removeSoft,NO_ADDITIONAL_INFO);
+                //------------for testing---------------------------------------
                 exists = false;
                 entityManager.removeEntity(this);
             }
