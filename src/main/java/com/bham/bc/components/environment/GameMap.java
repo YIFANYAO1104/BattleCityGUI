@@ -2,6 +2,7 @@ package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.environment.triggers.BombTrigger;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
@@ -40,6 +41,10 @@ public class GameMap {
 
 //    private ArrayList<GraphNode> a2; // temp value to render the graphlines
 
+    public void addBombTrigger(int x,int y){
+        BombTrigger bt = new BombTrigger(x,y,10);
+        triggerSystem.register(bt);
+    }
 
 
     //init only--------------------------------------------------------------
@@ -60,6 +65,7 @@ public class GameMap {
         HealthGiver hg1 = new HealthGiver(600,400,10,100);
         triggerSystem.register(hg);
         triggerSystem.register(hg1);
+//        addBombTrigger(500,500);
     }
 
     public void initialGraph(Point2D location){

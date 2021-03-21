@@ -7,11 +7,14 @@ package com.bham.bc.entity.triggers;
 
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
 
-abstract class TriggerRegion {
+public abstract class TriggerRegion {
     /**
      * returns true if an entity of the given size and position is intersecting
      * the trigger region.
      */
-    abstract boolean isTouching(Point2D EntityPos, Point2D EntityRadius);
+    public abstract boolean isTouching(Point2D EntityPos, Point2D EntityRadius);
+
+    public abstract void render(GraphicsContext gc);
 }

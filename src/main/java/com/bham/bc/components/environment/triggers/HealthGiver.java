@@ -57,6 +57,7 @@ public class HealthGiver extends RespawnTrigger<Character>{
     public void render(GraphicsContext gc) {
         if (isActive()) {
             gc.drawImage(entityImages[0], this.x, this.y);
+            renderRegion(gc);
         }
     }
 

@@ -8,6 +8,8 @@ package com.bham.bc.entity.triggers;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.graph.ExtraInfo;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGameEntity implements ExtraInfo {
 
@@ -55,6 +57,11 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
         triggerRegion = new TriggerRegionRectangle(pos, radius);
     }
 
+    protected void addRectangularTriggerRegionSurrounded(Point2D imgPos, Point2D imgRadius, Point2D regionRadius) {
+        Point2D topLeft = imgPos.subtract(regionRadius.subtract(imgRadius).multiply(0.5));
+        triggerRegion = new TriggerRegionRectangle(topLeft, regionRadius);
+    }
+
     public Trigger(int id, int x, int y) {
         super(id, x, y);
         toBeRemoved = false;
@@ -82,5 +89,9 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
 
     public boolean isActive() {
         return active;
+    }
+
+    public void renderRegion(GraphicsContext gc) {
+        triggerRegion.render(gc);
     }
 }
