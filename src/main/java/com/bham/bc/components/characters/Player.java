@@ -1,92 +1,47 @@
 package com.bham.bc.components.characters;
 
-
-import com.bham.bc.components.armory.Bullets01;
-import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.components.environment.navigation.ItemType;
+import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.environment.navigation.NavigationService;
-import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
-import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.utils.Constants;
-import com.bham.bc.entity.Direction;
+import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.entity.MovingEntity;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
-public class Player extends Character implements TrackableCharacter {
+/**
+ * Represents the character controlled by the user
+ */
+public class Player extends Character {
 
-	public static int count = 0;
-	/**
-	 * the STABLE direction of the Player Tank
-	 * It's value should not be 'stop'
-	 * Mainly for renderer
-	 */
-	private Direction Kdirection = Direction.U;
-	/**
-	 *  initialize the health of tank to 200 hp */
-	private int hp = 200;
-	/**
-	 * The direction that will be set by KeyAction
-	 */
-	private boolean bL = false, bU = false, bR = false, bD = false;
+	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
+	public static final int WIDTH = 25;
+	public static final int HEIGHT = 35;
+	public static final int MAX_HP = 100;
 
-	private SimpleDoubleProperty trackableX;
-	private SimpleDoubleProperty trackableY;
+	private double hp;
 
-	//-----------------------------------------------------------------//
-	private Weapon currWeapon = null;
-
+	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2);
+	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2);
 	private NavigationService navigationService;
-
-
-
 	/**
-	 * Constructor of Player Tank,also indicates which Player it is creating
-	 * @param x
-	 * @param y
-	 * @param dir
+	 * Constructs a player instance with initial speed value set to 5
+	 *
+	 * @param x top left x coordinate of the player
+	 * @param y top left y coordinate of the player
 	 */
-	public Player(int x, int y, Direction dir, GameMap gm) {
-		super(1,1, x,y,32,32,dir);
-		initImages();
-		initTrackableCoordinates();
+	public Player(double x, double y) {
+		super(x, y, 5, MAX_HP, SIDE.ALLY);
+		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
 		navigationService = new PathPlanner(this,gm.getGraph());
-	}
-
-	/**
-	 * List of images should be replaced later
-	 */
-	private void initImages() {
-		entityImages = new Image[] {
-				new Image("file:src/main/resources/img/HtankD.gif"),
-				new Image("file:src/main/resources/img/HtankU.gif"),
-				new Image("file:src/main/resources/img/HtankL.gif"),
-				new Image("file:src/main/resources/img/HtankR.gif"),
-		};
-	}
-
-
-	/**
-	 * Draw Blood Bar
-	 * @param gc
-	 */
-	private void renderBloodbBar(GraphicsContext gc) {
-		Paint c = gc.getFill();
-		gc.setFill(Color.RED);
-		gc.fillRect(375, 585, width, 10);
-		int w = width * hp / 200;
-		gc.fillRect(375, 585, w, 10);
-		gc.setFill(c);
 	}
 
 	public void createNewRequestItem(){
@@ -105,211 +60,89 @@ public class Player extends Character implements TrackableCharacter {
 		}
 	}
 	/**
-	 * Render Method
-	 * Use directions to determine the image of Player Tank
-	 * @param gc
+	 * Handles pressed key
+	 *
+	 * <p>If one of the control keys are pressed, namely, W, A, S or D, a corresponding
+	 * {@link com.bham.bc.entity.DIRECTION} is added to the directionSet. If the key F
+	 * is pressed, then an appropriate bullet is fired</p>
+	 *
+	 * @param e key to handle
 	 */
-	@Override
-	public void render(GraphicsContext gc) {
-
-		if (!isAlive) return;
-
-		if (navigationService!=null) navigationService.render(gc);
-
-		//It is covered by home currently. So you could not see it.
-		renderBloodbBar(gc);
-
-		switch (Kdirection) {
-			case D:
-				gc.drawImage(entityImages[0], x, y);
-				break;
-			case U:
-				gc.drawImage(entityImages[1], x, y);
-				break;
-			case L:
-				gc.drawImage(entityImages[2], x, y);
-				break;
-			case R:
-				gc.drawImage(entityImages[3], x, y);
-				break;
-		}
-	}
-
 	public void keyPressed(KeyEvent e) {
 		switch (e.getCode()) {
-			case D: bR = true; break;
-			case A: bL = true; break;
-			case W: bU = true; break;
-			case S: bD = true; break;
+			case F: fire(); break;
+			case W: directionSet.add(DIRECTION.U); break;
+			case A: directionSet.add(DIRECTION.L); break;
+			case S: directionSet.add(DIRECTION.D); break;
+			case D: directionSet.add(DIRECTION.R); break;
 		}
-		decideDirection();
 	}
+
 	/**
-	 * Determine the direction Of Player Tank
+	 * Handles released key
+	 *
+	 * <p>If one of the control keys are released, namely, W, A, S or D, a corresponding
+	 * {@link com.bham.bc.entity.DIRECTION} is removed from the directionSet</p>
+	 *
+	 * @param e key to handle
 	 */
-	void decideDirection() {
-		if (!bL && !bU && bR && !bD) 
-			direction = Direction.R;
-
-		else if (bL && !bU && !bR && !bD) 
-			direction = Direction.L;
-
-		else if (!bL && bU && !bR && !bD) 
-			direction = Direction.U;
-
-		else if (!bL && !bU && !bR && bD) 
-			direction = Direction.D;
-
-		else if (!bL && !bU && !bR && !bD)
-			direction = Direction.STOP; 
-	}
-
 	public void keyReleased(KeyEvent e) {
 		switch (e.getCode()) {
-			case F: fire(); break;
-			case D: bR = false; break;
-			case A: bL = false; break;
-			case W: bU = false; break;
-			case S: bD = false; break;
+			case W: directionSet.remove(DIRECTION.U); break;
+			case A: directionSet.remove(DIRECTION.L); break;
+			case S: directionSet.remove(DIRECTION.D); break;
+			case D: directionSet.remove(DIRECTION.R); break;
 		}
-		decideDirection(); 
-	}
-	/**This method create the firing bullet01
-	 * Use Kdirection to set the direction of Bullet
-	 * Add bullet to list of bullets
-	 */
-	public Bullets01 fire() {
-		if (!isAlive)
-			return null;
-		int x=0;
-		int y=0;
-		switch (Kdirection) {
-			case D:
-				x = this.x + this.width / 2 - Bullets01.width / 2;
-				y = this.y + this.length;
-				break;
-
-			case U:
-				x = this.x + this.width / 2 - Bullets01.width / 2;
-				y = this.y - Bullets01.length;
-				break;
-			case L:
-				x = this.x - Bullets01.width;
-				y = this.y + this.length / 2 - Bullets01.length / 2;
-				break;
-
-			case R:
-				x = this.x + this.width;
-				y = this.y + this.length / 2 - Bullets01.length / 2;
-				break;
-		}
-		Bullets01 m = new Bullets01(this.ID(),x, y, Kdirection);
-		backendServices.addBullet(m);
-		return m;
 	}
 
-	public boolean isAlive() {
-		return isAlive;
-	}
-
-	public void setAlive(boolean alive) {
-		this.isAlive = alive;
-	}
-
-	public boolean isUser() {
-		return true;
-	}
 	/**
-	 * Since the tanks on the map was put into a list, we need to check if the this.tank collide
-	 * with any of those tanks, if intersects, change both of tanks's coordinate to previous value
-	 * so they can not go further
-	 * Note: IF more environment class are creating, should write more collideWithXXXX methods...
+	 * Shoots default bullet
+	 *
+	 * <p>This method creates a new instance of {@link com.bham.bc.components.armory.DefaultBullet}
+	 * based on player's position and angle</p>
+	 *
+	 * TODO: generalize the method once weapon class is defined of more bullet types appear
+	 *
+	 * @return instance of DefaultBullet
 	 */
-	public boolean collideWithTanks(java.util.List<Enemy> tanks) {
-		for (int i = 0; i < tanks.size(); i++) {
-			MovingEntity t = tanks.get(i);
-			if (this != t) {
-				if (this.isAlive && t.isAlive()
-						&& this.intersects(t)) {
-					this.changToOldDir();
-					t.changToOldDir();
-					return true;
-				}
-			}
-		}
-		return false;
+	public DefaultBullet fire() {
+		double centerBulletX = x + WIDTH/2;
+		double centerBulletY = y - DefaultBullet.HEIGHT/2;
+
+		Rotate rot = new Rotate(angle, x + WIDTH/2, y + HEIGHT/2);
+		Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
+
+		double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
+		double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
+
+		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
+		backendServices.addBullet(b);
+		return b;
 	}
 
-	public int getHp() {
-		return hp;
-	}
+	@Override
+	public Ellipse getHitBox() {
+		Point2D hitBoxOffset = new Point2D(0, 4);
 
-	public void setHp(int hp) {
-		this.hp = hp;
+		Ellipse hitBox = new Ellipse(x + WIDTH/2, y + HEIGHT/2, WIDTH/2-1, HEIGHT/2-3);
+		hitBox.getTransforms().add(new Rotate(angle, hitBox.getCenterX(), hitBox.getCenterY()));
+		hitBox.getTransforms().add(new Translate(hitBoxOffset.getX(), hitBoxOffset.getY()));
+
+		return hitBox;
 	}
 
 	@Override
 	public void update() {
+		updateAngle();
 		move();
-		trackableX.set(this.x + this.width/2);
-		trackableY.set(this.y + this.length/2);
-	}
-	/**
-	 * Method to implements the movement of Player tanks
-	 * Record the current coordinate as old coordinates and move to the specific direction
-	 * Note: Always check the constraints of boundary:
-	 * x AND y coordinate of Player tank can not go outside of the frame
-	 */
-	@Override
-	protected void move() {
-
-		this.oldX = x;
-		this.oldY = y;
-
-		switch (direction) {
-			case L:
-				x -= speedX;
-				break;
-			case U:
-				y -= speedY;
-				break;
-			case R:
-				x += speedX;
-				break;
-			case D:
-				y += speedY;
-				break;
-			case STOP:
-				break;
-		}
-
-		if (this.direction != Direction.STOP) {
-			this.Kdirection = this.direction;
-		}
-
-
-
-		//guarantee the tank is in Frame
-		if (x < 0) x = 0;
-		if (y < 0) y = 0;
-		if (x + this.width > Constants.MAP_WIDTH) x = Constants.MAP_WIDTH - this.width;
-		if (y + this.length > Constants.MAP_HEIGHT) y = Constants.MAP_HEIGHT - this.length;
+		TRACKABLE_X.set(x + WIDTH/2);
+		TRACKABLE_Y.set(y + HEIGHT/2);
 	}
 
 	@Override
-	public void initTrackableCoordinates() {
-		trackableX = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2);
-		trackableY = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2);
-	}
-
-	@Override
-	public SimpleDoubleProperty getTrackableCoordinateX() {
-		return trackableX;
-	}
-	@Override
-	public SimpleDoubleProperty getTrackableCoordinateY() {
-		return trackableY;
-	}
+	public void render(GraphicsContext gc) {
+		if (navigationService!=null) navigationService.render(gc);
+		drawRotatedImage(gc, entityImages[0], angle); }
 
 	@Override
 	public boolean handleMessage(Telegram msg) {
@@ -322,29 +155,8 @@ public class Player extends Character implements TrackableCharacter {
 				System.out.println("no match");
 				return false;
 		}
-
 	}
 
 	@Override
-	public String toString() {
-		return "Player Type";
-	}
-
-	@Override
-	public void increaseHealth(int health){
-		if(this.hp +health<=200){
-			this.hp = this.hp +health;
-		} else{
-			this.hp = 200;
-		}
-	}
-
-	@Override
-	public void switchWeapon(Weapon w) {
-
-	}
-
-
-	//----------------------------------------------------------------------------------------//
-
+	public String toString() { return "Player"; }
 }

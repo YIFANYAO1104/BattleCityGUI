@@ -32,16 +32,13 @@ public class Hard extends GenericObstacle {
 
     @Override
     public void handleBullet(Bullet b) {
-        if (b.isAlive() && this.intersects(b)) {
-            b.setAlive(false);
-            backendServices.removeBullet(b);
+        if (intersects(b)) {
+            b.destroy();
         }
     }
 
     @Override
-    public void handleCharacter(Character t) {
-        if(t.isAlive() && this.intersects(t)){
-            backendServices.changeToOldDir(t);
-        }
+    public void handleCharacter(Character c) {
+        if(intersects(c)) c.move(-1, true);
     }
 }

@@ -9,9 +9,10 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
@@ -35,6 +36,8 @@ public class GameSession {
 
     private Camera cmr;
 
+    private AnchorPane hbPane;
+
     /**
      * Constructs the view manager
      */
@@ -51,13 +54,13 @@ public class GameSession {
         canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        Rectangle rect = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
-        rect.setStroke(Color.RED);
-        rect.setStrokeWidth(5);
+        hbPane = new AnchorPane();
+        hbPane.setPrefWidth(Constants.MAP_WIDTH);
+        hbPane.setPrefHeight(Constants.MAP_HEIGHT);
 
-        gamePane = new AnchorPane(canvas, rect);
+        gamePane = new AnchorPane(canvas, hbPane);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
-        cmr = new Camera(frontendServices.getHomeTank());
+        cmr = new Camera();
         gameScene.setCamera(cmr);
 
         gameStage = new Stage();
@@ -65,6 +68,16 @@ public class GameSession {
         gameStage.setScene(gameScene);
         gameStage.setTitle("A very cool game");
         gameStage.setResizable(false);
+
+        KeyCodeCombination keyCodeCombination=new KeyCodeCombination(KeyCode.ESCAPE);
+        gameScene.getAccelerators().put(keyCodeCombination, new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("press showPauseMenu");
+                MenuSession.showPauseMenu(gamePane);
+            }
+        });
+
     }
 
     /**
@@ -98,10 +111,8 @@ public class GameSession {
         gc.setFill(Color.BLUE);
         gc.setFont(new Font("Times New Roman", 20));
 
-        gc.fillText("Tanks left in the field: ", 200, 70);
-        gc.fillText("" + frontendServices.getEnemyNumber(), 400, 70);
         gc.fillText("Health: ", 580, 70);
-        gc.fillText("" + frontendServices.getLife(), 650, 70);
+        gc.fillText("" + frontendServices.getPlayerHP(), 650, 70);
     }
 
 
@@ -110,13 +121,7 @@ public class GameSession {
      * @returns true if game ended and false otherwise
      */
     private boolean gameEnded() {
-        if(frontendServices.isLoss()){
-            gc.setFill(Color.GREEN);
-            gc.setFont(new Font("Times New Roman", 40));
-            gc.fillText("Sowwy. You lose!", 200, 300);
-
-            return true;
-        } else if(frontendServices.isWin()){
+        if(frontendServices.isGameOver()){
             gc.setFill(Color.GREEN);
             gc.setFont(new Font("Times New Roman", 40));
             gc.fillText("Congratulations!", 200, 300);
@@ -127,25 +132,38 @@ public class GameSession {
         return false;
     }
 
+    private void tick() {
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        frontendServices.render(gc);
+        frontendServices.renderHitBoxes(hbPane);
+        renderScoreBoard();
+
+        cmr.update();
+        backendServices.update();
+
+        if (gameEnded()) {
+            backendServices.clear();
+            gameTimer.stop();
+        }
+    }
+
     /**
      * runs methods which update the state of the game
      */
     private void createGameLoop() {
         gameTimer = new AnimationTimer() {
+            long lastTick = 0;
             @Override
             public void handle(long now) {
-                // Would be better to wrap rendering into one function
-                gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());  // Clear canvas before every frame
-                frontendServices.render(gc);                                      // Render backend content
-                renderScoreBoard();                                               // Render backend content
-                cmr.update();
-                frontendServices.update();                                        // Update backend content
+                if(lastTick == 0) {
+                    lastTick = now;
+                    tick();
+                    return;
+                }
 
-                // Would be better for the backend to trigger
-                // this state so that less checks are performed
-                if(gameEnded()) {                                                 // Stop game loop if game ended
-                    frontendServices.clear();
-                    gameTimer.stop();
+                if(now - lastTick > 1_000_000_000 / 20) {
+                    lastTick = now;
+                    tick();
                 }
             }
 

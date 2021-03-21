@@ -10,13 +10,13 @@ public class AudioManager {
     private double volume;
     private static AudioPlayer player;
 
+    public static AudioManager audioManager = new AudioManager();
+
     /**
      * Constructs audio manager and sets default player to play MENU track
      */
     public AudioManager() {
         volume = INITIAL_VOLUME;
-        //createSequentialPlayer(TRACK.MENU);
-        createParallelPlayer(TRACK.STEM1, TRACK.STEM2);
     }
 
     /**
@@ -52,9 +52,9 @@ public class AudioManager {
     public AudioPlayer getCurrentPlayer() { return player; }
 
 
-    public void play() { player.play(); }
-    public void pause() { player.pause(); }
-    public void stop() { player.stop(); }
+    public void play() { if(player != null) player.play(); }
+    public void pause() { if(player != null) player.pause(); }
+    public void stop() { if(player != null) player.stop(); }
 
     /**
      * sets volume for the current player

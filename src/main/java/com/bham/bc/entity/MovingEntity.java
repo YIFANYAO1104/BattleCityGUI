@@ -1,80 +1,59 @@
 package com.bham.bc.entity;
 
-import javafx.scene.shape.Rectangle;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.transform.Rotate;
 
-public abstract class MovingEntity extends BaseGameEntity{
-
-    /**
-     * the velocity of moving object( speed x in horizontal and speed y in vertical)
-     */
-    protected int speedX;
-    protected int speedY;
-
-    /**
-     * the record of the previous position of the moving object
-     * It is useful when it moves and intersects sth.
-     * In this situation, it will move back.
-     */
-    protected int oldX, oldY;
+/**
+ * Represents any entity that can move in any angle
+ */
+public abstract class MovingEntity extends BaseGameEntity {
+    protected double speed;
+    protected double angle;
+    protected boolean exists;
 
     /**
-     * the length and width of the moving object
-     * It is somewhat wasting spaces, but this could be easier to develop. So we need them
+     * Constructs a single moving entity by default facing up (angle is set to 0) and generates a new valid ID for it
+     *
+     * @param x top left x coordinate of the entity and its image
+     * @param y top left y coordinate of the entity and its image
+     * @param speed value which defines the initial velocity
      */
-    protected int width;
-    protected int length;
-
-    /**
-     * the moving direction of the moving object
-     */
-
-    protected Direction direction;
-    /**
-     * the status to check if the object is alive or dead
-     */
-    protected boolean isAlive;
-
-    /**
-     * the constructor of this class, will generate a valid ID using parent class's generating ID method
-     */
-    /**
-     * the constructor of this class, will generate a valid ID using parent class's generating ID method
-     * The other attributes of an moving entity will be set
-     */
-    protected MovingEntity(int speedX,int speedY,
-                           int x, int y,
-                           int width, int length,
-                           Direction direction) {
-        super(GetNextValidID(),x,y);
-        this.speedX =speedX;
-        this.speedY = speedY;
-
-        this.oldX = x;
-        this.oldY = y;
-
-        this.width =width;
-        this.length = length;
-
-        this.direction = direction;
-        isAlive = true;
+    protected MovingEntity(double x, double y, double speed) {
+        super(GetNextValidID(), x, y);
+        this.speed = speed;
+        angle = 0;
+        exists = true;
     }
 
-    protected abstract void move();
-
-    public boolean isAlive() {
-        return isAlive;
+    /**
+     * Draws an image on a graphics context
+     *
+     * <p>The image is drawn at (x, y) rotated by angle pivoted around the point (centerX, centerY).
+     * It uses Rotate class form JavaFX which applies rotation using transform matrix.</p>
+     *
+     * @param gc graphics context the image is to be drawn on
+     * @param angle rotation angle
+     *
+     * @see <a href="https://stackoverflow.com/questions/18260421/how-to-draw-image-rotated-on-javafx-canvas">stackoverflow.com</a>
+     * @see <a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/transform/Rotate.html">docs.oracle.com</a>
+     */
+    protected void drawRotatedImage(GraphicsContext gc, Image image, double angle) {
+        gc.save();
+        Rotate r = new Rotate(angle, x + image.getWidth() / 2, y + image.getHeight() / 2);
+        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+        gc.drawImage(image, x, y);
+        gc.restore();
     }
 
-    public void setAlive(boolean alive) {
-        this.isAlive = alive;
-    }
+    /**
+     * Checks if this entity exists
+     * @return true if it exists and false otherwise
+     */
+    public boolean exists() { return exists; }
 
-    public Rectangle getHitBox() {
-        return new Rectangle(x, y, width, length);
-    }
-
-    public void changToOldDir() {
-        x = oldX;
-        y = oldY;
-    }
+    /**
+     * Defines how the position of the entity is updated on each frame
+     */
+    public abstract void move();
 }

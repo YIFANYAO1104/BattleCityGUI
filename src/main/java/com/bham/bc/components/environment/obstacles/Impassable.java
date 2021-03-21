@@ -35,9 +35,7 @@ public class Impassable extends GenericObstacle {
     public void handleBullet(Bullet b) { return; }
 
     @Override
-    public void handleCharacter(Character t) {
-        if(t.isAlive() && this.intersects(t)){
-            backendServices.changeToOldDir(t);
-        }
+    public void handleCharacter(Character c) {
+        if(intersects(c)) c.move(-1, true);
     }
 }

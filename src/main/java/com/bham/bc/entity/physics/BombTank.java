@@ -27,7 +27,7 @@ public class BombTank extends BaseGameEntity {
 	 * @param x coordinate of x axis
 	 * @param y coordinate of y axis
 	 */
-	public BombTank(int x, int y) {
+	public BombTank(double x, double y) {
 		super(GetNextValidID(), x, y);
 		initImages();
 	}
@@ -61,7 +61,7 @@ public class BombTank extends BaseGameEntity {
 	@Override
 	public void render(GraphicsContext gc) {
 		if (!live) {
-			backendServices.removeBombTank(this);
+			//backendServices.removeBombTank(this);
 			return;
 		}
 		if (step == entityImages.length) {

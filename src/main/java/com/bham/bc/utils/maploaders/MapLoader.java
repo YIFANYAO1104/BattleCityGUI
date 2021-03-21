@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MapLoader {
+    protected int mapWidth;
+    protected int mapHeight;
 
     protected List<GenericObstacle> obstacles;
     protected List<Trigger> triggers;
@@ -17,25 +19,39 @@ public abstract class MapLoader {
      * Constructs map loader with compulsory attributes
      */
     public MapLoader() {
+        mapWidth = 0;
+        mapHeight = 0;
         obstacles = new ArrayList<>();
         triggers = new ArrayList<>();
         triggerSystem = new TriggerSystem();
     }
 
     /**
-     * gets all obstacles
+     * Gets the width of the map
+     * @return integer representing the size of map's width
+     */
+    public int getMapWidth() { return mapWidth; }
+
+    /**
+     * Gets the height of the map
+     * @return integer representing the size of map's height
+     */
+    public int getMapHeight() { return mapHeight; }
+
+    /**
+     * Gets all obstacles
      * @return List of Generic Obstacles
      */
     public List<GenericObstacle> getObstacles() { return obstacles; }
 
     /**
-     * gets all triggers
+     * Gets all triggers
      * @return List of Triggers
      */
     public List<Trigger> getTriggers() { return triggers; }
 
     /**
-     * gets trigger layer
+     * Gets trigger layer
      * @return Trigger System
      */
     public TriggerSystem getTriggerSystem() { return triggerSystem; }

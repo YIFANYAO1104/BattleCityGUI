@@ -46,7 +46,7 @@ public class HealthGiver extends RespawnTrigger<Character>{
     @Override
     public void tryTrigger(Character character) {
         if (isActive() && isTouchingTrigger(character.getPosition(), character.getRadius())) {
-            character.increaseHealth(health);
+            character.addHP(health);
 
             deactivate();
         }

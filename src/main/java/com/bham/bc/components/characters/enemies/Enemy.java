@@ -1,231 +1,99 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.BackendServices;
-import com.bham.bc.components.armory.Bullets01;
-import com.bham.bc.components.environment.triggers.Weapon;
-import com.bham.bc.utils.Constants;
-import com.bham.bc.entity.Direction;
+import com.bham.bc.components.armory.DefaultBullet;
+import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.components.characters.Character;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
-
-import java.util.Random;
+import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
+/**
+ * Represents a bot that is an enemy of a player
+ */
 public class Enemy extends Character {
-    public static int count = 0;
-    /**
-     * the STABLE direction of the Player Tank
-     * It's value should not be 'stop'
-     * Mainly for renderer
-     */
-    private Direction Kdirection = Direction.U;
-    /**
-     *  initialize the health of tank to 200 hp
-     *  */
-    private int life = 200;
+
+    public static final String IMAGE_PATH = "file:src/main/resources/img/tankU.gif";
+    public static final int WIDTH = 30;
+    public static final int HEIGHT = 30;
+    public static final int MAX_HP = 100;
 
     /**
-     * Attribute to indicate if Enemy is near around
-     * If enemy around, rate =2
-     * If enemy not near around, rate =1
-     * Initialize to 1
+     * Constructs an enemy instance with initial speed value set to 1
+     *
+     * @param x top left x coordinate of the enemy
+     * @param y top left y coordinate of the enemy
      */
-    private int rate=1;
-    private static Random r = new Random();
-    /**
-     * Attribute generate randomly to determine how many steps would tank takes before change direction
-     */
-    private int step = r.nextInt(10)+5 ;
-    /**
-     *  a constructor of enemy tank,
-     *  Create Enemy tank using coordinate ,direction and centerController as parameters */
-    public Enemy(int x, int y, Direction dir) {
-        super(1,1, x, y, 35,35, dir);
-
-        initImages();
+    public Enemy(int x, int y) {
+        super(x, y, 1, MAX_HP, SIDE.ENEMY);
+        entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
     }
+
     /**
-     * List of Enemy tank photos of different directions,should be replace Later
+     * Sample method for shooting a default bullet
+     *
+     * <p>This method creates a new instance of {@link com.bham.bc.components.armory.DefaultBullet}
+     * based on player's position and angle</p>
+     *
+     * TODO: generalize the method once weapon class is defined of more bullet types appear
+     *
+     * @return instance of DefaultBullet
      */
-    private void initImages() {
-        entityImages = new Image[] {
-                new Image("file:src/main/resources/img/tankD.gif"),
-                new Image("file:src/main/resources/img/tankU.gif"),
-                new Image("file:src/main/resources/img/tankL.gif"),
-                new Image("file:src/main/resources/img/tankR.gif"),
-        };
-    }
-    /**This method  render all kinds of tanks needed by choosing the particular image in the entityImage list
-     * After render the image of tank, this method calls move() and aimAndShoot() to update */
-    @Override
-    public void render(GraphicsContext gc) {
+    public DefaultBullet fire() {
+        double centerBulletX = x + WIDTH/2;
+        double centerBulletY = y - DefaultBullet.HEIGHT/2;
 
-        if (!isAlive) {
-            backendServices.removeEnemy(this);
-            return;
-        }
+        Rotate rot = new Rotate(angle, x + WIDTH/2, y + HEIGHT/2);
+        Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
 
-        switch (Kdirection) {
-            case D:
-                    gc.drawImage(entityImages[0], x, y);
-                break;
+        double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
+        double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
 
-            case U:
-                    gc.drawImage(entityImages[1], x, y);
-                break;
-            case L:
-                    gc.drawImage(entityImages[2], x, y);
-                break;
-
-            case R:
-                    gc.drawImage(entityImages[3], x, y);
-                break;
-        }
-
-
+        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
+        backendServices.addBullet(b);
+        return b;
     }
 
 
-    /**This is a method to indicate if Player Tank is in the area of the Rectangle around Enemy Tank,
-     if they are in the same rectangle region then return true
-     */
-    public boolean playertankaround(){
-        int rx=x-15,ry=y-15;
-        if((x-15)<0) rx=0;
-        if((y-15)<0)ry=0;
-        Rectangle a=new Rectangle(rx, ry,60,60);
-        if (this.isAlive && a.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) {
-            return true;
-        }
-        return false;
-    }
-    /**This method create the firing bullet
-     * Use Kdirection to set the direction of Bullet
-     * Add bullet to list of bullets
-     */
-    public Bullets01 fire() {
-        if (!isAlive)
-            return null;
-        int x=0;
-        int y=0;
-        switch (Kdirection) {
-            case D:
-                x = this.x + this.width / 2 - Bullets01.width / 2;
-                y = this.y + this.length;
-                break;
+    /** TODO: replace this method */
+    @Deprecated
+    public boolean isPlayerClose() {
+        /*
+        double rx = x - 15 < 0 ? 0 : x - 15;
+        double ry = y - 15 < 0 ? 0 : y - 15;
 
-            case U:
-                x = this.x + this.width / 2 - Bullets01.width / 2;
-                y = this.y - Bullets01.length;
-                break;
-            case L:
-                x = this.x - Bullets01.width;
-                y = this.y + this.length / 2 - Bullets01.length / 2;
-                break;
+        Rectangle detectRegion = new Rectangle(rx, ry,60,60);
+        if (this.exists && detectRegion.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) return true;
+        */
 
-            case R:
-                x = this.x + this.width;
-                y = this.y + this.length / 2 - Bullets01.length / 2;
-                break;
-        }
-        Bullets01 m = new Bullets01(this.ID(),x, y, Kdirection);
-        backendServices.addBullet(m);
-        return m;
-    }
-    /**
-     * Since the tanks on the map was put into a list, we need to check if the this.tank collide
-     * with any of those tanks, if intersects, change both of tanks's coordinate to previous value
-     * so they can not go further
-     */
-    public boolean collideWithTanks(java.util.List<Enemy> be) {
-        for (int i = 0; i < be.size(); i++) {
-            MovingEntity t = be.get(i);
-            if (this != t) {
-                if (this.isAlive && t.isAlive()
-                        && this.getHitBox().intersects(t.getHitBox().getBoundsInLocal())) {
-                    this.changToOldDir();
-                    t.changToOldDir();
-                    return true;
-                }
-            }
-        }
         return false;
     }
 
-    public int getLife() {
-        return life;
-    }
-
-    public void setLife(int life) {
-        this.life = life;
-    }
-
-    @Override
-    public void update() {
-        move();
-//        aimAtAndShoot();
-    }
-    /**
-     * Method to implements the movement of enemy tanks
-     * Record the current coordinate as old coordinates and move to the specific direction
-     * Note: Always check the constraints of boundary:
-     * x AND y coordinate of enemy tank can not go outside of the frame
-     */
-    protected void move() {
-        this.oldX = x;
-        this.oldY = y;
-
-        switch (direction) {
-            case L:
-                x -= speedX;
-                break;
-            case U:
-                y -= speedY;
-                break;
-            case R:
-                x += speedX;
-                break;
-            case D:
-                y += speedY;
-                break;
-            case STOP:
-                break;
-        }
-
-        if (this.direction != Direction.STOP) {
-            this.Kdirection = this.direction;
-        }
-
-        //guarantee the tank is in Frame
-        if (x < 0) x = 0;
-        if (y < 40) y = 40;
-        if (x + this.width > Constants.MAP_WIDTH) x = Constants.MAP_WIDTH - this.width;
-        if (y + this.length > Constants.MAP_HEIGHT) y = Constants.MAP_HEIGHT - this.length;
-    }
-
+    /** TODO: replace this method */
+    @Deprecated
     private void aimAtAndShoot(){
-        /**
-         * Enemy tank switch direction after every 'step' times
-         * After the tank changes direction, generate another random steps
-         */
+        /*
+         //Enemy tank switch direction after every 'step' times
+         //After the tank changes direction, generate another random steps
+
         if (step == 0) {
-            Direction[] directons = Direction.values();
+            DIRECTION[] directons = DIRECTION.values();
             //[3,14]
             step = r.nextInt(12) + 3;
             //[0,8]
             int mod=r.nextInt(9);
 
-            /**
-             * Condition: If Enemy Tank finds Player tank around
-             * Logic: check if Player tank is in the same horizontal or vertical line of Enemy Tank
-             * If Player tank is found in the line, switch enemy tank's direction and chase Player Tank
-             * Else randomly choose direction to move forward
-             */
+
+             //Condition: If Enemy Tank finds Player tank around
+             //Logic: check if Player tank is in the same horizontal or vertical line of Enemy Tank
+             //If Player tank is found in the line, switch enemy tank's direction and chase Player Tank
+             //Else randomly choose direction to move forward
+
             if (playertankaround()){
                 BackendServices cC = backendServices;
                 if(x==cC.getPlayerX()){
@@ -257,19 +125,28 @@ public class Enemy extends Character {
         }
         step--;
 
-        /**
-         * If Player Tank is near around, having a specific probability to fire (low probability)
-         */
+
+        //If Player Tank is near around, having a specific probability to fire (low probability)
         if(rate==2){
             if (r.nextInt(40) > 35) this.fire();
         }else if (r.nextInt(40) > 38) this.fire();
+        */
     }
 
-    /**
-     * Handle the message received, and choose corresponding output message
-     * @param msg
-     * @return
-     */
+    @Override
+    public void update() { move(); }
+
+    @Override
+    public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
+
+    @Override
+    public Shape getHitBox() {
+        Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
+        hitBox.getTransforms().add(new Rotate(angle, x + WIDTH/2,y + HEIGHT/2));
+
+        return hitBox;
+    }
+
     @Override
     public boolean handleMessage(Telegram msg) {
         switch (msg.Msg.id){
@@ -277,7 +154,7 @@ public class Enemy extends Character {
                 System.out.println("you are deafeated by id "+ msg.Sender);
                 return true;
             case 3:
-                this.direction = (Direction) msg.ExtraInfo;
+                //this.direction = (DIRECTION) msg.ExtraInfo;
                 System.out.println("chang the direction");
                 return true;
             default:
@@ -288,22 +165,5 @@ public class Enemy extends Character {
     }
 
     @Override
-    public String toString() {
-        return "enemy type";
-    }
-
-    @Override
-    public void increaseHealth(int health) {
-        if(this.life+health<=200){
-            this.life = this.life+health;
-        } else{
-            this.life = 200;
-        }
-    }
-
-    @Override
-    public void switchWeapon(Weapon w) {
-
-    }
-
+    public String toString() { return "Enemy"; }
 }
