@@ -9,6 +9,7 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.graph.NodeTypeEnum.invalid_node_index;
@@ -57,12 +58,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     private boolean isDirectedGraph;
     //the index of the next node to be added
     private int nextNodeIndex;
-
-    private HashSet<NavNode> obstacleNodes = new HashSet<>();
-
+    // Map the obstacle's ID to the index of nodes interacting with
     private HashMap<Integer, ArrayList<NavNode>> obstacleId = new HashMap<>();
-
-    private ArrayList<NavNode> ooooNodes = new ArrayList<>();
 
     /**
      * @return true if the edge is not present in the graph. Used when adding
@@ -99,43 +96,27 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         this.eachDisY = eachDisY;
     }
 
-//    public void display(){
-////        System.out.println("size: "+ this.nodeVector.size());
-////        System.out.println("size: "+ this.m_Edges.size());
-//        for(int i = 0; i < nodeVector.size();i++){
-//            NavNode n1 = (NavNode)this.nodeVector.get(i);
-//
-////            System.out.println(n1.Pos().toString());
-//        }
-
-
-//    }
-
-
-
+    /**
+     * rener the graph nodes on the map
+     * @param gc
+     */
     @Override
     public void render(GraphicsContext gc){
 
-        gc.setFill(Color.BLACK);
-        for(int i = 0; i < nodeVector.size() ; i++){
-            NavNode n1 = getNode(i);
+        for(GraphNode node : nodeVector){
+            NavNode n1 = (NavNode) node;
             if(n1.isValid()){
                 gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),2,2,1,1);
+                renderNode(gc,Color.BLACK,n1,1);
                 for(GraphNode nn1: getAroundNodes(n1)){
-                    if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).Cost() > 1000.0){
-                        gc.setFill(Color.BLUE);
-                        gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),4,4,2,2);
-                        gc.setFill(Color.BLACK);
+                    if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).Cost() >= Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST){
+                        renderNode(gc,Color.BLUE,(NavNode) nn1,2);
+//                        renderline(gc,Color.BLUE,n1,(NavNode) nn1);
                     }
                 }
-//                System.out.println(n1.Pos().toString());
-            }else {
-//                System.out.println("------------------------------is----------invallid----------------------------");
             }
 
         }
-//        System.out.println(getNode(613).numWithObs);
-
 
         // draw edges
 //        for (int i = 0; i<m_Edges.size();i++){
@@ -155,32 +136,42 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 //        }
 
     }
-
-    public void renderlines(GraphicsContext gc, ArrayList<GraphNode> a1){
-        ArrayList<GraphEdge> ee1 = new ArrayList<>();
-        for(int i =0;i<a1.size()-1;i++){
-            ee1.add(getEdge(a1.get(i).Index(), a1.get(i+1).Index()));
-        }
-         //draw edges
-        for (int j = 0; j < ee1.size();j++){
-            GraphEdge nh1  = (GraphEdge)ee1.get(j);
-            NavNode n1 = (NavNode)this.nodeVector.get(nh1.From());
-            NavNode n2 = (NavNode)this.nodeVector.get(nh1.To());
-//                Line line1 = new Line(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
-
-            gc.setStroke(Color.RED);
-            gc.setLineWidth(2.0);
-            gc.strokeLine(n1.getPosition().getX(), n1.getPosition().getY(), n2.getPosition().getX(), n2.getPosition().getY());
-
-
-        }
-
+    private void renderNode(GraphicsContext gc,Color color, NavNode n1, int level){
+        gc.setFill(Color.BLUE);
+        gc.fillRoundRect(
+                n1.getPosition().getX(),n1.getPosition().getY(),2*level,2*level,1*level,1*level);
     }
+
+
+    private void renderline(GraphicsContext gc,Color color, NavNode n1, NavNode n2){
+        gc.setStroke(color);
+        gc.setLineWidth(1.0);
+        gc.strokeLine(
+                n1.getPosition().getX(), n1.getPosition().getY(), n2.getPosition().getX(), n2.getPosition().getY());
+    }
+//    public void renderlines(GraphicsContext gc, ArrayList<GraphNode> a1){
+//        ArrayList<GraphEdge> ee1 = new ArrayList<>();
+//        for(int i =0;i<a1.size()-1;i++){
+//            ee1.add(getEdge(a1.get(i).Index(), a1.get(i+1).Index()));
+//        }
+//         //draw edges
+//        for (int j = 0; j < ee1.size();j++){
+//            GraphEdge nh1  = (GraphEdge)ee1.get(j);
+//            NavNode n1 = (NavNode)this.nodeVector.get(nh1.From());
+//            NavNode n2 = (NavNode)this.nodeVector.get(nh1.To());
+////                Line line1 = new Line(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
+//
+//            gc.setStroke(Color.RED);
+//            gc.setLineWidth(2.0);
+//            gc.strokeLine(n1.getPosition().getX(), n1.getPosition().getY(), n2.getPosition().getX(), n2.getPosition().getY());
+//
+//
+//        }
+//
+//    }
 
     public int renderTankPoints(Point2D location , GraphicsContext gc){
         gc.setFill(Color.RED);
-
-
         NavNode n1 = getClosestNodeForPlayer(location);
 //        System.out.println("1 size"+n1.Pos().toString());
         if(n1.isValid() ){
@@ -190,8 +181,6 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         gc.fillRoundRect(location.getX(),location.getY(),4,4,1,1);
 
         return n1.Index();
-
-
     }
 
     public NavNode getClosestNodeForPlayer(Point2D location){
@@ -374,34 +363,19 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
     }
 
+    /**
+     * set nodes around the (from) node edges all with new Cost
+     * @param from root node
+     * @param newCost
+     */
     public void setNodeALLEdages(int from, double newCost){
-
         for(NavNode n1 :getNodeList(from)){
             setEdgeCost(from,n1.Index(),newCost);
+            setEdgeCost(n1.Index(),from,newCost);
         }
 
-        if(newCost> 1000.0) {
-            obstacleNodes.add(getNode(from));           //1000.0 is the stander
-            if(getNode(from).Index() == -1){
-                System.out.println("I am invalid");
-            }
-        }
-
-//        System.out.println("have added obstacle nodes");
     }
 
-    public HashSet<NavNode> getObstacleNodes() {
-        return obstacleNodes;
-    }
-    public void freeInvalidObtsatcleNodes(){
-        HashSet<NavNode> temp = new HashSet<>();
-        for(NavNode node : obstacleNodes){
-            if(node.isValid()){
-                temp.add(node);
-            }
-        }
-        obstacleNodes = temp;
-    }
 
     /**
      * returns the number of active + inactive nodes present in the graph

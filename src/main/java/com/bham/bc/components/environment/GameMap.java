@@ -79,7 +79,6 @@ public class GameMap {
             NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(trigger.getPosition()).Index());
             node.setExtraInfo(trigger);
         }
-        graphSystem.freeInvalidObtsatcleNodes();
     }
 
     /**
