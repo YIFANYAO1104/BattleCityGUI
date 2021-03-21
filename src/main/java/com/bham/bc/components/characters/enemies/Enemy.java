@@ -1,26 +1,22 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.characters.SIDE;
-import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.entity.ai.StateMachine;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
 
 import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
+/**
+ * Represents a generic bot that is an enemy of a player
+ */
 public abstract class Enemy extends Character {
-
-    public static String IMAGE_PATH;
-    public static int WIDTH;
-    public static int HEIGHT;
-    public static int MAX_HP;
     private static StateMachine stateMachine;
+    //private ArrayList<PathEdge> pathEdges;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -28,11 +24,11 @@ public abstract class Enemy extends Character {
      * @param x     top left x coordinate of the character
      * @param y     top left y coordinate of the character
      * @param speed value which defines the initial velocity
-     * @param hp
-     * @param side
+     * @param hp    health points the enemy should have
      */
-    protected Enemy(double x, double y, double speed, double hp, SIDE side) {
-        super(x, y, speed, hp, side);
+    protected Enemy(double x, double y, double speed, double hp) {
+        super(x, y, speed, hp, SIDE.ENEMY);
+        //navigationService = new PathPlanner(this, backendServices.getGraph());
     }
 
     /**
@@ -40,52 +36,6 @@ public abstract class Enemy extends Character {
      * @return The StateMachine for that specific enemy
      */
     protected abstract StateMachine createFSM();
-
-    /**
-     * Abstract method which all chile classes must fill depending on their Finite State Machine
-     */
-    @Override
-    public abstract void update();
-
-    /**
-     * Sample method for shooting a default bullet
-     *
-     * <p>This method creates a new instance of {@link com.bham.bc.components.armory.DefaultBullet}
-     * based on player's position and angle</p>
-     *
-     * TODO: generalize the method once weapon class is defined of more bullet types appear
-     *
-     * @return instance of DefaultBullet
-     */
-    public DefaultBullet fire() {
-        double centerBulletX = x + WIDTH/2;
-        double centerBulletY = y - DefaultBullet.HEIGHT/2;
-
-        Rotate rot = new Rotate(angle, x + WIDTH/2, y + HEIGHT/2);
-        Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
-
-        double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
-        double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
-
-        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
-        backendServices.addBullet(b);
-        return b;
-    }
-
-
-    /** TODO: replace this method */
-    @Deprecated
-    public boolean isPlayerClose() {
-        /*
-        double rx = x - 15 < 0 ? 0 : x - 15;
-        double ry = y - 15 < 0 ? 0 : y - 15;
-
-        Rectangle detectRegion = new Rectangle(rx, ry,60,60);
-        if (this.exists && detectRegion.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) return true;
-        */
-
-        return false;
-    }
 
     /** TODO: replace this method */
     @Deprecated
@@ -147,15 +97,33 @@ public abstract class Enemy extends Character {
     }
 
     @Override
+    public void updateAngle() {
+        /*
+        if(pathRequired) {
+            Point2D nearestAlly = backendServices.getClosestCharacter(SIDE.ALLY);
+            navigationService.createRequest(nearestAlly);
+            if(navigationService.peekRequestStatus() == SearchStatus.target_found) {
+                pathEdges = getPath();
+            }
+        } else if(!pathRequired && navigationService.peekRequestStatus() == SearchStatus.search_incomplete) {
+
+        }
+        */
+
+    }
+
+    @Override
     public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
 
     @Override
-    public Shape getHitBox() {
-        Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
-        hitBox.getTransforms().add(new Rotate(angle, x + WIDTH/2,y + HEIGHT/2));
-
-        return hitBox;
+    // TODO: MAKE this abstract, i.e. compulsory in every child
+    public void destroy() {
+        entityManager.removeEntity(this);
+        exists = false;
     }
+
+    // TODO: remove this, this is just for development
+    public Shape getLine() {return null;}
 
     @Override
     public boolean handleMessage(Telegram msg) {
@@ -199,7 +167,7 @@ public abstract class Enemy extends Character {
      * This algorithm will not be used after each update as this could cause strain on the game
      * Instead every so often the tank will update it's location of the player, and pathfind to it
      */
-    protected void attackPlayer() {
+    protected void approachPlayer() {
         //TODO
     }
 
@@ -222,7 +190,20 @@ public abstract class Enemy extends Character {
     }
 
     /**
-     * In this behaviour the AI will pathfind to the home base and try to attack it
+     * In this behaviour the AI will try to minimise its distance between the player with increased speed.
+     * It can do this only if there are no obstacles in the way and the player is close enough so no path-
+     * finding is required.
+     */
+    protected void charge() {
+        Point2D pt1 = getCenterPosition();
+        //Point2D pt2 = backendServices.getNearestCharacterCenterPosition(SIDE.ALLY);
+        Point2D pt2 = backendServices.getPlayerCenterPosition();
+        angle = Math.toDegrees(Math.atan2(pt2.getY() - pt1.getY(), pt2.getX() - pt1.getX())) + 90;
+        move(4, true);
+    }
+
+    /**
+     * In this behaviour the AI will pathfind to the home base and try to take it over
      */
     protected void attackHomeBase(){
         //TODO

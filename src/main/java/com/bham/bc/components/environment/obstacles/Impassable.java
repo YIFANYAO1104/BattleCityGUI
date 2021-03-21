@@ -5,6 +5,7 @@ import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Shape;
 
 import static com.bham.bc.components.CenterController.backendServices;
 

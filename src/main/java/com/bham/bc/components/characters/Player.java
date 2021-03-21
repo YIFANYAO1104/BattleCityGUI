@@ -9,7 +9,9 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
@@ -23,12 +25,11 @@ public class Player extends Character {
 	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
 	public static final int WIDTH = 25;
 	public static final int HEIGHT = 35;
+	public static final int SIZE = 25;
 	public static final int MAX_HP = 100;
 
-	private double hp;
-
-	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2);
-	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2);
+	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
+	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
 
 	/**
 	 * Constructs a player instance with initial speed value set to 5
@@ -38,7 +39,7 @@ public class Player extends Character {
 	 */
 	public Player(double x, double y) {
 		super(x, y, 5, MAX_HP, SIDE.ALLY);
-		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
+		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
 	}
 
 	/**
@@ -91,11 +92,11 @@ public class Player extends Character {
 		double centerBulletX = x + WIDTH/2;
 		double centerBulletY = y - DefaultBullet.HEIGHT/2;
 
-		Rotate rot = new Rotate(angle, x + WIDTH/2, y + HEIGHT/2);
+		Rotate rot = new Rotate(angle, getCenterPosition().getX(), getCenterPosition().getY());
 		Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
 
-		double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
-		double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
+		double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
+		double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
 
 		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
 		backendServices.addBullet(b);
@@ -103,22 +104,17 @@ public class Player extends Character {
 	}
 
 	@Override
-	public Ellipse getHitBox() {
-		Point2D hitBoxOffset = new Point2D(0, 4);
+	public void destroy() {}
 
-		Ellipse hitBox = new Ellipse(x + WIDTH/2, y + HEIGHT/2, WIDTH/2-1, HEIGHT/2-3);
-		hitBox.getTransforms().add(new Rotate(angle, hitBox.getCenterX(), hitBox.getCenterY()));
-		hitBox.getTransforms().add(new Translate(hitBoxOffset.getX(), hitBoxOffset.getY()));
-
-		return hitBox;
-	}
+	@Override
+	public Circle getHitBox() { return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0); }
 
 	@Override
 	public void update() {
 		updateAngle();
 		move();
-		TRACKABLE_X.set(x + WIDTH/2);
-		TRACKABLE_Y.set(y + HEIGHT/2);
+		TRACKABLE_X.set(x + WIDTH/2.0);
+		TRACKABLE_Y.set(y + HEIGHT/2.0);
 	}
 
 	@Override

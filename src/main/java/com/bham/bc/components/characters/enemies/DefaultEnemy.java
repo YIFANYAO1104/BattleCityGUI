@@ -18,7 +18,7 @@ import static com.bham.bc.components.CenterController.backendServices;
  */
 public class DefaultEnemy extends Enemy {
 
-    public static final String IMAGE_PATH = "file:src/main/resources/img/tankU.gif";
+    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/enemy1";
     public static final int WIDTH = 30;
     public static final int HEIGHT = 30;
     public static final int MAX_HP = 100;
@@ -32,7 +32,7 @@ public class DefaultEnemy extends Enemy {
      * @param y top left y coordinate of the enemy
      */
     public DefaultEnemy(int x, int y) {
-        super(x, y, 1, MAX_HP, SIDE.ENEMY);
+        super(x, y, 1, MAX_HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
         this.stateMachine = createFSM();
     }
@@ -43,7 +43,7 @@ public class DefaultEnemy extends Enemy {
         this.distanceToPlayer = new IntCondition(0, 10); // Creates the handle to the IntCondition such that it can be used to control the State Machine
         Transition detectedPlayer = new Transition(aimAndShootState, distanceToPlayer); // Creates the transition to AimAndShootState
         Transition undetectedPlayer = new Transition(moveState, new NotCondition(distanceToPlayer)); // Creates the transition to MoveState
-        moveState.setTransitions(new Transition[]{detectedPlayer}); // Adds the transitition to the state
+        moveState.setTransitions(new Transition[]{detectedPlayer}); // Adds the transition to the state
         aimAndShootState.setTransitions(new Transition[]{undetectedPlayer}); // Adds the transition to the state
         return new StateMachine(moveState); // Creates the StateMachine handle with the moveState as the initial state
     }
@@ -149,6 +149,7 @@ public class DefaultEnemy extends Enemy {
 
     @Override
     public void update() {
+        /*
         distanceToPlayer.setTestValue(getDistanceToPlayer());
         Action[] actions = this.stateMachine.update();
         for (Action action : actions){
@@ -161,6 +162,7 @@ public class DefaultEnemy extends Enemy {
                     break;
             }
         }
+        */
     }
 
     /**
@@ -184,22 +186,5 @@ public class DefaultEnemy extends Enemy {
     }
 
     @Override
-    public boolean handleMessage(Telegram msg) {
-        switch (msg.Msg.id){
-            case 0:
-                System.out.println("you are deafeated by id "+ msg.Sender);
-                return true;
-            case 3:
-                //this.direction = (DIRECTION) msg.ExtraInfo;
-                System.out.println("chang the direction");
-                return true;
-            default:
-                System.out.println("no match");
-                return false;
-        }
-
-    }
-
-    @Override
-    public String toString() { return "Enemy"; }
+    public String toString() { return "Default Enemy"; }
 }

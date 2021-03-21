@@ -4,6 +4,9 @@ import com.bham.bc.components.CenterController;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.DefaultEnemy;
+import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.characters.enemies.Kamikaze;
 import com.bham.bc.components.environment.GameMap;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -22,7 +25,7 @@ public class SurvivalController extends CenterController {
     public SurvivalController(){
         super();
         gameMap = new GameMap("/64x64.json");
-        player = new Player(16*32 - Player.WIDTH/2, 16*32-Player.HEIGHT/2);
+        player = new Player(16*32 - Player.WIDTH/2.0, 16*32-Player.HEIGHT/2.0);
         gameMap.initGraph(player.getPosition());
         initEnemies();
     }
@@ -31,10 +34,12 @@ public class SurvivalController extends CenterController {
      * Spawns all the initial enemies
      */
     private void initEnemies() {
+        enemies.add(new Kamikaze(16*28, 16*28));
+        /*
         enemies.add(new DefaultEnemy(16*3, 16*3));
         enemies.add(new DefaultEnemy(16*61, 16*3));
         enemies.add(new DefaultEnemy(16*3, 16*61));
-        enemies.add(new DefaultEnemy(16*61, 16*61));
+        enemies.add(new DefaultEnemy(16*61, 16*61));*/
     }
 
     /**TODO: instead of using loops, ask entities to check certain map areas if they are free.
@@ -43,7 +48,7 @@ public class SurvivalController extends CenterController {
     public void update() {
         gameMap.update();
         player.update();
-        enemies.forEach(DefaultEnemy::update);
+        enemies.forEach(Enemy::update);
         bullets.forEach(Bullet::update);
 
         gameMap.handleAll(player, enemies, bullets);
@@ -64,6 +69,7 @@ public class SurvivalController extends CenterController {
         bombTanks.forEach(bombTank -> bombTank.render(gc));
 
         gameMap.renderTopLayer(gc);
+        gameMap.renderTriggers(gc);
         gameMap.renderGraph(gc, allCharactersLocation());
     }
 
@@ -75,7 +81,7 @@ public class SurvivalController extends CenterController {
         //return (ArrayList<Point2D>) getCharacters().stream().map(Character::getPosition).collect(Collectors.toList());
         ArrayList<Point2D> temp1 = new ArrayList<>();
         temp1.add(player.getPosition());
-        for (DefaultEnemy e1 :enemies){
+        for (Enemy e1 :enemies){
             temp1.add(e1.getPosition());
         }
         return temp1;
@@ -83,7 +89,7 @@ public class SurvivalController extends CenterController {
 
     @Override
     public boolean isGameOver() {
-        return enemies.isEmpty()  && player.exists();
+        return false;/*enemies.isEmpty() && player.exists();*/
     }
 
     @Override
