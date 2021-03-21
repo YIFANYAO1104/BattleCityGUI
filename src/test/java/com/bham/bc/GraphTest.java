@@ -5,8 +5,8 @@ import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedDijkst
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.node.Vector2D;
 
+import javafx.geometry.Point2D;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
 import junitparams.naming.TestCaseName;
@@ -15,9 +15,6 @@ import org.junit.runner.RunWith;
 
 import java.math.BigDecimal;
 import java.util.*;
-
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 @RunWith(JUnitParamsRunner.class)
 public class GraphTest {
@@ -131,7 +128,7 @@ public class GraphTest {
             if (edge[1]>maxIndex) maxIndex = edge[1];
         }
         for (int i = 0; i <= maxIndex; i++) {
-            graph.addNode(new NavNode(i,new Vector2D(0,0)));
+            graph.addNode(new NavNode(i,new Point2D(0,0)));
         }
     }
     private void addEdges(SparseGraph graph, int[][] edges) throws Exception {

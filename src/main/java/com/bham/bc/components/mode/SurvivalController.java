@@ -11,7 +11,6 @@ import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.node.GraphNode;
-import com.bham.bc.utils.graph.node.Vector2D;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 

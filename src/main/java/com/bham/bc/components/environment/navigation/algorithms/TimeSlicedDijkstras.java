@@ -122,7 +122,7 @@ public class TimeSlicedDijkstras<termination_condition extends TerminationCondit
 
         while ((nd != source) && (parent.get(nd) != null)) {
             path.add(0, 
-                    new PathEdge(navGraph.getNode(parent.get(nd)).Pos(), navGraph.getNode(nd).Pos()));
+                    new PathEdge(navGraph.getNode(parent.get(nd)).getPosition(), navGraph.getNode(nd).getPosition()));
 
             nd = parent.get(nd);
         }

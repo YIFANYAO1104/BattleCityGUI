@@ -4,8 +4,8 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -119,11 +119,11 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         for(int i = 0; i < nodeVector.size() ; i++){
             NavNode n1 = getNode(i);
             if(n1.isValid()){
-                gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),2,2,1,1);
+                gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),2,2,1,1);
                 for(GraphNode nn1: getAroundNodes(n1)){
                     if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).Cost() > 1000.0){
                         gc.setFill(Color.BLUE);
-                        gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),4,4,2,2);
+                        gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),4,4,2,2);
                         gc.setFill(Color.BLACK);
                     }
                 }
@@ -169,21 +169,21 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
             gc.setStroke(Color.RED);
             gc.setLineWidth(2.0);
-            gc.strokeLine(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
+            gc.strokeLine(n1.getPosition().getX(), n1.getPosition().getY(), n2.getPosition().getX(), n2.getPosition().getY());
 
 
         }
 
     }
 
-    public int renderTankPoints(Vector2D location , GraphicsContext gc){
+    public int renderTankPoints(Point2D location , GraphicsContext gc){
         gc.setFill(Color.RED);
 
 
         NavNode n1 = getClosestNodeForPlayer(location);
 //        System.out.println("1 size"+n1.Pos().toString());
         if(n1.isValid() ){
-            gc.fillRoundRect(n1.Pos().getX(),n1.Pos().getY(),8,8,1,1);
+            gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),8,8,1,1);
         }
         gc.setFill(Color.BLUE);
         gc.fillRoundRect(location.getX(),location.getY(),4,4,1,1);
@@ -193,7 +193,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     }
 
-    public NavNode getClosestNodeForPlayer(Vector2D location){
+    public NavNode getClosestNodeForPlayer(Point2D location){
         int i = (int) (location.getX() + 16.0) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
         int j = (int) (location.getY() + 16.0) / eachDisX;
         int c = j*rowNums + i;
@@ -557,12 +557,12 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
 
-    public ArrayList<Vector2D> getAllVector(){
-        ArrayList<Vector2D> i1 = new ArrayList<Vector2D>();
+    public ArrayList<Point2D> getAllVector(){
+        ArrayList<Point2D> i1 = new ArrayList<Point2D>();
 
         for(Object n1 : this.nodeVector){
             NavNode nn1 = (NavNode)n1;
-            i1.add(nn1.Pos());
+            i1.add(nn1.getPosition());
         }
 
         return i1;

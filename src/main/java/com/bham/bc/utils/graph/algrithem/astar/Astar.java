@@ -4,6 +4,7 @@ import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
+import javafx.geometry.Point2D;
 
 import java.util.*;
 
@@ -75,7 +76,9 @@ public class Astar {
     private double getDistance(Node n1){
         NavNode n2 = (NavNode)n1.getNode();
         NavNode n3 = (NavNode)goal.getNode();
-        return n2.Pos().ManHadunDis(n3.Pos());
+//        return n2.Pos().ManHadunDis(n3.Pos());
+        Point2D x = n2.getPosition().subtract(n3.getPosition());
+        return x.dotProduct(x);
     }
 
     private double getCost(Node n1 , Node n2){

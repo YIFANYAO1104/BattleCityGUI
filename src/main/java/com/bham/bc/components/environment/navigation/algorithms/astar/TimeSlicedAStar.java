@@ -8,6 +8,7 @@ import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
+import javafx.geometry.Point2D;
 
 import java.util.*;
 
@@ -78,7 +79,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         for(int i = routine.size()-1;i>0;i--){
             NavNode n1 = routine.get(i);
             NavNode n2 = routine.get(i-1);
-            path.add(new PathEdge(n1.Pos(),n2.Pos()));
+            path.add(new PathEdge(n1.getPosition(),n2.getPosition()));
         }
 
         return path;
@@ -140,7 +141,10 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     private double getDistance(Node n1){
         NavNode n2 = (NavNode)n1.getNode();
         NavNode n3 = (NavNode)goal.getNode();
-        return n2.Pos().ManHadunDis(n3.Pos());
+//        return n2.Pos().ManHadunDis(n3.Pos());
+        //ManHadunDis()
+        Point2D x = n2.getPosition().subtract(n3.getPosition());
+        return x.dotProduct(x);
     }
 
     private double getCost(Node n1 , Node n2){

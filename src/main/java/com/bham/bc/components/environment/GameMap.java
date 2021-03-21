@@ -15,7 +15,6 @@ import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
 import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.geometry.Point2D;
@@ -72,19 +71,19 @@ public class GameMap {
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         graphSystem = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
         hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,64,64); //make network
-        ArrayList<Vector2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
+        ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
-            Vector2D vv1 = allNodesLocations.get(index);
+            Point2D vv1 = allNodesLocations.get(index);
             collideWithRectangle(graphSystem.ID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32,32));
         }
         //removed unreachable nodes
-        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(new Vector2D(location)));
+        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(location));
 //        a2 = hgf.Astar(graphSystem,location,new Point2D(450,550));
 
         //let the corresponding navgraph node point to triggers object
         ArrayList<Trigger> triggers = triggerSystem.getTriggers();
         for (Trigger trigger : triggers) {
-            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(new Vector2D(trigger.getX(),trigger.getY())).Index());
+            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(new Point2D(trigger.getX(),trigger.getY())).Index());
             node.setExtraInfo(trigger);
         }
         graphSystem.freeInvalidObtsatcleNodes();
@@ -99,7 +98,7 @@ public class GameMap {
 //            NavNode node = (NavNode) n1;
 //
 //        }
-        NavNode nnnnn1 = graphSystem.getClosestNodeForPlayer(new Vector2D(location));
+        NavNode nnnnn1 = graphSystem.getClosestNodeForPlayer(location);
 
 //        NavNode nnn2 =  graphSystem.getNode(613);
 //        System.out.println("index of node is " + nnnnn1.isHit());
@@ -176,7 +175,7 @@ public class GameMap {
     public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
         graphSystem.render(gc);     // render network on map
 
-        for(Point2D p1 : points)  graphSystem.renderTankPoints(new Vector2D(p1),gc);
+        for(Point2D p1 : points)  graphSystem.renderTankPoints(p1,gc);
 
 //        HandyGraphFunctions hgf = new HandyGraphFunctions();
 //

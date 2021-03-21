@@ -5,14 +5,11 @@ import com.bham.bc.utils.graph.algrithem.Floodfill;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.graph.algrithem.astar.Astar;
 import javafx.geometry.Point2D;
 
 
 import java.util.ArrayList;
-
-import static com.bham.bc.utils.graph.node.Vector2D.Vec2DDistance;
 
 public class HandyGraphFunctions {
 
@@ -53,10 +50,10 @@ public class HandyGraphFunctions {
                 //check to see if this is a valid neighbour
                 if (ValidNeighbour(nodeX, nodeY, NumCellsX, NumCellsY)) {
                     //calculate the distance to this node
-                    Vector2D PosNode = graph.getNode(row * NumCellsX + col).Pos();
-                    Vector2D PosNeighbour = graph.getNode(nodeY * NumCellsX + nodeX).Pos();
+                    Point2D PosNode = graph.getNode(row * NumCellsX + col).getPosition();
+                    Point2D PosNeighbour = graph.getNode(nodeY * NumCellsX + nodeX).getPosition();
 
-                    double dist = PosNode.Distance(PosNeighbour);
+                    double dist = PosNode.distance(PosNeighbour);
 
                     //this neighbour is okay so it can be added
                     GraphEdge NewEdge = new GraphEdge(row * NumCellsX + col,
@@ -101,7 +98,7 @@ public class HandyGraphFunctions {
         for (int row = 0; row < NumCellsY; ++row) {
             for (int col = 0; col < NumCellsX; ++col) {
                 graph.addNode(new NavNode(graph.getNextFreeNodeIndex(),
-                        new Vector2D(midX + (col * CellWidth),
+                        new Point2D(midX + (col * CellWidth),
                                 midY + (row * CellHeight))));
 
             }
@@ -130,8 +127,8 @@ public class HandyGraphFunctions {
 
     public ArrayList<GraphNode> Astar(SparseGraph sg, Point2D root, Point2D goal){
 //        Astar astar = new Astar(sg, new Vector2D(root), new Vector2D(goal));
-        GraphNode root1 = sg.getClosestNodeForPlayer(new Vector2D(root) );
-        GraphNode goal1 = sg.getClosestNodeForPlayer(new Vector2D(goal) );
+        GraphNode root1 = sg.getClosestNodeForPlayer(root);
+        GraphNode goal1 = sg.getClosestNodeForPlayer(goal);
         Astar astar = new Astar(root1, goal1, sg);
         return astar.search();
 
@@ -154,8 +151,11 @@ public class HandyGraphFunctions {
              !ConstEdgeItr.end();
              pE = ConstEdgeItr.next()) {
             //calculate the distance between nodes
-            double dist = Vec2DDistance(graph.getNode(pE.From()).Pos(),
-                    graph.getNode(pE.To()).Pos());
+            Point2D p1 = graph.getNode(pE.From()).getPosition();
+            Point2D p2 = graph.getNode(pE.To()).getPosition();
+            double dist = p1.distance(p2);
+//            double dist = Vec2DDistance(graph.getNode(pE.From()).Pos(),
+//                    graph.getNode(pE.To()).Pos());
 
             //set the cost of this edge
             graph.setEdgeCost(pE.From(), pE.To(), dist * weight);

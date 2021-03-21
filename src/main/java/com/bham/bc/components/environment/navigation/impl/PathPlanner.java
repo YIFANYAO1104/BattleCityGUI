@@ -9,7 +9,6 @@ import com.bham.bc.components.environment.navigation.algorithms.astar.TimeSliced
 import com.bham.bc.components.environment.navigation.algorithms.terminationPolicies.FindActiveTrigger;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.node.Vector2D;
 import javafx.geometry.Point2D;
 import com.bham.bc.components.characters.Character;
 import javafx.scene.canvas.GraphicsContext;
@@ -55,7 +54,7 @@ public class PathPlanner implements NavigationService {
      * @return node index. -1 if no closest node found
      */
     private int getClosestNode(Point2D pos){
-        NavNode n1 = navGraph.getClosestNodeForPlayer(new Vector2D(pos));
+        NavNode n1 = navGraph.getClosestNodeForPlayer(pos);
         if(n1.isValid() ){
             return n1.Index();
         }
@@ -148,7 +147,7 @@ public class PathPlanner implements NavigationService {
         //add start and end node
 
         curPath.add(0,
-                new PathEdge(getCenter(owner.getPosition(),owner.getRadius()), navGraph.getNode(closest).Pos())
+                new PathEdge(getCenter(owner.getPosition(),owner.getRadius()), navGraph.getNode(closest).getPosition())
         );
 
 //        PathEdge lastEdge = path.get(path.size()-1);

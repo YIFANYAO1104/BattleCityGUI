@@ -3,7 +3,6 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.utils.graph.node.Vector2D;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 
