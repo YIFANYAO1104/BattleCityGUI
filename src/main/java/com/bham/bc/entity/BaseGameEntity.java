@@ -12,6 +12,14 @@ abstract public class BaseGameEntity {
     private static int nextValidID = 0;
     private int id;
 
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
     protected double x, y;
     protected Image[] entityImages;
 
@@ -95,5 +103,6 @@ abstract public class BaseGameEntity {
      * @return
      */
     abstract public String toString();
+
 
 }

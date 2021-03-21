@@ -6,7 +6,8 @@ import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.entity.Direction;
+import com.bham.bc.components.environment.MapType;
+import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.utils.graph.SparseGraph;
 import javafx.geometry.Point2D;
@@ -27,15 +28,14 @@ public class SurvivalController extends CenterController {
 
     private SparseGraph sg;
 
-    public SurvivalController(MapType mapType){
     /**
      * Constructs the controller by selecting a specific map and creating components
      */
-    public SurvivalController(){
+    public SurvivalController(MapType mapType){
         super();
         gameMap = new GameMap(mapType);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        player = new Player(16*32, 16*32, Direction.STOP,gameMap);
+        player = new Player(16*32, 16*32,gameMap);
         initEnemies();
     }
 
@@ -51,61 +51,18 @@ public class SurvivalController extends CenterController {
 
     /**TODO: instead of using loops, ask entities to check certain map areas if they are free.
      * TODO: If they are not free, then search through all the entities to find which one intersects it*/
-    @Override
-    public void removeObstacle(GenericObstacle go) {
-        gameMap.removeObstacle(go);
-//        player.createNewRequestItem();//每个pathpalnner只有一个任务
-        player.createNewRequestAStar();// 存在问题！～～～～
-        // 当 obstacle 被消除， node 的 edge 需要被重新设置为正常
-        gameMap.updateGraph(player.getPosition());
-//        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
-//        GraphNode g1 = gameMap.getGraph().getClosestNodeForPlayer(new Vector2D(go.getX(),go.getY()));
-//        if(g1.isValid())
-        Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,go.ID(),gameMap.getGraph().ID(), Msg_removeSoft,NO_ADDITIONAL_INFO);
-    }
-
-
-    @Override
-    public void update() {
-        gameMap.update();
-        player.update();
-        enemies.forEach(Enemy::update);
-        bullets.forEach(Bullet::update);
-
-        gameMap.handleAll(player, enemies, bullets);
-        player.handleAll(getCharacters(), bullets);
-        enemies.forEach(enemy -> enemy.handleAll(getCharacters(), bullets));
-
-        bullets.removeIf(b -> !b.exists());
-        enemies.removeIf(e -> !e.exists());
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        gameMap.renderBottomLayer(gc);
-
-        bullets.forEach(bullet -> bullet.render(gc));
-        player.render(gc);
-        enemies.forEach(enemy -> enemy.render(gc));
-        bombTanks.forEach(bombTank -> bombTank.render(gc));
-
-        gameMap.renderTopLayer(gc);
-        gameMap.renderGraph(gc, allCharactersLocation());
-    }
-
-    /**
-     * Gets the positions of all the characters in the game
-     * @return Point2D list with all character locations
-     */
-    public ArrayList<Point2D> allCharactersLocation() {
-        //return (ArrayList<Point2D>) getCharacters().stream().map(Character::getPosition).collect(Collectors.toList());
-        ArrayList<Point2D> temp1 = new ArrayList<>();
-        temp1.add(player.getPosition());
-        for (Enemy e1 :enemies){
-            temp1.add(e1.getPosition());
-        }
-        return temp1;
-    }
+//    @Override
+//    public void removeObstacle(GenericObstacle go) {
+//        gameMap.removeObstacle(go);
+////        player.createNewRequestItem();//每个pathpalnner只有一个任务
+//        player.createNewRequestAStar();// 存在问题！～～～～
+//        // 当 obstacle 被消除， node 的 edge 需要被重新设置为正常
+//        gameMap.updateGraph(player.getPosition());
+////        gameMap.initialGraph(player.getPosition());         // update the map, But it seems really slow, I would improve it
+////        GraphNode g1 = gameMap.getGraph().getClosestNodeForPlayer(new Vector2D(go.getX(),go.getY()));
+////        if(g1.isValid())
+//        Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,go.ID(),gameMap.getGraph().ID(), Msg_removeSoft,NO_ADDITIONAL_INFO);
+//    }
 
     @Override
     public boolean isGameOver() {

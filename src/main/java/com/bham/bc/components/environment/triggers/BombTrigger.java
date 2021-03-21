@@ -44,7 +44,7 @@ public class BombTrigger extends DelayTrigger<Character> {
     public void tryTrigger(Character character) {
         //is this bot within range of this sound
         if (isActive() && isTouchingTrigger(character.getPosition(), character.getRadius())) {
-            character.increaseHealth(0);
+            character.addHP(0);
             backendServices.addBombTank(new BombTank(character.getX(),character.getY()));
         }
     }

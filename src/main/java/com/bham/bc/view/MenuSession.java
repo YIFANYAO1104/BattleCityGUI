@@ -1,6 +1,7 @@
 package com.bham.bc.view;
 
 import com.bham.bc.audio.TRACK;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
@@ -72,10 +73,10 @@ public class MenuSession {
      * Creates a single Game Session based on a chosen MODE
      * @param mode SURVIVAL or CHALLENGE mode to be set in Controller
      */
-    public void createGameSession(MODE mode) {
+    public void createGameSession(MODE mode, MapType mapType) {
         audioManager.createSequentialPlayer(TRACK.CORRUPTION, TRACK.LEAD, TRACK.REVOLUTION);
 
-        GameSession gameSession = new GameSession(mode);
+        GameSession gameSession = new GameSession(mode, mapType);
         gameSession.createNewGame(mainStage);
 
         audioManager.play();

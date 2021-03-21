@@ -2,6 +2,7 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.entity.physics.BombTank;
 
 /**
  * Interface defining the required backend services for a mode to properly work
@@ -28,4 +29,6 @@ public interface BackendServices {
      * Clears all objects in the game
      */
     void clear();
+
+    void addBombTank(BombTank b);
 }

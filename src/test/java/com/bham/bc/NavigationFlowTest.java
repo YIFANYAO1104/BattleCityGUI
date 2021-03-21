@@ -6,7 +6,6 @@ import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
-import com.bham.bc.entity.Direction;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;
 import org.hamcrest.Matchers;
@@ -27,7 +26,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        Player player = new Player(16*32, 16*32, Direction.STOP,gameMap);
+        Player player = new Player(16*32, 16*32, gameMap);
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 
@@ -46,7 +45,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        Player player = new Player(16*32, 16*32, Direction.STOP,gameMap);
+        Player player = new Player(16*32, 16*32, gameMap);
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 
@@ -67,7 +66,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        Player player = new Player(16*32, 16*32, Direction.STOP,gameMap);
+        Player player = new Player(16*32, 16*32, gameMap);
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 

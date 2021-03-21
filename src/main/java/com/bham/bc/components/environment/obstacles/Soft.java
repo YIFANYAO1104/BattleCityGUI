@@ -67,7 +67,7 @@ public class Soft extends GenericObstacle {
     @Override
     public void interactWith(int ID, int indexOfNode , Rectangle r1) {
         if(this.getHitBox().intersects(r1.getBoundsInLocal()))
-            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.ID(),ID,Msg_interactWithPassable,indexOfNode);
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.getID(),ID,Msg_interactWithPassable,indexOfNode);
     }
 
 }

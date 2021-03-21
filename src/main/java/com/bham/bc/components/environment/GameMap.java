@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.BombTrigger;
 import com.bham.bc.components.environment.triggers.Weapon;
@@ -13,7 +14,6 @@ import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
 import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.geometry.Point2D;
@@ -68,7 +68,7 @@ public class GameMap {
         ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Point2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.ID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32,32));
+            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32,32));
         }
         //removed unreachable nodes
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(location));
@@ -77,7 +77,7 @@ public class GameMap {
         //let the corresponding navgraph node point to triggers object
         ArrayList<Trigger> triggers = triggerSystem.getTriggers();
         for (Trigger trigger : triggers) {
-            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(new Point2D(trigger.getX(),trigger.getY())).Index());
+            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(trigger.getPosition()).Index());
             node.setExtraInfo(trigger);
         }
         graphSystem.freeInvalidObtsatcleNodes();
@@ -112,7 +112,7 @@ public class GameMap {
 
     public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
         graphSystem.render(gc);     // render network on map
-        for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1), gc);
+        for(Point2D p1 : points)  graphSystem.renderTankPoints(p1,gc);
     }
 
     public void renderTriggers(GraphicsContext gc) { triggerSystem.render(gc); }
@@ -148,5 +148,9 @@ public class GameMap {
             GenericObstacle w = obstacles.get(i);
             w.interactWith(ID,indexOfNode,r1);
         }
+    }
+
+    public SparseGraph getGraph(){
+        return this.graphSystem;
     }
 }

@@ -1,7 +1,10 @@
 package com.bham.bc.components.characters;
 
 import com.bham.bc.components.armory.DefaultBullet;
+import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
+import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.DIRECTION;
@@ -38,7 +41,7 @@ public class Player extends Character {
 	 * @param x top left x coordinate of the player
 	 * @param y top left y coordinate of the player
 	 */
-	public Player(double x, double y) {
+	public Player(double x, double y, GameMap gm) {
 		super(x, y, 5, MAX_HP, SIDE.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
 		navigationService = new PathPlanner(this,gm.getGraph());

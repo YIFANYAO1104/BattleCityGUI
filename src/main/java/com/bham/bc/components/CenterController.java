@@ -2,6 +2,7 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
@@ -13,6 +14,8 @@ import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Character;
 
+import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -42,10 +45,18 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public CenterController() { super(GetNextValidID(),-1,-1); }
 
     /**
+     * Adding bombtank to bomb tank list
+     * @param b
+     */
+    public void addBombTank(BombTank b){
+        bombTanks.add(b);
+    }
+
+    /**
      * Sets the mode of the game the user has chosen
      * @param mode SURVIVAL or CHALLENGE value to be passed as a game mode
      */
-    public static void setMode(MODE mode){
+    public static void setMode(MODE mode, MapType mapType){
         CenterController centerController = null;
         switch (mode) {
             case SURVIVAL:
@@ -70,6 +81,49 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
         return characters;
     }
+
+    @Override
+    public void update() {
+        gameMap.update();
+        player.update();
+        enemies.forEach(Enemy::update);
+        bullets.forEach(Bullet::update);
+
+        gameMap.handleAll(player, enemies, bullets);
+        player.handleAll(getCharacters(), bullets);
+        enemies.forEach(enemy -> enemy.handleAll(getCharacters(), bullets));
+
+        bullets.removeIf(b -> !b.exists());
+        enemies.removeIf(e -> !e.exists());
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        gameMap.renderBottomLayer(gc);
+
+        bullets.forEach(bullet -> bullet.render(gc));
+        player.render(gc);
+        enemies.forEach(enemy -> enemy.render(gc));
+        bombTanks.forEach(bombTank -> bombTank.render(gc));
+
+        gameMap.renderTopLayer(gc);
+        gameMap.renderGraph(gc, allCharactersLocation());
+    }
+
+    /**
+     * Gets the positions of all the characters in the game
+     * @return Point2D list with all character locations
+     */
+    public ArrayList<Point2D> allCharactersLocation() {
+        //return (ArrayList<Point2D>) getCharacters().stream().map(Character::getPosition).collect(Collectors.toList());
+        ArrayList<Point2D> temp1 = new ArrayList<>();
+        temp1.add(player.getPosition());
+        for (Enemy e1 :enemies){
+            temp1.add(e1.getPosition());
+        }
+        return temp1;
+    }
+
 
     @Override
     public boolean isGameOver() { return isGameOver; }
