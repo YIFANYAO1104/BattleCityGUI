@@ -48,18 +48,26 @@ public class Player extends Character {
 	}
 
 	public void createNewRequestItem(){
-//		navigationService = new PathPlanner(this,gm.getGraph());
-		navigationService.createRequest(ItemType.health);
-		if(navigationService.peekRequestStatus()== SearchStatus.target_found){
-			navigationService.getPath();
+		if(navigationService.createRequest(ItemType.health)==true){
+			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
+				navigationService.getPath();
+			} else {
+				System.out.println("target not found");
+			}
+		} else {
+			System.out.println("no closest node around player/target");
 		}
 	}
 
 	public void createNewRequestAStar(){
-//		navigationService = new PathPlanner(this,gm.getGraph());
-		navigationService.createRequest(new Point2D(440,550));
-		if(navigationService.peekRequestStatus()== SearchStatus.target_found){
-			navigationService.getPath();
+		if(navigationService.createRequest(new Point2D(440,550))==true){
+			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
+				navigationService.getPath();
+			} else {
+				System.out.println("target not found");
+			}
+		} else {
+			System.out.println("no closest node around player/target");
 		}
 	}
 	/**
