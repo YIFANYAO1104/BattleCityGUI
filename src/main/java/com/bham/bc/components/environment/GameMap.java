@@ -1,9 +1,6 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.characters.enemies.DefaultEnemy;
-import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
@@ -13,7 +10,6 @@ import com.bham.bc.entity.triggers.TriggerSystem;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
-import com.bham.bc.utils.graph.node.Vector2D;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
@@ -21,8 +17,8 @@ import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import com.bham.bc.components.characters.GameCharacter;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +75,7 @@ public class GameMap {
         ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Point2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-Enemy.WIDTH/2,vv1.getY()-Enemy.HEIGHT/2,Enemy.WIDTH,Enemy.HEIGHT));
+            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-32/2,vv1.getY()-32/2,32,32));
         }
         //removed unreachable nodes
         graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(location));
@@ -145,22 +141,16 @@ public class GameMap {
     }
 
 
-    public void handleAll(Player player, ArrayList<Enemy> enemies, ArrayList<Bullet> bullets) {
+    public void handleAll(ArrayList<GameCharacter> enemies, ArrayList<Bullet> bullets) {
         obstacles.forEach(obstacle -> {
-            obstacle.handleCharacter(player);
             enemies.forEach(obstacle::handleCharacter);
             bullets.forEach(obstacle::handleBullet);
         });
 
-        List<GameCharacter> temp = new ArrayList<GameCharacter>();
-        temp.add(player);
+        List<GameCharacter> temp = new ArrayList<>();
         temp.addAll(enemies);
         triggerSystem.handleAll(temp, obstacles);
 //        enemies.forEach(enemy -> triggerSystem.update(enemy));
-    }
-
-    public boolean intersectsObstacles(Shape hitBox) {
-        return obstacles.stream().anyMatch(o -> o.handleHitBox(hitBox));
     }
 
 
@@ -171,8 +161,8 @@ public class GameMap {
         }
     }
 
-    public SparseGraph getGraph(){
-        return this.graphSystem;
+    public boolean intersectsObstacles(Shape shape) {
+        return obstacles.stream().anyMatch(o -> o.intersectsShape(shape));
     }
 
     public void addBombTrigger(int x, int y){

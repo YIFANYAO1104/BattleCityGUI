@@ -12,7 +12,7 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import com.bham.bc.components.characters.GameCharacter;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
@@ -109,7 +109,7 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
     }
 
     @Override
-    public Rectangle getHitBox() {
+    public Shape getHitBox() {
         return null;
     }
 

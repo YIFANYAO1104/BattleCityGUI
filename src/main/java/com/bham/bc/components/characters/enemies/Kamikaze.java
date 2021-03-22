@@ -1,6 +1,9 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.*;
 import com.bham.bc.entity.triggers.Trigger;
@@ -9,7 +12,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
-import com.bham.bc.components.characters.Character;
 
 import java.util.Arrays;
 
@@ -95,17 +97,18 @@ public class Kamikaze extends Enemy {
         closeRadiusCondition.setTestValue((int) distanceToPlayer);
         noObstaclesCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
 
-        Action[] actions = stateMachine.update();
+        //Action[] actions = stateMachine.update();
+        Action[] actions = new Action[] {};
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case MOVE:
-                    //move();sd
+                    //move();
                     break;
                 case CHARGE:
-                    charge();
+                    //charge();
                     break;
                 case AIMANDSHOOT:
-                    destroy();
+                    //destroy();
                     break;
             }
         });
@@ -114,7 +117,7 @@ public class Kamikaze extends Enemy {
     /**
      * Represents Kamikaze's explosion effect. This is created as a trigger because it affects player's HP
      */
-    private static class ExplosionTrigger extends Trigger<Character> {
+    private static class ExplosionTrigger extends Trigger {
 
         public static final int SIZE = 60;
         private int currentFrame;
@@ -157,11 +160,16 @@ public class Kamikaze extends Enemy {
         }
 
         @Override
-        public void tryTrigger(Character character) {
+        public void tryTriggerC(GameCharacter character) {
             if(intersects(character) && character.getSide() == SIDE.ALLY && isActive()) {
                 setInactive();
-                character.addHP(-damage);
+                character.changeHP(-damage);
             }
+        }
+
+        @Override
+        public void tryTriggerO(GenericObstacle entity) {
+
         }
 
         @Override
@@ -177,6 +185,11 @@ public class Kamikaze extends Enemy {
         @Override
         public String toString() {
             return "Kamikaze's explosion";
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return null;
         }
     }
 }

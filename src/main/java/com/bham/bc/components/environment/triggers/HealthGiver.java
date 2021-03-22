@@ -7,13 +7,11 @@ import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.Constants;
-import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
@@ -46,7 +44,7 @@ public class HealthGiver extends RespawnTrigger{
     @Override
     public void tryTriggerC(GameCharacter gameCharacter) {
         if (isActive() && rectIsTouchingTrigger(gameCharacter.getPosition(), gameCharacter.getRadius())) {
-            gameCharacter.addHP(health);
+            gameCharacter.changeHP(health);
 
             deactivate();
         }

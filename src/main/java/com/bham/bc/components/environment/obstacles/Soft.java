@@ -55,7 +55,7 @@ public class Soft extends GenericObstacle {
                 //------------for testing---------------------------------------
                 backendServices.testAStar();
                 Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
-                        backendServices.getNavigationGraph().getID(),
+                        backendServices.getGraph().getID(),
                         Msg_removeSoft,NO_ADDITIONAL_INFO);
                 //------------for testing---------------------------------------
                 exists = false;
@@ -76,16 +76,13 @@ public class Soft extends GenericObstacle {
     }
 
 
-    /**
-     * Decreases or decreases HP for the player
-     * @param hurt amount by which the player's HP is changed
-     */
     @Override
+    // TODO
     public void decreaseHP(double hurt) {
         hp = Math.max(hp - hurt, 0.0);
         if(hp <= 0.0) {
             Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
-                    backendServices.getNavigationGraph().getID(),
+                    backendServices.getGraph().getID(),
                     Msg_removeSoft,NO_ADDITIONAL_INFO);
             exists = false;
             entityManager.removeEntity(this);

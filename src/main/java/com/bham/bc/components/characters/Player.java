@@ -15,15 +15,12 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
-import javafx.scene.transform.Translate;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
 /**
- * Represents the character controlled by the user
+ * Represents a character controlled by the user
  */
 public class Player extends GameCharacter {
 
@@ -46,11 +43,10 @@ public class Player extends GameCharacter {
 	public Player(double x, double y, GameMap gm) {
 		super(x, y, 5, MAX_HP, SIDE.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
 		navigationService = new PathPlanner(this,gm.getGraph());
 	}
 
-	public void createNewRequestItem(){
+	public void createNewRequestItem() {
 		if(navigationService.createRequest(ItemType.health)==true){
 			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
 				navigationService.getPath();
@@ -62,7 +58,7 @@ public class Player extends GameCharacter {
 		}
 	}
 
-	public void createNewRequestAStar(){
+	public void createNewRequestAStar() {
 		if(navigationService.createRequest(new Point2D(440,550))==true){
 			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
 				navigationService.getPath();

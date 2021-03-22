@@ -38,9 +38,6 @@ public class Passable extends GenericObstacle {
     public void handleCharacter(GameCharacter t) { return; }
 
     @Override
-    public boolean handleHitBox(Shape hitBox) { return false; }
-
-    @Override
     public void interactWith(int ID, int indexOfNode , Rectangle r1) {
         return;
     }

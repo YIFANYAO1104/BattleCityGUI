@@ -5,6 +5,8 @@ import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -33,6 +35,8 @@ abstract public class GameCharacter extends MovingEntity {
         this.side = side;
         directionSet = EnumSet.noneOf(DIRECTION.class);
     }
+    //TODO: remove
+    public Shape getLine() {return new Rectangle(0,0,0,0);}
 
     /**
      * Updates angle at which the player is facing
@@ -64,9 +68,9 @@ abstract public class GameCharacter extends MovingEntity {
      * Increases or decreases HP for the player
      * @param health amount by which the player's HP is changed
      */
-    public void addHP(double health) {
+    public void changeHP(double health) {
         hp = Math.min(hp + health, MAX_HP);
-        if(hp <= MIN_HP) destroy();
+        if(hp <= 0) destroy();
     }
 
     @Deprecated
@@ -80,7 +84,7 @@ abstract public class GameCharacter extends MovingEntity {
     protected void handleBullet(Bullet bullet) {
         if(intersects(bullet)) {
             if(bullet.getSide() != side) {
-                addHP(-bullet.getDamage());
+                changeHP(-bullet.getDamage());
             }
             bullet.destroy();
         }

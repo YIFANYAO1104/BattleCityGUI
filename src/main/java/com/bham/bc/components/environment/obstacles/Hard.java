@@ -5,8 +5,6 @@ import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 /**
  * Desc: Tile that is unbreakable, nothing can pass through it

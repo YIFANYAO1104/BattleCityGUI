@@ -50,7 +50,7 @@ public class ExplosiveTrigger extends Trigger {
     public void tryTriggerC(GameCharacter gameCharacter) {
         //is this bot within range of this sound
         if (isActive() && this.rectIsTouchingTrigger(gameCharacter.getPosition(), gameCharacter.getRadius())) {
-            gameCharacter.decreaseHP(1000);
+            gameCharacter.changeHP(-1000);
             backendServices.addBombTank(new BombTank(gameCharacter.getX(), gameCharacter.getY()));
         } else if (gameCharacter.getHitBox().intersects(x,y,entityImages[0].getWidth(),entityImages[0].getHeight())){
             gameCharacter.move(-1, true);
