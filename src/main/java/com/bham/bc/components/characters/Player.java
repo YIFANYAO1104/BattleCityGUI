@@ -42,7 +42,7 @@ public class Player extends GameCharacter {
 	 * @param y top left y coordinate of the player
 	 */
 	public Player(double x, double y, GameMap gm) {
-		super(x, y, 3, MAX_HP, SIDE.ALLY);
+		super(x, y, 5, MAX_HP, SIDE.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
 		navigationService = new PathPlanner(this,gm.getGraph());
 	}

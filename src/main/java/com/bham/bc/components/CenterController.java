@@ -195,12 +195,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     @Override
     public void update() {
         gameMap.update();
-        player.update();
         characters.forEach(GameCharacter::update);
         bullets.forEach(Bullet::update);
 
         gameMap.handleAll(characters, bullets);
-        player.handleAll(characters, bullets);
         characters.forEach(character -> character.handleAll(characters, bullets));
 
         bullets.removeIf(b -> !b.exists());
@@ -214,7 +212,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         bombTanks.forEach(b -> render(gc)); // TEMP
 
         bullets.forEach(bullet -> bullet.render(gc));
-        player.render(gc);
         characters.forEach(character -> character.render(gc));
 
         gameMap.renderTopLayer(gc);
