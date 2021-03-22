@@ -22,7 +22,6 @@ import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
 public abstract class GenericObstacle extends BaseGameEntity {
     protected boolean exists;
     protected int currentFrame;
-    protected boolean renderTop;
 
     /**
      * Constructs an obstacle
@@ -38,13 +37,6 @@ public abstract class GenericObstacle extends BaseGameEntity {
         currentFrame = 0;
         entityImages = tileIDs.length == 0 ? getDefaultImage() : tileset.getTiles(tileIDs);
     }
-
-    /**
-     * Checks if the tile has to be rendered on top of all other entities
-     * @return true if it needs to be in top layer and false otherwise
-     * TODO: remove because this is now an attribute
-     */
-    public boolean renderTop() { return renderTop; }
 
     /**
      * Gets all the important attributes described in {@link com.bham.bc.components.environment.obstacles.ATTRIBUTE} this obstacle has

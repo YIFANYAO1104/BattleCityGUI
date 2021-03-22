@@ -23,7 +23,6 @@ public class Passable extends GenericObstacle {
      */
     public Passable(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
-        renderTop = false;
     }
 
     @Override

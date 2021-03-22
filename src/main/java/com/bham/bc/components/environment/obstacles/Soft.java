@@ -34,7 +34,6 @@ public class Soft extends GenericObstacle {
      */
     public Soft(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
-        renderTop = false;
     }
 
     @Override

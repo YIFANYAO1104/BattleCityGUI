@@ -2,6 +2,7 @@ package com.bham.bc.entity.physics;
 
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -24,11 +25,9 @@ public class BombTank extends BaseGameEntity {
 	int step = 0;
 	/**
 	 * Constructor of BombTank. When tank gets bombed the Object should be created
-	 * @param x coordinate of x axis
-	 * @param y coordinate of y axis
 	 */
-	public BombTank(double x, double y) {
-		super(GetNextValidID(), x, y);
+	public BombTank(Point2D p) {
+		super(GetNextValidID(), p.getX(), p.getY());
 		initImages();
 	}
 	/**

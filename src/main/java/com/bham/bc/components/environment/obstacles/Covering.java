@@ -7,6 +7,8 @@ import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
+import java.util.EnumSet;
+
 /**
  * Desc: Tile which covers anything that passes through it
  */
@@ -21,8 +23,9 @@ public class Covering extends GenericObstacle {
      */
     public Covering(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
-        renderTop = true;
     }
+
+    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.RENDER_TOP); }
 
     @Override
     protected Image[] getDefaultImage() {
@@ -30,13 +33,11 @@ public class Covering extends GenericObstacle {
     }
 
     @Override
-    public void handleBullet(Bullet b) { return; }
+    public void handleBullet(Bullet b) { }
 
     @Override
-    public void handleCharacter(GameCharacter t) { return; }
+    public void handleCharacter(GameCharacter t) { }
 
     @Override
-    public void interactWith(int ID, int indexOfNode , Rectangle r1) {
-        return;
-    }
+    public void interactWith(int ID, int indexOfNode , Rectangle r1) { }
 }

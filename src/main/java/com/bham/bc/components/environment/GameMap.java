@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.obstacles.ATTRIBUTE;
 import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
@@ -91,14 +92,10 @@ public class GameMap {
     /**
      * Clears all obstacles in the map
      */
-    public void clearAll() { clearHomeWalls(); clearTriggers(); }
-
-    /**
-     * Clean all home walls
-     */
-    public void clearHomeWalls() { obstacles.clear(); }
-
-    public void clearTriggers() { triggerSystem.clear(); }
+    public void clearAll() {
+        obstacles.clear();
+        triggerSystem.clear();
+    }
 
 
     //renderers-------------------------------------------------------------------
@@ -108,12 +105,12 @@ public class GameMap {
      */
 
     public void renderBottomLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(!o.renderTop()) o.render(gc); });
+        obstacles.forEach(o -> { if(!o.getAttributes().contains(ATTRIBUTE.RENDER_TOP)) o.render(gc); });
         renderTriggers(gc);
     }
 
     public void renderTopLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(o.renderTop()) o.render(gc); });
+        obstacles.forEach(o -> { if(o.getAttributes().contains(ATTRIBUTE.RENDER_TOP)) o.render(gc); });
     }
 
     public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
@@ -136,21 +133,18 @@ public class GameMap {
 
     }
 
-    public void addTrigget(Trigger t) {
+    public void addTrigger(Trigger t) {
         triggerSystem.register(t);
     }
 
 
-    public void handleAll(ArrayList<GameCharacter> enemies, ArrayList<Bullet> bullets) {
+    public void handleAll(ArrayList<GameCharacter> characters, ArrayList<Bullet> bullets) {
         obstacles.forEach(obstacle -> {
-            enemies.forEach(obstacle::handleCharacter);
+            characters.forEach(obstacle::handleCharacter);
             bullets.forEach(obstacle::handleBullet);
         });
 
-        List<GameCharacter> temp = new ArrayList<>();
-        temp.addAll(enemies);
-        triggerSystem.handleAll(temp, obstacles);
-//        enemies.forEach(enemy -> triggerSystem.update(enemy));
+        triggerSystem.handleAll(characters, obstacles);
     }
 
 
@@ -161,12 +155,8 @@ public class GameMap {
         }
     }
 
+    // Temp until physics
     public boolean intersectsObstacles(Shape shape) {
         return obstacles.stream().anyMatch(o -> o.intersectsShape(shape));
-    }
-
-    public void addBombTrigger(int x, int y){
-        ExplosiveTrigger bt = new ExplosiveTrigger(x,y,10);
-        triggerSystem.register(bt);
     }
 }

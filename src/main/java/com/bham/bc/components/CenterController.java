@@ -1,18 +1,17 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.GameCharacter;
 
@@ -37,11 +36,13 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     protected boolean isGameOver;
     protected GameMap gameMap;
-    protected Player player;
-    protected ArrayList<BombTank> bombTanks;
-    protected ArrayList<Trigger> triggers;
+    protected Player player;                //TODO: remove as it is the 0th objcet in characters list
     protected ArrayList<Bullet> bullets;
+    protected ArrayList<Trigger> triggers;
     protected ArrayList<GameCharacter> characters;
+
+    //temp
+    protected ArrayList<BombTank> bombTanks = new ArrayList<>();
 
 
     /**
@@ -50,7 +51,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public CenterController() {
         super(GetNextValidID(),-1,-1);
         bullets = new ArrayList<>();
-        bombTanks = new ArrayList<>();
         triggers = new ArrayList<>();
         characters = new ArrayList<>();
         // TODO: add empty map by default
@@ -77,6 +77,26 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     // TEMPORARY METHODS -------------------------------------------
+    @Override
+    public void testAStar() {
+        player.createNewRequestAStar();
+    }
+
+    @Override
+    public void testDjistra() {
+        player.createNewRequestItem();
+    }
+
+    @Override
+    public void addBombTank(BombTank b) {
+        bombTanks.add(b);
+    }
+
+    @Override
+    public boolean intersectsObstacles(Shape hitBox) {
+        return gameMap.intersectsObstacles(hitBox);
+    }
+
     @Override
     public void renderHitBoxes(AnchorPane hitBoxPane) {
         hitBoxPane.getChildren().clear();
@@ -150,7 +170,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     @Override
     public void addTrigger(Trigger trigger) {
-        gameMap.addTrigget(trigger);
+        gameMap.addTrigger(trigger);
     }
     // ------------------------------------------------------------
 
@@ -164,6 +184,11 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public Point2D getPlayerCenterPosition() {
         return player.getCenterPosition();
     }
+
+    @Override
+    public ArrayList<Point2D> allCharacterPositions() {
+        return (ArrayList<Point2D>) characters.stream().map(GameCharacter::getPosition).collect(Collectors.toList());
+    }
     // ------------------------------------------------------------
 
     // OTHER ------------------------------------------------------
@@ -175,7 +200,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         bullets.forEach(Bullet::update);
 
         gameMap.handleAll(characters, bullets);
-        player.handleAll(getCharacters(), bullets);
+        player.handleAll(characters, bullets);
         characters.forEach(character -> character.handleAll(characters, bullets));
 
         bullets.removeIf(b -> !b.exists());
@@ -186,85 +211,25 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void render(GraphicsContext gc) {
         gameMap.renderBottomLayer(gc);
 
+        bombTanks.forEach(b -> render(gc)); // TEMP
+
         bullets.forEach(bullet -> bullet.render(gc));
         player.render(gc);
         characters.forEach(character -> character.render(gc));
-        bombTanks.forEach(bombTank -> bombTank.render(gc));
 
         gameMap.renderTopLayer(gc);
-        gameMap.renderGraph(gc, allCharactersLocation());
+        gameMap.renderGraph(gc, allCharacterPositions());
     }
 
     @Override
     public void clear(){
         characters.clear();
         bullets.clear();
-        bombTanks.clear();
         gameMap.clearAll();
     }
     // ------------------------------------------------------------
 
-
-
-
-    /**
-     * Adding bombtank to bomb tank list
-     * @param b
-     */
-    public void addBombTank(BombTank b){
-        bombTanks.add(b);
-    }
-
-    public void addExplosiveTrigger(int x, int y) {gameMap.addBombTrigger(x,y);}
-
-    public void testAStar() {
-        player.createNewRequestAStar();
-    }
-
-    public void testDjistra() {
-        player.createNewRequestItem();
-    }
-
-
-
-    /**
-     * Gets all characters in the game
-     * @return list of all the characters in the game
-     */
-    public ArrayList<GameCharacter> getCharacters() {
-        //ArrayList<GameCharacter> gameCharacters = new ArrayList<>(enemies);
-        //gameCharacters.add(player);
-
-        return characters;
-    }
-
-
-
-
-    //-----------------------------------------
-    // TODO: move to physics
-    @Override
-    public boolean intersectsObstacles(Shape hitBox) {
-        return gameMap.intersectsObstacles(hitBox);
-    }
-    //------------------------------------------------------
-
-
-    /**
-     * Gets the positions of all the characters in the game
-     * @return Point2D list with all character locations
-     */
-    public ArrayList<Point2D> allCharactersLocation() {
-        //return (ArrayList<Point2D>) getCharacters().stream().map(Character::getPosition).collect(Collectors.toList());
-        //ArrayList<Point2D> temp1 = new ArrayList<>();
-        //temp1.add(player.getPosition());
-        //for (Enemy e1 :enemies){
-            //temp1.add(e1.getPosition());
-        //}
-        return (ArrayList<Point2D>) characters.stream().map(GameCharacter::getPosition).collect(Collectors.toList());
-    }
-
-    // INHERITED
+    // INHERITED --------------------------------------------------
     @Override
     public Rectangle getHitBox() { return null; }
 
@@ -275,5 +240,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public boolean handleMessage(Telegram msg) { return false; }
 
     @Override
-    public String toString() { return "Center Controller"; }
+    public String toString() { return "Controller"; }
+    // ------------------------------------------------------------
 }

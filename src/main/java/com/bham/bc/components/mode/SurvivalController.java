@@ -29,11 +29,6 @@ public class SurvivalController extends CenterController {
      */
     private void initEnemies() {
         characters.add(new Kamikaze(16*28, 16*28));
-        /*
-        enemies.add(new DefaultEnemy(16*3, 16*3));
-        enemies.add(new DefaultEnemy(16*61, 16*3));
-        enemies.add(new DefaultEnemy(16*3, 16*61));
-        enemies.add(new DefaultEnemy(16*61, 16*61));*/
     }
 
     @Override

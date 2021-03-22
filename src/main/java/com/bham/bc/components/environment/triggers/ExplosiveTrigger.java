@@ -51,7 +51,7 @@ public class ExplosiveTrigger extends Trigger {
         //is this bot within range of this sound
         if (isActive() && this.rectIsTouchingTrigger(gameCharacter.getPosition(), gameCharacter.getRadius())) {
             gameCharacter.changeHP(-1000);
-            backendServices.addBombTank(new BombTank(gameCharacter.getX(), gameCharacter.getY()));
+            backendServices.addBombTank(new BombTank(gameCharacter.getPosition()));
         } else if (gameCharacter.getHitBox().intersects(x,y,entityImages[0].getWidth(),entityImages[0].getHeight())){
             gameCharacter.move(-1, true);
         }
@@ -61,7 +61,7 @@ public class ExplosiveTrigger extends Trigger {
         //is this bot within range of this sound
         if (isActive() && rectIsTouchingTrigger(obs.getPosition(), obs.getRadius())) {
             obs.decreaseHP(1000);
-            backendServices.addBombTank(new BombTank(obs.getX(),obs.getY()));
+            backendServices.addBombTank(new BombTank(obs.getPosition()));
         }
     }
 

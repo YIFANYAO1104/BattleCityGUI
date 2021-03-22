@@ -6,6 +6,7 @@ import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
 import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
+import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.utils.messaging.Telegram;
@@ -41,7 +42,7 @@ public class Player extends GameCharacter {
 	 * @param y top left y coordinate of the player
 	 */
 	public Player(double x, double y, GameMap gm) {
-		super(x, y, 5, MAX_HP, SIDE.ALLY);
+		super(x, y, 3, MAX_HP, SIDE.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
 		navigationService = new PathPlanner(this,gm.getGraph());
 	}
@@ -81,7 +82,7 @@ public class Player extends GameCharacter {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getCode()) {
 			case F: fire(); break;
-			case B: backendServices.addExplosiveTrigger((int)x,(int)y); break;
+			case B: bomb(); break;
 			case W: directionSet.add(DIRECTION.U); break;
 			case A: directionSet.add(DIRECTION.L); break;
 			case S: directionSet.add(DIRECTION.D); break;
@@ -129,6 +130,11 @@ public class Player extends GameCharacter {
 		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
 		backendServices.addBullet(b);
 		return b;
+	}
+
+	public void bomb() {
+		ExplosiveTrigger bt = new ExplosiveTrigger((int) getCenterPosition().getX(), (int) getCenterPosition().getY(), 10);
+		backendServices.addTrigger(bt);
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 
 /**
- * Desc: Tile that cannot be passed by a character. Only bullets can pass it
+ * Tile that cannot be passed by a character. Only bullets can pass it
  */
 public class Impassable extends GenericObstacle {
 
@@ -21,7 +21,6 @@ public class Impassable extends GenericObstacle {
      */
     public Impassable(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
-        renderTop = false;
     }
 
     @Override

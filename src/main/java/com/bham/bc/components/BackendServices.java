@@ -55,6 +55,12 @@ public interface BackendServices {
      * @return Point2D object containing x and y coordinates of a player
      */
     Point2D getPlayerCenterPosition();
+
+    /**
+     * Gets the positions of all the characters in the game
+     * @return Point2D list with all character locations
+     */
+    ArrayList<Point2D> allCharacterPositions();
     //-------------------------------------------------------------
 
 
@@ -75,10 +81,8 @@ public interface BackendServices {
 
     // TEMPORARY METHODS -------------------------------------------
     // TODO: replace / remove or find another usage
-    ArrayList<GameCharacter> getCharacters();   // Unsafe as any class would be able to get a list of characters
     void testAStar();                           // a test?
     void testDjistra();                         // a test?
-    void addExplosiveTrigger(int x, int y);     // there is a generic addTrigger() method
     void addBombTank(BombTank b);               // We don't have effects yet or it can be a trigger
     boolean intersectsObstacles(Shape hitbox);  // This will be moved to physics package
 }
