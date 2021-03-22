@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment.triggers;
 
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.entity.BaseGameEntity;
@@ -12,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class WeaponGenerator extends RespawnTrigger<Character> {
+public class WeaponGenerator extends RespawnTrigger {
     private Weapon weapon;
 
     public WeaponGenerator(int x, int y,Weapon weapon,int width, int length,int respawnCooldown) {
@@ -28,13 +29,19 @@ public class WeaponGenerator extends RespawnTrigger<Character> {
     private void initImages() {
         entityImages = new Image[] {new Image("file:src/main/resources/img/tmp.jpg"), };
     }
+
     @Override
-    public void tryTrigger(Character entity) {
-        if(isActive()&& isTouchingTrigger(entity.getPosition(),entity.getRadius())){
+    public void tryTriggerC(Character entity) {
+        if(isActive()&& rectIsTouchingTrigger(entity.getPosition(),entity.getRadius())){
             entity.switchWeapon(this.weapon);
             deactivate();
 
         }
+
+    }
+
+    @Override
+    public void tryTriggerO(GenericObstacle entity) {
 
     }
 

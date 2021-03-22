@@ -1,9 +1,11 @@
 package com.bham.bc.components.environment.triggers;
 
 
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.physics.BombTank;
-import com.bham.bc.entity.triggers.DelayTrigger;
+import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
@@ -12,17 +14,22 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class BombTrigger extends DelayTrigger<Character> {
+import static com.bham.bc.components.CenterController.backendServices;
+
+public class BombTrigger extends Trigger {
 
     public static int width = 300;
     public static int length = 300;
 
+    protected int delayTime;
+
     public BombTrigger(int x,int y, /*double range,*/ int lifeTime) {
 
-        super(x, y, lifeTime * FRAME_RATE);
+        super(BaseGameEntity.GetNextValidID(),x,y);
+        this.delayTime = (lifeTime * FRAME_RATE);
+        setInactive();
 
         initImages();
         //create and set this trigger's region of fluence
@@ -41,11 +48,19 @@ public class BombTrigger extends DelayTrigger<Character> {
      * sound to the triggering bot's perception.
      */
     @Override
-    public void tryTrigger(Character character) {
+    public void tryTriggerC(Character character) {
         //is this bot within range of this sound
-        if (isActive() && isTouchingTrigger(character.getPosition(), character.getRadius())) {
+        if (isActive() && rectIsTouchingTrigger(character.getPosition(), character.getRadius())) {
             character.addHP(0);
             backendServices.addBombTank(new BombTank(character.getX(),character.getY()));
+        }
+    }
+
+    public void tryTriggerO(GenericObstacle obs) {
+        //is this bot within range of this sound
+        if (isActive() && rectIsTouchingTrigger(obs.getPosition(), obs.getRadius())) {
+//            obs.addHP(0);
+            backendServices.addBombTank(new BombTank(obs.getX(),obs.getY()));
         }
     }
 
@@ -79,6 +94,7 @@ public class BombTrigger extends DelayTrigger<Character> {
     public void update() {
         //if the lifetime counter expires set this trigger to be removed from
         //the game
+        System.out.println("BombTimeLeft: " + delayTime/FRAME_RATE);
          --delayTime;
         if (delayTime == 0) {
             setActive();

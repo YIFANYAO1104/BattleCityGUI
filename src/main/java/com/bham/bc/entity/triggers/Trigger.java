@@ -5,13 +5,14 @@
 package com.bham.bc.entity.triggers;
 
 
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.graph.ExtraInfo;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
+import com.bham.bc.components.characters.Character;
 
-abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGameEntity implements ExtraInfo {
+abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
     /**
      * Every trigger owns a trigger region. If an entity comes within this
@@ -45,7 +46,7 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
      * returns true if the entity given by a position and bounding radius is
      * overlapping the trigger region
      */
-    protected boolean isTouchingTrigger(Point2D EntityPos, Point2D EntityRadius) {
+    protected boolean rectIsTouchingTrigger(Point2D EntityPos, Point2D EntityRadius) {
         if (triggerRegion != null) {
             return triggerRegion.isTouching(EntityPos, EntityRadius);
         }
@@ -74,7 +75,9 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
      * trigger's region of influence. If it is then the trigger will be
      * triggered and the appropriate action will be taken.
      */
-    public abstract void tryTrigger(entity_type entity);
+    public abstract void tryTriggerC(Character entity);
+
+    public abstract void tryTriggerO(GenericObstacle entity);
 
     /**
      * called each update-step of the game. This methods updates any internal

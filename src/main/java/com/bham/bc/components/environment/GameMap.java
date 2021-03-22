@@ -4,11 +4,11 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.triggers.BombTrigger;
+import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.components.characters.Character;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
@@ -19,9 +19,9 @@ import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
+import com.bham.bc.components.characters.Character;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -33,9 +33,13 @@ public class GameMap {
     private static int width = Constants.MAP_WIDTH;
     private static int height = Constants.MAP_HEIGHT;
 
-    public void addBombTrigger(int x,int y){
-        BombTrigger bt = new BombTrigger(x,y,10);
+    public void addBombTrigger(){
+        BombTrigger bt = new BombTrigger(500,500,5);
         triggerSystem.register(bt);
+        HealthGiver hg = new HealthGiver(400,400,10,100);
+        HealthGiver hg1 = new HealthGiver(600,400,10,100);
+        triggerSystem.register(hg);
+        triggerSystem.register(hg1);
     }
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
@@ -46,6 +50,7 @@ public class GameMap {
         //height = mapLoader.getMapHeight();
         obstacles = mapLoader.getObstacles();
         triggerSystem = mapLoader.getTriggerSystem();
+        addBombTrigger();
     }
 
     /**
@@ -102,6 +107,7 @@ public class GameMap {
 
     public void renderBottomLayer(GraphicsContext gc) {
         obstacles.forEach(o -> { if(!o.renderTop()) o.render(gc); });
+        renderTriggers(gc);
     }
 
     public void renderTopLayer(GraphicsContext gc) {
@@ -136,8 +142,11 @@ public class GameMap {
             bullets.forEach(obstacle::handleBullet);
         });
 
-        triggerSystem.update(player);
-        enemies.forEach(enemy -> triggerSystem.update(enemy));
+        List<Character> temp = new ArrayList<Character>();
+        temp.add(player);
+        temp.addAll(enemies);
+        triggerSystem.handleAll(temp, obstacles);
+//        enemies.forEach(enemy -> triggerSystem.update(enemy));
     }
 
 

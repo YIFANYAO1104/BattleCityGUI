@@ -98,4 +98,8 @@ public abstract class GenericObstacle extends BaseGameEntity {
 
     @Override
     public String toString() { return "Obstacle"; }
+
+    public void addHP(double hp) {}
+
+    public void decreaseHP(double hp) {}
 }

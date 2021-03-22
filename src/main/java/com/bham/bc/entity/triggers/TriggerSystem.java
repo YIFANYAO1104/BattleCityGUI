@@ -8,10 +8,12 @@ package com.bham.bc.entity.triggers;
 
 
 import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.environment.GenericObstacle;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class TriggerSystem<trigger_type extends Trigger> {
 
@@ -35,21 +37,24 @@ public class TriggerSystem<trigger_type extends Trigger> {
         }
     }
 
-    /**
-     * this method iterates through the container of entities passed as a
-     * parameter and passes each one to the Try method of each trigger
-     * *provided* the entity is alive and provided the entity is ready for a
-     * trigger update.
-     */
-    private void tryTriggers(Character curEnt) {
+    private void tryTriggers(List<Character> characters, List<GenericObstacle> obstacles) {
         //test each entity against the triggers
 
         //an entity must be ready for its next trigger update and it must be
         //alive before it is tested against each trigger.
 //      if (curEnt.isReadyForTriggerUpdate() && curEnt.isAlive())
-        for (Trigger curTrg : m_Triggers) {
-            curTrg.tryTrigger(curEnt);
+        for (Character curEnt : characters) {
+            for (Trigger curTrg : m_Triggers) {
+                curTrg.tryTriggerC(curEnt);
+            }
         }
+
+        for (GenericObstacle curEnt : obstacles) {
+            for (Trigger curTrg : m_Triggers) {
+                curTrg.tryTriggerO(curEnt);
+            }
+        }
+
     }
 
     /**
@@ -64,9 +69,9 @@ public class TriggerSystem<trigger_type extends Trigger> {
      * update the internal state odf the triggers and then try each entity
      * against each active trigger to test if any should be triggered.
      */
-    public void update(Character entity) {
+    public void handleAll(List<Character> characters, List<GenericObstacle> obstacles) {
         updateTriggers();
-        tryTriggers(entity);
+        tryTriggers(characters,obstacles);
     }
 
     /**

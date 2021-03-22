@@ -3,10 +3,10 @@
  */
 package com.bham.bc.components.environment.triggers;
 
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.Constants;
-import com.bham.bc.utils.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.Character;
@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class HealthGiver extends RespawnTrigger<Character>{
+public class HealthGiver extends RespawnTrigger{
 
     public static int width = Constants.TILE_WIDTH;
     public static int length = Constants.TILE_WIDTH;
@@ -44,12 +44,17 @@ public class HealthGiver extends RespawnTrigger<Character>{
 
     //if triggered, the bot's health will be incremented
     @Override
-    public void tryTrigger(Character character) {
-        if (isActive() && isTouchingTrigger(character.getPosition(), character.getRadius())) {
+    public void tryTriggerC(Character character) {
+        if (isActive() && rectIsTouchingTrigger(character.getPosition(), character.getRadius())) {
             character.addHP(health);
 
             deactivate();
         }
+    }
+
+    @Override
+    public void tryTriggerO(GenericObstacle entity) {
+
     }
 
     //draws a box with a red cross at the trigger's location
