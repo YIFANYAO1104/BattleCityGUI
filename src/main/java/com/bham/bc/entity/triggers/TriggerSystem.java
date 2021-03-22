@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class TriggerSystem<trigger_type extends Trigger> {
+public class TriggerSystem {
 
-    private ArrayList<trigger_type> m_Triggers = new ArrayList<trigger_type>();
+    private ArrayList<Trigger> m_Triggers = new ArrayList<Trigger>();
 
     /**
      * this method iterates through all the triggers present in the system and
@@ -26,9 +26,9 @@ public class TriggerSystem<trigger_type extends Trigger> {
      * have their m_bRemoveFromGame field set to true.
      */
     private void updateTriggers() {
-        Iterator<trigger_type> it = m_Triggers.iterator();
+        Iterator<Trigger> it = m_Triggers.iterator();
         while (it.hasNext()) {
-            trigger_type curTrg = it.next();
+            Trigger curTrg = it.next();
             if (curTrg.isToBeRemoved()) {
                 it.remove();
             } else {
@@ -78,7 +78,7 @@ public class TriggerSystem<trigger_type extends Trigger> {
      * this is used to register triggers with the TriggerSystem (the
      * TriggerSystem will take care of tidying up memory used by a trigger)
      */
-    public void register(trigger_type trigger) {
+    public void register(Trigger trigger) {
         m_Triggers.add(trigger);
     }
 
@@ -87,12 +87,12 @@ public class TriggerSystem<trigger_type extends Trigger> {
      * example)
      */
     public void render(GraphicsContext gc) {
-        for (trigger_type curTrg : m_Triggers) {
+        for (Trigger curTrg : m_Triggers) {
             curTrg.render(gc);
         }
     }
 
-    public ArrayList<trigger_type> getTriggers() {
+    public ArrayList<Trigger> getTriggers() {
         return m_Triggers;
     }
 }

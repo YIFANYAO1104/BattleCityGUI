@@ -34,6 +34,7 @@ abstract public class RespawnTrigger extends Trigger {
      */
     @Override
     public void update() {
+//        System.out.println("respawn  after: "+curToRespawn);
         if ((--curToRespawn <= 0) && !isActive()) {
             setActive();
         }

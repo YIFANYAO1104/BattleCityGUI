@@ -8,9 +8,11 @@ package com.bham.bc.entity.triggers;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.graph.ExtraInfo;
+import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import com.bham.bc.components.characters.GameCharacter;
+import javafx.scene.shape.Rectangle;
 
 abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
@@ -96,5 +98,28 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
     public void renderRegion(GraphicsContext gc) {
         triggerRegion.render(gc);
+    }
+
+
+
+    @Override
+    public void render(GraphicsContext gc) {
+        gc.drawImage(entityImages[0], this.x, this.y);
+        renderRegion(gc);
+    }
+
+    @Override
+    public Rectangle getHitBox() {
+        return null;
+    }
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return null;
     }
 }

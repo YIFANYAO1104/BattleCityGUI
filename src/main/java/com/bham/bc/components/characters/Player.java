@@ -82,6 +82,7 @@ public class Player extends GameCharacter {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getCode()) {
 			case F: fire(); break;
+			case B: backendServices.addExplosiveTrigger((int)x,(int)y); break;
 			case W: directionSet.add(DIRECTION.U); break;
 			case A: directionSet.add(DIRECTION.L); break;
 			case S: directionSet.add(DIRECTION.D); break;

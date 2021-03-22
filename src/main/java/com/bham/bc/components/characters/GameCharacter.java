@@ -15,6 +15,7 @@ import java.util.Optional;
  */
 abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
+    private final double MIN_HP = 0;
     protected double hp;
     protected SIDE side;
     protected EnumSet<DIRECTION> directionSet;
@@ -60,7 +61,16 @@ abstract public class GameCharacter extends MovingEntity {
      */
     public void addHP(double health) {
         hp = Math.min(hp + health, MAX_HP);
-        if(hp <= 0) exists = false;
+        if(hp <= MIN_HP) exists = false;
+    }
+
+    /**
+     * Decreases or decreases HP for the player
+     * @param hurt amount by which the player's HP is changed
+     */
+    public void decreaseHP(double hurt) {
+        hp = Math.max(hp - hurt, MIN_HP);
+        if(hp <= MIN_HP) exists = false;
     }
 
     @Deprecated

@@ -6,30 +6,30 @@ import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import com.bham.bc.components.characters.GameCharacter;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
-public class BombTrigger extends Trigger {
+public class ExplosiveTrigger extends Trigger {
 
     public static int width = 300;
     public static int length = 300;
+    //for printing out
+    static int seconds = 0;
 
     protected int delayTime;
 
-    public BombTrigger(int x,int y, /*double range,*/ int lifeTime) {
+    public ExplosiveTrigger(int x, int y, /*double range,*/ int lifeTime) {
 
         super(BaseGameEntity.GetNextValidID(),x,y);
         this.delayTime = (lifeTime * FRAME_RATE);
         setInactive();
 
+        seconds = delayTime/FRAME_RATE;
         initImages();
         //create and set this trigger's region of fluence
         addRectangularTriggerRegionSurrounded(new Point2D(x, y),
@@ -49,39 +49,20 @@ public class BombTrigger extends Trigger {
     @Override
     public void tryTriggerC(GameCharacter gameCharacter) {
         //is this bot within range of this sound
-        if (isActive() && rectIsTouchingTrigger(gameCharacter.getPosition(), gameCharacter.getRadius())) {
-            gameCharacter.addHP(0);
+        if (isActive() && this.rectIsTouchingTrigger(gameCharacter.getPosition(), gameCharacter.getRadius())) {
+            gameCharacter.decreaseHP(1000);
             backendServices.addBombTank(new BombTank(gameCharacter.getX(), gameCharacter.getY()));
+        } else if (gameCharacter.getHitBox().intersects(x,y,entityImages[0].getWidth(),entityImages[0].getHeight())){
+            gameCharacter.move(-1, true);
         }
     }
 
     public void tryTriggerO(GenericObstacle obs) {
         //is this bot within range of this sound
         if (isActive() && rectIsTouchingTrigger(obs.getPosition(), obs.getRadius())) {
-//            obs.addHP(0);
+            obs.decreaseHP(1000);
             backendServices.addBombTank(new BombTank(obs.getX(),obs.getY()));
         }
-    }
-
-    @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(entityImages[0], this.x, this.y);
-        renderRegion(gc);
-    }
-
-    @Override
-    public Rectangle getHitBox() {
-        return null;
-    }
-
-    @Override
-    public boolean handleMessage(Telegram msg) {
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return null;
     }
 
     @Override
@@ -91,16 +72,21 @@ public class BombTrigger extends Trigger {
 
     @Override
     public void update() {
-        //if the lifetime counter expires set this trigger to be removed from
-        //the game
-        System.out.println("BombTimeLeft: " + delayTime/FRAME_RATE);
-         --delayTime;
+        //debug
+        if(delayTime/FRAME_RATE != seconds){
+            seconds = delayTime/FRAME_RATE;
+            System.out.println("BombTimeLeft: " + seconds);
+        }
+
+        --delayTime;
         if (delayTime == 0) {
             setActive();
-        } else if (delayTime <-1) {
+        } else if (delayTime == -1) {
             setInactive();
             setToBeRemovedFromGame();
-            backendServices.addBombTank(new BombTank(getX(),getY()));
+//            backendServices.addBombTank(new BombTank(x,y));
         }
     }
+
+
 }

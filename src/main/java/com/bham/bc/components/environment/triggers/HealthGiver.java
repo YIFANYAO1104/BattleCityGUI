@@ -67,26 +67,6 @@ public class HealthGiver extends RespawnTrigger{
     }
 
     @Override
-    public Rectangle getHitBox() {
-        return null;
-    }
-
-    @Override
-    public boolean handleMessage(Telegram msg) {
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return null;
-    }
-
-    @Override
-    public boolean intersects(BaseGameEntity b) {
-        return false;
-    }
-
-    @Override
     public ItemType getItemType() {
         return ItemType.health;
     }

@@ -22,7 +22,7 @@ public class Soft extends GenericObstacle {
 
     // Use Switch statement and check tileID manually to determine how much hp each type of softTile has
     // Alternatively, just set every tile equal to the same hp
-    private int hp = 50;
+    private double hp = 50;
 
     /**
      * Constructs an obstacle
@@ -73,6 +73,23 @@ public class Soft extends GenericObstacle {
     public void interactWith(int ID, int indexOfNode , Rectangle r1) {
         if(this.getHitBox().intersects(r1.getBoundsInLocal()))
             Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.getID(),ID,Msg_interactWithPassable,indexOfNode);
+    }
+
+
+    /**
+     * Decreases or decreases HP for the player
+     * @param hurt amount by which the player's HP is changed
+     */
+    @Override
+    public void decreaseHP(double hurt) {
+        hp = Math.max(hp - hurt, 0.0);
+        if(hp <= 0.0) {
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
+                    backendServices.getNavigationGraph().getID(),
+                    Msg_removeSoft,NO_ADDITIONAL_INFO);
+            exists = false;
+            entityManager.removeEntity(this);
+        }
     }
 
 }

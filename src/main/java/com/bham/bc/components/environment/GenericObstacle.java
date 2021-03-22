@@ -101,5 +101,5 @@ public abstract class GenericObstacle extends BaseGameEntity {
 
     public void addHP(double hp) {}
 
-    public void decreaseHP(double hp) {}
+    public void decreaseHP(double hurt) {}
 }

@@ -12,7 +12,7 @@ final public class Constants {
     final public static int WINDOW_HEIGHT = 600;
     final public static int MAP_WIDTH = 64*TILE_WIDTH;
     final public static int MAP_HEIGHT = 64*TILE_HEIGHT;
-    final public static int FRAME_RATE = 3;
+    final public static int FRAME_RATE = 24;
 
     final public static int GRAPH_NUM_CELLS_X = MAP_WIDTH / (Enemy.WIDTH/2);
     final public static int GRAPH_NUM_CELLS_Y = MAP_HEIGHT / (Enemy.HEIGHT/2);

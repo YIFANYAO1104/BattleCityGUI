@@ -38,4 +38,6 @@ public interface BackendServices {
      void testAStar();
 
      void testDjistra();
+
+    void addExplosiveTrigger(int x, int y);
 }

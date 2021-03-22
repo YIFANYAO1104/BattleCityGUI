@@ -3,7 +3,7 @@ package com.bham.bc.components.environment;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.environment.triggers.BombTrigger;
+import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
@@ -33,14 +33,7 @@ public class GameMap {
     private static int width = Constants.MAP_WIDTH;
     private static int height = Constants.MAP_HEIGHT;
 
-    public void addBombTrigger(){
-        BombTrigger bt = new BombTrigger(500,500,5);
-        triggerSystem.register(bt);
-        HealthGiver hg = new HealthGiver(400,400,10,100);
-        HealthGiver hg1 = new HealthGiver(600,400,10,100);
-        triggerSystem.register(hg);
-        triggerSystem.register(hg1);
-    }
+
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
@@ -50,8 +43,16 @@ public class GameMap {
         //height = mapLoader.getMapHeight();
         obstacles = mapLoader.getObstacles();
         triggerSystem = mapLoader.getTriggerSystem();
-        addBombTrigger();
+        addTriggers();
     }
+
+    public void addTriggers(){
+        HealthGiver hg = new HealthGiver(400,400,10,10);
+        HealthGiver hg1 = new HealthGiver(600,400,10,10);
+        triggerSystem.register(hg);
+        triggerSystem.register(hg1);
+    }
+    /**
 
     /**
      * Gets map's width (tileSize * amountInX)
@@ -159,5 +160,10 @@ public class GameMap {
 
     public SparseGraph getGraph(){
         return this.graphSystem;
+    }
+
+    public void addBombTrigger(int x, int y){
+        ExplosiveTrigger bt = new ExplosiveTrigger(x,y,10);
+        triggerSystem.register(bt);
     }
 }

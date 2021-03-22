@@ -57,6 +57,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         return gameMap.getGraph();
     }
 
+    public void addExplosiveTrigger(int x, int y) {gameMap.addBombTrigger(x,y);}
+
     public void testAStar() {
         player.createNewRequestAStar();
     }
