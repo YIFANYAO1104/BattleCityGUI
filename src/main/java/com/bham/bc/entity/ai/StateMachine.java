@@ -1,8 +1,5 @@
 package com.bham.bc.entity.ai;
 
-import java.util.Arrays;
-import java.util.stream.Stream;
-
 public class StateMachine {
     protected State initialState;
     protected State currentState;
@@ -53,10 +50,15 @@ public class StateMachine {
      * @return a singular array consisting of all 3 input arrays
      */
     private Action[] concatActions(Action[] exit, Action[] trans, Action[] entry){
-        Action[] exitPlusTrans = Stream.concat(Arrays.stream(exit), Arrays.stream(trans))
-                .toArray(Action[]::new);
+        int exitLength = exit != null ? exit.length : 0;
+        int transLength = trans != null ? trans.length : 0;
+        int entryLength = entry != null ? entry.length : 0;
 
-        return Stream.concat(Arrays.stream(exitPlusTrans), Arrays.stream(entry))
-                .toArray(Action[]::new);
+        Action[] allActions = new Action[exitLength+transLength+entryLength];
+
+        if (exit != null){ System.arraycopy(exit, 0, allActions, 0, exitLength);}
+        if (trans != null){ System.arraycopy(trans, 0, allActions, exitLength, transLength);}
+        if (entry != null){ System.arraycopy(entry, 0, allActions, exitLength+transLength, entryLength);}
+        return allActions;
     }
 }
