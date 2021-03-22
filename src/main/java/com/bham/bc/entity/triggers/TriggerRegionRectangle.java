@@ -4,6 +4,8 @@
 package com.bham.bc.entity.triggers;
 
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class TriggerRegionRectangle extends TriggerRegion {
@@ -22,5 +24,12 @@ public class TriggerRegionRectangle extends TriggerRegion {
     public boolean isTouching(Point2D pos, Point2D EntityRadius) {
         Rectangle r = new Rectangle(pos.getX(), pos.getY(), EntityRadius.getX(), EntityRadius.getY());
         return r.intersects(this.rectangle.getBoundsInLocal());
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(2.0);
+        gc.strokeRect(rectangle.getX(),rectangle.getY(),rectangle.getWidth(),rectangle.getHeight());
     }
 }

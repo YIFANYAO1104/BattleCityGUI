@@ -8,25 +8,37 @@ import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.enemies.Kamikaze;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.MapType;
+import com.bham.bc.entity.DIRECTION;
+import com.bham.bc.entity.physics.BombTank;
+import com.bham.bc.utils.graph.SparseGraph;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Rectangle;
 
 
 import java.util.ArrayList;
+
+import static com.bham.bc.utils.messaging.MessageDispatcher.*;
+import static com.bham.bc.utils.messaging.MessageTypes.Msg_removeSoft;
 
 /**
  * Represents a controller for the survival game mode
  */
 public class SurvivalController extends CenterController {
 
+
+    private SparseGraph sg;
+
     /**
      * Constructs the controller by selecting a specific map and creating components
      */
-    public SurvivalController(){
+    public SurvivalController(MapType mapType){
         super();
-        gameMap = new GameMap("/64x64.json");
-        player = new Player(16*32 - Player.WIDTH/2.0, 16*32-Player.HEIGHT/2.0);
-        gameMap.initGraph(player.getPosition());
+        gameMap = new GameMap(mapType);
+        gameMap.initialGraph(new Point2D(16*32, 16*32));
+        player = new Player(16*32, 16*32,gameMap);
         initEnemies();
     }
 

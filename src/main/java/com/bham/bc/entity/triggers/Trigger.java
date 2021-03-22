@@ -5,10 +5,16 @@
 package com.bham.bc.entity.triggers;
 
 
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.graph.ExtraInfo;
+import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import com.bham.bc.components.characters.GameCharacter;
+import javafx.scene.shape.Rectangle;
 
-abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGameEntity {
+abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
     /**
      * Every trigger owns a trigger region. If an entity comes within this
@@ -42,7 +48,7 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
      * returns true if the entity given by a position and bounding radius is
      * overlapping the trigger region
      */
-    protected boolean isTouchingTrigger(Point2D EntityPos, Point2D EntityRadius) {
+    protected boolean rectIsTouchingTrigger(Point2D EntityPos, Point2D EntityRadius) {
         if (triggerRegion != null) {
             return triggerRegion.isTouching(EntityPos, EntityRadius);
         }
@@ -52,6 +58,11 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
     //child classes use one of these methods to initialize the trigger region
     protected void addRectangularTriggerRegion(Point2D pos, Point2D radius) {
         triggerRegion = new TriggerRegionRectangle(pos, radius);
+    }
+
+    protected void addRectangularTriggerRegionSurrounded(Point2D imgPos, Point2D imgRadius, Point2D regionRadius) {
+        Point2D topLeft = imgPos.subtract(regionRadius.subtract(imgRadius).multiply(0.5));
+        triggerRegion = new TriggerRegionRectangle(topLeft, regionRadius);
     }
 
     public Trigger(int id, int x, int y) {
@@ -66,7 +77,9 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
      * trigger's region of influence. If it is then the trigger will be
      * triggered and the appropriate action will be taken.
      */
-    public abstract void tryTrigger(entity_type entity);
+    public abstract void tryTriggerC(GameCharacter entity);
+
+    public abstract void tryTriggerO(GenericObstacle entity);
 
     /**
      * called each update-step of the game. This methods updates any internal
@@ -81,5 +94,32 @@ abstract public class Trigger<entity_type extends BaseGameEntity> extends BaseGa
 
     public boolean isActive() {
         return active;
+    }
+
+    public void renderRegion(GraphicsContext gc) {
+        triggerRegion.render(gc);
+    }
+
+
+
+    @Override
+    public void render(GraphicsContext gc) {
+        gc.drawImage(entityImages[0], this.x, this.y);
+        renderRegion(gc);
+    }
+
+    @Override
+    public Rectangle getHitBox() {
+        return null;
+    }
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return null;
     }
 }

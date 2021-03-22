@@ -103,10 +103,10 @@ public class MessageDispatcher {
          * Print out the message with its other info(CurrentTime, sender and receiver,and message content
          */
         if (delay <= 0.0f) {
-            System.out.println("\nInstant telegram dispatched at time: " + Clock.GetCurrentTime()
-                    + " by " + pSender.toString() + " to "
-                    + pReceiver.toString()
-                    + ". Msg is: " + MsgToStr(msg));
+//            System.out.println("\nInstant telegram dispatched at time: " + Clock.GetCurrentTime()
+//                    + " by " + pSender.toString() + " to "
+//                    + pReceiver.toString()
+//                    + ". Msg is: " + MsgToStr(msg));
 
             /**
              * send the telegram to the receiver

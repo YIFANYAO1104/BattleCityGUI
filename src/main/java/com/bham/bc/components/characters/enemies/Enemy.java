@@ -1,9 +1,10 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.entity.ai.StateMachine;
 import com.bham.bc.utils.messaging.Telegram;
+import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Shape;

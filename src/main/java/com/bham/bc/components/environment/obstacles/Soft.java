@@ -1,10 +1,17 @@
 package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Rectangle;
+
+import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.utils.messaging.MessageDispatcher.*;
+import static com.bham.bc.utils.messaging.MessageTypes.*;
+import static com.bham.bc.utils.messaging.MessageTypes.Msg_interactWithPassable;
+import java.util.EnumSet;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
 
@@ -15,7 +22,7 @@ public class Soft extends GenericObstacle {
 
     // Use Switch statement and check tileID manually to determine how much hp each type of softTile has
     // Alternatively, just set every tile equal to the same hp
-    private int hp = 50;
+    private double hp = 50;
 
     /**
      * Constructs an obstacle
@@ -31,6 +38,9 @@ public class Soft extends GenericObstacle {
     }
 
     @Override
+    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.BREAKABLE); }
+
+    @Override
     protected Image[] getDefaultImage() {
         return new Image[] { new Image("file:src/main/resources/img/tiles/softWall.bmp") };
     }
@@ -42,6 +52,12 @@ public class Soft extends GenericObstacle {
             b.destroy();
 
             if(hp <= 0) {
+                //------------for testing---------------------------------------
+                backendServices.testAStar();
+                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
+                        backendServices.getNavigationGraph().getID(),
+                        Msg_removeSoft,NO_ADDITIONAL_INFO);
+                //------------for testing---------------------------------------
                 exists = false;
                 entityManager.removeEntity(this);
             }
@@ -49,7 +65,31 @@ public class Soft extends GenericObstacle {
     }
 
     @Override
-    public void handleCharacter(Character c) {
+    public void handleCharacter(GameCharacter c) {
         if(intersects(c)) c.move(-1, true);
     }
+
+    @Override
+    public void interactWith(int ID, int indexOfNode , Rectangle r1) {
+        if(this.getHitBox().intersects(r1.getBoundsInLocal()))
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.getID(),ID,Msg_interactWithPassable,indexOfNode);
+    }
+
+
+    /**
+     * Decreases or decreases HP for the player
+     * @param hurt amount by which the player's HP is changed
+     */
+    @Override
+    public void decreaseHP(double hurt) {
+        hp = Math.max(hp - hurt, 0.0);
+        if(hp <= 0.0) {
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
+                    backendServices.getNavigationGraph().getID(),
+                    Msg_removeSoft,NO_ADDITIONAL_INFO);
+            exists = false;
+            entityManager.removeEntity(this);
+        }
+    }
+
 }

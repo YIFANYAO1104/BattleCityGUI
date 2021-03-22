@@ -3,11 +3,13 @@
  */
 package com.bham.bc.components.environment.triggers;
 
+import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -15,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class HealthGiver extends RespawnTrigger<Character> {
+public class HealthGiver extends RespawnTrigger{
 
     public static int width = Constants.TILE_WIDTH;
     public static int length = Constants.TILE_WIDTH;
@@ -37,17 +39,22 @@ public class HealthGiver extends RespawnTrigger<Character> {
     }
 
     private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/Map/hp.png"), };
+        entityImages = new Image[] {new Image("file:src/main/resources/img/tiles/hp.png"), };
     }
 
     //if triggered, the bot's health will be incremented
     @Override
-    public void tryTrigger(Character character) {
-        if (isActive() && isTouchingTrigger(character.getPosition(), character.getRadius())) {
-            character.addHP(health);
+    public void tryTriggerC(GameCharacter gameCharacter) {
+        if (isActive() && rectIsTouchingTrigger(gameCharacter.getPosition(), gameCharacter.getRadius())) {
+            gameCharacter.addHP(health);
 
             deactivate();
         }
+    }
+
+    @Override
+    public void tryTriggerO(GenericObstacle entity) {
+
     }
 
     //draws a box with a red cross at the trigger's location
@@ -55,26 +62,12 @@ public class HealthGiver extends RespawnTrigger<Character> {
     public void render(GraphicsContext gc) {
         if (isActive()) {
             gc.drawImage(entityImages[0], this.x, this.y);
+            renderRegion(gc);
         }
     }
 
     @Override
-    public Rectangle getHitBox() {
-        return null;
-    }
-
-    @Override
-    public boolean handleMessage(Telegram msg) {
-        return false;
-    }
-
-    @Override
-    public String toString() {
-        return null;
-    }
-
-    @Override
-    public boolean intersects(BaseGameEntity b) {
-        return false;
+    public ItemType getItemType() {
+        return ItemType.health;
     }
 }

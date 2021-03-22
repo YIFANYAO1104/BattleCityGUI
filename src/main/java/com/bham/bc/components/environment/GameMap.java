@@ -4,6 +4,8 @@ import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.DefaultEnemy;
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
+import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.triggers.Trigger;
@@ -12,12 +14,15 @@ import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.node.Vector2D;
+import com.bham.bc.utils.graph.edge.GraphEdge;
+import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
 import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import com.bham.bc.components.characters.GameCharacter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,13 +40,22 @@ public class GameMap {
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
-    public GameMap(String resourceName) {
-        MapLoader mapLoader = new JsonMapLoader(resourceName);
+    public GameMap(MapType mapType) {
+        MapLoader mapLoader = new JsonMapLoader(mapType.getName());
         //width = mapLoader.getMapWidth();
         //height = mapLoader.getMapHeight();
         obstacles = mapLoader.getObstacles();
         triggerSystem = mapLoader.getTriggerSystem();
+        addTriggers();
     }
+
+    public void addTriggers(){
+        HealthGiver hg = new HealthGiver(400,400,10,10);
+        HealthGiver hg1 = new HealthGiver(600,400,10,10);
+        triggerSystem.register(hg);
+        triggerSystem.register(hg1);
+    }
+    /**
 
     /**
      * Gets map's width (tileSize * amountInX)
@@ -58,19 +72,24 @@ public class GameMap {
     public SparseGraph getGraph() { return graphSystem; }
 
 
-    public void initGraph(Point2D location) {
+    public void initialGraph(Point2D location){
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
-        graphSystem = new SparseGraph<>(false); //single direction turn off
-        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH, Constants.MAP_HEIGHT,64,64); //make network
-        ArrayList<Vector2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
-
+        graphSystem = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
+        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,Constants.GRAPH_NUM_CELLS_Y,Constants.GRAPH_NUM_CELLS_X); //make network
+        ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
-            Vector2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-16,vv1.getY()-16,32.0,32.0));
+            Point2D vv1 = allNodesLocations.get(index);
+            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-Enemy.WIDTH/2,vv1.getY()-Enemy.HEIGHT/2,Enemy.WIDTH,Enemy.HEIGHT));
         }
-
         //removed unreachable nodes
-        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.TrickingTank(new Vector2D(location)));
+        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(location));
+
+        //let the corresponding navgraph node point to triggers object
+        ArrayList<Trigger> triggers = triggerSystem.getTriggers();
+        for (Trigger trigger : triggers) {
+            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(trigger.getPosition()).Index());
+            node.setExtraInfo(trigger);
+        }
     }
 
     /**
@@ -94,6 +113,7 @@ public class GameMap {
 
     public void renderBottomLayer(GraphicsContext gc) {
         obstacles.forEach(o -> { if(!o.renderTop()) o.render(gc); });
+        renderTriggers(gc);
     }
 
     public void renderTopLayer(GraphicsContext gc) {
@@ -102,7 +122,7 @@ public class GameMap {
 
     public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
         graphSystem.render(gc);     // render network on map
-        for(Point2D p1 : points)  graphSystem.TrickingTank(new Vector2D(p1), gc);
+        for(Point2D p1 : points)  graphSystem.renderTankPoints(p1,gc);
     }
 
     public void renderTriggers(GraphicsContext gc) { triggerSystem.render(gc); }
@@ -132,8 +152,11 @@ public class GameMap {
             bullets.forEach(obstacle::handleBullet);
         });
 
-        triggerSystem.update(player);
-        enemies.forEach(enemy -> triggerSystem.update(enemy));
+        List<GameCharacter> temp = new ArrayList<GameCharacter>();
+        temp.add(player);
+        temp.addAll(enemies);
+        triggerSystem.handleAll(temp, obstacles);
+//        enemies.forEach(enemy -> triggerSystem.update(enemy));
     }
 
     public boolean intersectsObstacles(Shape hitBox) {
@@ -146,5 +169,14 @@ public class GameMap {
             GenericObstacle w = obstacles.get(i);
             w.interactWith(ID,indexOfNode,r1);
         }
+    }
+
+    public SparseGraph getGraph(){
+        return this.graphSystem;
+    }
+
+    public void addBombTrigger(int x, int y){
+        ExplosiveTrigger bt = new ExplosiveTrigger(x,y,10);
+        triggerSystem.register(bt);
     }
 }
