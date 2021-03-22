@@ -6,10 +6,9 @@ import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -48,11 +47,11 @@ public class BombTrigger extends Trigger {
      * sound to the triggering bot's perception.
      */
     @Override
-    public void tryTriggerC(Character character) {
+    public void tryTriggerC(GameCharacter gameCharacter) {
         //is this bot within range of this sound
-        if (isActive() && rectIsTouchingTrigger(character.getPosition(), character.getRadius())) {
-            character.addHP(0);
-            backendServices.addBombTank(new BombTank(character.getX(),character.getY()));
+        if (isActive() && rectIsTouchingTrigger(gameCharacter.getPosition(), gameCharacter.getRadius())) {
+            gameCharacter.addHP(0);
+            backendServices.addBombTank(new BombTank(gameCharacter.getX(), gameCharacter.getY()));
         }
     }
 

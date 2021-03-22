@@ -1,7 +1,7 @@
 package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
@@ -33,7 +33,7 @@ public class Covering extends GenericObstacle {
     public void handleBullet(Bullet b) { return; }
 
     @Override
-    public void handleCharacter(Character t) { return; }
+    public void handleCharacter(GameCharacter t) { return; }
 
     @Override
     public void interactWith(int ID, int indexOfNode , Rectangle r1) {

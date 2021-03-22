@@ -13,7 +13,7 @@ import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -88,11 +88,11 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * Gets all characters in the game
      * @return list of all the characters in the game
      */
-    public ArrayList<Character> getCharacters() {
-        ArrayList<Character> characters = new ArrayList<>(enemies);
-        characters.add(player);
+    public ArrayList<GameCharacter> getCharacters() {
+        ArrayList<GameCharacter> gameCharacters = new ArrayList<>(enemies);
+        gameCharacters.add(player);
 
-        return characters;
+        return gameCharacters;
     }
 
     @Override

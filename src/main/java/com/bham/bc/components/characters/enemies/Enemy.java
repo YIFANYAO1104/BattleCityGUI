@@ -3,7 +3,7 @@ package com.bham.bc.components.characters.enemies;
 import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,7 +16,7 @@ import static com.bham.bc.components.CenterController.backendServices;
 /**
  * Represents a bot that is an enemy of a player
  */
-public class Enemy extends Character {
+public class Enemy extends GameCharacter {
 
     public static final String IMAGE_PATH = "file:src/main/resources/img/tankU.gif";
     public static final int WIDTH = 32;

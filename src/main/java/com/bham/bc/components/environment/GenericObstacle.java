@@ -1,7 +1,7 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.obstacles.ATTRIBUTE;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.maploaders.TILESET;
@@ -74,7 +74,7 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * Handles character collision
      * @param c character to handle
      */
-    public abstract void handleCharacter(Character c);
+    public abstract void handleCharacter(GameCharacter c);
 
     @Deprecated
     /** TODO: check if it is necessary to have this */

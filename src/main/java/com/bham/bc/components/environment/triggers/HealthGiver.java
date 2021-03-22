@@ -9,7 +9,7 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -44,9 +44,9 @@ public class HealthGiver extends RespawnTrigger{
 
     //if triggered, the bot's health will be incremented
     @Override
-    public void tryTriggerC(Character character) {
-        if (isActive() && rectIsTouchingTrigger(character.getPosition(), character.getRadius())) {
-            character.addHP(health);
+    public void tryTriggerC(GameCharacter gameCharacter) {
+        if (isActive() && rectIsTouchingTrigger(gameCharacter.getPosition(), gameCharacter.getRadius())) {
+            gameCharacter.addHP(health);
 
             deactivate();
         }

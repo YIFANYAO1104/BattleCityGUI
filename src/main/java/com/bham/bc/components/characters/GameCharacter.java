@@ -13,7 +13,7 @@ import java.util.Optional;
 /**
  * Represents a character - this includes enemies, players and AI companions
  */
-abstract public class Character extends MovingEntity {
+abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
     protected SIDE side;
@@ -26,7 +26,7 @@ abstract public class Character extends MovingEntity {
      * @param y top left y coordinate of the character
      * @param speed value which defines the initial velocity
      */
-    protected Character(double x, double y, double speed, double hp, SIDE side) {
+    protected GameCharacter(double x, double y, double speed, double hp, SIDE side) {
         super(x, y, speed);
         MAX_HP = hp;
         this.hp = hp;
@@ -82,21 +82,21 @@ abstract public class Character extends MovingEntity {
 
     /**
      * Handles character collision - moves back
-     * @param character character to handle
+     * @param gameCharacter character to handle
      */
-    protected void handleCharacter(Character character) {
-        if(this.getID() != character.getID() && intersects(character)) {
+    protected void handleCharacter(GameCharacter gameCharacter) {
+        if(this.getID() != gameCharacter.getID() && intersects(gameCharacter)) {
             move(-1, true);
         }
     }
 
     /**
      * Handles a list of characters and bullets
-     * @param characters list of characters to handle
+     * @param gameCharacters list of characters to handle
      * @param bullets list of bullets to handle
      */
-    public void handleAll(List<Character> characters, List<Bullet> bullets) {
-        characters.forEach(this::handleCharacter);
+    public void handleAll(List<GameCharacter> gameCharacters, List<Bullet> bullets) {
+        gameCharacters.forEach(this::handleCharacter);
         bullets.forEach(this::handleBullet);
     }
 

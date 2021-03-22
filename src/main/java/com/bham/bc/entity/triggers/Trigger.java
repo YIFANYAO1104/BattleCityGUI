@@ -10,7 +10,7 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.graph.ExtraInfo;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 
 abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
@@ -75,7 +75,7 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
      * trigger's region of influence. If it is then the trigger will be
      * triggered and the appropriate action will be taken.
      */
-    public abstract void tryTriggerC(Character entity);
+    public abstract void tryTriggerC(GameCharacter entity);
 
     public abstract void tryTriggerO(GenericObstacle entity);
 

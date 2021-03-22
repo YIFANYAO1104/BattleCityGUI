@@ -10,7 +10,7 @@ import com.bham.bc.components.environment.navigation.algorithms.terminationPolic
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.node.NavNode;
 import javafx.geometry.Point2D;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -23,7 +23,7 @@ public class PathPlanner implements NavigationService {
     /**
      * A pointer to the owner of this class
      */
-    private Character owner;
+    private GameCharacter owner;
     /**
      * a reference to the navgraph
      */
@@ -43,7 +43,7 @@ public class PathPlanner implements NavigationService {
     // temp value to render the graphlines and getPath
     List<PathEdge> curPath = new ArrayList<PathEdge>();
 
-    public PathPlanner(Character owner, SparseGraph navGraph) {
+    public PathPlanner(GameCharacter owner, SparseGraph navGraph) {
         this.owner = owner;
         this.navGraph = navGraph;
         curSearchTask =null;

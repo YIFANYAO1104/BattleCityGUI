@@ -5,7 +5,7 @@ import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -31,7 +31,7 @@ public class WeaponGenerator extends RespawnTrigger {
     }
 
     @Override
-    public void tryTriggerC(Character entity) {
+    public void tryTriggerC(GameCharacter entity) {
         if(isActive()&& rectIsTouchingTrigger(entity.getPosition(),entity.getRadius())){
             entity.switchWeapon(this.weapon);
             deactivate();

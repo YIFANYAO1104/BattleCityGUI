@@ -19,7 +19,7 @@ import com.bham.bc.utils.maploaders.MapLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,7 +142,7 @@ public class GameMap {
             bullets.forEach(obstacle::handleBullet);
         });
 
-        List<Character> temp = new ArrayList<Character>();
+        List<GameCharacter> temp = new ArrayList<GameCharacter>();
         temp.add(player);
         temp.addAll(enemies);
         triggerSystem.handleAll(temp, obstacles);

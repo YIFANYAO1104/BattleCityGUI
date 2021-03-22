@@ -23,7 +23,7 @@ import static com.bham.bc.components.CenterController.backendServices;
 /**
  * Represents the character controlled by the user
  */
-public class Player extends Character {
+public class Player extends GameCharacter {
 
 	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
 	public static final int WIDTH = 25;
