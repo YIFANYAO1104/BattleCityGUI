@@ -98,18 +98,17 @@ public class Kamikaze extends Enemy {
         closeRadiusCondition.setTestValue((int) distanceToPlayer);
         noObstaclesCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
 
-        //Action[] actions = stateMachine.update();
-        Action[] actions = new Action[] {};
+        Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case MOVE:
                     //move();
                     break;
                 case CHARGE:
-                    //charge();
+                    charge();
                     break;
                 case AIMANDSHOOT:
-                    //destroy();
+                    destroy();
                     break;
             }
         });

@@ -157,6 +157,6 @@ public class GameMap {
 
     // Temp until physics
     public boolean intersectsObstacles(Shape shape) {
-        return obstacles.stream().anyMatch(o -> o.intersectsShape(shape));
+        return obstacles.stream().anyMatch(o -> !o.getAttributes().contains(ATTRIBUTE.PASSABLE) && o.intersectsShape(shape));
     }
 }

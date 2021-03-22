@@ -5,6 +5,7 @@ package com.bham.bc.components.environment.obstacles;
  * to identify certain obstacles from a group of Generic Obstacles.
  */
 public enum ATTRIBUTE {
+    PASSABLE,
     BREAKABLE,
     UPDATABLE,
     RENDER_TOP

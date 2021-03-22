@@ -25,7 +25,7 @@ public class Covering extends GenericObstacle {
         super(x, y, tileset, tileIDs);
     }
 
-    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.RENDER_TOP); }
+    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.RENDER_TOP, ATTRIBUTE.PASSABLE); }
 
     @Override
     protected Image[] getDefaultImage() {

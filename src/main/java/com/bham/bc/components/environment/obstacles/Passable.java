@@ -8,6 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+import java.util.EnumSet;
+
 
 /**
  * Desc: Tile which can be passed by any game entity. It can act as a decoration
@@ -24,6 +26,8 @@ public class Passable extends GenericObstacle {
     public Passable(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
     }
+    @Override
+    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.PASSABLE); }
 
     @Override
     protected Image[] getDefaultImage() {
