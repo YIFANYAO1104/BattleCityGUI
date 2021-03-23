@@ -38,11 +38,14 @@ public class GameSession {
 
     private AnchorPane hbPane;
 
+    private boolean paused;
+
     /**
      * Constructs the view manager
      */
     public GameSession(MODE mode, MapType mapType) {
         setMode(mode, mapType);
+        paused = false;
         initializeStage();
         createKeyListeners();
     }
@@ -100,9 +103,12 @@ public class GameSession {
      * creates the input listeners. Key presses are handled by the center controller class.
      */
     private void createKeyListeners() {
-        gameScene.setOnKeyPressed(e -> frontendServices.keyPressed(e));
+        gameScene.setOnKeyPressed(e -> {
+            frontendServices.keyPressed(e);
+        });
         gameScene.setOnKeyReleased(e -> frontendServices.keyReleased(e));
     }
+
 
     /**
      * renders the score of a currently running game
@@ -128,7 +134,6 @@ public class GameSession {
 
             return true;
         }
-
         return false;
     }
 

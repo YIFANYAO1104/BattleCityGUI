@@ -8,6 +8,7 @@ import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
+import com.bham.bc.view.model.NewGameEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -15,13 +16,18 @@ import javafx.stage.Stage;
 import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
- * Class managing the behavior of the main menu
+ * <h1>Menu Session</h1>
+ *
+ * <p>This class manages all the menus. Not only it sets up a stage for the main menu, it also is
+ * responsible for bringing up pause menu and end screen during the gameplay. Therefore, it has a
+ * strong communication with {@link com.bham.bc.view.GameSession}</p>
  */
 public class MenuSession {
 
     private static final int HEIGHT = 768;
     private static final int WIDTH = 1024;
-    private static MenuSession menuSessionTemp;
+
+
 
     private AnchorPane mainPane;
     private Scene mainScene;
@@ -46,6 +52,8 @@ public class MenuSession {
 
         initMainMenu();
 
+        mainPane.addEventFilter(NewGameEvent.START_GAME, this::createGameSession);
+
     }
 
     /**
@@ -60,9 +68,13 @@ public class MenuSession {
         audioManager.play();
     }
 
+    /**
+     *
+     * @param gamePane
+     */
+
     public static void showPauseMenu(AnchorPane gamePane) {
         if (pauseMenu==null){
-            menuSessionTemp=new MenuSession();
 
         }
         if (pauseMenu!=null){
@@ -89,19 +101,18 @@ public class MenuSession {
 
     /**
      * Creates a single Game Session based on a chosen MODE
-     * @param mode SURVIVAL or CHALLENGE mode to be set in Controller
+     * @param e SURVIVAL or CHALLENGE mode to be set in Controller
      */
-    public void createGameSession(MODE mode, MapType mapType) {
+    public void createGameSession(NewGameEvent e) {
         audioManager.createSequentialPlayer(TRACK.CORRUPTION, TRACK.LEAD, TRACK.REVOLUTION);
-
-        GameSession gameSession = new GameSession(mode, mapType);
+        GameSession gameSession = new GameSession(e.getMode(), e.getMapType());
         gameSession.createNewGame(mainStage);
 
         audioManager.play();
     }
 
     /**
-     * returns the main stage used for the menu
+     * Returns the main stage used for the main menu
      * @return the menu stage
      */
     public Stage getMainStage() {

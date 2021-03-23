@@ -4,6 +4,7 @@ import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
+import com.bham.bc.view.model.NewGameEvent;
 import com.bham.bc.view.model.SubMenu;
 import javafx.geometry.Pos;
 import javafx.scene.layout.AnchorPane;
@@ -30,6 +31,8 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
 
+    private NewGameEvent newGameEvent;
+
     /**
      * Constructs an AnchorPane layout as the Main Menu
      *
@@ -38,6 +41,7 @@ public class MainMenu extends AnchorPane {
      * @param height      menu window's height
      */
     public MainMenu(MenuSession menuSession, double width, double height) {
+        newGameEvent = new NewGameEvent(NewGameEvent.START_GAME);
         this.menuSession = menuSession;
         setWidth(width);
         setHeight(height);
@@ -87,8 +91,8 @@ public class MainMenu extends AnchorPane {
         MenuButton btnSettings = new MenuButton("SETTINGS");
         MenuButton btnQuit = new MenuButton("QUIT");
 
-        btnSolo.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMode.show(); });
-        btnCoop.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMode.show(); });
+        btnSolo.setOnMouseClicked(e -> { newGameEvent.setNumPlayers(1); subMenuMain.hide(); subMenuMode.show(); });
+        btnCoop.setOnMouseClicked(e -> { newGameEvent.setNumPlayers(2); subMenuMain.hide(); subMenuMode.show(); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
@@ -108,8 +112,8 @@ public class MainMenu extends AnchorPane {
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
 
         btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
-        btnSurvival.setOnMouseClicked(e -> menuSession.createGameSession(MODE.SURVIVAL, MapType.Map1));
-        btnChallenge.setOnMouseClicked(e -> menuSession.createGameSession(MODE.CHALLENGE, MapType.EmptyMap));
+        btnSurvival.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.SURVIVAL); newGameEvent.setMapType(MapType.Map1); btnSurvival.fireEvent(newGameEvent); });
+        btnChallenge.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.CHALLENGE); newGameEvent.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(newGameEvent);});
 
         subMenuMode = new SubMenu(this);
         subMenuMode.getChildren().addAll(btnBack, btnSurvival, btnChallenge);
