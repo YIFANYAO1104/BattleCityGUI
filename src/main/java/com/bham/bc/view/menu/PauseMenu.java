@@ -4,6 +4,7 @@ import com.bham.bc.utils.Constants;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.SubMenu;
+import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -11,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
 /**
  * <h1>Pause Menu</h1>
@@ -26,10 +28,18 @@ public class PauseMenu extends AnchorPane{
     private MenuButton btnResume;       // resumes the current game
     private MenuButton btnSettings;     // opens configuration menu
     private MenuButton btnEndGame;      // returns to the main menu
+    private MenuButton btnOptions;
+    private MenuButton btnVolume;
+    private MenuButton btnEffect;
+    private MenuButton btnSkin;
 
     private AnchorPane parent;          // Parent node to attach the pause menu
 
     private SubMenu subMenuPause;
+    private SubMenu subMenuOptions;
+    private Rectangle bg;
+
+
 
     public PauseMenu(MenuSession menuSession) {
 
@@ -40,6 +50,7 @@ public class PauseMenu extends AnchorPane{
 
         initBgDim();
         createSubMenuPause();
+        createSubMenuOptions();
         subMenuPause.show();
 
     }
@@ -47,7 +58,7 @@ public class PauseMenu extends AnchorPane{
     private void createSubMenuPause() {
         VBox vBox=new VBox(15,btnResume=new MenuButton("Resume"),
         btnSettings=new MenuButton("Settings"),
-        btnEndGame=new MenuButton("Quit"));
+        btnEndGame=new MenuButton("Quit"), btnOptions=new MenuButton("Options"));
         vBox.setTranslateX(530);
         vBox.setTranslateY(430);
 
@@ -55,22 +66,58 @@ public class PauseMenu extends AnchorPane{
         btnSettings.setOnMouseClicked(e->{});
         btnEndGame.setOnMouseClicked(e->{});
         btnResume.setOnMouseClicked(e->{});
+        btnOptions.setOnMouseClicked(e->{subMenuPause.hide();subMenuOptions.show();});
         
         subMenuPause=new SubMenu(this);
         subMenuPause.getChildren().addAll(vBox);
 
-        //subMenuPause.setOpacity(0.8);
 
     }
     /**
      * Adds background dim to the menu
      */
     private void initBgDim() {
-        Rectangle bg = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
+        bg = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         bg.setFill(Color.BLACK);
         bg.setOpacity(0.5);
         getChildren().add(bg);
     }
+
+    private void createSubMenuOptions(){
+        VBox vBox=new VBox(15,btnVolume=new MenuButton("Volume"),btnEffect=new MenuButton("Effect"),btnSkin=new MenuButton("Skin"));
+        btnEffect.setOnMouseClicked(e->{});
+        btnVolume.setOnMouseClicked(e->{});
+        btnSkin.setOnMouseClicked(e->{});
+        vBox.setTranslateX(0);
+        vBox.setTranslateY(430);
+        subMenuOptions=new SubMenu(this);
+        subMenuOptions.getChildren().addAll(vBox);
+
+    }
+    public void fadeIn(){
+        //Instantiating FadeTransition class
+        FadeTransition fade1 = new FadeTransition();
+
+
+        //setting the duration for the Fade transition
+        fade1.setDuration(Duration.millis(1000));
+
+        //setting the initial and the target opacity value for the transition
+        fade1.setFromValue(0);
+        fade1.setToValue(0.7);
+
+        //the transition will set to be auto reversed by setting this to true
+        fade1.setAutoReverse(true);
+        //setting Circle as the node onto which the transition will be applied
+        fade1.setNode(bg);
+
+
+        //playing the transition
+        fade1.play();
+
+    }
+
+
 
 
 }

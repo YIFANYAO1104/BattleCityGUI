@@ -57,10 +57,16 @@ public class MenuSession {
     }
 
     public static void showPauseMenu(AnchorPane gamePane) {
+        if (pauseMenu==null){
+            pauseMenu=new PauseMenu(new MenuSession());
+        }
         if(gamePane.getChildren().contains(pauseMenu)) {
             gamePane.getChildren().remove(pauseMenu);
+
+
         } else {
             gamePane.getChildren().add(pauseMenu);
+            pauseMenu.fadeIn();
         }
 
     }
