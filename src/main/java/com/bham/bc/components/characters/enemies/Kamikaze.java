@@ -20,7 +20,18 @@ import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
- * Represents enemy type which self-destructs near player to deal huge amount of damage
+ * <h1>Kamikaze - fearless suicider</h1>
+ *
+ * <p>This type of enemy has 3 states determined by its distance to ally and free path condition</p>
+ * <ul>
+ *     <li><b>Search</b> - searches for the closest ally in the game and moves towards it</li>
+ *
+ *     <li><b>Charge</b> - charges at the nearest ally with increased speed if it is close enough
+ *     and if there are no obstacles in a way to stop it</li>
+ *
+ *     <li><b>Attack</b> - attacks any ally that is very close to it by self-destructing itself and
+ *     dealing area damage to anything but enemies</li>
+ * </ul>
  */
 public class Kamikaze extends Enemy {
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/enemy3.png";
