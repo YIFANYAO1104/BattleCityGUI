@@ -23,8 +23,6 @@ import javafx.scene.text.Text;
  * a game session is not active.</p>
  */
 public class MainMenu extends AnchorPane {
-    
-    private MenuSession menuSession;
 
     private SubMenu subMenuMain;
     private SubMenu subMenuMode;
@@ -36,13 +34,11 @@ public class MainMenu extends AnchorPane {
     /**
      * Constructs an AnchorPane layout as the Main Menu
      *
-     * @param menuSession the manager of the menus
-     * @param width       menu window's length
-     * @param height      menu window's height
+     * @param width  menu window's length
+     * @param height menu window's height
      */
-    public MainMenu(MenuSession menuSession, double width, double height) {
+    public MainMenu(double width, double height) {
         newGameEvent = new NewGameEvent(NewGameEvent.START_GAME);
-        this.menuSession = menuSession;
         setWidth(width);
         setHeight(height);
 

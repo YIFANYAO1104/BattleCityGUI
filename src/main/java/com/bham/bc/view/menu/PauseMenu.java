@@ -22,60 +22,21 @@ import javafx.util.Duration;
  *
  * <b>Note:</b> neither state, nor the score of the game is saved when returning to the main menu.
  */
-public class PauseMenu extends AnchorPane{
+public class PauseMenu extends AnchorPane {
 
-    private MenuSession menuSession;
-    private MenuButton btnResume;       // resumes the current game
-    private MenuButton btnSettings;     // opens configuration menu
-    private MenuButton btnEndGame;      // returns to the main menu
-    private MenuButton btnOptions;
-    private MenuButton btnVolume;
-    private MenuButton btnEffect;
-    private MenuButton btnSkin;
-
-    private AnchorPane parent;          // Parent node to attach the pause menu
-
-    public static SubMenu subMenuPause;
+    private SubMenu subMenuPause;
     private SubMenu subMenuOptions;
     private Rectangle bg;
-    public static boolean isshown=false;
-    private VBox vBox;
 
-
-
-    public PauseMenu(MenuSession menuSession) {
-
-        this.menuSession = menuSession;
-
-        this.setLayoutX(0);
-        this.setLayoutY(0);
+    public PauseMenu() {
+        setWidth(Constants.WINDOW_WIDTH);
+        setHeight(Constants.WINDOW_HEIGHT);
 
         initBgDim();
         createSubMenuPause();
         createSubMenuOptions();
-        fadeIn();
-
-
     }
 
-    private void createSubMenuPause() {
-        vBox=new VBox(15,btnResume=new MenuButton("Resume"),
-        btnSettings=new MenuButton("Settings"),
-        btnEndGame=new MenuButton("Quit"), btnOptions=new MenuButton("Options"));
-        vBox.setTranslateX(530);
-        vBox.setTranslateY(430);
-
-
-        btnSettings.setOnMouseClicked(e->{});
-        btnEndGame.setOnMouseClicked(e->{});
-        btnResume.setOnMouseClicked(e->{});
-        btnOptions.setOnMouseClicked(e->{subMenuPause.hide();subMenuOptions.show();});
-        
-        subMenuPause=new SubMenu(this);
-        subMenuPause.getChildren().addAll(vBox);
-
-
-    }
     /**
      * Adds background dim to the menu
      */
@@ -86,71 +47,76 @@ public class PauseMenu extends AnchorPane{
         getChildren().add(bg);
     }
 
-    private void createSubMenuOptions(){
-        VBox vBox=new VBox(15,btnVolume=new MenuButton("Volume"),btnEffect=new MenuButton("Effect"),btnSkin=new MenuButton("Skin"));
+    /**
+     * Creates layout for primary view for pause menu
+     */
+    private void createSubMenuPause() {
+        MenuButton btnResume = new MenuButton("Resume");
+        MenuButton btnOptions = new MenuButton("Options");
+        MenuButton btnEndGame = new MenuButton("Quit");
+
+        btnResume.setOnMouseClicked(e->{});
+        btnOptions.setOnMouseClicked(e->{subMenuPause.hide();subMenuOptions.show();});
+        btnEndGame.setOnMouseClicked(e->{});
+
+        subMenuPause = new SubMenu(this);
+        subMenuPause.getChildren().addAll(btnResume, btnOptions, btnEndGame);
+
+        subMenuPause.setTranslateY(430);
+
+        getChildren().add(subMenuPause);
+        subMenuPause.hide();
+    }
+
+    /**
+     * Creates layout for options in the pause menu
+     */
+    private void createSubMenuOptions() {
+        MenuButton btnVolume = new MenuButton("Volume");
+        MenuButton btnEffect = new MenuButton("Effect");
+        MenuButton btnSkin = new MenuButton("Skin");
+
         btnEffect.setOnMouseClicked(e->{});
         btnVolume.setOnMouseClicked(e->{});
         btnSkin.setOnMouseClicked(e->{});
-        vBox.setTranslateX(0);
-        vBox.setTranslateY(430);
-        subMenuOptions=new SubMenu(this);
-        subMenuOptions.getChildren().addAll(vBox);
 
-    }
-    public void fadeIn(){
-        //Instantiating FadeTransition class
-        FadeTransition fade1 = new FadeTransition();
+        subMenuOptions = new SubMenu(this);
+        subMenuOptions.getChildren().addAll(btnVolume, btnEffect, btnSkin);
 
+        subMenuOptions.setTranslateY(430);
 
-        //setting the duration for the Fade transition
-        fade1.setDuration(Duration.millis(1000));
-
-        //setting the initial and the target opacity value for the transition
-        fade1.setFromValue(0);
-        fade1.setToValue(0.7);
-
-        //the transition will set to be auto reversed by setting this to true
-        fade1.setAutoReverse(false);
-        //setting Circle as the node onto which the transition will be applied
-        fade1.setNode(bg);
-
-        //playing the transition
-        fade1.play();
-        subMenuPause.show();
-
-        isshown=true;
-
-
-
-    }
-
-    public void fadeOut(){
-
-        //Instantiating FadeTransition class
-        FadeTransition fade2 = new FadeTransition();
-
-
-        //setting the duration for the Fade transition
-        fade2.setDuration(Duration.millis(1000));
-
-        //setting the initial and the target opacity value for the transition
-        fade2.setFromValue(0.7);
-        fade2.setToValue(0);
-
-        //the transition will set to be auto reversed by setting this to true
-        fade2.setAutoReverse(false);
-        //setting Circle as the node onto which the transition will be applied
-        fade2.setNode(bg);
-
-        //playing the transition
-        fade2.play();
-        subMenuPause.hide();
+        getChildren().add(subMenuOptions);
         subMenuOptions.hide();
-        isshown=false;
-
     }
 
+    /**
+     * Shows pause menu with fade in transition
+     * @param gamePane game pane menu will be attached to
+     */
+    public void show(AnchorPane gamePane) {
+        gamePane.getChildren().add(this);
 
+        FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
+        ft.setFromValue(0);
+        ft.setToValue(0.7);
 
+        ft.play();
+        subMenuPause.show();
+    }
 
+    /**
+     * Hides pause menu with fade out transition
+     * @param gamePane game pane menu will be detached from
+     */
+    public void hide(AnchorPane gamePane) {
+        FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
+        ft.setFromValue(0.7);
+        ft.setToValue(0);
+
+        ft.play();
+        subMenuOptions.hide();
+        subMenuPause.hide();
+
+        ft.setOnFinished(e -> gamePane.getChildren().remove(this));
+    }
 }

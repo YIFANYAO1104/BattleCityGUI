@@ -1,14 +1,12 @@
 package com.bham.bc.view;
 
 import com.bham.bc.audio.TRACK;
-import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.mode.MODE;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
 import com.bham.bc.view.model.NewGameEvent;
+import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -27,16 +25,13 @@ public class MenuSession {
     private static final int HEIGHT = 768;
     private static final int WIDTH = 1024;
 
-
-
     private AnchorPane mainPane;
     private Scene mainScene;
     private Stage mainStage;
 
     private MainMenu mainMenu;
-    private static PauseMenu pauseMenu;
 
-
+    private static PauseMenu pauseMenu = new PauseMenu();
 
     /**
      * Constructs the menu view manager
@@ -47,8 +42,7 @@ public class MenuSession {
         mainStage = new Stage();
         mainStage.setScene(mainScene);
 
-        mainMenu = new MainMenu(this, WIDTH, HEIGHT);
-        pauseMenu = new PauseMenu(this);
+        mainMenu = new MainMenu(WIDTH, HEIGHT);
 
         initMainMenu();
 
@@ -68,35 +62,26 @@ public class MenuSession {
         audioManager.play();
     }
 
+
     /**
-     *
-     * @param gamePane
+     * Attaches (detaches) pause menu to the provided game pane and shows (hides) it
+     * @param gamePane game pane the pause menu will be attached (detached) to
+     * @param timer animation timer to be stopped (started)
      */
-
-    public static void showPauseMenu(AnchorPane gamePane) {
-        if (pauseMenu==null){
-
+    public static void showPauseMenu(AnchorPane gamePane, AnimationTimer timer) {
+        if(gamePane.getChildren().contains(pauseMenu)) {
+            pauseMenu.hide(gamePane);
+            timer.start();
+        } else {
+            pauseMenu.show(gamePane);
+            timer.stop();
         }
-        if (pauseMenu!=null){
-            System.out.println("not null");
-        }
-
-        if(gamePane.getChildren().contains(pauseMenu)==false) {
-            gamePane.getChildren().add(pauseMenu);
-
-        }else if (PauseMenu.isshown==true){
-
-            System.out.println("fadeOut");
-            pauseMenu.fadeOut();
-        }else if (PauseMenu.isshown==false){
-            System.out.println("fadeIn");
-            pauseMenu.fadeIn();
-        }
-
     }
 
-    private MainMenu getMainMenu() { return mainMenu; }
-    private EndMenu getEndMenu(double score) { return new EndMenu(); }
+
+    public static void showEndMenu(AnchorPane gamePane, double score) {
+        EndMenu endMenu = new EndMenu();
+    }
 
 
     /**

@@ -69,18 +69,8 @@ public class GameSession {
         gameStage = new Stage();
 
         gameStage.setScene(gameScene);
-        gameStage.setTitle("A very cool game");
+        gameStage.setTitle("Defenders");
         gameStage.setResizable(false);
-
-        KeyCodeCombination keyCodeCombination=new KeyCodeCombination(KeyCode.ESCAPE);
-        gameScene.getAccelerators().put(keyCodeCombination, new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("press showPauseMenu");
-                MenuSession.showPauseMenu(gamePane);
-            }
-        });
-
     }
 
     /**
@@ -104,9 +94,18 @@ public class GameSession {
      */
     private void createKeyListeners() {
         gameScene.setOnKeyPressed(e -> {
-            frontendServices.keyPressed(e);
+            if (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
+                showPauseMenu();
+            } else {
+                frontendServices.keyPressed(e);
+            }
         });
         gameScene.setOnKeyReleased(e -> frontendServices.keyReleased(e));
+    }
+
+
+    public void showPauseMenu() {
+        MenuSession.showPauseMenu(gamePane, gameTimer);
     }
 
 
