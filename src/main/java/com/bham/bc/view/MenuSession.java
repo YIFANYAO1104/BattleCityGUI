@@ -3,6 +3,7 @@ package com.bham.bc.view;
 import com.bham.bc.audio.TRACK;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
@@ -20,6 +21,7 @@ public class MenuSession {
 
     private static final int HEIGHT = 768;
     private static final int WIDTH = 1024;
+    private static MenuSession menuSessionTemp;
 
     private AnchorPane mainPane;
     private Scene mainScene;
@@ -27,6 +29,8 @@ public class MenuSession {
 
     private MainMenu mainMenu;
     private static PauseMenu pauseMenu;
+
+
 
     /**
      * Constructs the menu view manager
@@ -58,14 +62,22 @@ public class MenuSession {
 
     public static void showPauseMenu(AnchorPane gamePane) {
         if (pauseMenu==null){
-            pauseMenu=new PauseMenu(new MenuSession());
+            menuSessionTemp=new MenuSession();
+
         }
-        if(gamePane.getChildren().contains(pauseMenu)) {
-            gamePane.getChildren().remove(pauseMenu);
+        if (pauseMenu!=null){
+            System.out.println("not null");
+        }
 
-
-        } else {
+        if(gamePane.getChildren().contains(pauseMenu)==false) {
             gamePane.getChildren().add(pauseMenu);
+
+        }else if (PauseMenu.isshown==true){
+
+            System.out.println("fadeOut");
+            pauseMenu.fadeOut();
+        }else if (PauseMenu.isshown==false){
+            System.out.println("fadeIn");
             pauseMenu.fadeIn();
         }
 

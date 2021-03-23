@@ -35,9 +35,11 @@ public class PauseMenu extends AnchorPane{
 
     private AnchorPane parent;          // Parent node to attach the pause menu
 
-    private SubMenu subMenuPause;
+    public static SubMenu subMenuPause;
     private SubMenu subMenuOptions;
     private Rectangle bg;
+    public static boolean isshown=false;
+    private VBox vBox;
 
 
 
@@ -51,12 +53,13 @@ public class PauseMenu extends AnchorPane{
         initBgDim();
         createSubMenuPause();
         createSubMenuOptions();
-        subMenuPause.show();
+        fadeIn();
+
 
     }
 
     private void createSubMenuPause() {
-        VBox vBox=new VBox(15,btnResume=new MenuButton("Resume"),
+        vBox=new VBox(15,btnResume=new MenuButton("Resume"),
         btnSettings=new MenuButton("Settings"),
         btnEndGame=new MenuButton("Quit"), btnOptions=new MenuButton("Options"));
         vBox.setTranslateX(530);
@@ -107,13 +110,43 @@ public class PauseMenu extends AnchorPane{
         fade1.setToValue(0.7);
 
         //the transition will set to be auto reversed by setting this to true
-        fade1.setAutoReverse(true);
+        fade1.setAutoReverse(false);
         //setting Circle as the node onto which the transition will be applied
         fade1.setNode(bg);
 
-
         //playing the transition
         fade1.play();
+        subMenuPause.show();
+
+        isshown=true;
+
+
+
+    }
+
+    public void fadeOut(){
+
+        //Instantiating FadeTransition class
+        FadeTransition fade2 = new FadeTransition();
+
+
+        //setting the duration for the Fade transition
+        fade2.setDuration(Duration.millis(1000));
+
+        //setting the initial and the target opacity value for the transition
+        fade2.setFromValue(0.7);
+        fade2.setToValue(0);
+
+        //the transition will set to be auto reversed by setting this to true
+        fade2.setAutoReverse(false);
+        //setting Circle as the node onto which the transition will be applied
+        fade2.setNode(bg);
+
+        //playing the transition
+        fade2.play();
+        subMenuPause.hide();
+        subMenuOptions.hide();
+        isshown=false;
 
     }
 
