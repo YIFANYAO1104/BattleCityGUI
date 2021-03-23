@@ -5,9 +5,7 @@
 package com.bham.bc.entity.triggers;
 
 
-import com.bham.bc.entity.BaseGameEntity;
-
-abstract public class RespawnTrigger<entity_type extends BaseGameEntity> extends Trigger<entity_type> {
+abstract public class RespawnTrigger extends Trigger {
 
     //When a bot comes within this trigger's area of influence it is triggered
     //but then becomes inactive for a specified amount of time. These values
@@ -32,16 +30,11 @@ abstract public class RespawnTrigger<entity_type extends BaseGameEntity> extends
     }
 
     /**
-     * to be implemented by child classes
-     */
-    @Override
-    abstract public void tryTrigger(entity_type entity);
-
-    /**
      * this is called each game-tick to update the trigger's internal state
      */
     @Override
     public void update() {
+//        System.out.println("respawn  after: "+curToRespawn);
         if ((--curToRespawn <= 0) && !isActive()) {
             setActive();
         }

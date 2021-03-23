@@ -1,18 +1,8 @@
 package com.bham.bc.components.armory;
 
 import com.bham.bc.components.characters.SIDE;
-import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.characters.Player;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.shape.Rectangle;
-
-import java.util.List;
-
-import static com.bham.bc.components.CenterController.backendServices;
-import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
  * Represents any bullet and defines common bullet properties

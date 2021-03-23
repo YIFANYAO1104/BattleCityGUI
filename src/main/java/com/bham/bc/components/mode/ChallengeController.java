@@ -2,6 +2,9 @@ package com.bham.bc.components.mode;
 
 import com.bham.bc.components.CenterController;
 import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.MapType;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 
 /**
@@ -12,14 +15,16 @@ public class ChallengeController extends CenterController {
     /**
      * Constructs the controller by selecting an empty map and creating components
      */
-    public ChallengeController(){
+    public ChallengeController(MapType mapType){
         super();
-        player = new Player(16*32, 16*32);
+        gameMap = new GameMap(mapType);
+        gameMap.initialGraph(new Point2D(16*32, 16*32));
+        player = new Player(16*32, 16*32,gameMap);
     }
 
-    @Override
-    public void update() { player.update(); }
-
-    @Override
-    public void render(GraphicsContext gc) { player.render(gc); }
+//    @Override
+//    public void update() { player.update(); }
+//
+//    @Override
+//    public void render(GraphicsContext gc) { player.render(gc); }
 }

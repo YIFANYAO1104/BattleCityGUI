@@ -4,7 +4,6 @@ import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.node.Vector2D;
 
 import java.util.ArrayList;
 import java.util.HashSet;

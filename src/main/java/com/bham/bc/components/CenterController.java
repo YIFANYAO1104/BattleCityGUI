@@ -2,17 +2,21 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.utils.Constants;
-import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.physics.BombTank;
-import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.entity.triggers.Trigger;
+import com.bham.bc.utils.Constants;
+import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 
+import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -20,6 +24,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 /**
  * Class defining the common elements and behavior for both survival and challenge controllers
@@ -31,58 +36,66 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     protected boolean isGameOver;
     protected GameMap gameMap;
-    protected Player player;
-    protected ArrayList<Enemy> enemies = new ArrayList<>();
+    protected Player player;                //TODO: remove as it is the 0th objcet in characters list
+    protected ArrayList<Bullet> bullets;
+    protected ArrayList<Trigger> triggers;
+    protected ArrayList<GameCharacter> characters;
+
+    //temp
     protected ArrayList<BombTank> bombTanks = new ArrayList<>();
-    protected ArrayList<Bullet> bullets = new ArrayList<>();
+
 
     /**
      * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
      */
-    public CenterController() { super(GetNextValidID(),-1,-1); }
+    public CenterController() {
+        super(GetNextValidID(),-1,-1);
+        bullets = new ArrayList<>();
+        triggers = new ArrayList<>();
+        characters = new ArrayList<>();
+        // TODO: add empty map by default
+    }
 
     /**
      * Sets the mode of the game the user has chosen
      * @param mode SURVIVAL or CHALLENGE value to be passed as a game mode
+     * @param mapType layout of map that will be used by a specific mode
      */
-    public static void setMode(MODE mode){
+    public static void setMode(MODE mode, MapType mapType) {
         CenterController centerController = null;
         switch (mode) {
             case SURVIVAL:
-                centerController = new SurvivalController();
+                centerController = new SurvivalController(mapType);
 
                 break;
             case CHALLENGE:
-                centerController = new ChallengeController();
+                centerController = new ChallengeController(mapType);
                 break;
         }
         frontendServices = centerController;
         backendServices = centerController;
     }
 
-    /**
-     * Gets all characters in the game
-     * @return list of all the characters in the game
-     */
-    public ArrayList<Character> getCharacters() {
-        ArrayList<Character> characters = new ArrayList<>(enemies);
-        characters.add(player);
-
-        return characters;
+    // TEMPORARY METHODS -------------------------------------------
+    @Override
+    public void testAStar() {
+        player.createNewRequestAStar();
     }
 
     @Override
-    public boolean isGameOver() { return isGameOver; }
+    public void testDjistra() {
+        player.createNewRequestItem();
+    }
 
     @Override
-    public double getPlayerHP() { return player.getHp(); }
+    public void addBombTank(BombTank b) {
+        bombTanks.add(b);
+    }
 
     @Override
-    public void keyReleased(KeyEvent e) { player.keyReleased(e); }
-
-    @Override
-    public void keyPressed(KeyEvent e) { player.keyPressed(e); }
-
+    public boolean intersectsObstacles(Shape hitBox) {
+        return gameMap.intersectsObstacles(hitBox);
+    }
 
     @Override
     public void renderHitBoxes(AnchorPane hitBoxPane) {
@@ -94,13 +107,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         mapConstrain.setStrokeWidth(5);
         hitBoxPane.getChildren().add(mapConstrain);
 
-        // Add player hit-box
-        Shape playerHitBox = player.getHitBox();
-        playerHitBox.setFill(Color.TRANSPARENT);
-        playerHitBox.setStroke(Color.RED);
-        playerHitBox.setStrokeWidth(2);
-        hitBoxPane.getChildren().add(playerHitBox);
-
         // Add bullet hit-boxes
         bullets.forEach(b -> {
             Shape bulletHitBox = b.getHitBox();
@@ -110,30 +116,117 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             hitBoxPane.getChildren().add(bulletHitBox);
         });
 
-        // Add enemy hit-boxes
-        enemies.forEach(e -> {
-            Shape enemyHitBox = e.getHitBox();
-            enemyHitBox.setFill(Color.TRANSPARENT);
-            enemyHitBox.setStroke(Color.RED);
-            enemyHitBox.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(enemyHitBox);
+        // Add character hit-boxes
+        characters.forEach(c -> {
+            Shape cHitBox = c.getHitBox();
+            cHitBox.setFill(Color.TRANSPARENT);
+            cHitBox.setStroke(Color.RED);
+            cHitBox.setStrokeWidth(1);
+            hitBoxPane.getChildren().add(cHitBox);
+
+            Shape enemyLine = c.getLine();
+            enemyLine.setStroke(Color.RED);
+            enemyLine.setStrokeWidth(1);
+            hitBoxPane.getChildren().add(enemyLine);
         });
     }
+    // ------------------------------------------------------------
 
+
+    // CHECKERS ---------------------------------------------------
+    @Override
+    public boolean isGameOver() {
+        return isGameOver;
+    }
 
     @Override
-    public void addEnemy(Enemy enemy) { enemies.add(enemy); }
+    public double getPlayerHP() {
+        return player.getHp();
+    }
+    // ------------------------------------------------------------
+
+    // UI ---------------------------------------------------------
+    @Override
+    public void keyPressed(KeyEvent e) {
+        player.keyPressed(e);
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        player.keyReleased(e);
+    }
+    // ------------------------------------------------------------
+
+    // ADDERS -----------------------------------------------------
+    @Override
+    public void addBullet(Bullet bullet) {
+        bullets.add(bullet);
+    }
+
+    @Override
+    public void addCharacter(GameCharacter character) {
+        characters.add(character);
+    }
+
+    @Override
+    public void addTrigger(Trigger trigger) {
+        gameMap.addTrigger(trigger);
+    }
+    // ------------------------------------------------------------
+
+    // GETTERS ----------------------------------------------------
+    @Override
+    public SparseGraph getGraph() {
+        return gameMap.getGraph();
+    }
+
+    @Override
+    public Point2D getPlayerCenterPosition() {
+        return player.getCenterPosition();
+    }
+
+    @Override
+    public ArrayList<Point2D> allCharacterPositions() {
+        return (ArrayList<Point2D>) characters.stream().map(GameCharacter::getPosition).collect(Collectors.toList());
+    }
+    // ------------------------------------------------------------
+
+    // OTHER ------------------------------------------------------
+    @Override
+    public void update() {
+        gameMap.update();
+        characters.forEach(GameCharacter::update);
+        bullets.forEach(Bullet::update);
+
+        gameMap.handleAll(characters, bullets);
+        characters.forEach(character -> character.handleAll(characters, bullets));
+
+        bullets.removeIf(b -> !b.exists());
+        characters.removeIf(c -> !c.exists());
+    }
+
+    @Override
+    public void render(GraphicsContext gc) {
+        gameMap.renderBottomLayer(gc);
+
+        bombTanks.forEach(b -> render(gc)); // TEMP
+
+        bullets.forEach(bullet -> bullet.render(gc));
+        characters.forEach(character -> character.render(gc));
+
+        gameMap.renderTopLayer(gc);
+        gameMap.renderGraph(gc, allCharacterPositions());
+    }
 
     @Override
     public void clear(){
-        enemies.clear();
+        characters.clear();
         bullets.clear();
-        bombTanks.clear();
+        gameMap.clearAll();
     }
+    // ------------------------------------------------------------
 
-    @Override
-    public void addBullet(Bullet bullet){ bullets.add(bullet); }
-
+    // INHERITED --------------------------------------------------
     @Override
     public Rectangle getHitBox() { return null; }
 
@@ -144,5 +237,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public boolean handleMessage(Telegram msg) { return false; }
 
     @Override
-    public String toString() { return "Center Controller"; }
+    public String toString() { return "Controller"; }
+    // ------------------------------------------------------------
 }

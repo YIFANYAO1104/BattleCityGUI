@@ -2,9 +2,9 @@ package com.bham.bc.entity.ai;
 
 public class State{
 
-    private final Action[] actions;
-    private final Action[] entryActions;
-    private final Action[] exitActions;
+    private Action[] actions;
+    private Action[] entryActions;
+    private Action[] exitActions;
     private Transition[] transitions;
 
     /**
@@ -33,10 +33,43 @@ public class State{
         this.transitions = transitions;
     }
 
+    /**
+     * Alternate constructor to create an empty state which can be filled using setters later
+     */
+    public State(){
+        this.actions = null;
+        this.entryActions = null;
+        this.exitActions = null;
+        this.transitions = null;
+    }
+
+    /**
+     * Setter for Transitions of this State
+     * @param newTransitions The new Transitions
+     */
     public void setTransitions(Transition[] newTransitions) { this.transitions = newTransitions;}
+
+    /**
+     * Setter for the entry actions of this State
+     * @param newActions the new entry actions
+     */
+    public void setEntryActions(Action[] newActions){ this.entryActions = newActions;}
+
+    /**
+     * Setter for the exit actions of this State
+     * @param newActions the new exit actions
+     */
+    public void setExitActions(Action[] newActions){ this.exitActions = newActions;}
+
+    /**
+     * Setter for the actions of this State
+     * @param newActions the new actions
+     */
+    public void setActions(Action[] newActions){ this.actions = newActions;}
+
     /**
      * Returns the actions of the State
-     * @return
+     * @return the actions
      */
     public Action[] getActions(){
         return actions;
