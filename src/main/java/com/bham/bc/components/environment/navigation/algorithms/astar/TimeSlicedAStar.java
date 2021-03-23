@@ -71,10 +71,8 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
 
     @Override
     public List<PathEdge> getPathAsPathEdges() {
-        /*TODO: FILL*/
         List<PathEdge> path = new LinkedList<PathEdge>();
 
-//        if(routine == null) return null;
 
         for(int i = routine.size()-1;i>0;i--){
             NavNode n1 = routine.get(i);
@@ -128,28 +126,33 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     private void addNode(Node n1){
         for(Object gn1: sg.getNodeList(n1.getNode().Index())){
             Node nn1 = new Node((GraphNode)gn1);
-            double cost = getCost(n1,nn1);
-            double dis = getDistance(nn1);
-            Node nn2 = new Node(nn1, n1, cost+n1.getCost(), dis);
+            double edgecost = getCost(n1,nn1);
+            double diagonalDis = getDiagonalDis(n1);
+            Node nn2 = new Node(nn1, n1, edgecost+n1.getCost(), diagonalDis);
             if(!register.contains(nn2.getNode())){
                 openList.add(nn2);
                 register.add(nn2.getNode());
             }
         }
     }
-
+    private double getDiagonalDis(Node n1){
+        NavNode node1 = (NavNode)n1.getNode();
+        NavNode node2 = (NavNode)goal.getNode();
+        Point2D dis = node1.getPosition().subtract(node2.getPosition());
+        double x = Math.abs(dis.getX());
+        double y = Math.abs(dis.getY());
+        return x + 0.41 * y;                    // According the book Game AI. It states that the good way to calculate Dis.
+    }
     private double getDistance(Node n1){
         NavNode n2 = (NavNode)n1.getNode();
         NavNode n3 = (NavNode)goal.getNode();
-//        return n2.Pos().ManHadunDis(n3.Pos());
-        //ManHadunDis()
         Point2D x = n2.getPosition().subtract(n3.getPosition());
-        return x.dotProduct(x);
+        return Math.sqrt(x.dotProduct(x));
     }
 
     private double getCost(Node n1 , Node n2){
         GraphEdge e1 = sg.getEdge(n1.getNode().Index(), n2.getNode().Index());
-        return e1.Cost() * e1.Cost();
+        return e1.Cost();
     }
 
 
@@ -158,7 +161,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         private GraphNode node;
         private Node parentNode;
         private double cost;
-        private double distance;
+        private double diagonalDis;
 
         public Node(GraphNode node1){
             this.node = node1;
@@ -168,8 +171,12 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
             this.node =node1.getNode();
             this.parentNode = parent;
             this.cost = cost1;
-            this.distance = distance1;
+            this.diagonalDis = distance1;
 
+        }
+
+        public double hers(){
+            return cost+diagonalDis;
         }
 
         @Override
@@ -177,9 +184,9 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         {
             if (o == null) return -1;
 
-            if (cost+distance > o.cost + o.distance)
+            if (this.hers() > o.hers())
                 return 1;
-            else if (cost+distance < o.cost + o.distance) return -1;
+            else if (this.hers() < o.hers()) return -1;
 
             return 0;
         }
@@ -192,7 +199,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
             return parentNode;
         }
         public double getDistance(){
-            return distance;
+            return diagonalDis;
         }
         public Double getCost(){return cost;}
     }
