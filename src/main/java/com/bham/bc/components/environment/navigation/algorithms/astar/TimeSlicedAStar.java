@@ -174,7 +174,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
             this.diagonalDis = distance1;
 
         }
-
+        // update to master
         public double hers(){
             return cost+diagonalDis;
         }
