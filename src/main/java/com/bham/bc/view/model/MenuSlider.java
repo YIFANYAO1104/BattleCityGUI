@@ -21,6 +21,7 @@ public class MenuSlider extends VBox{
     private Label volume;
     private HBox HBox;
     private Slider volumeSlider;
+    private Label num;
 
     public MenuSlider(String name){
         volume=new Label(name);
@@ -32,7 +33,7 @@ public class MenuSlider extends VBox{
         volumeSlider.setValue(100);
         volumeSlider.setEffect(glow);
 
-        Label num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
+        num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
         num.setStyle(" -fx-font-size: 15px;\n" +
                 "    -fx-text-fill: white;\n" +
                 "    -fx-font-family: \"Arial Narrow\";\n" +
@@ -51,5 +52,8 @@ public class MenuSlider extends VBox{
 
 
         return volumeSlider.valueProperty();
+    }
+    public Label getLabelOfVolume(){
+        return num;
     }
 }

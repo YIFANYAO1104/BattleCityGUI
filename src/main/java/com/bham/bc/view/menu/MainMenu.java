@@ -171,11 +171,13 @@ public class MainMenu extends AnchorPane {
         MenuSlider bg=new MenuSlider("Volume:");
         doubleProperty1=bg.getValueProperty();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
+            bg.getLabelOfVolume().setText(newVal.intValue()+"");
             audioManager.setMusicVolume(newVal.doubleValue()/100);
         });
         MenuSlider sfx=new MenuSlider("SFX Volume:");
         doubleProperty2=sfx.getValueProperty();
         doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
+            sfx.getLabelOfVolume().setText(newVal.intValue()+"");
             audioManager.setEffectVolume(newVal.doubleValue()/100);
         });
 

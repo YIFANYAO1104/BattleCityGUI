@@ -3,10 +3,12 @@ package com.bham.bc.view.menu;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
+import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.SubMenu;
 import javafx.animation.FadeTransition;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -93,7 +95,13 @@ public class PauseMenu extends AnchorPane {
      * Creates layout for options in the pause menu
      */
     private void createSubMenuOptions() {
-        volumeSlider();
+        MenuSlider bg=new MenuSlider("Volume:");
+        DoubleProperty doubleProperty1 = bg.getValueProperty();
+        doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
+            bg.getLabelOfVolume().setText(newVal.intValue()+"");
+            audioManager.setMusicVolume(newVal.doubleValue()/100);
+        });
+
         MenuButton btnEffect = new MenuButton("Effect");
         MenuButton btnSkin = new MenuButton("Skin");
 
@@ -101,7 +109,7 @@ public class PauseMenu extends AnchorPane {
         btnSkin.setOnMouseClicked(e->{});
 
         subMenuOptions = new SubMenu(this);
-        subMenuOptions.getChildren().addAll(vBox, btnEffect, btnSkin);
+        subMenuOptions.getChildren().addAll(bg, btnEffect, btnSkin);
 
         subMenuOptions.setTranslateY(430);
 
@@ -140,29 +148,5 @@ public class PauseMenu extends AnchorPane {
         ft.setOnFinished(e -> gamePane.getChildren().remove(this));
     }
 
-    public void volumeSlider(){
-        Slider volumeSlider = new Slider();
-        volumeSlider.setValue(100);
 
-        Label num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
-        num.setStyle(" -fx-font-size: 15px;\n" +
-                "    -fx-text-fill: white;\n" +
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;");
-
-        volumeSlider.valueProperty().addListener((obsVal, oldVal, newVal) -> {
-            audioManager.setMusicVolume(newVal.doubleValue()/100);
-            num.setText(newVal.intValue() + "");
-        });
-
-        HBox HBox=new HBox(volumeSlider,num);
-
-        Label volume=new Label("Volume:");
-
-        volume.setStyle(" -fx-font-size: 25px;\n" +
-                "    -fx-text-fill: white;\n" +
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;");
-        vBox=new VBox(volume,HBox);
-    }
 }
