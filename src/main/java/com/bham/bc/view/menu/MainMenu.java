@@ -173,12 +173,14 @@ public class MainMenu extends AnchorPane {
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
             bg.getLabelOfVolume().setText(newVal.intValue()+"");
             audioManager.setMusicVolume(newVal.doubleValue()/100);
+            bg.setRecStyle(newVal);
         });
         MenuSlider sfx=new MenuSlider("SFX Volume:");
         doubleProperty2=sfx.getValueProperty();
         doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
             sfx.getLabelOfVolume().setText(newVal.intValue()+"");
             audioManager.setEffectVolume(newVal.doubleValue()/100);
+            sfx.setRecStyle(newVal);
         });
 
         MenuButton btnBack = new MenuButton("BACK");
