@@ -28,7 +28,7 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  */
 public class MenuSlider extends VBox{
     private Label volume;
-    private HBox HBox;
+
     private Slider volumeSlider;
     private Label num;
     private Rectangle progressRec ;
@@ -38,8 +38,8 @@ public class MenuSlider extends VBox{
         volume=new Label();
         volume.setText(name);
         volume.setId("volume");
-        HBox=new HBox();
-        getChildren().addAll(volume,HBox);
+
+
         Glow glow=new Glow();
         glow.setLevel(1);
         volumeSlider = new Slider();
@@ -73,12 +73,17 @@ public class MenuSlider extends VBox{
         progressRec.setArcHeight(15);
         progressRec.setArcWidth(15);
         progressRec.setTranslateX(0);
-        progressRec.setTranslateY(-16);
+        progressRec.setTranslateY(0);
         progressRec.setEffect(glow);
 
-        HBox.setSpacing(20);
-        HBox.getChildren().addAll(volumeSlider,num);
+
+
+        getChildren().addAll(volume);
         getChildren().add(progressRec);
+        volumeSlider.setTranslateY(-15);
+        getChildren().add(volumeSlider);
+        getChildren().add(num);
+
 
 
 
