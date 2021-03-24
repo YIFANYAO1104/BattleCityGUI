@@ -1,5 +1,6 @@
 package com.bham.bc.view.menu;
 
+import com.bham.bc.audio.AudioManager;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.MenuSession;
@@ -7,6 +8,7 @@ import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.NewGameEvent;
 import com.bham.bc.view.model.SubMenu;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.effect.Glow;
@@ -18,6 +20,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
  * <h1>Main Menu</h1>
@@ -34,8 +38,8 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuSettings;
 
     private NewGameEvent newGameEvent;
-    private VBox vBox;
-    private VBox vBox2;
+    private DoubleProperty doubleProperty1;
+    private DoubleProperty doubleProperty2;
 
     /**
      * Constructs an AnchorPane layout as the Main Menu
@@ -165,16 +169,23 @@ public class MainMenu extends AnchorPane {
      * and allows the user to configure UI parameters, such as SFX or MUSIC volume
      */
     private void createSubMenuSettings() {
-        MenuSlider bg=new MenuSlider();
-        vBox=bg.createMenuSlider("bgMusic");
-        MenuSlider sfx=new MenuSlider();
-        vBox2=sfx.createMenuSlider("SFX");
+        MenuSlider bg=new MenuSlider("Volume:");
+        doubleProperty1=bg.createMenuSlider();
+        doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
+            AudioManager.audioManager.setMusicVolume(newVal.doubleValue()/100);
+        });
+        MenuSlider sfx=new MenuSlider("SFX Volume:");
+        doubleProperty2=sfx.createMenuSlider();
+        doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
+            audioManager.setEffectVolume(newVal.doubleValue()/100);
+        });
+
         MenuButton btnBack = new MenuButton("BACK");
 
         btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
 
         subMenuSettings = new SubMenu(this);
-        subMenuSettings.getChildren().addAll(vBox,vBox2,btnBack);
+        subMenuSettings.getChildren().addAll(bg,sfx,btnBack);
     }
 
 

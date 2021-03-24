@@ -1,5 +1,6 @@
 package com.bham.bc.view.model;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
@@ -16,10 +17,16 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  * @data : 2021/3/24
  * @time : 19:54
  */
-public class MenuSlider {
-    public VBox vBox;
+public class MenuSlider extends VBox{
+    private Label volume;
+    private HBox HBox;
 
-    public VBox createMenuSlider(String whichVolume){
+    public MenuSlider(String name){
+        volume=new Label(name);
+        HBox=new HBox();
+        getChildren().addAll(volume,HBox);
+    }
+    public DoubleProperty createMenuSlider(){
         Glow glow=new Glow();
         glow.setLevel(1);
         Slider volumeSlider = new Slider();
@@ -31,28 +38,16 @@ public class MenuSlider {
                 "    -fx-text-fill: white;\n" +
                 "    -fx-font-family: \"Arial Narrow\";\n" +
                 "    -fx-font-weight: bold;");
-
-        volumeSlider.valueProperty().addListener((obsVal, oldVal, newVal) -> {
-            //SFX
-            if (whichVolume.equals("SFX")){
-                audioManager.setEffectVolume(newVal.doubleValue()/100);
-            }else if (whichVolume.equals("bgMusic")){
-                audioManager.setMusicVolume(newVal.doubleValue()/100);
-            }
-
-            num.setText(newVal.intValue() + "");
-        });
         num.setEffect(glow);
-        HBox HBox=new HBox(volumeSlider,num);
+        HBox.getChildren().addAll(volumeSlider,num);
 
-        Label volume=new Label("SFX Volume:");
         volume.setEffect(glow);
 
         volume.setStyle(" -fx-font-size: 25px;\n" +
                 "    -fx-text-fill: white;\n" +
                 "    -fx-font-family: \"Arial Narrow\";\n" +
                 "    -fx-font-weight: bold;");
-        vBox=new VBox(volume,HBox);
-        return vBox;
+
+        return volumeSlider.valueProperty();
     }
 }
