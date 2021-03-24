@@ -10,8 +10,11 @@ import com.bham.bc.view.model.SubMenu;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -40,6 +43,8 @@ public class MainMenu extends AnchorPane {
     private DoubleProperty doubleProperty1;
     private DoubleProperty doubleProperty2;
 
+    private Scene scene;
+
     /**
      * Constructs an AnchorPane layout as the Main Menu
      *
@@ -58,6 +63,7 @@ public class MainMenu extends AnchorPane {
         createSubMenuMode();
         createSubMenuScores();
         createSubMenuSettings();
+        backToMainMenu();
 
         getChildren().addAll(subMenuMain);
         subMenuMain.show();
@@ -151,15 +157,7 @@ public class MainMenu extends AnchorPane {
         text2.setTranslateY(40);
         subMenuScores.getChildren().add(text2);
         getChildren().add(subMenuScores);
-        subMenuScores.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
 
-                    System.out.println("    You pressed ESCAPE!");
-                    subMenuScores.hide();
-                    subMenuMain.show();
-            }
-        });
 
     }
 
@@ -183,12 +181,10 @@ public class MainMenu extends AnchorPane {
             sfx.setRecStyle(newVal);
         });
 
-        MenuButton btnBack = new MenuButton("BACK");
 
-        btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
 
         subMenuSettings = new SubMenu(this);
-        subMenuSettings.getChildren().addAll(bg,sfx,btnBack);
+        subMenuSettings.getChildren().addAll(bg,sfx);
     }
 
 
@@ -224,6 +220,21 @@ public class MainMenu extends AnchorPane {
             setAlignment(Pos.TOP_CENTER);
             getChildren().addAll(bg,text);
         }
+    }
+    public void backToMainMenu(){
+        scene=MenuSession.getMainScene();
+        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode()== KeyCode.ESCAPE){
+                    subMenuMode.hide();
+                    subMenuSettings.hide();
+                    subMenuScores.hide();
+                    subMenuMain.show();
+                }
+            }
+        });
+
     }
 
 

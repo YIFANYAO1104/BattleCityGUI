@@ -25,8 +25,9 @@ public class MenuSession {
     private static final int HEIGHT = 768;
     private static final int WIDTH = 1024;
 
+
     private AnchorPane mainPane;
-    private Scene mainScene;
+    private static Scene mainScene;
     private Stage mainStage;
 
     private MainMenu mainMenu;
@@ -102,5 +103,9 @@ public class MenuSession {
      */
     public Stage getMainStage() {
         return mainStage;
+    }
+
+    public static Scene getMainScene(){
+        return mainScene;
     }
 }
