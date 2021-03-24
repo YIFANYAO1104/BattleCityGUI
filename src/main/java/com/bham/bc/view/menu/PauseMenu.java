@@ -47,8 +47,8 @@ public class PauseMenu extends AnchorPane {
     private MediaPlayer mediaPlayer;
     private MediaView mediaView;
     private Slider volumeSlider;
-    private SubMenu subMenuVolume;
     private HBox HBox;
+    private VBox vBox;
 
     public PauseMenu() {
         setWidth(Constants.WINDOW_WIDTH);
@@ -94,16 +94,15 @@ public class PauseMenu extends AnchorPane {
      * Creates layout for options in the pause menu
      */
     private void createSubMenuOptions() {
-        MenuButton btnVolume = new MenuButton("Volume");
+        volumeSlider();
         MenuButton btnEffect = new MenuButton("Effect");
         MenuButton btnSkin = new MenuButton("Skin");
 
         btnEffect.setOnMouseClicked(e->{});
-        btnVolume.setOnMouseClicked(e->{volumeSlider();subMenuVolume.show();});
         btnSkin.setOnMouseClicked(e->{});
 
         subMenuOptions = new SubMenu(this);
-        subMenuOptions.getChildren().addAll(btnVolume, btnEffect, btnSkin);
+        subMenuOptions.getChildren().addAll(vBox, btnEffect, btnSkin);
 
         subMenuOptions.setTranslateY(430);
 
@@ -138,7 +137,6 @@ public class PauseMenu extends AnchorPane {
 
         ft.play();
         subMenuOptions.hide();
-        subMenuVolume.hide();
         subMenuPause.hide();
 
         ft.setOnFinished(e -> gamePane.getChildren().remove(this));
@@ -154,17 +152,33 @@ public class PauseMenu extends AnchorPane {
         volumeSlider=new Slider();
         volumeSlider.setValue(50);
         mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty().divide(100));
-        subMenuOptions.hide();
+
+        Label num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
+        num.setStyle(" -fx-font-size: 15px;\n" +
+                "    -fx-text-fill: white;\n" +
+                "    -fx-font-family: \"Arial Narrow\";\n" +
+                "    -fx-font-weight: bold;");
+        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
+                                                     @Override
+                                                     public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
+                                                         num.setText(t1.intValue()+"");
+                                                     }
+                                                 }
+        );
+
+        HBox=new HBox(volumeSlider,num);
+
+        HBox.getChildren().add(mediaView);
+        Label volume=new Label("Volume:");
+
+        volume.setStyle(" -fx-font-size: 25px;\n" +
+                "    -fx-text-fill: white;\n" +
+                "    -fx-font-family: \"Arial Narrow\";\n" +
+                "    -fx-font-weight: bold;");
+        vBox=new VBox(volume,HBox);
 
         mediaPlayer.play();
 
-        HBox=new HBox(volumeSlider);
-        HBox.setTranslateY(230);
-        HBox.getChildren().add(mediaView);
-        subMenuVolume = new SubMenu(this);
-        subMenuVolume.getChildren().addAll(HBox);
-
-        getChildren().add(subMenuVolume);
 
     }
 }
