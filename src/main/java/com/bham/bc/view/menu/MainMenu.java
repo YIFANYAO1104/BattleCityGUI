@@ -172,7 +172,7 @@ public class MainMenu extends AnchorPane {
         MenuSlider bg=new MenuSlider("Volume:");
         doubleProperty1=bg.createMenuSlider();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
-            AudioManager.audioManager.setMusicVolume(newVal.doubleValue()/100);
+            audioManager.setMusicVolume(newVal.doubleValue()/100);
         });
         MenuSlider sfx=new MenuSlider("SFX Volume:");
         doubleProperty2=sfx.createMenuSlider();
