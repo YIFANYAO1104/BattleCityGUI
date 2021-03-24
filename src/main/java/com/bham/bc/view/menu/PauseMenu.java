@@ -5,14 +5,30 @@ import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.SubMenu;
 import javafx.animation.FadeTransition;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+
+import java.io.File;
 
 /**
  * <h1>Pause Menu</h1>
@@ -27,6 +43,12 @@ public class PauseMenu extends AnchorPane {
     private SubMenu subMenuPause;
     private SubMenu subMenuOptions;
     private Rectangle bg;
+    private AnchorPane gamePane2;
+    private MediaPlayer mediaPlayer;
+    private MediaView mediaView;
+    private Slider volumeSlider;
+    private SubMenu subMenuVolume;
+    private HBox HBox;
 
     public PauseMenu() {
         setWidth(Constants.WINDOW_WIDTH);
@@ -77,7 +99,7 @@ public class PauseMenu extends AnchorPane {
         MenuButton btnSkin = new MenuButton("Skin");
 
         btnEffect.setOnMouseClicked(e->{});
-        btnVolume.setOnMouseClicked(e->{});
+        btnVolume.setOnMouseClicked(e->{volumeSlider();subMenuVolume.show();});
         btnSkin.setOnMouseClicked(e->{});
 
         subMenuOptions = new SubMenu(this);
@@ -94,6 +116,7 @@ public class PauseMenu extends AnchorPane {
      * @param gamePane game pane menu will be attached to
      */
     public void show(AnchorPane gamePane) {
+        gamePane2=gamePane;
         gamePane.getChildren().add(this);
 
         FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
@@ -115,8 +138,33 @@ public class PauseMenu extends AnchorPane {
 
         ft.play();
         subMenuOptions.hide();
+        subMenuVolume.hide();
         subMenuPause.hide();
 
         ft.setOnFinished(e -> gamePane.getChildren().remove(this));
+    }
+
+    public void volumeSlider(){
+
+        File url = new File("D:\\IDEAWorkStation\\BattleCityGUI\\src\\main\\resources\\audio\\music\\menu\\night-break.mp3");
+
+        Media media = new Media(url.getAbsoluteFile().toURI().toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaView = new MediaView(mediaPlayer);
+        volumeSlider=new Slider();
+        volumeSlider.setValue(50);
+        mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty().divide(100));
+        subMenuOptions.hide();
+
+        mediaPlayer.play();
+
+        HBox=new HBox(volumeSlider);
+        HBox.setTranslateY(230);
+        HBox.getChildren().add(mediaView);
+        subMenuVolume = new SubMenu(this);
+        subMenuVolume.getChildren().addAll(HBox);
+
+        getChildren().add(subMenuVolume);
+
     }
 }
