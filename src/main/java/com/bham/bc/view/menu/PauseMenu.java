@@ -30,6 +30,8 @@ import javafx.util.Duration;
 
 import java.io.File;
 
+import static com.bham.bc.audio.AudioManager.audioManager;
+
 /**
  * <h1>Pause Menu</h1>
  *
@@ -43,9 +45,6 @@ public class PauseMenu extends AnchorPane {
     private SubMenu subMenuPause;
     private SubMenu subMenuOptions;
     private Rectangle bg;
-    private AnchorPane gamePane2;
-    private MediaPlayer mediaPlayer;
-    private MediaView mediaView;
     private Slider volumeSlider;
     private HBox HBox;
     private VBox vBox;
@@ -115,7 +114,6 @@ public class PauseMenu extends AnchorPane {
      * @param gamePane game pane menu will be attached to
      */
     public void show(AnchorPane gamePane) {
-        gamePane2=gamePane;
         gamePane.getChildren().add(this);
 
         FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
@@ -143,32 +141,22 @@ public class PauseMenu extends AnchorPane {
     }
 
     public void volumeSlider(){
-
-        File url = new File("D:\\IDEAWorkStation\\BattleCityGUI\\src\\main\\resources\\audio\\music\\menu\\night-break.mp3");
-
-        Media media = new Media(url.getAbsoluteFile().toURI().toString());
-        mediaPlayer = new MediaPlayer(media);
-        mediaView = new MediaView(mediaPlayer);
         volumeSlider=new Slider();
-        volumeSlider.setValue(50);
-        mediaPlayer.volumeProperty().bind(volumeSlider.valueProperty().divide(100));
+        volumeSlider.setValue(100);
 
         Label num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
         num.setStyle(" -fx-font-size: 15px;\n" +
                 "    -fx-text-fill: white;\n" +
                 "    -fx-font-family: \"Arial Narrow\";\n" +
                 "    -fx-font-weight: bold;");
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-                                                     @Override
-                                                     public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-                                                         num.setText(t1.intValue()+"");
-                                                     }
-                                                 }
-        );
+
+        volumeSlider.valueProperty().addListener((obsVal, oldVal, newVal) -> {
+            audioManager.setMusicVolume(newVal.doubleValue()/100);
+            num.setText(newVal.intValue() + "");
+        });
 
         HBox=new HBox(volumeSlider,num);
 
-        HBox.getChildren().add(mediaView);
         Label volume=new Label("Volume:");
 
         volume.setStyle(" -fx-font-size: 25px;\n" +
@@ -176,9 +164,5 @@ public class PauseMenu extends AnchorPane {
                 "    -fx-font-family: \"Arial Narrow\";\n" +
                 "    -fx-font-weight: bold;");
         vBox=new VBox(volume,HBox);
-
-        mediaPlayer.play();
-
-
     }
 }
