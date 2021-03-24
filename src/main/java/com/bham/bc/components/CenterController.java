@@ -209,7 +209,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void render(GraphicsContext gc) {
         gameMap.renderBottomLayer(gc);
 
-        bombTanks.forEach(b -> render(gc)); // TEMP
+//        bombTanks.forEach(b -> render(gc)); // TEMP
+        for (BombTank bombTank : bombTanks) {
+            bombTank.render(gc);
+        }
 
         bullets.forEach(bullet -> bullet.render(gc));
         characters.forEach(character -> character.render(gc));

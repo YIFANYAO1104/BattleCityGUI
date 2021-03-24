@@ -133,7 +133,7 @@ public class Player extends GameCharacter {
 	}
 
 	public void bomb() {
-		ExplosiveTrigger bt = new ExplosiveTrigger((int) getCenterPosition().getX(), (int) getCenterPosition().getY(), 10);
+		ExplosiveTrigger bt = new ExplosiveTrigger((int) getCenterPosition().getX(), (int) getCenterPosition().getY(), 2);
 		backendServices.addTrigger(bt);
 	}
 
