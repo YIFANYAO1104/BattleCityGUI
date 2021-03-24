@@ -1,6 +1,8 @@
 package com.bham.bc.components.characters;
 
+import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.armory.DefaultBullet;
+import com.bham.bc.components.armory.ExplosiveBullet;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
@@ -132,9 +134,15 @@ public class Player extends GameCharacter {
 		return b;
 	}
 
+//	public void bomb() {
+//		ExplosiveTrigger bt = new ExplosiveTrigger((int) getCenterPosition().getX(), (int) getCenterPosition().getY(), 10);
+//		backendServices.addTrigger(bt);
+//	}
+
 	public void bomb() {
-		ExplosiveTrigger bt = new ExplosiveTrigger((int) getCenterPosition().getX(), (int) getCenterPosition().getY(), 2);
-		backendServices.addTrigger(bt);
+		Point2D center = getPosition().add(getRadius().multiply(0.5));
+		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), angle, side);
+		backendServices.addBullet(b);
 	}
 
 	@Override
