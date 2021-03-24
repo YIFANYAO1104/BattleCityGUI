@@ -96,40 +96,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public boolean intersectsObstacles(Shape hitBox) {
         return gameMap.intersectsObstacles(hitBox);
     }
-
-    @Override
-    public void renderHitBoxes(AnchorPane hitBoxPane) {
-        hitBoxPane.getChildren().clear();
-
-        // Add map hit-box
-        Rectangle mapConstrain = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
-        mapConstrain.setStroke(Color.RED);
-        mapConstrain.setStrokeWidth(5);
-        hitBoxPane.getChildren().add(mapConstrain);
-
-        // Add bullet hit-boxes
-        bullets.forEach(b -> {
-            Shape bulletHitBox = b.getHitBox();
-            bulletHitBox.setFill(Color.TRANSPARENT);
-            bulletHitBox.setStroke(Color.RED);
-            bulletHitBox.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(bulletHitBox);
-        });
-
-        // Add character hit-boxes
-        characters.forEach(c -> {
-            Shape cHitBox = c.getHitBox();
-            cHitBox.setFill(Color.TRANSPARENT);
-            cHitBox.setStroke(Color.RED);
-            cHitBox.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(cHitBox);
-
-            Shape enemyLine = c.getLine();
-            enemyLine.setStroke(Color.RED);
-            enemyLine.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(enemyLine);
-        });
-    }
     // ------------------------------------------------------------
 
 

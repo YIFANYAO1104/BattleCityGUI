@@ -5,45 +5,37 @@ import com.bham.bc.utils.Constants;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.PerspectiveCamera;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.transform.Translate;
 
-public class Camera extends PerspectiveCamera {
-    //must be strictly less than 0. Or we'll se nothing.
-    private static final double INITIAL_PERSPECTIVE = -500;    // Between -1 and -1000
+public class Camera {
+    private final Translate translate;
 
-    private DoubleProperty x;
-    private DoubleProperty y;
-    private DoubleProperty z;
+    private final DoubleProperty x;
+    private final DoubleProperty y;
+    private final GraphicsContext gc;
 
     /**
      * Constructs camera which tracks 1 character
      */
-    public Camera() {
-        initCameraProperties();
-
-        x.bind(Bindings.subtract(Player.TRACKABLE_X, Constants.WINDOW_WIDTH/2));
-        y.bind(Bindings.subtract(Player.TRACKABLE_Y, Constants.WINDOW_HEIGHT/2));
-    }
-
-    /**
-     * initializes trackable coordinate and perspective values
-     */
-    private void initCameraProperties() {
+    public Camera(GraphicsContext gc) {
+        this.gc = gc;
+        translate = new Translate();
         x = new SimpleDoubleProperty();
         y = new SimpleDoubleProperty();
-        z = new SimpleDoubleProperty(INITIAL_PERSPECTIVE);
 
-        this.setTranslateZ(z.get());
-        this.setNearClip(1);
-        this.setFarClip(1000);
+        x.bind(Bindings.subtract(GameSession.GAME_WIDTH/2.0, Player.TRACKABLE_X));
+        y.bind(Bindings.subtract(GameSession.GAME_HEIGHT/2.0, Player.TRACKABLE_Y));
     }
 
     /**
      * updates camera position
      */
     public void update() {
-        if(!isCloseToBorderX(0)) this.setTranslateX(x.get());
-        if(!isCloseToBorderY(0)) this.setTranslateY(y.get());
+        if(!isCloseToBorderX(0)) translate.setX(x.get());
+        if(!isCloseToBorderY(0)) translate.setY(y.get());
+
+        gc.setTransform(translate.getMxx(), translate.getMyx(), translate.getMxy(), translate.getMyy(), translate.getTx(), translate.getTy());
     }
 
     /**
@@ -52,10 +44,7 @@ public class Camera extends PerspectiveCamera {
      * @return true if camera's view is close and false otherwise
      */
     private boolean isCloseToBorderX(double offset) {
-        if(x.get() <= 0 + offset || x.get() >= Constants.MAP_WIDTH - Constants.WINDOW_WIDTH - offset) {
-            return true;
-        }
-        return false;
+        return x.get() >= 0 - offset || x.get() <= Constants.WINDOW_WIDTH - Constants.MAP_WIDTH + offset;
     }
 
     /**
@@ -64,9 +53,6 @@ public class Camera extends PerspectiveCamera {
      * @return true if camera's view is close and false otherwise
      */
     private boolean isCloseToBorderY(double offset) {
-        if(y.get() <= 0 + offset || y.get() >= Constants.MAP_HEIGHT - Constants.WINDOW_HEIGHT - offset) {
-            return true;
-        }
-        return false;
+        return y.get() >= 0 - offset || y.get() <=  Constants.WINDOW_HEIGHT - Constants.MAP_HEIGHT + offset;
     }
 }
