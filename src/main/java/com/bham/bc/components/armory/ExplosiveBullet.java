@@ -26,6 +26,8 @@ public class ExplosiveBullet extends Bullet {
 
     private int existTime;
 
+    private Rectangle hitBox;
+
     /**
      * Constructs a bullet using default bullet's attributes for speed and damage
      *
@@ -38,6 +40,7 @@ public class ExplosiveBullet extends Bullet {
         super(x, y, 0, angle, side, DAMAGE);
         entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
         existTime = 0;
+        this.hitBox = updateHitBox(existTime);
     }
 
     @Override
@@ -62,6 +65,7 @@ public class ExplosiveBullet extends Bullet {
     @Override
     public void update() {
         existTime++;
+        this.hitBox = updateHitBox(existTime);
     }
 
     @Override
@@ -69,6 +73,10 @@ public class ExplosiveBullet extends Bullet {
 
     @Override
     public Rectangle getHitBox() {
+        return hitBox;
+    }
+
+    private Rectangle updateHitBox(int existTime) {
         //get bound rectangle top left pos
         //calculate region radius according to current time
         Point2D regionRadius = new Point2D(MAX_BOUNDWIDTH, MAX_BOUNDHEIGHT).multiply(existTime/(double)LIFETIME);
@@ -80,6 +88,4 @@ public class ExplosiveBullet extends Bullet {
 
         return hitBox;
     }
-
-
 }
