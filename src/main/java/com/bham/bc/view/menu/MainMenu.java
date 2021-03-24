@@ -118,7 +118,7 @@ public class MainMenu extends AnchorPane {
      * single {@link com.bham.bc.view.GameSession} based on the selected parameters
      */
     private void createSubMenuMode() {
-        MenuButton btnBack = new MenuButton("BACK");
+
         MenuButton btnSurvival = new MenuButton("SURVIVAL");
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
 
@@ -127,7 +127,7 @@ public class MainMenu extends AnchorPane {
         btnChallenge.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.CHALLENGE); newGameEvent.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(newGameEvent);});
 
         subMenuMode = new SubMenu(this);
-        subMenuMode.getChildren().addAll(btnBack, btnSurvival, btnChallenge);
+        subMenuMode.getChildren().addAll( btnSurvival, btnChallenge);
     }
 
     /**
