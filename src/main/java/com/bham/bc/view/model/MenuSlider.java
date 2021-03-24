@@ -20,16 +20,15 @@ import static com.bham.bc.audio.AudioManager.audioManager;
 public class MenuSlider extends VBox{
     private Label volume;
     private HBox HBox;
+    private Slider volumeSlider;
 
     public MenuSlider(String name){
         volume=new Label(name);
         HBox=new HBox();
         getChildren().addAll(volume,HBox);
-    }
-    public DoubleProperty createMenuSlider(){
         Glow glow=new Glow();
         glow.setLevel(1);
-        Slider volumeSlider = new Slider();
+        volumeSlider = new Slider();
         volumeSlider.setValue(100);
         volumeSlider.setEffect(glow);
 
@@ -47,6 +46,9 @@ public class MenuSlider extends VBox{
                 "    -fx-text-fill: white;\n" +
                 "    -fx-font-family: \"Arial Narrow\";\n" +
                 "    -fx-font-weight: bold;");
+    }
+    public DoubleProperty getValueProperty(){
+
 
         return volumeSlider.valueProperty();
     }

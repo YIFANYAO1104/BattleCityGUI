@@ -1,6 +1,5 @@
 package com.bham.bc.view.menu;
 
-import com.bham.bc.audio.AudioManager;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.MenuSession;
@@ -170,12 +169,12 @@ public class MainMenu extends AnchorPane {
      */
     private void createSubMenuSettings() {
         MenuSlider bg=new MenuSlider("Volume:");
-        doubleProperty1=bg.createMenuSlider();
+        doubleProperty1=bg.getValueProperty();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setMusicVolume(newVal.doubleValue()/100);
         });
         MenuSlider sfx=new MenuSlider("SFX Volume:");
-        doubleProperty2=sfx.createMenuSlider();
+        doubleProperty2=sfx.getValueProperty();
         doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setEffectVolume(newVal.doubleValue()/100);
         });
