@@ -1,20 +1,16 @@
 package com.bham.bc.view.menu;
 
-import com.bham.bc.audio.SFX;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
+import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.NewGameEvent;
 import com.bham.bc.view.model.SubMenu;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -22,8 +18,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-
-import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
  * <h1>Main Menu</h1>
@@ -171,8 +165,10 @@ public class MainMenu extends AnchorPane {
      * and allows the user to configure UI parameters, such as SFX or MUSIC volume
      */
     private void createSubMenuSettings() {
-        volumeSlider();
-        SFXVolumeSlider();
+        MenuSlider bg=new MenuSlider();
+        vBox=bg.createMenuSlider("bgMusic");
+        MenuSlider sfx=new MenuSlider();
+        vBox2=sfx.createMenuSlider("SFX");
         MenuButton btnBack = new MenuButton("BACK");
 
         btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
@@ -216,63 +212,7 @@ public class MainMenu extends AnchorPane {
         }
     }
 
-    public void volumeSlider(){
-        Slider volumeSlider = new Slider();
-        volumeSlider.setValue(100);
 
-        Label num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
-        num.setStyle(" -fx-font-size: 15px;\n" +
-                "    -fx-text-fill: white;\n" +
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;");
-
-        volumeSlider.valueProperty().addListener((obsVal, oldVal, newVal) -> {
-            audioManager.setMusicVolume(newVal.doubleValue()/100);
-            num.setText(newVal.intValue() + "");
-        });
-
-        HBox HBox=new HBox(volumeSlider,num);
-
-        Label volume=new Label("Volume:");
-
-        volume.setStyle(" -fx-font-size: 25px;\n" +
-                "    -fx-text-fill: white;\n" +
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;");
-        vBox=new VBox(volume,HBox);
-    }
-
-    public void SFXVolumeSlider(){
-        Slider volumeSlider = new Slider();
-        volumeSlider.setValue(100);
-
-        Label num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
-        num.setStyle(" -fx-font-size: 15px;\n" +
-                "    -fx-text-fill: white;\n" +
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;");
-
-        volumeSlider.valueProperty().addListener((obsVal, oldVal, newVal) -> {
-            //SFX
-            SFX[] sfxs=SFX.values();
-            for (SFX v:sfxs){
-                v.setVolume(newVal.doubleValue()/100);
-            }
-
-            num.setText(newVal.intValue() + "");
-        });
-
-        HBox HBox=new HBox(volumeSlider,num);
-
-        Label volume=new Label("SFX Volume:");
-
-        volume.setStyle(" -fx-font-size: 25px;\n" +
-                "    -fx-text-fill: white;\n" +
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;");
-        vBox2=new VBox(volume,HBox);
-
-    }
 
 
 
