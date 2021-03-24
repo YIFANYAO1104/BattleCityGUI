@@ -45,9 +45,9 @@ public class PauseMenu extends AnchorPane {
     private SubMenu subMenuPause;
     private SubMenu subMenuOptions;
     private Rectangle bg;
-    private Slider volumeSlider;
-    private HBox HBox;
+
     private VBox vBox;
+
 
     public PauseMenu() {
         setWidth(Constants.WINDOW_WIDTH);
@@ -141,7 +141,7 @@ public class PauseMenu extends AnchorPane {
     }
 
     public void volumeSlider(){
-        volumeSlider=new Slider();
+        Slider volumeSlider = new Slider();
         volumeSlider.setValue(100);
 
         Label num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
@@ -155,7 +155,7 @@ public class PauseMenu extends AnchorPane {
             num.setText(newVal.intValue() + "");
         });
 
-        HBox=new HBox(volumeSlider,num);
+        HBox HBox=new HBox(volumeSlider,num);
 
         Label volume=new Label("Volume:");
 
