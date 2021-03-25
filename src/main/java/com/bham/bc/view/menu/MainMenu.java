@@ -183,13 +183,10 @@ public class MainMenu extends AnchorPane {
         tableView.setItems(dataSet);
         tableView.setId("table");
 
-
-
         tableView.setMaxSize(395,300);
-
-        subMenuScores.getChildren().addAll(text2,tableView);
         tableView.setTranslateX(150);
         tableView.setTranslateY(30);
+        subMenuScores.getChildren().addAll(text2,tableView);
 
 
 
