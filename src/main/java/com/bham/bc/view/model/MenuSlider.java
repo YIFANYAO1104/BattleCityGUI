@@ -67,11 +67,7 @@ public class MenuSlider extends VBox {
 
     public void setSliderStyle(){
         trackPane = (StackPane) slider.lookup(".track");
-        if (trackPane==null){
-            System.out.println("null");
-        }else {
-            System.out.println("not nukl");
-        }
+
         trackPane.setStyle("-fx-background-color: linear-gradient(to right, #2D819D 0%, #969696 0%);");
 
 
