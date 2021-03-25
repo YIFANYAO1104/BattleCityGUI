@@ -45,10 +45,7 @@ public class ExplosiveBullet extends Bullet {
 
     @Override
     public void destroy() {
-        if (existTime >= LIFETIME) {
-            entityManager.removeEntity(this);
-            exists = false;
-        }
+
     }
 
     @Override
@@ -66,6 +63,10 @@ public class ExplosiveBullet extends Bullet {
     public void update() {
         existTime++;
         this.hitBox = updateHitBox(existTime);
+        if (existTime >= LIFETIME) {
+            entityManager.removeEntity(this);
+            exists = false;
+        }
     }
 
     @Override
