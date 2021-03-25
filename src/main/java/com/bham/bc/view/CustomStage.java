@@ -29,7 +29,7 @@ import javafx.beans.value.ChangeListener;
  * @data : 2021/2/28
  * @time : 14:43
  */
-public class CustomStage {
+public class CustomStage extends Stage{
 
     private Stage stage;
     private Scene gamescene;
@@ -70,16 +70,7 @@ public class CustomStage {
         setMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                /*
-                if (GameSession.isshown==false){
-                    CustomMenuSubscene customMenuSubscene =new CustomMenuSubscene();
-                    customMenuSubscene.getStage(stage);
-                    customMenuSubscene.getGameScene(gamescene);
-//                    customMenuSubscene.createDeafultSubscene();
-                    gamePane.getChildren().add(customMenuSubscene);
-                    GameSession.isshown=true;}
-
-                 */
+                MenuSession.showPauseMenu(gamePane, GameSession.gameTimer);
             }
         });
         setMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -92,23 +83,7 @@ public class CustomStage {
 
             }
         });
-        KeyCodeCombination keyCodeCombination=new KeyCodeCombination(KeyCode.ENTER);
-        gamescene.getAccelerators().put(keyCodeCombination, new Runnable() {
-            @Override
-            public void run() {
-                /*
-                if (GameSession.isshown==false){
-                    CustomMenuSubscene customMenuSubscene =new CustomMenuSubscene();
-                    customMenuSubscene.getStage(stage);
-                    customMenuSubscene.getGameScene(gamescene);
-//                    customMenuSubscene.createDeafultSubscene();
-                    gamePane.getChildren().add(customMenuSubscene);
-                    GameSession.isshown=true;}
 
-                 */
-
-            }
-        });
 
 
 

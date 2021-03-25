@@ -15,6 +15,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Class managing the animations of a running game
@@ -32,7 +33,7 @@ public class GameSession {
 
     private Stage menuStage;
 
-    private AnimationTimer gameTimer;
+    public static AnimationTimer gameTimer;
 
     private Camera cmr;
 
@@ -61,6 +62,10 @@ public class GameSession {
         gameStage.setScene(gameScene);
         gameStage.setTitle("Defenders");
         gameStage.setResizable(false);
+        gameStage.initStyle(StageStyle.TRANSPARENT);
+        CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
+        customStage.createCustomStage(gamePane);
+
     }
 
     /**
