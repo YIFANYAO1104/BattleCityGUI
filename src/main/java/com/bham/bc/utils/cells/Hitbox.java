@@ -1,5 +1,6 @@
 package com.bham.bc.utils.cells;
 
+import com.sun.xml.internal.ws.policy.EffectiveAlternativeSelector;
 import javafx.geometry.Point2D;
 
 
@@ -17,14 +18,27 @@ public class Hitbox {
     }
 
     //Return true if this one is hitted with another one.
-    public Boolean isInteractedWith(Hitbox another) {
-        return !(
-                (another.getTop() > this.getBottom())
-                ||(another.getBottom() < this.getTop())
-                ||(another.getLeft() > this.getRight())
-                ||(another.getRight() < this.getLeft())
-                );
+    private static Boolean isInteractedWith(Hitbox one, Hitbox another) {
+//        return !(
+//                (another.getTop() > this.getBottom())
+//                ||(another.getBottom() < this.getTop())
+//                ||(another.getLeft() > this.getRight())
+//                ||(another.getRight() < this.getLeft())
+//                );
 
+        if(
+                (one.getTop()< another.getBottom() && one.getRight() < another.getRight())
+                && (one.getBottom() > another.getTop() && one.getRight()>another.getLeft() )
+        )
+            return true;
+        else
+            return false;
+
+    }
+
+    public Boolean isInteractedWith(Hitbox another){
+        if(isInteractedWith(this,another) || isInteractedWith(another,this)) return true;
+        return false;
     }
     public double getLeft(){
         return this.TopLeft.getX();

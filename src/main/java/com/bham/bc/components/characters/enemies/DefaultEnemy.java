@@ -174,6 +174,11 @@ public class DefaultEnemy extends Enemy {
         return 0;
     }
 
+    public void setPos(double x, double y){
+        this.x = x;
+        this.y = y;
+    }
+
     @Override
     public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
 

@@ -69,6 +69,18 @@ public class MapDivision<entity extends BaseGameEntity>{
         // calculate the height and width of the cell
         cellWidth = m_Width/m_NumCellsX;
         cellHeight = m_Height/m_NumCellsY;
+
+        //create the cells
+        for (int y = 0; y < m_NumCellsY; ++y) {
+            for (int x = 0; x < m_NumCellsX; ++x) {
+                double left = x * cellWidth;
+                double right = left + cellWidth;
+                double top = y * cellHeight;
+                double bot = top + cellHeight;
+
+                m_Cells.add(new Cell<entity>(new Point2D(left, top), new Point2D(right, bot)));
+            }
+        }
     }
 
     /**
@@ -86,7 +98,7 @@ public class MapDivision<entity extends BaseGameEntity>{
     }
 
     public void UpdateEntity(entity ent){
-        if(register.containsKey((MovingEntity) ent)){
+        if(!register.containsKey((MovingEntity) ent)){
             System.out.println("It may not be a Moving entitys or Does not contain this ent!!!, it should be added firstly");
             return;
         }
@@ -147,4 +159,18 @@ public class MapDivision<entity extends BaseGameEntity>{
     }
 
     public void Render(){}
+
+    public int sizeOfCells(){
+        return m_Cells.size();
+    }
+    public double getCellWidth(){
+        return cellWidth;
+    }
+    public double getCellHeight(){
+        return cellHeight;
+    }
+
+    public HashMap<MovingEntity, Integer> getRegister() {
+        return register;
+    }
 }
