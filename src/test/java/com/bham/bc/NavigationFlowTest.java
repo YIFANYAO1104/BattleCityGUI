@@ -26,7 +26,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        Player player = new Player(16*32, 16*32, gameMap);
+        Player player = new Player(16*32, 16*32);
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 
@@ -45,7 +45,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        Player player = new Player(16*32, 16*32, gameMap);
+        Player player = new Player(16*32, 16*32);
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 
@@ -66,7 +66,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        Player player = new Player(16*32, 16*32, gameMap);
+        Player player = new Player(16*32, 16*32);
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 

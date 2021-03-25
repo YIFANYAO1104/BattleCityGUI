@@ -33,7 +33,6 @@ public class Player extends GameCharacter {
 	public static final int SIZE = 25;
 	public static final int MAX_HP = 100;
 
-	private NavigationService navigationService;
 	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
 	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
 
@@ -43,35 +42,11 @@ public class Player extends GameCharacter {
 	 * @param x top left x coordinate of the player
 	 * @param y top left y coordinate of the player
 	 */
-	public Player(double x, double y, GameMap gm) {
+	public Player(double x, double y) {
 		super(x, y, 5, MAX_HP, SIDE.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-		navigationService = new PathPlanner(this,gm.getGraph());
 	}
 
-	public void createNewRequestItem() {
-		if(navigationService.createRequest(ItemType.health)==true){
-			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
-				navigationService.getPath();
-			} else {
-				System.out.println("target not found");
-			}
-		} else {
-			System.out.println("no closest node around player/target");
-		}
-	}
-
-	public void createNewRequestAStar() {
-		if(navigationService.createRequest(new Point2D(440,550))==true){
-			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
-				navigationService.getPath();
-			} else {
-				System.out.println("target not found");
-			}
-		} else {
-			System.out.println("no closest node around player/target");
-		}
-	}
 	/**
 	 * Handles pressed key
 	 *
@@ -134,11 +109,6 @@ public class Player extends GameCharacter {
 		return b;
 	}
 
-//	public void bomb() {
-//		ExplosiveTrigger bt = new ExplosiveTrigger((int) getCenterPosition().getX(), (int) getCenterPosition().getY(), 10);
-//		backendServices.addTrigger(bt);
-//	}
-
 	public void bomb() {
 		Point2D center = getPosition().add(getRadius().multiply(0.5));
 		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), angle, side);
@@ -161,8 +131,8 @@ public class Player extends GameCharacter {
 
 	@Override
 	public void render(GraphicsContext gc) {
-		if (navigationService!=null) navigationService.render(gc);
-		drawRotatedImage(gc, entityImages[0], angle); }
+		drawRotatedImage(gc, entityImages[0], angle);
+	}
 
 	@Override
 	public boolean handleMessage(Telegram msg) {

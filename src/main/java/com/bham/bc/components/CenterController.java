@@ -66,7 +66,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         switch (mode) {
             case SURVIVAL:
                 centerController = new SurvivalController(mapType);
-
                 break;
             case CHALLENGE:
                 centerController = new ChallengeController(mapType);
@@ -74,18 +73,12 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         }
         frontendServices = centerController;
         backendServices = centerController;
+
+        centerController.startGame();
     }
 
     // TEMPORARY METHODS -------------------------------------------
-    @Override
-    public void testAStar() {
-        player.createNewRequestAStar();
-    }
-
-    @Override
-    public void testDjistra() {
-        player.createNewRequestItem();
-    }
+    public abstract void startGame();
 
     @Override
     public void addBombTank(BombTank b) {
@@ -124,10 +117,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             cHitBox.setStrokeWidth(1);
             hitBoxPane.getChildren().add(cHitBox);
 
-            Shape enemyLine = c.getLine();
-            enemyLine.setStroke(Color.RED);
-            enemyLine.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(enemyLine);
+            //Shape enemyLine = c.getLine();
+            //enemyLine.setStroke(Color.RED);
+            //enemyLine.setStrokeWidth(1);
+            //awhitBoxPane.getChildren().add(enemyLine);
         });
     }
     // ------------------------------------------------------------

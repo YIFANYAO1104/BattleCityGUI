@@ -19,16 +19,21 @@ public class SurvivalController extends CenterController {
         super();
         gameMap = new GameMap(mapType);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        player = new Player(16*32, 16*32,gameMap);
+        player = new Player(16*32, 16*32);
         characters.add(player);
-        initEnemies();
+        //initEnemies();
     }
 
     /**
      * Spawns all the initial enemies
      */
     private void initEnemies() {
-        characters.add(new Kamikaze(16*28, 16*28));
+        characters.add(new Kamikaze(16*3, 16*3));
+    }
+
+    @Override
+    public void startGame() {
+        initEnemies();
     }
 
     @Override

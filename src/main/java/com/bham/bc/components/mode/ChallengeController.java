@@ -19,7 +19,12 @@ public class ChallengeController extends CenterController {
         super();
         gameMap = new GameMap(mapType);
         gameMap.initialGraph(new Point2D(16*32, 16*32));
-        player = new Player(16*32, 16*32,gameMap);
+        player = new Player(16*32, 16*32);
+    }
+
+    @Override
+    public void startGame() {
+
     }
 
 //    @Override

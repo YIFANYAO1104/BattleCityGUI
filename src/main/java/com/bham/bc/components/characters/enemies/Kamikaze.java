@@ -39,6 +39,8 @@ public class Kamikaze extends Enemy {
     public static final int MAX_HP = 100;
     public static final double SPEED = 1;
 
+    private int timeout = 100; //temp
+
     private final StateMachine stateMachine;
     private FreePathCondition noObstaclesCondition;
     private IntCondition closeRadiusCondition;
@@ -77,7 +79,7 @@ public class Kamikaze extends Enemy {
         closeRadiusCondition = new IntCondition(0, 100);
         noObstaclesCondition = new FreePathCondition();
         chargeCondition = new AndCondition(closeRadiusCondition, noObstaclesCondition);
-        attackCondition = new IntCondition(0, 45);
+        attackCondition = new IntCondition(0, 40);
 
         // Define all state transitions that could happen
         Transition searchPossibility = new Transition(searchState, new NotCondition(chargeCondition));
@@ -98,10 +100,6 @@ public class Kamikaze extends Enemy {
     }
 
     @Override
-    // TODO: remove
-    public Shape getLine() { return noObstaclesCondition.getPath(); }
-
-    @Override
     public void update() {
         double distanceToPlayer = getCenterPosition().distance(backendServices.getPlayerCenterPosition());
 
@@ -113,7 +111,13 @@ public class Kamikaze extends Enemy {
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case MOVE:
-                    //move();
+                    if(--timeout == 0) {
+                        navigate(backendServices.getPlayerCenterPosition());
+                        timeout = 100;
+                    }
+                    if(timeout%10 == 0) System.out.println(timeout);
+
+                    moveTowardsTarget();
                     break;
                 case CHARGE:
                     charge();

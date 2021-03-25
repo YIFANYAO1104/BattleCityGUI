@@ -1,12 +1,19 @@
 package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.environment.navigation.NavigationService;
+import com.bham.bc.components.environment.navigation.SearchStatus;
+import com.bham.bc.components.environment.navigation.impl.PathEdge;
+import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.entity.ai.StateMachine;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+
+import java.util.LinkedList;
 
 import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.entityManager;
@@ -20,8 +27,9 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * so each enemy already knows what properties it will have when spawning. No setters make it more safe.</p>
  */
 public abstract class Enemy extends GameCharacter {
-    private static StateMachine stateMachine;
-    //private ArrayList<PathEdge> pathEdges;
+    protected NavigationService navigationService;
+    private LinkedList<PathEdge> pathEdges;
+    private Point2D destination;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -33,7 +41,9 @@ public abstract class Enemy extends GameCharacter {
      */
     protected Enemy(double x, double y, double speed, double hp) {
         super(x, y, speed, hp, SIDE.ENEMY);
-        //navigationService = new PathPlanner(this, backendServices.getGraph());
+        navigationService = new PathPlanner(this, backendServices.getGraph());
+        pathEdges = new LinkedList<>();
+        destination = getPosition();
     }
 
     /**
@@ -103,22 +113,20 @@ public abstract class Enemy extends GameCharacter {
 
     @Override
     public void updateAngle() {
-        /*
-        if(pathRequired) {
-            Point2D nearestAlly = backendServices.getClosestCharacter(SIDE.ALLY);
-            navigationService.createRequest(nearestAlly);
-            if(navigationService.peekRequestStatus() == SearchStatus.target_found) {
-                pathEdges = getPath();
-            }
-        } else if(!pathRequired && navigationService.peekRequestStatus() == SearchStatus.search_incomplete) {
-
-        }
-        */
 
     }
 
+    protected void updateAngle(Point2D yonder) {
+        double deltaX = yonder.getX() - getCenterPosition().getX();
+        double deltaY = yonder.getY() - getCenterPosition().getY();
+        angle = Math.toDegrees(Math.atan2(deltaY, deltaX)) + 90;
+    }
+
     @Override
-    public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
+    public void render(GraphicsContext gc) {
+        if (navigationService!=null) navigationService.render(gc);
+        drawRotatedImage(gc, entityImages[0], angle);
+    }
 
     @Override
     // TODO: MAKE this abstract, i.e. compulsory in every child
@@ -144,6 +152,43 @@ public abstract class Enemy extends GameCharacter {
                 return false;
         }
     }
+
+    // TEMP ------------------------------------------------
+    protected void moveTowardsTarget() {
+        updateAngle(destination);
+        Circle fatPoint = new Circle(destination.getX(), destination.getY(), 5);
+
+        if(intersectsShape(fatPoint)) {
+            if(!pathEdges.isEmpty()) destination = pathEdges.removeFirst().getDestination();
+        } else {
+            Point2D pt1 = getCenterPosition();
+            Point2D pt2 = destination;
+            angle = Math.toDegrees(Math.atan2(pt2.getY() - pt1.getY(), pt2.getX() - pt1.getX())) + 90;
+            move(4, true);
+        }
+    }
+
+    protected void navigate(Point2D point) {
+        if(navigationService.createRequest(point)) {
+            if(navigationService.peekRequestStatus() == SearchStatus.target_found) {
+                pathEdges = (LinkedList<PathEdge>) navigationService.getPath();
+
+                if(!pathEdges.isEmpty()) {
+                    destination = pathEdges.removeFirst().getDestination();
+                } else {
+                    destination = getCenterPosition();
+                }
+                System.out.println("Path length: " + pathEdges.size());
+            } else {
+                System.out.println("Valid request but target not found :/");
+                // Send false to repeat search
+            }
+        } else {
+            System.out.println("Invalid lol");
+            // destroy() :)
+        }
+    }
+    // -------------------------------------------------------
 
     /**
      * AI behaviour to idly patrol around the map.
