@@ -4,13 +4,22 @@
 }
 .table-column {
     -fx-background-color: transparent;
-    -fx-text-fill:  white;
+
 
 
 }
+#table .table-column{
+    -fx-alignment: center;
+    -fx-text-fill: white;
+}
+.table-view .table-cell {
+    -fx-border-width: 0;
+    -fx-border-color:transparent ;
+}
+
 .table-row-cell {
     -fx-background-color:transparent;
-    -fx-border-color: white;
+
 
 }
 .table-view .column-header-background {
@@ -41,13 +50,13 @@
 .scroll-bar:horizontal .increment-button,  .scroll-bar:horizontal .decrement-button
 {
     -fx-background-color: transparent;
-    /*-fx-padding: 0 0 10 0;*/
+
 }
 
 .scroll-bar:vertical .increment-button,  .scroll-bar:vertical .decrement-button
 {
     -fx-background-color: transparent;
-    /*-fx-padding: 0 0 10 0;*/
+
 }
 .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow{
     -fx-shape:"";
@@ -70,7 +79,6 @@
     -fx-background-color: transparent;
 }
 .scroll-pane .content {
-    /*-fx-padding:10px;*/
     -fx-alignment: center;
     -fx-background-color: transparent;
 }

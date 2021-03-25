@@ -182,6 +182,7 @@ public class MainMenu extends AnchorPane {
         tableView.getColumns().addAll(rank,name,score,date);
         ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","25/3"));
         tableView.setItems(dataSet);
+        tableView.setId("table");
 
 
 
