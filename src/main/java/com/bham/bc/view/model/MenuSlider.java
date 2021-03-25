@@ -1,22 +1,13 @@
 package com.bham.bc.view.model;
 
-import com.bham.bc.view.CustomStage;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.effect.ColorInput;
 import javafx.scene.effect.Glow;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
-
-import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
  * @author : YiFan Yaao
@@ -26,45 +17,37 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  * @data : 2021/3/24
  * @time : 19:54
  */
-public class MenuSlider extends VBox{
-    private Label volume;
+public class MenuSlider extends VBox {
+    private Slider slider;
 
-    private Slider volumeSlider;
-    private Label num;
     private Rectangle progressRec ;
 
-    public MenuSlider(String name){
-
-        volume=new Label();
-        volume.setText(name);
-        volume.setId("volume");
-
-
-        Glow glow=new Glow();
-        glow.setLevel(1);
-        volumeSlider = new Slider();
-        volumeSlider.setValue(100);
-        volumeSlider.setEffect(glow);
-
-
-        num=new Label((int)volumeSlider.valueProperty().getValue().doubleValue()+"");
-        num.setId("num");
-
-        num.setEffect(glow);
-
-
-        volume.setEffect(glow);
-        volumeSlider.setId("color-slider");
+    public MenuSlider(String name) {
+        // Stylesheet for menu slider's elements
         getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/MenuSlider.css").toExternalForm());
 
+        // The actual slider
+        slider = new Slider();
+        slider.setValue(100);
+        slider.setEffect(new Glow(1));
+        slider.setId("color-slider");
+
+        // Label for slider
+        Label sliderLabel = new Label();
+        sliderLabel.setText(name);
+        sliderLabel.setId("volume");
+
+        // Label for slider's value
+        Label valueLabel = new Label(slider.valueProperty().toString());
+        valueLabel.textProperty().bind(slider.valueProperty().asString());
+        valueLabel.setId("num");
 
 
-
-        // The rectangle which shows the progress
+        // Slider's body
         progressRec = new Rectangle();
         // Bind both width and height to match the size of Slider
-        progressRec.heightProperty().bind(volumeSlider.heightProperty().subtract(7));
-        progressRec.widthProperty().bind(volumeSlider.widthProperty());
+        progressRec.heightProperty().bind(slider.heightProperty().subtract(7));
+        progressRec.widthProperty().bind(slider.widthProperty());
 
         progressRec.setFill(Color.web("#2D819D"));
 
@@ -74,29 +57,23 @@ public class MenuSlider extends VBox{
         progressRec.setArcWidth(15);
         progressRec.setTranslateX(0);
         progressRec.setTranslateY(0);
-        progressRec.setEffect(glow);
 
 
 
-        getChildren().addAll(volume);
+        getChildren().addAll(sliderLabel);
         getChildren().add(progressRec);
-        volumeSlider.setTranslateY(-15);
-        getChildren().add(volumeSlider);
-        getChildren().add(num);
-
-
-
+        slider.setTranslateY(-15);
+        getChildren().add(slider);
+        getChildren().add(valueLabel);
 
 
     }
+
+
     public DoubleProperty getValueProperty(){
-
-
-        return volumeSlider.valueProperty();
+        return slider.valueProperty();
     }
-    public Label getLabelOfVolume(){
-        return num;
-    }
+
     public void setRecStyle(Number newVal){
         // Using linear gradient we can fill two colors to show the progress
         // the new_val gets values between 0 - 100

@@ -29,19 +29,23 @@ public class SubMenu extends VBox {
      * Animates the appearance of the sub-menu
      */
     public void show() {
-        if(!parent.getChildren().contains(this)) parent.getChildren().add(this);
-        TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), this);
-        tt.setToX(parent.getWidth()/2 - getWidth()/2);
-        tt.play();
+        if(!parent.getChildren().contains(this)) {
+            parent.getChildren().add(this);
+            TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), this);
+            tt.setToX(parent.getWidth() / 2 - getWidth() / 2);
+            tt.play();
+        }
     }
 
     /**
      * Animates the disappearance of the sub-menu
      */
     public void hide() {
-        TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), this);
-        tt1.setToX(parent.getWidth());
-        tt1.play();
-        tt1.setOnFinished(e -> parent.getChildren().remove(this));
+        if(parent.getChildren().contains(this)) {
+            TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), this);
+            tt1.setToX(parent.getWidth());
+            tt1.play();
+            tt1.setOnFinished(e -> parent.getChildren().remove(this));
+        }
     }
 }

@@ -40,8 +40,6 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuSettings;
 
     private NewGameEvent newGameEvent;
-    private DoubleProperty doubleProperty1;
-    private DoubleProperty doubleProperty2;
 
     private Scene scene;
 
@@ -65,7 +63,7 @@ public class MainMenu extends AnchorPane {
         createSubMenuSettings();
         backToMainMenu();
 
-        getChildren().addAll(subMenuMain);
+        //getChildren().addAll(subMenuMain);
         subMenuMain.show();
     }
 
@@ -123,7 +121,7 @@ public class MainMenu extends AnchorPane {
         MenuButton btnSurvival = new MenuButton("SURVIVAL");
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
 
-       btnBack.setOnMouseClicked(e->{subMenuMode.hide();subMenuMain.show();});
+        btnBack.setOnMouseClicked(e->{subMenuMode.hide();subMenuMain.show();});
         btnSurvival.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.SURVIVAL); newGameEvent.setMapType(MapType.Map1); btnSurvival.fireEvent(newGameEvent); });
         btnChallenge.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.CHALLENGE); newGameEvent.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(newGameEvent);});
 
@@ -169,16 +167,14 @@ public class MainMenu extends AnchorPane {
     private void createSubMenuSettings() {
         MenuButton btnBack = new MenuButton("Back");
         MenuSlider bg=new MenuSlider("Volume:");
-        doubleProperty1=bg.getValueProperty();
+        DoubleProperty doubleProperty1=bg.getValueProperty();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
-            bg.getLabelOfVolume().setText(newVal.intValue()+"");
             audioManager.setMusicVolume(newVal.doubleValue()/100);
             bg.setRecStyle(newVal);
         });
         MenuSlider sfx=new MenuSlider("SFX Volume:");
-        doubleProperty2=sfx.getValueProperty();
+        DoubleProperty doubleProperty2=sfx.getValueProperty();
         doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
-            sfx.getLabelOfVolume().setText(newVal.intValue()+"");
             audioManager.setEffectVolume(newVal.doubleValue()/100);
             sfx.setRecStyle(newVal);
         });
@@ -238,11 +234,4 @@ public class MainMenu extends AnchorPane {
         });
 
     }
-
-
-
-
-
-
-
 }

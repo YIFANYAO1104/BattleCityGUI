@@ -48,9 +48,9 @@ public class PauseMenu extends AnchorPane {
     private SubMenu subMenuOptions;
     private Rectangle bg;
 
-    private VBox vBox;
-
-
+    /**
+     * Constructs a pause menu based on Game window's size parameters
+     */
     public PauseMenu() {
         setWidth(Constants.WINDOW_WIDTH);
         setHeight(Constants.WINDOW_HEIGHT);
@@ -64,7 +64,7 @@ public class PauseMenu extends AnchorPane {
      * Adds background dim to the menu
      */
     private void initBgDim() {
-        bg = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
+        bg = new Rectangle(Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT);
         bg.setFill(Color.BLACK);
         bg.setOpacity(0.5);
         getChildren().add(bg);
@@ -84,11 +84,6 @@ public class PauseMenu extends AnchorPane {
 
         subMenuPause = new SubMenu(this);
         subMenuPause.getChildren().addAll(btnResume, btnOptions, btnEndGame);
-
-        subMenuPause.setTranslateY(430);
-
-        getChildren().add(subMenuPause);
-        subMenuPause.hide();
     }
 
     /**
@@ -98,7 +93,6 @@ public class PauseMenu extends AnchorPane {
         MenuSlider bg=new MenuSlider("Volume:");
         DoubleProperty doubleProperty1 = bg.getValueProperty();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
-            bg.getLabelOfVolume().setText(newVal.intValue()+"");
             audioManager.setMusicVolume(newVal.doubleValue()/100);
         });
 
@@ -110,11 +104,6 @@ public class PauseMenu extends AnchorPane {
 
         subMenuOptions = new SubMenu(this);
         subMenuOptions.getChildren().addAll(bg, btnEffect, btnSkin);
-
-        subMenuOptions.setTranslateY(430);
-
-        getChildren().add(subMenuOptions);
-        subMenuOptions.hide();
     }
 
     /**
