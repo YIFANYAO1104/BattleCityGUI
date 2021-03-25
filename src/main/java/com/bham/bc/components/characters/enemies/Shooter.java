@@ -11,6 +11,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
+import java.util.Arrays;
+
 import static com.bham.bc.components.CenterController.backendServices;
 
 /**
@@ -40,8 +42,15 @@ public class Shooter extends Enemy {
     public static final int WIDTH = 30;
     public static final int HEIGHT = 30;
     public static final int MAX_HP = 100;
+
     private final StateMachine stateMachine;
-    private IntCondition distanceToPlayer;
+    private FreePathCondition noObstaclesCondition;
+    private IntCondition badHealthCondition;
+    private IntCondition goodHealthCondition;
+    private AndCondition attackCondition;
+    private BooleanCondition canRetreatCondition;
+    private AndCondition retreatCondition;
+    private IntCondition safeDistance;
 
     /**
      * Constructs an enemy instance with initial speed value set to 1
@@ -56,14 +65,34 @@ public class Shooter extends Enemy {
     }
 
     protected StateMachine createFSM(){
-        State moveState = new State(new Action[]{Action.MOVE},null,null, null); // Creates the move state with actions MOVE to be performed during the state
-        State aimAndShootState = new State(new Action[]{Action.AIMANDSHOOT}, null, null, null); // Creates the AimAndShoot state with actions AIMANDSHOOT to be performed during the state
-        this.distanceToPlayer = new IntCondition(0, 10); // Creates the handle to the IntCondition such that it can be used to control the State Machine
-        Transition detectedPlayer = new Transition(aimAndShootState, distanceToPlayer); // Creates the transition to AimAndShootState
-        Transition undetectedPlayer = new Transition(moveState, new NotCondition(distanceToPlayer)); // Creates the transition to MoveState
-        moveState.setTransitions(new Transition[]{detectedPlayer}); // Adds the transition to the state
-        aimAndShootState.setTransitions(new Transition[]{undetectedPlayer}); // Adds the transition to the state
-        return new StateMachine(moveState); // Creates the StateMachine handle with the moveState as the initial state
+        // Define possible states the enemy can be in
+        State searchState = new State(new Action[]{ Action.MOVE }, null);
+        State attackState = new State(new Action[]{ Action.AIMANDSHOOT }, null);
+        State retreatState = new State(new Action[]{ Action.RETREAT }, null);
+        State regenerateState = new State(new Action[]{ Action.REGENERATE }, null);
+
+        // Define all conditions required to change any state
+        badHealthCondition = new IntCondition(0, 20);
+        goodHealthCondition = new IntCondition(80,100);
+        noObstaclesCondition = new FreePathCondition();
+        canRetreatCondition = new BooleanCondition();
+        attackCondition = new AndCondition(new NotCondition(badHealthCondition), noObstaclesCondition);
+        retreatCondition = new AndCondition(canRetreatCondition, badHealthCondition);
+        safeDistance = new IntCondition(0, 50); // TODO: Figure out if this is a good distance
+
+        // Define all state transitions that could happen
+        Transition searchPossibility = new Transition(searchState, goodHealthCondition);
+        Transition attackPossibility = new Transition(attackState, attackCondition);
+        Transition retreatPossibility = new Transition(retreatState, retreatCondition);
+        Transition regeneratePossibility = new Transition(regenerateState, safeDistance);
+
+        // Define how the states can transit from one another
+        searchState.setTransitions(new Transition[]{ attackPossibility });
+        attackState.setTransitions(new Transition[]{ retreatPossibility});
+        retreatState.setTransitions(new Transition[]{ regeneratePossibility});
+        regenerateState.setTransitions(new Transition[]{ searchPossibility});
+
+        return new StateMachine(searchState);
     }
 
     /**
@@ -167,20 +196,31 @@ public class Shooter extends Enemy {
 
     @Override
     public void update() {
-        /*
-        distanceToPlayer.setTestValue(getDistanceToPlayer());
-        Action[] actions = this.stateMachine.update();
-        for (Action action : actions){
-            switch(action){
+        double distanceToPlayer = getCenterPosition().distance(backendServices.getPlayerCenterPosition());
+
+        safeDistance.setTestValue((int) distanceToPlayer);
+        badHealthCondition.setTestValue((int) this.hp);
+        goodHealthCondition.setTestValue((int) this.hp);
+        noObstaclesCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
+        // TODO: canRetreatCondition.setTestValue(SOME FUNCTION);
+
+        Action[] actions = stateMachine.update();
+        Arrays.stream(actions).forEach(action -> {
+            switch(action) {
                 case MOVE:
-                    move();
+                    //move();
                     break;
                 case AIMANDSHOOT:
                     aimAtAndShoot();
                     break;
+                case RETREAT:
+                    // TODO: retreat();
+                    break;
+                case REGENERATE:
+                    // TODO: regenerate();
+                    break;
             }
-        }
-        */
+        });
     }
 
     /**
