@@ -1,5 +1,8 @@
 package com.bham.bc.entity.ai;
 
+import java.util.Objects;
+import java.util.stream.Stream;
+
 public class StateMachine {
     protected State initialState;
     protected State currentState;
@@ -44,21 +47,10 @@ public class StateMachine {
 
     /**
      * Helper function to concatenate the 3 action arrays
-     * @param exit the actions taken exiting a state
-     * @param trans the actions taken during a transition
-     * @param entry the actions taken on entry of a new state
+     * @param actions entry, transition and exit action arrays to be concatenated
      * @return a singular array consisting of all 3 input arrays
      */
-    private Action[] concatActions(Action[] exit, Action[] trans, Action[] entry){
-        int exitLength = exit != null ? exit.length : 0;
-        int transLength = trans != null ? trans.length : 0;
-        int entryLength = entry != null ? entry.length : 0;
-
-        Action[] allActions = new Action[exitLength+transLength+entryLength];
-
-        if (exit != null){ System.arraycopy(exit, 0, allActions, 0, exitLength);}
-        if (trans != null){ System.arraycopy(trans, 0, allActions, exitLength, transLength);}
-        if (entry != null){ System.arraycopy(entry, 0, allActions, exitLength+transLength, entryLength);}
-        return allActions;
+    private Action[] concatActions(Action[]... actions) {
+        return Stream.of(actions).filter(Objects::nonNull).flatMap(Stream::of).toArray(Action[]::new);
     }
 }
