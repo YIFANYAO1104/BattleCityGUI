@@ -12,7 +12,12 @@ import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
- * Represents a generic bot that is an enemy of a player
+ * <h1>Generic enemy bot</h1>
+ *
+ * <p>This class defines all the common behavior an enemy character can show. All the method calls are
+ * determined by the state machine each enemy has. Its properties like <i>strength</i>, <i>max_hp</i>,
+ * <i>speed</i>, <i>weapon type</i> are influenced by the {@link com.bham.bc.components}.DirectorAI
+ * so each enemy already knows what properties it will have when spawning. No setters make it more safe.</p>
  */
 public abstract class Enemy extends GameCharacter {
     private static StateMachine stateMachine;
