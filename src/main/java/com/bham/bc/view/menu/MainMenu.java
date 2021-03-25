@@ -68,7 +68,7 @@ public class MainMenu extends AnchorPane {
         createSubMenuSettings();
         backToMainMenu();
 
-        //getChildren().addAll(subMenuMain);
+
         subMenuMain.show();
     }
 
@@ -144,9 +144,7 @@ public class MainMenu extends AnchorPane {
         subMenuScores.setMinWidth(750);
         BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",750,430,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         subMenuScores.setBackground(new Background(image));
-
-
-        subMenuScores.setLayoutY(-80);
+        subMenuScores.setTranslateY(200);
         Text text2 = new Text();
         text2.setText("Scores:");
         text2.setStyle(" -fx-font-size: 25px;\n" +
@@ -188,7 +186,6 @@ public class MainMenu extends AnchorPane {
 
 
         tableView.setMaxSize(395,300);
-
 
         subMenuScores.getChildren().addAll(text2,tableView);
         tableView.setTranslateX(150);
