@@ -5,11 +5,9 @@ import com.bham.bc.utils.graph.algrithem.Floodfill;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
 import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.graph.algrithem.astar.Astar;
+
 import javafx.geometry.Point2D;
 
-
-import java.util.ArrayList;
 
 public class HandyGraphFunctions {
 
@@ -123,15 +121,6 @@ public class HandyGraphFunctions {
         Floodfill fl = new Floodfill(gn);
 
         return fl.stratFLood(sg);
-    }
-
-    public ArrayList<GraphNode> Astar(SparseGraph sg, Point2D root, Point2D goal){
-//        Astar astar = new Astar(sg, new Vector2D(root), new Vector2D(goal));
-        GraphNode root1 = sg.getClosestNodeForPlayer(root);
-        GraphNode goal1 = sg.getClosestNodeForPlayer(goal);
-        Astar astar = new Astar(root1, goal1, sg);
-        return astar.search();
-
     }
 
 
