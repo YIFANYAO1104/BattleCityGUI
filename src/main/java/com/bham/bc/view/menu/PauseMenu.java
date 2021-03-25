@@ -95,15 +95,23 @@ public class PauseMenu extends AnchorPane {
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setMusicVolume(newVal.doubleValue()/100);
         });
+        MenuSlider sfx=new MenuSlider("SFX Volume:");
+        DoubleProperty doubleProperty2=sfx.getValueProperty();
+        doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
+            audioManager.setEffectVolume(newVal.doubleValue()/100);
+            sfx.setRecStyle(newVal);
+        });
 
-        MenuButton btnEffect = new MenuButton("Effect");
+
         MenuButton btnSkin = new MenuButton("Skin");
+        MenuButton btnback = new MenuButton("Back");
 
-        btnEffect.setOnMouseClicked(e->{});
+
+        btnback.setOnMouseClicked(e->{subMenuOptions.hide();subMenuPause.show();});
         btnSkin.setOnMouseClicked(e->{});
 
         subMenuOptions = new SubMenu(this);
-        subMenuOptions.getChildren().addAll(bg, btnEffect, btnSkin);
+        subMenuOptions.getChildren().addAll(bg, sfx, btnSkin,btnback);
     }
 
     /**

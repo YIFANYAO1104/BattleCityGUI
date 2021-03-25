@@ -7,15 +7,21 @@ import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.NewGameEvent;
 import com.bham.bc.view.model.SubMenu;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -154,10 +160,67 @@ public class MainMenu extends AnchorPane {
         glow1.setLevel(0.7);
         text2.setTranslateX(90);
         text2.setTranslateY(40);
-        subMenuScores.getChildren().add(text2);
+
+        // Stylesheet for menu table
+        getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/table.css").toExternalForm());
+
+        TableColumn<Records,String> time=new TableColumn<>("Time");
+        time.setMinWidth(100);
+
+        time.setCellValueFactory(new PropertyValueFactory<>("time"));
+        TableColumn<Records,String> score=new TableColumn<>("Scores");
+        score.setMinWidth(100);
+        score.setCellValueFactory(
+                new PropertyValueFactory<>("score"));
+        TableView tableView=new TableView();
+        tableView.getColumns().addAll(time,score);
+        ObservableList<Records> data = FXCollections.observableArrayList(new Records("First","701"));
+        tableView.setItems(data);
+
+
+        tableView.setFixedCellSize(25);
+        tableView.setMaxSize(200,300);
+
+        subMenuScores.getChildren().addAll(text2,tableView);
+        tableView.setTranslateX(120);
+        tableView.setTranslateY(30);
         getChildren().add(subMenuScores);
 
 
+    }
+
+    public static class Records{
+        private final SimpleStringProperty time;
+        private final SimpleStringProperty score;
+
+        public Records(String time, String score) {
+            this.time = new SimpleStringProperty(time);
+            this.score = new SimpleStringProperty(score);
+        }
+
+        public String getTime() {
+            return time.get();
+        }
+
+        public SimpleStringProperty timeProperty() {
+            return time;
+        }
+
+        public void setTime(String time) {
+            this.time.set(time);
+        }
+
+        public String getScore() {
+            return score.get();
+        }
+
+        public SimpleStringProperty scoreProperty() {
+            return score;
+        }
+
+        public void setScore(String score) {
+            this.score.set(score);
+        }
     }
 
     /**
