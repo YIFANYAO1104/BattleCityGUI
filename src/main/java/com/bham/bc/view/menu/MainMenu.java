@@ -174,13 +174,13 @@ public class MainMenu extends AnchorPane {
         score.setMinWidth(100);
         score.setCellValueFactory(
                 new PropertyValueFactory<>("score"));
-        TableColumn<Records,String> data=new TableColumn<>("Data");
-        data.setMinWidth(100);
-        data.setCellValueFactory(
-                new PropertyValueFactory<>("data"));
+        TableColumn<Records,String> date=new TableColumn<>("Date");
+        date.setMinWidth(100);
+        date.setCellValueFactory(
+                new PropertyValueFactory<>("date"));
         TableView tableView=new TableView();
-        tableView.getColumns().addAll(rank,name,score,data);
-        ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","MALE"));
+        tableView.getColumns().addAll(rank,name,score,date);
+        ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","25/3"));
         tableView.setItems(dataSet);
 
 
@@ -201,13 +201,13 @@ public class MainMenu extends AnchorPane {
         private final SimpleStringProperty rank;
         private final SimpleStringProperty name;
         private final SimpleStringProperty score;
-        private final SimpleStringProperty data;
+        private final SimpleStringProperty date;
 
-        public Records(String rank, String name,String  score, String data) {
+        public Records(String rank, String name,String  score, String date) {
             this.rank = new SimpleStringProperty(rank);
             this.name = new SimpleStringProperty(name);
             this.score = new SimpleStringProperty(score);
-            this.data =new SimpleStringProperty(data);
+            this.date =new SimpleStringProperty(date);
         }
 
         public String getRank() {
@@ -246,16 +246,16 @@ public class MainMenu extends AnchorPane {
             this.score.set(score);
         }
 
-        public String getData() {
-            return data.get();
+        public String getDate() {
+            return date.get();
         }
 
-        public SimpleStringProperty dataProperty() {
-            return data;
+        public SimpleStringProperty dateProperty() {
+            return date;
         }
 
-        public void setData(String data) {
-            this.data.set(data);
+        public void setDate(String date) {
+            this.date.set(date);
         }
     }
 
