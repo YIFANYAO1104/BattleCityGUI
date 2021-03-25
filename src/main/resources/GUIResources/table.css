@@ -51,7 +51,7 @@
 }
 .scroll-bar .increment-arrow, .scroll-bar .decrement-arrow{
     -fx-shape:"";
-    -fx-padding:0 0 10 0;
+    -fx-padding:0 0 8 0;
 }
 .scroll-bar:horizontal .thumb,  .scroll-bar:vertical .thumb
 {

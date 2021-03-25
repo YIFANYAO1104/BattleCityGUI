@@ -7,7 +7,6 @@ import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.NewGameEvent;
 import com.bham.bc.view.model.SubMenu;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -142,10 +141,10 @@ public class MainMenu extends AnchorPane {
     private void createSubMenuScores() {
         subMenuScores=new SubMenu(this);
         subMenuScores.setMinHeight(430);
-        subMenuScores.setMinWidth(850);
-        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",430,850,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        subMenuScores.setMinWidth(750);
+        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",750,430,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         subMenuScores.setBackground(new Background(image));
-        subMenuScores.setLayoutX(200);
+        subMenuScores.setLayoutX(0);
         subMenuScores.setLayoutY(-80);
         Text text2 = new Text();
         text2.setText("Scores:");
@@ -164,50 +163,75 @@ public class MainMenu extends AnchorPane {
         // Stylesheet for menu table
         getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/table.css").toExternalForm());
 
-        TableColumn<Records,String> time=new TableColumn<>("Time");
-        time.setMinWidth(100);
-
-        time.setCellValueFactory(new PropertyValueFactory<>("time"));
-        TableColumn<Records,String> score=new TableColumn<>("Scores");
+        TableColumn<Records,String> rank=new TableColumn<>("Rank");
+        rank.setMinWidth(100);
+        rank.setCellValueFactory(new PropertyValueFactory<>("rank"));
+        TableColumn<Records,String> name=new TableColumn<>("Name");
+        name.setMinWidth(100);
+        name.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+        TableColumn<Records,String> score=new TableColumn<>("Score");
         score.setMinWidth(100);
         score.setCellValueFactory(
                 new PropertyValueFactory<>("score"));
+        TableColumn<Records,String> data=new TableColumn<>("Data");
+        data.setMinWidth(100);
+        data.setCellValueFactory(
+                new PropertyValueFactory<>("data"));
         TableView tableView=new TableView();
-        tableView.getColumns().addAll(time,score);
-        ObservableList<Records> data = FXCollections.observableArrayList(new Records("First","701"));
-        tableView.setItems(data);
+        tableView.getColumns().addAll(rank,name,score,data);
+        ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","MALE"));
+        tableView.setItems(dataSet);
 
 
-        tableView.setFixedCellSize(25);
-        tableView.setMaxSize(200,300);
+
+        tableView.setMaxSize(395,300);
+
 
         subMenuScores.getChildren().addAll(text2,tableView);
-        tableView.setTranslateX(120);
+        tableView.setTranslateX(150);
         tableView.setTranslateY(30);
         getChildren().add(subMenuScores);
 
 
     }
 
+
     public static class Records{
-        private final SimpleStringProperty time;
+        private final SimpleStringProperty rank;
+        private final SimpleStringProperty name;
         private final SimpleStringProperty score;
+        private final SimpleStringProperty data;
 
-        public Records(String time, String score) {
-            this.time = new SimpleStringProperty(time);
+        public Records(String rank, String name,String  score, String data) {
+            this.rank = new SimpleStringProperty(rank);
+            this.name = new SimpleStringProperty(name);
             this.score = new SimpleStringProperty(score);
+            this.data =new SimpleStringProperty(data);
         }
 
-        public String getTime() {
-            return time.get();
+        public String getRank() {
+            return rank.get();
         }
 
-        public SimpleStringProperty timeProperty() {
-            return time;
+        public SimpleStringProperty rankProperty() {
+            return rank;
         }
 
-        public void setTime(String time) {
-            this.time.set(time);
+        public void setRank(String rank) {
+            this.rank.set(rank);
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public SimpleStringProperty nameProperty() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
         }
 
         public String getScore() {
@@ -220,6 +244,18 @@ public class MainMenu extends AnchorPane {
 
         public void setScore(String score) {
             this.score.set(score);
+        }
+
+        public String getData() {
+            return data.get();
+        }
+
+        public SimpleStringProperty dataProperty() {
+            return data;
+        }
+
+        public void setData(String data) {
+            this.data.set(data);
         }
     }
 
