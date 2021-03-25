@@ -119,15 +119,16 @@ public class MainMenu extends AnchorPane {
      */
     private void createSubMenuMode() {
 
+        MenuButton btnBack = new MenuButton("Back");
         MenuButton btnSurvival = new MenuButton("SURVIVAL");
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
 
-        btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
+       btnBack.setOnMouseClicked(e->{subMenuMode.hide();subMenuMain.show();});
         btnSurvival.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.SURVIVAL); newGameEvent.setMapType(MapType.Map1); btnSurvival.fireEvent(newGameEvent); });
         btnChallenge.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.CHALLENGE); newGameEvent.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(newGameEvent);});
 
         subMenuMode = new SubMenu(this);
-        subMenuMode.getChildren().addAll( btnSurvival, btnChallenge);
+        subMenuMode.getChildren().addAll(btnBack,btnSurvival, btnChallenge);
     }
 
     /**
@@ -166,6 +167,7 @@ public class MainMenu extends AnchorPane {
      * and allows the user to configure UI parameters, such as SFX or MUSIC volume
      */
     private void createSubMenuSettings() {
+        MenuButton btnBack = new MenuButton("Back");
         MenuSlider bg=new MenuSlider("Volume:");
         doubleProperty1=bg.getValueProperty();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
@@ -182,9 +184,9 @@ public class MainMenu extends AnchorPane {
         });
 
 
-
+        btnBack.setOnMouseClicked(e->{subMenuSettings.hide();subMenuMain.show();});
         subMenuSettings = new SubMenu(this);
-        subMenuSettings.getChildren().addAll(bg,sfx);
+        subMenuSettings.getChildren().addAll(bg,sfx,btnBack);
     }
 
 
