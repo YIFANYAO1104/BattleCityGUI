@@ -21,8 +21,8 @@ import javafx.stage.Stage;
  */
 public class GameSession {
 
-    private static final int GAME_WIDTH = Constants.WINDOW_WIDTH;
-    private static final int GAME_HEIGHT = Constants.WINDOW_HEIGHT;
+    public static final int GAME_WIDTH = Constants.WINDOW_WIDTH;
+    public static final int GAME_HEIGHT = Constants.WINDOW_HEIGHT;
 
     private AnchorPane gamePane;
     private Scene gameScene;
@@ -36,16 +36,11 @@ public class GameSession {
 
     private Camera cmr;
 
-    private AnchorPane hbPane;
-
-    private boolean paused;
-
     /**
      * Constructs the view manager
      */
     public GameSession(MODE mode, MapType mapType) {
         setMode(mode, mapType);
-        paused = false;
         initializeStage();
         createKeyListeners();
     }
@@ -57,14 +52,9 @@ public class GameSession {
         canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        hbPane = new AnchorPane();
-        hbPane.setPrefWidth(Constants.MAP_WIDTH);
-        hbPane.setPrefHeight(Constants.MAP_HEIGHT);
-
-        gamePane = new AnchorPane(canvas, hbPane);
+        gamePane = new AnchorPane(canvas);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
-        cmr = new Camera();
-        gameScene.setCamera(cmr);
+        cmr = new Camera(gc);
 
         gameStage = new Stage();
 
@@ -139,7 +129,6 @@ public class GameSession {
     private void tick() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         frontendServices.render(gc);
-        frontendServices.renderHitBoxes(hbPane);
         renderScoreBoard();
 
         cmr.update();

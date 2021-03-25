@@ -9,7 +9,6 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.utils.graph.NodeTypeEnum.invalid_node_index;
@@ -111,7 +110,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 for(GraphNode nn1: getAroundNodes(n1)){
                     if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).Cost() >= Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST){
                         renderNode(gc,Color.BLUE,(NavNode) nn1,2);
-//                        renderline(gc,Color.BLUE,n1,(NavNode) nn1);
+                        renderline(gc,Color.BLUE,n1,(NavNode) nn1);
                     }
                 }
             }
@@ -376,6 +375,13 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     }
 
+    public void setNodeALlEdagesNormal(int from) {
+        for (NavNode n1 : getNodeList(from)) {
+            double dis = n1.getPosition().distance(getNode(from).getPosition());
+            setEdgeCost(from, n1.Index(), dis);
+            setEdgeCost(n1.Index(), from, dis);
+        }
+    }
 
     /**
      * returns the number of active + inactive nodes present in the graph
@@ -568,7 +574,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             for(NavNode node: obstacleId.get(id)){
                 node.minesNum();
                 if(node.isValid() && (!node.isHit()) ){
-                    setNodeALLEdages(node.Index(),16.0);
+                    setNodeALlEdagesNormal(node.Index());
                 }
             }
             obstacleId.remove(id);
