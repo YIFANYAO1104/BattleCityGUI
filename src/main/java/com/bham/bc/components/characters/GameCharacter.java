@@ -5,6 +5,8 @@ import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.Optional;
 /**
  * Represents a character - this includes enemies, players and AI companions
  */
-abstract public class Character extends MovingEntity {
+abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
     protected SIDE side;
@@ -26,13 +28,15 @@ abstract public class Character extends MovingEntity {
      * @param y top left y coordinate of the character
      * @param speed value which defines the initial velocity
      */
-    protected Character(double x, double y, double speed, double hp, SIDE side) {
+    protected GameCharacter(double x, double y, double speed, double hp, SIDE side) {
         super(x, y, speed);
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
         directionSet = EnumSet.noneOf(DIRECTION.class);
     }
+    //TODO: remove
+    public Shape getLine() {return new Rectangle(0,0,0,0);}
 
     /**
      * Updates angle at which the player is facing
@@ -64,7 +68,7 @@ abstract public class Character extends MovingEntity {
      * Increases or decreases HP for the player
      * @param health amount by which the player's HP is changed
      */
-    public void addHP(double health) {
+    public void changeHP(double health) {
         hp = Math.min(hp + health, MAX_HP);
         if(hp <= 0) destroy();
     }
@@ -80,7 +84,7 @@ abstract public class Character extends MovingEntity {
     protected void handleBullet(Bullet bullet) {
         if(intersects(bullet)) {
             if(bullet.getSide() != side) {
-                addHP(-bullet.getDamage());
+                changeHP(-bullet.getDamage());
             }
             bullet.destroy();
         }
@@ -88,21 +92,21 @@ abstract public class Character extends MovingEntity {
 
     /**
      * Handles character collision - moves back
-     * @param character character to handle
+     * @param gameCharacter character to handle
      */
-    protected void handleCharacter(Character character) {
-        if(this.getID() != character.getID() && intersects(character)) {
+    protected void handleCharacter(GameCharacter gameCharacter) {
+        if(this.getID() != gameCharacter.getID() && intersects(gameCharacter)) {
             move(-1, true);
         }
     }
 
     /**
      * Handles a list of characters and bullets
-     * @param characters list of characters to handle
+     * @param gameCharacters list of characters to handle
      * @param bullets list of bullets to handle
      */
-    public void handleAll(List<Character> characters, List<Bullet> bullets) {
-        characters.forEach(this::handleCharacter);
+    public void handleAll(List<GameCharacter> gameCharacters, List<Bullet> bullets) {
+        gameCharacters.forEach(this::handleCharacter);
         bullets.forEach(this::handleBullet);
     }
 

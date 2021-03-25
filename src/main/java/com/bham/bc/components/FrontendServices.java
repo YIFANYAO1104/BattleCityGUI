@@ -8,6 +8,7 @@ import javafx.scene.layout.AnchorPane;
  * Interface defining the required frontend services for a mode to properly work
  */
 public interface FrontendServices {
+    // GAME PROGRESS
     /**
      * Checks if the game has ended
      * @return true if the game ended and false otherwise
@@ -20,6 +21,7 @@ public interface FrontendServices {
      */
     double getPlayerHP();
 
+    // UI
     /**
      * Monitors the keyboard button presses and creates a corresponding GUI response
      * @param e key to handle
@@ -32,12 +34,15 @@ public interface FrontendServices {
      */
     void keyReleased(KeyEvent e);
 
+    // OTHER
     /**
      * Renders backend content
      * @param gc graphics context where things will be rendered
      */
     void render(GraphicsContext gc);
 
+
+    // TEMPORARY
     /**
      * Renders hit-boxes of characters and armory
      * <br>TODO: remove before release

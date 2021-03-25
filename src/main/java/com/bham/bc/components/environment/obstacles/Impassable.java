@@ -1,16 +1,13 @@
 package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Shape;
-
-import static com.bham.bc.components.CenterController.backendServices;
 
 /**
- * Desc: Tile that cannot be passed by a character. Only bullets can pass it
+ * Tile that cannot be passed by a character. Only bullets can pass it
  */
 public class Impassable extends GenericObstacle {
 
@@ -24,7 +21,6 @@ public class Impassable extends GenericObstacle {
      */
     public Impassable(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
-        renderTop = false;
     }
 
     @Override
@@ -36,7 +32,7 @@ public class Impassable extends GenericObstacle {
     public void handleBullet(Bullet b) { return; }
 
     @Override
-    public void handleCharacter(Character c) {
+    public void handleCharacter(GameCharacter c) {
         if(intersects(c)) c.move(-1, true);
     }
 }

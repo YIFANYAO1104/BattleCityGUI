@@ -1,9 +1,9 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.characters.Character;
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.entity.ai.StateMachine;
 import com.bham.bc.utils.messaging.Telegram;
+import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Shape;
@@ -14,7 +14,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 /**
  * Represents a generic bot that is an enemy of a player
  */
-public abstract class Enemy extends Character {
+public abstract class Enemy extends GameCharacter {
     private static StateMachine stateMachine;
     //private ArrayList<PathEdge> pathEdges;
 
@@ -132,14 +132,12 @@ public abstract class Enemy extends Character {
                 System.out.println("you are deafeated by id "+ msg.Sender);
                 return true;
             case 3:
-                //this.direction = (DIRECTION) msg.ExtraInfo;
                 System.out.println("chang the direction");
                 return true;
             default:
                 System.out.println("no match");
                 return false;
         }
-
     }
 
     /**

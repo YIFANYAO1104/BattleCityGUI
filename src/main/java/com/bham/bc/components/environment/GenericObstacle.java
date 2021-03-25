@@ -1,15 +1,16 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.environment.obstacles.ATTRIBUTE;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.maploaders.TILESET;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+
+import java.util.EnumSet;
 
 import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
 import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
@@ -21,9 +22,6 @@ import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
 public abstract class GenericObstacle extends BaseGameEntity {
     protected boolean exists;
     protected int currentFrame;
-    protected boolean renderTop;
-
-    protected Color c = new Color(1, 1, 0, 0);
 
     /**
      * Constructs an obstacle
@@ -41,10 +39,10 @@ public abstract class GenericObstacle extends BaseGameEntity {
     }
 
     /**
-     * Checks if the tile has to be rendered on top of all other entities
-     * @return true if it needs to be in top layer and false otherwise
+     * Gets all the important attributes described in {@link com.bham.bc.components.environment.obstacles.ATTRIBUTE} this obstacle has
+     * @return EnumSet containing all the attributes this obstacle possesses
      */
-    public boolean renderTop() { return renderTop; }
+    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.noneOf(ATTRIBUTE.class); }
 
     /**
      * Checks if the tile exists. Only for Soft obstacles it is possible to not exist
@@ -68,7 +66,7 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * Handles character collision
      * @param c character to handle
      */
-    public abstract void handleCharacter(Character c);
+    public abstract void handleCharacter(GameCharacter c);
 
     @Deprecated
     /** TODO: check if it is necessary to have this */
@@ -78,25 +76,13 @@ public abstract class GenericObstacle extends BaseGameEntity {
         }
     }
 
-    public boolean handleHitBox(Shape hitBox) {
-        if(hitBox.intersects(hitBox.sceneToLocal(getHitBox().localToScene(getHitBox().getBoundsInLocal())))) {
-            c = new Color(1, 1, 0, 1);
-            return true;
-        }
-        c = new Color(1, 1, 0, 0);
-        return false;
-    }
+    public void decreaseHP(double hurt) {}
 
     @Override
     public void update() { if(entityImages.length > 1) currentFrame = (++currentFrame) % entityImages.length; }
 
     @Override
-    public void render(GraphicsContext gc) {
-        gc.setFill(c);
-
-        gc.drawImage(entityImages[currentFrame], x, y);
-        gc.fillRect(x, y, 16, 16);
-    }
+    public void render(GraphicsContext gc) { gc.drawImage(entityImages[currentFrame], x, y); }
 
     @Override
     public Rectangle getHitBox() { return new Rectangle(x, y, entityImages[0].getWidth(), entityImages[0].getHeight()); }

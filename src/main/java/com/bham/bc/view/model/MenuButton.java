@@ -1,16 +1,21 @@
 package com.bham.bc.view.model;
 
+import javafx.animation.FillTransition;
+import javafx.animation.Transition;
+import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.GaussianBlur;
-import javafx.scene.effect.Glow;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
+
+import static com.bham.bc.audio.SFX.SELECT;
 
 /**
  *The Class MenuButton imports StackPane which contains a single property named alignment.
@@ -22,46 +27,67 @@ public class MenuButton extends StackPane {
 
     public static final double WIDTH = 250;
     public static final double HEIGHT = 30;
-    private Text text;
+
+
+
 
     /**
      * @param name The name of each button.
      */
     public MenuButton(String name) {
-        setWidth(WIDTH);
-        setHeight(HEIGHT);
+        LinearGradient gradient = new LinearGradient(
+                0, 0.5, 1, 0.5, true, CycleMethod.NO_CYCLE,
+                new Stop(0.1, Color.web("black", 0.75)),
+                new Stop(1.0, Color.web("black", 0.15))
+        );
+        Rectangle bg0 = new Rectangle(WIDTH, HEIGHT, gradient);
+        Rectangle bg1 = new Rectangle(WIDTH, HEIGHT, Color.web("black", 0.2));
 
-        text = new Text(name);
-        text.setFont(text.getFont().font(20));
-        text.setFill(Color.WHITE);
+        FillTransition ft = new FillTransition(Duration.seconds(0.6),
+                bg1, Color.web("black", 0.2), Color.web("white", 0.3));
 
-        Rectangle bg = new Rectangle(WIDTH, HEIGHT);
-        bg.setOpacity(0.6);
-        bg.setFill(Color.BLACK);
-        bg.setEffect(new GaussianBlur(3.5));
+        ft.setAutoReverse(true);
+        ft.setCycleCount(Transition.INDEFINITE);
+
+        hoverProperty().addListener((o, oldValue, isHovering) -> {
+            if (isHovering) {
+                ft.playFromStart();
+            } else {
+                ft.stop();
+                bg1.setFill(Color.web("black", 0.2));
+            }
+        });
+
+        Rectangle line = new Rectangle(5, HEIGHT);
+        line.widthProperty().bind(
+                Bindings.when(hoverProperty())
+                        .then(8).otherwise(5)
+        );
+        line.fillProperty().bind(
+                Bindings.when(hoverProperty())
+                        .then(Color.RED).otherwise(Color.GRAY)
+        );
+
+        Text text = new Text(name);
+        text.setFont(Font.font(21.0));
+        text.fillProperty().bind(
+                Bindings.when(hoverProperty())
+                        .then(Color.WHITE).otherwise(Color.GRAY)
+        );
+
+
+        setOnMousePressed(e -> {
+            bg0.setFill(Color.LIGHTBLUE);
+            SELECT.play();
+        });
+
+        setOnMouseReleased(e -> bg0.setFill(gradient));
 
         setAlignment(Pos.CENTER_LEFT);
-        setRotate(-0.5);
-        getChildren().addAll(bg, text);
 
-        setOnMouseEntered(event -> {
-            bg.setFill(Color.WHITE);
-            text.setFill(Color.BLACK);
-            bg.setTranslateX(10);
-            text.setTranslateX(10);
-        });
+        HBox box = new HBox(15, line, text);
+        box.setAlignment(Pos.CENTER_LEFT);
 
-        setOnMouseExited(event -> {
-            bg.setFill(Color.BLACK);
-            text.setFill(Color.WHITE);
-            bg.setTranslateX(0);
-            text.setTranslateX(0);
-        });
-
-        DropShadow drop = new DropShadow(50, Color.WHITE);
-        drop.setInput(new Glow());
-
-        setOnMousePressed(event -> setEffect(drop));
-        setOnMouseReleased(event -> setEffect(null));
+        getChildren().addAll(bg0, bg1, box);
     }
 }

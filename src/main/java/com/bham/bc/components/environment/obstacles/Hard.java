@@ -1,14 +1,10 @@
 package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-
-import static com.bham.bc.components.CenterController.backendServices;
 
 /**
  * Desc: Tile that is unbreakable, nothing can pass through it
@@ -24,7 +20,6 @@ public class Hard extends GenericObstacle {
      */
     public Hard(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
-        renderTop = false;
     }
 
     @Override
@@ -40,5 +35,5 @@ public class Hard extends GenericObstacle {
     }
 
     @Override
-    public void handleCharacter(Character c) { if(intersects(c)) c.move(-1, true); }
+    public void handleCharacter(GameCharacter c) { if(intersects(c)) c.move(-1, true); }
 }

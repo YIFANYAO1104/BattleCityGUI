@@ -1,13 +1,17 @@
 package com.bham.bc.utils.graph.node;
 
+import com.bham.bc.utils.graph.ExtraInfo;
+import javafx.geometry.Point2D;
+
 public class NavNode extends GraphNode{
 
-    protected Vector2D m_vPosition;
+    protected Point2D m_vPosition;
+    protected ExtraInfo m_ExtraInfo;
+    public int numWithObs = 0;
 
-
-    public NavNode(int idx, Vector2D pos){
+    public NavNode(int idx, Point2D pos){
         super(idx);
-        m_vPosition = new Vector2D(pos);
+        m_vPosition = pos;
     }
 
     @Override
@@ -16,12 +20,34 @@ public class NavNode extends GraphNode{
     }
 
 
-
-    public Vector2D Pos() {
-        return new Vector2D(m_vPosition);
+    public int getNumWithObs() {
+        return numWithObs;
+    }
+    public void addNum(){
+        numWithObs++;
+    }
+    public void minesNum(){
+        numWithObs--;
+    }
+    public boolean isHit(){
+        if(numWithObs > 0) return true;
+        return false;
     }
 
-    public void SetPos(Vector2D NewPosition) {
-        m_vPosition = new Vector2D(NewPosition);
+    public Point2D getPosition() {
+        return m_vPosition;
+    }
+
+    public void setPos(Point2D newPosition) {
+        m_vPosition = newPosition;
+    }
+
+
+    public ExtraInfo getExtraInfo() {
+        return m_ExtraInfo;
+    }
+
+    public void setExtraInfo(ExtraInfo info) {
+        m_ExtraInfo = info;
     }
 }

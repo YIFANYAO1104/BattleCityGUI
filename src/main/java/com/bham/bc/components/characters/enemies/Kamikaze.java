@@ -1,15 +1,18 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.*;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
-import com.bham.bc.components.characters.Character;
 
 import java.util.Arrays;
 
@@ -48,7 +51,7 @@ public class Kamikaze extends Enemy {
     public void destroy() {
         exists = false;
         entityManager.removeEntity(this);
-        Trigger explosion = new ExplosionTrigger(getCenterPosition().getX(), getCenterPosition().getY(), 50);
+        Trigger explosion = new ExplosionTrigger(getCenterPosition(), 50, side);
         backendServices.addTrigger(explosion);
     }
 
@@ -99,7 +102,7 @@ public class Kamikaze extends Enemy {
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case MOVE:
-                    //move();sd
+                    //move();
                     break;
                 case CHARGE:
                     charge();
@@ -114,20 +117,23 @@ public class Kamikaze extends Enemy {
     /**
      * Represents Kamikaze's explosion effect. This is created as a trigger because it affects player's HP
      */
-    private static class ExplosionTrigger extends Trigger<Character> {
+    private static class ExplosionTrigger extends Trigger {
 
         public static final int SIZE = 60;
         private int currentFrame;
         private double damage;
+        private SIDE side;
 
         /**
          * Constructs explosion at a given location
-         * @param centerX center x coordinate of the trigger image
-         * @param centerY center y coordinate of the trigger image
+         * @param centerPosition x and y coordinates of the trigger image
+         * @param damage amount of damage that will be dealt to specific side
+         * @param side ALLY or ENEMY side trigger belongs to
          */
-        public ExplosionTrigger(double centerX, double centerY, double damage) {
-            super(BaseGameEntity.GetNextValidID(), (int) (centerX - SIZE/2), (int) (centerY - SIZE/2));
+        public ExplosionTrigger(Point2D centerPosition, double damage, SIDE side) {
+            super(BaseGameEntity.GetNextValidID(), (int) (centerPosition.getX() - SIZE/2), (int) (centerPosition.getY() - SIZE/2));
             this.damage = damage;
+            this.side = side;
             currentFrame = 0;
             initImages();
         }
@@ -157,11 +163,16 @@ public class Kamikaze extends Enemy {
         }
 
         @Override
-        public void tryTrigger(Character character) {
-            if(intersects(character) && character.getSide() == SIDE.ALLY && isActive()) {
+        public void tryTriggerC(GameCharacter character) {
+            if(intersects(character) && character.getSide() != side && isActive()) {
                 setInactive();
-                character.addHP(-damage);
+                character.changeHP(-damage);
             }
+        }
+
+        @Override
+        public void tryTriggerO(GenericObstacle entity) {
+
         }
 
         @Override
@@ -177,6 +188,11 @@ public class Kamikaze extends Enemy {
         @Override
         public String toString() {
             return "Kamikaze's explosion";
+        }
+
+        @Override
+        public ItemType getItemType() {
+            return null;
         }
     }
 }

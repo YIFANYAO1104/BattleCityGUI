@@ -1,12 +1,15 @@
 package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Character;
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+
+import java.util.EnumSet;
+
 
 /**
  * Desc: Tile which can be passed by any game entity. It can act as a decoration
@@ -22,8 +25,9 @@ public class Passable extends GenericObstacle {
      */
     public Passable(int x, int y, TILESET tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
-        renderTop = false;
     }
+    @Override
+    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.PASSABLE); }
 
     @Override
     protected Image[] getDefaultImage() {
@@ -34,10 +38,7 @@ public class Passable extends GenericObstacle {
     public void handleBullet(Bullet b) { return; }
 
     @Override
-    public void handleCharacter(Character t) { return; }
-
-    @Override
-    public boolean handleHitBox(Shape hitBox) { return false; }
+    public void handleCharacter(GameCharacter t) { return; }
 
     @Override
     public void interactWith(int ID, int indexOfNode , Rectangle r1) {

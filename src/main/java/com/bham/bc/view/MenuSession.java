@@ -1,6 +1,7 @@
 package com.bham.bc.view;
 
 import com.bham.bc.audio.TRACK;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
@@ -25,7 +26,7 @@ public class MenuSession {
     private Stage mainStage;
 
     private MainMenu mainMenu;
-    private PauseMenu pauseMenu;
+    private static PauseMenu pauseMenu;
 
     /**
      * Constructs the menu view manager
@@ -37,10 +38,10 @@ public class MenuSession {
         mainStage.setScene(mainScene);
 
         mainMenu = new MainMenu(this, WIDTH, HEIGHT);
-        pauseMenu = new PauseMenu();
+        pauseMenu = new PauseMenu(this);
 
         initMainMenu();
-        initPauseMenu();
+
     }
 
     /**
@@ -55,10 +56,16 @@ public class MenuSession {
         audioManager.play();
     }
 
-    private void initPauseMenu() {}
+    public static void showPauseMenu(AnchorPane gamePane) {
+        if(gamePane.getChildren().contains(pauseMenu)) {
+            gamePane.getChildren().remove(pauseMenu);
+        } else {
+            gamePane.getChildren().add(pauseMenu);
+        }
+
+    }
 
     private MainMenu getMainMenu() { return mainMenu; }
-    private PauseMenu getPauseMenu() { return pauseMenu; }
     private EndMenu getEndMenu(double score) { return new EndMenu(); }
 
 
@@ -66,10 +73,10 @@ public class MenuSession {
      * Creates a single Game Session based on a chosen MODE
      * @param mode SURVIVAL or CHALLENGE mode to be set in Controller
      */
-    public void createGameSession(MODE mode) {
+    public void createGameSession(MODE mode, MapType mapType) {
         audioManager.createSequentialPlayer(TRACK.CORRUPTION, TRACK.LEAD, TRACK.REVOLUTION);
 
-        GameSession gameSession = new GameSession(mode);
+        GameSession gameSession = new GameSession(mode, mapType);
         gameSession.createNewGame(mainStage);
 
         audioManager.play();
