@@ -145,7 +145,6 @@ public class MainMenu extends AnchorPane {
         BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",750,430,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         subMenuScores.setBackground(new Background(image));
 
-        subMenuScores.setLayoutX(-230);
 
         subMenuScores.setLayoutY(-80);
         Text text2 = new Text();
@@ -269,16 +268,21 @@ public class MainMenu extends AnchorPane {
     private void createSubMenuSettings() {
         MenuButton btnBack = new MenuButton("Back");
         MenuSlider bg=new MenuSlider("Volume:");
+
         DoubleProperty doubleProperty1=bg.getValueProperty();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setMusicVolume(newVal.doubleValue()/100);
-            bg.setRecStyle(newVal);
+            bg.setSliderStyle();
+
+
         });
         MenuSlider sfx=new MenuSlider("SFX Volume:");
+
         DoubleProperty doubleProperty2=sfx.getValueProperty();
         doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setEffectVolume(newVal.doubleValue()/100);
-            sfx.setRecStyle(newVal);
+            sfx.setSliderStyle();
+
         });
 
 

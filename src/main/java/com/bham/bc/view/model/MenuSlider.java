@@ -1,9 +1,14 @@
 package com.bham.bc.view.model;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 import javafx.scene.paint.Color;
@@ -19,8 +24,9 @@ import javafx.scene.shape.Rectangle;
  */
 public class MenuSlider extends VBox {
     private Slider slider;
+    private StackPane trackPane;
 
-    private Rectangle progressRec ;
+
 
     public MenuSlider(String name) {
         // Stylesheet for menu slider's elements
@@ -43,28 +49,13 @@ public class MenuSlider extends VBox {
         valueLabel.setId("num");
 
 
-        // Slider's body
-        progressRec = new Rectangle();
-        // Bind both width and height to match the size of Slider
-        progressRec.heightProperty().bind(slider.heightProperty().subtract(7));
-        progressRec.widthProperty().bind(slider.widthProperty());
-
-        progressRec.setFill(Color.web("#2D819D"));
-
-
-        // Make the corners of Rectangle to be rounded
-        progressRec.setArcHeight(15);
-        progressRec.setArcWidth(15);
-        progressRec.setTranslateX(0);
-        progressRec.setTranslateY(0);
-
 
 
         getChildren().addAll(sliderLabel);
-        getChildren().add(progressRec);
-        slider.setTranslateY(-15);
         getChildren().add(slider);
         getChildren().add(valueLabel);
+
+
 
 
     }
@@ -74,12 +65,28 @@ public class MenuSlider extends VBox {
         return slider.valueProperty();
     }
 
-    public void setRecStyle(Number newVal){
-        // Using linear gradient we can fill two colors to show the progress
-        // the new_val gets values between 0 - 100
-        String style = String.format("-fx-fill: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
-                newVal.intValue(), newVal.intValue());
-        // set the Style
-        progressRec.setStyle(style);
-    }
+    public void setSliderStyle(){
+        trackPane = (StackPane) slider.lookup(".track");
+        if (trackPane==null){
+            System.out.println("null");
+        }else {
+            System.out.println("not nukl");
+        }
+        trackPane.setStyle("-fx-background-color: linear-gradient(to right, #2D819D 0%, #969696 0%);");
+
+
+
+
+
+        slider.valueProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
+
+                String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
+                        new_val.intValue(), new_val.intValue());
+                trackPane.setStyle(style);
+            }
+        });
+
+         }
 }

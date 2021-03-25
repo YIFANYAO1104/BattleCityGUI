@@ -10,7 +10,9 @@
 -fx-font-family: "Arial Narrow";
 -fx-font-weight: bold;
 }
+
+
 #color-slider .track{
-    -fx-background-color:transparent;
+    -fx-background-color:#2D819D;
 }
 
