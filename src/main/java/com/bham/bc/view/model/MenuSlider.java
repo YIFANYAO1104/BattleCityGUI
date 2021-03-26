@@ -53,6 +53,8 @@ public class MenuSlider extends VBox {
 
         HBox hBox=new HBox(slider,valueLabel);
 
+
+
         getChildren().addAll(sliderLabel);
         getChildren().add(hBox);
 
