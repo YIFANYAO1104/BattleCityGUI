@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
@@ -29,6 +30,7 @@ public class MenuSlider extends VBox {
 
 
     public MenuSlider(String name) {
+
         // Stylesheet for menu slider's elements
         getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/MenuSlider.css").toExternalForm());
 
@@ -49,11 +51,11 @@ public class MenuSlider extends VBox {
         valueLabel.setId("num");
 
 
-
+        HBox hBox=new HBox(slider,valueLabel);
 
         getChildren().addAll(sliderLabel);
-        getChildren().add(slider);
-        getChildren().add(valueLabel);
+        getChildren().add(hBox);
+
 
 
 
@@ -68,7 +70,7 @@ public class MenuSlider extends VBox {
     public void setSliderStyle(){
         trackPane = (StackPane) slider.lookup(".track");
 
-        trackPane.setStyle("-fx-background-color: linear-gradient(to right, #2D819D 0%, #969696 0%);");
+        trackPane.setStyle("-fx-background-color: linear-gradient(to right, #c17e1c 0%, #f3eace 0%);");
 
 
 
@@ -78,7 +80,7 @@ public class MenuSlider extends VBox {
             @Override
             public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
 
-                String style = String.format("-fx-background-color: linear-gradient(to right, #2D819D %d%%, #969696 %d%%);",
+                String style = String.format("-fx-background-color: linear-gradient(to right,#c17e1c %d%%, #f3eace %d%%);",
                         new_val.intValue(), new_val.intValue());
                 trackPane.setStyle(style);
             }

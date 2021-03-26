@@ -1,18 +1,18 @@
 #num {
 -fx-font-size: 15px;
--fx-text-fill: white;
+-fx-text-fill: WHITE;
 -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
 }
 #volume {
 -fx-font-size: 25px;
--fx-text-fill: #faf3f3;
+-fx-text-fill:WHITE;
 -fx-font-family: "Arial Narrow";
 -fx-font-weight: bold;
 }
 
 
 #color-slider .track{
-    -fx-background-color:#2D819D;
+    -fx-background-color: #c17e1c;
 }
 

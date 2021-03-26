@@ -197,15 +197,13 @@ public class CustomStage extends Stage{
         btnMin.setId("winMin");
         lbTitle.setTranslateX(-540);
         btnMin.setTranslateY(6);
-        changeSkin.setTranslateY(1);
-        changeSkin.setTranslateX(-3);
+        btnMin.setTranslateX(3);
+
 
 
         gpTitle.getChildren().add(lbTitle);
-        gpTitle.getChildren().add(setMenu);
-        gpTitle.getChildren().add(changeSkin);
-        gpTitle.getChildren().add(btnMin);
-        gpTitle.getChildren().add(btnClose);
+        HBox hBox=new HBox(5,setMenu,changeSkin,btnMin,btnClose);
+        gpTitle.getChildren().add(hBox);
         root.getChildren().add(gpTitle);
 
         gpTitle.setLayoutX(0);

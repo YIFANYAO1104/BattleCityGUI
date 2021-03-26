@@ -65,7 +65,7 @@ public class MenuButton extends StackPane {
         );
         line.fillProperty().bind(
                 Bindings.when(hoverProperty())
-                        .then(Color.RED).otherwise(Color.GRAY)
+                        .then(Color.YELLOW).otherwise(Color.GRAY)
         );
 
         Text text = new Text(name);
