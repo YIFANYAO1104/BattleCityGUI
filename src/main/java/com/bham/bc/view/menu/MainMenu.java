@@ -66,7 +66,7 @@ public class MainMenu extends AnchorPane {
         createSubMenuMode();
         createSubMenuScores();
         createSubMenuSettings();
-        backToMainMenu();
+
 
 
         subMenuMain.show();
@@ -186,6 +186,16 @@ public class MainMenu extends AnchorPane {
         tableView.setTranslateX(150);
         tableView.setTranslateY(30);
         subMenuScores.getChildren().addAll(text2,tableView);
+
+        subMenuScores.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode()== KeyCode.ENTER){
+                    subMenuScores.hide();
+                    subMenuMain.show();
+                }
+            }
+        });
 
 
 
@@ -318,19 +328,5 @@ public class MainMenu extends AnchorPane {
             getChildren().addAll(bg,text);
         }
     }
-    public void backToMainMenu(){
-        scene=MenuSession.getMainScene();
-        scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode()== KeyCode.ESCAPE){
-                    subMenuMode.hide();
-                    subMenuSettings.hide();
-                    subMenuScores.hide();
-                    subMenuMain.show();
-                }
-            }
-        });
 
-    }
 }
