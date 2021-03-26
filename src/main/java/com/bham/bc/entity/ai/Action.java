@@ -11,4 +11,7 @@ public enum Action{
     REGENERATE,
     ATTACKHOME,
     ATTACKALLY,
+    SEARCHALLY,
+    SEARCHHOME,
+    SEARCHANDTRAP,
 }
