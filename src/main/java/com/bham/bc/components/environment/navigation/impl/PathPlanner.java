@@ -187,11 +187,9 @@ public class PathPlanner implements NavigationService {
             PathEdge e2 = iterator.next();
             //check for obstruction, adjust and remove the edges accordingly
             if (backendServices.couldWalkThrough(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
-                System.out.println("smooth");
                 e1.setDestination(e2.getDestination());
                 iterator.remove(); //remove e2 from the list
             } else {
-                System.out.println("no smooth");
                 e1 = e2;
             }
         }

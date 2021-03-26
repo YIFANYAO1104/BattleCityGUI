@@ -85,8 +85,6 @@ public interface BackendServices {
 
     // TEMPORARY METHODS -------------------------------------------
     // TODO: replace / remove or find another usage
-    void testAStar();                           // a test?
-    void testDjistra();                         // a test?
     void addBombTank(BombTank b);               // We don't have effects yet or it can be a trigger
     boolean intersectsObstacles(Shape hitbox);  // This will be moved to physics package
 }

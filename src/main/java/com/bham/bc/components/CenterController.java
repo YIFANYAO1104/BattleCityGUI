@@ -80,16 +80,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     // TEMPORARY METHODS -------------------------------------------
     @Override
-    public void testAStar() {
-        player.createNewRequestAStar();
-    }
-
-    @Override
-    public void testDjistra() {
-        player.createNewRequestItem();
-    }
-
-    @Override
     public void addBombTank(BombTank b) {
         bombTanks.add(b);
     }
@@ -243,7 +233,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         double angle = end.subtract(start).angle(new Point2D(0,-1));
         //angle between vectors are [0,180), so we need add extra direction info
         if (end.subtract(start).getX()<0) angle = -angle;
-        System.out.println(angle);
         double dis = start.distance(end);
 
         Point2D center = start.midpoint(end);
