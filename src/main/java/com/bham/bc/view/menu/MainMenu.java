@@ -146,17 +146,16 @@ public class MainMenu extends AnchorPane {
         subMenuScores.setBackground(new Background(image));
         subMenuScores.setTranslateY(200);
         Text text2 = new Text();
-        text2.setText("Scores:");
-        text2.setStyle(" -fx-font-size: 25px;\n" +
-                "-fx-text-fill: gold;\n"+
+        text2.setText("SCORES");
+        text2.setStyle(" -fx-font-size: 30px;\n" +
+                "-fx-fill: gold;\n"+
                 "    -fx-font-family: \"Arial Narrow\";\n" +
                 "    -fx-font-weight: bold;\n" +
-                "\n" +
-                "    -fx-stroke: gold;");
+                "\n" );
         Glow glow1=new Glow();
         text2.setEffect(glow1);
-        glow1.setLevel(0.7);
-        text2.setTranslateX(90);
+        glow1.setLevel(1);
+        text2.setTranslateX(310);
         text2.setTranslateY(40);
 
         // Stylesheet for menu table
