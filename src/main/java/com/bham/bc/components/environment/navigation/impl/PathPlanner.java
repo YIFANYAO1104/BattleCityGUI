@@ -54,7 +54,7 @@ public class PathPlanner implements NavigationService {
      * @return node index. -1 if no closest node found
      */
     private int getClosestNode(Point2D pos){
-        NavNode n1 = navGraph.getClosestNodeForPlayer(pos);
+        NavNode n1 = navGraph.getClosestNodeForPlayer(pos,new Point2D(32,32));
         if(n1.isValid() ){
             return n1.Index();
         }

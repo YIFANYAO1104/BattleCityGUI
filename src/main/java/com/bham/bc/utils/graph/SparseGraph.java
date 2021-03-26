@@ -136,7 +136,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     }
     private void renderNode(GraphicsContext gc,Color color, NavNode n1, int level){
-        gc.setFill(Color.BLUE);
+        gc.setFill(color);
         gc.fillRoundRect(
                 n1.getPosition().getX(),n1.getPosition().getY(),2*level,2*level,1*level,1*level);
     }
@@ -148,43 +148,26 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         gc.strokeLine(
                 n1.getPosition().getX(), n1.getPosition().getY(), n2.getPosition().getX(), n2.getPosition().getY());
     }
-//    public void renderlines(GraphicsContext gc, ArrayList<GraphNode> a1){
-//        ArrayList<GraphEdge> ee1 = new ArrayList<>();
-//        for(int i =0;i<a1.size()-1;i++){
-//            ee1.add(getEdge(a1.get(i).Index(), a1.get(i+1).Index()));
-//        }
-//         //draw edges
-//        for (int j = 0; j < ee1.size();j++){
-//            GraphEdge nh1  = (GraphEdge)ee1.get(j);
-//            NavNode n1 = (NavNode)this.nodeVector.get(nh1.From());
-//            NavNode n2 = (NavNode)this.nodeVector.get(nh1.To());
-////                Line line1 = new Line(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
-//
-//            gc.setStroke(Color.RED);
-//            gc.setLineWidth(2.0);
-//            gc.strokeLine(n1.getPosition().getX(), n1.getPosition().getY(), n2.getPosition().getX(), n2.getPosition().getY());
-//
-//
-//        }
-//
-//    }
+    public void renderTankPoints(ArrayList<BaseGameEntity> entities, GraphicsContext gc){
+        for(BaseGameEntity e1: entities) renderTankPoint(e1,gc);
+    }
 
-    public int renderTankPoints(Point2D location , GraphicsContext gc){
-        gc.setFill(Color.RED);
-        NavNode n1 = getClosestNodeForPlayer(location);
-//        System.out.println("1 size"+n1.Pos().toString());
+    public int renderTankPoint(BaseGameEntity e1 , GraphicsContext gc){
+        NavNode n1 = getClosestNodeForPlayer(e1.getPosition(),e1.getRadius());
         if(n1.isValid() ){
             gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),8,8,1,1);
+            renderNode(gc,Color.RED,n1,4);
         }
+        Point2D location = e1.getPosition();
         gc.setFill(Color.BLUE);
         gc.fillRoundRect(location.getX(),location.getY(),4,4,1,1);
 
         return n1.Index();
     }
 
-    public NavNode getClosestNodeForPlayer(Point2D location){
-        int i = (int) (location.getX() + 16.0) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
-        int j = (int) (location.getY() + 16.0) / eachDisX;
+    public NavNode getClosestNodeForPlayer(Point2D location, Point2D radius){
+        int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
+        int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
         int c = j*rowNums + i;
         NavNode n1 = (NavNode)this.nodeVector.get(c);
 
