@@ -97,7 +97,7 @@ public class CustomStage extends Stage{
     }
 
 
-    public void createCustomStage(AnchorPane root){
+    public void createCustomStage(AnchorPane root,int Width,int Height){
         startMenuIcon();
         stage.initStyle(StageStyle.TRANSPARENT);
 
@@ -113,8 +113,8 @@ public class CustomStage extends Stage{
         BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
         gpTitle.setBackground(new Background(image));
-        gpTitle.setMinWidth(Constants.WINDOW_WIDTH);
-        gpTitle.setMaxWidth(Constants.WINDOW_WIDTH);
+        gpTitle.setMinWidth(Width);
+        gpTitle.setMaxWidth(Height);
         gpTitle.setMinHeight(15);
         gpTitle.setMaxHeight(35);
         gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../GUIResources/Stage.css").toExternalForm());

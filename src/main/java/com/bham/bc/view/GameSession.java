@@ -62,10 +62,10 @@ public class GameSession {
         gameStage.setScene(gameScene);
         gameStage.setTitle("Defenders");
         gameStage.setResizable(false);
-        gameStage.initStyle(StageStyle.TRANSPARENT);
+
 
         CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
-        customStage.createCustomStage(gamePane);
+        customStage.createCustomStage(gamePane,Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT);
 
     }
 
