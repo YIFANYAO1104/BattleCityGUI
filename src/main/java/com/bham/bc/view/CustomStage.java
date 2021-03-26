@@ -46,9 +46,11 @@ public class CustomStage extends Stage{
     private double MIN_WIDTH = 400.00;
     private double MIN_HEIGHT = 300.00;
     private double xOffset = 0, yOffset = 0;//自定义dialog移动横纵坐标
-    private String typeOf;
+    public static String typeOf;
     private AnchorPane gamePane;
-    private Label setMenu;
+    public static Label setMenu;
+    public static HBox gpTitle;
+    public static String[] types;
 
 
 
@@ -97,7 +99,7 @@ public class CustomStage extends Stage{
         startMenuIcon();
         stage.initStyle(StageStyle.TRANSPARENT);
 
-        HBox gpTitle = new HBox();
+        gpTitle = new HBox();
         gpTitle.setId("title");
         gpTitle.setSpacing(4);
         gpTitle.setPadding(new Insets(15,5,17,5));
@@ -129,7 +131,7 @@ public class CustomStage extends Stage{
         btnClose.setPrefHeight(26);
 
 
-        String[] types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
+        types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
         ChoiceBox changeSkin=new ChoiceBox(FXCollections.observableArrayList(
                 "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
         ));

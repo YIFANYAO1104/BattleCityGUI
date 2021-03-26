@@ -1,6 +1,7 @@
 package com.bham.bc.view.menu;
 
 import com.bham.bc.utils.Constants;
+import com.bham.bc.view.CustomStage;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
@@ -11,13 +12,16 @@ import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
@@ -47,6 +51,7 @@ public class PauseMenu extends AnchorPane {
     private SubMenu subMenuPause;
     private SubMenu subMenuOptions;
     private Rectangle bg;
+    private ChoiceBox changeSkin;
 
     /**
      * Constructs a pause menu based on Game window's size parameters
@@ -105,17 +110,26 @@ public class PauseMenu extends AnchorPane {
             sfx.setSliderStyle();
 
         });
+        createSkinChoose();
+        Label skin=new Label("Skin Choose: ");
+        skin.setStyle(" -fx-font-size: 18px;\n" +
+                "-fx-text-fill: white;\n"+
+                "    -fx-font-family: \"Arial Narrow\";\n" +
+                "    -fx-font-weight: bold;\n" +
+                "\n" +
+                "    -fx-stroke: gold;");
+        HBox hBox=new HBox(skin,changeSkin);
 
 
-        MenuButton btnSkin = new MenuButton("Skin");
+
         MenuButton btnback = new MenuButton("Back");
 
 
         btnback.setOnMouseClicked(e->{subMenuOptions.hide();subMenuPause.show();});
-        btnSkin.setOnMouseClicked(e->{});
+
 
         subMenuOptions = new SubMenu(this);
-        subMenuOptions.getChildren().addAll(bg, sfx, btnSkin,btnback);
+        subMenuOptions.getChildren().addAll(bg, sfx, hBox,btnback);
     }
 
     /**
@@ -147,6 +161,60 @@ public class PauseMenu extends AnchorPane {
         subMenuPause.hide();
 
         ft.setOnFinished(e -> gamePane.getChildren().remove(this));
+    }
+
+    public void createSkinChoose(){
+        CustomStage.types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
+        changeSkin=new ChoiceBox(FXCollections.observableArrayList(
+                "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
+        ));
+
+
+        changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
+
+
+            CustomStage.typeOf =  CustomStage.types[new_val.intValue()];
+            if ( CustomStage.typeOf.equals("TYPE 1")){
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar05.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+
+                CustomStage.gpTitle.setBackground(new Background(image4));
+                CustomStage.setMenu.requestFocus();
+
+            }else if ( CustomStage.typeOf.equals("TYPE 2")){
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar02.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+
+                CustomStage.gpTitle.setBackground(new Background(image4));
+                CustomStage.setMenu.requestFocus();
+
+            }else if ( CustomStage.typeOf.equals("TYPE 3")){
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+
+                CustomStage.gpTitle.setBackground(new Background(image4));
+                CustomStage.setMenu.requestFocus();
+
+            }else if ( CustomStage.typeOf.equals("TYPE 4")){
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar04.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+
+                CustomStage.gpTitle.setBackground(new Background(image4));
+                CustomStage.setMenu.requestFocus();
+
+            }else if ( CustomStage.typeOf.equals("TYPE 5")){
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+
+                CustomStage.gpTitle.setBackground(new Background(image4));
+                CustomStage.setMenu.requestFocus();
+
+            }
+
+
+
+        });
+        changeSkin.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                CustomStage.setMenu.requestFocus();
+            }
+        });
     }
 
 
