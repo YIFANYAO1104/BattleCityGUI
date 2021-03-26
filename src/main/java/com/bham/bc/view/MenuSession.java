@@ -7,9 +7,11 @@ import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
 import com.bham.bc.view.model.NewGameEvent;
 import javafx.animation.AnimationTimer;
+import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
@@ -78,6 +80,24 @@ public class MenuSession {
             timer.stop();
         }
     }
+
+    /**
+     * Attaches Options menu to the provided game pane and shows (hides) it
+     * @param gamePane game pane the Options menu will be attached (detached) to
+     * @param timer animation timer to be stopped (started)
+     */
+    public static void showOptionsMenu(AnchorPane gamePane, AnimationTimer timer) {
+        if(gamePane.getChildren().contains(pauseMenu)) {
+            pauseMenu.hide(gamePane);
+            timer.start();
+        } else {
+            pauseMenu.showOptionsMenu(gamePane);
+            timer.stop();
+        }
+    }
+
+
+
 
 
     public static void showEndMenu(AnchorPane gamePane, double score) {

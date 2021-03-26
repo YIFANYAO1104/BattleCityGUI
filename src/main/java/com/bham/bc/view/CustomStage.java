@@ -1,6 +1,7 @@
 package com.bham.bc.view;
 
 import com.bham.bc.utils.Constants;
+import com.bham.bc.view.menu.PauseMenu;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
@@ -72,7 +73,8 @@ public class CustomStage extends Stage{
         setMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                MenuSession.showPauseMenu(gamePane, GameSession.gameTimer);
+
+                  MenuSession.showOptionsMenu(gamePane,GameSession.gameTimer);
             }
         });
         setMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {

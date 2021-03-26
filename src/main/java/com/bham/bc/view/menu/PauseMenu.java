@@ -6,6 +6,7 @@ import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.SubMenu;
+import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -49,8 +50,8 @@ import static com.bham.bc.audio.AudioManager.audioManager;
 public class PauseMenu extends AnchorPane {
 
     private SubMenu subMenuPause;
-    private SubMenu subMenuOptions;
-    private Rectangle bg;
+    public SubMenu subMenuOptions;
+    public Rectangle bg;
     private ChoiceBox changeSkin;
 
     /**
@@ -148,6 +149,23 @@ public class PauseMenu extends AnchorPane {
     }
 
     /**
+     * Shows options menu with fade in transition
+     * @param gamePane game pane menu will be attached to
+     */
+    public void showOptionsMenu(AnchorPane gamePane) {
+        gamePane.getChildren().add(this);
+
+        FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
+        ft.setFromValue(0);
+        ft.setToValue(0.7);
+
+        ft.play();
+        subMenuOptions.show();
+    }
+
+
+
+    /**
      * Hides pause menu with fade out transition
      * @param gamePane game pane menu will be detached from
      */
@@ -163,6 +181,9 @@ public class PauseMenu extends AnchorPane {
         ft.setOnFinished(e -> gamePane.getChildren().remove(this));
     }
 
+    /**
+     * to choose the skin style from pauseMenu
+     */
     public void createSkinChoose(){
         CustomStage.types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
         changeSkin=new ChoiceBox(FXCollections.observableArrayList(
@@ -216,6 +237,11 @@ public class PauseMenu extends AnchorPane {
             }
         });
     }
+
+
+
+
+
 
 
 }

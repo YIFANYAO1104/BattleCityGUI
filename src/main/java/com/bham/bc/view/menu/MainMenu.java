@@ -21,6 +21,7 @@ import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -47,6 +48,7 @@ public class MainMenu extends AnchorPane {
     private NewGameEvent newGameEvent;
 
     private Scene scene;
+    private TableView tableView;
 
     /**
      * Constructs an AnchorPane layout as the Main Menu
@@ -122,16 +124,16 @@ public class MainMenu extends AnchorPane {
      */
     private void createSubMenuMode() {
 
-        MenuButton btnBack = new MenuButton("Back");
+
         MenuButton btnSurvival = new MenuButton("SURVIVAL");
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
-
+        MenuButton btnBack = new MenuButton("Back");
         btnBack.setOnMouseClicked(e->{subMenuMode.hide();subMenuMain.show();});
         btnSurvival.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.SURVIVAL); newGameEvent.setMapType(MapType.Map1); btnSurvival.fireEvent(newGameEvent); });
         btnChallenge.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.CHALLENGE); newGameEvent.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(newGameEvent);});
 
         subMenuMode = new SubMenu(this);
-        subMenuMode.getChildren().addAll(btnBack,btnSurvival, btnChallenge);
+        subMenuMode.getChildren().addAll(btnSurvival, btnChallenge,btnBack);
     }
 
     /**
@@ -157,10 +159,41 @@ public class MainMenu extends AnchorPane {
         glow1.setLevel(1);
         text2.setTranslateX(310);
         text2.setTranslateY(40);
+        MenuButton btnBack = new MenuButton("Back");
+        btnBack.setOnMouseClicked(e->{subMenuScores.hide();subMenuMain.show();});
 
         // Stylesheet for menu table
         getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/table.css").toExternalForm());
 
+        createScoreTable();
+        subMenuScores.getChildren().addAll(text2,tableView,btnBack);
+
+
+    }
+
+    /**
+     * create the class for data in the table
+     */
+    public static class Records{
+        private final SimpleStringProperty rank;
+        private final SimpleStringProperty name;
+        private final SimpleStringProperty score;
+        private final SimpleStringProperty date;
+
+        public Records(String rank, String name,String  score, String date) {
+            this.rank = new SimpleStringProperty(rank);
+            this.name = new SimpleStringProperty(name);
+            this.score = new SimpleStringProperty(score);
+            this.date =new SimpleStringProperty(date);
+        }
+
+
+    }
+
+    /**
+     * create the table of scoreSubMenu
+     */
+    public void createScoreTable(){
         TableColumn<Records,String> rank=new TableColumn<>("Rank");
         rank.setMinWidth(100);
         rank.setCellValueFactory(new PropertyValueFactory<>("rank"));
@@ -176,93 +209,16 @@ public class MainMenu extends AnchorPane {
         date.setMinWidth(100);
         date.setCellValueFactory(
                 new PropertyValueFactory<>("date"));
-        TableView tableView=new TableView();
+        tableView=new TableView();
         tableView.getColumns().addAll(rank,name,score,date);
         ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","25/3"));
         tableView.setItems(dataSet);
         tableView.setId("table");
-
         tableView.setMaxSize(395,300);
         tableView.setTranslateX(150);
         tableView.setTranslateY(30);
-        subMenuScores.getChildren().addAll(text2,tableView);
-
-        subMenuScores.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if (keyEvent.getCode()== KeyCode.ENTER){
-                    subMenuScores.hide();
-                    subMenuMain.show();
-                }
-            }
-        });
-
-
-
     }
 
-
-    public static class Records{
-        private final SimpleStringProperty rank;
-        private final SimpleStringProperty name;
-        private final SimpleStringProperty score;
-        private final SimpleStringProperty date;
-
-        public Records(String rank, String name,String  score, String date) {
-            this.rank = new SimpleStringProperty(rank);
-            this.name = new SimpleStringProperty(name);
-            this.score = new SimpleStringProperty(score);
-            this.date =new SimpleStringProperty(date);
-        }
-
-        public String getRank() {
-            return rank.get();
-        }
-
-        public SimpleStringProperty rankProperty() {
-            return rank;
-        }
-
-        public void setRank(String rank) {
-            this.rank.set(rank);
-        }
-
-        public String getName() {
-            return name.get();
-        }
-
-        public SimpleStringProperty nameProperty() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name.set(name);
-        }
-
-        public String getScore() {
-            return score.get();
-        }
-
-        public SimpleStringProperty scoreProperty() {
-            return score;
-        }
-
-        public void setScore(String score) {
-            this.score.set(score);
-        }
-
-        public String getDate() {
-            return date.get();
-        }
-
-        public SimpleStringProperty dateProperty() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date.set(date);
-        }
-    }
 
     /**
      * Creates a sub-menu for settings. This menu is observed whenever "SETTINGS" is clicked
