@@ -22,8 +22,10 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -129,6 +131,15 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             enemyLine.setStrokeWidth(1);
             hitBoxPane.getChildren().add(enemyLine);
         });
+
+        List<Shape> smoothingBoxes = player.getSmoothingBoxes();
+        for (Shape smoothingBox : smoothingBoxes) {
+            smoothingBox.setFill(Color.TRANSPARENT);
+            smoothingBox.setStroke(Color.GREEN);
+            smoothingBox.setStrokeWidth(1);
+            hitBoxPane.getChildren().add(smoothingBox);
+        }
+
     }
     // ------------------------------------------------------------
 
@@ -217,7 +228,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         bullets.forEach(bullet -> bullet.render(gc));
         characters.forEach(character -> character.render(gc));
 
-        gameMap.renderTopLayer(gc);
+        //gameMap.renderTopLayer(gc);
         gameMap.renderGraph(gc, allCharacterPositions());
     }
 
@@ -226,6 +237,22 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         characters.clear();
         bullets.clear();
         gameMap.clearAll();
+    }
+
+    public boolean couldWalkThrough(Point2D start, Point2D end, Point2D radius, List<Shape> array){
+        double angle = end.subtract(start).angle(new Point2D(0,-1));
+        //angle between vectors are [0,180), so we need add extra direction info
+        if (end.subtract(start).getX()<0) angle = -angle;
+        System.out.println(angle);
+        double dis = start.distance(end);
+
+        Point2D center = start.midpoint(end);
+        Point2D topLeft = center.subtract(radius.multiply(0.5)).subtract(0,dis/2);
+        Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), radius.getX()+2, radius.getY()+dis+2);
+        hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
+        array.add(hitBox);
+
+        return !gameMap.intersectsObstacles(hitBox);
     }
     // ------------------------------------------------------------
 

@@ -156,6 +156,7 @@ public class GameMap {
     }
 
     // Temp until physics
+    //Really useful for path smoothing!
     public boolean intersectsObstacles(Shape shape) {
         return obstacles.stream().anyMatch(o -> !o.getAttributes().contains(ATTRIBUTE.PASSABLE) && o.intersectsShape(shape));
     }

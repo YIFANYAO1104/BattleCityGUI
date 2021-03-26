@@ -3,6 +3,7 @@ package com.bham.bc.components.environment.navigation;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Shape;
 
 import java.util.List;
 
@@ -29,9 +30,10 @@ public interface NavigationService {
     /**
      * called by an agent after a request was created
      * @return
-     * 0 if target found
-     * 1 if not found
-     * 2 if the search is not completed;
+     * target_found if target found
+     * target_not_found if not found
+     * search_incomplete if the search is not completed
+     * no_task if no closest node around player or target
      */
     public SearchStatus peekRequestStatus();
 
@@ -58,4 +60,6 @@ public interface NavigationService {
     public double getCostToClosestItem(int GiverType);
 
     public void render(GraphicsContext gc);
+
+    public List<Shape> getSmoothingBoxes();
 }

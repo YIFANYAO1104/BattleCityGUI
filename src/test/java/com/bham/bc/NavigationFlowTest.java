@@ -13,8 +13,11 @@ import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
+import static com.bham.bc.components.CenterController.backendServices;
 import static org.junit.Assert.*;
 
 /**
@@ -117,5 +120,31 @@ public class NavigationFlowTest {
         field.setAccessible(true);
         // test status
         assertEquals(SearchStatus.search_incomplete, field.get(p));
+    }
+
+    @Test
+    public void testQuickSmooth() {
+        //we need at least 2 path edges
+        List<PathEdge> path = new ArrayList<>();
+        path.add(new PathEdge(new Point2D(0,0),new Point2D(0,1)));
+        path.add(new PathEdge(new Point2D(1,1),new Point2D(0,1)));
+        path.add(new PathEdge(new Point2D(3,3),new Point2D(5,5)));
+        path.add(new PathEdge(new Point2D(8,8),new Point2D(0,2)));
+
+        System.out.println("Before: "+path);
+        ListIterator<PathEdge> iterator = path.listIterator();
+
+        //0th element in the list
+        PathEdge e1 = iterator.next();
+
+        while (iterator.hasNext()) {
+            //increment e2 so it points to the edge following e1 (and futher)
+            PathEdge e2 = iterator.next();
+            //check for obstruction, adjust and remove the edges accordingly
+            e1.setDestination(e2.getDestination());
+            iterator.remove(); //remove e2 from the list
+
+        }
+        System.out.println("After: "+path);
     }
 }

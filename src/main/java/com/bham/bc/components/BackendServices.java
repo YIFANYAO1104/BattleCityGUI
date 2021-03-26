@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import com.bham.bc.entity.physics.BombTank;
 
 /**
@@ -75,6 +77,8 @@ public interface BackendServices {
      * Clears all objects in the game
      */
     void clear();
+
+    boolean couldWalkThrough(Point2D start,Point2D end,Point2D radius, List<Shape> array);
     //-------------------------------------------------------------
 
 

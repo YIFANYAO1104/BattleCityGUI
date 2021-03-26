@@ -13,9 +13,13 @@ import javafx.geometry.Point2D;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
+
+import static com.bham.bc.components.CenterController.backendServices;
 
 public class PathPlanner implements NavigationService {
 
@@ -42,6 +46,9 @@ public class PathPlanner implements NavigationService {
 
     // temp value to render the graphlines and getPath
     List<PathEdge> curPath = new ArrayList<PathEdge>();
+    List<PathEdge> smoothedPath = new ArrayList<PathEdge>();
+
+    private List<Shape> array = new ArrayList<>();
 
     public PathPlanner(GameCharacter owner, SparseGraph navGraph) {
         this.owner = owner;
@@ -65,6 +72,7 @@ public class PathPlanner implements NavigationService {
         curSearchTask = null;
         taskStatus = SearchStatus.no_task;
         curPath.clear();
+        smoothedPath.clear();
     }
 
 
@@ -152,6 +160,43 @@ public class PathPlanner implements NavigationService {
         //        }
 
         //smooth path
+        for (PathEdge pathEdge : curPath) {
+            smoothedPath.add(new PathEdge(pathEdge));
+        }
+        quickSmooth(smoothedPath);
+    }
+
+    /**
+     * smooths a path by removing extraneous edges. (may not remove all
+     * extraneous edges)
+     */
+    private void quickSmooth(List<PathEdge> path) {
+        //we need at least 2 path edges
+        if (path.size()<=1) return;
+
+        List<Shape> array = new ArrayList<>();
+
+        System.out.println("Before: "+path);
+        ListIterator<PathEdge> iterator = path.listIterator();
+
+        //0th element in the list
+        PathEdge e1 = iterator.next();
+
+        while (iterator.hasNext()) {
+            //increment e2 so it points to the edge following e1 (and futher)
+            PathEdge e2 = iterator.next();
+            //check for obstruction, adjust and remove the edges accordingly
+            if (backendServices.couldWalkThrough(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
+                System.out.println("smooth");
+                e1.setDestination(e2.getDestination());
+                iterator.remove(); //remove e2 from the list
+            } else {
+                System.out.println("no smooth");
+                e1 = e2;
+            }
+        }
+        this.array = array;
+        System.out.println("After: "+path);
     }
 
     /**
@@ -221,6 +266,18 @@ public class PathPlanner implements NavigationService {
             gc.setLineWidth(2.0);
             gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
         }
+
+        for (PathEdge graphEdge : smoothedPath) {
+            Point2D n1 = graphEdge.getSource();
+            Point2D n2 = graphEdge.getDestination();
+            gc.setStroke(Color.WHITE);
+            gc.setLineWidth(2.0);
+            gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
+        }
+    }
+
+    public List<Shape> getSmoothingBoxes(){
+        return array;
     }
 
     /**
