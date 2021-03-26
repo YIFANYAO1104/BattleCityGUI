@@ -52,9 +52,10 @@ public class Kamikaze extends Enemy {
     public void destroy() {
         exists = false;
         entityManager.removeEntity(this);
-        Trigger explosion = new Dissolve(getCenterPosition(), entityImages[0], angle);
-        //Trigger explosion = new ExplosionTrigger(getCenterPosition(), 50, side);
+        Trigger explosion = new Dissolve(getPosition(), entityImages[0], angle);
+        Trigger explosion1 = new ExplosionTrigger(getCenterPosition(), 50, side);
         backendServices.addTrigger(explosion);
+        backendServices.addTrigger(explosion1);
     }
 
     @Override
@@ -107,7 +108,7 @@ public class Kamikaze extends Enemy {
                     //move();
                     break;
                 case CHARGE:
-                    charge();
+                    //charge();
                     break;
                 case AIMANDSHOOT:
                     destroy();
