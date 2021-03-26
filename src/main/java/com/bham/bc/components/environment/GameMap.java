@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.obstacles.ATTRIBUTE;
 import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
 import com.bham.bc.components.environment.triggers.HealthGiver;
@@ -70,7 +71,7 @@ public class GameMap {
     public SparseGraph getGraph() { return graphSystem; }
 
 
-    public void initialGraph(Point2D location){
+    public void initialGraph(Player p1){
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         graphSystem = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
         hgf.GraphHelper_CreateGrid(graphSystem, MAP_WIDTH,MAP_HEIGHT,GRAPH_NUM_CELLS_Y,GRAPH_NUM_CELLS_X); //make network
@@ -81,12 +82,12 @@ public class GameMap {
                     vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
         }
         //removed unreachable nodes
-        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(location,new Point2D(24,24)));
+        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(p1));
 
         //let the corresponding navgraph node point to triggers object
         ArrayList<Trigger> triggers = triggerSystem.getTriggers();
         for (Trigger trigger : triggers) {
-            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(trigger.getPosition(),trigger.getRadius()).Index());
+            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(trigger).Index());
             node.setExtraInfo(trigger);
         }
     }
@@ -123,7 +124,6 @@ public class GameMap {
     public void renderGraph(GraphicsContext gc, ArrayList<BaseGameEntity> entities){
         graphSystem.render(gc);     // render network on map
         graphSystem.renderTankPoints(entities,gc);
-//        for(BaseGameEntity p1 : points)  graphSystem.renderTankPoints(p1,gc);
     }
     public void renderTriggers(GraphicsContext gc) { triggerSystem.render(gc); }
 

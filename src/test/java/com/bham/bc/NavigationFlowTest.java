@@ -27,8 +27,8 @@ public class NavigationFlowTest {
     public void test1() throws Exception {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
-        gameMap.initialGraph(new Point2D(16*32, 16*32));
         Player player = new Player(16*32, 16*32, gameMap);
+        gameMap.initialGraph(player);
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         Field field = PathPlanner.class.getDeclaredField("taskStatus");
@@ -84,9 +84,8 @@ public class NavigationFlowTest {
     public void test2() throws Exception {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
-        gameMap.initialGraph(new Point2D(16*32, 16*32));
         Player player = new Player(-1, -1, gameMap);
-
+        gameMap.initialGraph(player);
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         Field field = PathPlanner.class.getDeclaredField("taskStatus");
         // access private field
@@ -101,8 +100,8 @@ public class NavigationFlowTest {
     public void test3() throws Exception {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
-        gameMap.initialGraph(new Point2D(16*32, 16*32));
         Player player = new Player(16*32, 16*32, gameMap);
+        gameMap.initialGraph(player);
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 

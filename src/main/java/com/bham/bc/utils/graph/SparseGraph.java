@@ -1,6 +1,7 @@
 package com.bham.bc.utils.graph;
 
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.GraphNode;
@@ -59,6 +60,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     private int nextNodeIndex;
     // Map the obstacle's ID to the index of nodes interacting with
     private HashMap<Integer, ArrayList<NavNode>> obstacleId = new HashMap<>();
+    //Map the closet node for that entities
+    private  HashMap<BaseGameEntity, NavNode> trcikingTable = new HashMap<>();
 
     /**
      * @return true if the edge is not present in the graph. Used when adding
@@ -153,7 +156,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     public int renderTankPoint(BaseGameEntity e1 , GraphicsContext gc){
-        NavNode n1 = getClosestNodeForPlayer(e1.getPosition(),e1.getRadius());
+        NavNode n1 = getClosestNodeForPlayer(e1);
         if(n1.isValid() ){
             gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),8,8,1,1);
             renderNode(gc,Color.RED,n1,4);
@@ -165,14 +168,19 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         return n1.Index();
     }
 
-    public NavNode getClosestNodeForPlayer(Point2D location, Point2D radius){
+    public NavNode getClosestNodeForPlayer(BaseGameEntity entity){
+        Point2D location = entity.getPosition();
+        Point2D radius = entity.getRadius();
         int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
         int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
         int c = j*rowNums + i;
         NavNode n1 = (NavNode)this.nodeVector.get(c);
-
-        return getNode(c);
-//        System.out.println("1 size"+n1.Pos().toString());
+        if(n1.isValid()){
+            trcikingTable.put(entity,n1);
+            return n1;
+        }else {
+            return trcikingTable.get(entity);
+        }
 
     }
 
