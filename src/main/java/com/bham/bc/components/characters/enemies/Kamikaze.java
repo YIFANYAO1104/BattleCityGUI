@@ -4,6 +4,7 @@ import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
+import com.bham.bc.components.environment.triggers.Dissolve;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.*;
 import com.bham.bc.entity.triggers.Trigger;
@@ -51,7 +52,8 @@ public class Kamikaze extends Enemy {
     public void destroy() {
         exists = false;
         entityManager.removeEntity(this);
-        Trigger explosion = new ExplosionTrigger(getCenterPosition(), 50, side);
+        Trigger explosion = new Dissolve(getCenterPosition(), entityImages[0], angle);
+        //Trigger explosion = new ExplosionTrigger(getCenterPosition(), 50, side);
         backendServices.addTrigger(explosion);
     }
 
