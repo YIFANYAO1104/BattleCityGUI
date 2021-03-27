@@ -1,6 +1,7 @@
 package com.bham.bc.view;
 
 import com.bham.bc.utils.Constants;
+import com.bham.bc.view.menu.PauseMenu;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
@@ -29,7 +30,7 @@ import javafx.beans.value.ChangeListener;
  * @data : 2021/2/28
  * @time : 14:43
  */
-public class CustomStage {
+public class CustomStage extends Stage{
 
     private Stage stage;
     private Scene gamescene;
@@ -46,9 +47,11 @@ public class CustomStage {
     private double MIN_WIDTH = 400.00;
     private double MIN_HEIGHT = 300.00;
     private double xOffset = 0, yOffset = 0;//自定义dialog移动横纵坐标
-    private String typeOf;
+    public static String typeOf;
     private AnchorPane gamePane;
-    private Label setMenu;
+    public static Label setMenu;
+    public static HBox gpTitle;
+    public static String[] types;
 
 
 
@@ -70,16 +73,8 @@ public class CustomStage {
         setMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                /*
-                if (GameSession.isshown==false){
-                    CustomMenuSubscene customMenuSubscene =new CustomMenuSubscene();
-                    customMenuSubscene.getStage(stage);
-                    customMenuSubscene.getGameScene(gamescene);
-//                    customMenuSubscene.createDeafultSubscene();
-                    gamePane.getChildren().add(customMenuSubscene);
-                    GameSession.isshown=true;}
 
-                 */
+                  MenuSession.showOptionsMenu(gamePane,GameSession.gameTimer);
             }
         });
         setMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {
@@ -92,23 +87,7 @@ public class CustomStage {
 
             }
         });
-        KeyCodeCombination keyCodeCombination=new KeyCodeCombination(KeyCode.ENTER);
-        gamescene.getAccelerators().put(keyCodeCombination, new Runnable() {
-            @Override
-            public void run() {
-                /*
-                if (GameSession.isshown==false){
-                    CustomMenuSubscene customMenuSubscene =new CustomMenuSubscene();
-                    customMenuSubscene.getStage(stage);
-                    customMenuSubscene.getGameScene(gamescene);
-//                    customMenuSubscene.createDeafultSubscene();
-                    gamePane.getChildren().add(customMenuSubscene);
-                    GameSession.isshown=true;}
 
-                 */
-
-            }
-        });
 
 
 
@@ -118,11 +97,11 @@ public class CustomStage {
     }
 
 
-    public void createCustomStage(AnchorPane root){
+    public void createCustomStage(AnchorPane root,int Width,int Height){
         startMenuIcon();
         stage.initStyle(StageStyle.TRANSPARENT);
 
-        HBox gpTitle = new HBox();
+        gpTitle = new HBox();
         gpTitle.setId("title");
         gpTitle.setSpacing(4);
         gpTitle.setPadding(new Insets(15,5,17,5));
@@ -134,8 +113,8 @@ public class CustomStage {
         BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
         gpTitle.setBackground(new Background(image));
-        gpTitle.setMinWidth(Constants.WINDOW_WIDTH);
-        gpTitle.setMaxWidth(Constants.WINDOW_WIDTH);
+        gpTitle.setMinWidth(Width);
+        gpTitle.setMaxWidth(Height);
         gpTitle.setMinHeight(15);
         gpTitle.setMaxHeight(35);
         gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../GUIResources/Stage.css").toExternalForm());
@@ -154,7 +133,7 @@ public class CustomStage {
         btnClose.setPrefHeight(26);
 
 
-        String[] types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
+        types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
         ChoiceBox changeSkin=new ChoiceBox(FXCollections.observableArrayList(
                 "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
         ));
@@ -218,15 +197,13 @@ public class CustomStage {
         btnMin.setId("winMin");
         lbTitle.setTranslateX(-540);
         btnMin.setTranslateY(6);
-        changeSkin.setTranslateY(1);
-        changeSkin.setTranslateX(-3);
+        btnMin.setTranslateX(3);
+
 
 
         gpTitle.getChildren().add(lbTitle);
-        gpTitle.getChildren().add(setMenu);
-        gpTitle.getChildren().add(changeSkin);
-        gpTitle.getChildren().add(btnMin);
-        gpTitle.getChildren().add(btnClose);
+        HBox hBox=new HBox(5,setMenu,changeSkin,btnMin,btnClose);
+        gpTitle.getChildren().add(hBox);
         root.getChildren().add(gpTitle);
 
         gpTitle.setLayoutX(0);

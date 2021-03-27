@@ -15,16 +15,17 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * Class managing the animations of a running game
  */
 public class GameSession {
 
-    private static final int GAME_WIDTH = Constants.WINDOW_WIDTH;
-    private static final int GAME_HEIGHT = Constants.WINDOW_HEIGHT;
+    public static final int GAME_WIDTH = Constants.WINDOW_WIDTH;
+    public static final int GAME_HEIGHT = Constants.WINDOW_HEIGHT;
 
-    private AnchorPane gamePane;
+    public static AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
     private Canvas canvas;
@@ -32,11 +33,9 @@ public class GameSession {
 
     private Stage menuStage;
 
-    private AnimationTimer gameTimer;
+    public static AnimationTimer gameTimer;
 
     private Camera cmr;
-
-    private AnchorPane hbPane;
 
     /**
      * Constructs the view manager
@@ -54,29 +53,19 @@ public class GameSession {
         canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
-        hbPane = new AnchorPane();
-        hbPane.setPrefWidth(Constants.MAP_WIDTH);
-        hbPane.setPrefHeight(Constants.MAP_HEIGHT);
-
-        gamePane = new AnchorPane(canvas, hbPane);
+        gamePane = new AnchorPane(canvas);
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
-        cmr = new Camera();
-        gameScene.setCamera(cmr);
+        cmr = new Camera(gc);
 
         gameStage = new Stage();
 
         gameStage.setScene(gameScene);
-        gameStage.setTitle("A very cool game");
+        gameStage.setTitle("Defenders");
         gameStage.setResizable(false);
 
-        KeyCodeCombination keyCodeCombination=new KeyCodeCombination(KeyCode.ESCAPE);
-        gameScene.getAccelerators().put(keyCodeCombination, new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("press showPauseMenu");
-                MenuSession.showPauseMenu(gamePane);
-            }
-        });
+
+        CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
+        customStage.createCustomStage(gamePane,Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT);
 
     }
 
@@ -100,9 +89,21 @@ public class GameSession {
      * creates the input listeners. Key presses are handled by the center controller class.
      */
     private void createKeyListeners() {
-        gameScene.setOnKeyPressed(e -> frontendServices.keyPressed(e));
+        gameScene.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
+                showPauseMenu();
+            } else {
+                frontendServices.keyPressed(e);
+            }
+        });
         gameScene.setOnKeyReleased(e -> frontendServices.keyReleased(e));
     }
+
+
+    public void showPauseMenu() {
+        MenuSession.showPauseMenu(gamePane, gameTimer);
+    }
+
 
     /**
      * renders the score of a currently running game
@@ -128,14 +129,12 @@ public class GameSession {
 
             return true;
         }
-
         return false;
     }
 
     private void tick() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         frontendServices.render(gc);
-        frontendServices.renderHitBoxes(hbPane);
         renderScoreBoard();
 
         cmr.update();

@@ -4,15 +4,32 @@ import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
+import com.bham.bc.view.model.MenuSlider;
+import com.bham.bc.view.model.NewGameEvent;
 import com.bham.bc.view.model.SubMenu;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.Scene;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.effect.Glow;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
  * <h1>Main Menu</h1>
@@ -22,23 +39,25 @@ import javafx.scene.text.Text;
  * a game session is not active.</p>
  */
 public class MainMenu extends AnchorPane {
-    
-    private MenuSession menuSession;
 
     private SubMenu subMenuMain;
     private SubMenu subMenuMode;
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
 
+    private NewGameEvent newGameEvent;
+
+    private Scene scene;
+    private TableView tableView;
+
     /**
      * Constructs an AnchorPane layout as the Main Menu
      *
-     * @param menuSession the manager of the menus
-     * @param width       menu window's length
-     * @param height      menu window's height
+     * @param width  menu window's length
+     * @param height menu window's height
      */
-    public MainMenu(MenuSession menuSession, double width, double height) {
-        this.menuSession = menuSession;
+    public MainMenu(double width, double height) {
+        newGameEvent = new NewGameEvent(NewGameEvent.START_GAME);
         setWidth(width);
         setHeight(height);
 
@@ -50,7 +69,8 @@ public class MainMenu extends AnchorPane {
         createSubMenuScores();
         createSubMenuSettings();
 
-        getChildren().addAll(subMenuMain);
+
+
         subMenuMain.show();
     }
 
@@ -87,8 +107,8 @@ public class MainMenu extends AnchorPane {
         MenuButton btnSettings = new MenuButton("SETTINGS");
         MenuButton btnQuit = new MenuButton("QUIT");
 
-        btnSolo.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMode.show(); });
-        btnCoop.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMode.show(); });
+        btnSolo.setOnMouseClicked(e -> { newGameEvent.setNumPlayers(1); subMenuMain.hide(); subMenuMode.show(); });
+        btnCoop.setOnMouseClicked(e -> { newGameEvent.setNumPlayers(2); subMenuMain.hide(); subMenuMode.show(); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
@@ -103,16 +123,17 @@ public class MainMenu extends AnchorPane {
      * single {@link com.bham.bc.view.GameSession} based on the selected parameters
      */
     private void createSubMenuMode() {
-        MenuButton btnBack = new MenuButton("BACK");
+
+
         MenuButton btnSurvival = new MenuButton("SURVIVAL");
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
-
-        btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
-        btnSurvival.setOnMouseClicked(e -> menuSession.createGameSession(MODE.SURVIVAL, MapType.Map1));
-        btnChallenge.setOnMouseClicked(e -> menuSession.createGameSession(MODE.CHALLENGE, MapType.EmptyMap));
+        MenuButton btnBack = new MenuButton("Back");
+        btnBack.setOnMouseClicked(e->{subMenuMode.hide();subMenuMain.show();});
+        btnSurvival.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.SURVIVAL); newGameEvent.setMapType(MapType.Map1); btnSurvival.fireEvent(newGameEvent); });
+        btnChallenge.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.CHALLENGE); newGameEvent.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(newGameEvent);});
 
         subMenuMode = new SubMenu(this);
-        subMenuMode.getChildren().addAll(btnBack, btnSurvival, btnChallenge);
+        subMenuMode.getChildren().addAll(btnSurvival, btnChallenge,btnBack);
     }
 
     /**
@@ -120,22 +141,174 @@ public class MainMenu extends AnchorPane {
      * "HIGH-SCORES" is clicked and shows top 10 scores.
      */
     private void createSubMenuScores() {
-        subMenuScores = new SubMenu(this);
+        subMenuScores=new SubMenu(this);
+        subMenuScores.setMinHeight(430);
+        subMenuScores.setMinWidth(750);
+        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",750,430,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        subMenuScores.setBackground(new Background(image));
+        subMenuScores.setTranslateY(200);
+        Text text2 = new Text();
+        text2.setText("SCORES");
+        text2.setStyle(" -fx-font-size: 30px;\n" +
+                "-fx-fill: gold;\n"+
+                "    -fx-font-family: \"Arial Narrow\";\n" +
+                "    -fx-font-weight: bold;\n" +
+                "\n" );
+        Glow glow1=new Glow();
+        text2.setEffect(glow1);
+        glow1.setLevel(1);
+        text2.setTranslateX(310);
+        text2.setTranslateY(40);
+
+
+        // Stylesheet for menu table
+        getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/table.css").toExternalForm());
+
+        createScoreTable();
+
+        subMenuScores.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                subMenuScores.hide();
+                subMenuMain.show();
+
+            }
+        });
+        tableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                subMenuScores.hide();
+                subMenuMain.show();
+            }
+        });
+        subMenuScores.getChildren().addAll(text2,tableView);
+
+
     }
+
+    /**
+     * create the class for data in the table
+     */
+    public static class Records{
+        private final SimpleStringProperty rank;
+        private final SimpleStringProperty name;
+        private final SimpleStringProperty score;
+        private final SimpleStringProperty date;
+
+        public Records(String rank, String name,String  score, String date) {
+            this.rank = new SimpleStringProperty(rank);
+            this.name = new SimpleStringProperty(name);
+            this.score = new SimpleStringProperty(score);
+            this.date =new SimpleStringProperty(date);
+        }
+
+        public String getRank() {
+            return rank.get();
+        }
+
+        public SimpleStringProperty rankProperty() {
+            return rank;
+        }
+
+        public void setRank(String rank) {
+            this.rank.set(rank);
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public SimpleStringProperty nameProperty() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
+        }
+
+        public String getScore() {
+            return score.get();
+        }
+
+        public SimpleStringProperty scoreProperty() {
+            return score;
+        }
+
+        public void setScore(String score) {
+            this.score.set(score);
+        }
+
+        public String getDate() {
+            return date.get();
+        }
+
+        public SimpleStringProperty dateProperty() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date.set(date);
+        }
+    }
+
+    /**
+     * create the table of scoreSubMenu
+     */
+    public void createScoreTable(){
+        TableColumn<Records,String> rank=new TableColumn<>("Rank");
+        rank.setMinWidth(100);
+        rank.setCellValueFactory(new PropertyValueFactory<>("rank"));
+        TableColumn<Records,String> name=new TableColumn<>("Name");
+        name.setMinWidth(100);
+        name.setCellValueFactory(
+                new PropertyValueFactory<>("name"));
+        TableColumn<Records,String> score=new TableColumn<>("Score");
+        score.setMinWidth(100);
+        score.setCellValueFactory(
+                new PropertyValueFactory<>("score"));
+        TableColumn<Records,String> date=new TableColumn<>("Date");
+        date.setMinWidth(100);
+        date.setCellValueFactory(
+                new PropertyValueFactory<>("date"));
+        tableView=new TableView();
+        tableView.getColumns().addAll(rank,name,score,date);
+        ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","25/3"));
+        tableView.setItems(dataSet);
+        tableView.setId("table");
+        tableView.setMaxSize(395,300);
+        tableView.setTranslateX(150);
+        tableView.setTranslateY(30);
+    }
+
 
     /**
      * Creates a sub-menu for settings. This menu is observed whenever "SETTINGS" is clicked
      * and allows the user to configure UI parameters, such as SFX or MUSIC volume
      */
     private void createSubMenuSettings() {
-        MenuButton btnBack = new MenuButton("BACK");
-        MenuButton btnSFX = new MenuButton("SFX VOLUME");
-        MenuButton btnMusic = new MenuButton("MUSIC VOLUME");
+        MenuButton btnBack = new MenuButton("Back");
+        MenuSlider bg=new MenuSlider("Volume:");
 
-        btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
+        DoubleProperty doubleProperty1=bg.getValueProperty();
+        doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
+            audioManager.setMusicVolume(newVal.doubleValue()/100);
+            bg.setSliderStyle();
 
+
+        });
+        MenuSlider sfx=new MenuSlider("SFX Volume:");
+
+        DoubleProperty doubleProperty2=sfx.getValueProperty();
+        doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
+            audioManager.setEffectVolume(newVal.doubleValue()/100);
+            sfx.setSliderStyle();
+
+        });
+
+
+        btnBack.setOnMouseClicked(e->{subMenuSettings.hide();subMenuMain.show();});
         subMenuSettings = new SubMenu(this);
-        subMenuSettings.getChildren().addAll(btnBack, btnSFX, btnMusic);
+        subMenuSettings.getChildren().addAll(bg,sfx,btnBack);
     }
 
 
@@ -172,4 +345,5 @@ public class MainMenu extends AnchorPane {
             getChildren().addAll(bg,text);
         }
     }
+
 }

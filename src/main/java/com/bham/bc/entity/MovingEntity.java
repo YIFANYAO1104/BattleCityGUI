@@ -2,7 +2,10 @@ package com.bham.bc.entity;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 
 /**
  * Represents any entity that can move in any angle
@@ -35,13 +38,12 @@ public abstract class MovingEntity extends BaseGameEntity {
      * @param gc graphics context the image is to be drawn on
      * @param angle rotation angle
      *
-     * @see <a href="https://stackoverflow.com/questions/18260421/how-to-draw-image-rotated-on-javafx-canvas">stackoverflow.com</a>
      * @see <a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/transform/Rotate.html">docs.oracle.com</a>
      */
     protected void drawRotatedImage(GraphicsContext gc, Image image, double angle) {
         gc.save();
         Rotate r = new Rotate(angle, x + image.getWidth() / 2, y + image.getHeight() / 2);
-        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+        gc.transform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
         gc.drawImage(image, x, y);
         gc.restore();
     }
