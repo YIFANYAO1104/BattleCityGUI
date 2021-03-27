@@ -159,14 +159,29 @@ public class MainMenu extends AnchorPane {
         glow1.setLevel(1);
         text2.setTranslateX(310);
         text2.setTranslateY(40);
-        MenuButton btnBack = new MenuButton("Back");
-        btnBack.setOnMouseClicked(e->{subMenuScores.hide();subMenuMain.show();});
+
 
         // Stylesheet for menu table
         getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/table.css").toExternalForm());
 
         createScoreTable();
-        subMenuScores.getChildren().addAll(text2,tableView,btnBack);
+
+        subMenuScores.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                subMenuScores.hide();
+                subMenuMain.show();
+
+            }
+        });
+        tableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                subMenuScores.hide();
+                subMenuMain.show();
+            }
+        });
+        subMenuScores.getChildren().addAll(text2,tableView);
 
 
     }
@@ -187,7 +202,53 @@ public class MainMenu extends AnchorPane {
             this.date =new SimpleStringProperty(date);
         }
 
+        public String getRank() {
+            return rank.get();
+        }
 
+        public SimpleStringProperty rankProperty() {
+            return rank;
+        }
+
+        public void setRank(String rank) {
+            this.rank.set(rank);
+        }
+
+        public String getName() {
+            return name.get();
+        }
+
+        public SimpleStringProperty nameProperty() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name.set(name);
+        }
+
+        public String getScore() {
+            return score.get();
+        }
+
+        public SimpleStringProperty scoreProperty() {
+            return score;
+        }
+
+        public void setScore(String score) {
+            this.score.set(score);
+        }
+
+        public String getDate() {
+            return date.get();
+        }
+
+        public SimpleStringProperty dateProperty() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date.set(date);
+        }
     }
 
     /**
