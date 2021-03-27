@@ -60,6 +60,8 @@ public class MenuSession {
     private void initMainMenu() {
         audioManager.createSequentialPlayer(TRACK.BREAK);
 
+//        CustomStage customStage=new CustomStage(mainStage,mainScene,mainPane);
+//        customStage.createCustomStage(mainPane,Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT);
         MenuBackground menuBackground = new MenuBackground(WIDTH, HEIGHT);
         mainPane.getChildren().addAll(menuBackground, mainMenu);
 
