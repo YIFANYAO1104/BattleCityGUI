@@ -181,7 +181,14 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }else {
             return trcikingTable.get(entity);
         }
+    }
 
+    public NavNode getClosestNodeByPosition(Point2D location,Point2D radius){
+        int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
+        int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
+        int c = j*rowNums + i;
+        NavNode n1 = (NavNode)this.nodeVector.get(c);
+        return n1;
     }
 
     public LinkedList<NavNode> getNodeList(int n1){

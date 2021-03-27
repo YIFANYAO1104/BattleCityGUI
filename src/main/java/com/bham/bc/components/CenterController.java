@@ -78,15 +78,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     // TEMPORARY METHODS -------------------------------------------
-    @Override
-    public void testAStar() {
-        player.createNewRequestAStar();
-    }
-
-    @Override
-    public void testDjistra() {
-        player.createNewRequestItem();
-    }
 
     @Override
     public void addBombTank(BombTank b) {

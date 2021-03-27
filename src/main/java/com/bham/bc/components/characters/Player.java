@@ -90,6 +90,8 @@ public class Player extends GameCharacter {
 		switch (e.getCode()) {
 			case F: fire(); break;
 			case B: bomb(); break;
+			case P:this.createNewRequestAStar();break;
+			case O:this.createNewRequestItem();break;
 			case W: directionSet.add(DIRECTION.U); break;
 			case A: directionSet.add(DIRECTION.L); break;
 			case S: directionSet.add(DIRECTION.D); break;
