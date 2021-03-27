@@ -25,7 +25,7 @@ public class GameSession {
     public static final int GAME_WIDTH = Constants.WINDOW_WIDTH;
     public static final int GAME_HEIGHT = Constants.WINDOW_HEIGHT;
 
-    public AnchorPane gamePane;
+    public static AnchorPane gamePane;
     private Scene gameScene;
     private Stage gameStage;
     private Canvas canvas;
