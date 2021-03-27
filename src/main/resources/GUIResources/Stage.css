@@ -20,6 +20,7 @@
     -fx-font-weight: bold;
 
     -fx-stroke: #ba7b16;
+
 }
 
 #changeSkin .arrow {
@@ -31,5 +32,7 @@
     -fx-background-size: 25px;
     -fx-background-repeat: no-repeat;
 }
+
+
 
 

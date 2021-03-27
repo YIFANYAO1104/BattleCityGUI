@@ -10,12 +10,10 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 /**
  * Class managing the animations of a running game
@@ -65,7 +63,7 @@ public class GameSession {
 
 
         CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
-        customStage.createCustomStage(gamePane,Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT);
+        customStage.createTitleBar(gamePane,Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT);
 
     }
 

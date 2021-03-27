@@ -1,18 +1,15 @@
 package com.bham.bc.view;
 
 import com.bham.bc.audio.TRACK;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
 import com.bham.bc.view.model.NewGameEvent;
 import javafx.animation.AnimationTimer;
-import javafx.animation.FadeTransition;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
@@ -49,6 +46,8 @@ public class MenuSession {
         mainMenu = new MainMenu(WIDTH, HEIGHT);
 
         initMainMenu();
+        CustomStage customStage=new CustomStage(mainStage,mainScene,mainPane);
+        customStage.createCommonTitlebar(mainPane,WIDTH,HEIGHT);
 
         mainPane.addEventFilter(NewGameEvent.START_GAME, this::createGameSession);
 
@@ -60,10 +59,10 @@ public class MenuSession {
     private void initMainMenu() {
         audioManager.createSequentialPlayer(TRACK.BREAK);
 
-//        CustomStage customStage=new CustomStage(mainStage,mainScene,mainPane);
-//        customStage.createCustomStage(mainPane,Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT);
+
         MenuBackground menuBackground = new MenuBackground(WIDTH, HEIGHT);
-        mainPane.getChildren().addAll(menuBackground, mainMenu);
+        menuBackground.setTranslateY(35);
+        mainPane.getChildren().addAll(menuBackground,mainMenu);
 
         audioManager.play();
     }
