@@ -221,7 +221,7 @@ public class PathPlanner implements NavigationService {
         //return cost
         return -1;
     }
-
+    //update
     @Override
     public void render(GraphicsContext gc) {
         //draw edges
