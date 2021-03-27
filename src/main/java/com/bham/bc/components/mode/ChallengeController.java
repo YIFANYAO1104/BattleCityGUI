@@ -18,7 +18,7 @@ public class ChallengeController extends CenterController {
     public ChallengeController(MapType mapType){
         super();
         gameMap = new GameMap(mapType);
-        player = new Player(16*32, 16*32,gameMap);
+        player = new Player(16*32, 16*32);
         gameMap.initialGraph(player);
     }
 
