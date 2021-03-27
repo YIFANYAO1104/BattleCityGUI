@@ -156,7 +156,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     public int renderTankPoint(BaseGameEntity e1 , GraphicsContext gc){
-        NavNode n1 = getClosestNodeForPlayer(e1);
+        NavNode n1 = getClosestNodeForEntity(e1);
         if(n1.isValid() ){
             gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),8,8,1,1);
             renderNode(gc,Color.RED,n1,4);
@@ -168,17 +168,29 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         return n1.Index();
     }
 
-    public NavNode getClosestNodeForPlayer(BaseGameEntity entity){
+    public NavNode getClosestNodeForEntity(BaseGameEntity entity){
         Point2D location = entity.getPosition();
         Point2D radius = entity.getRadius();
         int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
         int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
         int c = j*rowNums + i;
+        if(c<0 || c>= nodeVector.size()) c=0;
         NavNode n1 = (NavNode)this.nodeVector.get(c);
         if(n1.isValid()){
             trcikingTable.put(entity,n1);
             return n1;
         }else {
+            try {
+                for(NavNode nn1:getNodeList(c)){
+                    if(nn1.isValid()){
+                        trcikingTable.put(entity,nn1);
+                        return nn1;
+                    }
+                }
+            }catch (Exception e){
+
+            }
+
             return trcikingTable.get(entity);
         }
     }

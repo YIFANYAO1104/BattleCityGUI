@@ -55,7 +55,7 @@ public class PathPlanner implements NavigationService {
      * @return node index. -1 if no closest node found
      */
     private int getClosestNode(BaseGameEntity entity){
-        NavNode n1 = navGraph.getClosestNodeForPlayer(entity);
+        NavNode n1 = navGraph.getClosestNodeForEntity(entity);
 
         if(n1.isValid()){
             return n1.Index();

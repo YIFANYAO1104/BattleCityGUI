@@ -82,12 +82,12 @@ public class GameMap {
                     vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
         }
         //removed unreachable nodes
-        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(p1));
+        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForEntity(p1));
 
         //let the corresponding navgraph node point to triggers object
         ArrayList<Trigger> triggers = triggerSystem.getTriggers();
         for (Trigger trigger : triggers) {
-            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(trigger).Index());
+            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).Index());
             node.setExtraInfo(trigger);
         }
     }
