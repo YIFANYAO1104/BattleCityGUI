@@ -85,7 +85,7 @@ public class PauseMenu extends AnchorPane {
         MenuButton btnOptions = new MenuButton("Options");
         MenuButton btnEndGame = new MenuButton("Quit");
 
-        btnResume.setOnMouseClicked(e->{this.hide(GameSession.gamePane);});
+        btnResume.setOnMouseClicked(e->{MenuSession.showPauseMenu(GameSession.gamePane,GameSession.gameTimer);});
         btnOptions.setOnMouseClicked(e->{subMenuPause.hide();subMenuOptions.show();});
         btnEndGame.setOnMouseClicked(e->{System.exit(0);});
 
