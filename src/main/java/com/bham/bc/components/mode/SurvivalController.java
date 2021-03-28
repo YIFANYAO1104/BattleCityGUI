@@ -18,8 +18,9 @@ public class SurvivalController extends CenterController {
     public SurvivalController(MapType mapType){
         super();
         gameMap = new GameMap(mapType);
-        gameMap.initialGraph(new Point2D(16*32, 16*32));
-        player = new Player(16*32, 16*32,gameMap);
+        player = new Player(16*32, 16*32);
+        gameMap.initialGraph(player);
+        player.initNavigationService(gameMap.getGraph());
         characters.add(player);
         initEnemies();
     }
