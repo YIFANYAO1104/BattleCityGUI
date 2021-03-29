@@ -1,11 +1,14 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.characters.TRIBE;
 import com.bham.bc.entity.ai.*;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
+
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
  * <h1>Teaser - annoying attention grabber</h1>
@@ -27,11 +30,16 @@ import java.util.Arrays;
  * </ul>
  */
 public class Teaser extends Enemy {
-
+    // Constant
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/teaser.png";
     public static final int SIZE = 30;
-    public static final int MAX_HP = 50;
+    public static final TRIBE TYPE = TRIBE.TEASER;
 
+    // Configurable
+    public static final double HP = 50;
+    public static final double SPEED = 5;
+
+    // Behavior
     private final StateMachine stateMachine;
     private IntCondition badHealthCondition;
     private IntCondition closeToHome;
@@ -45,7 +53,7 @@ public class Teaser extends Enemy {
      * @param y top left y coordinate of the character
      */
     public Teaser(double x, double y) {
-        super(x, y, 1, MAX_HP);
+        super(x, y, 1, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         this.stateMachine = createFSM();
     }
@@ -80,11 +88,6 @@ public class Teaser extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
-        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .43);
-    }
-
-    @Override
     public void update() {
         // TODO: double distanceToHome = find distance to home
         // TODO: closeToHome.setTestValue((int) distanceToHome);
@@ -109,5 +112,16 @@ public class Teaser extends Enemy {
                     break;
             }
         });
+    }
+
+    @Override
+    public void destroy() {
+        entityManager.removeEntity(this);
+        exists = false;
+    }
+
+    @Override
+    public Shape getHitBox() {
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .43);
     }
 }

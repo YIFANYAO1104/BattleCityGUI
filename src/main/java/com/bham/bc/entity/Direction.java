@@ -5,7 +5,7 @@ import javafx.geometry.Point2D;
 /**
  * Represents 4 valid directions: up, down, left, right
  */
-public enum DIRECTION {
+public enum Direction {
 	U(0, 1),
 	D(0, -1),
 	L(-1, 0),
@@ -19,7 +19,7 @@ public enum DIRECTION {
 	 * @param x basis coordinate in x axis
 	 * @param y basis coordinate in y axis
 	 */
-	DIRECTION(int x, int y) { point2D = new Point2D(x, y); }
+	Direction(int x, int y) { point2D = new Point2D(x, y); }
 
 	/**
 	 * Gets the value of enum as a point (basis vector)

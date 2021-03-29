@@ -16,6 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class PathPlanner implements NavigationService {
@@ -170,10 +171,10 @@ public class PathPlanner implements NavigationService {
      * terminated successfully.
      * @return a list of PathEdges
      */
-    public List<PathEdge> getPath() {
+    public LinkedList<PathEdge> getPath() {
 
 
-        List<PathEdge> tempList = new ArrayList<PathEdge>();
+        LinkedList<PathEdge> tempList = new LinkedList<>();
 
         switch(taskStatus){
             case target_found:
@@ -246,5 +247,10 @@ public class PathPlanner implements NavigationService {
         //if found, notice agent by msg, also attach pointer to the target if there been a object
         //the agent will call getpath() after received the msg
         return 0;
+    }
+
+    @Override
+    public void resetTaskStatus() {
+        if(taskStatus != SearchStatus.search_incomplete) taskStatus = SearchStatus.no_task;
     }
 }

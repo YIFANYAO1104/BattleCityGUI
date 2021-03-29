@@ -35,5 +35,5 @@ public class Hard extends GenericObstacle {
     }
 
     @Override
-    public void handleCharacter(GameCharacter c) { if(intersects(c)) c.move(-1, true); }
+    public void handleCharacter(GameCharacter c) { if(intersects(c)) c.move(-1); }
 }

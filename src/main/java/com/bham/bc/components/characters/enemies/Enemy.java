@@ -1,6 +1,8 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
 import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
@@ -11,31 +13,29 @@ import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
 import java.util.LinkedList;
 
 import static com.bham.bc.components.CenterController.backendServices;
-import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
  * <h1>Generic enemy bot</h1>
  *
  * <p>This class defines all the common behavior an enemy character can show. All the method calls are
- * determined by the state machine each enemy has. Its properties like <i>strength</i>, <i>max_hp</i>,
- * <i>speed</i>, <i>weapon type</i> are influenced by the {@link com.bham.bc.components}.DirectorAI
- * so each enemy already knows what properties it will have when spawning. No setters make it more safe.</p>
+ * determined by the state machine each enemy has.</p>
  */
 public abstract class Enemy extends GameCharacter {
     protected NavigationService navigationService;
     private LinkedList<PathEdge> pathEdges;
     private Point2D destination;
+    private int timeTillSearch;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
      *
-     * @param x     top left x coordinate of the character
-     * @param y     top left y coordinate of the character
+     * @param x     top left x coordinate of the enemy
+     * @param y     top left y coordinate of the enemy
      * @param speed value which defines the initial velocity
      * @param hp    health points the enemy should have
      */
@@ -43,149 +43,119 @@ public abstract class Enemy extends GameCharacter {
         super(x, y, speed, hp, SIDE.ENEMY);
         navigationService = new PathPlanner(this, backendServices.getGraph());
         pathEdges = new LinkedList<>();
-        destination = getPosition();
+        destination = new Point2D(0, 0);
+        timeTillSearch = 20;
+    }
+
+
+    /**
+     * Finds path to a specified item type if it has not already been found
+     * @param itemType type of item that should be navigated
+     */
+    public void navigate(ItemType itemType) {
+        // If we don't have any points to follow, we need to navigate (it may return 0 edges if it's close)
+        // If there are points in the point array, we still need to update the search for dynamic
+        if(pathEdges.isEmpty()) {
+            // Return if the search is still in progress, otherwise we need a new search
+            if (navigationService.peekRequestStatus() != SearchStatus.search_incomplete) {
+                switch (itemType) {
+                    case health:
+                        navigationService.createRequest(ItemType.health);
+                        break;
+                    case home:
+                        Point2D home = backendServices.getMapCenterPosition();
+                        navigationService.createRequest(home);
+                        break;
+                    case ally:
+                        Point2D ally = backendServices.getNearestOppositeSideCenterPosition(getCenterPosition(), side);
+                        navigationService.createRequest(ally);
+                        break;
+                }
+            }
+        } else if(itemType == ItemType.ally && (--timeTillSearch <= 0)) {
+            Point2D ally = backendServices.getNearestOppositeSideCenterPosition(getCenterPosition(), side);
+            navigationService.createRequest(ally);
+        }
+
+        //-----test
+        if(itemType == ItemType.ally && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
+        //---------
+
+        // Due to checks on each frame of whether the search is complete or not we always need get the list of points if it is empty
+        if((pathEdges.isEmpty() || (itemType == ItemType.ally && timeTillSearch <= 0)) && navigationService.peekRequestStatus() == SearchStatus.target_found) {
+            pathEdges = navigationService.getPath();
+            pathEdges.add(pathEdges.getLast()); // Repeat the last element for the purposes in the search method when ove is performed
+            destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.removeFirst().getDestination();
+            timeTillSearch = 20;
+            navigationService.resetTaskStatus();
+        }
     }
 
     /**
-     * Abstract method which all child classes must fill with their own unique Finite State Machine
-     * @return The StateMachine for that specific enemy
+     * Navigates to a specific item type (if needed) and moves towards that direction
+     * @param itemType type of item that should be searched
      */
-    protected abstract StateMachine createFSM();
+    public void search(ItemType itemType) {
+        navigate(itemType);
+        System.out.println(pathEdges.size());
 
-    /** TODO: replace this method */
-    @Deprecated
-    private void aimAtAndShoot(){
-        /*
-         //Enemy tank switch direction after every 'step' times
-         //After the tank changes direction, generate another random steps
-
-        if (step == 0) {
-            DIRECTION[] directons = DIRECTION.values();
-            //[3,14]
-            step = r.nextInt(12) + 3;
-            //[0,8]
-            int mod=r.nextInt(9);
-
-
-             //Condition: If Enemy Tank finds Player tank around
-             //Logic: check if Player tank is in the same horizontal or vertical line of Enemy Tank
-             //If Player tank is found in the line, switch enemy tank's direction and chase Player Tank
-             //Else randomly choose direction to move forward
-
-            if (playertankaround()){
-                BackendServices cC = backendServices;
-                if(x==cC.getPlayerX()){
-                    if(y>cC.getPlayerY()){
-                        direction=directons[1];
-                    } else if (y<cC.getPlayerY()){
-                        direction=directons[3];
-                    }
-                }else if(y==cC.getPlayerY()){
-                    if(x>cC.getPlayerX()) {
-                        direction=directons[0];
-                    } else if (x<cC.getPlayerX()) {
-                        direction=directons[2];
-                    }
-                } else{ //change my direction
-                    int rn = r.nextInt(directons.length);
-                    direction = directons[rn];
-                }
-                rate=2;
-            } else {
-                if (1<=mod&&mod<=3) {
-                    rate=1;
-                } else {
-                    int rn = r.nextInt(directons.length);
-                    direction = directons[rn];
-                    rate=1;
-                }
+        if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
+            if(!pathEdges.isEmpty()) {
+                destination = pathEdges.removeFirst().getDestination();
+                face(destination);
+                move();
             }
+        } else if(!pathEdges.isEmpty()) {
+            move();
         }
-        step--;
-
-
-        //If Player Tank is near around, having a specific probability to fire (low probability)
-        if(rate==2){
-            if (r.nextInt(40) > 35) this.fire();
-        }else if (r.nextInt(40) > 38) this.fire();
-        */
     }
 
-    @Override
-    public void updateAngle() {
-
-    }
-
-    protected void updateAngle(Point2D yonder) {
-        double deltaX = yonder.getX() - getCenterPosition().getX();
-        double deltaY = yonder.getY() - getCenterPosition().getY();
+    /**
+     * Changes angle to align with a specified point
+     * @param toward position to face
+     */
+    protected void face(Point2D toward) {
+        double deltaX = toward.getX() - getCenterPosition().getX();
+        double deltaY = toward.getY() - getCenterPosition().getY();
         angle = Math.toDegrees(Math.atan2(deltaY, deltaX)) + 90;
     }
 
-    @Override
-    public void render(GraphicsContext gc) {
-        if (navigationService!=null) navigationService.render(gc);
-        drawRotatedImage(gc, entityImages[0], angle);
+    /**
+     * Changes angle to face the nearest character of an opposite side
+     * <b>Note:</b> if some ally target was followed and found but there is another ally standing closer
+     * but behind an obstacle, this method will make the enemy aim at that ally. So free path condition must be checked.
+     * Alternatively, in <i>getNearestOppositeSideCenterPosition()</i> only those distances could be filtered if they don't
+     * intersect any obstacles.
+     */
+    protected void aim() {
+        face(backendServices.getNearestOppositeSideCenterPosition(getCenterPosition(), side));
     }
 
-    @Override
-    // TODO: MAKE this abstract, i.e. compulsory in every child
-    public void destroy() {
-        entityManager.removeEntity(this);
-        exists = false;
+    /**
+     * Shoots the specified bullet(-s) at the current angle
+     */
+    protected void shoot() {
+        double centerBulletX = x + getRadius().getX()/2.0;
+        double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
+
+        Rotate rot = new Rotate(angle, getCenterPosition().getX(), getCenterPosition().getY());
+        Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
+
+        double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
+        double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
+
+        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
+        backendServices.addBullet(b);
     }
 
-    @Override
-    public boolean handleMessage(Telegram msg) {
-        switch (msg.Msg.id){
-            case 0:
-                System.out.println("you are deafeated by id "+ msg.Sender);
-                return true;
-            case 3:
-                System.out.println("chang the direction");
-                return true;
-            default:
-                System.out.println("no match");
-                return false;
-        }
+    /**
+     * Shoots the specified bullet(-s) at the current angle with a random probability
+     * @param threshold value between 0 and 1 above which the shoot() method would be run
+     */
+    protected void shoot(double threshold) {
+        if(Math.random() > threshold) shoot();
     }
 
-    // TEMP ------------------------------------------------
-    protected void moveTowardsTarget() {
-        updateAngle(destination);
-        Circle fatPoint = new Circle(destination.getX(), destination.getY(), 5);
-
-        if(intersectsShape(fatPoint)) {
-            if(!pathEdges.isEmpty()) destination = pathEdges.removeFirst().getDestination();
-        } else {
-            Point2D pt1 = getCenterPosition();
-            Point2D pt2 = destination;
-            angle = Math.toDegrees(Math.atan2(pt2.getY() - pt1.getY(), pt2.getX() - pt1.getX())) + 90;
-            move(4, true);
-        }
-    }
-
-    protected void navigate(Point2D point) {
-        if(navigationService.createRequest(point)) {
-            if(navigationService.peekRequestStatus() == SearchStatus.target_found) {
-                pathEdges = (LinkedList<PathEdge>) navigationService.getPath();
-
-                if(!pathEdges.isEmpty()) {
-                    destination = pathEdges.removeFirst().getDestination();
-                } else {
-                    destination = getCenterPosition();
-                }
-                System.out.println("Path length: " + pathEdges.size());
-            } else {
-                System.out.println("Valid request but target not found :/");
-                // Send false to repeat search
-            }
-        } else {
-            System.out.println("Invalid lol");
-            // destroy() :)
-        }
-    }
-    // -------------------------------------------------------
 
     /**
      * AI behaviour to idly patrol around the map.
@@ -235,16 +205,12 @@ public abstract class Enemy extends GameCharacter {
     }
 
     /**
-     * In this behaviour the AI will try to minimise its distance between the player with increased speed.
-     * It can do this only if there are no obstacles in the way and the player is close enough so no path-
-     * finding is required.
+     * In this behaviour the AI will try to minimise its distance between the closest character of
+     * the opposite side with 2 times increased speed.
      */
     protected void charge() {
-        Point2D pt1 = getCenterPosition();
-        //Point2D pt2 = backendServices.getNearestCharacterCenterPosition(SIDE.ALLY);
-        Point2D pt2 = backendServices.getPlayerCenterPosition();
-        angle = Math.toDegrees(Math.atan2(pt2.getY() - pt1.getY(), pt2.getX() - pt1.getX())) + 90;
-        move(4, true);
+        aim();
+        move(2);
     }
 
     /**
@@ -252,6 +218,36 @@ public abstract class Enemy extends GameCharacter {
      */
     protected void attackHomeBase(){
         //TODO
+    }
+
+
+
+
+    /**
+     * Abstract method which all child classes must fill with their own unique Finite State Machine
+     * @return The StateMachine for that specific enemy
+     */
+    protected abstract StateMachine createFSM();
+
+    @Override
+    public void render(GraphicsContext gc) {
+        if (navigationService!=null) navigationService.render(gc);
+        drawRotatedImage(gc, entityImages[0], angle);
+    }
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        switch (msg.Msg.id){
+            case 0:
+                System.out.println("you are deafeated by id "+ msg.Sender);
+                return true;
+            case 3:
+                System.out.println("chang the direction");
+                return true;
+            default:
+                System.out.println("no match");
+                return false;
+        }
     }
 
     @Override

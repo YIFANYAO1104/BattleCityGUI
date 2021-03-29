@@ -7,6 +7,8 @@ import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
 
+import static com.bham.bc.entity.EntityManager.entityManager;
+
 /**
  * <h1>Trapper - throws traps everywhere</h1>
  *
@@ -23,16 +25,20 @@ import java.util.Arrays;
  * </ul>
  */
 public class Trapper extends Enemy {
-
+    // Constant
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/trapper.png";
     public static final int SIZE = 30;
-    public static final int MAX_HP = 100;
+
+    // Configurable
+    public static final double HP = 100;
+    public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
     private IntCondition badHealthCondition;
     private IntCondition closeToAlly;
     private AndCondition regenerateCondition;
     private AndCondition searchAndTrapCondition;
+
     /**
      * Constructs a character instance with directionSet initialized to empty
      *
@@ -40,7 +46,7 @@ public class Trapper extends Enemy {
      * @param y top left y coordinate of the character
      */
     public Trapper(double x, double y) {
-        super(x, y, 1, MAX_HP);
+        super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         this.stateMachine = createFSM();
     }
@@ -72,11 +78,6 @@ public class Trapper extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
-        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
-    }
-
-    @Override
     public void update() {
         // TODO: double distanceToAlly = find distance to nearest ally
         // TODO: closeToAlly.setTestValue((int) distanceToAlly);
@@ -97,5 +98,16 @@ public class Trapper extends Enemy {
             }
         });
 
+    }
+
+    @Override
+    public void destroy() {
+        entityManager.removeEntity(this);
+        exists = false;
+    }
+
+    @Override
+    public Shape getHitBox() {
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }
 }

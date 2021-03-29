@@ -15,6 +15,7 @@ import javafx.scene.transform.Rotate;
 import java.util.Arrays;
 
 import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
  * <h1>Shooter - far-end operative</h1>
@@ -41,7 +42,8 @@ public class Shooter extends Enemy {
 
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/shooter.png";
     public static final int SIZE = 30;
-    public static final int MAX_HP = 100;
+    public static final double HP = 100;
+    public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
     private FreePathCondition noObstaclesCondition;
@@ -59,11 +61,12 @@ public class Shooter extends Enemy {
      * @param y top left y coordinate of the enemy
      */
     public Shooter(int x, int y) {
-        super(x, y, 1, MAX_HP);
+        super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-        this.stateMachine = createFSM();
+        stateMachine = createFSM();
     }
 
+    @Override
     protected StateMachine createFSM(){
         // Define possible states the enemy can be in
         State searchState = new State(new Action[]{ Action.MOVE }, null);
@@ -93,31 +96,6 @@ public class Shooter extends Enemy {
         regenerateState.setTransitions(new Transition[]{ searchPossibility});
 
         return new StateMachine(searchState);
-    }
-
-    /**
-     * Sample method for shooting a default bullet
-     *
-     * <p>This method creates a new instance of {@link com.bham.bc.components.armory.DefaultBullet}
-     * based on player's position and angle</p>
-     *
-     * TODO: generalize the method once weapon class is defined of more bullet types appear
-     *
-     * @return instance of DefaultBullet
-     */
-    public DefaultBullet fire() {
-        double centerBulletX = x + getRadius().getX()/2.0;
-        double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
-
-        Rotate rot = new Rotate(angle, x + getRadius().getX()/2, y + getRadius().getY()/2);
-        Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
-
-        double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
-        double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
-
-        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
-        backendServices.addBullet(b);
-        return b;
     }
 
     @Override
@@ -150,7 +128,10 @@ public class Shooter extends Enemy {
     }
 
     @Override
-    public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
+    public void destroy() {
+        entityManager.removeEntity(this);
+        exists = false;
+    }
 
     @Override
     public Shape getHitBox() {

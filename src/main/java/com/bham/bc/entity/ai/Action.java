@@ -5,7 +5,7 @@ package com.bham.bc.entity.ai;
  */
 public enum Action{
     MOVE,
-    CHARGE,
+    CHARGEALLY,
     AIMANDSHOOT,
     RETREAT,
     REGENERATE,

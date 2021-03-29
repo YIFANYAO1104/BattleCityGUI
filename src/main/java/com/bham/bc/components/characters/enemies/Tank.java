@@ -8,6 +8,7 @@ import javafx.scene.shape.Shape;
 import java.util.Arrays;
 
 import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
  * <h1>Tank - not a tank but heavy enough</h1>
@@ -78,11 +79,6 @@ public class Tank extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
-        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
-    }
-
-    @Override
     public void update() {
         // TODO: double distanceToHome = find distance to home
 
@@ -103,5 +99,16 @@ public class Tank extends Enemy {
                     break;
             }
         });
+    }
+
+    @Override
+    public void destroy() {
+        entityManager.removeEntity(this);
+        exists = false;
+    }
+
+    @Override
+    public Shape getHitBox() {
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }
 }
