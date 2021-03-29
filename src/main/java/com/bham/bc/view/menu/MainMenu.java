@@ -24,10 +24,22 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
@@ -49,6 +61,7 @@ public class MainMenu extends AnchorPane {
 
     private Scene scene;
     private TableView tableView;
+    private static ArrayList<Records> records=new ArrayList<>();
 
     /**
      * Constructs an AnchorPane layout as the Main Menu
@@ -56,7 +69,7 @@ public class MainMenu extends AnchorPane {
      * @param width  menu window's length
      * @param height menu window's height
      */
-    public MainMenu(double width, double height) {
+    public MainMenu(double width, double height) throws IOException {
         newGameEvent = new NewGameEvent(NewGameEvent.START_GAME);
         setWidth(width);
         setHeight(height);
@@ -140,7 +153,7 @@ public class MainMenu extends AnchorPane {
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
      */
-    private void createSubMenuScores() {
+    private void createSubMenuScores() throws IOException {
         subMenuScores=new SubMenu(this);
         subMenuScores.setMinHeight(430);
         subMenuScores.setMinWidth(550);
@@ -182,9 +195,14 @@ public class MainMenu extends AnchorPane {
             }
         });
         subMenuScores.getChildren().addAll(text2,tableView);
+        parseJsonFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
+        ObservableList data = FXCollections.observableArrayList(records);
+        tableView.setItems(data);
 
 
     }
+
+
 
     /**
      * create the class for data in the table
@@ -251,6 +269,30 @@ public class MainMenu extends AnchorPane {
         }
     }
 
+    public static void parseJsonFile(String fileName) throws IOException {
+        FileInputStream fileInputStream=new FileInputStream(fileName);
+        byte[] array=new byte[1024*1024];
+        int num=fileInputStream.read(array);
+        String s=new String(array);
+        System.out.println(s);
+        parse(s);
+    }
+
+    public static ArrayList<Records> parse(String responseBody){
+        JSONArray albums = new JSONArray(responseBody);
+        for (int i = 0; i < albums.length(); i++){
+            JSONObject album = albums.getJSONObject(i);
+            String rank = album.getString("rank");
+            String name = album.getString("name");
+            String score = album.getString("score");
+            String date = album.getString("date");
+            records.add(i,new Records(rank,name,score,date));
+            System.out.println(rank + " | " + name + " | " + score+" | "+date);
+
+        }
+        return records;
+    }
+
     /**
      * create the table of scoreSubMenu
      */
@@ -272,8 +314,8 @@ public class MainMenu extends AnchorPane {
                 new PropertyValueFactory<>("date"));
         tableView=new TableView();
         tableView.getColumns().addAll(rank,name,score,date);
-        ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","25/3"));
-        tableView.setItems(dataSet);
+//        ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","25/3"));
+//        tableView.setItems(dataSet);
         tableView.setId("table");
         tableView.setMaxSize(395,300);
         tableView.setTranslateX(80);

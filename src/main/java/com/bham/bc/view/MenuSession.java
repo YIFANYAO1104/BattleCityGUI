@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
@@ -37,7 +39,7 @@ public class MenuSession {
     /**
      * Constructs the menu view manager
      */
-    public MenuSession() {
+    public MenuSession() throws IOException {
         mainPane = new AnchorPane();
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();
