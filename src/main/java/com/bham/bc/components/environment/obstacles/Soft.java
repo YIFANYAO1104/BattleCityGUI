@@ -51,6 +51,9 @@ public class Soft extends GenericObstacle {
             b.destroy();
 
             if(hp <= 0) {
+                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
+                        backendServices.getGraph().getID(),
+                        Msg_removeSoft,NO_ADDITIONAL_INFO);
                 exists = false;
                 entityManager.removeEntity(this);
             }

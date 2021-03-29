@@ -11,6 +11,7 @@ import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.DIRECTION;
+import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -45,6 +46,23 @@ public class Player extends GameCharacter {
 	public Player(double x, double y) {
 		super(x, y, 5, MAX_HP, SIDE.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+
+	}
+
+	public void initNavigationService(SparseGraph sg){
+		navigationService = new PathPlanner(this,sg);
+	}
+
+	public void createNewRequestItem() {
+		if(navigationService.createRequest(ItemType.health)==true){
+			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
+				navigationService.getPath();
+			} else {
+				System.out.println("target not found");
+			}
+		} else {
+			System.out.println("no closest node around player/target");
+		}
 	}
 
 	/**
@@ -60,6 +78,8 @@ public class Player extends GameCharacter {
 		switch (e.getCode()) {
 			case F: fire(); break;
 			case B: bomb(); break;
+			case P:this.createNewRequestAStar();break;
+			case O:this.createNewRequestItem();break;
 			case W: directionSet.add(DIRECTION.U); break;
 			case A: directionSet.add(DIRECTION.L); break;
 			case S: directionSet.add(DIRECTION.D); break;
@@ -131,8 +151,8 @@ public class Player extends GameCharacter {
 
 	@Override
 	public void render(GraphicsContext gc) {
-		drawRotatedImage(gc, entityImages[0], angle);
-	}
+		if (navigationService!=null) navigationService.render(gc);
+		drawRotatedImage(gc, entityImages[0], angle); }
 
 	@Override
 	public boolean handleMessage(Telegram msg) {

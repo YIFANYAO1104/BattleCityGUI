@@ -22,6 +22,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import org.omg.CORBA.BAD_CONTEXT;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -120,7 +121,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             //Shape enemyLine = c.getLine();
             //enemyLine.setStroke(Color.RED);
             //enemyLine.setStrokeWidth(1);
-            //awhitBoxPane.getChildren().add(enemyLine);
+            //hitBoxPane.getChildren().add(enemyLine);
         });
     }
     // ------------------------------------------------------------
@@ -182,6 +183,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public ArrayList<Point2D> allCharacterPositions() {
         return (ArrayList<Point2D>) characters.stream().map(GameCharacter::getPosition).collect(Collectors.toList());
     }
+
+    public ArrayList<BaseGameEntity> allInfoCharacter(){
+        return new ArrayList<BaseGameEntity>(characters);
+    }
     // ------------------------------------------------------------
 
     // OTHER ------------------------------------------------------
@@ -211,7 +216,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         characters.forEach(character -> character.render(gc));
 
         gameMap.renderTopLayer(gc);
-        gameMap.renderGraph(gc, allCharacterPositions());
+        gameMap.renderGraph(gc, allInfoCharacter());
     }
 
     @Override
