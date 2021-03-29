@@ -143,8 +143,8 @@ public class MainMenu extends AnchorPane {
     private void createSubMenuScores() {
         subMenuScores=new SubMenu(this);
         subMenuScores.setMinHeight(430);
-        subMenuScores.setMinWidth(750);
-        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",750,430,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        subMenuScores.setMinWidth(550);
+        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",550,430,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         subMenuScores.setBackground(new Background(image));
         subMenuScores.setTranslateY(200);
         Text text2 = new Text();
@@ -157,7 +157,7 @@ public class MainMenu extends AnchorPane {
         Glow glow1=new Glow();
         text2.setEffect(glow1);
         glow1.setLevel(1);
-        text2.setTranslateX(310);
+        text2.setTranslateX(210);
         text2.setTranslateY(40);
 
 
@@ -276,7 +276,7 @@ public class MainMenu extends AnchorPane {
         tableView.setItems(dataSet);
         tableView.setId("table");
         tableView.setMaxSize(395,300);
-        tableView.setTranslateX(150);
+        tableView.setTranslateX(80);
         tableView.setTranslateY(30);
     }
 
