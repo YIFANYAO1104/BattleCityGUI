@@ -66,6 +66,18 @@ public class Player extends GameCharacter {
 		}
 	}
 
+	public void createNewRequestAStar() {
+		if(navigationService.createRequest(new Point2D(440,550))==true){
+			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
+				navigationService.getPath();
+			} else {
+				System.out.println("target not found");
+			}
+		} else {
+			System.out.println("no closest node around player/target");
+		}
+	}
+
 	/**
 	 * Handles pressed key
 	 *
@@ -79,7 +91,7 @@ public class Player extends GameCharacter {
 		switch (e.getCode()) {
 			case F: fire(); break;
 			case B: bomb(); break;
-			case P: /*this.createNewRequestAStar()*/;break;
+			case P:this.createNewRequestAStar();break;
 			case O:this.createNewRequestItem();break;
 			case W: directionSet.add(DIRECTION.U); break;
 			case A: directionSet.add(DIRECTION.L); break;

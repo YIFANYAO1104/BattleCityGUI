@@ -2,6 +2,7 @@ package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.entity.ai.*;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
@@ -23,10 +24,9 @@ import java.util.Arrays;
  */
 public class Trapper extends Enemy {
 
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/enemy1"; //TODO: Change this
-    public static final int WIDTH = 30;
-    public static final int HEIGHT = 30;
-    public static final int MAX_HP = 100; //Double the health for the strong enemy
+    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/trapper.png";
+    public static final int SIZE = 30;
+    public static final int MAX_HP = 100;
 
     private final StateMachine stateMachine;
     private IntCondition badHealthCondition;
@@ -36,14 +36,12 @@ public class Trapper extends Enemy {
     /**
      * Constructs a character instance with directionSet initialized to empty
      *
-     * @param x     top left x coordinate of the character
-     * @param y     top left y coordinate of the character
-     * @param speed value which defines the initial velocity
-     * @param hp    health points the enemy should have
+     * @param x top left x coordinate of the character
+     * @param y top left y coordinate of the character
      */
-    protected Trapper(double x, double y, double speed, double hp) {
+    public Trapper(double x, double y) {
         super(x, y, 1, MAX_HP);
-        entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
+        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         this.stateMachine = createFSM();
     }
 
@@ -75,7 +73,7 @@ public class Trapper extends Enemy {
 
     @Override
     public Shape getHitBox() {
-        return null;
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }
 
     @Override

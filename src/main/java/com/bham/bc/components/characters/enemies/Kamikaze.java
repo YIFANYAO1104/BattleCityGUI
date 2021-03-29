@@ -34,8 +34,11 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * </ul>
  */
 public class Kamikaze extends Enemy {
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/enemy3.png";
+    // Constant
+    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/kamikaze.png";
     public static final int SIZE = 30;
+
+    // Configurable
     public static final int MAX_HP = 100;
     public static final double SPEED = 1;
 
@@ -56,7 +59,6 @@ public class Kamikaze extends Enemy {
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, MAX_HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-
         stateMachine = createFSM();
     }
 
@@ -96,7 +98,7 @@ public class Kamikaze extends Enemy {
 
     @Override
     public Shape getHitBox() {
-        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }
 
     @Override

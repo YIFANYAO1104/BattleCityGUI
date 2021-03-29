@@ -7,6 +7,7 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
@@ -38,9 +39,8 @@ import static com.bham.bc.components.CenterController.backendServices;
  */
 public class Shooter extends Enemy {
 
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/enemy1";
-    public static final int WIDTH = 30;
-    public static final int HEIGHT = 30;
+    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/shooter.png";
+    public static final int SIZE = 30;
     public static final int MAX_HP = 100;
 
     private final StateMachine stateMachine;
@@ -60,7 +60,7 @@ public class Shooter extends Enemy {
      */
     public Shooter(int x, int y) {
         super(x, y, 1, MAX_HP);
-        entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
+        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         this.stateMachine = createFSM();
     }
 
@@ -106,92 +106,18 @@ public class Shooter extends Enemy {
      * @return instance of DefaultBullet
      */
     public DefaultBullet fire() {
-        double centerBulletX = x + WIDTH/2;
-        double centerBulletY = y - DefaultBullet.HEIGHT/2;
+        double centerBulletX = x + getRadius().getX()/2.0;
+        double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
 
-        Rotate rot = new Rotate(angle, x + WIDTH/2, y + HEIGHT/2);
+        Rotate rot = new Rotate(angle, x + getRadius().getX()/2, y + getRadius().getY()/2);
         Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
 
-        double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2;
-        double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2;
+        double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
+        double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
 
         DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
         backendServices.addBullet(b);
         return b;
-    }
-
-
-    /** TODO: replace this method */
-    @Deprecated
-    public boolean isPlayerClose() {
-        /*
-        double rx = x - 15 < 0 ? 0 : x - 15;
-        double ry = y - 15 < 0 ? 0 : y - 15;
-
-        Rectangle detectRegion = new Rectangle(rx, ry,60,60);
-        if (this.exists && detectRegion.intersects(backendServices.getHomeHitBox().getBoundsInLocal())) return true;
-        */
-
-        return false;
-    }
-
-    /** TODO: replace this method */
-    @Deprecated
-    private void aimAtAndShoot(){
-        /*
-         //Enemy tank switch direction after every 'step' times
-         //After the tank changes direction, generate another random steps
-
-        if (step == 0) {
-            DIRECTION[] directons = DIRECTION.values();
-            //[3,14]
-            step = r.nextInt(12) + 3;
-            //[0,8]
-            int mod=r.nextInt(9);
-
-
-             //Condition: If Enemy Tank finds Player tank around
-             //Logic: check if Player tank is in the same horizontal or vertical line of Enemy Tank
-             //If Player tank is found in the line, switch enemy tank's direction and chase Player Tank
-             //Else randomly choose direction to move forward
-
-            if (playertankaround()){
-                BackendServices cC = backendServices;
-                if(x==cC.getPlayerX()){
-                    if(y>cC.getPlayerY()){
-                        direction=directons[1];
-                    } else if (y<cC.getPlayerY()){
-                        direction=directons[3];
-                    }
-                }else if(y==cC.getPlayerY()){
-                    if(x>cC.getPlayerX()) {
-                        direction=directons[0];
-                    } else if (x<cC.getPlayerX()) {
-                        direction=directons[2];
-                    }
-                } else{ //change my direction
-                    int rn = r.nextInt(directons.length);
-                    direction = directons[rn];
-                }
-                rate=2;
-            } else {
-                if (1<=mod&&mod<=3) {
-                    rate=1;
-                } else {
-                    int rn = r.nextInt(directons.length);
-                    direction = directons[rn];
-                    rate=1;
-                }
-            }
-        }
-        step--;
-
-
-        //If Player Tank is near around, having a specific probability to fire (low probability)
-        if(rate==2){
-            if (r.nextInt(40) > 35) this.fire();
-        }else if (r.nextInt(40) > 38) this.fire();
-        */
     }
 
     @Override
@@ -211,7 +137,7 @@ public class Shooter extends Enemy {
                     //move();
                     break;
                 case AIMANDSHOOT:
-                    aimAtAndShoot();
+                    // shoot();
                     break;
                 case RETREAT:
                     // TODO: retreat();
@@ -223,24 +149,12 @@ public class Shooter extends Enemy {
         });
     }
 
-    /**
-     * Obtains the distance from the tank to the player
-     * @return
-     */
-    //TODO
-    private int getDistanceToPlayer(){
-        return 0;
-    }
-
     @Override
     public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
 
     @Override
     public Shape getHitBox() {
-        Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
-        hitBox.getTransforms().add(new Rotate(angle, x + WIDTH/2,y + HEIGHT/2));
-
-        return hitBox;
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .4);
     }
 
     @Override

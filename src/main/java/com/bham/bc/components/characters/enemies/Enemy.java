@@ -135,9 +135,6 @@ public abstract class Enemy extends GameCharacter {
         exists = false;
     }
 
-    // TODO: remove this, this is just for development
-    public Shape getLine() {return null;}
-
     @Override
     public boolean handleMessage(Telegram msg) {
         switch (msg.Msg.id){

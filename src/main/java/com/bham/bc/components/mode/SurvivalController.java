@@ -2,7 +2,7 @@ package com.bham.bc.components.mode;
 
 import com.bham.bc.components.CenterController;
 import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.characters.enemies.Kamikaze;
+import com.bham.bc.components.characters.enemies.*;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import javafx.geometry.Point2D;
@@ -22,14 +22,17 @@ public class SurvivalController extends CenterController {
         gameMap.initialGraph(player);
         player.initNavigationService(gameMap.getGraph());
         characters.add(player);
-        //initEnemies();
     }
 
     /**
      * Spawns all the initial enemies
      */
     private void initEnemies() {
-        characters.add(new Kamikaze(16*3, 16*3));
+        characters.add(new Kamikaze(16*28, 16*28));
+        characters.add(new Shooter(16*32, 16*28));
+        characters.add(new Teaser(16*36, 16*28));
+        characters.add(new Tank(16*28, 16*36));
+        characters.add(new Trapper(16*32, 16*32));
     }
 
     @Override
