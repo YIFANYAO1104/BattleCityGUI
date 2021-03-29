@@ -100,6 +100,14 @@ public class CustomStage extends Stage{
 
     }
 
+    /**
+     * create titler bar template
+     * @param root
+     * @param Width
+     * @param Height
+     * @param offset
+     */
+
     public void titleBar(AnchorPane root, int Width, int Height,int offset){
 
         stage.initStyle(StageStyle.TRANSPARENT);
@@ -357,12 +365,25 @@ public class CustomStage extends Stage{
 
     }
 
+    /**
+     * create title bar(without options menu icon) to main interface
+     * @param root
+     * @param Width
+     * @param Height
+     */
 
     public void createCommonTitlebar(AnchorPane root, int Width, int Height){
         titleBar(root,Width,Height,-780);
 
 
     }
+
+    /**
+     * create title bar(with options Menu icon) to gameSession
+     * @param root
+     * @param Width
+     * @param Height
+     */
 
     public void createTitleBar(AnchorPane root, int Width, int Height){
         startMenuIcon();

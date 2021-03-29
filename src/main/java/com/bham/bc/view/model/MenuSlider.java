@@ -65,20 +65,27 @@ public class MenuSlider extends VBox {
 
     }
 
+    /**
+     * return the label of volume num (%)
+     * @return
+     */
     public Label getNumOfVolume(){ return valueLabel;}
 
+    /**
+     * return doubltProperty to set value of volume
+     * @return
+     */
     public DoubleProperty getValueProperty(){
         return slider.valueProperty();
     }
 
+    /**
+     * set the style of slider
+     */
     public void setSliderStyle(){
         trackPane = (StackPane) slider.lookup(".track");
 
         trackPane.setStyle("-fx-background-color: linear-gradient(to right, #c17e1c 0%, #f3eace 0%);");
-
-
-
-
 
         slider.valueProperty().addListener(new ChangeListener<Number>() {
             @Override
