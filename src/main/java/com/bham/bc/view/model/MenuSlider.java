@@ -26,6 +26,7 @@ import javafx.scene.shape.Rectangle;
 public class MenuSlider extends VBox {
     private Slider slider;
     private StackPane trackPane;
+    private Label valueLabel;
 
 
 
@@ -46,8 +47,8 @@ public class MenuSlider extends VBox {
         sliderLabel.setId("volume");
 
         // Label for slider's value
-        Label valueLabel = new Label(slider.valueProperty().toString());
-        valueLabel.textProperty().bind(slider.valueProperty().asString());
+        valueLabel = new Label(slider.valueProperty().getValue().intValue()+"%");
+//        valueLabel.textProperty().bind(slider.valueProperty().asString());
         valueLabel.setId("num");
 
 
@@ -64,6 +65,7 @@ public class MenuSlider extends VBox {
 
     }
 
+    public Label getNumOfVolume(){ return valueLabel;}
 
     public DoubleProperty getValueProperty(){
         return slider.valueProperty();
@@ -89,4 +91,5 @@ public class MenuSlider extends VBox {
         });
 
          }
+
 }

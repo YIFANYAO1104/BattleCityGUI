@@ -102,6 +102,7 @@ public class PauseMenu extends AnchorPane {
         DoubleProperty doubleProperty1 = bg.getValueProperty();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setMusicVolume(newVal.doubleValue()/100);
+            bg.getNumOfVolume().setText(newVal.intValue()+"%");
             bg.setSliderStyle();
         });
         MenuSlider sfx=new MenuSlider("SFX Volume:");
@@ -109,6 +110,7 @@ public class PauseMenu extends AnchorPane {
         DoubleProperty doubleProperty2=sfx.getValueProperty();
         doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setEffectVolume(newVal.doubleValue()/100);
+            sfx.getNumOfVolume().setText(newVal.intValue()+"%");
             sfx.setSliderStyle();
 
         });
