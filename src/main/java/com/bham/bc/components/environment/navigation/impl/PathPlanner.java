@@ -47,7 +47,7 @@ public class PathPlanner implements NavigationService {
         this.owner = owner;
         this.navGraph = navGraph;
         curSearchTask =null;
-        taskStatus = SearchStatus.search_incomplete;
+        taskStatus = SearchStatus.no_task;
     }
 
     /**
@@ -61,6 +61,12 @@ public class PathPlanner implements NavigationService {
         return no_closest_node_found;
     }
 
+    private void clear() {
+        curSearchTask = null;
+        taskStatus = SearchStatus.no_task;
+        curPath.clear();
+    }
+
 
     /**
      * Create a path finding request and register it in the time slice service
@@ -70,8 +76,7 @@ public class PathPlanner implements NavigationService {
      */
     public boolean createRequest(ItemType itemType) {
         //unregister current search
-        curSearchTask = null;
-        curPath.clear();
+        clear();
         //find closest node around bot, if no return false
         int closestNodeToPlayer = getClosestNode(owner.getPosition());
         if (closestNodeToPlayer == no_closest_node_found){
@@ -93,10 +98,7 @@ public class PathPlanner implements NavigationService {
     public boolean createRequest(Point2D targetPos) {
 
         //unregister current search
-        curSearchTask = null;
-        curPath.clear();
-        destinationPos = new Point2D(targetPos.getX(),targetPos.getY());
-
+        clear();
         //find closest node around bot, if no return false
         int closestNodeToPlayer = getClosestNode(owner.getPosition());
         if (closestNodeToPlayer == no_closest_node_found){
@@ -108,6 +110,7 @@ public class PathPlanner implements NavigationService {
             return false;
         }
         //create algorithm instance
+        destinationPos = new Point2D(targetPos.getX(),targetPos.getY());
         curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
         taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
@@ -129,20 +132,11 @@ public class PathPlanner implements NavigationService {
         return topLeft.add(radius.multiply(0.5));
     }
 
-    /**
-     * called by an agent after it has been notified that a search has
-     * terminated successfully.
-     * @return a list of PathEdges
-     */
-    public List<PathEdge> getPath() {
-        //return empty path if search is not finished or path had already been fetched
-        if (taskStatus == SearchStatus.search_incomplete) return curPath;
-        //return path if it had already been fetched
-        if (!curPath.isEmpty()) return curPath;
-
+    private void fetchPathFromAlgorithm(){
         //fetch path list from 'task'
         curPath = curSearchTask.getPathAsPathEdges();
         //get closest node around current position
+        //matters only if the agent is moving away during the waiting
         int closest = getClosestNode(owner.getPosition());
         //add start and end node
 
@@ -150,18 +144,50 @@ public class PathPlanner implements NavigationService {
                 new PathEdge(getCenter(owner.getPosition(),owner.getRadius()), navGraph.getNode(closest).getPosition())
         );
 
-//        PathEdge lastEdge = path.get(path.size()-1);
-//        if(!lastEdge.getDestination().equals(destinationPos)){//add end note if request is position
-//            path.add(new PathEdge(path.get(path.size() - 1).getDestination(),
-//                    this.destinationPos)
-//            );
-//        }
+        //        PathEdge lastEdge = path.get(path.size()-1);
+        //        if(!lastEdge.getDestination().equals(destinationPos)){//add end note if request is position
+        //            path.add(new PathEdge(path.get(path.size() - 1).getDestination(),
+        //                    this.destinationPos)
+        //            );
+        //        }
 
         //smooth path
-
-
-        return curPath;
     }
+
+    /**
+     * called by an agent after it has been notified that a search has
+     * terminated successfully.
+     * @return a list of PathEdges
+     */
+    public List<PathEdge> getPath() {
+
+
+        List<PathEdge> tempList = new ArrayList<PathEdge>();
+
+        switch(taskStatus){
+            case target_found:
+                //first time after search
+                if (curPath.isEmpty()) {
+                    fetchPathFromAlgorithm();
+                }
+                //deep copy
+                for (PathEdge pathEdge : curPath) {
+                    tempList.add(new PathEdge(pathEdge));
+                }
+                break;
+
+            case target_not_found:
+                break;
+            //return empty path if search is not finished
+            case search_incomplete:
+                break;
+            case no_task:
+                break;
+        }
+        return tempList;
+    }
+
+
 
     /**
      * This method makes use of the pre-calculated lookup table
