@@ -27,7 +27,6 @@ public class NavigationFlowTest {
     public void test1() throws Exception {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
-        gameMap.initialGraph(new Point2D(16*32, 16*32));
         Player player = new Player(16*32, 16*32);
         gameMap.initialGraph(player);
         player.initNavigationService(gameMap.getGraph());

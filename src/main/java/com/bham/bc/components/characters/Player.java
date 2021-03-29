@@ -37,6 +37,8 @@ public class Player extends GameCharacter {
 	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
 	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
 
+	private NavigationService navigationService;
+
 	/**
 	 * Constructs a player instance with initial speed value set to 5
 	 *
@@ -46,7 +48,6 @@ public class Player extends GameCharacter {
 	public Player(double x, double y) {
 		super(x, y, 5, MAX_HP, SIDE.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-
 	}
 
 	public void initNavigationService(SparseGraph sg){
@@ -78,7 +79,7 @@ public class Player extends GameCharacter {
 		switch (e.getCode()) {
 			case F: fire(); break;
 			case B: bomb(); break;
-			case P:this.createNewRequestAStar();break;
+			case P: /*this.createNewRequestAStar()*/;break;
 			case O:this.createNewRequestItem();break;
 			case W: directionSet.add(DIRECTION.U); break;
 			case A: directionSet.add(DIRECTION.L); break;
