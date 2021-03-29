@@ -11,6 +11,7 @@ import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.DIRECTION;
+import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -43,10 +44,14 @@ public class Player extends GameCharacter {
 	 * @param x top left x coordinate of the player
 	 * @param y top left y coordinate of the player
 	 */
-	public Player(double x, double y, GameMap gm) {
+	public Player(double x, double y) {
 		super(x, y, 5, MAX_HP, SIDE.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-		navigationService = new PathPlanner(this,gm.getGraph());
+
+	}
+
+	public void initNavigationService(SparseGraph sg){
+		navigationService = new PathPlanner(this,sg);
 	}
 
 	public void createNewRequestItem() {
@@ -85,6 +90,8 @@ public class Player extends GameCharacter {
 		switch (e.getCode()) {
 			case F: fire(); break;
 			case B: bomb(); break;
+			case P:this.createNewRequestAStar();break;
+			case O:this.createNewRequestItem();break;
 			case W: directionSet.add(DIRECTION.U); break;
 			case A: directionSet.add(DIRECTION.L); break;
 			case S: directionSet.add(DIRECTION.D); break;
