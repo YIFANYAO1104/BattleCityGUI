@@ -269,6 +269,11 @@ public class MainMenu extends AnchorPane {
         }
     }
 
+    /**
+     * read file to get a string and parse string
+     * @param fileName
+     * @throws IOException
+     */
     public static void parseJsonFile(String fileName) throws IOException {
         FileInputStream fileInputStream=new FileInputStream(fileName);
         byte[] array=new byte[1024*1024];
@@ -278,6 +283,11 @@ public class MainMenu extends AnchorPane {
         parse(s);
     }
 
+    /**
+     * parse the string and make a array of records
+     * @param responseBody
+     * @return
+     */
     public static ArrayList<Records> parse(String responseBody){
         JSONArray albums = new JSONArray(responseBody);
         for (int i = 0; i < albums.length(); i++){
