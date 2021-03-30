@@ -39,7 +39,7 @@ public class MenuSession {
     /**
      * Constructs the menu view manager
      */
-    public MenuSession() throws IOException {
+    public MenuSession() throws Exception {
         mainPane = new AnchorPane();
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();

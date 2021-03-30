@@ -19,12 +19,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -33,12 +30,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 
 import static com.bham.bc.audio.AudioManager.audioManager;
@@ -62,6 +58,7 @@ public class MainMenu extends AnchorPane {
     private Scene scene;
     private TableView tableView;
     private static ArrayList<Records> records=new ArrayList<>();
+    private static JSONArray jsonArrayToFile=new JSONArray();
 
     /**
      * Constructs an AnchorPane layout as the Main Menu
@@ -69,7 +66,7 @@ public class MainMenu extends AnchorPane {
      * @param width  menu window's length
      * @param height menu window's height
      */
-    public MainMenu(double width, double height) throws IOException {
+    public MainMenu(double width, double height) throws Exception {
         newGameEvent = new NewGameEvent(NewGameEvent.START_GAME);
         setWidth(width);
         setHeight(height);
@@ -153,7 +150,7 @@ public class MainMenu extends AnchorPane {
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
      */
-    private void createSubMenuScores() throws IOException {
+    private void createSubMenuScores() throws Exception {
         subMenuScores=new SubMenu(this);
         subMenuScores.setMinHeight(430);
         subMenuScores.setMinWidth(550);
@@ -195,12 +192,80 @@ public class MainMenu extends AnchorPane {
             }
         });
         subMenuScores.getChildren().addAll(text2,tableView);
+
+        //write to Json file
+        Records record=new Records("3rd","DOU","222","7/3");
+        JSONObject recordJson=record.toJSON();
+        jsonArrayToFile.put(recordJson);
+        writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
+        //read from Json file
         parseJsonFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
         ObservableList data = FXCollections.observableArrayList(records);
         tableView.setItems(data);
 
 
+
+
     }
+
+    /**
+     * to format json
+     */
+    public static class Tool {
+        private boolean isTab = true;
+        public String stringToJSON(String strJson) {
+            int tabNum = 0;
+            StringBuffer jsonFormat = new StringBuffer();
+            int length = strJson.length();
+            for (int i = 0; i < length; i++) {
+                char c = strJson.charAt(i);
+                if (c == '{') {
+                    tabNum++;
+                    jsonFormat.append(c + "\n");
+                    jsonFormat.append(getSpaceOrTab(tabNum));
+                } else if (c == '}') {
+                    tabNum--;
+                    jsonFormat.append("\n");
+                    jsonFormat.append(getSpaceOrTab(tabNum));
+                    jsonFormat.append(c);
+                } else if (c == ',') {
+                    jsonFormat.append(c + "\n");
+                    jsonFormat.append(getSpaceOrTab(tabNum));
+                } else {
+                    jsonFormat.append(c);
+                }
+            }
+            return jsonFormat.toString();
+        }
+        public String getSpaceOrTab(int tabNum) {
+            StringBuffer sbTab = new StringBuffer();
+            for (int i = 0; i < tabNum; i++) {
+                if (isTab) {
+                    sbTab.append('\t');
+                } else {
+                    sbTab.append("    ");
+                }
+            }
+            return sbTab.toString();
+        }
+    }
+
+    /**
+     * write Json array to the file
+     * @param filename
+     * @throws Exception
+     */
+
+    public static void writeJsonToFile(String filename) throws Exception {
+        Tool tool=new Tool();
+
+        String jsonString=jsonArrayToFile.toString();//to string
+        System.out.println(jsonString);
+        String JsonString=tool.stringToJSON(jsonString);//format string
+
+        Files.write(Paths.get(filename), JsonString.getBytes());
+    }
+
 
 
 
@@ -267,6 +332,21 @@ public class MainMenu extends AnchorPane {
         public void setDate(String date) {
             this.date.set(date);
         }
+
+        /**
+         * to convert java object to JSon Object
+         * @return
+         */
+        public JSONObject toJSON() {
+
+            JSONObject jo = new JSONObject();
+            jo.put("rank", rank.getValue());
+            jo.put("name", name.getValue());
+            jo.put("score",score.getValue());
+            jo.put("date",date.getValue());
+
+            return jo;
+        }
     }
 
     /**
@@ -324,8 +404,7 @@ public class MainMenu extends AnchorPane {
                 new PropertyValueFactory<>("date"));
         tableView=new TableView();
         tableView.getColumns().addAll(rank,name,score,date);
-//        ObservableList<Records> dataSet = FXCollections.observableArrayList(new Records("First","Fan","999","25/3"));
-//        tableView.setItems(dataSet);
+
         tableView.setId("table");
         tableView.setMaxSize(395,300);
         tableView.setTranslateX(80);
