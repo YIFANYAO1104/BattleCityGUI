@@ -84,7 +84,7 @@ public abstract class Enemy extends GameCharacter {
         // Due to checks on each frame of whether the search is complete or not we always need get the list of points if it is empty
         if((pathEdges.isEmpty() || (itemType == ItemType.ally && timeTillSearch <= 0)) && navigationService.peekRequestStatus() == SearchStatus.target_found) {
             pathEdges = navigationService.getPath();
-            pathEdges.add(pathEdges.getLast()); // Repeat the last element for the purposes in the search method when ove is performed
+            pathEdges.add(pathEdges.getLast()); // Repeat the last element for the purposes in the search method when move is performed
             destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.removeFirst().getDestination();
             timeTillSearch = 20;
             navigationService.resetTaskStatus();
@@ -97,7 +97,6 @@ public abstract class Enemy extends GameCharacter {
      */
     public void search(ItemType itemType) {
         navigate(itemType);
-        System.out.println(pathEdges.size());
 
         if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
             if(!pathEdges.isEmpty()) {
@@ -216,7 +215,8 @@ public abstract class Enemy extends GameCharacter {
     /**
      * In this behaviour the AI will pathfind to the home base and try to take it over
      */
-    protected void attackHomeBase(){
+    protected void takeOver() {
+        //backendServices.occupyHome(-1);
         //TODO
     }
 

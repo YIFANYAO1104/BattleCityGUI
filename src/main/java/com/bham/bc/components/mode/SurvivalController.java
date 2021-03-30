@@ -28,8 +28,8 @@ public class SurvivalController extends CenterController {
      * Spawns all the initial enemies
      */
     private void initEnemies() {
-        characters.add(new Kamikaze(16*26, 16*26));
-        //characters.add(new Shooter(16*32, 16*28));
+        //characters.add(new Kamikaze(16*26, 16*26));
+        characters.add(new Shooter(16*26, 16*26));
         //characters.add(new Teaser(16*36, 16*28));
         //characters.add(new Tank(16*28, 16*36));
         //characters.add(new Trapper(16*32, 16*32));

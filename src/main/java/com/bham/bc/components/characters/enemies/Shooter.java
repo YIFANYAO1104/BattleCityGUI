@@ -1,16 +1,10 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.armory.DefaultBullet;
-import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.ai.*;
-import com.bham.bc.utils.messaging.Telegram;
-import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
 
 import java.util.Arrays;
 
@@ -47,8 +41,8 @@ public class Shooter extends Enemy {
 
     private final StateMachine stateMachine;
     private FreePathCondition noObstaclesCondition;
-    private IntCondition badHealthCondition;
-    private IntCondition goodHealthCondition;
+    private IntCondition lowHealthCondition;
+    private IntCondition highHealthCondition;
     private AndCondition attackCondition;
     private BooleanCondition canRetreatCondition;
     private AndCondition retreatCondition;
@@ -69,31 +63,31 @@ public class Shooter extends Enemy {
     @Override
     protected StateMachine createFSM(){
         // Define possible states the enemy can be in
-        State searchState = new State(new Action[]{ Action.MOVE }, null);
-        State attackState = new State(new Action[]{ Action.AIMANDSHOOT }, null);
+        State searchState = new State(new Action[]{ Action.SEARCHALLY }, null);
+        State attackState = new State(new Action[]{ Action.ATTACKALLY }, null);
         State retreatState = new State(new Action[]{ Action.RETREAT }, null);
         State regenerateState = new State(new Action[]{ Action.REGENERATE }, null);
 
         // Define all conditions required to change any state
-        badHealthCondition = new IntCondition(0, 20);
-        goodHealthCondition = new IntCondition(80,100);
+        lowHealthCondition = new IntCondition(0, (int) (HP * .2));
+        highHealthCondition = new IntCondition((int) (HP * .8), 100);
         noObstaclesCondition = new FreePathCondition();
         canRetreatCondition = new BooleanCondition();
-        attackCondition = new AndCondition(new NotCondition(badHealthCondition), noObstaclesCondition);
-        retreatCondition = new AndCondition(canRetreatCondition, badHealthCondition);
+        attackCondition = new AndCondition(new NotCondition(lowHealthCondition), noObstaclesCondition);
+        retreatCondition = new AndCondition(canRetreatCondition, lowHealthCondition);
         safeDistance = new IntCondition(0, 50); // TODO: Figure out if this is a good distance
 
         // Define all state transitions that could happen
-        Transition searchPossibility = new Transition(searchState, goodHealthCondition);
+        Transition searchPossibility = new Transition(searchState, new AndCondition(highHealthCondition, new NotCondition(attackCondition)));
         Transition attackPossibility = new Transition(attackState, attackCondition);
         Transition retreatPossibility = new Transition(retreatState, retreatCondition);
         Transition regeneratePossibility = new Transition(regenerateState, safeDistance);
 
         // Define how the states can transit from one another
         searchState.setTransitions(new Transition[]{ attackPossibility });
-        attackState.setTransitions(new Transition[]{ retreatPossibility});
-        retreatState.setTransitions(new Transition[]{ regeneratePossibility});
-        regenerateState.setTransitions(new Transition[]{ searchPossibility});
+        attackState.setTransitions(new Transition[]{ retreatPossibility, searchPossibility });
+        retreatState.setTransitions(new Transition[]{ regeneratePossibility });
+        regenerateState.setTransitions(new Transition[]{ searchPossibility });
 
         return new StateMachine(searchState);
     }
@@ -103,19 +97,20 @@ public class Shooter extends Enemy {
         double distanceToPlayer = getCenterPosition().distance(backendServices.getPlayerCenterPosition());
 
         safeDistance.setTestValue((int) distanceToPlayer);
-        badHealthCondition.setTestValue((int) this.hp);
-        goodHealthCondition.setTestValue((int) this.hp);
+        lowHealthCondition.setTestValue((int) hp);
+        highHealthCondition.setTestValue((int) hp);
         noObstaclesCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
         // TODO: canRetreatCondition.setTestValue(SOME FUNCTION);
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
-                case MOVE:
-                    //move();
+                case SEARCHALLY:
+                    search(ItemType.ally);
                     break;
-                case AIMANDSHOOT:
-                    // shoot();
+                case ATTACKALLY:
+                    aim();
+                    shoot(0.9);
                     break;
                 case RETREAT:
                     // TODO: retreat();
