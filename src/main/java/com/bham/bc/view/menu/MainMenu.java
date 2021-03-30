@@ -59,6 +59,7 @@ public class MainMenu extends AnchorPane {
     private TableView tableView;
     private static ArrayList<Records> records=new ArrayList<>();
     private static JSONArray jsonArrayToFile=new JSONArray();
+    private static JSONArray jsonArray;
 
     /**
      * Constructs an AnchorPane layout as the Main Menu
@@ -194,9 +195,19 @@ public class MainMenu extends AnchorPane {
         subMenuScores.getChildren().addAll(text2,tableView);
 
         //write to Json file
-        Records record=new Records("3rd","DOU","222","7/3");
-        JSONObject recordJson=record.toJSON();
-        jsonArrayToFile.put(recordJson);
+        Records record=new Records("1st","DOU","222","7/3");
+        record.putIntoArray();
+        Records record2=new Records("2nd","YIFAN","722","7/3");
+        record2.putIntoArray();
+        Records record3=new Records("3rd","YAO","722","7/3");
+        record3.putIntoArray();
+        Records record4=new Records("4th","YA","722","7/3");
+        record4.putIntoArray();
+        Records record5=new Records("5th","YAA","722","7/3");
+        record5.putIntoArray();
+        Records record6=new Records("6th","YAA","722","7/3");
+        record6.putIntoArray();
+        sort();
         writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
         //read from Json file
         parseJsonFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
@@ -247,6 +258,44 @@ public class MainMenu extends AnchorPane {
                 }
             }
             return sbTab.toString();
+        }
+    }
+
+    /**
+     * sort the socres automatically.
+     */
+    public static void sort(){
+        int len=jsonArrayToFile.length();
+        jsonArray=new JSONArray();
+        if (jsonArrayToFile.length()>3){
+            for (int i=0;i<len;i++){
+                if (3+i<len){
+                    jsonArray.put(i,jsonArrayToFile.get(3+i));
+                }
+                if (3+i>=len){
+                    jsonArray.put(i,jsonArrayToFile.get(i-2));
+                }
+            }
+
+        }
+        System.out.println("jsonArray"+jsonArray.toString());
+        for (int i=0;i<len;i++) {
+            if (i<3){
+                jsonArrayToFile.put(i,jsonArray.get(i));
+            }
+
+            if (i>=3){
+                jsonArrayToFile.remove(i);
+                i--;
+                len--;
+            }
+        }
+
+        for (int i=0;i<jsonArrayToFile.length();i++){
+            JSONObject jsonObject= (JSONObject) jsonArrayToFile.get(i);
+            jsonObject.put("rank",(i+1)+"");
+
+
         }
     }
 
@@ -347,6 +396,18 @@ public class MainMenu extends AnchorPane {
 
             return jo;
         }
+
+        /**
+         * put json object in to Json array (for Json file)
+         */
+        public void putIntoArray(){
+            jsonArrayToFile.put(toJSON());
+
+
+
+
+
+        }
     }
 
     /**
@@ -359,7 +420,7 @@ public class MainMenu extends AnchorPane {
         byte[] array=new byte[1024*1024];
         int num=fileInputStream.read(array);
         String s=new String(array);
-        System.out.println(s);
+//        System.out.println(s);
         parse(s);
     }
 
