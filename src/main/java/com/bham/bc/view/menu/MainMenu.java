@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -35,6 +36,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 
 import static com.bham.bc.audio.AudioManager.audioManager;
@@ -195,17 +199,17 @@ public class MainMenu extends AnchorPane {
         subMenuScores.getChildren().addAll(text2,tableView);
 
         //write to Json file
-        Records record=new Records("1st","DOU","222","7/3");
+        Records record=new Records("1st","Dou","222","7/3");
         record.putIntoArray();
-        Records record2=new Records("2nd","YIFAN","722","7/3");
+        Records record2=new Records("2nd","YIFAN","782","7/3");
         record2.putIntoArray();
-        Records record3=new Records("3rd","YAO","722","7/3");
+        Records record3=new Records("3rd","Alex","762","7/3");
         record3.putIntoArray();
-        Records record4=new Records("4th","YA","722","7/3");
+        Records record4=new Records("4th","Mantas","622","7/3");
         record4.putIntoArray();
-        Records record5=new Records("5th","YAA","722","7/3");
+        Records record5=new Records("5th","Najd","792","7/3");
         record5.putIntoArray();
-        Records record6=new Records("6th","YAA","722","7/3");
+        Records record6=new Records("6th","Junyu","772","7/3");
         record6.putIntoArray();
         sort();
         writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
@@ -291,13 +295,50 @@ public class MainMenu extends AnchorPane {
             }
         }
 
+
+
+       jsonArrayToFile=jsonArraySort(jsonArrayToFile);
+
         for (int i=0;i<jsonArrayToFile.length();i++){
-            JSONObject jsonObject= (JSONObject) jsonArrayToFile.get(i);
+            JSONObject jsonObject=(JSONObject) jsonArrayToFile.get(i);
             jsonObject.put("rank",(i+1)+"");
-
-
         }
     }
+
+
+
+    public static JSONArray jsonArraySort(JSONArray jsonArr) {
+
+        JSONArray sortedJsonArray = new JSONArray();
+        List<JSONObject> jsonValues = new ArrayList<JSONObject>();
+        for (int i = 0; i < jsonArr.length(); i++) {
+            jsonValues.add(jsonArr.getJSONObject(i));
+        }
+        Collections.sort(jsonValues, new Comparator<JSONObject>() {
+            private static final String KEY_NAME = "score";
+            String string1;
+            String string2;
+            @Override
+            public int compare(JSONObject a, JSONObject b) {
+                try {
+                    string1= a.getString(KEY_NAME);
+                    string2= b.getString(KEY_NAME);
+                } catch (JSONException e) {
+                    // 处理异常
+                }
+                //这里是按照时间逆序排列,不加负号为正序排列
+                return -string1.compareTo(string2);
+            }
+        });
+        for (int i = 0; i < jsonArr.length(); i++) {
+            sortedJsonArray.put(jsonValues.get(i));
+        }
+        return sortedJsonArray;
+    }
+
+
+
+
 
     /**
      * write Json array to the file
