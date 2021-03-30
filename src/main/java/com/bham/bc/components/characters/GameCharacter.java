@@ -110,4 +110,6 @@ abstract public class GameCharacter extends MovingEntity {
      *For path smoothing debug
      */
     abstract public List<Shape> getSmoothingBoxes();
+
+
 }

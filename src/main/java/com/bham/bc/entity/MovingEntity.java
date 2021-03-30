@@ -1,5 +1,6 @@
 package com.bham.bc.entity;
 
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.transform.Rotate;
@@ -56,4 +57,26 @@ public abstract class MovingEntity extends BaseGameEntity {
      * Defines how the position of the entity is updated on each frame
      */
     public abstract void move();
+
+    //TODO:ADD MAX SPEED
+    public double getMaxSpeed() {
+        return 0;
+    }
+
+    public Point2D getVelocity() {
+        return new Point2D(0,0);
+    }
+
+    public double getMaxForce() {
+        return 0;
+    }
+
+    public double getSpeed() {
+//        return m_vVelocity.Length();
+        return 0;
+    }
+
+    public Point2D getHeading() {
+        return new Point2D(0,0);
+    }
 }
