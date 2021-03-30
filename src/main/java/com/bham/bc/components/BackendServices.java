@@ -79,6 +79,9 @@ public interface BackendServices {
      */
     void clear();
 
+    /**
+     *For path smoothing algorithms
+     */
     boolean couldWalkThrough(Point2D start,Point2D end,Point2D radius, List<Shape> array);
     //-------------------------------------------------------------
 

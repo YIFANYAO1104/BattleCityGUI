@@ -3,6 +3,7 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.MovingEntity;
+import javafx.scene.shape.Shape;
 
 import java.util.List;
 
@@ -104,4 +105,9 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     protected abstract void destroy();
+
+    /**
+     *For path smoothing debug
+     */
+    abstract public List<Shape> getSmoothingBoxes();
 }

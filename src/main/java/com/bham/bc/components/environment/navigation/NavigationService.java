@@ -67,5 +67,9 @@ public interface NavigationService {
 
     public void render(GraphicsContext gc);
 
+    /**
+     * For path smoothing debug, return a list of hit boxes when smoothing paths
+     * @return
+     */
     public List<Shape> getSmoothingBoxes();
 }

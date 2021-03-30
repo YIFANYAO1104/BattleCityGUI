@@ -36,7 +36,6 @@ public class Player extends GameCharacter {
 	public static final double HP = 100;
 	public static final double SPEED = 5;
 
-	private NavigationService navigationService;
 	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
 	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
 
@@ -105,7 +104,7 @@ public class Player extends GameCharacter {
 	 * Handles pressed key
 	 *
 	 * <p>If one of the control keys are pressed, namely, W, A, S or D, a corresponding
-	 * {@link com.bham.bc.entity.DIRECTION} is added to the directionSet. If the key F
+	 * {@link Direction} is added to the directionSet. If the key F
 	 * is pressed, then an appropriate bullet is fired</p>
 	 *
 	 * @param e key to handle

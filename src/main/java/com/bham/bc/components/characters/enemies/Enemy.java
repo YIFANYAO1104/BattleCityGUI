@@ -13,9 +13,11 @@ import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import static com.bham.bc.components.CenterController.backendServices;
 
@@ -252,4 +254,8 @@ public abstract class Enemy extends GameCharacter {
 
     @Override
     public String toString() { return "Enemy"; }
+
+    public List<Shape> getSmoothingBoxes(){
+        return navigationService.getSmoothingBoxes();
+    }
 }

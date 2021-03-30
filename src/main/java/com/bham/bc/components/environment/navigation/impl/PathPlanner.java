@@ -172,10 +172,10 @@ public class PathPlanner implements NavigationService {
         //        }
 
         //smooth path
-        for (PathEdge pathEdge : curPath) {
-            smoothedPath.add(new PathEdge(pathEdge));
-        }
-        quickSmooth(smoothedPath);
+//        for (PathEdge pathEdge : curPath) {
+//            smoothedPath.add(new PathEdge(pathEdge));
+//        }
+//        quickSmooth(smoothedPath);
     }
 
     /**
@@ -219,25 +219,14 @@ public class PathPlanner implements NavigationService {
 
         LinkedList<PathEdge> tempList = new LinkedList<>();
 
-        switch(taskStatus){
-            case target_found:
-                //first time after search
-                if (curPath.isEmpty()) {
-                    fetchPathFromAlgorithm();
-                }
-                //deep copy
-                for (PathEdge pathEdge : curPath) {
-                    tempList.add(new PathEdge(pathEdge));
-                }
-                break;
-
-            case target_not_found:
-                break;
-            //return empty path if search is not finished
-            case search_incomplete:
-                break;
-            case no_task:
-                break;
+        if (taskStatus==SearchStatus.target_found){
+            if (curPath.isEmpty()) {
+                fetchPathFromAlgorithm();
+            }
+            //deep copy
+            for (PathEdge pathEdge : curPath) {
+                tempList.add(new PathEdge(pathEdge));
+            }
         }
         return tempList;
     }
