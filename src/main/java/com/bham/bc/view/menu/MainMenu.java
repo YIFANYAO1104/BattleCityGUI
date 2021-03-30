@@ -209,6 +209,18 @@ public class MainMenu extends AnchorPane {
         record4.putIntoArray();
         Records record5=new Records("5th","Najd","792","7/3");
         record5.putIntoArray();
+        Records record6=new Records("6th","Justin","892","7/3");
+        record6.putIntoArray();
+        Records record7=new Records("7th","John","792","7/3");
+        record7.putIntoArray();
+        Records record8=new Records("8th","Shan","792","7/3");
+        record8.putIntoArray();
+        Records record9=new Records("9th","Juily","792","7/3");
+        record9.putIntoArray();
+        Records record10=new Records("10th","Berry","792","7/3");
+        record10.putIntoArray();
+        Records record11=new Records("11th","Kitty","722","7/3");
+        record11.putIntoArray();
         sort();
         writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
         //read from Json file
@@ -267,27 +279,29 @@ public class MainMenu extends AnchorPane {
      * sort the socres automatically.
      */
     public static void sort(){
-        // keep the first 3 record. And when new record come, delete some old records
+        // keep the first 10 record. And when new record come, delete some old records
         int len=jsonArrayToFile.length();
         jsonArray=new JSONArray();
-        if (jsonArrayToFile.length()>3){
+        if (jsonArrayToFile.length()>10){
             for (int i=0;i<len;i++){
-                if (3+i<len){
-                    jsonArray.put(i,jsonArrayToFile.get(3+i));
+                if (10+i<len){
+                    jsonArray.put(i,jsonArrayToFile.get(10+i));
                 }
-                if (3+i>=len){
-                    jsonArray.put(i,jsonArrayToFile.get(i-2));
+                if (10+i>=len){
+                    jsonArray.put(i,jsonArrayToFile.get(i-(len-10)));
                 }
             }
 
+        }else {
+            jsonArray=jsonArrayToFile;
         }
         System.out.println("jsonArray"+jsonArray.toString());
         for (int i=0;i<len;i++) {
-            if (i<3){
+            if (i<10){
                 jsonArrayToFile.put(i,jsonArray.get(i));
             }
 
-            if (i>=3){
+            if (i>=10){
                 jsonArrayToFile.remove(i);
                 i--;
                 len--;
@@ -296,7 +310,7 @@ public class MainMenu extends AnchorPane {
 
 
 
-        //sort the first 3 records of array
+        //sort the first 10 records of array
        jsonArrayToFile=jsonArraySort(jsonArrayToFile);
 
         //set the rank according to the order of array
