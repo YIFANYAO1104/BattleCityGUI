@@ -1,14 +1,14 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.environment.obstacles.ATTRIBUTE;
-import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
+import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
@@ -21,6 +21,7 @@ import javafx.scene.shape.Rectangle;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.scene.shape.Shape;
 
+import static com.bham.bc.utils.Constants.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class GameMap {
     private TriggerSystem triggerSystem;
     private SparseGraph graphSystem;
 
-    private static int width = Constants.MAP_WIDTH;
-    private static int height = Constants.MAP_HEIGHT;
+    private static int width = MAP_WIDTH;
+    private static int height = MAP_HEIGHT;
 
 
     /**
@@ -69,22 +70,23 @@ public class GameMap {
     public SparseGraph getGraph() { return graphSystem; }
 
 
-    public void initialGraph(Point2D location){
+    public void initialGraph(Player p1){
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         graphSystem = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
-        hgf.GraphHelper_CreateGrid(graphSystem, Constants.MAP_WIDTH,Constants.MAP_HEIGHT,Constants.GRAPH_NUM_CELLS_Y,Constants.GRAPH_NUM_CELLS_X); //make network
+        hgf.GraphHelper_CreateGrid(graphSystem, MAP_WIDTH,MAP_HEIGHT,GRAPH_NUM_CELLS_Y,GRAPH_NUM_CELLS_X); //make network
         ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Point2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.getID(),index,new Rectangle(vv1.getX()-32/2,vv1.getY()-32/2,32,32));
+            collideWithRectangle(graphSystem.getID(),index,new Rectangle(
+                    vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
         }
         //removed unreachable nodes
-        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForPlayer(location));
+        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForEntity(p1));
 
         //let the corresponding navgraph node point to triggers object
         ArrayList<Trigger> triggers = triggerSystem.getTriggers();
         for (Trigger trigger : triggers) {
-            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForPlayer(trigger.getPosition()).Index());
+            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).Index());
             node.setExtraInfo(trigger);
         }
     }
@@ -105,19 +107,23 @@ public class GameMap {
      */
 
     public void renderBottomLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(!o.getAttributes().contains(ATTRIBUTE.RENDER_TOP)) o.render(gc); });
+        obstacles.forEach(o -> { if(!o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
         renderTriggers(gc);
     }
 
     public void renderTopLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(o.getAttributes().contains(ATTRIBUTE.RENDER_TOP)) o.render(gc); });
+        obstacles.forEach(o -> { if(o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
     }
 
-    public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
+//    public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
+//        graphSystem.render(gc);     // render network on map
+//        for(Point2D p1 : points)  graphSystem.renderTankPoints(p1,gc);
+//    }
+
+    public void renderGraph(GraphicsContext gc, ArrayList<BaseGameEntity> entities){
         graphSystem.render(gc);     // render network on map
-        for(Point2D p1 : points)  graphSystem.renderTankPoints(p1,gc);
+        graphSystem.renderTankPoints(entities,gc);
     }
-
     public void renderTriggers(GraphicsContext gc) { triggerSystem.render(gc); }
 
 
@@ -158,6 +164,6 @@ public class GameMap {
     // Temp until physics
     //Really useful for path smoothing!
     public boolean intersectsObstacles(Shape shape) {
-        return obstacles.stream().anyMatch(o -> !o.getAttributes().contains(ATTRIBUTE.PASSABLE) && o.intersectsShape(shape));
+        return obstacles.stream().anyMatch(o -> !o.getAttributes().contains(Attribute.PASSABLE) && o.intersectsShape(shape));
     }
 }

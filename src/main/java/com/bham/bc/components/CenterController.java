@@ -1,10 +1,11 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
-import com.bham.bc.components.mode.MODE;
+import com.bham.bc.components.mode.Mode;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.physics.BombTank;
@@ -25,6 +26,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,12 +65,11 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * @param mode SURVIVAL or CHALLENGE value to be passed as a game mode
      * @param mapType layout of map that will be used by a specific mode
      */
-    public static void setMode(MODE mode, MapType mapType) {
+    public static void setMode(Mode mode, MapType mapType) {
         CenterController centerController = null;
         switch (mode) {
             case SURVIVAL:
                 centerController = new SurvivalController(mapType);
-
                 break;
             case CHALLENGE:
                 centerController = new ChallengeController(mapType);
@@ -76,9 +77,23 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         }
         frontendServices = centerController;
         backendServices = centerController;
+
+        centerController.startGame();
     }
 
     // TEMPORARY METHODS -------------------------------------------
+    public abstract void startGame();
+
+    @Override
+    public Point2D getMapCenterPosition() {
+        return new Point2D(16*32, 16*32);
+    }
+
+    @Override
+    public Point2D getNearestOppositeSideCenterPosition(Point2D point, SIDE side) {
+        return characters.stream().filter(c -> c.getSide() != side).map(GameCharacter::getCenterPosition).min(Comparator.comparing(c -> c.distance(point))).get();
+    }
+
     @Override
     public void addBombTank(BombTank b) {
         bombTanks.add(b);
@@ -116,10 +131,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             cHitBox.setStrokeWidth(1);
             hitBoxPane.getChildren().add(cHitBox);
 
-            Shape enemyLine = c.getLine();
-            enemyLine.setStroke(Color.RED);
-            enemyLine.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(enemyLine);
+            //Shape enemyLine = c.getLine();
+            //enemyLine.setStroke(Color.RED);
+            //enemyLine.setStrokeWidth(1);
+            //hitBoxPane.getChildren().add(enemyLine);
         });
 
         List<Shape> smoothingBoxes = player.getSmoothingBoxes();
@@ -190,6 +205,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public ArrayList<Point2D> allCharacterPositions() {
         return (ArrayList<Point2D>) characters.stream().map(GameCharacter::getPosition).collect(Collectors.toList());
     }
+
+    public ArrayList<BaseGameEntity> allInfoCharacter(){
+        return new ArrayList<BaseGameEntity>(characters);
+    }
     // ------------------------------------------------------------
 
     // OTHER ------------------------------------------------------
@@ -218,8 +237,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         bullets.forEach(bullet -> bullet.render(gc));
         characters.forEach(character -> character.render(gc));
 
-        //gameMap.renderTopLayer(gc);
-        gameMap.renderGraph(gc, allCharacterPositions());
+        gameMap.renderTopLayer(gc);
+        gameMap.renderGraph(gc, allInfoCharacter());
     }
 
     @Override

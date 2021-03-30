@@ -5,6 +5,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Shape;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public interface NavigationService {
@@ -38,11 +39,16 @@ public interface NavigationService {
     public SearchStatus peekRequestStatus();
 
     /**
+     * Resets the search status to <i>no_task</i>. This is useful to not repeat the searches
+     */
+    void resetTaskStatus();
+
+    /**
      * called by an agent after it has been notified that a search has
      * terminated successfully.
      * @return a list of PathEdges
      */
-    public List<PathEdge> getPath();
+    public LinkedList<PathEdge> getPath();
 
     //under construction--------------------------------------------
     //utility based AI----------------------------------------------
