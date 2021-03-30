@@ -156,14 +156,38 @@ public class GameMap {
     }
 
 
+//    public void handleAll(ArrayList<GameCharacter> characters, ArrayList<Bullet> bullets) {
+//        obstacles.forEach(obstacle -> {
+//            characters.forEach(obstacle::handleCharacter);
+//            bullets.forEach(obstacle::handleBullet);
+//        });
+//
+//        triggerSystem.handleAll(characters, obstacles);
+//    }
+
     public void handleAll(ArrayList<GameCharacter> characters, ArrayList<Bullet> bullets) {
-        obstacles.forEach(obstacle -> {
-            characters.forEach(obstacle::handleCharacter);
-            bullets.forEach(obstacle::handleBullet);
+
+        characters.forEach(c1->{
+            mapDivision.CalculateNeighborsArray(c1,32.0).forEach(o1->{
+                try {
+                    GenericObstacle oo1 = (GenericObstacle)o1;
+                    oo1.handleCharacter(c1);
+                }catch (Exception e){}
+            });
+        });
+
+        bullets.forEach(b1->{
+            mapDivision.CalculateNeighborsArray(b1,32.0).forEach(o1->{
+                try {
+                    GenericObstacle oo1 = (GenericObstacle)o1;
+                    oo1.handleBullet(b1);
+                }catch (Exception e){}
+            });
         });
 
         triggerSystem.handleAll(characters, obstacles);
     }
+
 
 
     public void collideWithRectangle(int ID,int indexOfNode, Rectangle r1){

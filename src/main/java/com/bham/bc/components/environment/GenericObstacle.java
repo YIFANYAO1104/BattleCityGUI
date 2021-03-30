@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 import java.util.EnumSet;
+import java.util.List;
 
 import static com.bham.bc.utils.messaging.MessageDispatcher.Dispatch;
 import static com.bham.bc.utils.messaging.MessageDispatcher.SEND_MSG_IMMEDIATELY;
@@ -68,6 +69,15 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * @param c character to handle
      */
     public abstract void handleCharacter(GameCharacter c);
+
+//    public void handleAll(List<BaseGameEntity> entities){
+//        entities.forEach(entity -> {
+//            try {
+//                handleBullet((Bullet)entity);
+//                handleCharacter((GameCharacter) entity);
+//            }catch (Exception e){}
+//        });
+//    }
 
     @Deprecated
     /** TODO: check if it is necessary to have this */

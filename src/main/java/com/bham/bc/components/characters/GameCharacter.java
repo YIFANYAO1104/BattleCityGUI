@@ -1,7 +1,9 @@
 package com.bham.bc.components.characters;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.triggers.Weapon;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.DIRECTION;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
@@ -81,7 +83,7 @@ abstract public class GameCharacter extends MovingEntity {
      * Handles bullet collision - takes damage and destroys bullet
      * @param bullet bullet to handle
      */
-    protected void handleBullet(Bullet bullet) {
+    protected void handle(Bullet bullet) {
         if(intersects(bullet)) {
             if(bullet.getSide() != side) {
                 changeHP(-bullet.getDamage());
@@ -94,7 +96,7 @@ abstract public class GameCharacter extends MovingEntity {
      * Handles character collision - moves back
      * @param gameCharacter character to handle
      */
-    protected void handleCharacter(GameCharacter gameCharacter) {
+    protected void handle(GameCharacter gameCharacter) {
         if(this.getID() != gameCharacter.getID() && intersects(gameCharacter)) {
             move(-1, true);
         }
@@ -106,12 +108,17 @@ abstract public class GameCharacter extends MovingEntity {
      * @param bullets list of bullets to handle
      */
     public void handleAll(List<GameCharacter> gameCharacters, List<Bullet> bullets) {
-        gameCharacters.forEach(this::handleCharacter);
-        bullets.forEach(this::handleBullet);
+        gameCharacters.forEach(this::handle);
+        bullets.forEach(this::handle);
     }
 
-    public void handleALL(List<MovingEntity> en1){
-//        en1.forEach(this::handle);
+    public void handleAll(List<BaseGameEntity> en1){
+        en1.forEach(b1 -> {
+            try {
+                handle((Bullet) b1);
+                handle((GameCharacter)b1);
+            }catch (Exception e){}
+        });
     }
 
 

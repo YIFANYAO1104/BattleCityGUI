@@ -142,8 +142,13 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     public void UpdateObstacle (entity genericObstacle){
         if(! (genericObstacle instanceof GenericObstacle)) System.out.println("it is not a genericObstacle,but I will delete it");
-        int idx = PositionToIndex(genericObstacle.getPosition());
-        RemovedEntity(genericObstacle, idx);
+        try {
+            GenericObstacle g1 = (GenericObstacle) genericObstacle;
+            if(!g1.exists()){
+                int idx = PositionToIndex(genericObstacle.getPosition());
+                RemovedEntity(genericObstacle, idx);
+            }
+        }catch (Exception e){}
     }
 
     /**
@@ -168,6 +173,27 @@ public class MapDivision<entity extends BaseGameEntity>{
                 }
             }
         }
+    }
+
+    public List<entity> CalculateNeighborsArray(entity entity, double radius){
+        surround_entities.clear();
+        Point2D target = entity.getCenterPosition();
+        // creat the hitbox whcih is the interact test box of the target area
+        Hitbox targetBox = new Hitbox(target.subtract(radius,radius),target.add(radius,radius));
+
+
+        ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
+        while (c_iter.hasNext()){
+            Cell<entity> curCell = c_iter.next();
+
+            if(!curCell.Unites.isEmpty() && curCell.cBox.isInteractedWith(targetBox)){
+                for(entity ent :curCell.Unites){
+                    if(!curCell.Unites.isEmpty() && ent != entity &&  ent.getPosition().distance(target) < radius)
+                        surround_entities.add(ent);
+                }
+            }
+        }
+        return surround_entities;
     }
 
     public List<entity> CalculateNeighborsArray(Point2D target, double radius){

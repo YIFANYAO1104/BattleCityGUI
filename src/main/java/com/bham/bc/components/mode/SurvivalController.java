@@ -30,6 +30,12 @@ public class SurvivalController extends CenterController {
      */
     private void initEnemies() {
         characters.add(new Kamikaze(16*28, 16*28));
+        characters.add(new Kamikaze(15*28, 16*28));
+        characters.add(new Kamikaze(14*28, 16*28));
+//        characters.add(new Kamikaze(13*28, 16*28));
+//        characters.add(new Kamikaze(12*28, 16*28));
+
+
     }
 
     @Override
