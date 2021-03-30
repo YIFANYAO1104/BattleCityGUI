@@ -170,7 +170,7 @@ public class GameMap {
      * @param bullets
      */
     public void handleAll(ArrayList<GameCharacter> characters, ArrayList<Bullet> bullets) {
-
+        //Update
         characters.forEach(c1->{
             mapDivision.CalculateNeighborsArray(c1,32.0).forEach(o1->{
                 try {
