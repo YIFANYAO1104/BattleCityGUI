@@ -209,8 +209,6 @@ public class MainMenu extends AnchorPane {
         record4.putIntoArray();
         Records record5=new Records("5th","Najd","792","7/3");
         record5.putIntoArray();
-        Records record6=new Records("6th","Junyu","772","7/3");
-        record6.putIntoArray();
         sort();
         writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
         //read from Json file
@@ -269,6 +267,7 @@ public class MainMenu extends AnchorPane {
      * sort the socres automatically.
      */
     public static void sort(){
+        // keep the first 3 record. And when new record come, delete some old records
         int len=jsonArrayToFile.length();
         jsonArray=new JSONArray();
         if (jsonArrayToFile.length()>3){
@@ -297,8 +296,10 @@ public class MainMenu extends AnchorPane {
 
 
 
+        //sort the first 3 records of array
        jsonArrayToFile=jsonArraySort(jsonArrayToFile);
 
+        //set the rank according to the order of array
         for (int i=0;i<jsonArrayToFile.length();i++){
             JSONObject jsonObject=(JSONObject) jsonArrayToFile.get(i);
             jsonObject.put("rank",(i+1)+"");
