@@ -33,6 +33,6 @@ public class Impassable extends GenericObstacle {
 
     @Override
     public void handleCharacter(GameCharacter c) {
-        if(intersects(c)) c.move(-1, true);
+        if(intersects(c)) c.move(-1);
     }
 }

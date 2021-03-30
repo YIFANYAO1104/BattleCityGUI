@@ -53,7 +53,7 @@ public class ExplosiveTrigger extends Trigger {
             gameCharacter.changeHP(-1000);
             backendServices.addBombTank(new BombTank(gameCharacter.getPosition()));
         } else if (gameCharacter.getHitBox().intersects(x,y,entityImages[0].getWidth(),entityImages[0].getHeight())){
-            gameCharacter.move(-1, true);
+            gameCharacter.move(-1);
         }
     }
 

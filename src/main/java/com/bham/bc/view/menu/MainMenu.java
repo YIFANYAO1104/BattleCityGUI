@@ -1,7 +1,7 @@
 package com.bham.bc.view.menu;
 
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.mode.MODE;
+import com.bham.bc.components.mode.Mode;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.SubMenu;
@@ -108,8 +108,8 @@ public class MainMenu extends AnchorPane {
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
 
         btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
-        btnSurvival.setOnMouseClicked(e -> menuSession.createGameSession(MODE.SURVIVAL, MapType.Map1));
-        btnChallenge.setOnMouseClicked(e -> menuSession.createGameSession(MODE.CHALLENGE, MapType.EmptyMap));
+        btnSurvival.setOnMouseClicked(e -> menuSession.createGameSession(Mode.SURVIVAL, MapType.Map1));
+        btnChallenge.setOnMouseClicked(e -> menuSession.createGameSession(Mode.CHALLENGE, MapType.EmptyMap));
 
         subMenuMode = new SubMenu(this);
         subMenuMode.getChildren().addAll(btnBack, btnSurvival, btnChallenge);

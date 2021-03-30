@@ -1,10 +1,11 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
-import com.bham.bc.components.mode.MODE;
+import com.bham.bc.components.mode.Mode;
 import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.physics.BombTank;
@@ -23,9 +24,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import org.omg.CORBA.BAD_CONTEXT;
+import javafx.scene.transform.Rotate;
+import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +69,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * @param mode SURVIVAL or CHALLENGE value to be passed as a game mode
      * @param mapType layout of map that will be used by a specific mode
      */
-    public static void setMode(MODE mode, MapType mapType) {
+    public static void setMode(Mode mode, MapType mapType) {
         CenterController centerController = null;
         switch (mode) {
             case SURVIVAL:
@@ -78,6 +82,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         frontendServices = centerController;
         backendServices = centerController;
 
+        centerController.startGame();
+
         //--Add all game elemnets to mapDivision------
         centerController.gameMap.getMapDivision().addToMapDivision(
                 new ArrayList<>(centerController.characters));
@@ -86,6 +92,17 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     // TEMPORARY METHODS -------------------------------------------
+    public abstract void startGame();
+
+    @Override
+    public Point2D getMapCenterPosition() {
+        return new Point2D(16*32, 16*32);
+    }
+
+    @Override
+    public Point2D getNearestOppositeSideCenterPosition(Point2D point, SIDE side) {
+        return characters.stream().filter(c -> c.getSide() != side).map(GameCharacter::getCenterPosition).min(Comparator.comparing(c -> c.distance(point))).get();
+    }
 
     @Override
     public void addBombTank(BombTank b) {
@@ -124,11 +141,31 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             cHitBox.setStrokeWidth(1);
             hitBoxPane.getChildren().add(cHitBox);
 
-            Shape enemyLine = c.getLine();
-            enemyLine.setStroke(Color.RED);
-            enemyLine.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(enemyLine);
+            //Shape enemyLine = c.getLine();
+            //enemyLine.setStroke(Color.RED);
+            //enemyLine.setStrokeWidth(1);
+            //hitBoxPane.getChildren().add(enemyLine);
         });
+
+
+        characters.forEach(c -> {
+            List<Shape> smoothingBoxes = c.getSmoothingBoxes();
+            for (Shape smoothingBox : smoothingBoxes) {
+                smoothingBox.setFill(Color.TRANSPARENT);
+                smoothingBox.setStroke(Color.GREEN);
+                smoothingBox.setStrokeWidth(1);
+                hitBoxPane.getChildren().add(smoothingBox);
+            }
+        });
+
+        List<Shape> smoothingBoxes = player.getSmoothingBoxes();
+        for (Shape smoothingBox : smoothingBoxes) {
+            smoothingBox.setFill(Color.TRANSPARENT);
+            smoothingBox.setStroke(Color.GREEN);
+            smoothingBox.setStrokeWidth(1);
+            hitBoxPane.getChildren().add(smoothingBox);
+        }
+
     }
     // ------------------------------------------------------------
 
@@ -198,6 +235,22 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     // OTHER ------------------------------------------------------
     @Override
+    public boolean couldWalkThrough(Point2D start, Point2D end, Point2D radius, List<Shape> array){
+        double angle = end.subtract(start).angle(new Point2D(0,-1));
+        //angle between vectors are [0,180), so we need add extra direction info
+        if (end.subtract(start).getX()<0) angle = -angle;
+        double dis = start.distance(end);
+
+        Point2D center = start.midpoint(end);
+        Point2D topLeft = center.subtract(radius.multiply(0.5)).subtract(0,dis/2);
+        Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), radius.getX()+10, radius.getY()+dis+5);
+        hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
+        array.add(hitBox);
+
+        return !gameMap.intersectsObstacles(hitBox);
+    }
+
+    @Override
     public void update() {
         gameMap.update();
         characters.forEach(GameCharacter::update);
@@ -229,10 +282,9 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         }
 
         bullets.forEach(bullet -> bullet.render(gc));
-
         characters.forEach(character -> character.render(gc));
 
-        gameMap.renderTopLayer(gc);
+//        gameMap.renderTopLayer(gc);
         gameMap.renderGraph(gc, allInfoCharacter());
     }
 

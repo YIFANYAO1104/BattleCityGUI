@@ -37,7 +37,7 @@ public class Soft extends GenericObstacle {
     }
 
     @Override
-    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.BREAKABLE); }
+    public EnumSet<Attribute> getAttributes() { return EnumSet.of(Attribute.BREAKABLE); }
 
     @Override
     protected Image[] getDefaultImage() {
@@ -62,7 +62,7 @@ public class Soft extends GenericObstacle {
 
     @Override
     public void handleCharacter(GameCharacter c) {
-        if(intersects(c)) c.move(-1, true);
+        if(intersects(c)) c.move(-1);
     }
 
     @Override

@@ -22,6 +22,11 @@ public class ChallengeController extends CenterController {
         gameMap.initialGraph(player);
     }
 
+    @Override
+    public void startGame() {
+        player = new Player(16*32, 16*32);
+    }
+
 //    @Override
 //    public void update() { player.update(); }
 //

@@ -2,12 +2,15 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.utils.graph.SparseGraph;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import com.bham.bc.entity.physics.BombTank;
 
 /**
@@ -75,6 +78,11 @@ public interface BackendServices {
      * Clears all objects in the game
      */
     void clear();
+
+    /**
+     *For path smoothing algorithms
+     */
+    boolean couldWalkThrough(Point2D start,Point2D end,Point2D radius, List<Shape> array);
     //-------------------------------------------------------------
 
 
@@ -83,4 +91,6 @@ public interface BackendServices {
     // TODO: replace / remove or find another usage
     void addBombTank(BombTank b);               // We don't have effects yet or it can be a trigger
     boolean intersectsObstacles(Shape hitbox);  // This will be moved to physics package
+    Point2D getMapCenterPosition(); // TODO: doc
+    Point2D getNearestOppositeSideCenterPosition(Point2D point, SIDE side); //TODO: doc
 }

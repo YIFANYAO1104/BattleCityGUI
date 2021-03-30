@@ -2,8 +2,7 @@ package com.bham.bc.components.environment;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.environment.obstacles.ATTRIBUTE;
-import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
+import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
@@ -114,12 +113,12 @@ public class GameMap {
      */
 
     public void renderBottomLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(!o.getAttributes().contains(ATTRIBUTE.RENDER_TOP)) o.render(gc); });
+        obstacles.forEach(o -> { if(!o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
         renderTriggers(gc);
     }
 
     public void renderTopLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(o.getAttributes().contains(ATTRIBUTE.RENDER_TOP)) o.render(gc); });
+        obstacles.forEach(o -> { if(o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
     }
 
 //    public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
@@ -198,8 +197,9 @@ public class GameMap {
     }
 
     // Temp until physics
+    //Really useful for path smoothing!
     public boolean intersectsObstacles(Shape shape) {
-        return obstacles.stream().anyMatch(o -> !o.getAttributes().contains(ATTRIBUTE.PASSABLE) && o.intersectsShape(shape));
+        return obstacles.stream().anyMatch(o -> !o.getAttributes().contains(Attribute.PASSABLE) && o.intersectsShape(shape));
     }
 
     public List<BaseGameEntity> getObstacles() {
