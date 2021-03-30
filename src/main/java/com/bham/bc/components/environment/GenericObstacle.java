@@ -60,6 +60,7 @@ public abstract class GenericObstacle extends BaseGameEntity {
      * Handles bullet collision
      * @param b bullet to handle
      */
+
     public abstract void handleBullet(Bullet b);
 
     /**

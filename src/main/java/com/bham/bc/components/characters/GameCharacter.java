@@ -110,6 +110,10 @@ abstract public class GameCharacter extends MovingEntity {
         bullets.forEach(this::handleBullet);
     }
 
+    public void handleALL(List<MovingEntity> en1){
+//        en1.forEach(this::handle);
+    }
+
 
     /**
      * Overloads basic <i>move()</i> method with extra parameters

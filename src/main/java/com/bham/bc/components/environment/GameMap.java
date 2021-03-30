@@ -10,12 +10,14 @@ import com.bham.bc.components.environment.triggers.WeaponGenerator;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.entity.triggers.TriggerSystem;
+import com.bham.bc.utils.cells.MapDivision;
 import com.bham.bc.utils.graph.HandyGraphFunctions;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.graph.edge.GraphEdge;
 import com.bham.bc.utils.graph.node.NavNode;
 import com.bham.bc.utils.maploaders.JsonMapLoader;
 import com.bham.bc.utils.maploaders.MapLoader;
+import com.sun.tools.javah.Gen;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
@@ -35,6 +37,9 @@ public class GameMap {
     private static int width = MAP_WIDTH;
     private static int height = MAP_HEIGHT;
 
+    protected MapDivision<BaseGameEntity> mapDivision =
+            new MapDivision<>(MAP_WIDTH,MAP_HEIGHT,16,16,50);
+
 
     /**
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
@@ -44,6 +49,7 @@ public class GameMap {
         //width = mapLoader.getMapWidth();
         //height = mapLoader.getMapHeight();
         obstacles = mapLoader.getObstacles();
+        mapDivision.addToMapDivision(new ArrayList<>(obstacles));
         triggerSystem = mapLoader.getTriggerSystem();
         addTriggers();
     }
@@ -130,8 +136,13 @@ public class GameMap {
 
 
     public void update() {
+        mapDivision.UpdateObstacles(new ArrayList<>(obstacles));
         obstacles.removeIf(o -> !o.exists());
         obstacles.forEach(GenericObstacle::update);
+    }
+
+    public MapDivision<BaseGameEntity> getMapDivision() {
+        return mapDivision;
     }
 
     private void addWeaponGenerator(){
@@ -165,5 +176,9 @@ public class GameMap {
     // Temp until physics
     public boolean intersectsObstacles(Shape shape) {
         return obstacles.stream().anyMatch(o -> !o.getAttributes().contains(ATTRIBUTE.PASSABLE) && o.intersectsShape(shape));
+    }
+
+    public List<BaseGameEntity> getObstacles() {
+        return new ArrayList<>(obstacles);
     }
 }

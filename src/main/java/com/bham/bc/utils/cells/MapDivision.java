@@ -1,6 +1,8 @@
 package com.bham.bc.utils.cells;
 
 
+import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
@@ -97,6 +99,16 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
+    public void addToMapDivision(List<entity> m1){
+        for(entity b1:m1){
+            AddEntity(b1);
+        }
+    }
+
+    public void UpdateEntities(List<entity> n1){
+        n1.forEach(entity-> UpdateEntity(entity));
+    }
+
     public void UpdateEntity(entity ent){
         if(!register.containsKey((MovingEntity) ent)){
             System.out.println("It may not be a Moving entitys or Does not contain this ent!!!, it should be added firstly");
@@ -105,11 +117,33 @@ public class MapDivision<entity extends BaseGameEntity>{
         int oldIdx = register.get(ent);
         int newIdx = PositionToIndex(ent.getPosition());
 
-        if(newIdx == oldIdx) return;
+        //----------------------------remove-------if it is not exist--------
+        if(!((MovingEntity) ent).exists()){
+            RemovedEntity(ent,oldIdx);
+            register.remove(ent);
+            return;
+        }
+        //=-=-=-----replace new idx to old poistion----------------
+        if(newIdx != oldIdx){
+            m_Cells.get(oldIdx).Unites.remove(ent);
+            m_Cells.get(newIdx).Unites.add(ent);
+            register.replace((MovingEntity) ent,newIdx);
+        }
+        return;
 
-        m_Cells.get(oldIdx).Unites.remove(ent);
-        m_Cells.get(newIdx).Unites.add(ent);
-        register.replace((MovingEntity) ent,newIdx);
+    }
+
+    public void RemovedEntity(entity ent, int idx){
+        m_Cells.get(idx).Unites.remove(ent);
+    }
+    public void UpdateObstacles(ArrayList<entity> a1){
+        a1.forEach(b1-> UpdateObstacle(b1));
+    }
+
+    public void UpdateObstacle (entity genericObstacle){
+        if(! (genericObstacle instanceof GenericObstacle)) System.out.println("it is not a genericObstacle,but I will delete it");
+        int idx = PositionToIndex(genericObstacle.getPosition());
+        RemovedEntity(genericObstacle, idx);
     }
 
     /**
@@ -134,7 +168,26 @@ public class MapDivision<entity extends BaseGameEntity>{
                 }
             }
         }
+    }
 
+    public List<entity> CalculateNeighborsArray(Point2D target, double radius){
+        surround_entities.clear();
+        // creat the hitbox whcih is the interact test box of the target area
+        Hitbox targetBox = new Hitbox(target.subtract(radius,radius),target.add(radius,radius));
+
+
+        ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
+        while (c_iter.hasNext()){
+            Cell<entity> curCell = c_iter.next();
+
+            if(!curCell.Unites.isEmpty() && curCell.cBox.isInteractedWith(targetBox)){
+                for(entity ent :curCell.Unites){
+                    if(ent.getPosition().distance(target) < radius)
+                        surround_entities.add(ent);
+                }
+            }
+        }
+        return surround_entities;
     }
 
     public entity start(){

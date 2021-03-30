@@ -9,7 +9,8 @@ import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.utils.Constants;
+import static com.bham.bc.utils.Constants.*;
+import com.bham.bc.utils.cells.MapDivision;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
@@ -25,6 +26,7 @@ import javafx.scene.shape.Shape;
 import org.omg.CORBA.BAD_CONTEXT;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -44,6 +46,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     //temp
     protected ArrayList<BombTank> bombTanks = new ArrayList<>();
+    //Map division
 
 
     /**
@@ -67,7 +70,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         switch (mode) {
             case SURVIVAL:
                 centerController = new SurvivalController(mapType);
-
                 break;
             case CHALLENGE:
                 centerController = new ChallengeController(mapType);
@@ -75,6 +77,12 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         }
         frontendServices = centerController;
         backendServices = centerController;
+
+        //--Add all game elemnets to mapDivision------
+        centerController.gameMap.getMapDivision().addToMapDivision(
+                new ArrayList<>(centerController.characters));
+        //-----------------------------------------------
+
     }
 
     // TEMPORARY METHODS -------------------------------------------
@@ -94,7 +102,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         hitBoxPane.getChildren().clear();
 
         // Add map hit-box
-        Rectangle mapConstrain = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
+        Rectangle mapConstrain = new Rectangle(MAP_WIDTH, MAP_HEIGHT, Color.TRANSPARENT);
         mapConstrain.setStroke(Color.RED);
         mapConstrain.setStrokeWidth(5);
         hitBoxPane.getChildren().add(mapConstrain);
@@ -152,6 +160,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     // ADDERS -----------------------------------------------------
     @Override
     public void addBullet(Bullet bullet) {
+        gameMap.getMapDivision().AddEntity(bullet);
         bullets.add(bullet);
     }
 
@@ -192,9 +201,17 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void update() {
         gameMap.update();
         characters.forEach(GameCharacter::update);
-        bullets.forEach(Bullet::update);
-
+//        bullets.forEach(Bullet::update);
+        // --------temp---------
+        for(Bullet b1 : bullets){
+            b1.update();
+            gameMap.getMapDivision().UpdateEntity(b1);
+        }
+//        mapDivision.UpdateEntity(player);
+        characters.forEach(c1-> gameMap.getMapDivision().UpdateEntity(c1));
+        //-----------------------
         gameMap.handleAll(characters, bullets);
+//        gameMap.handleAll(characters, bullets);
         characters.forEach(character -> character.handleAll(characters, bullets));
 
         bullets.removeIf(b -> !b.exists());
@@ -211,6 +228,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         }
 
         bullets.forEach(bullet -> bullet.render(gc));
+
         characters.forEach(character -> character.render(gc));
 
         gameMap.renderTopLayer(gc);

@@ -37,7 +37,8 @@ public class Hitbox {
     }
 
     public Boolean isInteractedWith(Hitbox another){
-        if(isInteractedWith(this,another) || isInteractedWith(another,this)) return true;
+        if(isInteractedWith(this,another) || isInteractedWith(another,this))
+            return true;
         return false;
     }
     public double getLeft(){
