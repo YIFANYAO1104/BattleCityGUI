@@ -117,13 +117,13 @@ public class MapDivision<entity extends BaseGameEntity>{
         int oldIdx = register.get(ent);
         int newIdx = PositionToIndex(ent.getPosition());
 
-        //----------------------------remove-------if it is not exist--------
+        //----------------------------remove-------if it is not exist----------------
         if(!((MovingEntity) ent).exists()){
             RemovedEntity(ent,oldIdx);
             register.remove(ent);
             return;
         }
-        //=-=-=-----replace new idx to old poistion----------------
+        //---------------------------replace new idx to old poistion----------------
         if(newIdx != oldIdx){
             m_Cells.get(oldIdx).Unites.remove(ent);
             m_Cells.get(newIdx).Unites.add(ent);

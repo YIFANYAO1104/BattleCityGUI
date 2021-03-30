@@ -84,11 +84,15 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
         centerController.startGame();
 
-        //--Add all game elemnets to mapDivision------
-        centerController.gameMap.getMapDivision().addToMapDivision(
-                new ArrayList<>(centerController.characters));
-        //-----------------------------------------------
+        initialMapDivision(centerController);
 
+    }
+
+    public static void initialMapDivision(CenterController c1){
+        //--Add all game elemnets to mapDivision------
+        c1.gameMap.getMapDivision().addToMapDivision(
+                new ArrayList<>(c1.characters));
+        //-----------------------------------------------
     }
 
     // TEMPORARY METHODS -------------------------------------------
@@ -254,20 +258,18 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void update() {
         gameMap.update();
         characters.forEach(GameCharacter::update);
-//        bullets.forEach(Bullet::update);
-        // --------temp---------
+        // Update bullets
         for(Bullet b1 : bullets){
             b1.update();
-            gameMap.getMapDivision().UpdateEntity(b1);
+            gameMap.getMapDivision().UpdateEntity(b1);       // Removed the not exist bullet stored in Mapdivision
         }
-//        mapDivision.UpdateEntity(player);
-        characters.forEach(c1-> gameMap.getMapDivision().UpdateEntity(c1));
-        //-----------------------
+
+        characters.forEach(c1-> gameMap.getMapDivision().UpdateEntity(c1));     //Update characters
         gameMap.handleAll(characters, bullets);
-//        gameMap.handleAll(characters, bullets);
 //        characters.forEach(character -> character.handleAll(characters, bullets));
         characters.forEach(character -> character.handleAll(
                 gameMap.getMapDivision().CalculateNeighborsArray(character,40)));
+
         bullets.removeIf(b -> !b.exists());
         characters.removeIf(c -> !c.exists());
     }

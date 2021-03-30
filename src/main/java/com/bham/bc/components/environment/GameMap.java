@@ -164,6 +164,11 @@ public class GameMap {
 //        triggerSystem.handleAll(characters, obstacles);
 //    }
 
+    /**
+     * Use the map division reduce the at elast two orders of magnitude of computation.
+     * @param characters
+     * @param bullets
+     */
     public void handleAll(ArrayList<GameCharacter> characters, ArrayList<Bullet> bullets) {
 
         characters.forEach(c1->{
