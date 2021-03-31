@@ -172,10 +172,10 @@ public class PathPlanner implements NavigationService {
         //        }
 
         //smooth path
-//        for (PathEdge pathEdge : curPath) {
-//            smoothedPath.add(new PathEdge(pathEdge));
-//        }
-//        quickSmooth(smoothedPath);
+        for (PathEdge pathEdge : curPath) {
+            smoothedPath.add(new PathEdge(pathEdge));
+        }
+        quickSmooth(smoothedPath);
     }
 
     /**
@@ -224,7 +224,7 @@ public class PathPlanner implements NavigationService {
                 fetchPathFromAlgorithm();
             }
             //deep copy
-            for (PathEdge pathEdge : curPath) {
+            for (PathEdge pathEdge : smoothedPath) {
                 tempList.add(new PathEdge(pathEdge));
             }
         }

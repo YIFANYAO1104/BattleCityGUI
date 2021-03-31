@@ -12,6 +12,7 @@ import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
@@ -32,6 +33,9 @@ public abstract class Enemy extends GameCharacter {
     private LinkedList<PathEdge> pathEdges;
     private Point2D destination;
     private int timeTillSearch;
+
+    //temp for debug
+    Point2D acceleration = new Point2D(0,0);
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -103,12 +107,28 @@ public abstract class Enemy extends GameCharacter {
         if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
             if(!pathEdges.isEmpty()) {
                 destination = pathEdges.removeFirst().getDestination();
-                face(destination);
-                move();
+//                face(destination);
+//                move();
             }
         } else if(!pathEdges.isEmpty()) {
+//            move();
+        }
+
+        if (pathEdges.isEmpty()) { //last element
+            //arrive
+        } else {
+            //seek
+            Point2D force = sb.seek(destination);
+            Point2D acceleration = force.multiply(1./5);
+            this.acceleration = acceleration;
+            velocity = velocity.add(acceleration);
+            //Truncate
+            if(velocity.magnitude()>speed){
+                velocity = velocity.normalize().multiply(speed);
+            }
             move();
         }
+
     }
 
     /**
@@ -119,6 +139,10 @@ public abstract class Enemy extends GameCharacter {
         double deltaX = toward.getX() - getCenterPosition().getX();
         double deltaY = toward.getY() - getCenterPosition().getY();
         angle = Math.toDegrees(Math.atan2(deltaY, deltaX)) + 90;
+        velocity = toward.subtract(getCenterPosition());
+        if(velocity.magnitude()>speed){
+                velocity = velocity.normalize().multiply(speed);
+        }
     }
 
     /**
@@ -235,6 +259,19 @@ public abstract class Enemy extends GameCharacter {
     public void render(GraphicsContext gc) {
         if (navigationService!=null) navigationService.render(gc);
         drawRotatedImage(gc, entityImages[0], angle);
+
+        gc.setStroke(Color.GOLD);
+        gc.setLineWidth(2.0);
+
+        gc.strokeLine(x, y, x+velocity.getX()*10, y+velocity.getY()*10);
+
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(2.0);
+
+        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
+
+        gc.setFill(Color.WHITE);
+        gc.fillRoundRect(destination.getX(),destination.getY(),4,4,1,1);
     }
 
     @Override

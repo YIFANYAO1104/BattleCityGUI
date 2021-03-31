@@ -96,8 +96,36 @@ public class Player extends GameCharacter {
 	 * way the character in the image is facing (upwards)</p>
 	 */
 	private void updateAngle() {
+		//sum up directions
 		Optional<Point2D> directionPoint = directionSet.stream().map(Direction::toPoint).reduce(Point2D::add);
-		directionPoint.ifPresent(p -> { if(p.getX() != 0 || p.getY() != 0) angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1); });
+		//convert to angle
+		directionPoint.ifPresent(p -> {
+
+//			System.out.println("p="+p);
+			System.out.println("------------------------------");
+			System.out.println("velocitybefore = "+velocity);
+			Point2D p1 = new Point2D(p.getX(),-p.getY());
+			Point2D force = sb.seek(getCenterPosition().add(p1));
+			System.out.println("force="+force);
+//			Point2D acceleration = force.multiply(1./5);
+//			velocity = velocity.add(acceleration);
+			//we want an instant change on speed rather than accumulation
+			velocity = velocity.add(force);
+			System.out.println("velocityafter = "+velocity);
+			System.out.println("------------------------------");
+//			System.out.println("velocity" + velocity);
+			//Truncate
+			if(velocity.magnitude()>speed){
+				velocity = velocity.normalize().multiply(speed);
+			}
+
+
+			//TODO:REMOVE ANGLE
+			if(p.getX() != 0 || p.getY() != 0) {
+
+				angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1);
+			}
+		});
 	}
 
 	/**
@@ -172,8 +200,8 @@ public class Player extends GameCharacter {
 	@Override
 	public void move() {
 		if(!directionSet.isEmpty()) {
-			x += Math.sin(Math.toRadians(angle)) * speed;
-			y -= Math.cos(Math.toRadians(angle)) * speed;
+			x += velocity.getX();
+			y += velocity.getY();
 		}
 	}
 

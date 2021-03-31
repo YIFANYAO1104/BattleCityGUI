@@ -3,6 +3,7 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.MovingEntity;
+import javafx.geometry.Point2D;
 import javafx.scene.shape.Shape;
 
 import java.util.List;
@@ -14,6 +15,8 @@ abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
     protected SIDE side;
+
+    protected Steering sb;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -27,6 +30,7 @@ abstract public class GameCharacter extends MovingEntity {
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
+        sb = new Steering(this);
     }
 
     /**
@@ -94,14 +98,21 @@ abstract public class GameCharacter extends MovingEntity {
      * @param speedMultiplier number by which the speed will be multiplied (use negative to inverse movement)
      */
     public void move(double speedMultiplier) {
-        x += Math.sin(Math.toRadians(angle)) * speed * speedMultiplier;
-        y -= Math.cos(Math.toRadians(angle)) * speed * speedMultiplier;
+        //TODO:Move to steering.calculate
+//        velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed).multiply(speedMultiplier);
+        Point2D temp = velocity.multiply(speedMultiplier);
+        velocity = velocity.multiply(speedMultiplier);
+        x += temp.getX();
+        y += temp.getY();
     }
 
     @Override
     public void move() {
-        x += Math.sin(Math.toRadians(angle)) * speed;
-        y -= Math.cos(Math.toRadians(angle)) * speed;
+        //TODO:Move to steering.calculate
+//        velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed);
+
+        x += velocity.getX();
+        y += velocity.getY();
     }
 
     protected abstract void destroy();

@@ -23,7 +23,7 @@ abstract public class Bullet extends MovingEntity {
      * @param damage amount of hp the bullet can take from an entity
      */
     public Bullet(double x, double y, double speed, double angle, SIDE side, double damage) {
-        super(x, y, speed);
+        super(x, y, speed, angle);
         this.angle = angle;
         this.side = side;
         this.damage = damage;

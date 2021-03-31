@@ -149,13 +149,13 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             }
         });
 
-        List<Shape> smoothingBoxes = player.getSmoothingBoxes();
-        for (Shape smoothingBox : smoothingBoxes) {
-            smoothingBox.setFill(Color.TRANSPARENT);
-            smoothingBox.setStroke(Color.GREEN);
-            smoothingBox.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(smoothingBox);
-        }
+//        List<Shape> smoothingBoxes = player.getSmoothingBoxes();
+//        for (Shape smoothingBox : smoothingBoxes) {
+//            smoothingBox.setFill(Color.TRANSPARENT);
+//            smoothingBox.setStroke(Color.GREEN);
+//            smoothingBox.setStrokeWidth(1);
+//            hitBoxPane.getChildren().add(smoothingBox);
+//        }
 
     }
     // ------------------------------------------------------------

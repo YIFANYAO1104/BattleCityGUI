@@ -2,6 +2,8 @@ package com.bham.bc.components.mode;
 
 import com.bham.bc.components.CenterController;
 import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.characters.enemies.Follower;
+import com.bham.bc.components.characters.enemies.Shooter;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import javafx.geometry.Point2D;
@@ -20,11 +22,13 @@ public class ChallengeController extends CenterController {
         gameMap = new GameMap(mapType);
         player = new Player(16*32, 16*32);
         gameMap.initialGraph(player);
+        player.initNavigationService(gameMap.getGraph());
+        characters.add(player);
     }
 
     @Override
     public void startGame() {
-        player = new Player(16*32, 16*32);
+        characters.add(new Follower(16*26, 16*26));
     }
 
 //    @Override

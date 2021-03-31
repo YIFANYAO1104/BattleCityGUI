@@ -1,5 +1,6 @@
 package com.bham.bc.entity;
 
+import com.bham.bc.components.characters.Steering;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -10,8 +11,11 @@ import javafx.scene.transform.Rotate;
  */
 public abstract class MovingEntity extends BaseGameEntity {
     protected double speed;
+    protected Point2D velocity;
     protected double angle;
     protected boolean exists;
+
+
 
     /**
      * Constructs a single moving entity by default facing up (angle is set to 0) and generates a new valid ID for it
@@ -23,7 +27,15 @@ public abstract class MovingEntity extends BaseGameEntity {
     protected MovingEntity(double x, double y, double speed) {
         super(GetNextValidID(), x, y);
         this.speed = speed;
+        this.velocity = new Point2D(0,0);
         angle = 0;
+        exists = true;
+    }
+
+    protected MovingEntity(double x, double y, double speed, double angle) {
+        super(GetNextValidID(), x, y);
+        this.speed = speed;
+        this.velocity = new Point2D(0,0);
         exists = true;
     }
 
@@ -58,13 +70,12 @@ public abstract class MovingEntity extends BaseGameEntity {
      */
     public abstract void move();
 
-    //TODO:ADD MAX SPEED
     public double getMaxSpeed() {
-        return 0;
+        return speed;
     }
 
     public Point2D getVelocity() {
-        return new Point2D(0,0);
+        return velocity;
     }
 
     public double getMaxForce() {
@@ -73,10 +84,10 @@ public abstract class MovingEntity extends BaseGameEntity {
 
     public double getSpeed() {
 //        return m_vVelocity.Length();
-        return 0;
+        return velocity.magnitude();
     }
 
     public Point2D getHeading() {
-        return new Point2D(0,0);
+        return velocity.normalize();
     }
 }

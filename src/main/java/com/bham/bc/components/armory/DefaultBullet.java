@@ -3,6 +3,7 @@ package com.bham.bc.components.armory;
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.utils.Constants;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -45,8 +46,14 @@ public class DefaultBullet extends Bullet {
 
 	@Override
 	public void move() {
-		x += Math.sin(Math.toRadians(angle)) * speed;
-		y -= Math.cos(Math.toRadians(angle)) * speed;
+		//TODO:Move to steering.calculate
+//		velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed);
+
+//		System.out.println("bullet"+velocity);
+//		System.out.println("angle"+angle);
+
+		x += velocity.getX();
+		y -= velocity.getY();
 
 		if (x < 0 || y < 0 || x > GameMap.getWidth() || y > GameMap.getHeight()) {
 			entityManager.removeEntity(this);

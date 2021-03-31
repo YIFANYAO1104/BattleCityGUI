@@ -28,6 +28,8 @@ import java.util.List;
 
 public class GameMap {
     private List<GenericObstacle> obstacles;
+    private List<GenericObstacle> bg;
+    private List<GenericObstacle> top;
     private TriggerSystem triggerSystem;
     private SparseGraph graphSystem;
 
@@ -39,10 +41,12 @@ public class GameMap {
      * Constructor Of Game Map (Adding All Initial Objects to the Map)
      */
     public GameMap(MapType mapType) {
-        MapLoader mapLoader = new JsonMapLoader(mapType.getName());
+        JsonMapLoader mapLoader = new JsonMapLoader(mapType.getName());
         //width = mapLoader.getMapWidth();
         //height = mapLoader.getMapHeight();
         obstacles = mapLoader.getObstacles();
+        bg = mapLoader.getPassables();
+        top = mapLoader.getCoverings();
         triggerSystem = mapLoader.getTriggerSystem();
         addTriggers();
     }
@@ -107,12 +111,15 @@ public class GameMap {
      */
 
     public void renderBottomLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(!o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
+        bg.forEach(o -> o.render(gc));
+        obstacles.forEach(o -> o.render(gc));
+//        obstacles.forEach(o -> { if(!o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
         renderTriggers(gc);
     }
 
     public void renderTopLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
+        top.forEach(o -> o.render(gc));
+//        obstacles.forEach(o -> { if(o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
     }
 
 //    public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
