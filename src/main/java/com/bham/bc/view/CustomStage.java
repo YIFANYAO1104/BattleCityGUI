@@ -403,9 +403,8 @@ public class CustomStage extends Stage{
      */
 
     public void createCommonTitlebar(AnchorPane root, int Width, int Height){
-        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
-        titleBar(root,Width,Height,-780,changeMainSkin);
-        gpTitle.setBackground(new Background(image));
+           titleBar(root,Width,Height,-780,changeMainSkin);
+           changeMainSkin.getSelectionModel().select(selected);
 
 
     }
