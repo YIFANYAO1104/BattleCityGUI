@@ -34,7 +34,10 @@ public class CustomStage extends Stage{
 
     private Stage stage;
     private Scene gamescene;
-
+    private double x = 0.00;
+    private double y = 0.00;
+    private double width = 0.00;
+    private double height = 0.00;
 
     private boolean isMax = false;
     private boolean isRight;// 是否处于右边界调整窗口状态
