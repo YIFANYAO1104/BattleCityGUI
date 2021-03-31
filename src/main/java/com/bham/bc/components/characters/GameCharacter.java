@@ -16,6 +16,7 @@ abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
     protected SIDE side;
+    protected int immuneTicks, freezeTicks, tripleTicks = 0; 
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -55,6 +56,25 @@ abstract public class GameCharacter extends MovingEntity {
     @Deprecated
     public void switchWeapon(Weapon w) {}
 
+    public void toTriple(int numTicks) {
+    	tripleTicks = numTicks;
+    }
+
+    public void toFreeze(int numTicks) {
+    	freezeTicks = numTicks;
+    }
+    
+    public void toImmune(int numTicks) {
+    	immuneTicks = numTicks;
+    }
+    
+    // Updates active trigger time ticks
+    protected void updateTriggers() {
+    	if(immuneTicks!=0) --immuneTicks;
+    	if(freezeTicks!=0) --freezeTicks;
+    	if(tripleTicks!=0) --tripleTicks;
+    }
+
 
     /**
      * Handles bullet collision - takes damage and destroys bullet
@@ -62,7 +82,7 @@ abstract public class GameCharacter extends MovingEntity {
      */
     protected void handle(Bullet bullet) {
         if(intersects(bullet)) {
-            if(bullet.getSide() != side) {
+            if(bullet.getSide() != side && immuneTicks == 0) {
                 changeHP(-bullet.getDamage());
             }
             bullet.destroy();

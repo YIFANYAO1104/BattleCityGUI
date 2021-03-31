@@ -150,17 +150,22 @@ public class Player extends GameCharacter {
 	 * @return instance of DefaultBullet
 	 */
 	public void fire() {
-		double centerBulletX = x + getRadius().getX()/2.0;
-		double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
+		double[] angles = {angle, angle+45, angle-45};
+		int loop = (tripleTicks!=0)? 3:1;
+		
+		for(int i=0; i<loop; i++) {
+			double centerBulletX = x + getRadius().getX()/2.0;
+			double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
 
-		Rotate rot = new Rotate(angle, getCenterPosition().getX(), getCenterPosition().getY());
-		Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
+			Rotate rot = new Rotate(angles[i], getCenterPosition().getX(), getCenterPosition().getY());
+			Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
 
-		double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
-		double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
+			double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
+			double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
 
-		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
-		backendServices.addBullet(b);
+			DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angles[i], side);
+			backendServices.addBullet(b);
+		}
 	}
 
 	public void bomb() {
@@ -185,8 +190,11 @@ public class Player extends GameCharacter {
 
 	@Override
 	public void update() {
-		updateAngle();
-		move();
+		updateTriggers();
+		if (freezeTicks == 0) {
+			updateAngle();
+			move();
+		} 
 		TRACKABLE_X.set(getCenterPosition().getX());
 		TRACKABLE_Y.set(getCenterPosition().getY());
 	}

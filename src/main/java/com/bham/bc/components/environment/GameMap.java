@@ -6,6 +6,9 @@ import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.components.environment.triggers.HealthGiver;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.components.environment.triggers.WeaponGenerator;
+import com.bham.bc.components.environment.triggers.Freeze;
+import com.bham.bc.components.environment.triggers.TripleBullet;
+import com.bham.bc.components.environment.triggers.Immune;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.entity.triggers.TriggerSystem;
@@ -56,8 +59,14 @@ public class GameMap {
     public void addTriggers(){
         HealthGiver hg = new HealthGiver(400,400,10,10);
         HealthGiver hg1 = new HealthGiver(600,400,10,10);
+        //Immune I = new Immune(325,325,10,10);
+        //TripleBullet T = new TripleBullet(350,350,10,10);
+        //Freeze F = new Freeze(375,375,5,10);
         triggerSystem.register(hg);
         triggerSystem.register(hg1);
+        //triggerSystem.register(I);
+        //triggerSystem.register(T);
+        //triggerSystem.register(F);
     }
     /**
 
