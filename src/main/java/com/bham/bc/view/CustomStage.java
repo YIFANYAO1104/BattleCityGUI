@@ -56,6 +56,7 @@ public class CustomStage extends Stage{
     public static ChoiceBox changeSkin;
     private Label btnMin;
     private Label btnClose;
+    public static int selected=4;
 
 
 
@@ -122,9 +123,7 @@ public class CustomStage extends Stage{
         Glow glow=new Glow();
         lbTitle.setEffect(glow);
         glow.setLevel(0.6);
-        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-        gpTitle.setBackground(new Background(image));
         gpTitle.setMinWidth(Width);
         gpTitle.setMaxWidth(Height);
         gpTitle.setMinHeight(15);
@@ -156,42 +155,49 @@ public class CustomStage extends Stage{
         changeSkin.setBackground(new Background(image3));
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 
-
-            typeOf = types[new_val.intValue()];
+            selected=new_val.intValue();
+            typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar05.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                lbTitle.requestFocus();;
-                PauseMenu.changeSkin.getSelectionModel().select(0);
+                lbTitle.requestFocus();
+
+
+
+
 
             }else if (typeOf.equals("TYPE 2")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar02.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
-                PauseMenu.changeSkin.getSelectionModel().select(1);
+
+
 
             }else if (typeOf.equals("TYPE 3")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
-                PauseMenu.changeSkin.getSelectionModel().select(2);
+
+
 
             }else if (typeOf.equals("TYPE 4")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar04.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
-                PauseMenu.changeSkin.getSelectionModel().select(3);
+
+
 
             }else if (typeOf.equals("TYPE 5")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                lbTitle.requestFocus();;
-                PauseMenu.changeSkin.getSelectionModel().select(4);
+                lbTitle.requestFocus();
+
+
 
             }
 
@@ -379,7 +385,9 @@ public class CustomStage extends Stage{
      */
 
     public void createCommonTitlebar(AnchorPane root, int Width, int Height){
+        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         titleBar(root,Width,Height,-780);
+        gpTitle.setBackground(new Background(image));
 
 
     }
@@ -394,6 +402,7 @@ public class CustomStage extends Stage{
     public void createTitleBar(AnchorPane root, int Width, int Height){
         startMenuIcon();
         titleBar(root,Width,Height,-540);
+        changeSkin.getSelectionModel().select(selected);
 
 
 
