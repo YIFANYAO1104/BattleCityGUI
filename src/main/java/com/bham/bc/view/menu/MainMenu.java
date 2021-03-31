@@ -213,10 +213,9 @@ public class MainMenu extends AnchorPane {
         //first step is to sort before add new records
         jsonArrayToFile=jsonArraySort(jsonArrayToFile);
         //second step is to add new records
-        Records record11=new Records("11th","Kitty","322","7/3");
-        record11.putIntoArray();
-        Records record12=new Records("12th","Jog","222","7/3");
-        record12.putIntoArray();
+        createRecord(new Records("11th","Kitty","322","7/3"));
+        createRecord(new Records("12th","Jog","222","7/3"));
+
         //third step is to sort after add the new records
         sort();
         writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
