@@ -199,26 +199,17 @@ public class MainMenu extends AnchorPane {
         subMenuScores.getChildren().addAll(text2,tableView);
 
         //write to Json file
-        Records record=new Records("1st","Dou","222","7/3");
-        record.putIntoArray();
-        Records record2=new Records("2nd","YIFAN","782","7/3");
-        record2.putIntoArray();
-        Records record3=new Records("3rd","Alex","762","7/3");
-        record3.putIntoArray();
-        Records record4=new Records("4th","Mantas","622","7/3");
-        record4.putIntoArray();
-        Records record5=new Records("5th","Najd","792","7/3");
-        record5.putIntoArray();
-        Records record6=new Records("6th","Justin","892","7/3");
-        record6.putIntoArray();
-        Records record7=new Records("7th","John","792","7/3");
-        record7.putIntoArray();
-        Records record8=new Records("8th","Shan","792","7/3");
-        record8.putIntoArray();
-        Records record9=new Records("9th","Juily","992","7/3");
-        record9.putIntoArray();
-        Records record10=new Records("10th","Berry","792","7/3");
-        record10.putIntoArray();
+        createRecord(new Records("1st","Dou","222","7/3"));
+        createRecord(new Records("2nd","YIFAN","782","7/3"));
+        createRecord(new Records("3rd","Alex","762","7/3"));
+        createRecord(new Records("4th","Mantas","622","7/3"));
+        createRecord(new Records("5th","Najd","792","7/3"));
+        createRecord(new Records("6th","Justin","892","7/3"));
+        createRecord(new Records("7th","John","792","7/3"));
+        createRecord(new Records("8th","Shan","792","7/3"));
+        createRecord(new Records("9th","Juily","992","7/3"));
+        createRecord(new Records("10th","Berry","792","7/3"));
+
         //first step is to sort before add new records
         jsonArrayToFile=jsonArraySort(jsonArrayToFile);
         //second step is to add new records
@@ -378,6 +369,13 @@ public class MainMenu extends AnchorPane {
     }
 
 
+    /**
+     * create a record and put into a Json array
+     * @param record
+     */
+    public static void createRecord(Records record){
+        record.putIntoArray();
+    }
 
 
     /**
