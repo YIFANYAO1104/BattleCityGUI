@@ -201,27 +201,27 @@ public class PauseMenu extends AnchorPane {
             if ( CustomStage.typeOf.equals("TYPE 1")){
 
 
-                CustomStage.changeSkin02.getSelectionModel().select(0);
+                CustomStage.changePauseSkin.getSelectionModel().select(0);
 
 
             }else if ( CustomStage.typeOf.equals("TYPE 2")){
 
 
-                CustomStage.changeSkin02.getSelectionModel().select(1);
+                CustomStage.changePauseSkin.getSelectionModel().select(1);
 
             }else if ( CustomStage.typeOf.equals("TYPE 3")){
 
 
-                CustomStage.changeSkin02.getSelectionModel().select(2);
+                CustomStage.changePauseSkin.getSelectionModel().select(2);
 
             }else if ( CustomStage.typeOf.equals("TYPE 4")){
 
 
-                CustomStage.changeSkin02.getSelectionModel().select(3);
+                CustomStage.changePauseSkin.getSelectionModel().select(3);
 
             }else if ( CustomStage.typeOf.equals("TYPE 5")){
 
-                CustomStage.changeSkin02.getSelectionModel().select(4);
+                CustomStage.changePauseSkin.getSelectionModel().select(4);
 
             }
 
