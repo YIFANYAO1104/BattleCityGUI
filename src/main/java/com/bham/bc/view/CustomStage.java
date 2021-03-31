@@ -53,7 +53,12 @@ public class CustomStage extends Stage{
     public static HBox gpTitle;
     public static String[] types;
     private HBox hBox;
-    public static ChoiceBox changeSkin;
+    public static ChoiceBox changeSkin01=new ChoiceBox(FXCollections.observableArrayList(
+            "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
+    ));;
+    public static ChoiceBox changeSkin02=new ChoiceBox(FXCollections.observableArrayList(
+            "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
+    ));;
     private Label btnMin;
     private Label btnClose;
     public static int selected=4;
@@ -110,7 +115,7 @@ public class CustomStage extends Stage{
      * @param offset
      */
 
-    public void titleBar(AnchorPane root, int Width, int Height,int offset){
+    public void titleBar(AnchorPane root, int Width, int Height,int offset,ChoiceBox changeSkin){
 
         stage.initStyle(StageStyle.TRANSPARENT);
 
@@ -145,9 +150,7 @@ public class CustomStage extends Stage{
 
 
         types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
-        changeSkin=new ChoiceBox(FXCollections.observableArrayList(
-                "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
-        ));
+
         changeSkin.setId("changeSkin");
         changeSkin.setMaxSize(25,22);
         changeSkin.setMinSize(25,22);
@@ -162,6 +165,9 @@ public class CustomStage extends Stage{
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
+                if (changeSkin==changeSkin02){
+                    PauseMenu.changeSkin.getSelectionModel().select(0);
+                }
 
 
 
@@ -172,6 +178,9 @@ public class CustomStage extends Stage{
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
+                if (changeSkin==changeSkin02){
+                    PauseMenu.changeSkin.getSelectionModel().select(1);
+                }
 
 
 
@@ -180,6 +189,9 @@ public class CustomStage extends Stage{
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
+                if (changeSkin==changeSkin02){
+                    PauseMenu.changeSkin.getSelectionModel().select(2);
+                }
 
 
 
@@ -188,6 +200,9 @@ public class CustomStage extends Stage{
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
+                if (changeSkin==changeSkin02){
+                    PauseMenu.changeSkin.getSelectionModel().select(3);
+                }
 
 
 
@@ -196,6 +211,9 @@ public class CustomStage extends Stage{
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
+                if (changeSkin==changeSkin02){
+                    PauseMenu.changeSkin.getSelectionModel().select(4);
+                }
 
 
 
@@ -386,7 +404,7 @@ public class CustomStage extends Stage{
 
     public void createCommonTitlebar(AnchorPane root, int Width, int Height){
         BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
-        titleBar(root,Width,Height,-780);
+        titleBar(root,Width,Height,-780,changeSkin01);
         gpTitle.setBackground(new Background(image));
 
 
@@ -401,8 +419,8 @@ public class CustomStage extends Stage{
 
     public void createTitleBar(AnchorPane root, int Width, int Height){
         startMenuIcon();
-        titleBar(root,Width,Height,-540);
-        changeSkin.getSelectionModel().select(selected);
+        titleBar(root,Width,Height,-540,changeSkin02);
+        changeSkin02.getSelectionModel().select(selected);
 
 
 
