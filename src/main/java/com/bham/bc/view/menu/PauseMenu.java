@@ -53,7 +53,8 @@ public class PauseMenu extends AnchorPane {
     private SubMenu subMenuPause;
     public SubMenu subMenuOptions;
     public Rectangle bg;
-    private ChoiceBox changeSkin;
+    public static ChoiceBox changeSkin;
+
 
     /**
      * Constructs a pause menu based on Game window's size parameters
@@ -193,40 +194,30 @@ public class PauseMenu extends AnchorPane {
                 "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
         ));
 
-
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 
 
             CustomStage.typeOf =  CustomStage.types[new_val.intValue()];
             if ( CustomStage.typeOf.equals("TYPE 1")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar05.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+                CustomStage.changeSkin.getSelectionModel().select(0);
+
 
             }else if ( CustomStage.typeOf.equals("TYPE 2")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar02.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+                CustomStage.changeSkin.getSelectionModel().select(1);
 
             }else if ( CustomStage.typeOf.equals("TYPE 3")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+                CustomStage.changeSkin.getSelectionModel().select(2);
 
             }else if ( CustomStage.typeOf.equals("TYPE 4")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar04.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+                CustomStage.changeSkin.getSelectionModel().select(3);
 
             }else if ( CustomStage.typeOf.equals("TYPE 5")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+                CustomStage.changeSkin.getSelectionModel().select(4);
 
             }
 

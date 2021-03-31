@@ -53,9 +53,10 @@ public class CustomStage extends Stage{
     public static HBox gpTitle;
     public static String[] types;
     private HBox hBox;
-    private ChoiceBox changeSkin;
+    public static ChoiceBox changeSkin;
     private Label btnMin;
     private Label btnClose;
+
 
 
 
@@ -162,30 +163,35 @@ public class CustomStage extends Stage{
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();;
+                PauseMenu.changeSkin.getSelectionModel().select(0);
 
             }else if (typeOf.equals("TYPE 2")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar02.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                lbTitle.requestFocus();;
+                lbTitle.requestFocus();
+                PauseMenu.changeSkin.getSelectionModel().select(1);
 
             }else if (typeOf.equals("TYPE 3")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                lbTitle.requestFocus();;
+                lbTitle.requestFocus();
+                PauseMenu.changeSkin.getSelectionModel().select(2);
 
             }else if (typeOf.equals("TYPE 4")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar04.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                lbTitle.requestFocus();;
+                lbTitle.requestFocus();
+                PauseMenu.changeSkin.getSelectionModel().select(3);
 
             }else if (typeOf.equals("TYPE 5")){
                 BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();;
+                PauseMenu.changeSkin.getSelectionModel().select(4);
 
             }
 
