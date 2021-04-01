@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment.triggers;
 
 
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
@@ -54,6 +55,7 @@ public class BombTrigger extends Trigger {
             backendServices.addBombTank(new BombTank(gameCharacter.getX(), gameCharacter.getY()));
         }
     }
+
 
     public void tryTriggerO(GenericObstacle obs) {
         //is this bot within range of this sound

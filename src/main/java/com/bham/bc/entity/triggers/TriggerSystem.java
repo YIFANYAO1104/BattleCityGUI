@@ -8,6 +8,7 @@ package com.bham.bc.entity.triggers;
 
 
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GenericObstacle;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -56,6 +57,14 @@ public class TriggerSystem<trigger_type extends Trigger> {
         }
 
     }
+    //-----------------
+    private void tryTriggersPlayer(Player player){
+
+            for(Trigger curTrg : m_Triggers){
+                curTrg.tryTriggerC(player);
+            }
+
+    }
 
     /**
      * this deletes any current triggers and empties the trigger list
@@ -69,7 +78,7 @@ public class TriggerSystem<trigger_type extends Trigger> {
      * update the internal state odf the triggers and then try each entity
      * against each active trigger to test if any should be triggered.
      */
-    public void handleAll(List<GameCharacter> gameCharacters, List<GenericObstacle> obstacles) {
+    public void handleAll(List<GameCharacter> gameCharacters, List<GenericObstacle> obstacles){
         updateTriggers();
         tryTriggers(gameCharacters,obstacles);
     }

@@ -26,9 +26,12 @@ import static com.bham.bc.components.CenterController.backendServices;
 public class Player extends GameCharacter {
 
 	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
+	public static final String IMAGE_PATH2 ="file:src/main/resources/img/characters/state1.png";
 	public static final int WIDTH = 25;
 	public static final int HEIGHT = 35;
 	public static final int MAX_HP = 100;
+
+
 
 	private double hp;
 
@@ -70,6 +73,7 @@ public class Player extends GameCharacter {
 			System.out.println("no closest node around player/target");
 		}
 	}
+
 	/**
 	 * Handles pressed key
 	 *
@@ -80,14 +84,39 @@ public class Player extends GameCharacter {
 	 * @param e key to handle
 	 */
 	public void keyPressed(KeyEvent e) {
-		switch (e.getCode()) {
-			case F: fire(); break;
-			case W: directionSet.add(DIRECTION.U); break;
-			case A: directionSet.add(DIRECTION.L); break;
-			case S: directionSet.add(DIRECTION.D); break;
-			case D: directionSet.add(DIRECTION.R); break;
+		if(TRAPPED){
+			switch (e.getCode()){
+				case F :fire(); break;
+				case W: directionSet.add(DIRECTION.D); break;
+				case A: directionSet.add(DIRECTION.R); break;
+				case S: directionSet.add(DIRECTION.U); break;
+				case D: directionSet.add(DIRECTION.L); break;
+			}
 		}
+		else{
+			switch (e.getCode()) {
+				case F: fire(); break;
+				case W: directionSet.add(DIRECTION.U); break;
+				case A: directionSet.add(DIRECTION.L); break;
+				case S: directionSet.add(DIRECTION.D); break;
+				case D: directionSet.add(DIRECTION.R); break;
+			}
+		}
+
 	}
+	public void KeyPressdTrapped(KeyEvent e){
+		if(TRAPPED){
+			switch (e.getCode()){
+				case F :fire(); break;
+				case W: directionSet.add(DIRECTION.D); break;
+				case A: directionSet.add(DIRECTION.R); break;
+				case S: directionSet.add(DIRECTION.U); break;
+				case D: directionSet.add(DIRECTION.L); break;
+			}
+		}
+
+	}
+
 
 	/**
 	 * Handles released key
@@ -98,12 +127,25 @@ public class Player extends GameCharacter {
 	 * @param e key to handle
 	 */
 	public void keyReleased(KeyEvent e) {
-		switch (e.getCode()) {
-			case W: directionSet.remove(DIRECTION.U); break;
-			case A: directionSet.remove(DIRECTION.L); break;
-			case S: directionSet.remove(DIRECTION.D); break;
-			case D: directionSet.remove(DIRECTION.R); break;
+		if(TRAPPED){
+			switch ((e.getCode())){
+				case W: directionSet.remove(DIRECTION.D);break;
+				case A: directionSet.remove(DIRECTION.R);break;
+				case S: directionSet.remove(DIRECTION.U); break;
+				case D: directionSet.remove(DIRECTION.L); break;
+			}
+
 		}
+		else{
+			switch (e.getCode()) {
+				case W: directionSet.remove(DIRECTION.U); break;
+				case A: directionSet.remove(DIRECTION.L); break;
+				case S: directionSet.remove(DIRECTION.D); break;
+				case D: directionSet.remove(DIRECTION.R); break;
+			}
+
+		}
+
 	}
 
 	/**
@@ -150,6 +192,7 @@ public class Player extends GameCharacter {
 		TRACKABLE_Y.set(y + HEIGHT/2);
 	}
 
+
 	@Override
 	public void render(GraphicsContext gc) {
 		if (navigationService!=null) navigationService.render(gc);
@@ -170,4 +213,8 @@ public class Player extends GameCharacter {
 
 	@Override
 	public String toString() { return "Player"; }
+	public void toState1(){
+		this.entityImages =  new Image[] { new Image(IMAGE_PATH2, WIDTH, HEIGHT, false, false) };
+
+	}
 }

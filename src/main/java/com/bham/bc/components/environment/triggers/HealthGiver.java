@@ -3,6 +3,7 @@
  */
 package com.bham.bc.components.environment.triggers;
 
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
@@ -51,6 +52,8 @@ public class HealthGiver extends RespawnTrigger{
             deactivate();
         }
     }
+
+
 
     @Override
     public void tryTriggerO(GenericObstacle entity) {

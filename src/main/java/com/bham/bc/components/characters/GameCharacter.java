@@ -18,6 +18,7 @@ abstract public class GameCharacter extends MovingEntity {
     protected double hp;
     protected SIDE side;
     protected EnumSet<DIRECTION> directionSet;
+    protected boolean TRAPPED;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -63,9 +64,30 @@ abstract public class GameCharacter extends MovingEntity {
         if(hp <= 0) exists = false;
     }
 
+    /**
+     * Using speedBuff to change current speed
+     * @param speed
+     */
+    public void speedUp(double speed){
+        this.speed = speed;
+    }
+
+    /**
+     * Using armorBUff to reset entity's HP TO A NEW HIGHER LEVEL
+     * @param HP
+     */
+    public void armorUP(int HP){
+        this.hp = HP;
+    }
     @Deprecated
     public void switchWeapon(Weapon w) {}
 
+    public void setTRAPPED(){
+        this.TRAPPED=true;
+    }
+    public void setUNTRAPPED(){
+        this.TRAPPED=false;
+    }
 
     /**
      * Handles bullet collision - takes damage and destroys bullet
@@ -126,5 +148,12 @@ abstract public class GameCharacter extends MovingEntity {
             x += Math.sin(Math.toRadians(angle)) * speed;
             y -= Math.cos(Math.toRadians(angle)) * speed;
         }
+    }
+    public void teleport(double x,double y){
+        this.x = x;
+        this.y =y;
+    }
+    public void destroyed(){
+        this.hp-=200;
     }
 }
