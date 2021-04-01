@@ -1,7 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
@@ -128,7 +128,7 @@ public class Kamikaze extends Enemy {
         public static final int SIZE = 60;
         private int currentFrame;
         private double damage;
-        private SIDE side;
+        private Side side;
 
         /**
          * Constructs explosion at a given location
@@ -136,7 +136,7 @@ public class Kamikaze extends Enemy {
          * @param damage amount of damage that will be dealt to specific side
          * @param side ALLY or ENEMY side trigger belongs to
          */
-        public ExplosionTrigger(Point2D centerPosition, double damage, SIDE side) {
+        public ExplosionTrigger(Point2D centerPosition, double damage, Side side) {
             super(BaseGameEntity.GetNextValidID(), (int) (centerPosition.getX() - SIZE/2), (int) (centerPosition.getY() - SIZE/2));
             this.damage = damage;
             this.side = side;

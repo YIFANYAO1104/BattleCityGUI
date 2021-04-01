@@ -1,7 +1,7 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
@@ -11,7 +11,7 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.triggers.Trigger;
 import static com.bham.bc.utils.Constants.*;
-import com.bham.bc.utils.cells.MapDivision;
+
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
@@ -25,11 +25,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -104,7 +102,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public Point2D getNearestOppositeSideCenterPosition(Point2D point, SIDE side) {
+    public Point2D getNearestOppositeSideCenterPosition(Point2D point, Side side) {
         return characters.stream().filter(c -> c.getSide() != side).map(GameCharacter::getCenterPosition).min(Comparator.comparing(c -> c.distance(point))).get();
     }
 

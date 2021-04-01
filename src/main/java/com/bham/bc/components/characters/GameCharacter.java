@@ -18,9 +18,8 @@ import java.util.Optional;
 abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
-    protected SIDE side;
+    protected Side side;
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
-    protected EnumSet<Direction> directionSet;
     protected boolean TRAPPED;
 
     /**
@@ -30,34 +29,18 @@ abstract public class GameCharacter extends MovingEntity {
      * @param y top left y coordinate of the character
      * @param speed value which defines the initial velocity
      */
-    protected GameCharacter(double x, double y, double speed, double hp, SIDE side) {
+    protected GameCharacter(double x, double y, double speed, double hp, Side side) {
         super(x, y, speed);
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
-        directionSet = EnumSet.noneOf(Direction.class);
     }
+
     /**
      * Gets character's side
      * @return ALLY or ENEMY side the character belongs to
      */
-    public SIDE getSide() { return side; }
-
-
-
-    /**
-     * Updates angle at which the player is facing
-     *
-     * <p>This method goes through every direction in the directionSet, coverts them to basis vectors,
-     * adds them up to get a final direction vector and calculates the angle between it and (0, 1)</p>
-     *
-     * <p><b>Note:</b> the basis vector which is used for angle calculation must be (0, 1) as this is the
-     * way the character in the image is facing (upwards)</p>
-     */
-    protected void updateAngle() {
-        Optional<Point2D> directionPoint = directionSet.stream().map(Direction::toPoint).reduce(Point2D::add);
-        directionPoint.ifPresent(p -> { if(p.getX() != 0 || p.getY() != 0) angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1); });
-    }
+    public Side getSide() { return side; }
 
     /**
      * Gets the HP of the player
@@ -69,15 +52,10 @@ abstract public class GameCharacter extends MovingEntity {
      * Increases or decreases HP for the player
      * @param health amount by which the player's HP is changed
      */
-    public void addHP(double health) {
-        hp = Math.min(hp + health, MAX_HP);
-        if(hp <= 0) exists = false;
-    }
     public void changeHP(double health) {
         hp = Math.min(hp + health, MAX_HP);
         if(hp <= 0) destroy();
     }
-
 
     @Deprecated
     public void switchWeapon(Weapon w) {}
@@ -102,10 +80,11 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     public void setTRAPPED(){
-        this.TRAPPED=true;
+        TRAPPED = true;
     }
+
     public void setUNTRAPPED(){
-        this.TRAPPED=false;
+        TRAPPED = false;
     }
 
 
@@ -163,13 +142,10 @@ abstract public class GameCharacter extends MovingEntity {
         y -= Math.cos(Math.toRadians(angle)) * speed * speedMultiplier;
     }
 
-
     @Override
     public void move() {
-        if(!directionSet.isEmpty()) {
-            x += Math.sin(Math.toRadians(angle)) * speed;
-            y -= Math.cos(Math.toRadians(angle)) * speed;
-        }
+        x += Math.sin(Math.toRadians(angle)) * speed;
+        y -= Math.cos(Math.toRadians(angle)) * speed;
     }
 
     protected abstract void destroy();

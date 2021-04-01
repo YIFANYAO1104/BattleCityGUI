@@ -47,6 +47,14 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
+     * Gets the current angle
+     * @return angle between -180 and 180 degrees the entity s facing
+     */
+    public double getAngle() {
+        return angle;
+    }
+
+    /**
      * Checks if this entity exists
      * @return true if it exists and false otherwise
      */

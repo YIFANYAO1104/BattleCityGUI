@@ -1,6 +1,6 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.characters.TRIBE;
+import com.bham.bc.components.characters.Tribe;
 import com.bham.bc.entity.ai.*;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
@@ -33,7 +33,7 @@ public class Teaser extends Enemy {
     // Constant
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/teaser.png";
     public static final int SIZE = 30;
-    public static final TRIBE TYPE = TRIBE.TEASER;
+    public static final Tribe TYPE = Tribe.TEASER;
 
     // Configurable
     public static final double HP = 50;

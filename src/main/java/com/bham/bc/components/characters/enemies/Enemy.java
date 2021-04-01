@@ -1,7 +1,9 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.armory.BulletType;
 import com.bham.bc.components.armory.DefaultBullet;
-import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.armory.Gun;
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.NavigationService;
 import com.bham.bc.components.environment.navigation.SearchStatus;
@@ -32,6 +34,7 @@ public abstract class Enemy extends GameCharacter {
     private LinkedList<PathEdge> pathEdges;
     private Point2D destination;
     private int timeTillSearch;
+    private Gun gun;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -42,11 +45,12 @@ public abstract class Enemy extends GameCharacter {
      * @param hp    health points the enemy should have
      */
     protected Enemy(double x, double y, double speed, double hp) {
-        super(x, y, speed, hp, SIDE.ENEMY);
+        super(x, y, speed, hp, Side.ENEMY);
         navigationService = new PathPlanner(this, backendServices.getGraph());
         pathEdges = new LinkedList<>();
         destination = new Point2D(0, 0);
         timeTillSearch = 20;
+        gun = new Gun(this, BulletType.DEFAULT);
     }
 
 
@@ -136,22 +140,12 @@ public abstract class Enemy extends GameCharacter {
      * Shoots the specified bullet(-s) at the current angle
      */
     protected void shoot() {
-        double centerBulletX = x + getRadius().getX()/2.0;
-        double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
-
-        Rotate rot = new Rotate(angle, getCenterPosition().getX(), getCenterPosition().getY());
-        Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
-
-        double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
-        double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
-
-        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
-        backendServices.addBullet(b);
+        gun.shoot();
     }
 
     /**
-     * Shoots the specified bullet(-s) at the current angle with a random probability
-     * @param threshold value between 0 and 1 above which the shoot() method would be run
+     * Shoots the specified bullet(-s) at the current angle with a random probability. This simulates a more natural behavior.
+     * @param threshold value between 0 and 1 above which the shoot() method would be executed
      */
     protected void shoot(double threshold) {
         if(Math.random() > threshold) shoot();
