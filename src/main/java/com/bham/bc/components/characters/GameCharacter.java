@@ -1,13 +1,16 @@
 package com.bham.bc.components.characters;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.MovingEntity;
+import javafx.geometry.Point2D;
 import javafx.scene.shape.Shape;
 
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Represents a character - this includes enemies, players and AI companions
@@ -16,7 +19,9 @@ abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
     protected SIDE side;
-    protected int immuneTicks, freezeTicks, tripleTicks = 0; 
+    protected int immuneTicks, freezeTicks, tripleTicks = 0;
+    protected EnumSet<Direction> directionSet;
+    protected boolean TRAPPED;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -30,6 +35,28 @@ abstract public class GameCharacter extends MovingEntity {
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
+        directionSet = EnumSet.noneOf(Direction.class);
+    }
+    /**
+     * Gets character's side
+     * @return ALLY or ENEMY side the character belongs to
+     */
+    public SIDE getSide() { return side; }
+
+
+
+    /**
+     * Updates angle at which the player is facing
+     *
+     * <p>This method goes through every direction in the directionSet, coverts them to basis vectors,
+     * adds them up to get a final direction vector and calculates the angle between it and (0, 1)</p>
+     *
+     * <p><b>Note:</b> the basis vector which is used for angle calculation must be (0, 1) as this is the
+     * way the character in the image is facing (upwards)</p>
+     */
+    protected void updateAngle() {
+        Optional<Point2D> directionPoint = directionSet.stream().map(Direction::toPoint).reduce(Point2D::add);
+        directionPoint.ifPresent(p -> { if(p.getX() != 0 || p.getY() != 0) angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1); });
     }
 
     /**
@@ -39,19 +66,18 @@ abstract public class GameCharacter extends MovingEntity {
     public double getHp() { return hp; }
 
     /**
-     * Gets character's side
-     * @return ALLY or ENEMY side the character belongs to
-     */
-    public SIDE getSide() { return side; }
-
-    /**
      * Increases or decreases HP for the player
      * @param health amount by which the player's HP is changed
      */
+    public void addHP(double health) {
+        hp = Math.min(hp + health, MAX_HP);
+        if(hp <= 0) exists = false;
+    }
     public void changeHP(double health) {
         hp = Math.min(hp + health, MAX_HP);
         if(hp <= 0) destroy();
     }
+
 
     @Deprecated
     public void switchWeapon(Weapon w) {}
@@ -63,16 +89,23 @@ abstract public class GameCharacter extends MovingEntity {
     public void toFreeze(int numTicks) {
     	freezeTicks = numTicks;
     }
-    
+
     public void toImmune(int numTicks) {
     	immuneTicks = numTicks;
     }
-    
+
     // Updates active trigger time ticks
     protected void updateTriggers() {
     	if(immuneTicks!=0) --immuneTicks;
     	if(freezeTicks!=0) --freezeTicks;
     	if(tripleTicks!=0) --tripleTicks;
+    }
+
+    public void setTRAPPED(){
+        this.TRAPPED=true;
+    }
+    public void setUNTRAPPED(){
+        this.TRAPPED=false;
     }
 
 
@@ -98,6 +131,7 @@ abstract public class GameCharacter extends MovingEntity {
             move(-1);
         }
     }
+
 
     /**
      * Handles a list of characters and bullets
@@ -129,10 +163,13 @@ abstract public class GameCharacter extends MovingEntity {
         y -= Math.cos(Math.toRadians(angle)) * speed * speedMultiplier;
     }
 
+
     @Override
     public void move() {
-        x += Math.sin(Math.toRadians(angle)) * speed;
-        y -= Math.cos(Math.toRadians(angle)) * speed;
+        if(!directionSet.isEmpty()) {
+            x += Math.sin(Math.toRadians(angle)) * speed;
+            y -= Math.cos(Math.toRadians(angle)) * speed;
+        }
     }
 
     protected abstract void destroy();
@@ -141,4 +178,11 @@ abstract public class GameCharacter extends MovingEntity {
      *For path smoothing debug
      */
     abstract public List<Shape> getSmoothingBoxes();
+    public void teleport(double x,double y){
+        this.x = x;
+        this.y =y;
+    }
+    public void destroyed(){
+        this.hp-=200;
+    }
 }

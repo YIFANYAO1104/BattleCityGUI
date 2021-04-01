@@ -32,10 +32,17 @@ import static com.bham.bc.components.CenterController.backendServices;
 public class Player extends GameCharacter {
 
 	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
+	public static final String IMAGE_PATH2 ="file:src/main/resources/img/characters/state1.png";
+	public static final int WIDTH = 25;
+	public static final int HEIGHT = 35;
+	public static final int MAX_HP = 100;
 	public static final int SIZE = 25;
 	public static final double HP = 100;
 	public static final double SPEED = 5;
 
+
+
+	private double hp;
 	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
 	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
 
@@ -95,10 +102,19 @@ public class Player extends GameCharacter {
 	 * <p><b>Note:</b> the basis vector which is used for angle calculation must be (0, 1) as this is the
 	 * way the character in the image is facing (upwards)</p>
 	 */
-	private void updateAngle() {
+	public void updateAngle() {
 		Optional<Point2D> directionPoint = directionSet.stream().map(Direction::toPoint).reduce(Point2D::add);
 		directionPoint.ifPresent(p -> { if(p.getX() != 0 || p.getY() != 0) angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1); });
 	}
+
+
+
+	@Override
+	protected void destroy() {
+
+	}
+
+
 
 	/**
 	 * Handles pressed key
@@ -110,17 +126,47 @@ public class Player extends GameCharacter {
 	 * @param e key to handle
 	 */
 	public void keyPressed(KeyEvent e) {
-		switch (e.getCode()) {
-			case F: fire(); break;
-			case B: bomb(); break;
-			case P:this.createNewRequestAStar();break;		// TODO: remove
-			case O:this.createNewRequestItem();break;		// TODO: remove
-			case W: directionSet.add(Direction.U); break;
-			case A: directionSet.add(Direction.L); break;
-			case S: directionSet.add(Direction.D); break;
-			case D: directionSet.add(Direction.R); break;
+		if(TRAPPED){
+			switch (e.getCode()){
+				case F: fire(); break;
+				case B: bomb(); break;
+				case P:this.createNewRequestAStar();break;		// TODO: remove
+				case O:this.createNewRequestItem();break;
+				case W: directionSet.add(Direction.D); break;
+				case A: directionSet.add(Direction.R); break;
+				case S: directionSet.add(Direction.U); break;
+				case D: directionSet.add(Direction.L); break;
+			}
 		}
+		else{
+			switch (e.getCode()) {
+				case F: fire(); break;
+				case B: bomb(); break;
+				case P:this.createNewRequestAStar();break;		// TODO: remove
+				case O:this.createNewRequestItem();break;
+				case W: directionSet.add(Direction.U); break;
+				case A: directionSet.add(Direction.L); break;
+				case S: directionSet.add(Direction.D); break;
+				case D: directionSet.add(Direction.R); break;
+			}
+		}
+
 	}
+
+
+	public void KeyPressdTrapped(KeyEvent e){
+		if(TRAPPED){
+			switch (e.getCode()){
+				case F :fire(); break;
+				case W: directionSet.add(Direction.D); break;
+				case A: directionSet.add(Direction.R); break;
+				case S: directionSet.add(Direction.U); break;
+				case D: directionSet.add(Direction.L); break;
+			}
+		}
+
+	}
+
 
 	/**
 	 * Handles released key
@@ -131,12 +177,26 @@ public class Player extends GameCharacter {
 	 * @param e key to handle
 	 */
 	public void keyReleased(KeyEvent e) {
-		switch (e.getCode()) {
-			case W: directionSet.remove(Direction.U); break;
-			case A: directionSet.remove(Direction.L); break;
-			case S: directionSet.remove(Direction.D); break;
-			case D: directionSet.remove(Direction.R); break;
+
+		if(TRAPPED){
+			switch ((e.getCode())){
+				case W: directionSet.remove(Direction.D);break;
+				case A: directionSet.remove(Direction.R);break;
+				case S: directionSet.remove(Direction.U); break;
+				case D: directionSet.remove(Direction.L); break;
+			}
+
 		}
+		else{
+			switch (e.getCode()) {
+				case W: directionSet.remove(Direction.U); break;
+				case A: directionSet.remove(Direction.L); break;
+				case S: directionSet.remove(Direction.D); break;
+				case D: directionSet.remove(Direction.R); break;
+			}
+
+		}
+
 	}
 
 	/**
@@ -152,7 +212,7 @@ public class Player extends GameCharacter {
 	public void fire() {
 		double[] angles = {angle, angle+45, angle-45};
 		int loop = (tripleTicks!=0)? 3:1;
-		
+
 		for(int i=0; i<loop; i++) {
 			double centerBulletX = x + getRadius().getX()/2.0;
 			double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
@@ -182,8 +242,7 @@ public class Player extends GameCharacter {
 		}
 	}
 
-	@Override
-	public void destroy() {}
+
 
 	@Override
 	public Circle getHitBox() { return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0); }
@@ -194,10 +253,11 @@ public class Player extends GameCharacter {
 		if (freezeTicks == 0) {
 			updateAngle();
 			move();
-		} 
+		}
 		TRACKABLE_X.set(getCenterPosition().getX());
 		TRACKABLE_Y.set(getCenterPosition().getY());
 	}
+
 
 	@Override
 	public void render(GraphicsContext gc) {
@@ -219,6 +279,10 @@ public class Player extends GameCharacter {
 
 	@Override
 	public String toString() { return "Player"; }
+	public void toState1(){
+		this.entityImages =  new Image[] { new Image(IMAGE_PATH2, WIDTH, HEIGHT, false, false) };
+
+	}
 
 	public List<Shape> getSmoothingBoxes(){
 		return navigationService.getSmoothingBoxes();
