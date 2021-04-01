@@ -1,6 +1,7 @@
 package com.bham.bc.components.characters;
 
 import com.bham.bc.components.BackendServices;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
 
@@ -9,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import static com.bham.bc.utils.GeometryEnhanced.*;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
@@ -208,13 +210,13 @@ public class Steering {
         return rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
     }
 
-    private Point2D rotate(Point2D center, Point2D p, double angleInDegrees){
-        Rotate r = new Rotate();
-        r.setPivotX(center.getX());
-        r.setPivotY(center.getY());
-        r.setAngle(angleInDegrees);
-        return r.transform(p);
-    }
+//    private Point2D rotate(Point2D center, Point2D p, double angleInDegrees){
+//        Rotate r = new Rotate();
+//        r.setPivotX(center.getX());
+//        r.setPivotY(center.getY());
+//        r.setAngle(angleInDegrees);
+//        return r.transform(p);
+//    }
 
 
 
