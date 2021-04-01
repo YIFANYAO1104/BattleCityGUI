@@ -66,7 +66,7 @@ public class SpeedTrigger extends RespawnTrigger {
     @Override
     public void tryTriggerC(GameCharacter gameCharacter) {
         if(isActive()&& rectIsTouchingTrigger(gameCharacter.getPosition(),gameCharacter.getRadius())){
-            gameCharacter.speedUp(speed);
+            //gameCharacter.speedUp(speed);
             deactivate();
         }
 

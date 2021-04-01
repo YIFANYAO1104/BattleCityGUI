@@ -37,7 +37,7 @@ public class ArmorTrigger extends  RespawnTrigger{
     @Override
     public void tryTriggerC(GameCharacter entity) {
         if(isActive()&&rectIsTouchingTrigger(entity.getPosition(), entity.getRadius())){
-            entity.armorUP(HP);
+            //entity.armorUP(HP);
 
             deactivate();
         }

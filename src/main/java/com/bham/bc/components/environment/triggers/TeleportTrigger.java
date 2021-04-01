@@ -29,8 +29,8 @@ public class TeleportTrigger extends RespawnTrigger{
     }
     public void setDestination(RespawnTrigger dest){
         this.destination = dest;
-        this.destX = destination.getX();
-        this.destY = destination.getY();
+        //this.destX = destination.getX();
+        //this.destY = destination.getY();
 
     }
     public void initImages(){
