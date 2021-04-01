@@ -70,8 +70,26 @@ public class Follower extends Enemy {
 
         if (pathEdges.isEmpty()) { //last element
             //arrive
+            System.out.println("---------------------------------------------------");
+            System.out.println("seek"+destination);
+            Point2D force = sb.arrive(destination);
+            System.out.println("force" + force);
+            Point2D acceleration = force.multiply(1./3);
+            this.acceleration = acceleration;
+            System.out.println("v" + velocity);
+            velocity = velocity.add(acceleration);
+            System.out.println("---------------------------------------------------");
+//            System.out.println("EnemyV"+velocity);
+//
+//            System.out.println("EnemyA" + acceleration);
+            //Truncate
+            if(velocity.magnitude()>speed){
+                velocity = velocity.normalize().multiply(speed);
+            }
+            move();
         } else {
             //seek
+             System.out.println("---------------------------------------------------");
             System.out.println("seek"+destination);
             Point2D force = sb.seek(destination);
             System.out.println("force" + force);
@@ -79,6 +97,7 @@ public class Follower extends Enemy {
             this.acceleration = acceleration;
             System.out.println("v" + velocity);
             velocity = velocity.add(acceleration);
+            System.out.println("---------------------------------------------------");
 //            System.out.println("EnemyV"+velocity);
 //
 //            System.out.println("EnemyA" + acceleration);
@@ -113,7 +132,7 @@ public class Follower extends Enemy {
             gc.setLineWidth(2.0);
             gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
         }
-        drawRotatedImage(gc, entityImages[0], angle);
+        drawRotatedImage(gc, entityImages[0], getAngle());
 
         gc.setStroke(Color.GOLD);
         gc.setLineWidth(2.0);

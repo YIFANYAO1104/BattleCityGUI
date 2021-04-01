@@ -11,7 +11,20 @@ import javafx.scene.transform.Rotate;
  */
 public abstract class MovingEntity extends BaseGameEntity {
     protected double speed;
+    //could be zero
     protected Point2D velocity;
+    //non-zero, normalized vector for direction, must be updated once the velocity was updated
+    protected Point2D heading;
+
+    public double getAngle() {
+        return Math.toDegrees(Math.atan2(heading.getY(), heading.getX())) + 90;
+    }
+
+    public void setAngle(double angle) {
+        this.angle = angle;
+        this.heading = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle)));
+    }
+
     protected double angle;
     protected boolean exists;
 
@@ -28,14 +41,20 @@ public abstract class MovingEntity extends BaseGameEntity {
         super(GetNextValidID(), x, y);
         this.speed = speed;
         this.velocity = new Point2D(0,0);
-        angle = 0;
+        this.heading = new Point2D(0,-1);
+        setAngle(0);
         exists = true;
     }
 
     protected MovingEntity(double x, double y, double speed, double angle) {
         super(GetNextValidID(), x, y);
         this.speed = speed;
+
+        //        x += Math.sin(Math.toRadians(angle));
+//        y -= Math.cos(Math.toRadians(angle));
         this.velocity = new Point2D(0,0);
+        this.heading = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle)));
+        setAngle(angle);
         exists = true;
     }
 
@@ -88,6 +107,6 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     public Point2D getHeading() {
-        return velocity.normalize();
+        return heading;
     }
 }

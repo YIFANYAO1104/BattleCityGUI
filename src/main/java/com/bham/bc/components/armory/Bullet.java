@@ -24,7 +24,6 @@ abstract public class Bullet extends MovingEntity {
      */
     public Bullet(double x, double y, double speed, double angle, SIDE side, double damage) {
         super(x, y, speed, angle);
-        this.angle = angle;
         this.side = side;
         this.damage = damage;
     }

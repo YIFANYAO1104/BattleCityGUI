@@ -122,8 +122,7 @@ public class Player extends GameCharacter {
 
 			//TODO:REMOVE ANGLE
 			if(p.getX() != 0 || p.getY() != 0) {
-
-				angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1);
+				setAngle(p.angle(0, 1) * (p.getX() > 0 ? 1 : -1));
 			}
 		});
 	}
@@ -181,19 +180,19 @@ public class Player extends GameCharacter {
 		double centerBulletX = x + getRadius().getX()/2.0;
 		double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
 
-		Rotate rot = new Rotate(angle, getCenterPosition().getX(), getCenterPosition().getY());
+		Rotate rot = new Rotate(getAngle(), getCenterPosition().getX(), getCenterPosition().getY());
 		Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
 
 		double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
 		double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
 
-		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
+		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, getAngle(), side);
 		backendServices.addBullet(b);
 	}
 
 	public void bomb() {
 		Point2D center = getPosition().add(getRadius().multiply(0.5));
-		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), angle, side);
+		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), getAngle(), side);
 		backendServices.addBullet(b);
 	}
 
@@ -222,7 +221,7 @@ public class Player extends GameCharacter {
 	@Override
 	public void render(GraphicsContext gc) {
 		if (navigationService!=null) navigationService.render(gc);
-		drawRotatedImage(gc, entityImages[0], angle); }
+		drawRotatedImage(gc, entityImages[0], getAngle()); }
 
 	@Override
 	public boolean handleMessage(Telegram msg) {

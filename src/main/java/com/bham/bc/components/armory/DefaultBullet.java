@@ -65,12 +65,12 @@ public class DefaultBullet extends Bullet {
 	public void update() { move(); }
 
 	@Override
-	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
+	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAngle()); }
 
 	@Override
 	public Rectangle getHitBox() {
 		Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
-		hitBox.getTransforms().add(new Rotate(angle, x + WIDTH/2,y + HEIGHT/2));
+		hitBox.getTransforms().add(new Rotate(getAngle(), x + WIDTH/2,y + HEIGHT/2));
 
 		return hitBox;
 	}

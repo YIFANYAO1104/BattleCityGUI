@@ -138,7 +138,7 @@ public abstract class Enemy extends GameCharacter {
     protected void face(Point2D toward) {
         double deltaX = toward.getX() - getCenterPosition().getX();
         double deltaY = toward.getY() - getCenterPosition().getY();
-        angle = Math.toDegrees(Math.atan2(deltaY, deltaX)) + 90;
+        setAngle(Math.toDegrees(Math.atan2(deltaY, deltaX)) + 90);
         velocity = toward.subtract(getCenterPosition());
         if(velocity.magnitude()>speed){
                 velocity = velocity.normalize().multiply(speed);
@@ -163,13 +163,13 @@ public abstract class Enemy extends GameCharacter {
         double centerBulletX = x + getRadius().getX()/2.0;
         double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
 
-        Rotate rot = new Rotate(angle, getCenterPosition().getX(), getCenterPosition().getY());
+        Rotate rot = new Rotate(getAngle(), getCenterPosition().getX(), getCenterPosition().getY());
         Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
 
         double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
         double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
 
-        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, angle, side);
+        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, getAngle(), side);
         backendServices.addBullet(b);
     }
 
@@ -258,7 +258,7 @@ public abstract class Enemy extends GameCharacter {
     @Override
     public void render(GraphicsContext gc) {
         if (navigationService!=null) navigationService.render(gc);
-        drawRotatedImage(gc, entityImages[0], angle);
+        drawRotatedImage(gc, entityImages[0], getAngle());
 
         gc.setStroke(Color.GOLD);
         gc.setLineWidth(2.0);

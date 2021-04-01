@@ -27,7 +27,7 @@ public class Steering {
     /**
      * distance the wander circle is projected in front of the agent
      */
-    public static final double WanderDist = 2.0;
+    public static final double WanderDist = 4.0;
     /**
      * the maximum amount of displacement along the circle each frame
      */
@@ -132,7 +132,33 @@ public class Steering {
         return DesiredVelocity.subtract(m_pRaven_Bot.getVelocity());
     }
 
+    /**
+     * this behavior is similar to seek but it attempts to arrive at the target
+     * with a zero velocity
+     */
+    public Point2D arrive(final Point2D target) {
+        Point2D ToTarget = target.subtract(m_pRaven_Bot.getCenterPosition());
 
+        //calculate the distance to the target
+        double dist = ToTarget.magnitude();
+
+        if (dist > 0) {
+            //calculate the speed required to reach the target given the desired deceleration
+            double speed = dist / (0.6);//the bigger
+
+            //make sure the velocity does not exceed the max
+            speed = Math.min(speed, m_pRaven_Bot.getMaxSpeed());
+
+            //from here proceed just like Seek except we don't need to normalize
+            //the ToTarget vector because we have already gone to the trouble
+            //of calculating its length: dist.
+            Point2D DesiredVelocity = ToTarget.multiply(speed).multiply(1./dist);
+
+            return DesiredVelocity.subtract(m_pRaven_Bot.getVelocity());
+        }
+
+        return new Point2D(0, 0);
+    }
 
     /**
      * This behavior makes the agent wander about randomly
@@ -161,8 +187,8 @@ public class Steering {
 //        //and steer towards it
 //        return Target.subtract(m_pRaven_Bot.getPosition());
 //    }
-    private Point2D wander_improved() {
-        Point2D circleCenter = m_pRaven_Bot.getPosition()
+    public Point2D wander_improved() {
+        Point2D circleCenter = m_pRaven_Bot.getCenterPosition()
                 .add(m_pRaven_Bot.getHeading()
                         .normalize()
                         .multiply(m_dWanderDistance));
