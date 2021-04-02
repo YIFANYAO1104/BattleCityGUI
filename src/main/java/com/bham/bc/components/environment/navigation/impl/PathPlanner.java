@@ -188,7 +188,7 @@ public class PathPlanner implements NavigationService {
 
         List<Shape> array = new ArrayList<>();
 
-        System.out.println("Before: "+path);
+//        System.out.println("Before: "+path);
         ListIterator<PathEdge> iterator = path.listIterator();
 
         //0th element in the list
@@ -206,7 +206,7 @@ public class PathPlanner implements NavigationService {
             }
         }
         this.array = array;
-        System.out.println("After: "+path);
+//        System.out.println("After: "+path);
     }
 
     /**

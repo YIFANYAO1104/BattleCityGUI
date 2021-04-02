@@ -15,8 +15,6 @@ public abstract class MovingEntity extends BaseGameEntity {
     protected Point2D velocity;
     //non-zero, normalized vector for direction, must be updated once the velocity was updated
     protected Point2D heading;
-
-    protected double angle;
     protected boolean exists;
 
 

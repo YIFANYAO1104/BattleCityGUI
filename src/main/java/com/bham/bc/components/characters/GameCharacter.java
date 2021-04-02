@@ -20,7 +20,10 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
 abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
+
+    //should be bigger than 1, or it will cause unstable movement
     protected double mass=3;
+    //for debug
     protected Point2D acceleration = new Point2D(0,0);
     protected Steering sb;
 
@@ -154,10 +157,7 @@ abstract public class GameCharacter extends MovingEntity {
 
     @Override
     public void move() {
-        //TODO:Move to steering.calculate
-//        velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed);
         Point2D force = sb.calculate();
-        System.out.println("force="+force);
         Point2D acceleration = force.multiply(1./mass);
         //debug
         this.acceleration = acceleration;
