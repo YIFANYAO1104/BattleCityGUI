@@ -7,7 +7,7 @@ import java.util.TreeSet;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 import static com.bham.bc.utils.messaging.MessageTypes.MsgToStr;
-import static com.bham.bc.utils.time.CrudeTimer.Clock;
+import static com.bham.bc.utils.time.CrudeTimer.CLOCK;
 
 /**
  * Message System to check and track the Game States
@@ -120,14 +120,14 @@ public class MessageDispatcher {
          * Put this message into the TreeSet Container
          */
         else {
-            double CurrentTime = Clock.GetCurrentTime();
+            double CurrentTime = CLOCK.getCurrentTime();
 
             telegram.DispatchTime = CurrentTime + delay;
 
             PriorityQ.add(telegram);
 
             System.out.println("\nDelayed telegram from " + pSender.toString()
-                    + " recorded at time " + Clock.GetCurrentTime() + " for "
+                    + " recorded at time " + CLOCK.getCurrentTime() + " for "
                     + pReceiver.toString() + ". Msg is " + MsgToStr(msg));
         }
     }
@@ -141,7 +141,7 @@ public class MessageDispatcher {
 
 
 
-        double CurrentTime = Clock.GetCurrentTime();
+        double CurrentTime = CLOCK.getCurrentTime();
 
         /**
          * Peek the Queue to check if any telegrams need dispatching

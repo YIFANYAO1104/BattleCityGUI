@@ -110,7 +110,7 @@ public class Shooter extends Enemy {
                     break;
                 case ATTACKALLY:
                     aim();
-                    shoot(0.9);
+                    shoot(0.3);
                     break;
                 case RETREAT:
                     // TODO: retreat();

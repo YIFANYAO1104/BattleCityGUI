@@ -1,6 +1,6 @@
 package com.bham.bc.components.armory;
 
-import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -15,11 +15,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * Represents a default bullet the player starts with
  */
 public class DefaultBullet extends Bullet {
-
-	public static final String IMAGE_PATH = "file:src/main/resources/img/armory/defaultBullet.png";
-	public static final int WIDTH = 6;
-	public static final int HEIGHT = 12;
-
+	public static final BulletType TYPE = BulletType.DEFAULT;
 	public static final double SPEED = 5;
 	public static final double DAMAGE = 25;
 
@@ -31,9 +27,8 @@ public class DefaultBullet extends Bullet {
 	 * @param heading  a normalized vector indicate the direction
 	 * @param side   ALLY or ENEMY side the bullet belongs to
 	 */
-	public DefaultBullet(double x, double y, Point2D heading, SIDE side) {
-		super(x, y, SPEED, heading, side, DAMAGE);
-		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
+	public DefaultBullet(double x, double y, Point2D heading, Side side) {
+		super(x, y, SPEED, heading, TYPE, side, DAMAGE);
 	}
 
 	@Override
@@ -44,12 +39,6 @@ public class DefaultBullet extends Bullet {
 
 	@Override
 	public void move() {
-		//TODO:Move to steering.calculate
-//		velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed);
-
-//		System.out.println("bullet"+velocity);
-//		System.out.println("angle"+angle);
-
 		x += velocity.getX();
 		y += velocity.getY();
 
@@ -67,8 +56,8 @@ public class DefaultBullet extends Bullet {
 
 	@Override
 	public Rectangle getHitBox() {
-		Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
-		hitBox.getTransforms().add(new Rotate(getAntiAngleY(), x + WIDTH/2,y + HEIGHT/2));
+		Rectangle hitBox = new Rectangle(x, y, getRadius().getX(), getRadius().getY());
+		hitBox.getTransforms().add(new Rotate(getAntiAngleY(), x + getRadius().getX()/2,y + getRadius().getY()/2));
 
 		return hitBox;
 	}

@@ -1,10 +1,9 @@
 package com.bham.bc.components.armory;
 
 
-import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.characters.Side;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
@@ -12,15 +11,13 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
 public class ExplosiveBullet extends Bullet {
-
-    public static final String IMAGE_PATH = "file:src/main/resources/img/armory/defaultBullet.png";
-    public static final int WIDTH = 6;
-    public static final int HEIGHT = 12;
+    public static final BulletType TYPE = BulletType.EXPLOSIVE;
+    public static final double DAMAGE = 100;
 
     public static final int MAX_BOUNDWIDTH = 300;
     public static final int MAX_BOUNDHEIGHT = 300;
 
-    public static final double DAMAGE = 100;
+
 
     public static final int LIFETIME = 1*FRAME_RATE;
 
@@ -36,37 +33,26 @@ public class ExplosiveBullet extends Bullet {
      * @param angle  angle at which the bullet will move
      * @param side   ALLY or ENEMY side the bullet belongs to
      */
-    public ExplosiveBullet(double x, double y, Point2D heading, SIDE side) {
-        super(x, y, 0, heading, side, DAMAGE);
-        entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
+    public ExplosiveBullet(double x, double y, Point2D heading, Side side) {
+        super(x, y, 0, heading, TYPE, side, DAMAGE);
         existTime = 0;
-        this.hitBox = updateHitBox(existTime);
+        hitBox = updateHitBox(existTime);
     }
 
     @Override
     public void destroy() {
-
+        entityManager.removeEntity(this);
+        exists = false;
     }
 
     @Override
-    public void move() {
-//        x += Math.sin(Math.toRadians(angle)) * speed;
-//        y -= Math.cos(Math.toRadians(angle)) * speed;
-//
-//        if (x < 0 || y < 0 || x > GameMap.getWidth() || y > GameMap.getHeight()) {
-//            entityManager.removeEntity(this);
-//            exists = false;
-//        }
-    }
+    public void move() { }
 
     @Override
     public void update() {
         existTime++;
-        this.hitBox = updateHitBox(existTime);
-        if (existTime >= LIFETIME) {
-            entityManager.removeEntity(this);
-            exists = false;
-        }
+        hitBox = updateHitBox(existTime);
+        if (existTime >= LIFETIME) destroy();
     }
 
     @Override

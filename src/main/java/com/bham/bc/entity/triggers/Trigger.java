@@ -5,6 +5,7 @@
 package com.bham.bc.entity.triggers;
 
 
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.graph.ExtraInfo;
@@ -78,6 +79,7 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
      * triggered and the appropriate action will be taken.
      */
     public abstract void tryTriggerC(GameCharacter entity);
+
 
     public abstract void tryTriggerO(GenericObstacle entity);
 

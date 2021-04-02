@@ -3,62 +3,61 @@ package com.bham.bc.components.environment.triggers;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
-import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.messaging.Telegram;
+import com.bham.bc.entity.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
 
-public class WeaponGenerator extends RespawnTrigger {
-    private Weapon weapon;
+public class TrappedTrigger extends RespawnTrigger{
 
-    public WeaponGenerator(int x, int y,Weapon weapon,int width, int length,int respawnCooldown) {
-        super(BaseGameEntity.GetNextValidID(), x, y);
-        this.weapon = weapon;
-
-        addRectangularTriggerRegion(new Point2D(x, y), new Point2D(width, length));
-        setRespawnDelay(respawnCooldown * FRAME_RATE);
+    public static int width = Constants.TILE_WIDTH;
+    public static int height = Constants.TILE_HEIGHT;
+    public TrappedTrigger(int x, int y, int Respawn){
+        super(GetNextValidID(),x,y);
+        addRectangularTriggerRegion(new Point2D(x,y), new Point2D(width,height));
+        setRespawnDelay(Respawn*FRAME_RATE*2);
         initImages();
+
     }
 
 
-    private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/tmp.jpg"), };
-    }
 
+    public void initImages(){
+        entityImages = new Image[]{ new Image("file:src/main/resources/img/tiles/trap.png")};
+
+    }
     @Override
     public void tryTriggerC(GameCharacter entity) {
-        if(isActive()&& rectIsTouchingTrigger(entity.getPosition(),entity.getRadius())){
-            entity.switchWeapon(this.weapon);
-            deactivate();
-
+        if(entity instanceof  Player){
+            if(isActive() && rectIsTouchingTrigger(entity.getPosition(), entity.getRadius())){
+                entity.setTRAPPED();
+                deactivate();
+            }
         }
 
     }
 
 
-
     @Override
-    public void tryTriggerO(GenericObstacle entity) {
-
+    public Shape getHitBox() {
+        return null;
     }
 
     @Override
     public void render(GraphicsContext gc) {
         if (isActive()) {
             gc.drawImage(entityImages[0], this.x, this.y);
+            renderRegion(gc);
         }
 
-    }
-
-    @Override
-    public Rectangle getHitBox() {
-        return null;
     }
 
     @Override
@@ -71,14 +70,15 @@ public class WeaponGenerator extends RespawnTrigger {
         return null;
     }
 
-    @Override
-    public boolean intersects(BaseGameEntity b) {
-        return false;
-    }
 
+
+    @Override
+    public void tryTriggerO(GenericObstacle entity) {
+
+    }
 
     @Override
     public ItemType getItemType() {
-        return ItemType.weapon;
+        return null;
     }
 }

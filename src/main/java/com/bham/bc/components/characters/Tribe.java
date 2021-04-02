@@ -3,7 +3,7 @@ package com.bham.bc.components.characters;
 /**
  * Enum describing the type of character
  */
-public enum TRIBE {
+public enum Tribe {
     DEFENDER,
     KAMIKAZE,
     SHOOTER,

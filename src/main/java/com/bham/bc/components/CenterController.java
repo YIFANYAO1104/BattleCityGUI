@@ -1,7 +1,7 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
@@ -10,7 +10,8 @@ import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.utils.Constants;
+import static com.bham.bc.utils.Constants.*;
+
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
@@ -24,7 +25,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
-import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -48,6 +48,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     //temp
     protected ArrayList<BombTank> bombTanks = new ArrayList<>();
+    //Map division
 
 
     /**
@@ -80,6 +81,16 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         backendServices = centerController;
 
         centerController.startGame();
+
+        initialMapDivision(centerController);
+
+    }
+
+    public static void initialMapDivision(CenterController c1){
+        //--Add all game elemnets to mapDivision------
+        c1.gameMap.getMapDivision().addToMapDivision(
+                new ArrayList<>(c1.characters));
+        //-----------------------------------------------
     }
 
     // TEMPORARY METHODS -------------------------------------------
@@ -91,7 +102,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public Point2D getNearestOppositeSideCenterPosition(Point2D point, SIDE side) {
+    public Point2D getNearestOppositeSideCenterPosition(Point2D point, Side side) {
         return characters.stream().filter(c -> c.getSide() != side).map(GameCharacter::getCenterPosition).min(Comparator.comparing(c -> c.distance(point))).get();
     }
 
@@ -110,7 +121,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         hitBoxPane.getChildren().clear();
 
         // Add map hit-box
-        Rectangle mapConstrain = new Rectangle(Constants.MAP_WIDTH, Constants.MAP_HEIGHT, Color.TRANSPARENT);
+        Rectangle mapConstrain = new Rectangle(MAP_WIDTH, MAP_HEIGHT, Color.TRANSPARENT);
         mapConstrain.setStroke(Color.RED);
         mapConstrain.setStrokeWidth(5);
         hitBoxPane.getChildren().add(mapConstrain);
@@ -188,6 +199,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     // ADDERS -----------------------------------------------------
     @Override
     public void addBullet(Bullet bullet) {
+        gameMap.getMapDivision().AddEntity(bullet);
         bullets.add(bullet);
     }
 
@@ -244,10 +256,17 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public void update() {
         gameMap.update();
         characters.forEach(GameCharacter::update);
-        bullets.forEach(Bullet::update);
+        // Update bullets
+        for(Bullet b1 : bullets){
+            b1.update();
+            gameMap.getMapDivision().UpdateEntity(b1);       // Removed the not exist bullet stored in Mapdivision
+        }
 
+        characters.forEach(c1-> gameMap.getMapDivision().UpdateEntity(c1));     //Update characters
         gameMap.handleAll(characters, bullets);
-        characters.forEach(character -> character.handleAll(characters, bullets));
+//        characters.forEach(character -> character.handleAll(characters, bullets));
+        characters.forEach(character -> character.handleAll(
+                gameMap.getMapDivision().CalculateNeighborsArray(character,40)));
 
         bullets.removeIf(b -> !b.exists());
         characters.removeIf(c -> !c.exists());

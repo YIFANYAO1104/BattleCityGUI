@@ -1,5 +1,5 @@
 package com.bham.bc.components.characters;
 
-public enum SIDE {
+public enum Side {
     ALLY, ENEMY
 }
