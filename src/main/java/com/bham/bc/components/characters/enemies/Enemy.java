@@ -35,8 +35,8 @@ public abstract class Enemy extends GameCharacter {
     private Point2D destination;
     private int timeTillSearch;
 
-    //temp for debug
-    Point2D acceleration = new Point2D(0,0);
+//    //temp for debug
+//    Point2D acceleration = new Point2D(0,0);
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -93,6 +93,7 @@ public abstract class Enemy extends GameCharacter {
             pathEdges = navigationService.getPath();
             pathEdges.add(pathEdges.getLast()); // Repeat the last element for the purposes in the search method when move is performed
             destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.removeFirst().getDestination();
+            sb.setTarget(destination);
             timeTillSearch = 20;
             navigationService.resetTaskStatus();
         }
@@ -108,6 +109,7 @@ public abstract class Enemy extends GameCharacter {
         if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
             if(!pathEdges.isEmpty()) {
                 destination = pathEdges.removeFirst().getDestination();
+                sb.setTarget(destination);
 //                face(destination);
 //                move();
             }
@@ -119,14 +121,7 @@ public abstract class Enemy extends GameCharacter {
             //arrive
         } else {
             //seek
-            Point2D force = sb.seek(destination);
-            Point2D acceleration = force.multiply(1./5);
-            this.acceleration = acceleration;
-            velocity = velocity.add(acceleration);
-            //Truncate
-            if(velocity.magnitude()>speed){
-                velocity = velocity.normalize().multiply(speed);
-            }
+            sb.seekOn();
             move();
         }
 
@@ -167,7 +162,7 @@ public abstract class Enemy extends GameCharacter {
         double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
         double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
 
-        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, getAntiAngleY(), side);
+        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, heading, side);
         backendServices.addBullet(b);
     }
 

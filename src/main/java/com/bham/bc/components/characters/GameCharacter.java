@@ -8,13 +8,17 @@ import javafx.scene.shape.Shape;
 
 import java.util.List;
 
+import static com.bham.bc.utils.GeometryEnhanced.isZero;
+
 /**
  * Represents a character - this includes enemies, players and AI companions
  */
 abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
+    protected double mass=3;
     protected SIDE side;
+    protected Point2D acceleration = new Point2D(0,0);
 
     protected Steering sb;
 
@@ -100,16 +104,28 @@ abstract public class GameCharacter extends MovingEntity {
     public void move(double speedMultiplier) {
         //TODO:Move to steering.calculate
 //        velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed).multiply(speedMultiplier);
-        Point2D temp = velocity.multiply(speedMultiplier);
         velocity = velocity.multiply(speedMultiplier);
-        x += temp.getX();
-        y += temp.getY();
+        x += velocity.getX();
+        y += velocity.getY();
     }
 
     @Override
     public void move() {
         //TODO:Move to steering.calculate
 //        velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed);
+        Point2D force = sb.calculate();
+        System.out.println("force="+force);
+        Point2D acceleration = force.multiply(1./mass);
+        //debug
+        this.acceleration = acceleration;
+
+        velocity = velocity.add(acceleration);
+        if(velocity.magnitude()> maxSpeed){
+            velocity = velocity.normalize().multiply(maxSpeed);
+        }
+        if (!isZero(velocity)) {
+            heading = velocity.normalize();
+        }
 
         x += velocity.getX();
         y += velocity.getY();

@@ -72,7 +72,7 @@ public class Steering {
     private double m_dWeightSeparation = 10.0;
     private double m_dWeightWander = 1.0;
     private double m_dWeightWallAvoidance = 10.0;
-    private double m_dWeightSeek = 0.5;//0.5
+    private double m_dWeightSeek = 0.5;
     private double m_dWeightArrive = 1.0;
 
     public void setTarget(Point2D t) {
@@ -347,7 +347,6 @@ public class Steering {
     }
 
     public void arriveOn() {
-        seekOff();
         arriveOn = true;
     }
 

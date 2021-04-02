@@ -1,6 +1,5 @@
 package com.bham.bc.entity;
 
-import com.bham.bc.components.characters.Steering;
 import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -11,7 +10,7 @@ import javafx.scene.transform.Rotate;
  * Represents any entity that can move in any angle
  */
 public abstract class MovingEntity extends BaseGameEntity {
-    protected double speed;
+    protected double maxSpeed;
     //could be zero
     protected Point2D velocity;
     //non-zero, normalized vector for direction, must be updated once the velocity was updated
@@ -41,26 +40,24 @@ public abstract class MovingEntity extends BaseGameEntity {
      *
      * @param x top left x coordinate of the entity and its image
      * @param y top left y coordinate of the entity and its image
-     * @param speed value which defines the initial velocity
+     * @param maxSpeed value which defines the initial velocity
      */
-    protected MovingEntity(double x, double y, double speed) {
+    protected MovingEntity(double x, double y, double maxSpeed) {
         super(GetNextValidID(), x, y);
-        this.speed = speed;
+        this.maxSpeed = maxSpeed;
         this.velocity = new Point2D(0,0);
         this.heading = new Point2D(0,-1);
 //        setAngle(180);
         exists = true;
     }
 
-    protected MovingEntity(double x, double y, double speed, double angle) {
+    protected MovingEntity(double x, double y, double maxSpeed, Point2D heading) {
         super(GetNextValidID(), x, y);
-        this.speed = speed;
-
-        //        x += Math.sin(Math.toRadians(angle));
-//        y -= Math.cos(Math.toRadians(angle));
-        this.velocity = new Point2D(0,0);
-        this.heading = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle)));
-        setAngle(angle);
+        this.maxSpeed = maxSpeed;
+        this.velocity = heading.multiply(maxSpeed);
+        this.heading = heading;
+//                new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle)));
+//        setAngle(angle);
         exists = true;
     }
 
@@ -96,7 +93,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     public abstract void move();
 
     public double getMaxSpeed() {
-        return speed;
+        return maxSpeed;
     }
 
     public Point2D getVelocity() {
@@ -104,12 +101,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     public double getMaxForce() {
-        return 100;
-    }
-
-    public double getSpeed() {
-//        return m_vVelocity.Length();
-        return velocity.magnitude();
+        return 10;
     }
 
     public Point2D getHeading() {

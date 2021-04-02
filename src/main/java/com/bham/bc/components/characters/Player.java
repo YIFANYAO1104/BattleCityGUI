@@ -109,7 +109,7 @@ public class Player extends GameCharacter {
 			//we want an instant change on speed rather than accumulation
 			velocity = velocity.add(force);
 			//Truncate
-			velocity = GeometryEnhanced.truncate(velocity,speed);
+			velocity = GeometryEnhanced.truncate(velocity, maxSpeed);
 			if (!isZero(velocity)) {
 				heading = velocity.normalize();
 			}
@@ -175,13 +175,13 @@ public class Player extends GameCharacter {
 		double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
 		double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
 
-		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, getAntiAngleY(), side);
+		DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, heading, side);
 		backendServices.addBullet(b);
 	}
 
 	public void bomb() {
 		Point2D center = getPosition().add(getRadius().multiply(0.5));
-		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), getAntiAngleY(), side);
+		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), heading, side);
 		backendServices.addBullet(b);
 	}
 

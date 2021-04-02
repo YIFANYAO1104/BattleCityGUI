@@ -3,6 +3,8 @@ package com.bham.bc.components.armory;
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
+import javafx.geometry.Point2D;
+
 
 /**
  * Represents any bullet and defines common bullet properties
@@ -22,8 +24,8 @@ abstract public class Bullet extends MovingEntity {
      * @param side   ALLY or ENEMY side the bullet belongs to
      * @param damage amount of hp the bullet can take from an entity
      */
-    public Bullet(double x, double y, double speed, double angle, SIDE side, double damage) {
-        super(x, y, speed, angle);
+    public Bullet(double x, double y, double speed, Point2D heading, SIDE side, double damage) {
+        super(x, y, speed, heading);
         this.side = side;
         this.damage = damage;
     }
@@ -32,7 +34,7 @@ abstract public class Bullet extends MovingEntity {
      * Gets bullet's speed
      * @return velocity at which the bullet is moving
      */
-    public double getSpeed() { return speed; }
+    public double getMaxSpeed() { return maxSpeed; }
 
     /**
      * Gets bullet's damage
@@ -52,7 +54,7 @@ abstract public class Bullet extends MovingEntity {
      * <br>TODO: assert range
      */
     public void setSpeed(double speed) {
-        this.speed = speed;
+        this.maxSpeed = speed;
     }
 
     /**

@@ -58,8 +58,8 @@ public class Wanderer1 extends Enemy {
         Point2D acceleration = force.multiply(1./3);
         this.acceleration = acceleration;
         velocity = velocity.add(acceleration);
-        if(velocity.magnitude()>speed){
-            velocity = velocity.normalize().multiply(speed);
+        if(velocity.magnitude()> maxSpeed){
+            velocity = velocity.normalize().multiply(maxSpeed);
         }
         if (!isZero(velocity)) {
             heading = velocity.normalize();

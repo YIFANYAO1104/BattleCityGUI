@@ -2,6 +2,7 @@ package com.bham.bc.components.armory;
 
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.components.environment.GameMap;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -27,11 +28,11 @@ public class DefaultBullet extends Bullet {
 	 *
 	 * @param x      top left position in x axis
 	 * @param y      top left position in y axis
-	 * @param angle  angle at which the bullet will move
+	 * @param heading  a normalized vector indicate the direction
 	 * @param side   ALLY or ENEMY side the bullet belongs to
 	 */
-	public DefaultBullet(double x, double y, double angle, SIDE side) {
-		super(x, y, SPEED, angle, side, DAMAGE);
+	public DefaultBullet(double x, double y, Point2D heading, SIDE side) {
+		super(x, y, SPEED, heading, side, DAMAGE);
 		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
 	}
 
@@ -50,7 +51,7 @@ public class DefaultBullet extends Bullet {
 //		System.out.println("angle"+angle);
 
 		x += velocity.getX();
-		y -= velocity.getY();
+		y += velocity.getY();
 
 		if (x < 0 || y < 0 || x > GameMap.getWidth() || y > GameMap.getHeight()) {
 			entityManager.removeEntity(this);

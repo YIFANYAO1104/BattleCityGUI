@@ -36,8 +36,8 @@ public class ExplosiveBullet extends Bullet {
      * @param angle  angle at which the bullet will move
      * @param side   ALLY or ENEMY side the bullet belongs to
      */
-    public ExplosiveBullet(double x, double y, double angle, SIDE side) {
-        super(x, y, 0, angle, side, DAMAGE);
+    public ExplosiveBullet(double x, double y, Point2D heading, SIDE side) {
+        super(x, y, 0, heading, side, DAMAGE);
         entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
         existTime = 0;
         this.hitBox = updateHitBox(existTime);
