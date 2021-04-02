@@ -124,7 +124,7 @@ public class Follower1 extends Enemy {
             gc.setLineWidth(2.0);
             gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
         }
-        drawRotatedImage(gc, entityImages[0], getAntiAngleY());
+        drawRotatedImage(gc, entityImages[0], getAngle());
 
         gc.setStroke(Color.GOLD);
         gc.setLineWidth(2.0);

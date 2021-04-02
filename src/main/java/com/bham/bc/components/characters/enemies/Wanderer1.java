@@ -85,7 +85,7 @@ public class Wanderer1 extends Enemy {
 
     @Override
     public void render(GraphicsContext gc) {
-        drawRotatedImage(gc, entityImages[0], getAntiAngleY());
+        drawRotatedImage(gc, entityImages[0], getAngle());
 
         gc.setStroke(Color.GOLD);
         gc.setLineWidth(2.0);

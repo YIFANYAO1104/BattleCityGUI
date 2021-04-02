@@ -19,7 +19,6 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
 
 import java.util.EnumSet;
 import java.util.Optional;
@@ -94,7 +93,7 @@ public class Player extends GameCharacter {
 
 	public void bomb() {
 		Point2D center = getPosition().add(getRadius().multiply(0.5));
-		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), angle, side);
+		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), heading, side);
 		backendServices.addBullet(b);
 	}
 
@@ -220,7 +219,7 @@ public class Player extends GameCharacter {
 	@Override
 	public void render(GraphicsContext gc) {
 		if (navigationService!=null) navigationService.render(gc);
-		drawRotatedImage(gc, entityImages[0], getAntiAngleY());
+		drawRotatedImage(gc, entityImages[0], getAngle());
 	}
 
 	@Override

@@ -89,9 +89,9 @@ public class Gun {
         // Return an instance which corresponds to the bullet type
         switch(bulletType) {
             case EXPLOSIVE:
-                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getAngle() + angleOffset, CHARACTER.getSide());
+                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
             default:
-                return new DefaultBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getAngle() + angleOffset, CHARACTER.getSide());
+                return new DefaultBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
         }
     }
 

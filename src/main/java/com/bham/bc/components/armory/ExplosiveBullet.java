@@ -41,8 +41,8 @@ public class ExplosiveBullet extends Bullet {
 
     @Override
     public void destroy() {
-        entityManager.removeEntity(this);
-        exists = false;
+//        entityManager.removeEntity(this);
+//        exists = false;
     }
 
     @Override
@@ -52,11 +52,14 @@ public class ExplosiveBullet extends Bullet {
     public void update() {
         existTime++;
         hitBox = updateHitBox(existTime);
-        if (existTime >= LIFETIME) destroy();
+        if (existTime >= LIFETIME) {
+            entityManager.removeEntity(this);
+            exists = false;
+        }
     }
 
     @Override
-    public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAntiAngleY()); }
+    public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAngle()); }
 
     @Override
     public Rectangle getHitBox() {
@@ -71,7 +74,7 @@ public class ExplosiveBullet extends Bullet {
 
         //create hit box according to bound rectangle
         Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), regionRadius.getX(), regionRadius.getY());
-        hitBox.getTransforms().add(new Rotate(getAntiAngleY(), topLeft.getX() + regionRadius.getX() /2,topLeft.getY() + regionRadius.getY() /2));
+        hitBox.getTransforms().add(new Rotate(getAngle(), topLeft.getX() + regionRadius.getX() /2,topLeft.getY() + regionRadius.getY() /2));
 
         return hitBox;
     }

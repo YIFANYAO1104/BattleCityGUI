@@ -23,7 +23,7 @@ abstract public class Bullet extends MovingEntity {
      * @param x      top left position in x axis
      * @param y      top left position in y axis
      * @param speed  velocity value at which the bullet will move
-     * @param angle  angle at which the bullet will move
+     * @param heading  a normalized vector indicate the direction
      * @param type   bullet type (e.g., DEFAULT, EXPLOSIVE)
      * @param side   ALLY or ENEMY side the bullet belongs to
      * @param damage amount of hp the bullet can take from an entity

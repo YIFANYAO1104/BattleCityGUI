@@ -16,20 +16,6 @@ public abstract class MovingEntity extends BaseGameEntity {
     //non-zero, normalized vector for direction, must be updated once the velocity was updated
     protected Point2D heading;
 
-    public double getAntiAngleY() {
-        return GeometryEnhanced.antiClockWiseAngle(new Point2D(0,-1),heading);
-//        return Math.toDegrees(Math.atan2(heading.getY(), heading.getX())) + 90;
-    }
-
-    public void setAngle(double angle) {
-        this.angle = angle;
-        this.heading = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle)));
-        System.out.println("angle="+angle);
-        System.out.println("heading="+heading);
-
-        System.out.println(Math.toDegrees(Math.atan2(heading.getY(), heading.getX())) + 90);
-    }
-
     protected double angle;
     protected boolean exists;
 
@@ -47,7 +33,6 @@ public abstract class MovingEntity extends BaseGameEntity {
         this.maxSpeed = maxSpeed;
         this.velocity = new Point2D(0,0);
         this.heading = new Point2D(0,-1);
-//        setAngle(180);
         exists = true;
     }
 
@@ -56,8 +41,6 @@ public abstract class MovingEntity extends BaseGameEntity {
         this.maxSpeed = maxSpeed;
         this.velocity = heading.multiply(maxSpeed);
         this.heading = heading;
-//                new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle)));
-//        setAngle(angle);
         exists = true;
     }
 
@@ -86,8 +69,10 @@ public abstract class MovingEntity extends BaseGameEntity {
      * @return angle between -180 and 180 degrees the entity s facing
      */
     public double getAngle() {
-        return angle;
+        return GeometryEnhanced.antiClockWiseAngle(new Point2D(0,-1),heading);
+//        return Math.toDegrees(Math.atan2(heading.getY(), heading.getX())) + 90;
     }
+
 
     /**
      * Checks if this entity exists

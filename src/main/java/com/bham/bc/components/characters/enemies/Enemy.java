@@ -1,7 +1,6 @@
 package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.armory.BulletType;
-import com.bham.bc.components.armory.DefaultBullet;
 import com.bham.bc.components.armory.Gun;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.navigation.ItemType;
@@ -18,7 +17,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -242,7 +240,7 @@ public abstract class Enemy extends GameCharacter {
     @Override
     public void render(GraphicsContext gc) {
         if (navigationService!=null) navigationService.render(gc);
-        drawRotatedImage(gc, entityImages[0], getAntiAngleY());
+        drawRotatedImage(gc, entityImages[0], getAngle());
 
         gc.setStroke(Color.GOLD);
         gc.setLineWidth(2.0);

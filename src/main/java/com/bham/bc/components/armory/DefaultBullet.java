@@ -4,7 +4,6 @@ import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
@@ -52,12 +51,12 @@ public class DefaultBullet extends Bullet {
 	public void update() { move(); }
 
 	@Override
-	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAntiAngleY()); }
+	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAngle()); }
 
 	@Override
 	public Rectangle getHitBox() {
 		Rectangle hitBox = new Rectangle(x, y, getRadius().getX(), getRadius().getY());
-		hitBox.getTransforms().add(new Rotate(getAntiAngleY(), x + getRadius().getX()/2,y + getRadius().getY()/2));
+		hitBox.getTransforms().add(new Rotate(getAngle(), x + getRadius().getX()/2,y + getRadius().getY()/2));
 
 		return hitBox;
 	}
