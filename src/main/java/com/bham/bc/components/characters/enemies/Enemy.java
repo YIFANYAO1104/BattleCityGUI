@@ -8,6 +8,7 @@ import com.bham.bc.components.environment.navigation.SearchStatus;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import com.bham.bc.entity.ai.StateMachine;
+import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
@@ -136,12 +137,9 @@ public abstract class Enemy extends GameCharacter {
      * @param toward position to face
      */
     protected void face(Point2D toward) {
-        double deltaX = toward.getX() - getCenterPosition().getX();
-        double deltaY = toward.getY() - getCenterPosition().getY();
-        setAngle(Math.toDegrees(Math.atan2(deltaY, deltaX)) + 90);
-        velocity = toward.subtract(getCenterPosition());
-        if(velocity.magnitude()>speed){
-                velocity = velocity.normalize().multiply(speed);
+        Point2D direction = toward.subtract(getCenterPosition());
+        if (!GeometryEnhanced.isZero(direction)){
+            heading = direction.normalize();
         }
     }
 
@@ -163,13 +161,13 @@ public abstract class Enemy extends GameCharacter {
         double centerBulletX = x + getRadius().getX()/2.0;
         double centerBulletY = y - DefaultBullet.HEIGHT/2.0;
 
-        Rotate rot = new Rotate(getAngle(), getCenterPosition().getX(), getCenterPosition().getY());
+        Rotate rot = new Rotate(getAntiAngleY(), getCenterPosition().getX(), getCenterPosition().getY());
         Point2D rotatedCenterXY = rot.transform(centerBulletX, centerBulletY);
 
         double topLeftBulletX = rotatedCenterXY.getX() - DefaultBullet.WIDTH/2.0;
         double topLeftBulletY = rotatedCenterXY.getY() - DefaultBullet.HEIGHT/2.0;
 
-        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, getAngle(), side);
+        DefaultBullet b = new DefaultBullet(topLeftBulletX, topLeftBulletY, getAntiAngleY(), side);
         backendServices.addBullet(b);
     }
 
@@ -258,7 +256,7 @@ public abstract class Enemy extends GameCharacter {
     @Override
     public void render(GraphicsContext gc) {
         if (navigationService!=null) navigationService.render(gc);
-        drawRotatedImage(gc, entityImages[0], getAngle());
+        drawRotatedImage(gc, entityImages[0], getAntiAngleY());
 
         gc.setStroke(Color.GOLD);
         gc.setLineWidth(2.0);

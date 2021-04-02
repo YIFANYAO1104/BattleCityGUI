@@ -6,8 +6,7 @@ import javafx.geometry.Point3D;
 import org.junit.Test;
 import javafx.scene.transform.*;
 
-import static com.bham.bc.utils.GeometryEnhanced.antiClockWiseAngle;
-import static com.bham.bc.utils.GeometryEnhanced.clockWiseAngle;
+import static com.bham.bc.utils.GeometryEnhanced.*;
 import static org.junit.Assert.assertTrue;
 
 
@@ -50,14 +49,23 @@ public class TransformTest {
     }
 
     @Test
-    public void angleExperiment3(){
+    public void rotateTest1(){
         Point2D p1 = new Point2D(3,3);
         Point2D p2 = new Point2D(6,0);
         Rotate r = new Rotate();
         r.setPivotX(p1.getX());
         r.setPivotY(p1.getY());
         r.setAngle(90);
-        System.out.println(r.transform(p2));
+        Point2D target = r.transform(p2);
+        assertTrue(isZero(target.subtract(new Point2D(6,6))));
+    }
+
+    @Test
+    public void rotateTest2(){
+        Point2D p1 = new Point2D(3,3);
+        Point2D p2 = new Point2D(6,0);
+        Point2D target = GeometryEnhanced.rotate(p1,p2,90);
+        assertTrue(isZero(target.subtract(new Point2D(6,6))));
     }
 
     @Test

@@ -1,6 +1,7 @@
 package com.bham.bc.entity;
 
 import com.bham.bc.components.characters.Steering;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -16,13 +17,18 @@ public abstract class MovingEntity extends BaseGameEntity {
     //non-zero, normalized vector for direction, must be updated once the velocity was updated
     protected Point2D heading;
 
-    public double getAngle() {
-        return Math.toDegrees(Math.atan2(heading.getY(), heading.getX())) + 90;
+    public double getAntiAngleY() {
+        return GeometryEnhanced.antiClockWiseAngle(new Point2D(0,-1),heading);
+//        return Math.toDegrees(Math.atan2(heading.getY(), heading.getX())) + 90;
     }
 
     public void setAngle(double angle) {
         this.angle = angle;
         this.heading = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle)));
+        System.out.println("angle="+angle);
+        System.out.println("heading="+heading);
+
+        System.out.println(Math.toDegrees(Math.atan2(heading.getY(), heading.getX())) + 90);
     }
 
     protected double angle;
@@ -42,7 +48,7 @@ public abstract class MovingEntity extends BaseGameEntity {
         this.speed = speed;
         this.velocity = new Point2D(0,0);
         this.heading = new Point2D(0,-1);
-        setAngle(0);
+//        setAngle(180);
         exists = true;
     }
 
@@ -98,7 +104,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     public double getMaxForce() {
-        return 0;
+        return 100;
     }
 
     public double getSpeed() {

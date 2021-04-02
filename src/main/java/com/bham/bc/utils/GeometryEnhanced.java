@@ -12,13 +12,22 @@ public class GeometryEnhanced {
         return p.dotProduct(p) < eps;
     }
 
-    //rotate a point around center point, anti-clockwise angle
+    //Ensure the magnitude of a vector is less than speed
+    static public Point2D truncate(Point2D velocity, double speed){
+        if(velocity.magnitude()>speed){
+            return velocity.normalize().multiply(speed);
+        }
+        return velocity;
+    }
+
+    // rotate a point around center point, anti-clockwise angle 15ms in test
     static public Point2D rotate(Point2D center, Point2D p, double antiDegrees){
-        Rotate r = new Rotate();
-        r.setPivotX(center.getX());
-        r.setPivotY(center.getY());
-        r.setAngle(antiDegrees);
-        return r.transform(p);
+        Point2D x = p.subtract(center);
+        //rotate linear transformation
+        Point2D Tx = new Point2D(Math.cos(Math.toRadians(antiDegrees)),Math.sin(Math.toRadians(antiDegrees)));
+        Point2D Ty = new Point2D(-1*Math.sin(Math.toRadians(antiDegrees)),Math.cos(Math.toRadians(antiDegrees)));
+        Point2D b = Tx.multiply(x.getX()).add(Ty.multiply(x.getY()));
+        return b.add(center);
     }
 
     //return an angle between [0,360]
@@ -77,26 +86,12 @@ public class GeometryEnhanced {
         return new Point2D(-p.getY(), p.getX());
     }
 
-
-//    public static Point2D PointToWorldSpace(Point2D point,
-//                                             Point2D AgentHeading,
-//                                             Point2D AgentSide,
-//                                             Point2D AgentPosition) {
-//        //make a copy of the point
-//        Point2D TransPoint = new Point2D(point);
-//
-//        //create a transformation matrix
-//        C2DMatrix matTransform = new C2DMatrix();
-//
-//        //rotate
-//        matTransform.Rotate(AgentHeading, AgentSide);
-//
-//        //and translate
-//        matTransform.Translate(AgentPosition.x, AgentPosition.y);
-//
-//        //now transform the vertices
-//        matTransform.TransformPoint2Ds(TransPoint);
-//
-//        return TransPoint;
+    //rotate a point around center point, anti-clockwise angle, 31ms in test
+//    static public Point2D rotate(Point2D center, Point2D p, double antiDegrees){
+//        Rotate r = new Rotate();
+//        r.setPivotX(center.getX());
+//        r.setPivotY(center.getY());
+//        r.setAngle(antiDegrees);
+//        return r.transform(p);
 //    }
 }

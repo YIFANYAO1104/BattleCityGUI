@@ -15,7 +15,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 
-public class Wanderer extends Enemy {
+public class Follower1 extends Enemy {
 
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/shooter.png";
     public static final int SIZE = 30;
@@ -26,6 +26,8 @@ public class Wanderer extends Enemy {
     private Point2D destination;
 
 
+    boolean isLast = false;
+    boolean exit = false;
 
 
     /**
@@ -34,9 +36,20 @@ public class Wanderer extends Enemy {
      * @param x top left x coordinate of the enemy
      * @param y top left y coordinate of the enemy
      */
-    public Wanderer(int x, int y) {
+    public Follower1(int x, int y) {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        navigationService.createRequest(new Point2D(16*32, 16*32));
+        navigationService.peekRequestStatus();
+//        pathEdges = navigationService.getPath();
+        pathEdges = new LinkedList<>();
+        pathEdges.add(new PathEdge(new Point2D(16*26, 16*26),new Point2D(20*26, 16*26)));
+        pathEdges.add(new PathEdge(new Point2D(20*26, 16*26),new Point2D(16*26, 18*26)));
+        pathEdges.add(new PathEdge(new Point2D(16*26, 18*26),new Point2D(17 *26, 19*26)));
+        pathEdges.add(new PathEdge(new Point2D(17 *26, 19*26),new Point2D(16*26, 20*26)));
+        pathEdges.add(new PathEdge(new Point2D(16*26, 20*26),new Point2D(16*26, 21*26)));
+        destination = pathEdges.removeFirst().getDestination();
+        sb.setTarget(destination);
     }
 
     @Override
@@ -46,22 +59,38 @@ public class Wanderer extends Enemy {
 
     @Override
     public void update() {
-        System.out.println("curPos"+getPosition());
+        if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
+            if(!pathEdges.isEmpty()) {
+                System.out.println("new des");
+                destination = pathEdges.removeFirst().getDestination();
+                sb.setTarget(destination);
+            } else {
+                sb.arriveOff();
+//                velocity = new Point2D(0,0);
+                mymove();
+                return;
+            }
+        }
 
-        //arrive
-        System.out.println("---------------------------------------------------");
-        System.out.println("seek"+destination);
-        Point2D force = sb.wander_improved();
-        System.out.println("force" + force);
+        if (pathEdges.isEmpty()) { //last element
+            //arrive
+            sb.arriveOn();
+        } else {
+            //seek
+            sb.seekOn();
+        }
+
+        mymove();
+    }
+
+
+    public void mymove() {
+        //TODO:Move to steering.calculate
+        Point2D force = sb.calculate();
+        System.out.println("force="+force);
         Point2D acceleration = force.multiply(1./3);
         this.acceleration = acceleration;
-        System.out.println("v" + getVelocity());
         velocity = velocity.add(acceleration);
-        System.out.println("---------------------------------------------------");
-//            System.out.println("EnemyV"+velocity);
-//
-//            System.out.println("EnemyA" + acceleration);
-        //Truncate
         if(velocity.magnitude()>speed){
             velocity = velocity.normalize().multiply(speed);
         }
@@ -69,10 +98,9 @@ public class Wanderer extends Enemy {
             heading = velocity.normalize();
         }
 
-        move();
-
+        x += velocity.getX();
+        y += velocity.getY();
     }
-
     @Override
     public void destroy() {
         entityManager.removeEntity(this);
@@ -89,6 +117,13 @@ public class Wanderer extends Enemy {
 
     @Override
     public void render(GraphicsContext gc) {
+        for (PathEdge graphEdge : pathEdges) {
+            Point2D n1 = graphEdge.getSource();
+            Point2D n2 = graphEdge.getDestination();
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(2.0);
+            gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
+        }
         drawRotatedImage(gc, entityImages[0], getAntiAngleY());
 
         gc.setStroke(Color.GOLD);
@@ -99,7 +134,7 @@ public class Wanderer extends Enemy {
         gc.setStroke(Color.WHITE);
         gc.setLineWidth(2.0);
 
-        gc.strokeLine(x, y, x+acceleration.getX(),x+acceleration.getY() );
+        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
 
 
     }

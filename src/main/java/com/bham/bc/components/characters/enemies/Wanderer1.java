@@ -15,7 +15,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 
-public class Wanderer extends Enemy {
+public class Wanderer1 extends Enemy {
 
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/shooter.png";
     public static final int SIZE = 30;
@@ -34,7 +34,7 @@ public class Wanderer extends Enemy {
      * @param x top left x coordinate of the enemy
      * @param y top left y coordinate of the enemy
      */
-    public Wanderer(int x, int y) {
+    public Wanderer1(int x, int y) {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
     }
@@ -46,22 +46,18 @@ public class Wanderer extends Enemy {
 
     @Override
     public void update() {
-        System.out.println("curPos"+getPosition());
+        sb.wanderOn();
 
-        //arrive
-        System.out.println("---------------------------------------------------");
-        System.out.println("seek"+destination);
-        Point2D force = sb.wander_improved();
-        System.out.println("force" + force);
+        mymove();
+
+    }
+
+    public void mymove() {
+        //TODO:Move to steering.calculate
+        Point2D force = sb.calculate();
         Point2D acceleration = force.multiply(1./3);
         this.acceleration = acceleration;
-        System.out.println("v" + getVelocity());
         velocity = velocity.add(acceleration);
-        System.out.println("---------------------------------------------------");
-//            System.out.println("EnemyV"+velocity);
-//
-//            System.out.println("EnemyA" + acceleration);
-        //Truncate
         if(velocity.magnitude()>speed){
             velocity = velocity.normalize().multiply(speed);
         }
@@ -69,8 +65,8 @@ public class Wanderer extends Enemy {
             heading = velocity.normalize();
         }
 
-        move();
-
+        x += velocity.getX();
+        y += velocity.getY();
     }
 
     @Override

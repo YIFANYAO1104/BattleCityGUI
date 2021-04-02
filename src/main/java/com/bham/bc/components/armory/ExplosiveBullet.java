@@ -70,7 +70,7 @@ public class ExplosiveBullet extends Bullet {
     }
 
     @Override
-    public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAngle()); }
+    public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAntiAngleY()); }
 
     @Override
     public Rectangle getHitBox() {
@@ -85,7 +85,7 @@ public class ExplosiveBullet extends Bullet {
 
         //create hit box according to bound rectangle
         Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), regionRadius.getX(), regionRadius.getY());
-        hitBox.getTransforms().add(new Rotate(getAngle(), topLeft.getX() + regionRadius.getX() /2,topLeft.getY() + regionRadius.getY() /2));
+        hitBox.getTransforms().add(new Rotate(getAntiAngleY(), topLeft.getX() + regionRadius.getX() /2,topLeft.getY() + regionRadius.getY() /2));
 
         return hitBox;
     }

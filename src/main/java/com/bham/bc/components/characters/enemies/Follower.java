@@ -1,6 +1,5 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.entity.ai.*;
 import javafx.geometry.Point2D;
@@ -10,10 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 
-import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 
@@ -58,7 +55,7 @@ public class Follower extends Enemy {
 
     @Override
     public void update() {
-        System.out.println("curPos"+getPosition());
+//        System.out.println("curPos"+getPosition());
         if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
             if(!pathEdges.isEmpty()) {
                 System.out.println("new des");
@@ -70,43 +67,29 @@ public class Follower extends Enemy {
 
         if (pathEdges.isEmpty()) { //last element
             //arrive
-            System.out.println("---------------------------------------------------");
-            System.out.println("seek"+destination);
-            Point2D force = sb.arrive(destination);
-            System.out.println("force" + force);
+//            System.out.println("---------------------------------------------------");
+            Point2D force = sb.arrive_improved(destination);
+            System.out.println("force="+force);
             Point2D acceleration = force.multiply(1./3);
             this.acceleration = acceleration;
-            System.out.println("v" + velocity);
             velocity = velocity.add(acceleration);
-            System.out.println("---------------------------------------------------");
-//            System.out.println("EnemyV"+velocity);
-//
-//            System.out.println("EnemyA" + acceleration);
-            //Truncate
-            if(velocity.magnitude()>speed){
-                velocity = velocity.normalize().multiply(speed);
-            }
-            move();
+//            System.out.println("---------------------------------------------------");
         } else {
             //seek
-             System.out.println("---------------------------------------------------");
-            System.out.println("seek"+destination);
+//            System.out.println("---------------------------------------------------");
+//            System.out.println("seek"+destination);
             Point2D force = sb.seek(destination);
-            System.out.println("force" + force);
+            System.out.println("force="+force);
             Point2D acceleration = force.multiply(1./3);
             this.acceleration = acceleration;
-            System.out.println("v" + velocity);
             velocity = velocity.add(acceleration);
-            System.out.println("---------------------------------------------------");
-//            System.out.println("EnemyV"+velocity);
-//
-//            System.out.println("EnemyA" + acceleration);
-            //Truncate
-            if(velocity.magnitude()>speed){
-                velocity = velocity.normalize().multiply(speed);
-            }
-            move();
+//            System.out.println("---------------------------------------------------");
+
         }
+        if(velocity.magnitude()>speed){
+            velocity = velocity.normalize().multiply(speed);
+        }
+        move();
     }
 
     @Override
@@ -132,7 +115,7 @@ public class Follower extends Enemy {
             gc.setLineWidth(2.0);
             gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
         }
-        drawRotatedImage(gc, entityImages[0], getAngle());
+        drawRotatedImage(gc, entityImages[0], getAntiAngleY());
 
         gc.setStroke(Color.GOLD);
         gc.setLineWidth(2.0);

@@ -2,15 +2,12 @@ package com.bham.bc.components.armory;
 
 import com.bham.bc.components.characters.SIDE;
 import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.utils.Constants;
-import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
 
-import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -65,12 +62,12 @@ public class DefaultBullet extends Bullet {
 	public void update() { move(); }
 
 	@Override
-	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAngle()); }
+	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAntiAngleY()); }
 
 	@Override
 	public Rectangle getHitBox() {
 		Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
-		hitBox.getTransforms().add(new Rotate(getAngle(), x + WIDTH/2,y + HEIGHT/2));
+		hitBox.getTransforms().add(new Rotate(getAntiAngleY(), x + WIDTH/2,y + HEIGHT/2));
 
 		return hitBox;
 	}

@@ -69,16 +69,21 @@ public class Steering {
     private double m_dWanderDistance;
 
 
+    private double m_dWeightSeparation = 10.0;
+    private double m_dWeightWander = 1.0;
+    private double m_dWeightWallAvoidance = 10.0;
+    private double m_dWeightSeek = 0.5;//0.5
+    private double m_dWeightArrive = 1.0;
 
-
-
+    public void setTarget(Point2D t) {
+        m_vTarget = t;
+    }
 
     /**
      * This function calculates how much of its max steering force the vehicle
      * has left to apply and then applies that amount of the force to add.
      */
-    private boolean AccumulateForce(Point2D RunningTot,
-                                    Point2D ForceToAdd) {
+    private Point2D accumulateForce(Point2D RunningTot, Point2D ForceToAdd) {
 //        ForceToAdd = new Point2D(ForceToAdd); // work with copy
         //calculate how much steering force the vehicle has used so far
         double MagnitudeSoFar = RunningTot.magnitude();
@@ -87,8 +92,8 @@ public class Steering {
         double MagnitudeRemaining = m_pRaven_Bot.getMaxForce() - MagnitudeSoFar;
 
         //return false if there is no more force left to use
-        if (MagnitudeRemaining <= 0.0) {
-            return false;
+        if (MagnitudeRemaining <= 1E-8) {
+            return new Point2D(0,0);
         }
 
         //calculate the magnitude of the force we want to add
@@ -99,17 +104,19 @@ public class Steering {
         //add together. Otherwise add as much of the ForceToAdd vector is
         //possible without going over the max.
         if (MagnitudeToAdd < MagnitudeRemaining) {
-            RunningTot.add(ForceToAdd);
+//            RunningTot = RunningTot.add(ForceToAdd);
+            return ForceToAdd;
         } else {
             MagnitudeToAdd = MagnitudeRemaining;
 
             //add it to the steering force
             //mul(Vec2DNormalize(ForceToAdd), MagnitudeToAdd)
-            RunningTot.add(ForceToAdd.normalize().multiply(MagnitudeToAdd));
+//            RunningTot = RunningTot.add(ForceToAdd.normalize().multiply(MagnitudeToAdd));
+            return ForceToAdd.normalize().multiply(MagnitudeToAdd);
         }
 
 
-        return true;
+//        return RunningTot;
     }
 
 
@@ -129,7 +136,7 @@ public class Steering {
                                     .subtract(m_pRaven_Bot.getCenterPosition())
                                     .normalize()
                                     .multiply(m_pRaven_Bot.getMaxSpeed());
-        System.out.println("DesiredVelocity = "+DesiredVelocity);
+//        System.out.println("DesiredVelocity = "+DesiredVelocity);
 
         return DesiredVelocity.subtract(m_pRaven_Bot.getVelocity());
     }
@@ -146,7 +153,7 @@ public class Steering {
 
         if (dist > 0) {
             //calculate the speed required to reach the target given the desired deceleration
-            double speed = dist / (0.6);//the bigger
+            double speed = dist /0.3;//the bigger
 
             //make sure the velocity does not exceed the max
             speed = Math.min(speed, m_pRaven_Bot.getMaxSpeed());
@@ -155,6 +162,22 @@ public class Steering {
             //the ToTarget vector because we have already gone to the trouble
             //of calculating its length: dist.
             Point2D DesiredVelocity = ToTarget.multiply(speed).multiply(1./dist);
+
+            return DesiredVelocity.subtract(m_pRaven_Bot.getVelocity());
+        }
+
+        return new Point2D(0, 0);
+    }
+
+    public Point2D arrive_improved(final Point2D target) {
+        Point2D ToTarget = target.subtract(m_pRaven_Bot.getCenterPosition());
+
+        //calculate the distance to the target
+        double dist = ToTarget.magnitude();
+
+        if (dist > 0) {
+            double radius = 10;
+            Point2D DesiredVelocity = ToTarget.multiply(m_pRaven_Bot.getMaxSpeed()/radius);
 
             return DesiredVelocity.subtract(m_pRaven_Bot.getVelocity());
         }
@@ -209,17 +232,6 @@ public class Steering {
     private double randDouble(double rangeMin, double rangeMax){
         return rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
     }
-
-//    private Point2D rotate(Point2D center, Point2D p, double angleInDegrees){
-//        Rotate r = new Rotate();
-//        r.setPivotX(center.getX());
-//        r.setPivotY(center.getY());
-//        r.setAngle(angleInDegrees);
-//        return r.transform(p);
-//    }
-
-
-
     /* .......................................................
 
      END BEHAVIOR DECLARATIONS
@@ -251,16 +263,117 @@ public class Steering {
      * calculates the accumulated steering force according to the method set in
      * m_SummingMethod
      */
-//    public Point2D Calculate() {
-//        //reset the steering force
-//        m_vSteeringForce = new Point2D(0,0);
+    public Point2D calculate() {
+        //reset the steering force
+        m_vSteeringForce = new Point2D(0,0);
+
+        //tag neighbors if any of the following 3 group behaviors are switched on
+//        if (On(separation)) {
+//            m_pWorld.TagRaven_BotsWithinViewRange(m_pRaven_Bot, m_dViewDistance);
+//        }
+
+        m_vSteeringForce = calculatePrioritized();
+
+        return m_vSteeringForce;
+    }
+
+    private Point2D calculatePrioritized() {
+        Point2D force = new Point2D(0,0);
+
+//        if (On(wall_avoidance)) {
+//            force = mul(WallAvoidance(m_pWorld.GetMap().GetWalls()),
+//                    m_dWeightWallAvoidance);
 //
-//        m_vSteeringForce = Wander();
+//            if (!AccumulateForce(m_vSteeringForce, force)) {
+//                return m_vSteeringForce;
+//            }
+//        }
+
+
+        //these next three can be combined for flocking behavior (wander is
+        //also a good behavior to add into this mix)
+
+//        if (On(separation)) {
+//            force = mul(Separation(m_pWorld.GetAllBots()), m_dWeightSeparation);
 //
-//        return m_vSteeringForce;
+//            if (!AccumulateForce(m_vSteeringForce, force)) {
+//                return m_vSteeringForce;
+//            }
+//        }
+
+
+        if (seekOn) {
+//            System.out.println("seekOn");
+            force = seek(m_vTarget).multiply(m_dWeightSeek);
+            Point2D temp = accumulateForce(m_vSteeringForce, force);
+            if (GeometryEnhanced.isZero(temp)) {
+                return m_vSteeringForce;
+            } else {
+                m_vSteeringForce = m_vSteeringForce.add(temp);
+            }
+        }
+
+        if (arriveOn) {
+//            System.out.println("arriveOn");
+            force = arrive_improved(m_vTarget).multiply(m_dWeightArrive);
+
+            Point2D temp = accumulateForce(m_vSteeringForce, force);
+            if (GeometryEnhanced.isZero(temp)) {
+                return m_vSteeringForce;
+            } else {
+                m_vSteeringForce = m_vSteeringForce.add(temp);
+            }
+        }
+
+        if (wanderOn) {
+            force = wander_improved().multiply(m_dWeightWander);
+
+            Point2D temp = accumulateForce(m_vSteeringForce, force);
+            if (GeometryEnhanced.isZero(temp)) {
+                return m_vSteeringForce;
+            } else {
+                m_vSteeringForce = m_vSteeringForce.add(temp);
+            }
+        }
+        return m_vSteeringForce;
+    }
+
+    private boolean seekOn = false;
+    private boolean arriveOn = false;
+    private boolean wanderOn = false;
+
+    public void seekOn() {
+        seekOn = true;
+    }
+
+    public void arriveOn() {
+        seekOff();
+        arriveOn = true;
+    }
+
+    public void wanderOn() {
+        wanderOn = true;
+    }
+
+//    public void separationOn() {
+//        m_iFlags |= separation.b;
+//    }
+//
+//    public void wallAvoidanceOn() {
+//        m_iFlags |= wall_avoidance.b;
 //    }
 
+    public void seekOff() {
+        seekOn = false;
+    }
 
+    public void arriveOff() {
+        arriveOn = false;
+    }
+
+    public void wanderOff() {
+        wanderOn = false;
+    }
 
     public double WanderJitter() {
         return m_dWanderJitter;
