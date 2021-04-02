@@ -10,14 +10,14 @@ import javafx.scene.transform.Rotate;
  * Represents any entity that can move in any angle
  */
 public abstract class MovingEntity extends BaseGameEntity {
+
+    //the magnitude of velocity should be less than this value
     protected double maxSpeed;
     //could be zero
     protected Point2D velocity;
     //non-zero, normalized vector for direction, must be updated once the velocity was updated
     protected Point2D heading;
     protected boolean exists;
-
-
 
     /**
      * Constructs a single moving entity by default facing up (angle is set to 0) and generates a new valid ID for it
@@ -26,6 +26,7 @@ public abstract class MovingEntity extends BaseGameEntity {
      * @param y top left y coordinate of the entity and its image
      * @param maxSpeed value which defines the initial velocity
      */
+    //for game character
     protected MovingEntity(double x, double y, double maxSpeed) {
         super(GetNextValidID(), x, y);
         this.maxSpeed = maxSpeed;
@@ -34,6 +35,7 @@ public abstract class MovingEntity extends BaseGameEntity {
         exists = true;
     }
 
+    //for bullet
     protected MovingEntity(double x, double y, double maxSpeed, Point2D heading) {
         super(GetNextValidID(), x, y);
         this.maxSpeed = maxSpeed;
@@ -98,4 +100,9 @@ public abstract class MovingEntity extends BaseGameEntity {
     public Point2D getHeading() {
         return heading;
     }
+
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
 }

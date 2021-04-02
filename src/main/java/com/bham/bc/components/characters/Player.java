@@ -121,11 +121,8 @@ public class Player extends GameCharacter {
 		//convert to angle
 		directionPoint.ifPresent(p -> {
 			Point2D p1 = new Point2D(p.getX(), -p.getY());
-			Point2D force = sb.seek(getCenterPosition().add(p1));
-//			Point2D acceleration = force.multiply(1./5);
-//			velocity = velocity.add(acceleration);
-			//we want an instant change on speed rather than accumulation
-			velocity = velocity.add(force);
+
+			velocity = p1.multiply(maxSpeed);
 			//Truncate
 			velocity = GeometryEnhanced.truncate(velocity, maxSpeed);
 			if (!isZero(velocity)) {
