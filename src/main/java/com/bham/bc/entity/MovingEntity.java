@@ -10,20 +10,17 @@ import javafx.scene.transform.Rotate;
  * Represents any entity that can move in any angle
  */
 public abstract class MovingEntity extends BaseGameEntity {
+
     protected double maxSpeed;
-    //could be zero
     protected Point2D velocity;
-    //non-zero, normalized vector for direction, must be updated once the velocity was updated
-    protected Point2D heading;
+    protected Point2D heading; //non-zero, normalized vector for direction, must be updated once the velocity was updated
     protected boolean exists;
-
-
 
     /**
      * Constructs a single moving entity by default facing up (angle is set to 0) and generates a new valid ID for it
      *
-     * @param x top left x coordinate of the entity and its image
-     * @param y top left y coordinate of the entity and its image
+     * @param x        top left x coordinate of the entity and its image
+     * @param y        top left y coordinate of the entity and its image
      * @param maxSpeed value which defines the initial velocity
      */
     protected MovingEntity(double x, double y, double maxSpeed) {
@@ -34,6 +31,14 @@ public abstract class MovingEntity extends BaseGameEntity {
         exists = true;
     }
 
+    /**
+     * Alternate constructor allowing to initialize a custom facing direction
+     *
+     * @param x        top left x coordinate of the entity and its image
+     * @param y        top left y coordinate of the entity and its image
+     * @param maxSpeed value which defines the initial velocity
+     * @param heading  basis vector indicating the direction the entity is facing
+     */
     protected MovingEntity(double x, double y, double maxSpeed, Point2D heading) {
         super(GetNextValidID(), x, y);
         this.maxSpeed = maxSpeed;

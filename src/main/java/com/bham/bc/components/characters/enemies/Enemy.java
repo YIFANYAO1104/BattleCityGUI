@@ -92,7 +92,7 @@ public abstract class Enemy extends GameCharacter {
             pathEdges = navigationService.getPath();
             pathEdges.add(pathEdges.getLast()); // Repeat the last element for the purposes in the search method when move is performed
             destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.removeFirst().getDestination();
-            sb.setTarget(destination);
+            steering.setTarget(destination);
             timeTillSearch = 20;
             navigationService.resetTaskStatus();
         }
@@ -108,7 +108,7 @@ public abstract class Enemy extends GameCharacter {
         if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
             if(!pathEdges.isEmpty()) {
                 destination = pathEdges.removeFirst().getDestination();
-                sb.setTarget(destination);
+                steering.setTarget(destination);
 //                face(destination);
 //                move();
             }
@@ -120,7 +120,7 @@ public abstract class Enemy extends GameCharacter {
             //arrive
         } else {
             //seek
-            sb.seekOn();
+            steering.seekOn();
             move();
         }
 

@@ -12,6 +12,7 @@ import com.bham.bc.entity.physics.BombTank;
 import com.bham.bc.entity.triggers.Trigger;
 import static com.bham.bc.utils.Constants.*;
 
+import com.bham.bc.entity.triggers.TriggerSystem;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
@@ -40,15 +41,15 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public static BackendServices backendServices;
 
     protected boolean isGameOver;
+
     protected GameMap gameMap;
-    protected Player player;                //TODO: remove as it is the 0th objcet in characters list
+    protected TriggerSystem triggerSystem;
     protected ArrayList<Bullet> bullets;
-    protected ArrayList<Trigger> triggers;
     protected ArrayList<GameCharacter> characters;
 
     //temp
     protected ArrayList<BombTank> bombTanks = new ArrayList<>();
-    //Map division
+    protected Player player;
 
 
     /**
@@ -56,10 +57,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     public CenterController() {
         super(GetNextValidID(),-1,-1);
+        gameMap = new GameMap(MapType.EmptyMap);
+        triggerSystem = new TriggerSystem();
         bullets = new ArrayList<>();
-        triggers = new ArrayList<>();
         characters = new ArrayList<>();
-        // TODO: add empty map by default
     }
 
     /**
@@ -210,7 +211,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     @Override
     public void addTrigger(Trigger trigger) {
-        gameMap.addTrigger(trigger);
+        triggerSystem.register(trigger);
     }
     // ------------------------------------------------------------
 

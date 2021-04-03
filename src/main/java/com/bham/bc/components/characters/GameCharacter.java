@@ -3,14 +3,11 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.environment.triggers.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Shape;
 
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
@@ -18,16 +15,17 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  * Represents a character - this includes enemies, players and AI companions
  */
 abstract public class GameCharacter extends MovingEntity {
+    // Private properties
     private final double MAX_HP;
     protected double hp;
-
-    //should be bigger than 1, or it will cause unstable movement
-    protected double mass=3;
-    //for debug
-    protected Point2D acceleration = new Point2D(0,0);
-    protected Steering sb;
-
     protected Side side;
+
+    // Mechanics / movement
+    protected double mass;
+    protected Steering steering;
+    protected Point2D acceleration;
+
+    // Triggers
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
     protected boolean TRAPPED;
 
@@ -43,7 +41,10 @@ abstract public class GameCharacter extends MovingEntity {
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
-        sb = new Steering(this);
+
+        mass = 3;
+        steering = new Steering(this);
+        acceleration = new Point2D(0,0);
     }
 
     /**
@@ -67,6 +68,7 @@ abstract public class GameCharacter extends MovingEntity {
         if(hp <= 0) destroy();
     }
 
+    // TEMP: DOCUMENT ------------------------------------------------
     @Deprecated
     public void switchWeapon(Weapon w) {}
 
@@ -96,6 +98,7 @@ abstract public class GameCharacter extends MovingEntity {
     public void setUNTRAPPED(){
         TRAPPED = false;
     }
+    // -----------------------------------------------------------
 
 
     /**
@@ -148,8 +151,6 @@ abstract public class GameCharacter extends MovingEntity {
      * @param speedMultiplier number by which the speed will be multiplied (use negative to inverse movement)
      */
     public void move(double speedMultiplier) {
-        //TODO:Move to steering.calculate
-//        velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed).multiply(speedMultiplier);
         velocity = velocity.multiply(speedMultiplier);
         x += velocity.getX();
         y += velocity.getY();
@@ -157,7 +158,7 @@ abstract public class GameCharacter extends MovingEntity {
 
     @Override
     public void move() {
-        Point2D force = sb.calculate();
+        Point2D force = steering.calculate();
         Point2D acceleration = force.multiply(1./mass);
         //debug
         this.acceleration = acceleration;

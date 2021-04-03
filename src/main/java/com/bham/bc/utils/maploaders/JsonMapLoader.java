@@ -1,10 +1,7 @@
 package com.bham.bc.utils.maploaders;
 
 import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.environment.obstacles.*;
 import com.bham.bc.entity.triggers.Trigger;
-import javafx.embed.swing.JFXPanel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -14,6 +11,8 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 
 public class JsonMapLoader extends MapLoader {
+    private int mapWidth;
+    private int mapHeight;
     private int tileWidth;
     private int tileHeight;
 
@@ -80,7 +79,7 @@ public class JsonMapLoader extends MapLoader {
                 }
             }
         }
-        this.registerTriggers();
+        //this.registerTriggers();
     }
 
     /**
@@ -196,43 +195,64 @@ public class JsonMapLoader extends MapLoader {
         return triggerInstances;
     }
 
-    public static void main(String[] args) {
-        new JFXPanel();
-        JsonMapLoader js = new JsonMapLoader(MapType.Map1.getName());
-        js.getPassables();
-    }
-
-    public List<GenericObstacle> getPassables() {
-        List<GenericObstacle> bg = new ArrayList<>();
-        for (GenericObstacle obstacle : obstacles) {
-            if (obstacle.getClass()== Passable.class){
-                bg.add(obstacle);
-            }
-        }
-        return bg;
-    }
-
-    public List<GenericObstacle> getCoverings() {
-        List<GenericObstacle> bg = new ArrayList<>();
-        for (GenericObstacle obstacle : obstacles) {
-            if (obstacle.getClass()== Covering.class){
-                bg.add(obstacle);
-            }
-        }
-        return bg;
+    @Override
+    public int getTileWidth() {
+        return tileWidth;
     }
 
     @Override
-    public List<GenericObstacle> getObstacles() {
-        List<GenericObstacle> bg = new ArrayList<>();
-        for (GenericObstacle obstacle : obstacles) {
-            if (obstacle.getClass()== Hard.class||
-                    obstacle.getClass()== Soft.class||
-                    obstacle.getClass()== Impassable.class
-            ){
-                bg.add(obstacle);
-            }
-        }
-        return bg;
+    public int getTileHeight() {
+        return tileHeight;
     }
+
+    @Override
+    public int getNumTilesX() {
+        return mapWidth;
+    }
+
+    @Override
+    public int getNumTilesY() {
+        return mapHeight;
+    }
+
+    // TODO: delete above, stuff has been moved to abstract class, also JFXPanel is swing?
+//    public static void main(String[] args) {
+//        new JFXPanel();
+//        JsonMapLoader js = new JsonMapLoader(MapType.Map1.getName());
+//        js.getPassables();
+//    }
+//
+//    public List<GenericObstacle> getPassables() {
+//        List<GenericObstacle> bg = new ArrayList<>();
+//        for (GenericObstacle obstacle : obstacles) {
+//            if (obstacle.getClass()== Passable.class){
+//                bg.add(obstacle);
+//            }
+//        }
+//        return bg;
+//    }
+//
+//    public List<GenericObstacle> getCoverings() {
+//        List<GenericObstacle> bg = new ArrayList<>();
+//        for (GenericObstacle obstacle : obstacles) {
+//            if (obstacle.getClass()== Covering.class){
+//                bg.add(obstacle);
+//            }
+//        }
+//        return bg;
+//    }
+//
+//    @Override
+//    public List<GenericObstacle> getObstacles() {
+//        List<GenericObstacle> bg = new ArrayList<>();
+//        for (GenericObstacle obstacle : obstacles) {
+//            if (obstacle.getClass()== Hard.class||
+//                    obstacle.getClass()== Soft.class||
+//                    obstacle.getClass()== Impassable.class
+//            ){
+//                bg.add(obstacle);
+//            }
+//        }
+//        return bg;
+//    }
 }

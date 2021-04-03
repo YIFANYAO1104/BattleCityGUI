@@ -46,7 +46,7 @@ public class Wanderer1 extends Enemy {
 
     @Override
     public void update() {
-        sb.wanderOn();
+        steering.wanderOn();
 
         mymove();
 
@@ -54,7 +54,7 @@ public class Wanderer1 extends Enemy {
 
     public void mymove() {
         //TODO:Move to steering.calculate
-        Point2D force = sb.calculate();
+        Point2D force = steering.calculate();
         Point2D acceleration = force.multiply(1./3);
         this.acceleration = acceleration;
         velocity = velocity.add(acceleration);

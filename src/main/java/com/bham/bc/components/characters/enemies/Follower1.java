@@ -49,7 +49,7 @@ public class Follower1 extends Enemy {
         pathEdges.add(new PathEdge(new Point2D(17 *26, 19*26),new Point2D(16*26, 20*26)));
         pathEdges.add(new PathEdge(new Point2D(16*26, 20*26),new Point2D(16*26, 21*26)));
         destination = pathEdges.removeFirst().getDestination();
-        sb.setTarget(destination);
+        steering.setTarget(destination);
     }
 
     @Override
@@ -63,9 +63,9 @@ public class Follower1 extends Enemy {
             if(!pathEdges.isEmpty()) {
                 System.out.println("new des");
                 destination = pathEdges.removeFirst().getDestination();
-                sb.setTarget(destination);
+                steering.setTarget(destination);
             } else {
-                sb.arriveOff();
+                steering.arriveOff();
 //                velocity = new Point2D(0,0);
                 mymove();
                 return;
@@ -74,10 +74,10 @@ public class Follower1 extends Enemy {
 
         if (pathEdges.isEmpty()) { //last element
             //arrive
-            sb.arriveOn();
+            steering.arriveOn();
         } else {
             //seek
-            sb.seekOn();
+            steering.seekOn();
         }
 
         mymove();
@@ -86,7 +86,7 @@ public class Follower1 extends Enemy {
 
     public void mymove() {
         //TODO:Move to steering.calculate
-        Point2D force = sb.calculate();
+        Point2D force = steering.calculate();
         System.out.println("force="+force);
         Point2D acceleration = force.multiply(1./3);
         this.acceleration = acceleration;

@@ -1,7 +1,5 @@
 package com.bham.bc.utils;
 
-import com.bham.bc.components.characters.enemies.Enemy;
-
 /**
  * Final Class for size of Window
  */

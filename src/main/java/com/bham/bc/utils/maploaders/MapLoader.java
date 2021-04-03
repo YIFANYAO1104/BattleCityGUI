@@ -1,14 +1,14 @@
 package com.bham.bc.utils.maploaders;
 
 import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.entity.triggers.TriggerSystem;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class MapLoader {
-    protected int mapWidth;
-    protected int mapHeight;
 
     protected List<GenericObstacle> obstacles;
     protected List<Trigger> triggers;
@@ -19,24 +19,10 @@ public abstract class MapLoader {
      * Constructs map loader with compulsory attributes
      */
     public MapLoader() {
-        mapWidth = 0;
-        mapHeight = 0;
         obstacles = new ArrayList<>();
         triggers = new ArrayList<>();
         triggerSystem = new TriggerSystem();
     }
-
-    /**
-     * Gets the width of the map
-     * @return integer representing the size of map's width
-     */
-    public int getMapWidth() { return mapWidth; }
-
-    /**
-     * Gets the height of the map
-     * @return integer representing the size of map's height
-     */
-    public int getMapHeight() { return mapHeight; }
 
     /**
      * Gets all obstacles
@@ -44,7 +30,21 @@ public abstract class MapLoader {
      */
     public List<GenericObstacle> getObstacles() { return obstacles; }
 
-
+//    /**
+//     * Gets all the obstacles that don't affect any entities in the game
+//     * @return a list of type {@link GenericObstacle} containing obstacles that don't interact with other entities
+//     */
+//    public List<GenericObstacle> getNoninteractiveObstacles() {
+//        return obstacles.stream().filter(o -> o.getAttributes().contains(Attribute.PASSABLE)).collect(Collectors.toList());
+//    }
+//
+//    /**
+//     * Gets all the obstacles that do affect game entities in some way
+//     * @return a list of type {@link GenericObstacle} containing obstacles whose hit-boxes are taken into account when game updates
+//     */
+//    public List<GenericObstacle> getInteractiveObstacles() {
+//        return obstacles.stream().filter(o -> !o.getAttributes().contains(Attribute.PASSABLE)).collect(Collectors.toList());
+//    }
 
     /**
      * Gets all triggers
@@ -52,15 +52,38 @@ public abstract class MapLoader {
      */
     public List<Trigger> getTriggers() { return triggers; }
 
-    /**
-     * Gets trigger layer
-     * @return Trigger System
-     */
-    public TriggerSystem getTriggerSystem() { return triggerSystem; }
+//    /**
+//     * Gets trigger layer
+//     * @return Trigger System
+//     */
+//    public TriggerSystem getTriggerSystem() { return triggerSystem; }
+//
+//    /**
+//     * Registers all the triggers
+//     */
+//    public void registerTriggers() { for(Trigger t: triggers) triggerSystem.register(t); }
 
     /**
-     * registers all the triggers
+     * Gets the width of the tile
+     * @return width of any tile
      */
-    public void registerTriggers() { for(Trigger t: triggers) triggerSystem.register(t); }
+    public abstract int getTileWidth();
 
+    /**
+     * Gets the height of the tile
+     * @return height of any tile
+     */
+    public abstract int getTileHeight();
+
+    /**
+     * Gets the amount of tiles in X direction
+     * @return number of tiles making up the total width of the map
+     */
+    public abstract int getNumTilesX();
+
+    /**
+     * Gets the amount of tiles in Y direction
+     * @return number of tiles making up the total height of the map
+     */
+    public abstract int getNumTilesY();
 }

@@ -9,7 +9,6 @@ import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import com.bham.bc.components.environment.navigation.impl.PathPlanner;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.bham.bc.components.CenterController.backendServices;
 import static org.junit.Assert.*;
 
 /**
@@ -31,7 +29,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         Player player = new Player(16*32, 16*32);
-        gameMap.initialGraph(player);
+        gameMap.initGraph(player);
         player.initNavigationService(gameMap.getGraph());
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
@@ -89,7 +87,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         Player player = new Player(-1, -1);
-        gameMap.initialGraph(player);
+        gameMap.initGraph(player);
         player.initNavigationService(gameMap.getGraph());
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         Field field = PathPlanner.class.getDeclaredField("taskStatus");
@@ -106,7 +104,7 @@ public class NavigationFlowTest {
         new JFXPanel();
         GameMap gameMap = new GameMap(MapType.Map1);
         Player player = new Player(16*32, 16*32);
-        gameMap.initialGraph(player);
+        gameMap.initGraph(player);
         player.initNavigationService(gameMap.getGraph());
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
