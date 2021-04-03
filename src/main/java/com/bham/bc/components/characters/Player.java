@@ -93,9 +93,8 @@ public class Player extends GameCharacter {
 		// Convert that direction vector to angle
 		directionPoint.ifPresent(p -> {
 			Point2D p1 = new Point2D(p.getX(), -p.getY());
-			Point2D force = steering.seek(getCenterPosition().add(p1));
-			//we want an instant change on speed rather than accumulation
-			velocity = velocity.add(force);
+
+			velocity = p1.multiply(maxSpeed);
 			//Truncate
 			velocity = GeometryEnhanced.truncate(velocity, maxSpeed);
 			if (!isZero(velocity)) {

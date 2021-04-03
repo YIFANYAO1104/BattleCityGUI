@@ -11,6 +11,8 @@ import javafx.scene.transform.Rotate;
  */
 public abstract class MovingEntity extends BaseGameEntity {
 
+
+    //the magnitude of velocity should be less than this value
     protected double maxSpeed;
     protected Point2D velocity;
     protected Point2D heading; //non-zero, normalized vector for direction, must be updated once the velocity was updated
@@ -103,4 +105,9 @@ public abstract class MovingEntity extends BaseGameEntity {
     public Point2D getHeading() {
         return heading;
     }
+
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
 }
