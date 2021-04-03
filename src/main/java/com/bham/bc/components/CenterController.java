@@ -107,8 +107,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     }
 
     @Override
-    public boolean intersectsObstacles(Shape hitBox) {
-        return gameMap.intersectsObstacles(hitBox);
+    public boolean intersectsObstacles(Rectangle path) {
+        return gameMap.getInteractiveObstacles().stream().anyMatch(o -> o.intersectsShape(path));
     }
 
     @Override
@@ -219,7 +219,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     // OTHER ------------------------------------------------------
     @Override
-    public boolean couldWalkThrough(Point2D start, Point2D end, Point2D radius, List<Shape> array){
+    public boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array){
         double angle = end.subtract(start).angle(new Point2D(0,-1));
         //angle between vectors are [0,180), so we need add extra direction info
         if (end.subtract(start).getX()<0) angle = -angle;
@@ -231,7 +231,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
         array.add(hitBox);
 
-        return !gameMap.intersectsObstacles(hitBox);
+        return !intersectsObstacles(hitBox);
     }
 
     @Override

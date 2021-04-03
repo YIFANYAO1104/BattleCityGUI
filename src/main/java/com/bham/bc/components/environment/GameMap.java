@@ -115,7 +115,7 @@ public class GameMap {
         Point2D[] enemySpawnCenters = new Point2D[] { new Point2D(16*4, 16*4), new Point2D(16*60, 16*4), new Point2D(16*4, 16*60), new Point2D(16*60, 16*60)};
 
         // Get the center points of each territory
-        // Point2D homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(GenericObstacle::getPosition).toArray(Point2D[]::new)[0];
+        // Point2D homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(GenericObstacle::getPosition).toArray(Point2D[]::new)[0];  // use first match
         // Point2D[] enemySpawnCenters = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.ENEMY_SPAWN_CENTER)).map(GenericObstacle::getCenterPosition).toArray(Point2D[]::new);
 
         // Initialize the territories
@@ -123,8 +123,7 @@ public class GameMap {
         enemySpawnAreas = new Circle[enemySpawnCenters.length];
 
 
-        // Find out home territory size by incrementing its radius and checking
-        // if it intersects with non-home-territory obstacles
+        // Find out home territory size by incrementing its radius and checking if it intersects with non-home-territory obstacles
         /*
         for(int i = 0; i < maxChecks; i++) {
             radius += step;
@@ -147,7 +146,7 @@ public class GameMap {
                 radius += step;
                 enemySpawnAreas[i].setRadius(radius);
                 // if((allObstacles.stream().noneMatch(o -> !o.getAttributes().contains(Attribute.ENEMY_SPAWN_AREA) && o.intersectsShape(enemySpawnAreas[finalI])))) break;
-                if(intersectsObstacles(enemySpawnAreas[finalI])) break; // TODO replace with above
+                if(interactiveObstacles.stream().anyMatch(o -> o.intersectsShape(enemySpawnAreas[finalI]))) break; // TODO replace with above
             }
             // Apply padding to enemy spawn territory
             enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - GameCharacter.MAX_RADIUS));
@@ -329,11 +328,5 @@ public class GameMap {
     public void clear() {
         interactiveObstacles.clear();
         noninteractiveObstacles.clear();
-    }
-
-    // Temp until physics
-    //Really useful for path smoothing!
-    public boolean intersectsObstacles(Shape shape) {
-        return interactiveObstacles.stream().anyMatch(o -> o.intersectsShape(shape));
     }
 }

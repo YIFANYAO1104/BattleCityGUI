@@ -15,13 +15,16 @@ import java.util.ArrayList;
 public class SurvivalController extends CenterController {
 
     /**
-     * Constructs the controller by selecting a specific map and creating components
+     * Constructs the controller by selecting a specific map and preparing that map for the game session
      */
     public SurvivalController(MapType mapType){
         super();
         gameMap = new GameMap(mapType);
     }
 
+    /**
+     * Initializes all the triggers
+     */
     private void initTriggers() {
         HealthGiver hg = new HealthGiver(400,400,10,10);
         HealthGiver hg1 = new HealthGiver(600,400,10,10);
@@ -78,10 +81,15 @@ public class SurvivalController extends CenterController {
      * Spawns all the initial characters
      */
     private void initCharacters() {
-        player = new Player(16*36, 16*36);
+        // Init players
+        double playerX = gameMap.getHomeTerritory().getCenterX() - Player.SIZE/2.0;
+        double playerY = gameMap.getHomeTerritory().getCenterY() - Player.SIZE;
+        player = new Player(playerX, playerY);
         characters.add(player);
-        //characters.add(new Kamikaze(16*26, 16*26));
+
+        // Temp: init enemies, later, we will initialize director AI which will spawn enemies automatically
         characters.add(new Shooter(16*26, 16*26));
+        //characters.add(new Kamikaze(16*26, 16*26));
         //characters.add(new Teaser(16*36, 16*28));
         //characters.add(new Tank(16*28, 16*36));
         //characters.add(new Trapper(16*32, 16*32));
@@ -90,19 +98,18 @@ public class SurvivalController extends CenterController {
     /**
      * Once all the entities are initialized, they can be added to map division which will handle collision checks much faster
      */
-    private void addEntitiesToAreas() {
+    private void initDivision() {
         mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), GameMap.getNumTilesX(), GameMap.getNumTilesY(), 50);
         mapDivision.addToMapDivision(new ArrayList<>(gameMap.getInteractiveObstacles()));
         mapDivision.addToMapDivision(new ArrayList<>(triggerSystem.getTriggers()));
         mapDivision.addToMapDivision(new ArrayList<>(characters));
     }
 
-
-
     @Override
     public void startGame() {
+        initTriggers();
         initCharacters();
-        addEntitiesToAreas();
+        initDivision();
     }
 
     @Override

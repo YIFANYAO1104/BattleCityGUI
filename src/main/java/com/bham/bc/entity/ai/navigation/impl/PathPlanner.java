@@ -198,7 +198,7 @@ public class PathPlanner implements NavigationService {
             //increment e2 so it points to the edge following e1 (and futher)
             PathEdge e2 = iterator.next();
             //check for obstruction, adjust and remove the edges accordingly
-            if (backendServices.couldWalkThrough(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
+            if (backendServices.canPass(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
                 e1.setDestination(e2.getDestination());
                 iterator.remove(); //remove e2 from the list
             } else {
