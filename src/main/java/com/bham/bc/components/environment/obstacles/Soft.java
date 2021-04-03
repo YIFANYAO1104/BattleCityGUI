@@ -16,7 +16,7 @@ import java.util.EnumSet;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
- * Desc: Tile that is breakable, nothing can pass through it until it is destroyed
+ * Tile that is breakable, nothing can pass through it until it is destroyed
  */
 public class Soft extends GenericObstacle {
 
@@ -37,7 +37,9 @@ public class Soft extends GenericObstacle {
     }
 
     @Override
-    public EnumSet<Attribute> getAttributes() { return EnumSet.of(Attribute.BREAKABLE); }
+    public EnumSet<Attribute> getAttributes() {
+        return EnumSet.of(Attribute.BREAKABLE);
+    }
 
     @Override
     protected Image[] getDefaultImage() {

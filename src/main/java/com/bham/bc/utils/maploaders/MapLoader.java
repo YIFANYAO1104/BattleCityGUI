@@ -30,38 +30,11 @@ public abstract class MapLoader {
      */
     public List<GenericObstacle> getObstacles() { return obstacles; }
 
-//    /**
-//     * Gets all the obstacles that don't affect any entities in the game
-//     * @return a list of type {@link GenericObstacle} containing obstacles that don't interact with other entities
-//     */
-//    public List<GenericObstacle> getNoninteractiveObstacles() {
-//        return obstacles.stream().filter(o -> o.getAttributes().contains(Attribute.PASSABLE)).collect(Collectors.toList());
-//    }
-//
-//    /**
-//     * Gets all the obstacles that do affect game entities in some way
-//     * @return a list of type {@link GenericObstacle} containing obstacles whose hit-boxes are taken into account when game updates
-//     */
-//    public List<GenericObstacle> getInteractiveObstacles() {
-//        return obstacles.stream().filter(o -> !o.getAttributes().contains(Attribute.PASSABLE)).collect(Collectors.toList());
-//    }
-
     /**
      * Gets all triggers
      * @return List of Triggers
      */
     public List<Trigger> getTriggers() { return triggers; }
-
-//    /**
-//     * Gets trigger layer
-//     * @return Trigger System
-//     */
-//    public TriggerSystem getTriggerSystem() { return triggerSystem; }
-//
-//    /**
-//     * Registers all the triggers
-//     */
-//    public void registerTriggers() { for(Trigger t: triggers) triggerSystem.register(t); }
 
     /**
      * Gets the width of the tile

@@ -15,6 +15,8 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  * Represents a character - this includes enemies, players and AI companions
  */
 abstract public class GameCharacter extends MovingEntity {
+    public static final int MAX_RADIUS = 32;
+
     // Private properties
     private final double MAX_HP;
     protected double hp;

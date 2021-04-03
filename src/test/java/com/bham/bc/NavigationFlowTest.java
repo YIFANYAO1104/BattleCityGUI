@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import static com.bham.bc.components.CenterController.backendServices;
 import static org.junit.Assert.*;
 
 /**
@@ -27,9 +28,10 @@ public class NavigationFlowTest {
     @Test
     public void test1() throws Exception {
         new JFXPanel();
-        GameMap gameMap = new GameMap(MapType.Map1);
         Player player = new Player(16*32, 16*32);
-        gameMap.initGraph(player);
+        GameMap gameMap = new GameMap(MapType.Map1);
+
+        //gameMap.initGraph(player);
         player.initNavigationService(gameMap.getGraph());
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
@@ -85,9 +87,9 @@ public class NavigationFlowTest {
     @Test
     public void test2() throws Exception {
         new JFXPanel();
-        GameMap gameMap = new GameMap(MapType.Map1);
         Player player = new Player(-1, -1);
-        gameMap.initGraph(player);
+        GameMap gameMap = new GameMap(MapType.Map1);
+        //gameMap.initGraph(player);
         player.initNavigationService(gameMap.getGraph());
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         Field field = PathPlanner.class.getDeclaredField("taskStatus");
@@ -102,9 +104,9 @@ public class NavigationFlowTest {
     @Test
     public void test3() throws Exception {
         new JFXPanel();
-        GameMap gameMap = new GameMap(MapType.Map1);
         Player player = new Player(16*32, 16*32);
-        gameMap.initGraph(player);
+        GameMap gameMap = new GameMap(MapType.Map1);
+        //gameMap.initGraph(player);
         player.initNavigationService(gameMap.getGraph());
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());

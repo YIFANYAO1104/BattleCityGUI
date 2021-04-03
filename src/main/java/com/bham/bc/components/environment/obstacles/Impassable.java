@@ -29,7 +29,7 @@ public class Impassable extends GenericObstacle {
     }
 
     @Override
-    public void handleBullet(Bullet b) { return; }
+    public void handleBullet(Bullet b) { }
 
     @Override
     public void handleCharacter(GameCharacter c) {

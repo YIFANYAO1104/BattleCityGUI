@@ -8,5 +8,9 @@ public enum Attribute {
     PASSABLE,
     BREAKABLE,
     UPDATABLE,
-    RENDER_TOP
+    RENDER_TOP,
+    HOME_AREA,
+    HOME_CENTER,
+    ENEMY_SPAWN_AREA,
+    ENEMY_SPAWN_CENTER
 }

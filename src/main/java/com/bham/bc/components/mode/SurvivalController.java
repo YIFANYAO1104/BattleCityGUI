@@ -6,27 +6,37 @@ import com.bham.bc.components.characters.enemies.*;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.environment.triggers.HealthGiver;
+import com.bham.bc.entity.triggers.Trigger;
+import com.bham.bc.utils.cells.MapDivision;
+import com.bham.bc.utils.graph.HandyGraphFunctions;
+import com.bham.bc.utils.graph.node.NavNode;
+
+import java.util.ArrayList;
 
 /**
  * Represents a controller for the survival game mode
  */
 public class SurvivalController extends CenterController {
 
+    private MapType mapType;
+
     /**
      * Constructs the controller by selecting a specific map and creating components
      */
     public SurvivalController(MapType mapType){
         super();
-        gameMap = new GameMap(mapType);
+        this.mapType = mapType;
+
         player = new Player(16*36, 16*36);
-        gameMap.initGraph(player);
-        player.initNavigationService(gameMap.getGraph());
         characters.add(player);
     }
 
-    private void initMap() {
-
+    private void initGameMap() {
+        gameMap = new GameMap(mapType);
+        areas = new MapDivision<>(gameMap.getWidth(), gameMap.getHeight(), gameMap.getNumTilesX(), gameMap.getNumTilesY(), 50);
+        player.initNavigationService(gameMap.getGraph());
     }
+
 
     private void initTriggers() {
         HealthGiver hg = new HealthGiver(400,400,10,10);
@@ -91,9 +101,22 @@ public class SurvivalController extends CenterController {
         //characters.add(new Trapper(16*32, 16*32));
     }
 
+    /**
+     * Once all the entities are initialized, they can be added to the areas
+     */
+    private void addEntitiesToAreas() {
+        areas.addToMapDivision(new ArrayList<>(gameMap.getInteractiveObstacles()));
+        areas.addToMapDivision(new ArrayList<>(characters));
+    }
+
+
+
     @Override
     public void startGame() {
+        initGameMap();
         initCharacters();
+
+        addEntitiesToAreas();
     }
 
     @Override

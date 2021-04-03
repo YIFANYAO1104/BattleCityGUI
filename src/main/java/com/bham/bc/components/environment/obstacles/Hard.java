@@ -7,7 +7,7 @@ import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 
 /**
- * Desc: Tile that is unbreakable, nothing can pass through it
+ * Tile that is unbreakable, nothing can pass through it
  */
 public class Hard extends GenericObstacle {
     /**

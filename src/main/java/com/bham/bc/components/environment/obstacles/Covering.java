@@ -10,7 +10,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.EnumSet;
 
 /**
- * Desc: Tile which covers anything that passes through it
+ * Tile which covers anything that passes through it
  */
 public class Covering extends GenericObstacle {
     /**
@@ -25,7 +25,10 @@ public class Covering extends GenericObstacle {
         super(x, y, tileset, tileIDs);
     }
 
-    public EnumSet<Attribute> getAttributes() { return EnumSet.of(Attribute.RENDER_TOP, Attribute.PASSABLE); }
+    @Override
+    public EnumSet<Attribute> getAttributes() {
+        return EnumSet.of(Attribute.RENDER_TOP, Attribute.PASSABLE);
+    }
 
     @Override
     protected Image[] getDefaultImage() {

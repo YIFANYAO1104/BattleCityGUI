@@ -3,6 +3,7 @@ package com.bham.bc.components;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.triggers.Trigger;
 import com.bham.bc.utils.graph.SparseGraph;
 import javafx.geometry.Point2D;
@@ -93,4 +94,5 @@ public interface BackendServices {
     boolean intersectsObstacles(Shape hitbox);  // This will be moved to physics package
     Point2D getMapCenterPosition(); // TODO: doc
     Point2D getNearestOppositeSideCenterPosition(Point2D point, Side side); //TODO: doc
+    ArrayList<BaseGameEntity> allInfoCharacter(); //TODO: doc
 }

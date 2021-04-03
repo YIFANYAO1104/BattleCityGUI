@@ -37,7 +37,7 @@ public class JsonMapLoader extends MapLoader {
     }
 
     /**
-     * loads map with obstacles and triggers
+     * Loads map with obstacles and triggers
      *
      * @param resourceName path to resource
      * @throws Exception if resource is not found
@@ -79,11 +79,10 @@ public class JsonMapLoader extends MapLoader {
                 }
             }
         }
-        //this.registerTriggers();
     }
 
     /**
-     * checks the attributes about the map from the given JSON object
+     * Checks the attributes about the map from the given JSON object
      *
      * @param jsonObject JSON object to check
      */
@@ -123,7 +122,7 @@ public class JsonMapLoader extends MapLoader {
     }
 
     /**
-     * converts JSON object attributes to Obstacles in the map
+     * Converts JSON object attributes to Obstacles in the map
      *
      * @param tilesetName   name of the tileset used to take the tile image from
      * @param className     name of the class used to create an obstacle
@@ -155,7 +154,7 @@ public class JsonMapLoader extends MapLoader {
     }
 
     /**
-     * converts JSON object attributes to Triggers in the map
+     * Converts JSON object attributes to Triggers in the map
      *
      * @param className    name of the class used to create a trigger
      * @param triggerArray array of triggers in JSON format

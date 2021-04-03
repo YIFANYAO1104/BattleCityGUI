@@ -3,6 +3,7 @@ package com.bham.bc.components;
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.mode.ChallengeController;
 import com.bham.bc.components.mode.Mode;
@@ -13,6 +14,7 @@ import com.bham.bc.entity.triggers.Trigger;
 import static com.bham.bc.utils.Constants.*;
 
 import com.bham.bc.entity.triggers.TriggerSystem;
+import com.bham.bc.utils.cells.MapDivision;
 import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
@@ -46,6 +48,8 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected TriggerSystem triggerSystem;
     protected ArrayList<Bullet> bullets;
     protected ArrayList<GameCharacter> characters;
+
+    protected MapDivision<BaseGameEntity> areas;
 
     //temp
     protected ArrayList<BombTank> bombTanks = new ArrayList<>();
@@ -82,16 +86,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         backendServices = centerController;
 
         centerController.startGame();
-
-        initialMapDivision(centerController);
-
-    }
-
-    public static void initialMapDivision(CenterController c1){
-        //--Add all game elemnets to mapDivision------
-        c1.gameMap.getMapDivision().addToMapDivision(
-                new ArrayList<>(c1.characters));
-        //-----------------------------------------------
     }
 
     // TEMPORARY METHODS -------------------------------------------
@@ -169,6 +163,12 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 //            hitBoxPane.getChildren().add(smoothingBox);
 //        }
 
+        gameMap.getHits().forEach(h -> {
+            h.setStroke(Color.RED);
+            h.setStrokeWidth(1);
+            //hitBoxPane.getChildren().add(h);
+        });
+
     }
     // ------------------------------------------------------------
 
@@ -200,7 +200,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     // ADDERS -----------------------------------------------------
     @Override
     public void addBullet(Bullet bullet) {
-        gameMap.getMapDivision().AddEntity(bullet);
+        areas.AddEntity(bullet);
         bullets.add(bullet);
     }
 
@@ -231,8 +231,9 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         return (ArrayList<Point2D>) characters.stream().map(GameCharacter::getPosition).collect(Collectors.toList());
     }
 
+    @Override
     public ArrayList<BaseGameEntity> allInfoCharacter(){
-        return new ArrayList<BaseGameEntity>(characters);
+        return new ArrayList<>(characters);
     }
     // ------------------------------------------------------------
 
@@ -255,19 +256,35 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     @Override
     public void update() {
+
+        areas.UpdateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
+
         characters.forEach(GameCharacter::update);
         // Update bullets
         for(Bullet b1 : bullets){
             b1.update();
-            gameMap.getMapDivision().UpdateEntity(b1);       // Removed the not exist bullet stored in Mapdivision
+            areas.UpdateEntity(b1);       // Removed the not exist bullet stored in Mapdivision
         }
 
-        characters.forEach(c1-> gameMap.getMapDivision().UpdateEntity(c1));     //Update characters
-        gameMap.handleAll(characters, bullets);
-//        characters.forEach(character -> character.handleAll(characters, bullets));
+        characters.forEach(c1-> areas.UpdateEntity(c1));     //Update characters
+
+        characters.forEach(c1-> areas.CalculateNeighborsArray(c1,32.0).forEach(o1-> {
+            try {
+                ((GenericObstacle)o1).handleCharacter(c1);
+            } catch (Exception e) {}
+        }));
+
+        bullets.forEach(b1-> areas.CalculateNeighborsArray(b1,32.0).forEach(o1-> {
+                try {
+                    ((GenericObstacle) o1).handleBullet(b1);
+                } catch (Exception e){}
+        }));
+
+        triggerSystem.handleAll(characters, gameMap.getInteractiveObstacles());
+
         characters.forEach(character -> character.handleAll(
-                gameMap.getMapDivision().CalculateNeighborsArray(character,40)));
+                areas.CalculateNeighborsArray(character,40)));
 
         bullets.removeIf(b -> !b.exists());
         characters.removeIf(c -> !c.exists());
@@ -276,6 +293,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     @Override
     public void render(GraphicsContext gc) {
         gameMap.renderBottomLayer(gc);
+        triggerSystem.render(gc);
 
 //        bombTanks.forEach(b -> render(gc)); // TEMP
         for (BombTank bombTank : bombTanks) {
@@ -287,13 +305,14 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
 //        gameMap.renderTopLayer(gc);
         gameMap.renderGraph(gc, allInfoCharacter());
+        gameMap.renderTerritoryHitboxes(gc);
     }
 
     @Override
     public void clear(){
         characters.clear();
         bullets.clear();
-        gameMap.clearAll();
+        gameMap.clear();
     }
     // ------------------------------------------------------------
 
