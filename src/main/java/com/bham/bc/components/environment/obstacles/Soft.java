@@ -1,9 +1,9 @@
 package com.bham.bc.components.environment.obstacles;
 
-import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.utils.maploaders.TILESET;
+import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.components.environment.maploaders.Tileset;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
@@ -18,7 +18,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 /**
  * Tile that is breakable, nothing can pass through it until it is destroyed
  */
-public class Soft extends GenericObstacle {
+public class Soft extends Obstacle {
 
     // Use Switch statement and check tileID manually to determine how much hp each type of softTile has
     // Alternatively, just set every tile equal to the same hp
@@ -32,7 +32,7 @@ public class Soft extends GenericObstacle {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public Soft(int x, int y, TILESET tileset, int... tileIDs) {
+    public Soft(int x, int y, Tileset tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
     }
 

@@ -1,15 +1,9 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.components.environment.navigation.ItemType;
-import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.ai.*;
-import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.utils.messaging.Telegram;
-import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
+import com.bham.bc.components.triggers.effects.RingExplosion;
+import com.bham.bc.entity.ai.behavior.*;
+import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.components.triggers.Trigger;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -111,94 +105,12 @@ public class Kamikaze extends Enemy {
     public void destroy() {
         exists = false;
         entityManager.removeEntity(this);
-        Trigger explosion = new ExplosionTrigger(getCenterPosition(), 50, side);
+        Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
         backendServices.addTrigger(explosion);
     }
 
     @Override
     public Shape getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
-    }
-
-    /**
-     * Represents Kamikaze's explosion effect. This is created as a trigger because it affects player's HP
-     */
-    private static class ExplosionTrigger extends Trigger {
-
-        public static final int SIZE = 60;
-        private int currentFrame;
-        private double damage;
-        private Side side;
-
-        /**
-         * Constructs explosion at a given location
-         * @param centerPosition x and y coordinates of the trigger image
-         * @param damage amount of damage that will be dealt to specific side
-         * @param side ALLY or ENEMY side trigger belongs to
-         */
-        public ExplosionTrigger(Point2D centerPosition, double damage, Side side) {
-            super(BaseGameEntity.GetNextValidID(), (int) (centerPosition.getX() - SIZE/2), (int) (centerPosition.getY() - SIZE/2));
-            this.damage = damage;
-            this.side = side;
-            currentFrame = 0;
-            initImages();
-        }
-
-        /**
-         * Initializes all the images for the explosion
-         */
-        private void initImages() {
-            String baseUrl = "file:src/main/resources/img/characters/effects/blueRingExplosion";
-            entityImages = new Image[19];
-
-            for(int i = 1; i <= 19; i++) {
-                String url = baseUrl + i + ".png";
-                entityImages[i-1] = new Image(url, SIZE, SIZE, false, false);
-            }
-        }
-
-        //TODO: Adjust size according to currentFrame
-        @Override
-        public Shape getHitBox() {
-            return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
-        }
-
-        @Override
-        public void render(GraphicsContext gc) {
-            gc.drawImage(entityImages[currentFrame++ % 19], x, y);
-        }
-
-        @Override
-        public void tryTriggerC(GameCharacter character) {
-            if(intersects(character) && character.getSide() != side && isActive()) {
-                setInactive();
-                character.changeHP(-damage);
-            }
-        }
-
-        @Override
-        public void tryTriggerO(GenericObstacle entity) {
-
-        }
-
-        @Override
-        public void update() {
-            if(currentFrame == 19) setToBeRemovedFromGame();
-        }
-
-        @Override
-        public boolean handleMessage(Telegram msg) {
-            return false;
-        }
-
-        @Override
-        public String toString() {
-            return "Kamikaze's explosion";
-        }
-
-        @Override
-        public ItemType getItemType() {
-            return null;
-        }
     }
 }

@@ -1,10 +1,9 @@
 package com.bham.bc;
 
 
-import com.bham.bc.components.environment.navigation.algorithms.TimeSlicedDijkstras;
-import com.bham.bc.utils.graph.SparseGraph;
-import com.bham.bc.utils.graph.edge.GraphEdge;
-import com.bham.bc.utils.graph.node.NavNode;
+import com.bham.bc.entity.graph.SparseGraph;
+import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.graph.node.NavNode;
 
 import javafx.geometry.Point2D;
 import junitparams.JUnitParamsRunner;

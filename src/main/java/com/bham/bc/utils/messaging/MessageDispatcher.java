@@ -7,7 +7,7 @@ import java.util.TreeSet;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 import static com.bham.bc.utils.messaging.MessageTypes.MsgToStr;
-import static com.bham.bc.utils.time.CrudeTimer.CLOCK;
+import static com.bham.bc.utils.Timer.CLOCK;
 
 /**
  * Message System to check and track the Game States

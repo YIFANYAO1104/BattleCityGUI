@@ -3,10 +3,10 @@ package com.bham.bc;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.environment.navigation.ItemType;
-import com.bham.bc.components.environment.navigation.SearchStatus;
-import com.bham.bc.components.environment.navigation.impl.PathEdge;
-import com.bham.bc.components.environment.navigation.impl.PathPlanner;
+import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.navigation.SearchStatus;
+import com.bham.bc.entity.ai.navigation.impl.PathEdge;
+import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;
 import org.junit.Test;
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.bham.bc.components.CenterController.backendServices;
 import static org.junit.Assert.*;
 
 /**
@@ -32,7 +31,7 @@ public class NavigationFlowTest {
         GameMap gameMap = new GameMap(MapType.Map1);
 
         //gameMap.initGraph(player);
-        player.initNavigationService(gameMap.getGraph());
+        //player.initNavigationService(gameMap.getGraph());
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         Field field = PathPlanner.class.getDeclaredField("taskStatus");
@@ -90,7 +89,7 @@ public class NavigationFlowTest {
         Player player = new Player(-1, -1);
         GameMap gameMap = new GameMap(MapType.Map1);
         //gameMap.initGraph(player);
-        player.initNavigationService(gameMap.getGraph());
+        //player.initNavigationService(gameMap.getGraph());
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         Field field = PathPlanner.class.getDeclaredField("taskStatus");
         // access private field
@@ -107,7 +106,7 @@ public class NavigationFlowTest {
         Player player = new Player(16*32, 16*32);
         GameMap gameMap = new GameMap(MapType.Map1);
         //gameMap.initGraph(player);
-        player.initNavigationService(gameMap.getGraph());
+        //player.initNavigationService(gameMap.getGraph());
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 

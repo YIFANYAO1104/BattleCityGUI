@@ -1,21 +1,20 @@
 package com.bham.bc.components;
 
-import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.mode.ChallengeController;
-import com.bham.bc.components.mode.Mode;
-import com.bham.bc.components.mode.SurvivalController;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.graph.node.NavNode;
 import com.bham.bc.entity.physics.BombTank;
-import com.bham.bc.entity.triggers.Trigger;
+import com.bham.bc.components.triggers.Trigger;
 import static com.bham.bc.utils.Constants.*;
 
-import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.utils.cells.MapDivision;
-import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.components.triggers.TriggerSystem;
+import com.bham.bc.entity.physics.MapDivision;
+import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.GameCharacter;
@@ -49,7 +48,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected ArrayList<Bullet> bullets;
     protected ArrayList<GameCharacter> characters;
 
-    protected MapDivision<BaseGameEntity> areas;
+    protected MapDivision<BaseGameEntity> mapDivision;
 
     //temp
     protected ArrayList<BombTank> bombTanks = new ArrayList<>();
@@ -61,6 +60,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     public CenterController() {
         super(GetNextValidID(),-1,-1);
+
         gameMap = new GameMap(MapType.EmptyMap);
         triggerSystem = new TriggerSystem();
         bullets = new ArrayList<>();
@@ -137,11 +137,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
             cHitBox.setStroke(Color.RED);
             cHitBox.setStrokeWidth(1);
             hitBoxPane.getChildren().add(cHitBox);
-
-            //Shape enemyLine = c.getLine();
-            //enemyLine.setStroke(Color.RED);
-            //enemyLine.setStrokeWidth(1);
-            //hitBoxPane.getChildren().add(enemyLine);
         });
 
 
@@ -154,21 +149,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
                 hitBoxPane.getChildren().add(smoothingBox);
             }
         });
-
-//        List<Shape> smoothingBoxes = player.getSmoothingBoxes();
-//        for (Shape smoothingBox : smoothingBoxes) {
-//            smoothingBox.setFill(Color.TRANSPARENT);
-//            smoothingBox.setStroke(Color.GREEN);
-//            smoothingBox.setStrokeWidth(1);
-//            hitBoxPane.getChildren().add(smoothingBox);
-//        }
-
-        gameMap.getHits().forEach(h -> {
-            h.setStroke(Color.RED);
-            h.setStrokeWidth(1);
-            //hitBoxPane.getChildren().add(h);
-        });
-
     }
     // ------------------------------------------------------------
 
@@ -200,7 +180,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     // ADDERS -----------------------------------------------------
     @Override
     public void addBullet(Bullet bullet) {
-        areas.AddEntity(bullet);
+        mapDivision.AddEntity(bullet);
         bullets.add(bullet);
     }
 
@@ -217,7 +197,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     // GETTERS ----------------------------------------------------
     @Override
-    public SparseGraph getGraph() {
+    public SparseGraph<NavNode, GraphEdge> getGraph() {
         return gameMap.getGraph();
     }
 
@@ -257,34 +237,33 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     @Override
     public void update() {
 
-        areas.UpdateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
+        mapDivision.UpdateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
 
         characters.forEach(GameCharacter::update);
         // Update bullets
         for(Bullet b1 : bullets){
             b1.update();
-            areas.UpdateEntity(b1);       // Removed the not exist bullet stored in Mapdivision
+            mapDivision.UpdateEntity(b1);       // Removed the not exist bullet stored in Mapdivision
         }
 
-        characters.forEach(c1-> areas.UpdateEntity(c1));     //Update characters
+        characters.forEach(c1-> mapDivision.UpdateEntity(c1));     //Update characters
 
-        characters.forEach(c1-> areas.CalculateNeighborsArray(c1,32.0).forEach(o1-> {
+        characters.forEach(c1-> mapDivision.CalculateNeighborsArray(c1,32.0).forEach(o1-> {
             try {
-                ((GenericObstacle)o1).handleCharacter(c1);
+                ((Obstacle)o1).handleCharacter(c1);
             } catch (Exception e) {}
         }));
 
-        bullets.forEach(b1-> areas.CalculateNeighborsArray(b1,32.0).forEach(o1-> {
+        bullets.forEach(b1-> mapDivision.CalculateNeighborsArray(b1,32.0).forEach(o1-> {
                 try {
-                    ((GenericObstacle) o1).handleBullet(b1);
+                    ((Obstacle) o1).handleBullet(b1);
                 } catch (Exception e){}
         }));
 
         triggerSystem.handleAll(characters, gameMap.getInteractiveObstacles());
 
-        characters.forEach(character -> character.handleAll(
-                areas.CalculateNeighborsArray(character,40)));
+        characters.forEach(character -> character.handleAll(mapDivision.CalculateNeighborsArray(character,40)));
 
         bullets.removeIf(b -> !b.exists());
         characters.removeIf(c -> !c.exists());
@@ -293,23 +272,20 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     @Override
     public void render(GraphicsContext gc) {
         gameMap.renderBottomLayer(gc);
+
         triggerSystem.render(gc);
-
-//        bombTanks.forEach(b -> render(gc)); // TEMP
-        for (BombTank bombTank : bombTanks) {
-            bombTank.render(gc);
-        }
-
         bullets.forEach(bullet -> bullet.render(gc));
         characters.forEach(character -> character.render(gc));
 
-//        gameMap.renderTopLayer(gc);
+        // gameMap.renderTopLayer(gc);
+
         gameMap.renderGraph(gc, allInfoCharacter());
-        gameMap.renderTerritoryHitboxes(gc);
+        gameMap.renderTerritories(gc);
     }
 
     @Override
-    public void clear(){
+    public void clear() {
+        triggerSystem.clear();
         characters.clear();
         bullets.clear();
         gameMap.clear();

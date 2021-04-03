@@ -1,12 +1,9 @@
 package com.bham.bc;
 
 
-import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.utils.Constants;
-import com.bham.bc.utils.cells.MapDivision;
+import com.bham.bc.entity.physics.MapDivision;
 import javafx.embed.swing.JFXPanel;
-import javafx.geometry.Point2D;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

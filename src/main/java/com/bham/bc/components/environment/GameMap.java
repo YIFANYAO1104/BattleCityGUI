@@ -3,15 +3,15 @@ package com.bham.bc.components.environment;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.utils.cells.MapDivision;
-import com.bham.bc.utils.graph.HandyGraphFunctions;
-import com.bham.bc.utils.graph.SparseGraph;
-import com.bham.bc.utils.graph.edge.GraphEdge;
-import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.maploaders.JsonMapLoader;
-import com.bham.bc.utils.maploaders.MapLoader;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.TriggerSystem;
+import com.bham.bc.entity.physics.MapDivision;
+import com.bham.bc.entity.graph.HandyGraphFunctions;
+import com.bham.bc.entity.graph.SparseGraph;
+import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.graph.node.NavNode;
+import com.bham.bc.components.environment.maploaders.JsonMapLoader;
+import com.bham.bc.components.environment.maploaders.MapLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -42,11 +42,9 @@ public class GameMap {
     private static int numTilesX = 0;
     private static int numTilesY = 0;
 
-    // Obstacles
-    private List<GenericObstacle> interactiveObstacles;
-    private List<GenericObstacle> noninteractiveObstacles;
-
-    // Territories
+    // Obstacles and territories
+    private List<Obstacle> interactiveObstacles;
+    private List<Obstacle> noninteractiveObstacles;
     private Circle homeTerritory;
     private Circle[] enemySpawnAreas;
 
@@ -109,7 +107,7 @@ public class GameMap {
         int maxChecks = 9;
         double radius = 0;
         double step = Math.min(tileWidth, tileHeight);
-        List<GenericObstacle> allObstacles = mapLoader.getObstacles();
+        List<Obstacle> allObstacles = mapLoader.getObstacles();
 
 
         // TODO: TEMP, REPLACE WITH BELOW
@@ -172,7 +170,7 @@ public class GameMap {
             Point2D vv1 = allNodesLocations.get(index);
 
             for (int i = 0; i < interactiveObstacles.size(); i++) {
-                GenericObstacle w = interactiveObstacles.get(i);
+                Obstacle w = interactiveObstacles.get(i);
                 w.interactWith(graphSystem.getID(), index, new Rectangle(
                         vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
             }
@@ -250,9 +248,9 @@ public class GameMap {
 
     /**
      * Gets a copy of interactive obstacles
-     * @return {@link GenericObstacle} list that do not have PASSABLE attribute
+     * @return {@link Obstacle} list that do not have PASSABLE attribute
      */
-    public List<GenericObstacle> getInteractiveObstacles() {
+    public List<Obstacle> getInteractiveObstacles() {
         return new ArrayList<>(interactiveObstacles);
     }
 
@@ -282,8 +280,8 @@ public class GameMap {
      */
     public void update() {
         interactiveObstacles.removeIf(o -> !o.exists());
-        interactiveObstacles.forEach(GenericObstacle::update);
-        noninteractiveObstacles.forEach(GenericObstacle::update);
+        interactiveObstacles.forEach(Obstacle::update);
+        noninteractiveObstacles.forEach(Obstacle::update);
     }
 
     /**
@@ -317,7 +315,7 @@ public class GameMap {
      * Renders the circular areas around the specific territories
      * @param gc graphics context the hit-boxed will be drawn on
      */
-    public void renderTerritoryHitboxes(GraphicsContext gc) {
+    public void renderTerritories(GraphicsContext gc) {
         gc.setStroke(Color.RED);
         gc.setLineWidth(2);
         gc.strokeArc(homeTerritory.getCenterX() - homeTerritory.getRadius(), homeTerritory.getCenterY() - homeTerritory.getRadius(), homeTerritory.getRadius()*2, homeTerritory.getRadius()*2, 0, 360, ArcType.ROUND);

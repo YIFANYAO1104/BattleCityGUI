@@ -1,14 +1,14 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.armory.BulletType;
-import com.bham.bc.components.armory.Gun;
+import com.bham.bc.components.shooting.BulletType;
+import com.bham.bc.components.shooting.Gun;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.environment.navigation.ItemType;
-import com.bham.bc.components.environment.navigation.NavigationService;
-import com.bham.bc.components.environment.navigation.SearchStatus;
-import com.bham.bc.components.environment.navigation.impl.PathEdge;
-import com.bham.bc.components.environment.navigation.impl.PathPlanner;
-import com.bham.bc.entity.ai.StateMachine;
+import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.navigation.NavigationService;
+import com.bham.bc.entity.ai.navigation.SearchStatus;
+import com.bham.bc.entity.ai.navigation.impl.PathEdge;
+import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
+import com.bham.bc.entity.ai.behavior.StateMachine;
 import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.GameCharacter;

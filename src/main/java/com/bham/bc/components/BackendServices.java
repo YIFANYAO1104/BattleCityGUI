@@ -1,11 +1,11 @@
 package com.bham.bc.components;
 
-import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.utils.graph.SparseGraph;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.entity.graph.SparseGraph;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Shape;
 
@@ -27,7 +27,7 @@ public interface BackendServices {
 
     // ADDERS -----------------------------------------------------
     /**
-     * Adds {@link com.bham.bc.components.armory.Bullet} to the game
+     * Adds {@link com.bham.bc.components.shooting.Bullet} to the game
      * @param bullet Bullet object to be added to the list of bullets
      */
     void addBullet(Bullet bullet);
@@ -39,7 +39,7 @@ public interface BackendServices {
     void addCharacter(GameCharacter character);
 
     /**
-     * Adds {@link com.bham.bc.entity.triggers.Trigger} to the game
+     * Adds {@link Trigger} to the game
      * @param trigger Trigger objects to be added to the list of triggers
      */
     void addTrigger(Trigger trigger);
@@ -49,7 +49,7 @@ public interface BackendServices {
 
     // GETTERS ----------------------------------------------------
     /**
-     * Gets {@link com.bham.bc.utils.graph.SparseGraph} of a currently active map
+     * Gets {@link com.bham.bc.entity.graph.SparseGraph} of a currently active map
      * @return SparseGraph object used for searching algorithms
      */
     SparseGraph getGraph();

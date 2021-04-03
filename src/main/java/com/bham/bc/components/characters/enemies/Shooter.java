@@ -1,7 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.environment.navigation.ItemType;
-import com.bham.bc.entity.ai.*;
+import com.bham.bc.entity.ai.behavior.*;
+import com.bham.bc.entity.ai.navigation.ItemType;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;

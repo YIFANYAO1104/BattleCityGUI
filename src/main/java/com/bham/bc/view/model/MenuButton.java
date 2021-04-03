@@ -15,7 +15,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import static com.bham.bc.audio.SFX.SELECT;
+import static com.bham.bc.audio.Sfx.SELECT;
 
 /**
  *The Class MenuButton imports StackPane which contains a single property named alignment.

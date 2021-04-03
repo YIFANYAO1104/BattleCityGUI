@@ -1,7 +1,7 @@
 package com.bham.bc;
 
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.mode.Mode;
+import com.bham.bc.components.Mode;
 import com.bham.bc.view.GameSession;
 import javafx.application.Application;
 import javafx.stage.Stage;

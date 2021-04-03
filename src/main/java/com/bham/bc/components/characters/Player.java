@@ -1,16 +1,12 @@
 package com.bham.bc.components.characters;
 
-import com.bham.bc.components.armory.BulletType;
-import com.bham.bc.components.armory.ExplosiveBullet;
-import com.bham.bc.components.armory.Gun;
-import com.bham.bc.components.environment.navigation.ItemType;
-import com.bham.bc.components.environment.navigation.NavigationService;
-import com.bham.bc.components.environment.navigation.SearchStatus;
-import com.bham.bc.components.environment.navigation.impl.PathPlanner;
+import com.bham.bc.components.shooting.BulletType;
+import com.bham.bc.components.shooting.ExplosiveBullet;
+import com.bham.bc.components.shooting.Gun;
+import com.bham.bc.entity.ai.navigation.NavigationService;
+import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
 import com.bham.bc.utils.Constants;
-import com.bham.bc.entity.Direction;
 import com.bham.bc.utils.GeometryEnhanced;
-import com.bham.bc.utils.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -42,11 +38,11 @@ public class Player extends GameCharacter {
 	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
 	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
 
-	private EnumSet<Direction> directionSet;
+	private final EnumSet<Direction> DIRECTION_SET;
+	private final Gun GUN;
 
 	// TODO: remove, player doesn't need
 	private NavigationService navigationService;
-	private Gun gun;
 
 	/**
 	 * Constructs a player instance with directionSet initialized to empty
@@ -57,39 +53,14 @@ public class Player extends GameCharacter {
 	public Player(double x, double y) {
 		super(x, y, SPEED, HP, Side.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-		directionSet = EnumSet.noneOf(Direction.class);
-		gun = new Gun(this, BulletType.DEFAULT);
+		DIRECTION_SET = EnumSet.noneOf(Direction.class);
+		GUN = new Gun(this, BulletType.DEFAULT);
+
+		navigationService = new PathPlanner(this, backendServices.getGraph());
 	}
 
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
-	public void initNavigationService(SparseGraph sg){
-		navigationService = new PathPlanner(this,sg);
-	}
-
-	public void createNewRequestItem() {
-		if(navigationService.createRequest(ItemType.health)==true){
-			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
-				navigationService.getPath();
-			} else {
-				System.out.println("target not found");
-			}
-		} else {
-			System.out.println("no closest node around player/target");
-		}
-	}
-
-	public void createNewRequestAStar() {
-		if(navigationService.createRequest(new Point2D(440,550))==true){
-			if(navigationService.peekRequestStatus()== SearchStatus.target_found){
-				navigationService.getPath();
-			} else {
-				System.out.println("target not found");
-			}
-		} else {
-			System.out.println("no closest node around player/target");
-		}
-	}
 
 	public void bomb() {
 		Point2D center = getPosition().add(getRadius().multiply(0.5));
@@ -116,14 +87,13 @@ public class Player extends GameCharacter {
 	 * way the character in the image is facing (upwards)</p>
 	 */
 	private void updateAngle() {
-		//sum up directions
-		Optional<Point2D> directionPoint = directionSet.stream().map(Direction::toPoint).reduce(Point2D::add);
-		//convert to angle
+		// Sum up direction basis vectors to get a final direction vector
+		Optional<Point2D> directionPoint = DIRECTION_SET.stream().map(Direction::toPoint).map(p -> p.multiply(TRAPPED ? -1 : 1)).reduce(Point2D::add);
+
+		// Convert that direction vector to angle
 		directionPoint.ifPresent(p -> {
 			Point2D p1 = new Point2D(p.getX(), -p.getY());
 			Point2D force = steering.seek(getCenterPosition().add(p1));
-//			Point2D acceleration = force.multiply(1./5);
-//			velocity = velocity.add(acceleration);
 			//we want an instant change on speed rather than accumulation
 			velocity = velocity.add(force);
 			//Truncate
@@ -133,10 +103,6 @@ public class Player extends GameCharacter {
 			}
 		});
 	}
-//	public void updateAngle() {
-//		Optional<Point2D> directionPoint = directionSet.stream().map(Direction::toPoint).map(p -> p.multiply(TRAPPED ? -1 : 1)).reduce(Point2D::add);
-//		directionPoint.ifPresent(p -> { if(p.getX() != 0 || p.getY() != 0) angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1); });
-//	}
 
 	@Override
 	protected void destroy() { }
@@ -154,12 +120,10 @@ public class Player extends GameCharacter {
 		switch (e.getCode()){
 			case F: fire(); break;
 			case B: bomb(); break;
-			case P: this.createNewRequestAStar(); break;		// TODO: remove
-			case O: this.createNewRequestItem(); break;
-			case W: directionSet.add(Direction.U); break;
-			case A: directionSet.add(Direction.L); break;
-			case S: directionSet.add(Direction.D); break;
-			case D: directionSet.add(Direction.R); break;
+			case W: DIRECTION_SET.add(Direction.U); break;
+			case A: DIRECTION_SET.add(Direction.L); break;
+			case S: DIRECTION_SET.add(Direction.D); break;
+			case D: DIRECTION_SET.add(Direction.R); break;
 		}
 	}
 
@@ -173,27 +137,27 @@ public class Player extends GameCharacter {
 	 */
 	public void keyReleased(KeyEvent e) {
 		switch (e.getCode()) {
-			case W: directionSet.remove(Direction.U); break;
-			case A: directionSet.remove(Direction.L); break;
-			case S: directionSet.remove(Direction.D); break;
-			case D: directionSet.remove(Direction.R); break;
+			case W: DIRECTION_SET.remove(Direction.U); break;
+			case A: DIRECTION_SET.remove(Direction.L); break;
+			case S: DIRECTION_SET.remove(Direction.D); break;
+			case D: DIRECTION_SET.remove(Direction.R); break;
 		}
 	}
 
 	/**
 	 * Shoots a default bullet (or multiple)
 	 *
-	 * <p>This method creates a new instance of {@link com.bham.bc.components.armory.DefaultBullet}
+	 * <p>This method creates a new instance of {@link com.bham.bc.components.shooting.DefaultBullet}
 	 * based on player's position and angle</p>
 	 */
 	public void fire() {
-		gun.shoot();
-		if(tripleTicks != 0) gun.shoot(-45, 45);
+		GUN.shoot();
+		if(tripleTicks != 0) GUN.shoot(-45, 45);
 	}
 
 	@Override
 	public void move() {
-		if(!directionSet.isEmpty()) {
+		if(!DIRECTION_SET.isEmpty()) {
 			x += velocity.getX();
 			y += velocity.getY();
 		}

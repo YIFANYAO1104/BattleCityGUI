@@ -1,9 +1,9 @@
 package com.bham.bc.components.environment.obstacles;
 
-import com.bham.bc.components.armory.Bullet;
+import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.utils.maploaders.TILESET;
+import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.components.environment.maploaders.Tileset;
 import javafx.scene.image.Image;
 
 import java.util.EnumSet;
@@ -11,7 +11,7 @@ import java.util.EnumSet;
 /**
  * Tile which represents the center of the area surrounded by tiles of type {@link EnemySpawnArea}
  */
-public class EnemySpawnCenter extends GenericObstacle {
+public class EnemySpawnCenter extends Obstacle {
     /**
      * Constructs an obstacle
      *
@@ -20,7 +20,7 @@ public class EnemySpawnCenter extends GenericObstacle {
      * @param tileset type of tileset
      * @param tileIDs IDs of tiles in case the obstacle is animated
      */
-    public EnemySpawnCenter(int x, int y, TILESET tileset, int... tileIDs) {
+    public EnemySpawnCenter(int x, int y, Tileset tileset, int... tileIDs) {
         super(x, y, tileset, tileIDs);
     }
 
