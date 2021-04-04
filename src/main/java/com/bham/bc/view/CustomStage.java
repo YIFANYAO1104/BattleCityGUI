@@ -34,11 +34,11 @@ public class CustomStage extends Stage{
 
     private Stage stage;
     private Scene gamescene;
-
     private double x = 0.00;
     private double y = 0.00;
     private double width = 0.00;
     private double height = 0.00;
+
     private boolean isMax = false;
     private boolean isRight;// 是否处于右边界调整窗口状态
     private boolean isBottomRight;// 是否处于右下角调整窗口状态
@@ -52,6 +52,17 @@ public class CustomStage extends Stage{
     public static Label setMenu;
     public static HBox gpTitle;
     public static String[] types;
+    private HBox hBox;
+    public static ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
+            "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
+    ));;
+    public static ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
+            "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
+    ));;
+    private Label btnMin;
+    private Label btnClose;
+    public static int selected=4;
+
 
 
 
@@ -96,9 +107,16 @@ public class CustomStage extends Stage{
 
     }
 
+    /**
+     * create titler bar template
+     * @param root
+     * @param Width
+     * @param Height
+     * @param offset
+     */
 
-    public void createCustomStage(AnchorPane root,int Width,int Height){
-        startMenuIcon();
+    public void titleBar(AnchorPane root, int Width, int Height,int offset,ChoiceBox changeSkin){
+
         stage.initStyle(StageStyle.TRANSPARENT);
 
         gpTitle = new HBox();
@@ -110,9 +128,7 @@ public class CustomStage extends Stage{
         Glow glow=new Glow();
         lbTitle.setEffect(glow);
         glow.setLevel(0.6);
-        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-        gpTitle.setBackground(new Background(image));
         gpTitle.setMinWidth(Width);
         gpTitle.setMaxWidth(Height);
         gpTitle.setMinHeight(15);
@@ -120,7 +136,7 @@ public class CustomStage extends Stage{
         gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../GUIResources/Stage.css").toExternalForm());
 
 
-        Label btnMin = new Label();
+        btnMin = new Label();
         btnMin.setPrefWidth(33);
         btnMin.setPrefHeight(26);
 
@@ -128,15 +144,13 @@ public class CustomStage extends Stage{
 
         btnMin.setBackground(new Background(image2));
 
-        Label btnClose = new Label();
+        btnClose = new Label();
         btnClose.setPrefWidth(33);
         btnClose.setPrefHeight(26);
 
 
         types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
-        ChoiceBox changeSkin=new ChoiceBox(FXCollections.observableArrayList(
-                "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
-        ));
+
         changeSkin.setId("changeSkin");
         changeSkin.setMaxSize(25,22);
         changeSkin.setMinSize(25,22);
@@ -144,37 +158,64 @@ public class CustomStage extends Stage{
         changeSkin.setBackground(new Background(image3));
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 
-
-            typeOf = types[new_val.intValue()];
+            selected=new_val.intValue();
+            typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar05.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar05.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                setMenu.requestFocus();
+                lbTitle.requestFocus();
+                if (changeSkin==changePauseSkin){
+                    PauseMenu.changeSkin.getSelectionModel().select(0);
+                }
+
+
+
+
 
             }else if (typeOf.equals("TYPE 2")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar02.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar02.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                setMenu.requestFocus();
+                lbTitle.requestFocus();
+                if (changeSkin==changePauseSkin){
+                    PauseMenu.changeSkin.getSelectionModel().select(1);
+                }
+
+
 
             }else if (typeOf.equals("TYPE 3")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                setMenu.requestFocus();
+                lbTitle.requestFocus();
+                if (changeSkin==changePauseSkin){
+                    PauseMenu.changeSkin.getSelectionModel().select(2);
+                }
+
+
 
             }else if (typeOf.equals("TYPE 4")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar04.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar04.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                setMenu.requestFocus();
+                lbTitle.requestFocus();
+                if (changeSkin==changePauseSkin){
+                    PauseMenu.changeSkin.getSelectionModel().select(3);
+                }
+
+
 
             }else if (typeOf.equals("TYPE 5")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
                 gpTitle.setBackground(new Background(image4));
-                setMenu.requestFocus();
+                lbTitle.requestFocus();
+                if (changeSkin==changePauseSkin){
+                    PauseMenu.changeSkin.getSelectionModel().select(4);
+                }
+
+
 
             }
 
@@ -184,7 +225,7 @@ public class CustomStage extends Stage{
         changeSkin.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                setMenu.requestFocus();
+                lbTitle.requestFocus();;
             }
         });
 
@@ -195,15 +236,21 @@ public class CustomStage extends Stage{
 
         btnClose.setId("winClose");
         btnMin.setId("winMin");
-        lbTitle.setTranslateX(-540);
+        //-540 -760
+        lbTitle.setTranslateX(offset);
         btnMin.setTranslateY(6);
         btnMin.setTranslateX(3);
 
 
 
-        gpTitle.getChildren().add(lbTitle);
-        HBox hBox=new HBox(5,setMenu,changeSkin,btnMin,btnClose);
-        gpTitle.getChildren().add(hBox);
+        if (setMenu==null){
+            hBox=new HBox(5,changeSkin,btnMin,btnClose);
+        }else {
+            hBox=new HBox(5,setMenu,changeSkin,btnMin,btnClose);
+        }
+
+        gpTitle.getChildren().addAll(lbTitle,hBox);
+
         root.getChildren().add(gpTitle);
 
         gpTitle.setLayoutX(0);
@@ -344,7 +391,37 @@ public class CustomStage extends Stage{
                 yOffset = event.getSceneY();
             }
         });
-//
+
+
+    }
+
+    /**
+     * create title bar(without options menu icon) to main interface
+     * @param root
+     * @param Width
+     * @param Height
+     */
+
+    public void createCommonTitlebar(AnchorPane root, int Width, int Height){
+           titleBar(root,Width,Height,-780,changeMainSkin);
+           changeMainSkin.getSelectionModel().select(selected);
+
+
+    }
+
+    /**
+     * create title bar(with options Menu icon) to gameSession
+     * @param root
+     * @param Width
+     * @param Height
+     */
+
+    public void createTitleBar(AnchorPane root, int Width, int Height){
+        startMenuIcon();
+        titleBar(root,Width,Height,-540,changePauseSkin);
+        changePauseSkin.getSelectionModel().select(selected);
+
+
 
 
 

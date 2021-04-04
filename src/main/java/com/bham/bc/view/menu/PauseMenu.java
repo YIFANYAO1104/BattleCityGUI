@@ -53,7 +53,8 @@ public class PauseMenu extends AnchorPane {
     private SubMenu subMenuPause;
     public SubMenu subMenuOptions;
     public Rectangle bg;
-    private ChoiceBox changeSkin;
+    public static ChoiceBox changeSkin;
+
 
     /**
      * Constructs a pause menu based on Game window's size parameters
@@ -102,6 +103,7 @@ public class PauseMenu extends AnchorPane {
         DoubleProperty doubleProperty1 = bg.getValueProperty();
         doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setMusicVolume(newVal.doubleValue()/100);
+            bg.getNumOfVolume().setText(newVal.intValue()+"%");
             bg.setSliderStyle();
         });
         MenuSlider sfx=new MenuSlider("SFX Volume:");
@@ -109,6 +111,7 @@ public class PauseMenu extends AnchorPane {
         DoubleProperty doubleProperty2=sfx.getValueProperty();
         doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
             audioManager.setEffectVolume(newVal.doubleValue()/100);
+            sfx.getNumOfVolume().setText(newVal.intValue()+"%");
             sfx.setSliderStyle();
 
         });
@@ -191,40 +194,34 @@ public class PauseMenu extends AnchorPane {
                 "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
         ));
 
-
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 
 
             CustomStage.typeOf =  CustomStage.types[new_val.intValue()];
             if ( CustomStage.typeOf.equals("TYPE 1")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar05.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+
+                CustomStage.changePauseSkin.getSelectionModel().select(0);
+
 
             }else if ( CustomStage.typeOf.equals("TYPE 2")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar02.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+
+                CustomStage.changePauseSkin.getSelectionModel().select(1);
 
             }else if ( CustomStage.typeOf.equals("TYPE 3")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+
+                CustomStage.changePauseSkin.getSelectionModel().select(2);
 
             }else if ( CustomStage.typeOf.equals("TYPE 4")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar04.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+
+                CustomStage.changePauseSkin.getSelectionModel().select(3);
 
             }else if ( CustomStage.typeOf.equals("TYPE 5")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Constants.WINDOW_WIDTH,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                CustomStage.gpTitle.setBackground(new Background(image4));
-                CustomStage.setMenu.requestFocus();
+                CustomStage.changePauseSkin.getSelectionModel().select(4);
 
             }
 
