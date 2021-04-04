@@ -133,7 +133,7 @@ public class CustomStage extends Stage{
         gpTitle.setMaxWidth(Height);
         gpTitle.setMinHeight(15);
         gpTitle.setMaxHeight(35);
-        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../GUIResources/Stage.css").toExternalForm());
+        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../GUIResources/Style.css").toExternalForm());
 
 
         btnMin = new Label();

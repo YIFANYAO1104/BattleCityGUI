@@ -77,7 +77,7 @@ public class MainMenu extends AnchorPane {
         setHeight(height);
 
         initBgDim();
-        initTitle();
+        //initTitle();
 
         createSubMenuMain();
         createSubMenuMode();
@@ -103,13 +103,13 @@ public class MainMenu extends AnchorPane {
     /**
      * Adds title to the menu
      */
-    private void initTitle() {
-        Title title = new Title("T A N K 1 G A M E");
-        title.setTranslateY(100);
-        title.setTranslateX(getWidth()/2 - title.getWidth()/2);
-
-        getChildren().add(title);
-    }
+//    private void initTitle() {
+//        Title title = new Title("T A N K 1 G A M E");
+//        title.setTranslateY(100);
+//        title.setTranslateX(getWidth()/2 - title.getWidth()/2);
+//
+//        getChildren().add(title);
+//    }
 
     /**
      * Creates the primary sub-menu for the main menu. This defines the behavior of all the
@@ -177,7 +177,7 @@ public class MainMenu extends AnchorPane {
 
 
         // Stylesheet for menu table
-        getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/table.css").toExternalForm());
+        getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/Style.css").toExternalForm());
 
         createScoreTable();
 
@@ -571,32 +571,32 @@ public class MainMenu extends AnchorPane {
      *  <p>This is a unique component provided by a parent {@link com.bham.bc.view.menu.MainMenu}.
      *  This is because the Title should always be part of the Main Menu node.
      */
-    private static class Title extends StackPane {
-
-        private static final double WIDTH = 475;
-        private static final double HEIGHT = 60;
-
-        /**
-         * Constructs a title used in the Main Menu layout
-         * @param name the title of the game
-         * TODO: look for fancier/more game-like fonts
-         */
-        public Title(String name) {
-            Rectangle bg = new Rectangle(WIDTH, HEIGHT);
-            setWidth(WIDTH);
-            setHeight(HEIGHT);
-            bg.setStroke(Color.WHITE);
-            bg.setStrokeWidth(3);
-            bg.setFill(null);
-
-
-            Text text = new Text(name);
-            text.setFill(Color.WHITE);
-            text.setFont(Font.font("Times New Roman", FontWeight.SEMI_BOLD, 50));
-
-            setAlignment(Pos.TOP_CENTER);
-            getChildren().addAll(bg,text);
-        }
-    }
+//    private static class Title extends StackPane {
+//
+//        private static final double WIDTH = 475;
+//        private static final double HEIGHT = 60;
+//
+//        /**
+//         * Constructs a title used in the Main Menu layout
+//         * @param name the title of the game
+//         * TODO: look for fancier/more game-like fonts
+//         */
+//        public Title(String name) {
+//            Rectangle bg = new Rectangle(WIDTH, HEIGHT);
+//            setWidth(WIDTH);
+//            setHeight(HEIGHT);
+//            bg.setStroke(Color.WHITE);
+//            bg.setStrokeWidth(3);
+//            bg.setFill(null);
+//
+//
+//            Text text = new Text(name);
+//            text.setFill(Color.WHITE);
+//            text.setFont(Font.font("Times New Roman", FontWeight.SEMI_BOLD, 50));
+//
+//            setAlignment(Pos.TOP_CENTER);
+//            getChildren().addAll(bg,text);
+//        }
+//    }
 
 }
