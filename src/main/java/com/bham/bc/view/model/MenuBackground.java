@@ -14,7 +14,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class MenuBackground extends AnchorPane {
 
-    private static final String BG_PATH = "file:src/main/resources/img/menu/menuBG.gif";
+    private static final String BG_PATH = "file:src/main/resources/img/menu/7Logogif.gif";
 
     /**
      * Constructs a Stack Pane node with an animated background and particles
