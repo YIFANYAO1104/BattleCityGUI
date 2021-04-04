@@ -14,4 +14,8 @@ public enum Action{
     SEARCHALLY,
     SEARCHHOME,
     SEARCHANDTRAP,
+    BUILDUP,
+    PEAK,
+    RELAX,
+    INCREMENTLOOP,
 }
