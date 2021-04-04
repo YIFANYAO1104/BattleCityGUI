@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment.triggers;
 
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.triggers.RespawnTrigger;
@@ -39,6 +40,8 @@ public class WeaponGenerator extends RespawnTrigger {
         }
 
     }
+
+
 
     @Override
     public void tryTriggerO(GenericObstacle entity) {

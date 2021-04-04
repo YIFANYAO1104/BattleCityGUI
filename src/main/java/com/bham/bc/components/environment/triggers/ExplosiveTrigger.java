@@ -1,6 +1,7 @@
 package com.bham.bc.components.environment.triggers;
 
 
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.components.environment.navigation.ItemType;
 import com.bham.bc.entity.BaseGameEntity;
@@ -53,9 +54,10 @@ public class ExplosiveTrigger extends Trigger {
             gameCharacter.changeHP(-1000);
             backendServices.addBombTank(new BombTank(gameCharacter.getPosition()));
         } else if (gameCharacter.getHitBox().intersects(x,y,entityImages[0].getWidth(),entityImages[0].getHeight())){
-            gameCharacter.move(-1, true);
+            gameCharacter.move(-1);
         }
     }
+
 
     public void tryTriggerO(GenericObstacle obs) {
         //is this bot within range of this sound

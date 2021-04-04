@@ -37,7 +37,7 @@ public class Soft extends GenericObstacle {
     }
 
     @Override
-    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.BREAKABLE); }
+    public EnumSet<Attribute> getAttributes() { return EnumSet.of(Attribute.BREAKABLE); }
 
     @Override
     protected Image[] getDefaultImage() {
@@ -51,12 +51,9 @@ public class Soft extends GenericObstacle {
             b.destroy();
 
             if(hp <= 0) {
-                //------------for testing---------------------------------------
-                backendServices.testAStar();
                 Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
                         backendServices.getGraph().getID(),
                         Msg_removeSoft,NO_ADDITIONAL_INFO);
-                //------------for testing---------------------------------------
                 exists = false;
                 entityManager.removeEntity(this);
             }
@@ -65,7 +62,7 @@ public class Soft extends GenericObstacle {
 
     @Override
     public void handleCharacter(GameCharacter c) {
-        if(intersects(c)) c.move(-1, true);
+        if(intersects(c)) c.move(-1);
     }
 
     @Override

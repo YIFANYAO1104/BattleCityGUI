@@ -44,6 +44,8 @@ public abstract class MapLoader {
      */
     public List<GenericObstacle> getObstacles() { return obstacles; }
 
+
+
     /**
      * Gets all triggers
      * @return List of Triggers

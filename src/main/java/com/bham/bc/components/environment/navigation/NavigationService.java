@@ -3,7 +3,9 @@ package com.bham.bc.components.environment.navigation;
 import com.bham.bc.components.environment.navigation.impl.PathEdge;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Shape;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public interface NavigationService {
@@ -29,18 +31,24 @@ public interface NavigationService {
     /**
      * called by an agent after a request was created
      * @return
-     * 0 if target found
-     * 1 if not found
-     * 2 if the search is not completed;
+     * target_found if target found
+     * target_not_found if not found
+     * search_incomplete if the search is not completed
+     * no_task if no closest node around player or target
      */
     public SearchStatus peekRequestStatus();
+
+    /**
+     * Resets the search status to <i>no_task</i>. This is useful to not repeat the searches
+     */
+    void resetTaskStatus();
 
     /**
      * called by an agent after it has been notified that a search has
      * terminated successfully.
      * @return a list of PathEdges
      */
-    public List<PathEdge> getPath();
+    public LinkedList<PathEdge> getPath();
 
     //under construction--------------------------------------------
     //utility based AI----------------------------------------------
@@ -58,4 +66,10 @@ public interface NavigationService {
     public double getCostToClosestItem(int GiverType);
 
     public void render(GraphicsContext gc);
+
+    /**
+     * For path smoothing debug, return a list of hit boxes when smoothing paths
+     * @return
+     */
+    public List<Shape> getSmoothingBoxes();
 }

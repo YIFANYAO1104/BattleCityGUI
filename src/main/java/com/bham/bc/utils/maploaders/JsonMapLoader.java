@@ -1,7 +1,10 @@
 package com.bham.bc.utils.maploaders;
 
 import com.bham.bc.components.environment.GenericObstacle;
+import com.bham.bc.components.environment.MapType;
+import com.bham.bc.components.environment.obstacles.*;
 import com.bham.bc.entity.triggers.Trigger;
+import javafx.embed.swing.JFXPanel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -191,5 +194,45 @@ public class JsonMapLoader extends MapLoader {
             }
         }
         return triggerInstances;
+    }
+
+    public static void main(String[] args) {
+        new JFXPanel();
+        JsonMapLoader js = new JsonMapLoader(MapType.Map1.getName());
+        js.getPassables();
+    }
+
+    public List<GenericObstacle> getPassables() {
+        List<GenericObstacle> bg = new ArrayList<>();
+        for (GenericObstacle obstacle : obstacles) {
+            if (obstacle.getClass()== Passable.class){
+                bg.add(obstacle);
+            }
+        }
+        return bg;
+    }
+
+    public List<GenericObstacle> getCoverings() {
+        List<GenericObstacle> bg = new ArrayList<>();
+        for (GenericObstacle obstacle : obstacles) {
+            if (obstacle.getClass()== Covering.class){
+                bg.add(obstacle);
+            }
+        }
+        return bg;
+    }
+
+    @Override
+    public List<GenericObstacle> getObstacles() {
+        List<GenericObstacle> bg = new ArrayList<>();
+        for (GenericObstacle obstacle : obstacles) {
+            if (obstacle.getClass()== Hard.class||
+                    obstacle.getClass()== Soft.class||
+                    obstacle.getClass()== Impassable.class
+            ){
+                bg.add(obstacle);
+            }
+        }
+        return bg;
     }
 }

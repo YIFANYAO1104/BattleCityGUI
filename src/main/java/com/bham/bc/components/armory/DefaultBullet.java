@@ -1,26 +1,20 @@
 package com.bham.bc.components.armory;
 
-import com.bham.bc.components.characters.SIDE;
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.utils.Constants;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
 
-import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
  * Represents a default bullet the player starts with
  */
 public class DefaultBullet extends Bullet {
-
-	public static final String IMAGE_PATH = "file:src/main/resources/img/armory/defaultBullet.png";
-	public static final int WIDTH = 6;
-	public static final int HEIGHT = 12;
-
+	public static final BulletType TYPE = BulletType.DEFAULT;
 	public static final double SPEED = 5;
 	public static final double DAMAGE = 25;
 
@@ -29,12 +23,11 @@ public class DefaultBullet extends Bullet {
 	 *
 	 * @param x      top left position in x axis
 	 * @param y      top left position in y axis
-	 * @param angle  angle at which the bullet will move
+	 * @param heading  a normalized vector indicate the direction
 	 * @param side   ALLY or ENEMY side the bullet belongs to
 	 */
-	public DefaultBullet(double x, double y, double angle, SIDE side) {
-		super(x, y, SPEED, angle, side, DAMAGE);
-		entityImages = new Image[] { new Image(IMAGE_PATH, WIDTH, HEIGHT, false, false) };
+	public DefaultBullet(double x, double y, Point2D heading, Side side) {
+		super(x, y, SPEED, heading, TYPE, side, DAMAGE);
 	}
 
 	@Override
@@ -45,8 +38,8 @@ public class DefaultBullet extends Bullet {
 
 	@Override
 	public void move() {
-		x += Math.sin(Math.toRadians(angle)) * speed;
-		y -= Math.cos(Math.toRadians(angle)) * speed;
+		x += velocity.getX();
+		y += velocity.getY();
 
 		if (x < 0 || y < 0 || x > GameMap.getWidth() || y > GameMap.getHeight()) {
 			entityManager.removeEntity(this);
@@ -58,12 +51,12 @@ public class DefaultBullet extends Bullet {
 	public void update() { move(); }
 
 	@Override
-	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], angle); }
+	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAngle()); }
 
 	@Override
 	public Rectangle getHitBox() {
-		Rectangle hitBox = new Rectangle(x, y, WIDTH, HEIGHT);
-		hitBox.getTransforms().add(new Rotate(angle, x + WIDTH/2,y + HEIGHT/2));
+		Rectangle hitBox = new Rectangle(x, y, getRadius().getX(), getRadius().getY());
+		hitBox.getTransforms().add(new Rotate(getAngle(), x + getRadius().getX()/2,y + getRadius().getY()/2));
 
 		return hitBox;
 	}

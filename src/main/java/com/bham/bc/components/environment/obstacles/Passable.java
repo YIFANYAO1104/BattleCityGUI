@@ -6,7 +6,6 @@ import com.bham.bc.components.environment.GenericObstacle;
 import com.bham.bc.utils.maploaders.TILESET;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 import java.util.EnumSet;
 
@@ -27,7 +26,7 @@ public class Passable extends GenericObstacle {
         super(x, y, tileset, tileIDs);
     }
     @Override
-    public EnumSet<ATTRIBUTE> getAttributes() { return EnumSet.of(ATTRIBUTE.PASSABLE); }
+    public EnumSet<Attribute> getAttributes() { return EnumSet.of(Attribute.PASSABLE); }
 
     @Override
     protected Image[] getDefaultImage() {

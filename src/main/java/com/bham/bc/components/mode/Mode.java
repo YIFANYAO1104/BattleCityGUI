@@ -1,5 +1,5 @@
 package com.bham.bc.components.mode;
 
-public enum MODE {
+public enum Mode {
     CHALLENGE, SURVIVAL
 }

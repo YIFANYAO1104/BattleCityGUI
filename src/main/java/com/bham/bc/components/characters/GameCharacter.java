@@ -2,15 +2,17 @@ package com.bham.bc.components.characters;
 
 import com.bham.bc.components.armory.Bullet;
 import com.bham.bc.components.environment.triggers.Weapon;
-import com.bham.bc.entity.DIRECTION;
+import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.Direction;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
+
+import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
  * Represents a character - this includes enemies, players and AI companions
@@ -18,8 +20,16 @@ import java.util.Optional;
 abstract public class GameCharacter extends MovingEntity {
     private final double MAX_HP;
     protected double hp;
-    protected SIDE side;
-    protected EnumSet<DIRECTION> directionSet;
+
+    //should be bigger than 1, or it will cause unstable movement
+    protected double mass=3;
+    //for debug
+    protected Point2D acceleration = new Point2D(0,0);
+    protected Steering sb;
+
+    protected Side side;
+    protected int immuneTicks, freezeTicks, tripleTicks = 0;
+    protected boolean TRAPPED;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -28,41 +38,25 @@ abstract public class GameCharacter extends MovingEntity {
      * @param y top left y coordinate of the character
      * @param speed value which defines the initial velocity
      */
-    protected GameCharacter(double x, double y, double speed, double hp, SIDE side) {
+    protected GameCharacter(double x, double y, double speed, double hp, Side side) {
         super(x, y, speed);
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
-        directionSet = EnumSet.noneOf(DIRECTION.class);
+        sb = new Steering(this);
     }
-    //TODO: remove
-    public Shape getLine() {return new Rectangle(0,0,0,0);}
 
     /**
-     * Updates angle at which the player is facing
-     *
-     * <p>This method goes through every direction in the directionSet, coverts them to basis vectors,
-     * adds them up to get a final direction vector and calculates the angle between it and (0, 1)</p>
-     *
-     * <p><b>Note:</b> the basis vector which is used for angle calculation must be (0, 1) as this is the
-     * way the character in the image is facing (upwards)</p>
+     * Gets character's side
+     * @return ALLY or ENEMY side the character belongs to
      */
-    protected void updateAngle() {
-        Optional<Point2D> directionPoint = directionSet.stream().map(DIRECTION::toPoint).reduce(Point2D::add);
-        directionPoint.ifPresent(p -> { if(p.getX() != 0 || p.getY() != 0) angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1); });
-    }
+    public Side getSide() { return side; }
 
     /**
      * Gets the HP of the player
      * @return current HP
      */
     public double getHp() { return hp; }
-
-    /**
-     * Gets character's side
-     * @return ALLY or ENEMY side the character belongs to
-     */
-    public SIDE getSide() { return side; }
 
     /**
      * Increases or decreases HP for the player
@@ -76,14 +70,41 @@ abstract public class GameCharacter extends MovingEntity {
     @Deprecated
     public void switchWeapon(Weapon w) {}
 
+    public void toTriple(int numTicks) {
+    	tripleTicks = numTicks;
+    }
+
+    public void toFreeze(int numTicks) {
+    	freezeTicks = numTicks;
+    }
+
+    public void toImmune(int numTicks) {
+    	immuneTicks = numTicks;
+    }
+
+    // Updates active trigger time ticks
+    protected void updateTriggers() {
+    	if(immuneTicks!=0) --immuneTicks;
+    	if(freezeTicks!=0) --freezeTicks;
+    	if(tripleTicks!=0) --tripleTicks;
+    }
+
+    public void setTRAPPED(){
+        TRAPPED = true;
+    }
+
+    public void setUNTRAPPED(){
+        TRAPPED = false;
+    }
+
 
     /**
      * Handles bullet collision - takes damage and destroys bullet
      * @param bullet bullet to handle
      */
-    protected void handleBullet(Bullet bullet) {
+    protected void handle(Bullet bullet) {
         if(intersects(bullet)) {
-            if(bullet.getSide() != side) {
+            if(bullet.getSide() != side && immuneTicks == 0) {
                 changeHP(-bullet.getDamage());
             }
             bullet.destroy();
@@ -94,11 +115,12 @@ abstract public class GameCharacter extends MovingEntity {
      * Handles character collision - moves back
      * @param gameCharacter character to handle
      */
-    protected void handleCharacter(GameCharacter gameCharacter) {
+    protected void handle(GameCharacter gameCharacter) {
         if(this.getID() != gameCharacter.getID() && intersects(gameCharacter)) {
-            move(-1, true);
+            move(-1);
         }
     }
+
 
     /**
      * Handles a list of characters and bullets
@@ -106,37 +128,65 @@ abstract public class GameCharacter extends MovingEntity {
      * @param bullets list of bullets to handle
      */
     public void handleAll(List<GameCharacter> gameCharacters, List<Bullet> bullets) {
-        gameCharacters.forEach(this::handleCharacter);
-        bullets.forEach(this::handleBullet);
+        gameCharacters.forEach(this::handle);
+        bullets.forEach(this::handle);
+    }
+
+    public void handleAll(List<BaseGameEntity> en1){
+        en1.forEach(b1 -> {
+            try {
+                handle((Bullet) b1);
+                handle((GameCharacter)b1);
+            }catch (Exception e){}
+        });
     }
 
 
     /**
-     * Overloads basic <i>move()</i> method with extra parameters
+     * Overloads basic <i>move()</i> method with extra speed multiplier parameter
      * <br>TODO: assure speedMultiplier is within [-5, 5]
      * @param speedMultiplier number by which the speed will be multiplied (use negative to inverse movement)
-     * @param force boolean indicating if the character should move even if the directionSet is empty
      */
-    public void move(double speedMultiplier, boolean force) {
-        double deltaX = Math.sin(Math.toRadians(angle)) * speed;
-        double deltaY = Math.cos(Math.toRadians(angle)) * speed;
-
-        if(force) {
-            x += deltaX * speedMultiplier;
-            y -= deltaY * speedMultiplier;
-        } else if(!directionSet.isEmpty()) {
-            x += deltaX * speedMultiplier;
-            y -= deltaY * speedMultiplier;
-        }
+    public void move(double speedMultiplier) {
+        //TODO:Move to steering.calculate
+//        velocity = new Point2D(Math.sin(Math.toRadians(angle)),Math.cos(Math.toRadians(angle))).multiply(speed).multiply(speedMultiplier);
+        velocity = velocity.multiply(speedMultiplier);
+        x += velocity.getX();
+        y += velocity.getY();
     }
 
     @Override
     public void move() {
-        if(!directionSet.isEmpty()) {
-            x += Math.sin(Math.toRadians(angle)) * speed;
-            y -= Math.cos(Math.toRadians(angle)) * speed;
+        Point2D force = sb.calculate();
+        Point2D acceleration = force.multiply(1./mass);
+        //debug
+        this.acceleration = acceleration;
+
+        velocity = velocity.add(acceleration);
+        if(velocity.magnitude()> maxSpeed){
+            velocity = velocity.normalize().multiply(maxSpeed);
         }
+        if (!isZero(velocity)) {
+            heading = velocity.normalize();
+        }
+
+        x += velocity.getX();
+        y += velocity.getY();
     }
 
     protected abstract void destroy();
+
+    /**
+     *For path smoothing debug
+     */
+    abstract public List<Shape> getSmoothingBoxes();
+    public void teleport(double x,double y){
+        this.x = x;
+        this.y =y;
+    }
+    public void destroyed(){
+        this.hp-=200;
+    }
+
+
 }

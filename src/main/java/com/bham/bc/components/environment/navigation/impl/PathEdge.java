@@ -41,4 +41,9 @@ public class PathEdge {
     public void setSource(Point2D newSource) {
         source = new Point2D(newSource.getX(),newSource.getY());
     }
+
+    @Override
+    public String toString() {
+        return "[" + source + ", " + destination + ']';
+    }
 }

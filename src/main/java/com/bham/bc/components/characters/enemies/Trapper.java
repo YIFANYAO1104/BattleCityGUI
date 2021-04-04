@@ -1,48 +1,113 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.entity.ai.StateMachine;
+import com.bham.bc.entity.ai.*;
+import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
+
+import java.util.Arrays;
+
+import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
  * <h1>Trapper - throws traps everywhere</h1>
  *
  * <p>This type of enemy has 3 main states determined by time and location</p>
  * <ul>
- *     <li><b>Search</b> - in this state the enemy always tries to look for the home
- *     territory. It doesn't care about anything else that's going around it</li>
+ *     <li><b>Search and Lay Trap</b> - in this state the enemy navigates around the map and
+ *     lays a trap for the player </li>
  *
- *     <li><b>Attack Ally</b> - in this state the enemy stops moving for a moment once a
- *     certain amount of time has passed and places a trap (e.g. a bomb/ mine)</li>
+ *     <li><b>Retreat</b> - in this state the enemy runs away from Allies
+ *     if they get close enough </li>
  *
- *     <li><b>Attack Home</b> - in this state enemy stops moving and laying traps, it simply
- *     stands in one spot and tries to take over the home territory</li>
+ *     <li><b>Regenerate</b> - in this the enemy will stop and regenerate it's
+ *     health if it below 20% health and is far enough away from the enemy</li>
  * </ul>
  */
 public class Trapper extends Enemy {
+    // Constant
+    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/trapper.png";
+    public static final int SIZE = 30;
+
+    // Configurable
+    public static final double HP = 100;
+    public static final double SPEED = 3;
+
+    private final StateMachine stateMachine;
+    private IntCondition badHealthCondition;
+    private IntCondition closeToAlly;
+    private AndCondition regenerateCondition;
+    private AndCondition searchAndTrapCondition;
+
     /**
      * Constructs a character instance with directionSet initialized to empty
      *
-     * @param x     top left x coordinate of the character
-     * @param y     top left y coordinate of the character
-     * @param speed value which defines the initial velocity
-     * @param hp    health points the enemy should have
+     * @param x top left x coordinate of the character
+     * @param y top left y coordinate of the character
      */
-    protected Trapper(double x, double y, double speed, double hp) {
-        super(x, y, speed, hp);
+    public Trapper(double x, double y) {
+        super(x, y, SPEED, HP);
+        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        this.stateMachine = createFSM();
     }
 
     @Override
     protected StateMachine createFSM() {
-        return null;
-    }
+        // Define possible states the enemy can be in
+        State searchAndTrapState = new State(new Action[]{ Action.SEARCHANDTRAP }, null);
+        State retreatState = new State(new Action[]{ Action.RETREAT }, null);
+        State regenerateState = new State(new Action[]{ Action.REGENERATE }, null);
 
-    @Override
-    public Shape getHitBox() {
-        return null;
+        // Define all conditions required to change any state
+        closeToAlly = new IntCondition(0, 50);
+        badHealthCondition = new IntCondition(0, 20);
+        regenerateCondition = new AndCondition(new NotCondition(closeToAlly), badHealthCondition);
+        searchAndTrapCondition = new AndCondition(new NotCondition(closeToAlly), new NotCondition(badHealthCondition));
+
+        // Define all state transitions that could happen
+        Transition searchAndTrapPossibility = new Transition(searchAndTrapState, searchAndTrapCondition);
+        Transition retreatPossibility = new Transition(retreatState, closeToAlly);
+        Transition regeneratePossibility = new Transition(regenerateState, regenerateCondition);
+
+        // Define how the states can transit from one another
+        searchAndTrapState.setTransitions(new Transition[]{ retreatPossibility, regeneratePossibility });
+        retreatState.setTransitions(new Transition[]{ searchAndTrapPossibility, regeneratePossibility });
+        regenerateState.setTransitions(new Transition[]{ retreatPossibility, searchAndTrapPossibility});
+
+        return new StateMachine(searchAndTrapState);
     }
 
     @Override
     public void update() {
+        // TODO: double distanceToAlly = find distance to nearest ally
+        // TODO: closeToAlly.setTestValue((int) distanceToAlly);
+        badHealthCondition.setTestValue((int) this.hp);
 
+        Action[] actions = stateMachine.update();
+        Arrays.stream(actions).forEach(action -> {
+            switch(action) {
+                case SEARCHANDTRAP:
+                    //TODO: searchAndTrap();
+                    break;
+                case RETREAT:
+                    //TODO: retreat();
+                    break;
+                case REGENERATE:
+                    // TODO: regenerate();
+                    break;
+            }
+        });
+
+    }
+
+    @Override
+    public void destroy() {
+        entityManager.removeEntity(this);
+        exists = false;
+    }
+
+    @Override
+    public Shape getHitBox() {
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }
 }
