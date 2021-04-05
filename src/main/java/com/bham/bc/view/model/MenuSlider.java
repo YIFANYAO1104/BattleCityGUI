@@ -1,102 +1,60 @@
 package com.bham.bc.view.model;
 
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Circle;
 
 /**
- * @author : YiFan Yaao
- * @version : 1.0
- * @project: BattleCityGUI
- * @name : MenuSlider.java
- * @data : 2021/3/24
- * @time : 19:54
+ * Represents the custom menu slider with labels for the slider name and its value
  */
 public class MenuSlider extends VBox {
-    private Slider slider;
-    private StackPane trackPane;
-    private Label valueLabel;
+    private final Slider SLIDER;
 
-
-
-    public MenuSlider(String name) {
-
-        // Stylesheet for menu slider's elements
-        getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/MenuSlider.css").toExternalForm());
-
+    /**
+     * Constructs a slider with its name and initial value
+     *
+     * @param name         label's name above the slider
+     * @param initialValue value the slider should be set to initially
+     */
+    public MenuSlider(String name, int initialValue) {
         // The actual slider
-        slider = new Slider();
-        slider.setValue(100);
-        slider.setEffect(new Glow(1));
-        slider.setId("color-slider");
+        SLIDER = new Slider();
+        SLIDER.setValue(initialValue);
+        SLIDER.setEffect(new Glow(.6));
+        SLIDER.setId("slider");
+        SLIDER.valueProperty().addListener((obsVal, oldVal, newVal) -> SLIDER.lookup(".track").setStyle(String.format("-fx-background-color: linear-gradient(to right, -fx-primary-color %d%%, -fx-secondary-color %d%%);", newVal.intValue(), newVal.intValue())));
 
         // Label for slider
         Label sliderLabel = new Label();
         sliderLabel.setText(name);
-        sliderLabel.setId("volume");
+        sliderLabel.setId("slider-label");
 
         // Label for slider's value
-        valueLabel = new Label(slider.valueProperty().getValue().intValue()+"%");
-//        valueLabel.textProperty().bind(slider.valueProperty().asString());
-        valueLabel.setId("num");
+        Label valueLabel = new Label();
+        valueLabel.textProperty().bind(SLIDER.valueProperty().asString("%.0f%%"));
+        valueLabel.setId("value-label");
 
+        // Container for slider and its value
+        HBox sliderAndValue = new HBox(SLIDER, valueLabel);
 
-        HBox hBox=new HBox(slider,valueLabel);
-
-
-
-        getChildren().addAll(sliderLabel);
-        getChildren().add(hBox);
-
-
-
-
-
+        // Add all children
+        getChildren().addAll(sliderLabel, sliderAndValue);
     }
 
     /**
-     * return the label of volume num (%)
-     * @return
+     * Gets slider's value property which is used to change the audio volume
+     * @return DoubleProperty object to be bind with audio volume changes
      */
-    public Label getNumOfVolume(){ return valueLabel;}
-
-    /**
-     * return doubltProperty to set value of volume
-     * @return
-     */
-    public DoubleProperty getValueProperty(){
-        return slider.valueProperty();
+    public DoubleProperty getValueProperty() {
+        return SLIDER.valueProperty();
     }
-
-    /**
-     * set the style of slider
-     */
-    public void setSliderStyle(){
-        trackPane = (StackPane) slider.lookup(".track");
-
-        trackPane.setStyle("-fx-background-color: linear-gradient(to right, #c17e1c 0%, #f3eace 0%);");
-
-        slider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> ov, Number old_val, Number new_val) {
-
-                String style = String.format("-fx-background-color: linear-gradient(to right,#c17e1c %d%%, #f3eace %d%%);",
-                        new_val.intValue(), new_val.intValue());
-                trackPane.setStyle(style);
-            }
-        });
-
-         }
-
 }

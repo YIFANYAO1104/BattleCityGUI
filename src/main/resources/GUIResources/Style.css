@@ -1,3 +1,34 @@
+/* GLOBAL COLOR VARIABLES */
+* {
+    -fx-primary-color: #135ADD;
+    -fx-secondary-color: #649ACC;
+    -fx-darken-color: navy;
+    -fx-lighen-color: skyblue;
+}
+
+/* MENU SLIDER */
+#slider .track {
+    -fx-background-color: -fx-primary-color;
+    -fx-effect: innershadow(gaussian, -fx-darken-color, 4, .5, 0, 0);
+}
+#slider .thumb {
+    -fx-background-color: -fx-primary-color;
+    -fx-effect: dropshadow(gaussian, -fx-darken-color, 8, .5, 0, 0);
+}
+#slider-label {
+    -fx-font-size: 25px;
+    -fx-text-fill:WHITE;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+}
+#value-label {
+    -fx-font-size: 15px;
+    -fx-text-fill: WHITE;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+}
+
+/* OTHER */
 #text-effect{
    -fx-font: 50px Tahoma;
    -fx-fill: linear-gradient(from 0% 0% to 0% 0%, repeat, aqua 100%, Blue 100%);
@@ -160,32 +191,6 @@
     -fx-background-repeat: no-repeat;
 }
 
-#num {
--fx-font-size: 15px;
--fx-text-fill: WHITE;
--fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-}
-#volume {
--fx-font-size: 25px;
--fx-text-fill:WHITE;
--fx-font-family: "Arial Narrow";
--fx-font-weight: bold;
-}
-
-
-#color-slider .track{
-    -fx-background-color: #c17e1c;
-}
-
-#color-slider .thumb{
-
-    -fx-background-image :url("ball.png");
-    -fx-background-color: transparent;
-
-
-
-}
 #texts{
     -fx-font-size: 25px;
     -fx-text-fill: white;

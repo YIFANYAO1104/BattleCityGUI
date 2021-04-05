@@ -1,5 +1,6 @@
 package com.bham.bc.view.model;
 
+import com.bham.bc.view.MenuSession;
 import javafx.scene.SubScene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -18,14 +19,10 @@ public class MenuBackground extends AnchorPane {
 
     /**
      * Constructs a Stack Pane node with an animated background and particles
-     *
-     * @param width  the size of the menu's width
-     * @param height the size of the menu's height
      */
-    public MenuBackground(double width, double height) {
-        setWidth(width);
-        setHeight(height);
-
+    public MenuBackground() {
+        setWidth(MenuSession.WIDTH);
+        setHeight(MenuSession.HEIGHT);
         initBackgroundAnimation();
         initParticleAnimation();
     }

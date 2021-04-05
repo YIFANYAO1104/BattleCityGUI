@@ -7,36 +7,18 @@ import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.SubMenu;
-import javafx.animation.AnimationTimer;
 import javafx.animation.FadeTransition;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
-import java.io.File;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
@@ -98,23 +80,15 @@ public class PauseMenu extends AnchorPane {
      * Creates layout for options in the pause menu
      */
     private void createSubMenuOptions() {
-        MenuSlider bg=new MenuSlider("Volume:");
+        MenuSlider musicVolume = new MenuSlider("MUSIC VOLUME", 100);
+        MenuSlider sfxVolume = new MenuSlider("EFFECTS VOLUME", 100);
+        MenuButton btnBack = new MenuButton("BACK");
 
-        DoubleProperty doubleProperty1 = bg.getValueProperty();
-        doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
-            audioManager.setMusicVolume(newVal.doubleValue()/100);
-            bg.getNumOfVolume().setText(newVal.intValue()+"%");
-            bg.setSliderStyle();
-        });
-        MenuSlider sfx=new MenuSlider("SFX Volume:");
+        musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
+        sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectVolume(newVal.doubleValue()/100));
+        btnBack.setOnMouseClicked(e -> { subMenuOptions.hide();subMenuPause.show(); });
 
-        DoubleProperty doubleProperty2=sfx.getValueProperty();
-        doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
-            audioManager.setEffectVolume(newVal.doubleValue()/100);
-            sfx.getNumOfVolume().setText(newVal.intValue()+"%");
-            sfx.setSliderStyle();
 
-        });
         createSkinChoose();
         Label skin=new Label("Skin Choose: ");
         skin.setStyle(" -fx-font-size: 18px;\n" +
@@ -126,15 +100,8 @@ public class PauseMenu extends AnchorPane {
         HBox hBox=new HBox(skin,changeSkin);
 
 
-
-        MenuButton btnback = new MenuButton("Back");
-
-
-        btnback.setOnMouseClicked(e->{subMenuOptions.hide();subMenuPause.show();});
-
-
         subMenuOptions = new SubMenu(this);
-        subMenuOptions.getChildren().addAll(bg, sfx, hBox,btnback);
+        subMenuOptions.getChildren().addAll(musicVolume, sfxVolume, hBox,btnBack);
     }
 
     /**

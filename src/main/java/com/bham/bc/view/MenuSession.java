@@ -24,48 +24,42 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  */
 public class MenuSession {
 
-    private static final int HEIGHT = 768;
-    private static final int WIDTH = 1024;
-
+    public static final int WIDTH = 1024;
+    public static final int HEIGHT = 768;
+    public static final int SUB_MENU_SIZE = 512;
 
     private AnchorPane mainPane;
-    private static Scene mainScene;
+    private Scene mainScene;
     private Stage mainStage;
-
-    private MainMenu mainMenu;
 
     private static PauseMenu pauseMenu = new PauseMenu();
 
     /**
      * Constructs the menu view manager
      */
-    public MenuSession() throws Exception {
+    public MenuSession() {
         mainPane = new AnchorPane();
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
-
-        mainMenu = new MainMenu(WIDTH, HEIGHT);
 
         initMainMenu();
         CustomStage customStage=new CustomStage(mainStage,mainScene,mainPane);
         customStage.createCommonTitlebar(mainPane,WIDTH,HEIGHT);
 
         mainPane.addEventFilter(NewGameEvent.START_GAME, this::createGameSession);
-
     }
 
     /**
      * Creates the main menu from where the user can start a new game session
      */
     private void initMainMenu() {
+        MainMenu mainMenu = new MainMenu();
+        MenuBackground menuBackground = new MenuBackground();
+
+        mainPane.getChildren().addAll(menuBackground, mainMenu);
+
         audioManager.createSequentialPlayer(TRACK.BREAK);
-
-
-        MenuBackground menuBackground = new MenuBackground(WIDTH, HEIGHT);
-        menuBackground.setTranslateY(35);
-        mainPane.getChildren().addAll(menuBackground,mainMenu);
-
         audioManager.play();
     }
 
@@ -127,9 +121,5 @@ public class MenuSession {
      */
     public Stage getMainStage() {
         return mainStage;
-    }
-
-    public static Scene getMainScene(){
-        return mainScene;
     }
 }

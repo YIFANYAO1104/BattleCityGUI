@@ -12,8 +12,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -23,8 +21,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,7 +55,6 @@ public class MainMenu extends AnchorPane {
 
     private NewGameEvent newGameEvent;
 
-    private Scene scene;
     private TableView tableView;
     private static ArrayList<Records> records=new ArrayList<>();
     private static JSONArray jsonArrayToFile=new JSONArray();
@@ -67,24 +62,18 @@ public class MainMenu extends AnchorPane {
 
     /**
      * Constructs an AnchorPane layout as the Main Menu
-     *
-     * @param width  menu window's length
-     * @param height menu window's height
      */
-    public MainMenu(double width, double height) throws Exception {
+    public MainMenu() {
         newGameEvent = new NewGameEvent(NewGameEvent.START_GAME);
-        setWidth(width);
-        setHeight(height);
+        setWidth(MenuSession.WIDTH);
+        setHeight(MenuSession.HEIGHT);
 
         initBgDim();
-        //initTitle();
 
         createSubMenuMain();
         createSubMenuMode();
         createSubMenuScores();
         createSubMenuSettings();
-
-
 
         subMenuMain.show();
     }
@@ -93,23 +82,11 @@ public class MainMenu extends AnchorPane {
      * Adds background dim to the menu
      */
     private void initBgDim() {
-        Rectangle bg = new Rectangle(getWidth(), getHeight());
-        bg.setFill(Color.GRAY);
-        bg.setOpacity(0.2);
-
-        getChildren().add(bg);
+        Rectangle dim = new Rectangle(getWidth(), getHeight());
+        dim.setFill(Color.NAVY);
+        dim.setOpacity(0.3);
+        getChildren().add(dim);
     }
-
-    /**
-     * Adds title to the menu
-     */
-//    private void initTitle() {
-//        Title title = new Title("T A N K 1 G A M E");
-//        title.setTranslateY(100);
-//        title.setTranslateX(getWidth()/2 - title.getWidth()/2);
-//
-//        getChildren().add(title);
-//    }
 
     /**
      * Creates the primary sub-menu for the main menu. This defines the behavior of all the
@@ -138,24 +115,23 @@ public class MainMenu extends AnchorPane {
      * single {@link com.bham.bc.view.GameSession} based on the selected parameters
      */
     private void createSubMenuMode() {
-
-
         MenuButton btnSurvival = new MenuButton("SURVIVAL");
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
-        MenuButton btnBack = new MenuButton("Back");
-        btnBack.setOnMouseClicked(e->{subMenuMode.hide();subMenuMain.show();});
+        MenuButton btnBack = new MenuButton("BACK");
+
         btnSurvival.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.SURVIVAL); newGameEvent.setMapType(MapType.Map1); btnSurvival.fireEvent(newGameEvent); });
         btnChallenge.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.CHALLENGE); newGameEvent.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(newGameEvent);});
+        btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
 
         subMenuMode = new SubMenu(this);
-        subMenuMode.getChildren().addAll(btnSurvival, btnChallenge,btnBack);
+        subMenuMode.getChildren().addAll(btnSurvival, btnChallenge, btnBack);
     }
 
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
      */
-    private void createSubMenuScores() throws Exception {
+    private void createSubMenuScores() {
         subMenuScores=new SubMenu(this);
         subMenuScores.setMinHeight(430);
         subMenuScores.setMinWidth(550);
@@ -218,15 +194,19 @@ public class MainMenu extends AnchorPane {
 
         //third step is to sort after add the new records
         sort();
-        writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
+        try {
+            writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //read from Json file
-        parseJsonFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
+        try {
+            parseJsonFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         ObservableList data = FXCollections.observableArrayList(records);
         tableView.setItems(data);
-
-
-
-
     }
 
     /**
@@ -461,11 +441,6 @@ public class MainMenu extends AnchorPane {
          */
         public void putIntoArray(){
             jsonArrayToFile.put(toJSON());
-
-
-
-
-
         }
     }
 
@@ -479,7 +454,6 @@ public class MainMenu extends AnchorPane {
         byte[] array=new byte[1024*1024];
         int num=fileInputStream.read(array);
         String s=new String(array);
-//        System.out.println(s);
         parse(s);
     }
 
@@ -537,66 +511,15 @@ public class MainMenu extends AnchorPane {
      * and allows the user to configure UI parameters, such as SFX or MUSIC volume
      */
     private void createSubMenuSettings() {
-        MenuButton btnBack = new MenuButton("Back");
-        MenuSlider bg=new MenuSlider("Volume:");
+        MenuSlider musicVolume = new MenuSlider("MUSIC VOLUME", 100);
+        MenuSlider sfxVolume = new MenuSlider("EFFECTS VOLUME", 100);
+        MenuButton btnBack = new MenuButton("BACK");
 
-        DoubleProperty doubleProperty1=bg.getValueProperty();
-        doubleProperty1.addListener((obsVal, oldVal, newVal) -> {
-            audioManager.setMusicVolume(newVal.doubleValue()/100);
-            bg.getNumOfVolume().setText(newVal.intValue()+"%");
-            bg.setSliderStyle();
+        musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
+        sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectVolume(newVal.doubleValue()/100));
+        btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
 
-
-        });
-        MenuSlider sfx=new MenuSlider("SFX Volume:");
-
-        DoubleProperty doubleProperty2=sfx.getValueProperty();
-        doubleProperty2.addListener((obsVal, oldVal, newVal) -> {
-            audioManager.setEffectVolume(newVal.doubleValue()/100);
-            sfx.getNumOfVolume().setText(newVal.intValue()+"%");
-            sfx.setSliderStyle();
-
-        });
-
-
-        btnBack.setOnMouseClicked(e->{subMenuSettings.hide();subMenuMain.show();});
         subMenuSettings = new SubMenu(this);
-        subMenuSettings.getChildren().addAll(bg,sfx,btnBack);
+        subMenuSettings.getChildren().addAll(musicVolume, sfxVolume, btnBack);
     }
-
-
-    /**
-     *  <h1>Title of the game</h1>
-     *
-     *  <p>This is a unique component provided by a parent {@link com.bham.bc.view.menu.MainMenu}.
-     *  This is because the Title should always be part of the Main Menu node.
-     */
-//    private static class Title extends StackPane {
-//
-//        private static final double WIDTH = 475;
-//        private static final double HEIGHT = 60;
-//
-//        /**
-//         * Constructs a title used in the Main Menu layout
-//         * @param name the title of the game
-//         * TODO: look for fancier/more game-like fonts
-//         */
-//        public Title(String name) {
-//            Rectangle bg = new Rectangle(WIDTH, HEIGHT);
-//            setWidth(WIDTH);
-//            setHeight(HEIGHT);
-//            bg.setStroke(Color.WHITE);
-//            bg.setStrokeWidth(3);
-//            bg.setFill(null);
-//
-//
-//            Text text = new Text(name);
-//            text.setFill(Color.WHITE);
-//            text.setFont(Font.font("Times New Roman", FontWeight.SEMI_BOLD, 50));
-//
-//            setAlignment(Pos.TOP_CENTER);
-//            getChildren().addAll(bg,text);
-//        }
-//    }
-
 }
