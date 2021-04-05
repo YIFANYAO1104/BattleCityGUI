@@ -5,6 +5,7 @@ import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
+import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.NewGameEvent;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
@@ -38,15 +39,16 @@ public class MenuSession {
      */
     public MenuSession() {
         mainPane = new AnchorPane();
+        mainPane.addEventFilter(NewGameEvent.START_GAME, this::createGameSession);
+        mainPane.getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/Style.css").toExternalForm());
+
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
 
         initMainMenu();
         CustomStage customStage=new CustomStage(mainStage,mainScene,mainPane);
-        customStage.createCommonTitlebar(mainPane,WIDTH,HEIGHT);
-
-        mainPane.addEventFilter(NewGameEvent.START_GAME, this::createGameSession);
+        customStage.createCommonTitlebar(mainPane, WIDTH, HEIGHT);
     }
 
     /**

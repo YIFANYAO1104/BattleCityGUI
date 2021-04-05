@@ -7,10 +7,12 @@
     -fx-lighten-color: #B0CAFF;
 }
 
+/* CUSTOM UBUNTU FONT */
 @font-face {
     font-family: 'Ubuntu';
     src: url('../Ubuntu-Medium.ttf');
 }
+
 /* SUB-MENU */
 .sub-menu {
     -fx-background-color: linear-gradient(to right, -fx-darken-color 0%, transparent 50%, -fx-darken-color 100%);
@@ -30,7 +32,7 @@
     -fx-effect: dropshadow(gaussian, -fx-darken-color, 8, .5, 0, 0);
 }
 .slider-label {
-    -fx-font-size: 26px;
+    -fx-font-size: 20px;
     -fx-text-fill: -fx-lighten-color;
     -fx-font-family: "Ubuntu";
     -fx-font-weight: bold;
@@ -42,6 +44,49 @@
     -fx-font-weight: bold;
 }
 
+/* LEADERBOARD */
+#sub-menu-scores {
+    -fx-background-image: url("img_3.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 680 500;
+    -fx-background-position: center;
+    -fx-effect: innershadow(gaussian, -fx-bg-color, 10, .5, 0, 0);
+    -fx-spacing: 25;
+    -fx-padding: 80 40 10 40;
+}
+
+.leaderboard-label {
+    -fx-font-size: 30px;
+    -fx-text-fill: -fx-secondary-color;
+    -fx-font-family: "Ubuntu";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, -fx-primary-color, 8, .6, 0, 0);
+}
+
+#scores-table, #scores-table * {
+    -fx-background-color: transparent;
+}
+
+#scores-table .table-column {
+    -fx-alignment: center;
+    -fx-font-size: 18px;
+    -fx-font-family: "Ubuntu";
+    -fx-text-fill: -fx-lighten-color;
+    -fx-font-weight: bold;
+}
+
+#scores-table .column-header .label {
+    -fx-font-size: 24px;
+    -fx-text-fill: -fx-secondary-color;
+    -fx-effect: dropshadow(gaussian, -fx-primary-color, 8, .6, 0, 0);
+}
+
+#scores-table .table-cell {
+    -fx-border-width: 0;
+    -fx-min-height: 30px;
+    -fx-border-color: transparent;
+}
+
 /* OTHER */
 #text-effect{
    -fx-font: 50px Tahoma;
@@ -50,40 +95,6 @@
    -fx-stroke-width: 1;
    -fx-alignment: center;
    -fx-font-smoothing-type: lcd;
-}
-.table-view {
-    -fx-background-color: transparent;
-
-}
-.table-column {
-    -fx-background-color: transparent;
-
-
-
-}
-#table .table-column{
-    -fx-alignment: center;
-    -fx-text-fill: white;
-}
-.table-view .table-cell {
-    -fx-border-width: 0;
-    -fx-border-color:transparent ;
-}
-
-.table-row-cell {
-    -fx-background-color:transparent;
-
-
-}
-.table-view .column-header-background {
-    -fx-background-color:transparent;
-}
-.table-view .filler {
-    -fx-background-color:transparent;
-}
-.table-view .column-header .label {
-    -fx-text-fill:  white;
-    -fx-font-weight: bold;
 }
 
 .scroll-bar:horizontal {
@@ -138,23 +149,10 @@
 
 
 #title{
-
     -fx-border-width: 1px 1px 3px 1px ;
-
     -fx-border-color: #2b2b2b;
-
-
-
 }
-#title{
 
-    -fx-border-width: 1px 1px 3px 1px ;
-
-    -fx-border-color: #2b2b2b;
-
-
-
-}
 
 #winClose{
     -fx-background-image:url("close.png");
