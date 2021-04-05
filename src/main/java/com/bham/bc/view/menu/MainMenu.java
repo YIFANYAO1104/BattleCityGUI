@@ -7,11 +7,11 @@ import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.NewGameEvent;
 import com.bham.bc.view.model.SubMenu;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -53,7 +53,7 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
 
-    private NewGameEvent newGameEvent;
+    private final NewGameEvent NEW_GAME_EVENT;
 
     private TableView tableView;
     private static ArrayList<Records> records=new ArrayList<>();
@@ -64,9 +64,9 @@ public class MainMenu extends AnchorPane {
      * Constructs an AnchorPane layout as the Main Menu
      */
     public MainMenu() {
-        newGameEvent = new NewGameEvent(NewGameEvent.START_GAME);
-        setWidth(MenuSession.WIDTH);
-        setHeight(MenuSession.HEIGHT);
+        NEW_GAME_EVENT = new NewGameEvent(NewGameEvent.START_GAME);
+        setMinWidth(MenuSession.WIDTH);
+        setMinHeight(MenuSession.HEIGHT);
 
         initBgDim();
 
@@ -99,8 +99,8 @@ public class MainMenu extends AnchorPane {
         MenuButton btnSettings = new MenuButton("SETTINGS");
         MenuButton btnQuit = new MenuButton("QUIT");
 
-        btnSolo.setOnMouseClicked(e -> { newGameEvent.setNumPlayers(1); subMenuMain.hide(); subMenuMode.show(); });
-        btnCoop.setOnMouseClicked(e -> { newGameEvent.setNumPlayers(2); subMenuMain.hide(); subMenuMode.show(); });
+        btnSolo.setOnMouseClicked(e -> { NEW_GAME_EVENT.setNumPlayers(1); subMenuMain.hide(); subMenuMode.show(); });
+        btnCoop.setOnMouseClicked(e -> { NEW_GAME_EVENT.setNumPlayers(2); subMenuMain.hide(); subMenuMode.show(); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
@@ -119,8 +119,8 @@ public class MainMenu extends AnchorPane {
         MenuButton btnChallenge = new MenuButton("CHALLENGE");
         MenuButton btnBack = new MenuButton("BACK");
 
-        btnSurvival.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.SURVIVAL); newGameEvent.setMapType(MapType.Map1); btnSurvival.fireEvent(newGameEvent); });
-        btnChallenge.setOnMouseClicked(e -> { newGameEvent.setMode(MODE.CHALLENGE); newGameEvent.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(newGameEvent);});
+        btnSurvival.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMode(MODE.SURVIVAL); NEW_GAME_EVENT.setMapType(MapType.Map1); btnSurvival.fireEvent(NEW_GAME_EVENT); });
+        btnChallenge.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMode(MODE.CHALLENGE); NEW_GAME_EVENT.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(NEW_GAME_EVENT);});
         btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
 
         subMenuMode = new SubMenu(this);
@@ -133,11 +133,13 @@ public class MainMenu extends AnchorPane {
      */
     private void createSubMenuScores() {
         subMenuScores=new SubMenu(this);
-        subMenuScores.setMinHeight(430);
-        subMenuScores.setMinWidth(550);
-        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",550,430,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        subMenuScores.setMinWidth(680);
+        subMenuScores.setMinHeight(500);
+        subMenuScores.setTranslateX(getMinWidth()*.5 - subMenuScores.getMinWidth()*.5);
+        subMenuScores.setPadding(new Insets(20, 2, 2, 2));
+
+        BackgroundImage image=new BackgroundImage(new Image("file:src/main/resources/GUIResources/img_3.png",subMenuScores.getMinWidth(),subMenuScores.getMinHeight(),false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         subMenuScores.setBackground(new Background(image));
-        subMenuScores.setTranslateY(200);
         Text text2 = new Text();
         text2.setText("SCORES");
         text2.setStyle(" -fx-font-size: 30px;\n" +
@@ -148,8 +150,6 @@ public class MainMenu extends AnchorPane {
         Glow glow1=new Glow();
         text2.setEffect(glow1);
         glow1.setLevel(1);
-        text2.setTranslateX(210);
-        text2.setTranslateY(40);
 
 
         // Stylesheet for menu table
@@ -494,15 +494,12 @@ public class MainMenu extends AnchorPane {
                 new PropertyValueFactory<>("score"));
         TableColumn<Records,String> date=new TableColumn<>("Date");
         date.setMinWidth(100);
-        date.setCellValueFactory(
-                new PropertyValueFactory<>("date"));
+        date.setCellValueFactory(new PropertyValueFactory<>("date"));
         tableView=new TableView();
         tableView.getColumns().addAll(rank,name,score,date);
 
         tableView.setId("table");
-        tableView.setMaxSize(395,300);
-        tableView.setTranslateX(80);
-        tableView.setTranslateY(30);
+        tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
     }
 
 

@@ -17,6 +17,10 @@ import javafx.scene.shape.Circle;
  * Represents the custom menu slider with labels for the slider name and its value
  */
 public class MenuSlider extends VBox {
+
+    public static final int WIDTH = 360;
+    public static final int HEIGHT = 80;
+
     private final Slider SLIDER;
 
     /**
@@ -26,6 +30,9 @@ public class MenuSlider extends VBox {
      * @param initialValue value the slider should be set to initially
      */
     public MenuSlider(String name, int initialValue) {
+        setMaxWidth(WIDTH);
+        setMaxHeight(HEIGHT);
+
         // The actual slider
         SLIDER = new Slider();
         SLIDER.setValue(initialValue);

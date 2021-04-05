@@ -1,6 +1,8 @@
 package com.bham.bc.view.model;
 
-import javafx.animation.TranslateTransition;
+import javafx.animation.Interpolator;
+import javafx.animation.ScaleTransition;
+import javafx.geometry.Pos;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -11,6 +13,11 @@ import javafx.util.Duration;
  * <p>Represents a layout of a sub-menu</p>
  */
 public class SubMenu extends VBox {
+
+    // Note: must be lower than MenuSession and GameSession size
+    public static final int WIDTH = 512;
+    public static final int HEIGHT = 384;
+
     private AnchorPane parent;
 
     /**
@@ -20,9 +27,18 @@ public class SubMenu extends VBox {
     public SubMenu(AnchorPane parent) {
         super(15);
         this.parent = parent;
-        setWidth(MenuButton.WIDTH);
-        setTranslateX(parent.getWidth());
-        setTranslateY(parent.getHeight()/3);
+        setMinWidth(WIDTH);
+        setMinHeight(HEIGHT);
+        setAlignment(Pos.CENTER);
+
+        setStyle("-fx-border-color: red;");
+
+        setTranslateX(parent.getMinWidth()*.5 - WIDTH*.5);
+        setTranslateY(parent.getMinHeight()*.5 - HEIGHT*.5);
+
+        // Initialize as hidden
+        setScaleX(.1);
+        setScaleY(.1);
     }
 
     /**
@@ -31,9 +47,21 @@ public class SubMenu extends VBox {
     public void show() {
         if(!parent.getChildren().contains(this)) {
             parent.getChildren().add(this);
-            TranslateTransition tt = new TranslateTransition(Duration.seconds(0.25), this);
-            tt.setToX(parent.getWidth() / 2 - getWidth() / 2);
-            tt.play();
+
+            // JavaFX doesn't support bezier curves with values out of range [0, 1]
+            // so we must concatenate 2 scale animations to achieve the wanted effect
+            ScaleTransition scaleUp = new ScaleTransition(Duration.millis(160), this);
+            scaleUp.setInterpolator(Interpolator.SPLINE(.3,.73,.35,.99));
+            scaleUp.setToX(1.15);
+            scaleUp.setToY(1.15);
+
+            ScaleTransition scaleDown = new ScaleTransition(Duration.millis(90), this);
+            scaleDown.setInterpolator(Interpolator.SPLINE(.76,.01,.96,.44));
+            scaleDown.setToX(1);
+            scaleDown.setToY(1);
+
+            scaleUp.setOnFinished(e -> scaleDown.play());
+            scaleUp.play();
         }
     }
 
@@ -42,10 +70,13 @@ public class SubMenu extends VBox {
      */
     public void hide() {
         if(parent.getChildren().contains(this)) {
-            TranslateTransition tt1 = new TranslateTransition(Duration.seconds(0.5), this);
-            tt1.setToX(parent.getWidth());
-            tt1.play();
-            tt1.setOnFinished(e -> parent.getChildren().remove(this));
+            ScaleTransition st = new ScaleTransition(Duration.millis(150), this);
+            st.setInterpolator(Interpolator.EASE_OUT);
+            st.setToX(.1);
+            st.setToY(.1);
+
+            st.setOnFinished(e -> parent.getChildren().remove(this));
+            st.play();
         }
     }
 }
