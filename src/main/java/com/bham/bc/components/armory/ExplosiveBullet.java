@@ -30,7 +30,7 @@ public class ExplosiveBullet extends Bullet {
      *
      * @param x      top left position in x axis
      * @param y      top left position in y axis
-     * @param angle  angle at which the bullet will move
+//     * @param angle  angle at which the bullet will move
      * @param side   ALLY or ENEMY side the bullet belongs to
      */
     public ExplosiveBullet(double x, double y, Point2D heading, Side side) {
@@ -77,5 +77,12 @@ public class ExplosiveBullet extends Bullet {
         hitBox.getTransforms().add(new Rotate(getAngle(), topLeft.getX() + regionRadius.getX() /2,topLeft.getY() + regionRadius.getY() /2));
 
         return hitBox;
+    }
+
+    @Override
+    public double getHitboxRadius() {
+        Point2D p1 = new Point2D(MAX_BOUNDWIDTH,MAX_BOUNDWIDTH);
+        double n1 = Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
+        return n1;
     }
 }

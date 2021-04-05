@@ -92,6 +92,13 @@ abstract public class Bullet extends MovingEntity {
      */
     public abstract void destroy();
 
+
+    public double getHitboxRadius() {
+        Point2D p1 = super.getRadius();
+        double n1 = Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
+        return n1;
+    }
+
     @Override
     public boolean handleMessage(Telegram msg) { return false; }
 
