@@ -96,6 +96,7 @@ abstract public class Bullet extends MovingEntity {
     public double getHitboxRadius() {
         Point2D p1 = super.getRadius();
         double n1 = Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
+        if(n1<20.0) return 20.0;                // 20.0 means the mini check hitbox radius
         return n1;
     }
 
