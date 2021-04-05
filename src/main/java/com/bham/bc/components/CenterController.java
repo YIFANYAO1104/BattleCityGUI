@@ -267,6 +267,9 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 //        characters.forEach(character -> character.handleAll(characters, bullets));
         characters.forEach(character -> character.handleAll(
                 gameMap.getMapDivision().CalculateNeighborsArray(character,40)));
+        bullets.forEach(bullet -> bullet.handleAll(
+                gameMap.getMapDivision().CalculateNeighborsArray(bullet,bullet.getHitboxRadius())
+        ));
 
         bullets.removeIf(b -> !b.exists());
         characters.removeIf(c -> !c.exists());

@@ -1,10 +1,14 @@
 package com.bham.bc.components.armory;
 
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
+
+import java.util.List;
 
 
 /**
@@ -96,7 +100,7 @@ abstract public class Bullet extends MovingEntity {
     public double getHitboxRadius() {
         Point2D p1 = super.getRadius();
         double n1 = Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
-        if(n1<20.0) return 20.0;                // 20.0 means the mini check hitbox radius
+        if(n1<42.0) return 42.0;                // 20.0 means the mini check hitbox radius
         return n1;
     }
 
@@ -105,4 +109,23 @@ abstract public class Bullet extends MovingEntity {
 
     @Override
     public String toString() { return "Bullet"; }
+
+    public void handleAll(List<BaseGameEntity> en1){
+        en1.forEach(b1 -> {
+            try {
+                handle((GameCharacter)b1);
+            }catch (Exception e){}
+        });
+    }
+
+    protected void handle(GameCharacter gameCharacter) {
+        if(gameCharacter.intersects(this)) {
+            if(getSide() != gameCharacter.getSide() && gameCharacter.getImmuneTicks() == 0) {
+                gameCharacter.changeHP(-this.getDamage());
+            }
+            destroy();
+        }
+    }
+
+
 }
