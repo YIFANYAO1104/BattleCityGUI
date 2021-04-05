@@ -15,10 +15,10 @@ import javafx.util.Duration;
 public class SubMenu extends VBox {
 
     // Note: must be lower than MenuSession and GameSession size
-    public static final int WIDTH = 512;
+    public static final int WIDTH = 700;
     public static final int HEIGHT = 384;
 
-    private AnchorPane parent;
+    private final AnchorPane PARENT;
 
     /**
      * Constructs an AnchorPane as layout for the sub-menu
@@ -26,15 +26,12 @@ public class SubMenu extends VBox {
      */
     public SubMenu(AnchorPane parent) {
         super(15);
-        this.parent = parent;
+        PARENT = parent;
         setMinWidth(WIDTH);
         setMinHeight(HEIGHT);
         setAlignment(Pos.CENTER);
-
-        setStyle("-fx-border-color: red;");
-
-        setTranslateX(parent.getMinWidth()*.5 - WIDTH*.5);
-        setTranslateY(parent.getMinHeight()*.5 - HEIGHT*.5);
+        alignCenter();
+        getStyleClass().add("sub-menu");
 
         // Initialize as hidden
         setScaleX(.1);
@@ -42,11 +39,19 @@ public class SubMenu extends VBox {
     }
 
     /**
+     * Aligns itself at the center of the parent node
+     */
+    public void alignCenter() {
+        setTranslateX(PARENT.getMinWidth()*.5 - getMinWidth()*.5);
+        setTranslateY(PARENT.getMinHeight()*.5 - getMinHeight()*.5);
+    }
+
+    /**
      * Animates the appearance of the sub-menu
      */
     public void show() {
-        if(!parent.getChildren().contains(this)) {
-            parent.getChildren().add(this);
+        if(!PARENT.getChildren().contains(this)) {
+            PARENT.getChildren().add(this);
 
             // JavaFX doesn't support bezier curves with values out of range [0, 1]
             // so we must concatenate 2 scale animations to achieve the wanted effect
@@ -69,13 +74,13 @@ public class SubMenu extends VBox {
      * Animates the disappearance of the sub-menu
      */
     public void hide() {
-        if(parent.getChildren().contains(this)) {
+        if(PARENT.getChildren().contains(this)) {
             ScaleTransition st = new ScaleTransition(Duration.millis(150), this);
             st.setInterpolator(Interpolator.EASE_OUT);
             st.setToX(.1);
             st.setToY(.1);
 
-            st.setOnFinished(e -> parent.getChildren().remove(this));
+            st.setOnFinished(e -> PARENT.getChildren().remove(this));
             st.play();
         }
     }

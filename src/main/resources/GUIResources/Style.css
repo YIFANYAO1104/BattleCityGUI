@@ -2,29 +2,43 @@
 * {
     -fx-primary-color: #135ADD;
     -fx-secondary-color: #649ACC;
-    -fx-darken-color: navy;
-    -fx-lighen-color: skyblue;
+    -fx-bg-color: #080A1E;
+    -fx-darken-color: #00030A;
+    -fx-lighten-color: #B0CAFF;
+}
+
+@font-face {
+    font-family: 'Ubuntu';
+    src: url('../Ubuntu-Medium.ttf');
+}
+/* SUB-MENU */
+.sub-menu {
+    -fx-background-color: linear-gradient(to right, -fx-darken-color 0%, transparent 50%, -fx-darken-color 100%);
+    -fx-background-radius: 70px;
 }
 
 /* MENU SLIDER */
-#slider .track {
-    -fx-background-color: -fx-primary-color;
-    -fx-effect: innershadow(gaussian, -fx-darken-color, 4, .5, 0, 0);
+.menu-slider {
+    -fx-effect: dropshadow(gaussian, -fx-bg-color, 2, .5, 0, 0);
 }
-#slider .thumb {
+.slider .track {
+    -fx-background-color: -fx-primary-color;
+    -fx-effect: innershadow(gaussian, -fx-darken-color, 4, .1, 0, 0);
+}
+.slider .thumb {
     -fx-background-color: -fx-primary-color;
     -fx-effect: dropshadow(gaussian, -fx-darken-color, 8, .5, 0, 0);
 }
-#slider-label {
-    -fx-font-size: 25px;
-    -fx-text-fill:WHITE;
-    -fx-font-family: "Arial Narrow";
+.slider-label {
+    -fx-font-size: 26px;
+    -fx-text-fill: -fx-lighten-color;
+    -fx-font-family: "Ubuntu";
     -fx-font-weight: bold;
 }
-#value-label {
-    -fx-font-size: 15px;
-    -fx-text-fill: WHITE;
-    -fx-font-family: "Arial Narrow";
+.value-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: -fx-lighten-color;
+    -fx-font-family: "Ubuntu";
     -fx-font-weight: bold;
 }
 
@@ -198,21 +212,4 @@
     -fx-font-weight: bold;
     -fx-fill: #ffd505;
     -fx-stroke: #ba7b16;
-}
-
-#buttons {
-    -fx-background-radius: 10px;
-    -fx-font-size: 17px;
-    -fx-text-fill: white;
-    -fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-    -fx-background-color: linear-gradient( #50421f, #2b240f);
-    -fx-effect: dropshadow( three-pass-box , rgba(127, 108, 108, 0.6), 5, 0.0 , 0 , 1 );
-
-
-}
-#buttons:hover {
-    -fx-background-radius: 10px;
-    -fx-background-color: linear-gradient( #2b240f,#50421f);
-    -fx-font-size: 18.3px;
 }

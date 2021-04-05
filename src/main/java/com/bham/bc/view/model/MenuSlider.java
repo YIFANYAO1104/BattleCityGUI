@@ -5,6 +5,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
@@ -14,12 +16,15 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 
 /**
- * Represents the custom menu slider with labels for the slider name and its value
+ * <h1>Menu Slider</h1>
+ *
+ * <p>Custom menu slider which is represented through <i>HBox</i> node provided by JavaFX. This slider contains
+ * slider body (track), slider ball (thumb), slider label (name) and its value label (%).</p>
  */
-public class MenuSlider extends VBox {
+public class MenuSlider extends HBox {
 
-    public static final int WIDTH = 360;
-    public static final int HEIGHT = 80;
+    public static final int WIDTH = 440;
+    public static final int HEIGHT = 50;
 
     private final Slider SLIDER;
 
@@ -31,30 +36,33 @@ public class MenuSlider extends VBox {
      */
     public MenuSlider(String name, int initialValue) {
         setMaxWidth(WIDTH);
-        setMaxHeight(HEIGHT);
+        setPrefHeight(HEIGHT);
+        setAlignment(Pos.CENTER_LEFT);
+        setSpacing(20);
+        setPadding(new Insets(0, 0, 0, 15));
+        getStyleClass().add("menu-slider");
 
         // The actual slider
         SLIDER = new Slider();
         SLIDER.setValue(initialValue);
-        SLIDER.setEffect(new Glow(.6));
-        SLIDER.setId("slider");
+        SLIDER.setEffect(new Glow(.8));
+        SLIDER.setPrefWidth(WIDTH*.5);
+        SLIDER.getStyleClass().add("slider");
         SLIDER.valueProperty().addListener((obsVal, oldVal, newVal) -> SLIDER.lookup(".track").setStyle(String.format("-fx-background-color: linear-gradient(to right, -fx-primary-color %d%%, -fx-secondary-color %d%%);", newVal.intValue(), newVal.intValue())));
 
         // Label for slider
         Label sliderLabel = new Label();
         sliderLabel.setText(name);
-        sliderLabel.setId("slider-label");
+        sliderLabel.setPrefWidth(WIDTH*.25);
+        sliderLabel.getStyleClass().add("slider-label");
 
         // Label for slider's value
         Label valueLabel = new Label();
         valueLabel.textProperty().bind(SLIDER.valueProperty().asString("%.0f%%"));
-        valueLabel.setId("value-label");
-
-        // Container for slider and its value
-        HBox sliderAndValue = new HBox(SLIDER, valueLabel);
+        valueLabel.getStyleClass().add("value-label");
 
         // Add all children
-        getChildren().addAll(sliderLabel, sliderAndValue);
+        getChildren().addAll(sliderLabel, SLIDER, valueLabel);
     }
 
     /**

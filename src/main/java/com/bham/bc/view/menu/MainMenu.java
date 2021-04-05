@@ -508,9 +508,9 @@ public class MainMenu extends AnchorPane {
      * and allows the user to configure UI parameters, such as SFX or MUSIC volume
      */
     private void createSubMenuSettings() {
-        MenuSlider musicVolume = new MenuSlider("MUSIC VOLUME", 100);
-        MenuSlider sfxVolume = new MenuSlider("EFFECTS VOLUME", 100);
-        MenuButton btnBack = new MenuButton("BACK");
+        MenuSlider musicVolume = new MenuSlider("Music", 100);
+        MenuSlider sfxVolume = new MenuSlider("Effects", 100);
+        MenuButton btnBack = new MenuButton("Back");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
         sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectVolume(newVal.doubleValue()/100));
