@@ -1,6 +1,6 @@
 package com.bham.bc.entity.ai.director;
 
-import com.bham.bc.entity.ai.*;
+import com.bham.bc.entity.ai.behavior.*;
 import java.util.Arrays;
 
 public class Director {
