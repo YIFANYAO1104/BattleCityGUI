@@ -62,8 +62,6 @@ public class CustomStage extends Stage{
     private Label btnMin;
     private Label btnClose;
     public static int selected=0;
-    public Label score;
-    public Label HP;
 
 
 
@@ -163,7 +161,7 @@ public class CustomStage extends Stage{
             selected=new_val.intValue();
             typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#525fea, #091376);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#2a3ade, #091376);");
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(0);
@@ -195,7 +193,7 @@ public class CustomStage extends Stage{
 
 
             }else if (typeOf.equals("TYPE 4")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#b17123, #873e05);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#d4b288, #de8709);");
 
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
@@ -233,7 +231,7 @@ public class CustomStage extends Stage{
         if (setMenu==null){
             hBox=new HBox(5,changeSkin,btnMin,btnClose);
         }else {
-            hBox=new HBox(5,HP,score,setMenu,changeSkin,btnMin,btnClose);
+            hBox=new HBox(5,setMenu,changeSkin,btnMin,btnClose);
         }
 
         gpTitle.getChildren().addAll(lbTitle,hBox);
@@ -405,24 +403,8 @@ public class CustomStage extends Stage{
 
     public void createTitleBar(AnchorPane root, int Width, int Height){
         startMenuIcon();
-        HP=new Label("HP:"+"100");
-        HP.setStyle(" -fx-font-size: 16px;\n" +
-                "-fx-text-fill: white;\n"+
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;\n" +
-                "\n" +
-                "    -fx-stroke: gold;");
-        score=new Label("Score: "+"999");
-        score.setStyle(" -fx-font-size: 16px;\n" +
-                "-fx-text-fill: white;\n"+
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;\n" +
-                "\n" +
-                "    -fx-stroke: gold;");
-        titleBar(root,Width,Height,-390,changePauseSkin);
+        titleBar(root,Width,Height,-540,changePauseSkin);
         changePauseSkin.getSelectionModel().select(selected);
-
-
 
 
 
