@@ -191,7 +191,7 @@ public class PauseMenu extends AnchorPane {
     public void createSkinChoose(){
         CustomStage.types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
         changeSkin=new ChoiceBox(FXCollections.observableArrayList(
-                "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
+                "Classic Blue","Classic Green","Classic Black","Classic Orange","Classic Gold"
         ));
 
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
