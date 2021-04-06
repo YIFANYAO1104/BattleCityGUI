@@ -140,7 +140,7 @@ abstract public class GameCharacter extends MovingEntity {
     public void handleAll(List<BaseGameEntity> en1){
         en1.forEach(b1 -> {
             try {
-                handle((Bullet) b1);
+//                handle((Bullet) b1);
                 handle((GameCharacter)b1);
             }catch (Exception e){}
         });
@@ -191,5 +191,7 @@ abstract public class GameCharacter extends MovingEntity {
         this.hp-=200;
     }
 
-
+    public int getImmuneTicks() {
+        return immuneTicks;
+    }
 }

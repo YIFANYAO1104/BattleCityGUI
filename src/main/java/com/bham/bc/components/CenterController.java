@@ -261,6 +261,10 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
                 } catch (Exception e){}
         }));
 
+        bullets.forEach(bullet -> bullet.handleAll(
+                mapDivision.CalculateNeighborsArray(bullet,bullet.getHitboxRadius())
+        ));
+
         triggerSystem.handleAll(characters, gameMap.getInteractiveObstacles());
 
         characters.forEach(character -> character.handleAll(mapDivision.CalculateNeighborsArray(character,40)));

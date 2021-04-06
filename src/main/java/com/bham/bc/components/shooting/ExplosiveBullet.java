@@ -78,4 +78,11 @@ public class ExplosiveBullet extends Bullet {
 
         return hitBox;
     }
+
+    @Override
+    public double getHitboxRadius() {
+        Point2D p1 = new Point2D(MAX_BOUNDWIDTH,MAX_BOUNDWIDTH);
+        double n1 = Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
+        return n1;
+    }
 }
