@@ -161,7 +161,7 @@ public class CustomStage extends Stage{
             selected=new_val.intValue();
             typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#3a49e2, #091376);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#525fea, #091376);");
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(0);
@@ -193,7 +193,7 @@ public class CustomStage extends Stage{
 
 
             }else if (typeOf.equals("TYPE 4")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#d4b288, #a56406);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#b17123, #873e05);");
 
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
