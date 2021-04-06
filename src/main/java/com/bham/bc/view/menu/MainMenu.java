@@ -157,6 +157,7 @@ public class MainMenu extends AnchorPane {
     private void createSubMenuSettings() {
         MenuSlider musicVolume = new MenuSlider("MUSIC", 100);
         MenuSlider sfxVolume = new MenuSlider("EFFECTS", 100);
+
         MenuButton btnBack = new MenuButton("BACK");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));

@@ -86,19 +86,12 @@ public class PauseMenu extends AnchorPane {
         btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuPause.show(); });
 
 
-        createSkinChoose();
-        Label skin = new Label("Skin Choose: ");
-        skin.setStyle(" -fx-font-size: 18px;\n" +
-                "-fx-text-fill: white;\n"+
-                "    -fx-font-family: \"Arial Narrow\";\n" +
-                "    -fx-font-weight: bold;\n" +
-                "\n" +
-                "    -fx-stroke: gold;");
-        HBox hBox = new HBox(skin, changeSkin);
+
+
 
 
         subMenuSettings = new SubMenu(this);
-        subMenuSettings.getChildren().addAll(musicVolume, sfxVolume, hBox, btnBack);
+        subMenuSettings.getChildren().addAll(musicVolume, sfxVolume, btnBack);
     }
 
     /**
@@ -147,46 +140,5 @@ public class PauseMenu extends AnchorPane {
         ft.setOnFinished(e -> gamePane.getChildren().remove(this));
     }
 
-    /**
-     * to choose the skin style from pauseMenu
-     */
-    public void createSkinChoose(){
-        CustomStage.types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4"};
-        changeSkin=new ChoiceBox(FXCollections.observableArrayList(
-                "Classic Blue","Classic Green","Classic Black","Classic Orange"
-        ));
 
-        changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
-
-
-            CustomStage.typeOf =  CustomStage.types[new_val.intValue()];
-            if ( CustomStage.typeOf.equals("TYPE 1")){
-
-
-                CustomStage.changePauseSkin.getSelectionModel().select(0);
-
-
-            }else if ( CustomStage.typeOf.equals("TYPE 2")){
-
-
-                CustomStage.changePauseSkin.getSelectionModel().select(1);
-
-            }else if ( CustomStage.typeOf.equals("TYPE 3")){
-
-
-                CustomStage.changePauseSkin.getSelectionModel().select(2);
-
-            }else if ( CustomStage.typeOf.equals("TYPE 4")){
-
-
-                CustomStage.changePauseSkin.getSelectionModel().select(3);
-
-            }else if ( CustomStage.typeOf.equals("TYPE 5")){
-
-                CustomStage.changePauseSkin.getSelectionModel().select(4);
-
-            }
-        });
-        changeSkin.setOnMouseClicked(e -> CustomStage.setMenu.requestFocus());
-    }
 }

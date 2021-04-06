@@ -73,39 +73,7 @@ public class CustomStage extends Stage{
 
     }
 
-    public void startMenuIcon(){
-        setMenu = new Label("");
-        setMenu.setId("setMenu");
-        setMenu.setPrefWidth(29);
-        setMenu.setPrefHeight(40);
 
-
-
-        setMenu.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-
-                  MenuSession.showOptionsMenu(gamePane,GameSession.gameTimer);
-            }
-        });
-        setMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-
-                if (event.getCode() == KeyCode.ENTER) {
-                    System.out.println("    You pressed Enter!");
-                }
-
-            }
-        });
-
-
-
-
-
-
-
-    }
 
     /**
      * create titler bar template
@@ -163,9 +131,7 @@ public class CustomStage extends Stage{
             if (typeOf.equals("TYPE 1")){
                 gpTitle.setStyle(" -fx-background-color: linear-gradient(#2a3ade, #091376);");
                 lbTitle.requestFocus();
-                if (changeSkin==changePauseSkin){
-                    PauseMenu.changeSkin.getSelectionModel().select(0);
-                }
+
 
 
 
@@ -176,9 +142,7 @@ public class CustomStage extends Stage{
 
                 gpTitle.setStyle(" -fx-background-color: linear-gradient(#61a2b1, #2A5058);");
                 lbTitle.requestFocus();
-                if (changeSkin==changePauseSkin){
-                    PauseMenu.changeSkin.getSelectionModel().select(1);
-                }
+
 
 
 
@@ -186,9 +150,7 @@ public class CustomStage extends Stage{
 
                 gpTitle.setStyle(" -fx-background-color: linear-gradient(#636060, #000000);");
                 lbTitle.requestFocus();
-                if (changeSkin==changePauseSkin){
-                    PauseMenu.changeSkin.getSelectionModel().select(2);
-                }
+
 
 
 
@@ -196,9 +158,7 @@ public class CustomStage extends Stage{
                 gpTitle.setStyle(" -fx-background-color: linear-gradient(#d4b288, #de8709);");
 
                 lbTitle.requestFocus();
-                if (changeSkin==changePauseSkin){
-                    PauseMenu.changeSkin.getSelectionModel().select(3);
-                }
+
 
 
 
@@ -402,8 +362,8 @@ public class CustomStage extends Stage{
      */
 
     public void createTitleBar(AnchorPane root, int Width, int Height){
-        startMenuIcon();
-        titleBar(root,Width,Height,-540,changePauseSkin);
+
+        titleBar(root,Width,Height,-560,changePauseSkin);
         changePauseSkin.getSelectionModel().select(selected);
 
 
