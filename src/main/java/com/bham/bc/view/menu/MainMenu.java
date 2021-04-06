@@ -28,6 +28,8 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuMode;
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
+    private SubMenu subMenuCScore;
+    private SubMenu subMenuSScore;
 
     private final NewGameEvent NEW_GAME_EVENT;
     /**
@@ -42,7 +44,7 @@ public class MainMenu extends AnchorPane {
 
         createSubMenuMain();
         createSubMenuMode();
-        createSubMenuScores();
+        createSubMenuTwoScores();
         createSubMenuSettings();
 
         subMenuMain.show();
@@ -97,12 +99,25 @@ public class MainMenu extends AnchorPane {
         subMenuMode.getChildren().addAll(btnSurvival, btnChallenge, btnBack);
     }
 
+    private void createSubMenuTwoScores(){
+        subMenuScores=new SubMenu(this);
+        MenuButton challengeScore=new MenuButton("Challenge");
+        MenuButton survivalScore=new MenuButton("Survival");
+        subMenuScores.getChildren().addAll(challengeScore,survivalScore);
+        subMenuCScore=new SubMenu(this);
+        subMenuSScore=new SubMenu(this);
+        createSubMenuScores(subMenuCScore,"Challenge");
+        createSubMenuScores(subMenuSScore,"Survival");
+        challengeScore.setOnMouseClicked(e->{subMenuScores.hide();subMenuCScore.show();});
+        survivalScore.setOnMouseClicked(e->{subMenuScores.hide();subMenuSScore.show();});
+    }
+
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
      */
-    private void createSubMenuScores() {
-        subMenuScores = new SubMenu(this);
+    private void createSubMenuScores(SubMenu subMenuScores,String mode) {
+
 
         // Increase leaderboard size
         subMenuScores.setMinWidth(680);
@@ -114,7 +129,7 @@ public class MainMenu extends AnchorPane {
         subMenuScores.setId("sub-menu-scores");
 
         // Set up leaderboard label
-        Label leaderboardLabel = new Label("SURVIVAL");
+        Label leaderboardLabel = new Label(mode);
         leaderboardLabel.getStyleClass().add("leaderboard-label");
 
         // Create columns for leaderboard table
