@@ -155,7 +155,7 @@ public class CustomStage extends Stage{
 
 
             }else if (typeOf.equals("TYPE 4")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#d4b288, #de8709);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#aa640c, #8b4b07);");
 
                 lbTitle.requestFocus();
 
