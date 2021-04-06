@@ -5,19 +5,27 @@ import java.util.Arrays;
 
 public class Director {
 
-    private final StateMachine stateMachine;
-    private final int STATETIMELENGTH; // The base length at which each state lasts in the game
+    private final StateMachine stateMachine; // The State Machine that the director uses
+    private final int STATETIMELENGTH = 30; // The base length at which each state lasts in the game
+    private final int MAXSTATETIMEMOD = 20; // The maximum change in the length of each state
     private int stateTimeModifier; // The time at which states are increased/decreased. This value is incremented each loop of the FSM
     private BooleanCondition stateTimeLimit;
     private BooleanCondition playerStressLimit;
     private OrCondition endPeak;
 
+    /**
+     * Constructor for the Director. It sets the inital values and generates the FSM that the Director will use.
+     */
     public Director(){
-        this.STATETIMELENGTH = 60; //TODO: FIGURE OUT IF THIS IS A GOOD TIME
         this.stateTimeModifier = 0;
         stateMachine = createFSM();
     }
 
+    /**
+     * Creates the Finite State Machine for the Director AI,
+     * Generates all the states and the transitions and keeps track of the conditions
+     * @return the finished State Machine
+     */
     private StateMachine createFSM(){
         // Create States of the Finite State Machine
         State buildUpState = new State(new Action[]{Action.BUILDUP}, null);
@@ -42,27 +50,80 @@ public class Director {
         return new StateMachine(buildUpState);
     }
 
+    /**
+     * Updates the Director AI for each step of the game.
+     * It updates each condition and finds which functions must be performed as according to the State Machine
+     */
     public void update(){
 
-        //TODO: stateTimeLimit.setTestValue(checkTime());
-        //TODO: playerStressLimit.setTestValue(checkPlayerStressLimit());
+        stateTimeLimit.setTestValue(checkTime());
+        playerStressLimit.setTestValue(checkPlayerStressLimit());
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case BUILDUP:
-                    // TODO: buildUp()
+                    buildUp();
                     break;
                 case PEAK:
-                    // TODO: peak();
+                    peak();
                     break;
                 case RELAX:
-                    // TODO: relax();
+                    relax();
                     break;
                 case INCREMENTLOOP:
-                    // TODO: incrementTimeModifier();
+                    incrementTimeModifier();
                     break;
             }
         });
+    }
+
+    /**
+     * The Build Up state should slowly increase the threat and difficulty for the player.
+     * It does this by spawning more enemies, or spawning stronger enemies
+     */
+    private void buildUp(){
+
+    }
+
+    /**
+     * The Peak state is when no more enemies are spawned as the player has reached their limit
+     * The player needs to clean up the remaining enemies that are left on the screen
+     */
+    private void peak(){
+
+    }
+
+    /**
+     * The relax state is where only a small steady amount of enemies is spawned, to give the player a break.
+     * The time of this state will decrease over time to give the player less of a break
+     */
+    private void relax(){
+
+    }
+
+    /**
+     * Increases the time modifier up to a limit
+     */
+    private void incrementTimeModifier(){
+        if (this.stateTimeModifier < this.MAXSTATETIMEMOD){
+            this.stateTimeModifier += 4;
+        }
+    }
+
+    /**
+     * Checks if the time limit for a state has been reached
+     * @return
+     */
+    private boolean checkTime(){
+        return false;
+    }
+
+    /**
+     * Checks if the player has reached their stress limit
+     * @return
+     */
+    private boolean checkPlayerStressLimit(){
+        return false;
     }
 }
