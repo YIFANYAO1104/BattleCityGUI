@@ -161,7 +161,7 @@ public class CustomStage extends Stage{
             selected=new_val.intValue();
             typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#1b2cd5, #091376);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#2a3ade, #091376);");
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(0);
