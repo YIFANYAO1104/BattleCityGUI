@@ -62,6 +62,8 @@ public class CustomStage extends Stage{
     private Label btnMin;
     private Label btnClose;
     public static int selected=0;
+    public Label score;
+    public Label HP;
 
 
 
@@ -231,7 +233,7 @@ public class CustomStage extends Stage{
         if (setMenu==null){
             hBox=new HBox(5,changeSkin,btnMin,btnClose);
         }else {
-            hBox=new HBox(5,setMenu,changeSkin,btnMin,btnClose);
+            hBox=new HBox(5,HP,score,setMenu,changeSkin,btnMin,btnClose);
         }
 
         gpTitle.getChildren().addAll(lbTitle,hBox);
@@ -403,8 +405,24 @@ public class CustomStage extends Stage{
 
     public void createTitleBar(AnchorPane root, int Width, int Height){
         startMenuIcon();
-        titleBar(root,Width,Height,-540,changePauseSkin);
+        HP=new Label("HP:"+"100");
+        HP.setStyle(" -fx-font-size: 16px;\n" +
+                "-fx-text-fill: white;\n"+
+                "    -fx-font-family: \"Arial Narrow\";\n" +
+                "    -fx-font-weight: bold;\n" +
+                "\n" +
+                "    -fx-stroke: gold;");
+        score=new Label("Score: "+"999");
+        score.setStyle(" -fx-font-size: 16px;\n" +
+                "-fx-text-fill: white;\n"+
+                "    -fx-font-family: \"Arial Narrow\";\n" +
+                "    -fx-font-weight: bold;\n" +
+                "\n" +
+                "    -fx-stroke: gold;");
+        titleBar(root,Width,Height,-390,changePauseSkin);
         changePauseSkin.getSelectionModel().select(selected);
+
+
 
 
 
