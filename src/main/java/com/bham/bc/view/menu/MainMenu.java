@@ -30,6 +30,8 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuSettings;
     private SubMenu subMenuCScore;
     private SubMenu subMenuSScore;
+    private TableView<RecordsHandler.Records> tableViewC = new TableView<>();
+    private TableView<RecordsHandler.Records> tableViewS = new TableView<>();
 
     private final NewGameEvent NEW_GAME_EVENT;
     /**
@@ -99,6 +101,9 @@ public class MainMenu extends AnchorPane {
         subMenuMode.getChildren().addAll(btnSurvival, btnChallenge, btnBack);
     }
 
+    /**
+     * create score subMenu (including challenge and survival)
+     */
     private void createSubMenuTwoScores(){
         subMenuScores=new SubMenu(this);
         MenuButton challengeScore=new MenuButton("Challenge");
@@ -110,28 +115,47 @@ public class MainMenu extends AnchorPane {
         createSubMenuScores(subMenuSScore,"Survival");
         challengeScore.setOnMouseClicked(e->{subMenuScores.hide();subMenuCScore.show();});
         survivalScore.setOnMouseClicked(e->{subMenuScores.hide();subMenuSScore.show();});
+        // Get the saved data from record handler
+        RecordsHandler recordsHandler = new RecordsHandler();
+        ObservableList<RecordsHandler.Records> survivalData= recordsHandler.createSampleRecords();
+        handleRecords(subMenuCScore,tableViewC,survivalData);
+        handleRecords(subMenuSScore,tableViewS,survivalData);
     }
 
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
      */
-    private void createSubMenuScores(SubMenu subMenuScores,String mode) {
+    private void createSubMenuScores(SubMenu subMenu,String mode) {
 
 
         // Increase leaderboard size
-        subMenuScores.setMinWidth(680);
-        subMenuScores.setMinHeight(500);
-        subMenuScores.alignCenter();
+        subMenu.setMinWidth(680);
+        subMenu.setMinHeight(500);
+        subMenu.alignCenter();
 
         // We want a different style from a regular sub-menu
-        subMenuScores.getStyleClass().clear();
-        subMenuScores.setId("sub-menu-scores");
+        subMenu.getStyleClass().clear();
+        subMenu.setId("sub-menu-scores");
 
         // Set up leaderboard label
         Label leaderboardLabel = new Label(mode);
         leaderboardLabel.getStyleClass().add("leaderboard-label");
 
+
+        subMenu.setOnMouseClicked(e -> { subMenu.hide(); subMenuMain.show(); });
+
+
+        subMenu.getChildren().addAll(leaderboardLabel);
+    }
+
+    /**
+     * help subMenu handle records
+     * @param subMenu
+     * @param tableView
+     * @param survivalData to feed tableview
+     */
+    public void handleRecords(SubMenu subMenu,TableView tableView,ObservableList<RecordsHandler.Records> survivalData){
         // Create columns for leaderboard table
         TableColumn<RecordsHandler.Records, String> rank, name, score, date;
         rank = new TableColumn<>("Rank");
@@ -149,20 +173,15 @@ public class MainMenu extends AnchorPane {
         score.setCellValueFactory(new PropertyValueFactory<>("score"));
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        // Get the saved data from record handler
-        RecordsHandler recordsHandler = new RecordsHandler();
-        ObservableList<RecordsHandler.Records> survivalData= recordsHandler.createSampleRecords();
 
-        TableView<RecordsHandler.Records> tableView = new TableView<>();
-        tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
+
+        tableView.setMaxSize(subMenu.getMinWidth(), subMenu.getMinHeight());
         tableView.getColumns().addAll(rank, name, score, date);
         tableView.setItems(survivalData);
         tableView.setId("scores-table");
+        tableView.setOnMouseClicked(e -> { subMenu.hide(); subMenuMain.show(); });
+        subMenu.getChildren().addAll(tableView);
 
-        subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
-        tableView.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
-
-        subMenuScores.getChildren().addAll(leaderboardLabel, tableView);
     }
 
     /**
