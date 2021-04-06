@@ -161,7 +161,7 @@ public class CustomStage extends Stage{
             selected=new_val.intValue();
             typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#2a3ade, #091376);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#3a49e2, #091376);");
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(0);
@@ -184,7 +184,7 @@ public class CustomStage extends Stage{
 
             }else if (typeOf.equals("TYPE 3")){
 
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#323030, #000000);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#636060, #000000);");
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(2);
@@ -193,21 +193,11 @@ public class CustomStage extends Stage{
 
 
             }else if (typeOf.equals("TYPE 4")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#c6a173, #c2790c);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#d4b288, #a56406);");
 
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(3);
-                }
-
-
-
-            }else if (typeOf.equals("TYPE 5")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#d9ca6f, #ebf307);");
-
-                lbTitle.requestFocus();
-                if (changeSkin==changePauseSkin){
-                    PauseMenu.changeSkin.getSelectionModel().select(4);
                 }
 
 
