@@ -54,14 +54,14 @@ public class CustomStage extends Stage{
     public static String[] types;
     private HBox hBox;
     public static ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
-            "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
+            "Classic Blue","Classic Green","Classic Black","Classic Orange"
     ));;
     public static ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
-            "Classic Black","Classic Grey","Classic Blue","Classic Orange","Classic Gold"
+            "Classic Blue","Classic Green","Classic Black","Classic Orange"
     ));;
     private Label btnMin;
     private Label btnClose;
-    public static int selected=4;
+    public static int selected=0;
 
 
 
@@ -161,9 +161,7 @@ public class CustomStage extends Stage{
             selected=new_val.intValue();
             typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar05.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
-
-                gpTitle.setBackground(new Background(image4));
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#3a49e2, #091376);");
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(0);
@@ -174,9 +172,9 @@ public class CustomStage extends Stage{
 
 
             }else if (typeOf.equals("TYPE 2")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar02.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                gpTitle.setBackground(new Background(image4));
+
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#61a2b1, #2A5058);");
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(1);
@@ -185,9 +183,8 @@ public class CustomStage extends Stage{
 
 
             }else if (typeOf.equals("TYPE 3")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
-                gpTitle.setBackground(new Background(image4));
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#636060, #000000);");
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(2);
@@ -196,23 +193,11 @@ public class CustomStage extends Stage{
 
 
             }else if (typeOf.equals("TYPE 4")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar04.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(#d4b288, #a56406);");
 
-                gpTitle.setBackground(new Background(image4));
                 lbTitle.requestFocus();
                 if (changeSkin==changePauseSkin){
                     PauseMenu.changeSkin.getSelectionModel().select(3);
-                }
-
-
-
-            }else if (typeOf.equals("TYPE 5")){
-                BackgroundImage image4=new BackgroundImage(new Image("file:src/main/resources/GUIResources/menuBar03.png",Width,34,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
-
-                gpTitle.setBackground(new Background(image4));
-                lbTitle.requestFocus();
-                if (changeSkin==changePauseSkin){
-                    PauseMenu.changeSkin.getSelectionModel().select(4);
                 }
 
 
