@@ -2,12 +2,9 @@ package com.bham.bc.components.characters;
 
 import com.bham.bc.components.BackendServices;
 import com.bham.bc.utils.GeometryEnhanced;
+import com.bham.bc.utils.RandomEnhanced;
 import javafx.geometry.Point2D;
-import javafx.scene.transform.Rotate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Random;
 
 import static com.bham.bc.utils.GeometryEnhanced.*;
@@ -19,8 +16,6 @@ import static java.lang.Math.sin;
  */
 public class Steering {
 //--------------------------- Constants ----------------------------------
-
-    static private Random rand = new Random();
 
     /**
      * the radius of the constraining circle for the wander behavior
@@ -39,28 +34,20 @@ public class Steering {
     /**
      * a pointer to the owner of this instance
      */
-    private GameCharacter m_pRaven_Bot;
+    private GameCharacter agent;
     /**
      * pointer to the world data
      */
-    private BackendServices m_pWorld;
+    private BackendServices world;
     /**
      * the steering force created by the combined effect of all the selected
      * behaviors
      */
-    private Point2D m_vSteeringForce = new Point2D(0,0);
-    //these can be used to keep track of friends, pursuers, or prey
-    private GameCharacter m_pTargetAgent1;
-    private GameCharacter m_pTargetAgent2;
+    private Point2D steeringForce = new Point2D(0,0);
     /**
-     * the current target
+     * the current target for seek
      */
-    private Point2D m_vTarget = new Point2D(0,0);
-    /**
-     * the current position on the wander circle the agent is attempting to
-     * steer towards
-     */
-    private Point2D m_vWanderTarget;
+    private Point2D target = new Point2D(0,0);
     /**
      * explained above
      */
@@ -76,7 +63,7 @@ public class Steering {
     private double m_dWeightArrive = 1.0;
 
     public void setTarget(Point2D t) {
-        m_vTarget = t;
+        target = t;
     }
 
     /**
@@ -89,7 +76,7 @@ public class Steering {
         double MagnitudeSoFar = RunningTot.magnitude();
 
         //calculate how much steering force remains to be used by this vehicle
-        double MagnitudeRemaining = m_pRaven_Bot.getMaxForce() - MagnitudeSoFar;
+        double MagnitudeRemaining = agent.getMaxForce() - MagnitudeSoFar;
 
         //return false if there is no more force left to use
         if (MagnitudeRemaining <= 1E-8) {
@@ -133,12 +120,12 @@ public class Steering {
     public Point2D seek(final Point2D target) {
 
         Point2D DesiredVelocity = target
-                                    .subtract(m_pRaven_Bot.getCenterPosition())
+                                    .subtract(agent.getCenterPosition())
                                     .normalize()
-                                    .multiply(m_pRaven_Bot.getMaxSpeed());
+                                    .multiply(agent.getMaxSpeed());
 //        System.out.println("DesiredVelocity = "+DesiredVelocity);
 
-        return DesiredVelocity.subtract(m_pRaven_Bot.getVelocity());
+        return DesiredVelocity.subtract(agent.getVelocity());
     }
 
     /**
@@ -146,7 +133,7 @@ public class Steering {
      * with a zero velocity
      */
     public Point2D arrive(final Point2D target) {
-        Point2D ToTarget = target.subtract(m_pRaven_Bot.getCenterPosition());
+        Point2D ToTarget = target.subtract(agent.getCenterPosition());
 
         //calculate the distance to the target
         double dist = ToTarget.magnitude();
@@ -156,30 +143,30 @@ public class Steering {
             double speed = dist /0.3;//the bigger
 
             //make sure the velocity does not exceed the max
-            speed = Math.min(speed, m_pRaven_Bot.getMaxSpeed());
+            speed = Math.min(speed, agent.getMaxSpeed());
 
             //from here proceed just like Seek except we don't need to normalize
             //the ToTarget vector because we have already gone to the trouble
             //of calculating its length: dist.
             Point2D DesiredVelocity = ToTarget.multiply(speed).multiply(1./dist);
 
-            return DesiredVelocity.subtract(m_pRaven_Bot.getVelocity());
+            return DesiredVelocity.subtract(agent.getVelocity());
         }
 
         return new Point2D(0, 0);
     }
 
     public Point2D arrive_improved(final Point2D target) {
-        Point2D ToTarget = target.subtract(m_pRaven_Bot.getCenterPosition());
+        Point2D ToTarget = target.subtract(agent.getCenterPosition());
 
         //calculate the distance to the target
         double dist = ToTarget.magnitude();
 
         if (dist > 0) {
             double radius = 10;
-            Point2D DesiredVelocity = ToTarget.multiply(m_pRaven_Bot.getMaxSpeed()/radius);
+            Point2D DesiredVelocity = ToTarget.multiply(agent.getMaxSpeed()/radius);
 
-            return DesiredVelocity.subtract(m_pRaven_Bot.getVelocity());
+            return DesiredVelocity.subtract(agent.getVelocity());
         }
 
         return new Point2D(0, 0);
@@ -213,8 +200,8 @@ public class Steering {
 //        return Target.subtract(m_pRaven_Bot.getPosition());
 //    }
     public Point2D wander_improved() {
-        Point2D circleCenter = m_pRaven_Bot.getCenterPosition()
-                .add(m_pRaven_Bot.getHeading()
+        Point2D circleCenter = agent.getCenterPosition()
+                .add(agent.getHeading()
                         .normalize()
                         .multiply(m_dWanderDistance));
 
@@ -222,15 +209,11 @@ public class Steering {
                 .add(
                         rotate(new Point2D(0,0),
                                 new Point2D(m_dWanderRadius,0),
-                                randDouble(0,360))
+                                RandomEnhanced.randDouble(0,360))
                 );
 
         //and steer towards it
         return seek(target);
-    }
-
-    private double randDouble(double rangeMin, double rangeMax){
-        return rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
     }
     /* .......................................................
 
@@ -242,19 +225,14 @@ public class Steering {
     public Steering(GameCharacter agent) {
 
 //        m_pWorld = world;
-        m_pRaven_Bot = agent;
+        this.agent = agent;
 
         m_dWanderDistance = WanderDist;
         m_dWanderJitter = WanderJitterPerSec;
         m_dWanderRadius = WanderRad;
 
         //stuff for the wander behavior
-        double theta = rand.nextDouble() * Math.PI * 2;
-
-        //create a vector to a target position on the wander circle
-        m_vWanderTarget = new Point2D(m_dWanderRadius * cos(theta),
-                m_dWanderRadius * sin(theta));
-
+//        double theta = rand.nextDouble() * Math.PI * 2;
     }
 
     //---------------------------------dtor ----------------------------------
@@ -265,16 +243,16 @@ public class Steering {
      */
     public Point2D calculate() {
         //reset the steering force
-        m_vSteeringForce = new Point2D(0,0);
+        steeringForce = new Point2D(0,0);
 
         //tag neighbors if any of the following 3 group behaviors are switched on
 //        if (On(separation)) {
 //            m_pWorld.TagRaven_BotsWithinViewRange(m_pRaven_Bot, m_dViewDistance);
 //        }
 
-        m_vSteeringForce = calculatePrioritized();
+        steeringForce = calculatePrioritized();
 
-        return m_vSteeringForce;
+        return steeringForce;
     }
 
     private Point2D calculatePrioritized() {
@@ -304,38 +282,38 @@ public class Steering {
 
         if (seekOn) {
 //            System.out.println("seekOn");
-            force = seek(m_vTarget).multiply(m_dWeightSeek);
-            Point2D temp = accumulateForce(m_vSteeringForce, force);
+            force = seek(target).multiply(m_dWeightSeek);
+            Point2D temp = accumulateForce(steeringForce, force);
             if (GeometryEnhanced.isZero(temp)) {
-                return m_vSteeringForce;
+                return steeringForce;
             } else {
-                m_vSteeringForce = m_vSteeringForce.add(temp);
+                steeringForce = steeringForce.add(temp);
             }
         }
 
         if (arriveOn) {
 //            System.out.println("arriveOn");
-            force = arrive_improved(m_vTarget).multiply(m_dWeightArrive);
+            force = arrive_improved(target).multiply(m_dWeightArrive);
 
-            Point2D temp = accumulateForce(m_vSteeringForce, force);
+            Point2D temp = accumulateForce(steeringForce, force);
             if (GeometryEnhanced.isZero(temp)) {
-                return m_vSteeringForce;
+                return steeringForce;
             } else {
-                m_vSteeringForce = m_vSteeringForce.add(temp);
+                steeringForce = steeringForce.add(temp);
             }
         }
 
         if (wanderOn) {
             force = wander_improved().multiply(m_dWeightWander);
 
-            Point2D temp = accumulateForce(m_vSteeringForce, force);
+            Point2D temp = accumulateForce(steeringForce, force);
             if (GeometryEnhanced.isZero(temp)) {
-                return m_vSteeringForce;
+                return steeringForce;
             } else {
-                m_vSteeringForce = m_vSteeringForce.add(temp);
+                steeringForce = steeringForce.add(temp);
             }
         }
-        return m_vSteeringForce;
+        return steeringForce;
     }
 
     private boolean seekOn = false;

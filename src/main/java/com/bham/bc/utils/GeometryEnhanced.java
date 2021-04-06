@@ -86,6 +86,8 @@ public class GeometryEnhanced {
         return new Point2D(-p.getY(), p.getX());
     }
 
+
+
     //rotate a point around center point, anti-clockwise angle, 31ms in test
 //    static public Point2D rotate(Point2D center, Point2D p, double antiDegrees){
 //        Rotate r = new Rotate();

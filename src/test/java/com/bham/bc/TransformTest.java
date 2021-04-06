@@ -1,8 +1,10 @@
 package com.bham.bc;
 
 import com.bham.bc.utils.GeometryEnhanced;
+import com.bham.bc.utils.RandomEnhanced;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.paint.Color;
 import org.junit.Test;
 import javafx.scene.transform.*;
 
@@ -96,7 +98,17 @@ public class TransformTest {
         assertTrue(GeometryEnhanced.isZero(localPos.subtract(new Point2D(1,1))));
     }
 
+    @Test
+    public void randomPointTest(){
+        int windowHeight = 800;
+        int windowWidth = 800;
+        double radius = 300;
+        Point2D center = new Point2D(windowWidth/2,windowHeight/2);
 
+        for (int i = 0;i<1000;i++){
+            Point2D p = RandomEnhanced.randomPointInCircle(center,radius);
+            assertTrue(p.distance(center)<=radius);
+        }
 
-
+    }
 }
