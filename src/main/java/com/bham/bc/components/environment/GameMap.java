@@ -240,7 +240,7 @@ public class GameMap {
         });
 
         bullets.forEach(b1->{
-            mapDivision.CalculateNeighborsArray(b1,32.0).forEach(o1->{
+            mapDivision.CalculateNeighborsArray(b1,b1.getHitboxRadius()).forEach(o1->{
                 try {
                     GenericObstacle oo1 = (GenericObstacle)o1;
                     oo1.handleBullet(b1);
