@@ -117,9 +117,9 @@ public class MainMenu extends AnchorPane {
         survivalScore.setOnMouseClicked(e->{subMenuScores.hide();subMenuSScore.show();});
         // Get the saved data from record handler
         RecordsHandler recordsHandler = new RecordsHandler();
-        ObservableList<RecordsHandler.Records> survivalData= recordsHandler.createSampleRecords();
-        handleRecords(subMenuCScore,tableViewC,survivalData);
-        handleRecords(subMenuSScore,tableViewS,survivalData);
+        ObservableList<RecordsHandler.Records> sampleData= recordsHandler.createSampleRecords();
+        handleRecords(subMenuCScore,tableViewC,sampleData);
+        handleRecords(subMenuSScore,tableViewS,sampleData);
     }
 
     /**
@@ -153,9 +153,9 @@ public class MainMenu extends AnchorPane {
      * help subMenu handle records
      * @param subMenu
      * @param tableView
-     * @param survivalData to feed tableview
+     * @param data to feed tableview
      */
-    public void handleRecords(SubMenu subMenu,TableView tableView,ObservableList<RecordsHandler.Records> survivalData){
+    public void handleRecords(SubMenu subMenu,TableView tableView,ObservableList<RecordsHandler.Records> data){
         // Create columns for leaderboard table
         TableColumn<RecordsHandler.Records, String> rank, name, score, date;
         rank = new TableColumn<>("Rank");
@@ -177,7 +177,7 @@ public class MainMenu extends AnchorPane {
 
         tableView.setMaxSize(subMenu.getMinWidth(), subMenu.getMinHeight());
         tableView.getColumns().addAll(rank, name, score, date);
-        tableView.setItems(survivalData);
+        tableView.setItems(data);
         tableView.setId("scores-table");
         tableView.setOnMouseClicked(e -> { subMenu.hide(); subMenuMain.show(); });
         subMenu.getChildren().addAll(tableView);
