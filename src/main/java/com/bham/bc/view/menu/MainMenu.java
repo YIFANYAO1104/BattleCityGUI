@@ -5,16 +5,13 @@ import com.bham.bc.components.mode.MODE;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.*;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.effect.Glow;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 

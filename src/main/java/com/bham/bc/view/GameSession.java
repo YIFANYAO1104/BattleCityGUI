@@ -5,6 +5,7 @@ import com.bham.bc.components.mode.MODE;
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
 
+import com.bham.bc.view.model.MenuSlider;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -52,6 +53,8 @@ public class GameSession {
         gc = canvas.getGraphicsContext2D();
 
         gamePane = new AnchorPane(canvas);
+        gamePane.getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/Style.css").toExternalForm());
+
         gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
         cmr = new Camera(gc);
 

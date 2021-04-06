@@ -8,13 +8,10 @@ import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.SubMenu;
 import javafx.animation.FadeTransition;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.EventHandler;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -33,7 +30,7 @@ import static com.bham.bc.audio.AudioManager.audioManager;
 public class PauseMenu extends AnchorPane {
 
     private SubMenu subMenuPause;
-    public SubMenu subMenuOptions;
+    public SubMenu subMenuSettings;
     public Rectangle bg;
     public static ChoiceBox changeSkin;
 
@@ -42,8 +39,8 @@ public class PauseMenu extends AnchorPane {
      * Constructs a pause menu based on Game window's size parameters
      */
     public PauseMenu() {
-        setWidth(Constants.WINDOW_WIDTH);
-        setHeight(Constants.WINDOW_HEIGHT);
+        setMinWidth(Constants.WINDOW_WIDTH);
+        setMinHeight(Constants.WINDOW_HEIGHT);
 
         initBgDim();
         createSubMenuPause();
@@ -64,44 +61,44 @@ public class PauseMenu extends AnchorPane {
      * Creates layout for primary view for pause menu
      */
     private void createSubMenuPause() {
-        MenuButton btnResume = new MenuButton("Resume");
-        MenuButton btnOptions = new MenuButton("Options");
-        MenuButton btnEndGame = new MenuButton("Quit");
+        MenuButton btnResume = new MenuButton("RESUME");
+        MenuButton btnSettings = new MenuButton("SETTINGS");
+        MenuButton btnEndGame = new MenuButton("RETURN TO MENU");
 
-        btnResume.setOnMouseClicked(e->{MenuSession.showPauseMenu(GameSession.gamePane,GameSession.gameTimer);});
-        btnOptions.setOnMouseClicked(e->{subMenuPause.hide();subMenuOptions.show();});
-        btnEndGame.setOnMouseClicked(e->{System.exit(0);});
+        btnResume.setOnMouseClicked(e -> { MenuSession.showPauseMenu(GameSession.gamePane,GameSession.gameTimer); });
+        btnSettings.setOnMouseClicked(e -> { subMenuPause.hide(); subMenuSettings.show(); });
+        btnEndGame.setOnMouseClicked(e -> { System.exit(0); });
 
         subMenuPause = new SubMenu(this);
-        subMenuPause.getChildren().addAll(btnResume, btnOptions, btnEndGame);
+        subMenuPause.getChildren().addAll(btnResume, btnSettings, btnEndGame);
     }
 
     /**
      * Creates layout for options in the pause menu
      */
     private void createSubMenuOptions() {
-        MenuSlider musicVolume = new MenuSlider("MUSIC VOLUME", 100);
-        MenuSlider sfxVolume = new MenuSlider("EFFECTS VOLUME", 100);
+        MenuSlider musicVolume = new MenuSlider("MUSIC", 100);
+        MenuSlider sfxVolume = new MenuSlider("EFFECTS", 100);
         MenuButton btnBack = new MenuButton("BACK");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
         sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectVolume(newVal.doubleValue()/100));
-        btnBack.setOnMouseClicked(e -> { subMenuOptions.hide();subMenuPause.show(); });
+        btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuPause.show(); });
 
 
         createSkinChoose();
-        Label skin=new Label("Skin Choose: ");
+        Label skin = new Label("Skin Choose: ");
         skin.setStyle(" -fx-font-size: 18px;\n" +
                 "-fx-text-fill: white;\n"+
                 "    -fx-font-family: \"Arial Narrow\";\n" +
                 "    -fx-font-weight: bold;\n" +
                 "\n" +
                 "    -fx-stroke: gold;");
-        HBox hBox=new HBox(skin,changeSkin);
+        HBox hBox = new HBox(skin, changeSkin);
 
 
-        subMenuOptions = new SubMenu(this);
-        subMenuOptions.getChildren().addAll(musicVolume, sfxVolume, hBox,btnBack);
+        subMenuSettings = new SubMenu(this);
+        subMenuSettings.getChildren().addAll(musicVolume, sfxVolume, hBox, btnBack);
     }
 
     /**
@@ -131,10 +128,8 @@ public class PauseMenu extends AnchorPane {
         ft.setToValue(0.7);
 
         ft.play();
-        subMenuOptions.show();
+        subMenuSettings.show();
     }
-
-
 
     /**
      * Hides pause menu with fade out transition
@@ -146,7 +141,7 @@ public class PauseMenu extends AnchorPane {
         ft.setToValue(0);
 
         ft.play();
-        subMenuOptions.hide();
+        subMenuSettings.hide();
         subMenuPause.hide();
 
         ft.setOnFinished(e -> gamePane.getChildren().remove(this));
@@ -191,22 +186,7 @@ public class PauseMenu extends AnchorPane {
                 CustomStage.changePauseSkin.getSelectionModel().select(4);
 
             }
-
-
-
         });
-        changeSkin.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                CustomStage.setMenu.requestFocus();
-            }
-        });
+        changeSkin.setOnMouseClicked(e -> CustomStage.setMenu.requestFocus());
     }
-
-
-
-
-
-
-
 }

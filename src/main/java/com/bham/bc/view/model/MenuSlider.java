@@ -23,7 +23,7 @@ import javafx.scene.shape.Circle;
  */
 public class MenuSlider extends HBox {
 
-    public static final int WIDTH = 440;
+    public static final int WIDTH = 480;
     public static final int HEIGHT = 50;
 
     private final Slider SLIDER;
