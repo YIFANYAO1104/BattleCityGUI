@@ -1,5 +1,6 @@
 package com.bham.bc.view.menu;
 
+import com.bham.bc.application.Main;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.view.CustomStage;
 import com.bham.bc.view.GameSession;
@@ -63,14 +64,14 @@ public class PauseMenu extends AnchorPane {
     private void createSubMenuPause() {
         MenuButton btnResume = new MenuButton("RESUME");
         MenuButton btnSettings = new MenuButton("SETTINGS");
-        MenuButton btnEndGame = new MenuButton("RETURN TO MENU");
+        MenuButton btnReturn = new MenuButton("RETURN TO MENU");
 
         btnResume.setOnMouseClicked(e -> { MenuSession.showPauseMenu(GameSession.gamePane,GameSession.gameTimer); });
         btnSettings.setOnMouseClicked(e -> { subMenuPause.hide(); subMenuSettings.show(); });
-        btnEndGame.setOnMouseClicked(e -> { System.exit(0); });
+        btnReturn.setOnMouseClicked(e -> { GameSession.gameStage.hide();CustomStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);Main.manager.getMainStage().show(); });
 
         subMenuPause = new SubMenu(this);
-        subMenuPause.getChildren().addAll(btnResume, btnSettings, btnEndGame);
+        subMenuPause.getChildren().addAll(btnResume, btnSettings, btnReturn);
     }
 
     /**

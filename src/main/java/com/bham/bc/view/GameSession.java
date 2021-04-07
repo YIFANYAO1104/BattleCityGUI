@@ -26,7 +26,7 @@ public class GameSession {
 
     public static AnchorPane gamePane;
     private Scene gameScene;
-    private Stage gameStage;
+    public static Stage gameStage;
     private Canvas canvas;
     private GraphicsContext gc;
 
