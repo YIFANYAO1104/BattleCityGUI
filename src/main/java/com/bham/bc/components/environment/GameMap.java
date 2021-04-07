@@ -18,9 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
-import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.utils.Constants.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -145,7 +143,7 @@ public class GameMap {
                 radius += step;
                 enemySpawnAreas[i].setRadius(radius);
                 // if((allObstacles.stream().noneMatch(o -> !o.getAttributes().contains(Attribute.ENEMY_SPAWN_AREA) && o.intersectsShape(enemySpawnAreas[finalI])))) break;
-                if(interactiveObstacles.stream().anyMatch(o -> o.intersectsShape(enemySpawnAreas[finalI]))) break; // TODO replace with above
+                if(interactiveObstacles.stream().anyMatch(o -> o.intersects(enemySpawnAreas[finalI]))) break; // TODO replace with above
             }
             // Apply padding to enemy spawn territory
             enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - GameCharacter.MAX_RADIUS));

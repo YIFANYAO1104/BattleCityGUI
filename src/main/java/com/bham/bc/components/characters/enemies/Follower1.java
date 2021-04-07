@@ -59,7 +59,7 @@ public class Follower1 extends Enemy {
 
     @Override
     public void update() {
-        if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
+        if(intersects(new Circle(destination.getX(), destination.getY(), 1))) {
             if(!pathEdges.isEmpty()) {
                 System.out.println("new des");
                 destination = pathEdges.removeFirst().getDestination();

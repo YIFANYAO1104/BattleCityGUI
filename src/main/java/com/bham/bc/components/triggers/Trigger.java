@@ -6,76 +6,51 @@ package com.bham.bc.components.triggers;
 
 
 import com.bham.bc.components.environment.Obstacle;
-import com.bham.bc.components.environment.maploaders.Tileset;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
-    /**
-     * Every trigger owns a trigger region. If an entity comes within this
-     * region the trigger is activated
-     */
-    private TriggerRegion triggerRegion;
-    /**
-     * if this is true the trigger will be removed from the game
-     */
-    private boolean toBeRemoved;
-    /**
-     * it's convenient to be able to deactivate certain types of triggers on an
-     * event. Therefore a trigger can only be triggered when this value is true
-     * (respawning triggers make good use of this facility)
-     */
-    private boolean active;
-
+    protected boolean exists;
+    protected boolean active;
     protected int currentFrame;
 
-    protected void setToBeRemovedFromGame() {
-        toBeRemoved = true;
-    }
 
-    protected void setInactive() {
-        active = false;
-    }
-
-    protected void setActive() {
+    public Trigger(int x, int y) {
+        super(GetNextValidID(), x, y);
+        exists = true;
         active = true;
+
+        currentFrame = 0;
+        entityImages = getDefaultImage();
     }
 
     /**
      * returns true if the entity given by a position and bounding radius is
      * overlapping the trigger region
      */
-    protected boolean rectIsTouchingTrigger(Point2D EntityPos, Point2D EntityRadius) {
-        if (triggerRegion != null) {
-            return triggerRegion.isTouching(EntityPos, EntityRadius);
-        }
-        return false;
+    // TODO: remove, no usage of it
+    public boolean intersects(Point2D position, Point2D radius) {
+        return (new Rectangle(position.getX(), position.getY(), radius.getX(), radius.getY())).intersects(getHitBox().getBoundsInLocal());
     }
 
-    //child classes use one of these methods to initialize the trigger region
-    protected void addRectangularTriggerRegion(Point2D pos, Point2D radius) {
-        triggerRegion = new TriggerRegionRectangle(pos, radius);
+    @Override
+    public boolean intersects(Shape shape) {
+        return shape.intersects(getHitBox().getBoundsInLocal());
     }
 
-    protected void addRectangularTriggerRegionSurrounded(Point2D imgPos, Point2D imgRadius, Point2D regionRadius) {
-        Point2D topLeft = imgPos.subtract(regionRadius.subtract(imgRadius).multiply(0.5));
-        triggerRegion = new TriggerRegionRectangle(topLeft, regionRadius);
-    }
-
-    public Trigger(int x, int y) {
-        super(GetNextValidID(), x, y);
-        toBeRemoved = false;
-        active = true;
-        triggerRegion = null;
-        currentFrame = 0;
-        entityImages = getDefaultImage();
+    @Override
+    public boolean intersects(BaseGameEntity entity) {
+        return intersects(entity.getHitBox());
     }
 
     abstract protected Image[] getDefaultImage();
@@ -85,40 +60,31 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
      * trigger's region of influence. If it is then the trigger will be
      * triggered and the appropriate action will be taken.
      */
-    public abstract void tryTriggerC(GameCharacter entity);
+    public abstract void handleCharacter(GameCharacter entity);
 
-
-    public abstract void tryTriggerO(Obstacle entity);
+    public abstract void handleObstacle(Obstacle entity);
 
     /**
      * called each update-step of the game. This methods updates any internal
      * state the trigger may have
      */
-    @Override
-    public abstract void update();
 
-    public boolean isToBeRemoved() {
-        return toBeRemoved;
-    }
-
-    public boolean isActive() {
+    public boolean active() {
         return active;
     }
 
-    public void renderRegion(GraphicsContext gc) {
-        triggerRegion.render(gc);
+    public boolean exists() {
+        return exists;
     }
 
 
+    protected abstract void renderRegion(GraphicsContext gc);
 
     @Override
-    public void render(GraphicsContext gc) {
-        gc.drawImage(entityImages[0], this.x, this.y);
-        renderRegion(gc);
-    }
+    public abstract void update();
 
     @Override
-    public Shape getHitBox() {
+    public ItemType getItemType() {
         return null;
     }
 
@@ -129,6 +95,18 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
     @Override
     public String toString() {
-        return null;
+        return "Trigger";
     }
+
+    // TODO: remove
+    //child classes use one of these methods to initialize the trigger region
+//    protected void addRectangularTriggerRegion(Point2D pos, Point2D radius) {
+//        //triggerRegion = new TriggerRegionRectangle(pos, radius);
+//        region = new Rectangle(pos.getX(), pos.getY(), radius.getX(), radius.getY());
+//    }
+
+//    protected void addRectangularTriggerRegionSurrounded(Point2D imgPos, Point2D imgRadius, Point2D regionRadius) {
+//        Point2D topLeft = imgPos.subtract(regionRadius.subtract(imgRadius).multiply(0.5));
+//        triggerRegion = new TriggerRegionRectangle(topLeft, regionRadius);
+//    }
 }

@@ -13,7 +13,7 @@ public class FindActiveTrigger extends TerminationCondition{
         //if the extrainfo field is pointing to a giver-trigger, test to make sure
         //it is active and that it is of the correct type.
         if ((node.getExtraInfo() != null)
-                && node.getExtraInfo().isActive()
+                && node.getExtraInfo().active()
                 && (node.getExtraInfo().getItemType() == target)) {
             return true;
         }

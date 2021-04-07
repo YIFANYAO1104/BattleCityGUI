@@ -108,7 +108,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     @Override
     public boolean intersectsObstacles(Rectangle path) {
-        return gameMap.getInteractiveObstacles().stream().anyMatch(o -> o.intersectsShape(path));
+        return gameMap.getInteractiveObstacles().stream().anyMatch(o -> o.intersects(path));
     }
 
     @Override

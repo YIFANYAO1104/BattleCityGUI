@@ -105,7 +105,7 @@ public abstract class Enemy extends GameCharacter {
     public void search(ItemType itemType) {
         navigate(itemType);
 
-        if(intersectsShape(new Circle(destination.getX(), destination.getY(), 1))) {
+        if(intersects(new Circle(destination.getX(), destination.getY(), 1))) {
             if(!pathEdges.isEmpty()) {
                 destination = pathEdges.removeFirst().getDestination();
                 steering.setTarget(destination);
