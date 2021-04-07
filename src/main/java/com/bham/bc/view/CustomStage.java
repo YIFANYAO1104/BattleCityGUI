@@ -53,10 +53,10 @@ public class CustomStage extends Stage{
     public static HBox gpTitle;
     public static String[] types;
     private HBox hBox;
-    public static ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
+    public  ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
             "Classic Blue","Classic Green","Classic Black","Classic Orange"
     ));;
-    public static ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
+    public  ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
             "Classic Blue","Classic Green","Classic Black","Classic Orange"
     ));;
     private Label btnMin;

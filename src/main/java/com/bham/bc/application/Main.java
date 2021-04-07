@@ -5,12 +5,10 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    public static MenuSession manager;
-
     @Override
     public void start(Stage primaryStage) {
         try {
-            manager = new MenuSession();
+            MenuSession manager = new MenuSession();
             primaryStage = manager.getMainStage();
             primaryStage.show();
         } catch(Exception e) {

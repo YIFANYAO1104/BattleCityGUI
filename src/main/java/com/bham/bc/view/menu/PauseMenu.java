@@ -16,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
@@ -33,7 +34,7 @@ public class PauseMenu extends AnchorPane {
     private SubMenu subMenuPause;
     public SubMenu subMenuSettings;
     public Rectangle bg;
-    public static ChoiceBox changeSkin;
+    public static Stage primaryStage;
 
 
     /**
@@ -68,7 +69,10 @@ public class PauseMenu extends AnchorPane {
 
         btnResume.setOnMouseClicked(e -> { MenuSession.showPauseMenu(GameSession.gamePane,GameSession.gameTimer); });
         btnSettings.setOnMouseClicked(e -> { subMenuPause.hide(); subMenuSettings.show(); });
-        btnReturn.setOnMouseClicked(e -> { GameSession.gameStage.hide();CustomStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);Main.manager.getMainStage().show(); });
+        btnReturn.setOnMouseClicked(e -> { GameSession.gameStage.hide();
+            System.out.println(CustomStage.selected);MenuSession manager = new MenuSession();
+            primaryStage = manager.getMainStage();
+            primaryStage.show(); });
 
         subMenuPause = new SubMenu(this);
         subMenuPause.getChildren().addAll(btnResume, btnSettings, btnReturn);
