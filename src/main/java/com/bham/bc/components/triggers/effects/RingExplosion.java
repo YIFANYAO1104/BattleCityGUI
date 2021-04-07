@@ -30,17 +30,16 @@ public class RingExplosion extends Trigger {
      * @param side ALLY or ENEMY side trigger belongs to
      */
     public RingExplosion(Point2D centerPosition, double damage, Side side) {
-        super(BaseGameEntity.GetNextValidID(), (int) (centerPosition.getX() - SIZE/2), (int) (centerPosition.getY() - SIZE/2));
+        super((int) (centerPosition.getX() - SIZE/2), (int) (centerPosition.getY() - SIZE/2));
         this.damage = damage;
         this.side = side;
         currentFrame = 0;
-        initImages();
     }
 
     /**
      * Initializes all the images for the explosion
      */
-    private void initImages() {
+    protected Image[] getDefaultImage() {
         String baseUrl = "file:src/main/resources/img/characters/effects/blueRingExplosion";
         entityImages = new Image[19];
 
@@ -48,6 +47,7 @@ public class RingExplosion extends Trigger {
             String url = baseUrl + i + ".png";
             entityImages[i-1] = new Image(url, SIZE, SIZE, false, false);
         }
+        return entityImages;
     }
 
     //TODO: Adjust size according to currentFrame

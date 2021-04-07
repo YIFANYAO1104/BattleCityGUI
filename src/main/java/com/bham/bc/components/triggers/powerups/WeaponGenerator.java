@@ -17,17 +17,16 @@ public class WeaponGenerator extends RespawnTrigger {
     private Weapon weapon;
 
     public WeaponGenerator(int x, int y,Weapon weapon,int width, int length,int respawnCooldown) {
-        super(BaseGameEntity.GetNextValidID(), x, y);
+        super(x, y);
         this.weapon = weapon;
 
         addRectangularTriggerRegion(new Point2D(x, y), new Point2D(width, length));
         setRespawnDelay(respawnCooldown * FRAME_RATE);
-        initImages();
     }
 
 
-    private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/tmp.jpg"), };
+    protected Image[] getDefaultImage() {
+        return new Image[] {new Image("file:src/main/resources/img/tmp.jpg"), };
     }
 
     @Override

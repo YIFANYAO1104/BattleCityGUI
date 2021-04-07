@@ -6,6 +6,8 @@ import com.bham.bc.components.characters.enemies.*;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 
+import java.util.ArrayList;
+
 /**
  * Represents a controller for the survival game mode
  */

@@ -24,7 +24,7 @@ public class Hard extends Obstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/tiles/metalWall.bmp") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/metalWall.bmp") };
     }
 
     @Override

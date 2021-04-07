@@ -9,17 +9,12 @@ import java.util.List;
 public abstract class MapLoader {
 
     protected List<Obstacle> obstacles;
-    protected List<Trigger> triggers;
-
-    protected TriggerSystem triggerSystem;
 
     /**
      * Constructs map loader with compulsory attributes
      */
     public MapLoader() {
         obstacles = new ArrayList<>();
-        triggers = new ArrayList<>();
-        triggerSystem = new TriggerSystem();
     }
 
     /**
@@ -27,12 +22,6 @@ public abstract class MapLoader {
      * @return List of Generic Obstacles
      */
     public List<Obstacle> getObstacles() { return obstacles; }
-
-    /**
-     * Gets all triggers
-     * @return List of Triggers
-     */
-    public List<Trigger> getTriggers() { return triggers; }
 
     /**
      * Gets the width of the tile

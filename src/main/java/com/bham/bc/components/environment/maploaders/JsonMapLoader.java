@@ -71,11 +71,6 @@ public class JsonMapLoader extends MapLoader {
                     JSONArray obstacleArray = layer.getJSONArray("data");
 
                     obstacles.addAll(convertToObstacles(tilesetName, className, obstacleArray));
-                } else if(layer.has("objects")) {
-                    String className = layer.getString("name");
-                    JSONArray triggerArray = layer.getJSONArray("objects");
-
-                    triggers.addAll(convertToTriggers(className, triggerArray));
                 }
             }
         }
@@ -101,6 +96,7 @@ public class JsonMapLoader extends MapLoader {
             JSONObject tilesetProperties = tilesets.getJSONObject(i);
 
             String tilesetName = tilesetProperties.getString("name").toUpperCase();
+            if (tilesetName.equals("TRIGGERS")) continue;
             int offset = tilesetProperties.getInt("firstgid");
             offsets.put(Tileset.valueOf(tilesetName), offset);
 
@@ -153,47 +149,6 @@ public class JsonMapLoader extends MapLoader {
         return obstacleInstances;
     }
 
-    /**
-     * Converts JSON object attributes to Triggers in the map
-     *
-     * @param className    name of the class used to create a trigger
-     * @param triggerArray array of triggers in JSON format
-     * @throws Exception   if construction of a class fails
-     */
-    public List<Trigger> convertToTriggers(String className, JSONArray triggerArray) throws Exception {
-        // Reflect the names of parameters for constructor
-        Class cls = Class.forName("com.bham.bc.components.environment.triggers."+className);
-
-        List<Trigger> triggerInstances = new ArrayList<>();
-        Constructor[] constructors = cls.getConstructors();
-
-        // Construct a Trigger for each set of attributes
-        for(int i = 0; i < triggerArray.length(); i++) {
-            JSONObject triggerProperties = triggerArray.getJSONObject(i);
-            List<Object> params = new ArrayList<>();
-
-            params.add(triggerProperties.getInt("x"));
-            params.add(triggerProperties.getInt("y"));
-
-            // Read attributes
-            JSONArray attributes = triggerProperties.getJSONArray("properties");
-
-            for (int j = 0; j < attributes.length(); j++) {
-                JSONObject attribute = attributes.getJSONObject(j);
-                params.add(attribute.getInt("value"));
-            }
-
-            // Match attributes number with constructor's to find the right one
-            for (Constructor constructor : constructors) {
-                if (constructor.getParameterCount() == params.size()) {
-                    triggerInstances.add((Trigger) constructor.newInstance(params.toArray()));
-                    break;
-                }
-            }
-        }
-        return triggerInstances;
-    }
-
     @Override
     public int getTileWidth() {
         return tileWidth;
@@ -213,45 +168,4 @@ public class JsonMapLoader extends MapLoader {
     public int getNumTilesY() {
         return mapHeight;
     }
-
-    // TODO: delete above, stuff has been moved to abstract class, also JFXPanel is swing?
-//    public static void main(String[] args) {
-//        new JFXPanel();
-//        JsonMapLoader js = new JsonMapLoader(MapType.Map1.getName());
-//        js.getPassables();
-//    }
-//
-//    public List<GenericObstacle> getPassables() {
-//        List<GenericObstacle> bg = new ArrayList<>();
-//        for (GenericObstacle obstacle : obstacles) {
-//            if (obstacle.getClass()== Passable.class){
-//                bg.add(obstacle);
-//            }
-//        }
-//        return bg;
-//    }
-//
-//    public List<GenericObstacle> getCoverings() {
-//        List<GenericObstacle> bg = new ArrayList<>();
-//        for (GenericObstacle obstacle : obstacles) {
-//            if (obstacle.getClass()== Covering.class){
-//                bg.add(obstacle);
-//            }
-//        }
-//        return bg;
-//    }
-//
-//    @Override
-//    public List<GenericObstacle> getObstacles() {
-//        List<GenericObstacle> bg = new ArrayList<>();
-//        for (GenericObstacle obstacle : obstacles) {
-//            if (obstacle.getClass()== Hard.class||
-//                    obstacle.getClass()== Soft.class||
-//                    obstacle.getClass()== Impassable.class
-//            ){
-//                bg.add(obstacle);
-//            }
-//        }
-//        return bg;
-//    }
 }

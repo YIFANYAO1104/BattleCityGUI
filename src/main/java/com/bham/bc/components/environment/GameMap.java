@@ -87,7 +87,6 @@ public class GameMap {
     private void initElements(MapLoader mapLoader) {
         interactiveObstacles = mapLoader.getObstacles().stream().filter(o -> !o.getAttributes().contains(Attribute.PASSABLE)).collect(Collectors.toList());
         noninteractiveObstacles = mapLoader.getObstacles().stream().filter(o -> o.getAttributes().contains(Attribute.PASSABLE)).collect(Collectors.toList());
-        mapLoader.getTriggers().forEach(trigger -> backendServices.addTrigger(trigger));
     }
 
     /**
@@ -178,9 +177,10 @@ public class GameMap {
         // Consider multiple players and enemies spawning at unreachable nodes
         // Player dummyEntity = new Player(mapLoader.getHomeTerritory.getCenterX(), mapLoader.getHomeTerritory.getCenterY());
         // graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForEntity(dummyEntity));
+    }
 
+    public void attachExtraInfo(List<Trigger> triggers) {
         //let the corresponding navgraph node point to triggers object
-        List<Trigger> triggers = mapLoader.getTriggers();
         for (Trigger trigger : triggers) {
             NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).Index());
             node.setExtraInfo(trigger);

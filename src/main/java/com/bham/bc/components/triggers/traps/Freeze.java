@@ -24,17 +24,16 @@ public class Freeze extends RespawnTrigger {
 	
     public Freeze(int x, int y, int activationTime, int respawnCooldown) {
 
-        super(BaseGameEntity.GetNextValidID(), x, y);
+        super(x, y);
         this.activationTime = activationTime;
 
         //create this trigger's region of fluence
         addRectangularTriggerRegion(new Point2D(x, y), new Point2D(width, length));
         setRespawnDelay(respawnCooldown * FRAME_RATE);
-        initImages();
     }
 
-    private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/tiles/snowflake.png"), };
+    protected Image[] getDefaultImage() {
+        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/snowflake.png"), };
     }
 
     //if triggered, the bot will freeze for few seconds

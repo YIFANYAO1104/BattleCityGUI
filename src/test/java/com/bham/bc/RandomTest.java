@@ -1,23 +1,13 @@
 package com.bham.bc;
 
-import com.bham.bc.components.Mode;
-import com.bham.bc.components.environment.MapType;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.RandomEnhanced;
-import com.bham.bc.view.Camera;
-import com.bham.bc.view.GameSession;
-import com.bham.bc.view.MenuSession;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.junit.Test;
 

@@ -23,8 +23,8 @@ abstract public class RespawnTrigger extends Trigger {
         curToRespawn = cyclePeriod;
     }
 
-    public RespawnTrigger(int id, int x, int y) {
-        super(id,x,y);
+    public RespawnTrigger(int x, int y) {
+        super(x,y);
         cyclePeriod = 0;
         curToRespawn = 0;
     }

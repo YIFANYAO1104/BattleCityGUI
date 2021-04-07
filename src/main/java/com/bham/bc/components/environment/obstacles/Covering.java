@@ -32,7 +32,7 @@ public class Covering extends Obstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/tiles/tree.bmp") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/tree.bmp") };
     }
 
     @Override

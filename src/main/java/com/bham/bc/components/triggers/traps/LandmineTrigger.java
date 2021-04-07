@@ -20,14 +20,15 @@ public class LandmineTrigger extends RespawnTrigger{
     public static int height = Constants.TILE_WIDTH;
 
     public LandmineTrigger(int x,int y,int Respawn){
-        super(GetNextValidID(),x,y);
+        super(x,y);
         addRectangularTriggerRegion(new Point2D(x,y), new Point2D(width,height));
         setRespawnDelay(Respawn*FRAME_RATE);
-        initImages();
     }
-    public void initImages(){
-        entityImages = new Image[]{ new Image("file:src/main/resources/img/tiles/Landmine.png")};
+
+    protected Image[] getDefaultImage() {
+        return new Image[]{ new Image("file:src/main/resources/img/tiles/triggers/Landmine.png")};
     }
+
     @Override
     public void tryTriggerC(GameCharacter entity) {
         if(isActive()&&rectIsTouchingTrigger(entity.getPosition(), entity.getRadius())){

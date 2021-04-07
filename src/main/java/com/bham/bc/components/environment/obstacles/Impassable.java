@@ -25,7 +25,7 @@ public class Impassable extends Obstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/tiles/river_01.jpg") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/river_01.jpg") };
     }
 
     @Override

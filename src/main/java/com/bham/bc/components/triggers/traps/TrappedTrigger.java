@@ -19,19 +19,17 @@ public class TrappedTrigger extends RespawnTrigger{
     public static int width = Constants.TILE_WIDTH;
     public static int height = Constants.TILE_HEIGHT;
     public TrappedTrigger(int x, int y, int Respawn){
-        super(GetNextValidID(),x,y);
+        super(x,y);
         addRectangularTriggerRegion(new Point2D(x,y), new Point2D(width,height));
         setRespawnDelay(Respawn*FRAME_RATE*2);
-        initImages();
-
     }
 
 
 
-    public void initImages(){
-        entityImages = new Image[]{ new Image("file:src/main/resources/img/tiles/trap.png")};
-
+    protected Image[] getDefaultImage() {
+        return new Image[]{ new Image("file:src/main/resources/img/tiles/triggers/trap.png")};
     }
+
     @Override
     public void tryTriggerC(GameCharacter entity) {
         if(entity instanceof  Player){

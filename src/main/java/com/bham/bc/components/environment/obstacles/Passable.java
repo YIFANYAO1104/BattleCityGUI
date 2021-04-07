@@ -33,7 +33,7 @@ public class Passable extends Obstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/tiles/icewall.jpg") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/icewall.jpg") };
     }
 
     @Override

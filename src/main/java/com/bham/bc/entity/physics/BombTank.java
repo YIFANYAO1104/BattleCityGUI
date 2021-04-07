@@ -28,13 +28,12 @@ public class BombTank extends BaseGameEntity {
 	 */
 	public BombTank(Point2D p) {
 		super(GetNextValidID(), p.getX(), p.getY());
-		initImages();
 	}
 	/**
 	 * Images of bombing,should be replaced later
 	 */
-	private void initImages() {
-		entityImages = new Image[] {
+	protected Image[] getDefaultImage() {
+		return new Image[] {
 				new Image("file:src/main/resources/img/1.gif"),
 				new Image("file:src/main/resources/img/2.gif"),
 				new Image("file:src/main/resources/img/3.gif"),

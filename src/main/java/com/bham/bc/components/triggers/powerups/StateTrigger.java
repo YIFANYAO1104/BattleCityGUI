@@ -21,15 +21,15 @@ public class StateTrigger extends RespawnTrigger {
 
 
     public StateTrigger(int x, int y,int respawnCooldown) {
-        super(GetNextValidID(),x,y);
+        super(x,y);
         addRectangularTriggerRegion(new Point2D(x,y), new Point2D(width,length));
         setRespawnDelay(respawnCooldown*FRAME_RATE);
-        initImages();
-    }
-    private void initImages(){
-        entityImages = new Image[]{new Image("file:src/main/resources/img/tiles/state1.png")};
     }
 
+    @Override
+    protected Image[] getDefaultImage() {
+        return new Image[]{new Image("file:src/main/resources/img/tiles/triggers/state1.png")};
+    }
 
 
     @Override
@@ -55,6 +55,9 @@ public class StateTrigger extends RespawnTrigger {
     public String toString() {
         return null;
     }
+
+
+
     /**
      * If the speedBuff triggered, the tank will change its speed to new state
      * @return

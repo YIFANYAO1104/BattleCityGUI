@@ -20,22 +20,22 @@ public class ArmorTrigger extends  RespawnTrigger{
     private int HP;
 
     public ArmorTrigger(int x, int y, int HP, int Respawn){
-        super(GetNextValidID(),x,y);
+        super(x,y);
         this.HP = HP;
         addRectangularTriggerRegion(new Point2D(x,y), new Point2D(width,height));
         setRespawnDelay(Respawn*FRAME_RATE);
-        initImages();
+    }
 
 
+    @Override
+    protected Image[] getDefaultImage() {
+        return new Image[]{ new Image("file:src/main/resources/img/tiles/triggers/armor.png")};
     }
-    public void initImages(){
-        entityImages = new Image[]{ new Image("file:src/main/resources/img/tiles/armor.png")};
-    }
+
     @Override
     public void tryTriggerC(GameCharacter entity) {
         if(isActive()&&rectIsTouchingTrigger(entity.getPosition(), entity.getRadius())){
             //entity.armorUP(HP);
-
             deactivate();
         }
 

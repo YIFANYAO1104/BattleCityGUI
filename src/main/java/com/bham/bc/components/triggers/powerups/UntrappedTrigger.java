@@ -20,14 +20,14 @@ public class UntrappedTrigger extends RespawnTrigger {
     public static int height = TILE_HEIGHT;
 
     public UntrappedTrigger(int x, int y, int Respwan){
-        super(GetNextValidID(),x,y);
+        super(x,y);
         addRectangularTriggerRegion(new Point2D(x,y),new Point2D(width,height));
         setRespawnDelay(FRAME_RATE*Respwan);
-        initImages();
     }
-    public void initImages(){
-        entityImages = new Image[]{
-                new Image("file:src/main/resources/img/tiles/clear.png")
+
+    protected Image[] getDefaultImage() {
+        return new Image[]{
+                new Image("file:src/main/resources/img/tiles/triggers/clear.png")
         };
 
     }

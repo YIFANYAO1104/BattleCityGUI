@@ -43,7 +43,7 @@ public class Soft extends Obstacle {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/tiles/softWall.bmp") };
+        return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/softWall.bmp") };
     }
 
     @Override

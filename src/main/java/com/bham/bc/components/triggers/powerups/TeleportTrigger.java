@@ -20,10 +20,9 @@ public class TeleportTrigger extends RespawnTrigger{
     private double destY;
     RespawnTrigger destination;
     public TeleportTrigger(int x, int y, int Respawn){
-        super(GetNextValidID(),x,y);
+        super(x,y);
         addRectangularTriggerRegion(new Point2D(x,y), new Point2D(width,height));
         setRespawnDelay(FRAME_RATE*Respawn);
-        initImages();
     }
     public void setDestination(RespawnTrigger dest){
         this.destination = dest;
@@ -31,8 +30,9 @@ public class TeleportTrigger extends RespawnTrigger{
         //this.destY = destination.getY();
 
     }
-    public void initImages(){
-        entityImages = new Image[]{ new Image("file:src/main/resources/img/tiles/teleport.png")};
+
+    protected Image[] getDefaultImage() {
+        return new  Image[]{ new Image("file:src/main/resources/img/tiles/triggers/teleport.png")};
     }
 
 

@@ -6,12 +6,14 @@ package com.bham.bc.components.triggers;
 
 
 import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.components.environment.maploaders.Tileset;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import com.bham.bc.components.characters.GameCharacter;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Shape;
 
 abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
@@ -31,6 +33,8 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
      * (respawning triggers make good use of this facility)
      */
     private boolean active;
+
+    protected int currentFrame;
 
     protected void setToBeRemovedFromGame() {
         toBeRemoved = true;
@@ -65,12 +69,16 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
         triggerRegion = new TriggerRegionRectangle(topLeft, regionRadius);
     }
 
-    public Trigger(int id, int x, int y) {
-        super(id, x, y);
+    public Trigger(int x, int y) {
+        super(GetNextValidID(), x, y);
         toBeRemoved = false;
         active = true;
         triggerRegion = null;
+        currentFrame = 0;
+        entityImages = getDefaultImage();
     }
+
+    abstract protected Image[] getDefaultImage();
 
     /**
      * when this is called the trigger determines if the entity is within the

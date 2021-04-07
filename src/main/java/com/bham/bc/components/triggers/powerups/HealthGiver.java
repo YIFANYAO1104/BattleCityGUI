@@ -27,17 +27,16 @@ public class HealthGiver extends RespawnTrigger{
 
     public HealthGiver(int x,int y, int health, int respawnCooldown) {
 
-        super(BaseGameEntity.GetNextValidID(), x, y);
+        super(x, y);
         this.health = health;
 
         //create this trigger's region of fluence
         addRectangularTriggerRegion(new Point2D(x, y), new Point2D(width, length));
         setRespawnDelay(respawnCooldown * FRAME_RATE);
-        initImages();
     }
 
-    private void initImages() {
-        entityImages = new Image[] {new Image("file:src/main/resources/img/tiles/hp.png"), };
+    protected Image[] getDefaultImage() {
+        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/hp.png"), };
     }
 
     //if triggered, the bot's health will be incremented
