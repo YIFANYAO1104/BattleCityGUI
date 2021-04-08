@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
+// TODO: doc and ask to merge with trigger loader?
 public class MapLoader {
     private int mapWidth;
     private int mapHeight;
@@ -120,7 +121,7 @@ public class MapLoader {
      * Converts JSON object attributes to Obstacles in the map
      *
      * @param tilesetName   name of the tileset used to take the tile image from
-     * @param className     name of the class used to create an obstacle
+     * @param tileName     name of the class used to create an obstacle
      * @param obstacleArray array of obstacles in JSON format
      * @return list of generatable game obstacles
      * @throws ClassNotFoundException
@@ -129,14 +130,17 @@ public class MapLoader {
      * @throws InvocationTargetException
      * @throws InstantiationException
      */
-    public List<Obstacle> convertToObstacles(String tilesetName, String className, JSONArray obstacleArray) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public List<Obstacle> convertToObstacles(String tilesetName, String tileName, JSONArray obstacleArray) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // Reflect the names of parameters for constructor
         Tileset tileset = Tileset.valueOf(tilesetName);
         int yo = tileset.getyOffset();
-        Class cls = Class.forName("com.bham.bc.components.environment.obstacles."+className);
+        Class cls = Class.forName("com.bham.bc.components.environment.Obstacle");
+
+        ArrayList<Attribute> attributes = identifyAttributes(tileName);
+        System.out.println(attributes);
 
         List<Obstacle> obstacleInstances = new ArrayList<>();
-        Constructor constructor = cls.getConstructor(int.class, int.class, Tileset.class, int[].class);
+        Constructor constructor = cls.getConstructor(int.class, int.class, ArrayList.class, Tileset.class, int[].class);
 
         // Construct a GenericObstacle for each existing tile in obstacleArray
         for(int i = 0; i < obstacleArray.length(); i++) {
@@ -147,10 +151,56 @@ public class MapLoader {
                 int tileID = obstacleArray.getInt(i) - offsets.get(tileset);
                 int[] tileIDs = animations.containsKey(tileID) ? animations.get(tileID) : new int[] {tileID};
 
-                obstacleInstances.add((Obstacle) constructor.newInstance(x, y, tileset, tileIDs));
+                obstacleInstances.add((Obstacle) constructor.newInstance(x, y, attributes, tileset, tileIDs));
             }
         }
         return obstacleInstances;
+    }
+
+    /**
+     * Identifies all the attributes a tile to be converted to obstacle instance should have
+     * @param tileName name of the tile on which the attributes will depend
+     * @return a list of attributes the obstacle should have or WALKABLE attribute by default
+     */
+    private ArrayList<Attribute> identifyAttributes(String tileName) {
+        ArrayList<Attribute> attributes = new ArrayList<>();
+
+        switch(tileName) {
+            case "Soft":
+                attributes.add(Attribute.WALL);
+                attributes.add(Attribute.BREAKABLE);
+                return attributes;
+            case "Hard":
+                attributes.add(Attribute.WALL);
+                return attributes;
+            case "Impassable":
+                return attributes;
+            case "Covering":
+                attributes.add(Attribute.RENDER_TOP);
+                attributes.add(Attribute.WALKABLE);
+                return attributes;
+            case "HomeArea":
+                attributes.add(Attribute.HOME_AREA);
+                attributes.add(Attribute.WALKABLE);
+                return attributes;
+            case "HomeCenter":
+                attributes.add(Attribute.HOME_CENTER);
+                attributes.add(Attribute.HOME_AREA);
+                attributes.add(Attribute.WALKABLE);
+                return attributes;
+            case "EnemySpawnArea":
+                attributes.add(Attribute.ENEMY_SPAWN_AREA);
+                attributes.add(Attribute.WALKABLE);
+                return attributes;
+            case "EnemySpawnCenter":
+                attributes.add(Attribute.ENEMY_SPAWN_CENTER);
+                attributes.add(Attribute.ENEMY_SPAWN_AREA);
+                attributes.add(Attribute.WALKABLE);
+                return attributes;
+            default:
+                attributes.add(Attribute.WALKABLE);
+                return attributes;
+        }
     }
 
     /**

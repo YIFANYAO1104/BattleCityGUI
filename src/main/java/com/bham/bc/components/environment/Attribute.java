@@ -1,4 +1,4 @@
-package com.bham.bc.components.environment.obstacles;
+package com.bham.bc.components.environment;
 
 /**
  * Represents the attributes an obstacle can have. This is required whenever we want

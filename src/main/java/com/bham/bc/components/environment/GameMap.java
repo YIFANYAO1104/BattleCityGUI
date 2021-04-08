@@ -1,7 +1,6 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.components.triggers.TriggerLoader;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.triggers.Trigger;

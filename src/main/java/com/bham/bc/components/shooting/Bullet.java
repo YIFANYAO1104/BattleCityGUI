@@ -3,8 +3,7 @@ package com.bham.bc.components.shooting;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.Obstacle;
-import com.bham.bc.components.environment.obstacles.Attribute;
-import com.bham.bc.components.environment.obstacles.Soft;
+import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
@@ -124,7 +123,7 @@ abstract public class Bullet extends MovingEntity {
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {
             destroy();
             if(((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)) {
-                ((Soft) entity).changeHp(-damage);
+                ((Obstacle) entity).changeHp(-damage);
             }
         }
     }

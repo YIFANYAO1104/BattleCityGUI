@@ -1,8 +1,7 @@
 package com.bham.bc.components.characters;
 
 import com.bham.bc.components.environment.Obstacle;
-import com.bham.bc.components.environment.obstacles.Attribute;
-import com.bham.bc.components.shooting.Bullet;
+import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
