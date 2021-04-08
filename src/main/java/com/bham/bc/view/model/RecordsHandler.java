@@ -61,8 +61,7 @@ public class RecordsHandler {
             e.printStackTrace();
         }
         ObservableList<Records> data = FXCollections.observableArrayList(records);
-        for(Records a:data){
-            System.out.println(a.getScore());}
+
         return data;
     }
 
