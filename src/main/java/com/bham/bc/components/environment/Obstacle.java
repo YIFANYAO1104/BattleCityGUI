@@ -1,7 +1,5 @@
 package com.bham.bc.components.environment;
 
-import com.bham.bc.components.shooting.Bullet;
-import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.environment.maploaders.Tileset;
@@ -56,37 +54,14 @@ public abstract class Obstacle extends BaseGameEntity {
      */
     abstract protected Image[] getDefaultImage();
 
-    /**
-     * Handles bullet collision
-     * @param b bullet to handle
-     */
 
-    public abstract void handleBullet(Bullet b);
-
-    /**
-     * Handles character collision
-     * @param c character to handle
-     */
-    public abstract void handleCharacter(GameCharacter c);
-
-//    public void handleAll(List<BaseGameEntity> entities){
-//        entities.forEach(entity -> {
-//            try {
-//                handleBullet((Bullet)entity);
-//                handleCharacter((GameCharacter) entity);
-//            }catch (Exception e){}
-//        });
-//    }
-
-    @Deprecated
-    /** TODO: check if it is necessary to have this */
     public void interactWith(int ID, int nodeID, Rectangle area) {
         if(getHitBox().intersects(area.getBoundsInLocal())) {
             Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), ID, Msg_interact, nodeID);
         }
     }
 
-    public void decreaseHP(double hurt) {}
+    public void changeHp(double health) {}
 
     @Override
     public void update() { if(entityImages.length > 1) currentFrame = (++currentFrame) % entityImages.length; }

@@ -42,7 +42,7 @@ public class NavigationFlowTest {
         assertTrue(p.getPath().isEmpty());
 
 
-        p.createRequest(ItemType.health);
+        p.createRequest(ItemType.HEALTH);
 
         // test status
         assertEquals(SearchStatus.search_incomplete, field.get(p));
@@ -95,7 +95,7 @@ public class NavigationFlowTest {
         // access private field
         field.setAccessible(true);
 
-        assertFalse(p.createRequest(ItemType.health));
+        assertFalse(p.createRequest(ItemType.HEALTH));
         assertEquals(SearchStatus.no_task, field.get(p));
         assertTrue(p.getPath().isEmpty());
     }
@@ -110,10 +110,10 @@ public class NavigationFlowTest {
 
         PathPlanner p = new PathPlanner(player, gameMap.getGraph());
 
-        p.createRequest(ItemType.health);
+        p.createRequest(ItemType.HEALTH);
         p.peekRequestStatus();
 
-        p.createRequest(ItemType.health);
+        p.createRequest(ItemType.HEALTH);
 
 
         Field field = PathPlanner.class.getDeclaredField("taskStatus");

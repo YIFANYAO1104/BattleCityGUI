@@ -6,6 +6,8 @@ import com.bham.bc.components.characters.Side;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.graph.SparseGraph;
+import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.graph.node.NavNode;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -53,7 +55,7 @@ public interface BackendServices {
      * Gets {@link com.bham.bc.entity.graph.SparseGraph} of a currently active map
      * @return SparseGraph object used for searching algorithms
      */
-    SparseGraph getGraph();
+    SparseGraph<NavNode, GraphEdge> getGraph();
 
     /**
      * Gets the player's center position.
@@ -91,9 +93,7 @@ public interface BackendServices {
 
     // TEMPORARY METHODS -------------------------------------------
     // TODO: replace / remove or find another usage
-    void addBombTank(BombTank b);               // We don't have effects yet or it can be a trigger
     boolean intersectsObstacles(Rectangle hitbox);  // This will be moved to physics package
     Point2D getMapCenterPosition(); // TODO: doc
     Point2D getNearestOppositeSideCenterPosition(Point2D point, Side side); //TODO: doc
-    ArrayList<BaseGameEntity> allInfoCharacter(); //TODO: doc
 }

@@ -1,7 +1,5 @@
 package com.bham.bc.components.environment.obstacles;
 
-import com.bham.bc.components.shooting.Bullet;
-import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.maploaders.Tileset;
 import javafx.scene.image.Image;
@@ -38,7 +36,7 @@ public class Soft extends Obstacle {
 
     @Override
     public EnumSet<Attribute> getAttributes() {
-        return EnumSet.of(Attribute.BREAKABLE);
+        return EnumSet.of(Attribute.BREAKABLE, Attribute.WALL);
     }
 
     @Override
@@ -47,44 +45,19 @@ public class Soft extends Obstacle {
     }
 
     @Override
-    public void handleBullet(Bullet b) {
-        if(intersects(b)) {
-            hp -= b.getDamage();
-            b.destroy();
-
-            if(hp <= 0) {
-                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
-                        backendServices.getGraph().getID(),
-                        Msg_removeSoft,NO_ADDITIONAL_INFO);
-                exists = false;
-                entityManager.removeEntity(this);
-            }
-        }
-    }
-
-    @Override
-    public void handleCharacter(GameCharacter c) {
-        if(intersects(c)) c.move(-1);
-    }
-
-    @Override
     public void interactWith(int ID, int indexOfNode , Rectangle r1) {
-        if(this.getHitBox().intersects(r1.getBoundsInLocal()))
-            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,this.getID(),ID,Msg_interactWithPassable,indexOfNode);
+        if(getHitBox().intersects(r1.getBoundsInLocal()))
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), ID, Msg_interactWithPassable, indexOfNode);
     }
 
 
     @Override
-    // TODO
-    public void decreaseHP(double hurt) {
-        hp = Math.max(hp - hurt, 0.0);
+    public void changeHp(double health) {
+        hp += health;
         if(hp <= 0.0) {
-            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY,getID(),
-                    backendServices.getGraph().getID(),
-                    Msg_removeSoft,NO_ADDITIONAL_INFO);
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), backendServices.getGraph().getID(), Msg_removeSoft, NO_ADDITIONAL_INFO);
             exists = false;
             entityManager.removeEntity(this);
         }
     }
-
 }

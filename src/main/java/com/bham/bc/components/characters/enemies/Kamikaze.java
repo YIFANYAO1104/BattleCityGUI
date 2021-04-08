@@ -89,7 +89,7 @@ public class Kamikaze extends Enemy {
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case SEARCHALLY:
-                    search(ItemType.ally);
+                    search(ItemType.ALLY);
                     break;
                 case CHARGEALLY:
                     charge();

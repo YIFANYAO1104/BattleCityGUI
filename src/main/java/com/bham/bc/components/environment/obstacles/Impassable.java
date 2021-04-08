@@ -1,7 +1,5 @@
 package com.bham.bc.components.environment.obstacles;
 
-import com.bham.bc.components.shooting.Bullet;
-import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.maploaders.Tileset;
 import javafx.scene.image.Image;
@@ -26,13 +24,5 @@ public class Impassable extends Obstacle {
     @Override
     protected Image[] getDefaultImage() {
         return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/river_01.jpg") };
-    }
-
-    @Override
-    public void handleBullet(Bullet b) { }
-
-    @Override
-    public void handleCharacter(GameCharacter c) {
-        if(intersects(c)) c.move(-1);
     }
 }

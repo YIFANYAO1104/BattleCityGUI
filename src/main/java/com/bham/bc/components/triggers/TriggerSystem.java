@@ -36,6 +36,10 @@ public class TriggerSystem {
 //        }
         // Does not have a big impact for performance
         triggers.forEach(Trigger::update);
+    }
+
+    // Need a separate method because the non-existing triggers must first be removed from the map division
+    public void cleanUp() {
         triggers.removeIf(trigger -> !trigger.exists);
     }
 
@@ -53,8 +57,8 @@ public class TriggerSystem {
      */
     public void handleAll(List<GameCharacter> characters, List<Obstacle> obstacles){
         triggers.forEach(trigger -> {
-            characters.forEach(trigger::handleCharacter);
-            obstacles.forEach(trigger::handleObstacle);
+            characters.forEach(trigger::handle);
+            obstacles.forEach(trigger::handle);
         });
     }
 

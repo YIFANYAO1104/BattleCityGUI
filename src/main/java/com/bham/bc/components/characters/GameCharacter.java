@@ -1,5 +1,7 @@
 package com.bham.bc.components.characters;
 
+import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
@@ -103,49 +105,17 @@ abstract public class GameCharacter extends MovingEntity {
     // -----------------------------------------------------------
 
 
-    /**
-     * Handles bullet collision - takes damage and destroys bullet
-     * @param bullet bullet to handle
-     */
-    protected void handle(Bullet bullet) {
-        if(intersects(bullet)) {
-            if(bullet.getSide() != side && immuneTicks == 0) {
-                changeHP(-bullet.getDamage());
-            }
-            bullet.destroy();
-        }
+    public void handle(List<BaseGameEntity> entities) {
+        entities.forEach(this::handle);
     }
 
-    /**
-     * Handles character collision - moves back
-     * @param gameCharacter character to handle
-     */
-    protected void handle(GameCharacter gameCharacter) {
-        if(this.getID() != gameCharacter.getID() && intersects(gameCharacter)) {
+    public void handle(BaseGameEntity entity) {
+        if(entity instanceof GameCharacter && getID() != entity.getID() && intersects(entity)) {
+            move(-1);
+        } else if(entity instanceof Obstacle && !((Obstacle) entity).getAttributes().contains(Attribute.WALKABLE) && intersects(entity)) {
             move(-1);
         }
     }
-
-
-    /**
-     * Handles a list of characters and bullets
-     * @param gameCharacters list of characters to handle
-     * @param bullets list of bullets to handle
-     */
-    public void handleAll(List<GameCharacter> gameCharacters, List<Bullet> bullets) {
-        gameCharacters.forEach(this::handle);
-        bullets.forEach(this::handle);
-    }
-
-    public void handleAll(List<BaseGameEntity> en1){
-        en1.forEach(b1 -> {
-            try {
-//                handle((Bullet) b1);
-                handle((GameCharacter)b1);
-            }catch (Exception e){}
-        });
-    }
-
 
     /**
      * Overloads basic <i>move()</i> method with extra speed multiplier parameter

@@ -2,6 +2,7 @@ package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
@@ -22,8 +23,8 @@ public class ArmorTrigger extends  RespawnTrigger{
     }
 
     @Override
-    public void handleCharacter(GameCharacter character) {
-        if(active && intersects(character)){
+    public void handle(BaseGameEntity entity) {
+        if(active && entity instanceof GameCharacter && intersects(entity)) {
             //entity.armorUP(HP);
             deactivate();
         }

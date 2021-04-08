@@ -1,5 +1,7 @@
 package com.bham.bc.components.triggers.powerups;
 
+import com.bham.bc.components.characters.Player;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
@@ -23,16 +25,15 @@ public class WeaponGenerator extends RespawnTrigger {
     }
 
     @Override
-    public void handleCharacter(GameCharacter character) {
-        if(active && intersects(character)){
-            character.switchWeapon(this.weapon);
+    public void handle(BaseGameEntity entity) {
+        if(active && entity instanceof GameCharacter && intersects(entity)) {
+            ((GameCharacter) entity).switchWeapon(weapon);
             deactivate();
-
         }
     }
 
     @Override
     public ItemType getItemType() {
-        return ItemType.weapon;
+        return ItemType.WEAPON;
     }
 }

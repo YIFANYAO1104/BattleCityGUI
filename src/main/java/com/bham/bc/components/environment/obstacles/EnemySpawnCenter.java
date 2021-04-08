@@ -1,7 +1,5 @@
 package com.bham.bc.components.environment.obstacles;
 
-import com.bham.bc.components.shooting.Bullet;
-import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.maploaders.Tileset;
 import javafx.scene.image.Image;
@@ -26,17 +24,11 @@ public class EnemySpawnCenter extends Obstacle {
 
     @Override
     public EnumSet<Attribute> getAttributes() {
-        return EnumSet.of(Attribute.ENEMY_SPAWN_CENTER, Attribute.ENEMY_SPAWN_AREA, Attribute.PASSABLE);
+        return EnumSet.of(Attribute.ENEMY_SPAWN_CENTER, Attribute.ENEMY_SPAWN_AREA, Attribute.WALKABLE);
     }
 
     @Override
     protected Image[] getDefaultImage() {
         return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/icewall.jpg") };
     }
-
-    @Override
-    public void handleBullet(Bullet b) { }
-
-    @Override
-    public void handleCharacter(GameCharacter c) { }
 }

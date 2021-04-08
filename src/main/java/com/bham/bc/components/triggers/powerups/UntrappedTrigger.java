@@ -3,6 +3,7 @@ package com.bham.bc.components.triggers.powerups;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -30,12 +31,10 @@ public class UntrappedTrigger extends RespawnTrigger {
     }
 
     @Override
-    public void handleCharacter(GameCharacter character) {
-        if(character instanceof Player){
-            if(active && intersects(character)){
-                character.setUNTRAPPED();
-                deactivate();
-            }
+    public void handle(BaseGameEntity entity) {
+        if(active && entity instanceof Player && intersects(entity)) {
+            ((Player) entity).setUNTRAPPED();
+            deactivate();
         }
     }
 }

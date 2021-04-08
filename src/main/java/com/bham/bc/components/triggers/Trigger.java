@@ -60,9 +60,7 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
      * trigger's region of influence. If it is then the trigger will be
      * triggered and the appropriate action will be taken.
      */
-    public abstract void handleCharacter(GameCharacter entity);
-
-    public abstract void handleObstacle(Obstacle entity);
+    public abstract void handle(BaseGameEntity entity);
 
     /**
      * called each update-step of the game. This methods updates any internal

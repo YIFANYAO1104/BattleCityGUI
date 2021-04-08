@@ -34,7 +34,7 @@ public abstract class Enemy extends GameCharacter {
     private LinkedList<PathEdge> pathEdges;
     private Point2D destination;
     private int timeTillSearch;
-    private Gun gun;
+    private final Gun GUN;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -50,7 +50,7 @@ public abstract class Enemy extends GameCharacter {
         pathEdges = new LinkedList<>();
         destination = new Point2D(0, 0);
         timeTillSearch = 20;
-        gun = new Gun(this, BulletType.DEFAULT);
+        GUN = new Gun(this, BulletType.DEFAULT);
     }
 
 
@@ -65,30 +65,30 @@ public abstract class Enemy extends GameCharacter {
             // Return if the search is still in progress, otherwise we need a new search
             if (navigationService.peekRequestStatus() != SearchStatus.search_incomplete) {
                 switch (itemType) {
-                    case health:
-                        navigationService.createRequest(ItemType.health);
+                    case HEALTH:
+                        navigationService.createRequest(ItemType.HEALTH);
                         break;
-                    case home:
+                    case HOME:
                         Point2D home = backendServices.getMapCenterPosition();
                         navigationService.createRequest(home);
                         break;
-                    case ally:
+                    case ALLY:
                         Point2D ally = backendServices.getNearestOppositeSideCenterPosition(getCenterPosition(), side);
                         navigationService.createRequest(ally);
                         break;
                 }
             }
-        } else if(itemType == ItemType.ally && (--timeTillSearch <= 0)) {
+        } else if(itemType == ItemType.ALLY && (--timeTillSearch <= 0)) {
             Point2D ally = backendServices.getNearestOppositeSideCenterPosition(getCenterPosition(), side);
             navigationService.createRequest(ally);
         }
 
         //-----test
-        if(itemType == ItemType.ally && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
+        if(itemType == ItemType.ALLY && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
         //---------
 
         // Due to checks on each frame of whether the search is complete or not we always need get the list of points if it is empty
-        if((pathEdges.isEmpty() || (itemType == ItemType.ally && timeTillSearch <= 0)) && navigationService.peekRequestStatus() == SearchStatus.target_found) {
+        if((pathEdges.isEmpty() || (itemType == ItemType.ALLY && timeTillSearch <= 0)) && navigationService.peekRequestStatus() == SearchStatus.target_found) {
             pathEdges = navigationService.getPath();
             pathEdges.add(pathEdges.getLast()); // Repeat the last element for the purposes in the search method when move is performed
             destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.removeFirst().getDestination();
@@ -152,7 +152,7 @@ public abstract class Enemy extends GameCharacter {
      * Shoots the specified bullet(-s) at the current angle
      */
     protected void shoot() {
-        gun.shoot();
+        GUN.shoot();
     }
 
     /**

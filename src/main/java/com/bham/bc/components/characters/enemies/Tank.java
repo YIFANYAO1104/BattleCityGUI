@@ -86,7 +86,7 @@ public class Tank extends Enemy {
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case SEARCHHOME:
-                    search(ItemType.home);
+                    search(ItemType.HOME);
                     break;
                 case ATTACKHOME:
                     takeOver();

@@ -1,7 +1,5 @@
 package com.bham.bc.components.environment.obstacles;
 
-import com.bham.bc.components.shooting.Bullet;
-import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.maploaders.Tileset;
 import javafx.scene.image.Image;
@@ -27,19 +25,13 @@ public class Covering extends Obstacle {
 
     @Override
     public EnumSet<Attribute> getAttributes() {
-        return EnumSet.of(Attribute.RENDER_TOP, Attribute.PASSABLE);
+        return EnumSet.of(Attribute.RENDER_TOP, Attribute.WALKABLE);
     }
 
     @Override
     protected Image[] getDefaultImage() {
         return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/tree.bmp") };
     }
-
-    @Override
-    public void handleBullet(Bullet b) { }
-
-    @Override
-    public void handleCharacter(GameCharacter t) { }
 
     @Override
     public void interactWith(int ID, int indexOfNode , Rectangle r1) { }

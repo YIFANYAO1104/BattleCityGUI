@@ -5,6 +5,7 @@ package com.bham.bc.components.triggers.traps;
 
 import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
@@ -26,11 +27,10 @@ public class Freeze extends RespawnTrigger {
         return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/snowflake.png"), };
     }
 
-    //if triggered, the bot will freeze for few seconds
     @Override
-    public void handleCharacter(GameCharacter character) {
-        if(active && intersects(character)) {
-            character.toFreeze(activationTime * FRAME_RATE);
+    public void handle(BaseGameEntity entity) {
+        if(active && entity instanceof GameCharacter && intersects(entity)) {
+            ((GameCharacter) entity).toFreeze(activationTime * FRAME_RATE);
             deactivate();
         }
     }

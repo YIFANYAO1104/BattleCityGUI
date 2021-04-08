@@ -65,8 +65,6 @@ abstract public class RespawnTrigger extends Trigger {
         cooldown = numTicks;
     }
 
-    @Override
-    public void handleObstacle(Obstacle entity) { }
 
     @Override
     public Rectangle getHitBox() {

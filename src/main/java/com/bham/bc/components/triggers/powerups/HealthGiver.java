@@ -3,6 +3,7 @@
  */
 package com.bham.bc.components.triggers.powerups;
 
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
@@ -29,18 +30,16 @@ public class HealthGiver extends RespawnTrigger{
         return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/hp.png"), };
     }
 
-    //if triggered, the bot's health will be incremented
     @Override
-    public void handleCharacter(GameCharacter character) {
-        if (active && intersects(character)) {
-            character.changeHP(health);
-
+    public void handle(BaseGameEntity entity) {
+        if(active && entity instanceof GameCharacter && intersects(entity)) {
+            ((GameCharacter) entity).changeHP(health);
             deactivate();
         }
     }
 
     @Override
     public ItemType getItemType() {
-        return ItemType.health;
+        return ItemType.HEALTH;
     }
 }

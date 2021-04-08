@@ -2,6 +2,9 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
+import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.components.environment.obstacles.Attribute;
+import com.bham.bc.components.environment.obstacles.Soft;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
@@ -110,20 +113,19 @@ abstract public class Bullet extends MovingEntity {
     @Override
     public String toString() { return "Bullet"; }
 
-    public void handleAll(List<BaseGameEntity> en1){
-        en1.forEach(b1 -> {
-            try {
-                handle((GameCharacter)b1);
-            }catch (Exception e){}
-        });
+    public void handle(List<BaseGameEntity> entities) {
+        entities.forEach(this::handle);
     }
 
-    protected void handle(GameCharacter gameCharacter) {
-        if(gameCharacter.intersects(this)) {
-            if(getSide() != gameCharacter.getSide() && gameCharacter.getImmuneTicks() == 0) {
-                gameCharacter.changeHP(-this.getDamage());
-            }
+    public void handle(BaseGameEntity entity) {
+        if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
+            ((GameCharacter) entity).changeHP(-damage);
             destroy();
+        } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {
+            destroy();
+            if(((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)) {
+                ((Soft) entity).changeHp(-damage);
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package com.bham.bc.components.triggers.powerups;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
 import static com.bham.bc.utils.Constants.FRAME_RATE;
@@ -26,14 +27,12 @@ public class TeleportTrigger extends RespawnTrigger{
     }
 
     @Override
-    public void handleCharacter(GameCharacter character) {
-        if(character instanceof Player){
-            if(active && intersects(character)){
-                if(destination!=null){
-                    character.teleport(destX,destY);
-                }
-                deactivate();
+    public void handle(BaseGameEntity entity) {
+        if(active && entity instanceof Player && intersects(entity)) {
+            if(destination != null){
+                ((Player) entity).teleport(destX,destY);
             }
+            deactivate();
         }
     }
 }

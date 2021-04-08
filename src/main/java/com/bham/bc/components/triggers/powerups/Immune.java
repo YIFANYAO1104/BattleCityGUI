@@ -5,6 +5,7 @@ package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -24,11 +25,10 @@ public class Immune extends RespawnTrigger {
         return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/green_heart.png"), };
     }
 
-    //if triggered, the bot's health will be never decrease for few seconds only
     @Override
-    public void handleCharacter(GameCharacter character) {
-        if (active && intersects(character)) {
-            character.toImmune(activationTime * FRAME_RATE);
+    public void handle(BaseGameEntity entity) {
+        if(active && entity instanceof GameCharacter && intersects(entity)) {
+            ((GameCharacter) entity).toImmune(activationTime * FRAME_RATE);
             deactivate();
         }
     }
