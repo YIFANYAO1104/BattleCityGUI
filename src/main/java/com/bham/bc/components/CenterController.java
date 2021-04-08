@@ -3,14 +3,12 @@ package com.bham.bc.components;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
 import com.bham.bc.components.triggers.Trigger;
 
-import com.bham.bc.components.triggers.TriggerSystem;
 import com.bham.bc.entity.physics.MapDivision;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.utils.messaging.Telegram;
@@ -42,7 +40,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     protected boolean isGameOver;
 
     protected GameMap gameMap;
-    protected TriggerSystem triggerSystem;
+    protected ArrayList<Trigger> triggers;
     protected ArrayList<Bullet> bullets;
     protected ArrayList<GameCharacter> characters;
 
@@ -57,9 +55,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      */
     public CenterController() {
         super(GetNextValidID(),-1,-1);
-
-        gameMap = new GameMap(MapType.EmptyMap);
-        triggerSystem = new TriggerSystem();
+        triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
     }
@@ -73,19 +69,21 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         CenterController centerController = null;
         switch (mode) {
             case SURVIVAL:
-                centerController = new SurvivalController(mapType);
+                centerController = new SurvivalController();
                 break;
             case CHALLENGE:
-                centerController = new ChallengeController(mapType);
+                centerController = new ChallengeController();
                 break;
         }
         frontendServices = centerController;
         backendServices = centerController;
 
+        centerController.loadMap(mapType);
         centerController.startGame();
     }
 
     // TEMPORARY METHODS -------------------------------------------
+    public abstract void loadMap(MapType mapType);
     public abstract void startGame();
 
     public ArrayList<BaseGameEntity> allInfoCharacter(){
@@ -170,18 +168,19 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     // ADDERS -----------------------------------------------------
     @Override
     public void addBullet(Bullet bullet) {
-        mapDivision.AddEntity(bullet);
         bullets.add(bullet);
+        mapDivision.addEntity(bullet);
     }
 
     @Override
     public void addCharacter(GameCharacter character) {
         characters.add(character);
+        mapDivision.addEntity(character);
     }
 
     @Override
     public void addTrigger(Trigger trigger) {
-        triggerSystem.register(trigger);
+        triggers.add(trigger);
     }
     // ------------------------------------------------------------
 
@@ -221,33 +220,33 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     @Override
     public void update() {
-        mapDivision.UpdateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
+        mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
 
         characters.forEach(GameCharacter::update);
-        characters.forEach(character -> character.handle(mapDivision.CalculateNeighborsArray(character,40)));
+        characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character,40)));
 
         bullets.forEach(Bullet::update);
-        bullets.forEach(bullet -> bullet.handle(mapDivision.CalculateNeighborsArray(bullet, bullet.getHitboxRadius())));
+        bullets.forEach(bullet -> bullet.handle(mapDivision.calculateNeighborsArray(bullet, bullet.getHitboxRadius())));
 
-        triggerSystem.update();
-        triggerSystem.handleAll(characters, gameMap.getInteractiveObstacles());
+        triggers.forEach(Trigger::update);
+        triggers.forEach(trigger -> trigger.handle(mapDivision.calculateNeighborsArray(trigger.getCenterPosition(), 40)));
 
         // Performed before removals
-        bullets.forEach(b -> mapDivision.UpdateEntity(b));
-        characters.forEach(c -> mapDivision.UpdateEntity(c));
+        bullets.forEach(b -> mapDivision.updateEntity(b));
+        characters.forEach(c -> mapDivision.updateEntity(c));
 
         // Performed last
         bullets.removeIf(b -> !b.exists());
         characters.removeIf(c -> !c.exists());
-        triggerSystem.cleanUp();
+        triggers.removeIf(t -> !t.exists());
     }
 
     @Override
     public void render(GraphicsContext gc) {
         gameMap.renderBottomLayer(gc);
 
-        triggerSystem.render(gc);
+        triggers.forEach(trigger -> trigger.render(gc));
         bullets.forEach(bullet -> bullet.render(gc));
         characters.forEach(character -> character.render(gc));
 
@@ -259,7 +258,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     @Override
     public void clear() {
-        triggerSystem.clear();
+        triggers.clear();
         characters.clear();
         bullets.clear();
         gameMap.clear();
@@ -279,16 +278,4 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     @Override
     public String toString() { return "Controller"; }
     // ------------------------------------------------------------
-
-    public static class CollisionHandler {
-        private MapDivision<BaseGameEntity> mapDivision;
-
-        public CollisionHandler() {
-
-        }
-
-        public void handleAll() {
-
-        }
-    }
 }

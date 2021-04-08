@@ -1,12 +1,9 @@
 package com.bham.bc.components;
 
-import com.bham.bc.components.CenterController;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.*;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
-
-import java.util.ArrayList;
 
 /**
  * Represents a controller for the survival game mode
@@ -16,16 +13,20 @@ public class ChallengeController extends CenterController {
     /**
      * Constructs the controller by selecting an empty map and creating components
      */
-    public ChallengeController(MapType mapType){
+    public ChallengeController(){
         super();
-        player = new Player(16*32, 16*32);
 
+    }
+
+    @Override
+    public void loadMap(MapType mapType) {
         gameMap = new GameMap(mapType);
-        characters.add(player);
     }
 
     @Override
     public void startGame() {
+        player = new Player(16*32, 16*32);
+        characters.add(player);
         characters.add(new Follower1(16*26, 16*26));
 //        characters.add(new Wanderer1(16*26, 16*26));
     }

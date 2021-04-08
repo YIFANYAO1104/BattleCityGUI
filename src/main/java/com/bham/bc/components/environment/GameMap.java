@@ -2,16 +2,14 @@ package com.bham.bc.components.environment;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.environment.obstacles.Attribute;
+import com.bham.bc.components.triggers.TriggerLoader;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.triggers.Trigger;
-import com.bham.bc.components.triggers.TriggerSystem;
 import com.bham.bc.entity.physics.MapDivision;
 import com.bham.bc.entity.graph.HandyGraphFunctions;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
-import com.bham.bc.components.environment.maploaders.JsonMapLoader;
-import com.bham.bc.components.environment.maploaders.MapLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -19,6 +17,7 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
+import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.utils.Constants.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,8 +28,8 @@ import java.util.stream.Collectors;
  * <h1>Game Map</h1>
  *
  * <p>This class takes care of the the current game session uses. It generates an appropriate map, adds obstacles and triggers
- * to it and sets up graph. <b>Note: </b> the class itself only registers constant triggers that come along from the JSON file,
- * it passes them to {@link TriggerSystem}. It also does not check for obstacle intersection, {@link MapDivision} does that for
+ * to it and sets up a graph. <b>Note: </b> the class itself only registers constant triggers that come along from the JSON file,
+ * it passes them to {@link com.bham.bc.components.CenterController}. It also does not check for obstacle intersection, {@link MapDivision} does that for
  * it. This class only takes care of the visuals of obstacles and provides specific map territories.</p>
  */
 public class GameMap {
@@ -50,15 +49,16 @@ public class GameMap {
     private SparseGraph<NavNode, GraphEdge> graphSystem;
 
     /**
-     * Constructs the map for the active game session. All obstacles are from a JSON file parsed with {@link JsonMapLoader}.
+     * Constructs the map for the active game session. All obstacles are from a JSON file parsed with {@link MapLoader}.
      * @param mapType type of map to be loaded - it contains a path for the JSON file
      */
     public GameMap(MapType mapType) {
-        MapLoader mapLoader = new JsonMapLoader(mapType.getName());
+        MapLoader mapLoader = new MapLoader(mapType.getName());
+        TriggerLoader triggerLoader = new TriggerLoader(mapType.getName());
 
         initParams(mapLoader);
-        initElements(mapLoader);
-        initGraph(mapLoader);
+        initElements(mapLoader, triggerLoader);
+        initGraph(triggerLoader);
         initAreas(mapLoader);
     }
 
@@ -82,9 +82,10 @@ public class GameMap {
      * </ul>
      * @param mapLoader map loader that will provide all the generated obstacles
      */
-    private void initElements(MapLoader mapLoader) {
+    private void initElements(MapLoader mapLoader, TriggerLoader triggerLoader) {
         interactiveObstacles = mapLoader.getObstacles().stream().filter(o -> !o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toList());
         noninteractiveObstacles = mapLoader.getObstacles().stream().filter(o -> o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toList());
+        triggerLoader.getTriggers().forEach(t -> backendServices.addTrigger(t));
     }
 
     /**
@@ -154,9 +155,9 @@ public class GameMap {
 
     /**
      * Initializes the graph for the current map considering triggers locations
-     * @param mapLoader map loader that will provide the information about constant triggers the graph can point to
+     * @param triggerLoader map loader that will provide the information about constant triggers the graph can point to
      */
-    public void initGraph(MapLoader mapLoader) {
+    public void initGraph(TriggerLoader triggerLoader) {
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         graphSystem = new SparseGraph<>(false); //single direction turn off
         hgf.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(),GRAPH_NUM_CELLS_Y,GRAPH_NUM_CELLS_X); //make network
@@ -175,14 +176,12 @@ public class GameMap {
         // Consider multiple players and enemies spawning at unreachable nodes
         // Player dummyEntity = new Player(mapLoader.getHomeTerritory.getCenterX(), mapLoader.getHomeTerritory.getCenterY());
         // graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForEntity(dummyEntity));
-    }
 
-    public void attachExtraInfo(List<Trigger> triggers) {
-        //let the corresponding navgraph node point to triggers object
-        for (Trigger trigger : triggers) {
+        for (Trigger trigger : triggerLoader.getTriggers()) {
             NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).Index());
             node.setExtraInfo(trigger);
         }
+
     }
     // ---------------------------------------------------------------------------------
 

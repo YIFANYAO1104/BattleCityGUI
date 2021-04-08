@@ -1,7 +1,7 @@
 package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.environment.Obstacle;
-import com.bham.bc.components.environment.maploaders.Tileset;
+import com.bham.bc.components.environment.Tileset;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -11,7 +11,6 @@ import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import static com.bham.bc.utils.messaging.MessageTypes.*;
 import static com.bham.bc.utils.messaging.MessageTypes.Msg_interactWithSoft;
 import java.util.EnumSet;
-import java.util.List;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
 

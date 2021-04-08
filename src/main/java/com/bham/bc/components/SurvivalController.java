@@ -4,7 +4,6 @@ import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.*;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.triggers.TriggerLoader;
 import com.bham.bc.entity.physics.MapDivision;
 
 import java.util.ArrayList;
@@ -17,14 +16,14 @@ public class SurvivalController extends CenterController {
     /**
      * Constructs the controller by selecting a specific map and preparing that map for the game session
      */
-    public SurvivalController(MapType mapType){
+    public SurvivalController(){
         super();
-        gameMap = new GameMap(mapType);
-        triggerSystem = new TriggerLoader(mapType.getName()).getTriggerSystem();
-        gameMap.attachExtraInfo(triggerSystem.getTriggers());
     }
 
-
+    @Override
+    public void loadMap(MapType mapType) {
+        gameMap = new GameMap(mapType);
+    }
 
     /**
      * Spawns all the initial characters
@@ -50,7 +49,6 @@ public class SurvivalController extends CenterController {
     private void initDivision() {
         mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), GameMap.getNumTilesX(), GameMap.getNumTilesY(), 50);
         mapDivision.addToMapDivision(new ArrayList<>(gameMap.getInteractiveObstacles()));
-        mapDivision.addToMapDivision(new ArrayList<>(triggerSystem.getTriggers()));
         mapDivision.addToMapDivision(new ArrayList<>(characters));
     }
 

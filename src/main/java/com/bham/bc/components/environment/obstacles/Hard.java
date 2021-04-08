@@ -1,7 +1,7 @@
 package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.environment.Obstacle;
-import com.bham.bc.components.environment.maploaders.Tileset;
+import com.bham.bc.components.environment.Tileset;
 import javafx.scene.image.Image;
 
 import java.util.EnumSet;

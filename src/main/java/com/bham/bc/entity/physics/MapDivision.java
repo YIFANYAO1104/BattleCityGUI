@@ -87,7 +87,7 @@ public class MapDivision<entity extends BaseGameEntity>{
     /**
      * Used to add the entities to the cells linklist
      */
-    public void AddEntity(entity ent){
+    public void addEntity(entity ent){
         assert (ent != null);
 
         int idx = PositionToIndex(ent.getPosition());
@@ -100,17 +100,17 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     public void addToMapDivision(List<entity> m1){
         for(entity b1:m1){
-            AddEntity(b1);
+            addEntity(b1);
         }
     }
 
-    public void UpdateEntities(List<entity> n1){
-        n1.forEach(entity-> UpdateEntity(entity));
+    public void updateEntities(List<entity> n1){
+        n1.forEach(this::updateEntity);
     }
 
-    public void UpdateEntity(entity ent){
+    public void updateEntity(entity ent){
         if(!register.containsKey((MovingEntity) ent)){
-            System.out.println("It may not be a Moving entitys or Does not contain this ent!!!, it should be added firstly");
+            System.out.println("Two possible errors:\n1. It is not a MovingEntity\n2. The division does not contain this entity. Make sure to add it first");
             return;
         }
         int oldIdx = register.get(ent);
@@ -118,7 +118,7 @@ public class MapDivision<entity extends BaseGameEntity>{
 
         //----------------------------remove-------if it is not exist----------------
         if(!((MovingEntity) ent).exists()){
-            RemovedEntity(ent,oldIdx);
+            removedEntity(ent,oldIdx);
             register.remove(ent);
             return;
         }
@@ -132,20 +132,20 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     }
 
-    public void RemovedEntity(entity ent, int idx){
+    public void removedEntity(entity ent, int idx){
         m_Cells.get(idx).Unites.remove(ent);
     }
-    public void UpdateObstacles(ArrayList<entity> a1){
-        a1.forEach(b1-> UpdateObstacle(b1));
+    public void updateObstacles(ArrayList<entity> a1){
+        a1.forEach(b1-> updateObstacle(b1));
     }
 
-    public void UpdateObstacle (entity genericObstacle){
+    public void updateObstacle(entity genericObstacle){
         if(! (genericObstacle instanceof Obstacle)) System.out.println("it is not a genericObstacle,but I will delete it");
         try {
             Obstacle g1 = (Obstacle) genericObstacle;
             if(!g1.exists()){
                 int idx = PositionToIndex(genericObstacle.getPosition());
-                RemovedEntity(genericObstacle, idx);
+                removedEntity(genericObstacle, idx);
             }
         }catch (Exception e){}
     }
@@ -155,11 +155,10 @@ public class MapDivision<entity extends BaseGameEntity>{
      * @param target the entity should be check
      * @param radius is the raidus of Hitbox
      */
-    public void CalculateNeighbors(Point2D target, double radius){
+    public void calculateNeighbors(Point2D target, double radius){
         surround_entities.clear();
         // creat the hitbox whcih is the interact test box of the target area
         Hitbox targetBox = new Hitbox(target.subtract(radius,radius),target.add(radius,radius));
-
 
         ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
         while (c_iter.hasNext()){
@@ -174,7 +173,7 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
-    public List<entity> CalculateNeighborsArray(entity entity, double radius){
+    public List<entity> calculateNeighborsArray(entity entity, double radius){
         surround_entities.clear();
         Point2D target = entity.getCenterPosition();
         // creat the hitbox whcih is the interact test box of the target area
@@ -195,7 +194,7 @@ public class MapDivision<entity extends BaseGameEntity>{
         return surround_entities;
     }
 
-    public List<entity> CalculateNeighborsArray(Point2D target, double radius){
+    public List<entity> calculateNeighborsArray(Point2D target, double radius){
         surround_entities.clear();
         // creat the hitbox whcih is the interact test box of the target area
         Hitbox targetBox = new Hitbox(target.subtract(radius,radius),target.add(radius,radius));

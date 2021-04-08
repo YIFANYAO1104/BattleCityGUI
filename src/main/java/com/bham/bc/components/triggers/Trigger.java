@@ -5,18 +5,17 @@
 package com.bham.bc.components.triggers;
 
 
-import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import com.bham.bc.components.characters.GameCharacter;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+
+import java.util.List;
 
 abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
@@ -61,6 +60,10 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
      * triggered and the appropriate action will be taken.
      */
     public abstract void handle(BaseGameEntity entity);
+
+    public void handle(List<BaseGameEntity> entities) {
+        entities.forEach(this::handle);
+    }
 
     /**
      * called each update-step of the game. This methods updates any internal

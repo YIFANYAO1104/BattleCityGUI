@@ -1,8 +1,7 @@
 package com.bham.bc.components.triggers;
 
-import com.bham.bc.components.environment.maploaders.MapLoader;
+import com.bham.bc.components.environment.MapLoader;
 import com.bham.bc.components.triggers.powerups.*;
-import javafx.embed.swing.JFXPanel;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -16,11 +15,14 @@ import java.util.List;
 public class TriggerLoader {
 
 
-    private TriggerSystem triggerSystem = new TriggerSystem();
+    //private TriggerSystem triggerSystem = new TriggerSystem();
+
+    private ArrayList<Trigger> triggers;
 
     private HashMap<Integer, String> classNameMap= new HashMap<>();
 
     public TriggerLoader(String resourceName) {
+        triggers = new ArrayList<>();
         if (resourceName==null) return;
         try {
             loadMap(resourceName);
@@ -30,9 +32,11 @@ public class TriggerLoader {
 //        initTeleportTrigger();
     }
 
-    public TriggerSystem getTriggerSystem() {
-        return triggerSystem;
-    }
+//    public TriggerSystem getTriggerSystem() {
+//        return triggerSystem;
+//    }
+
+    public ArrayList<Trigger> getTriggers() { return triggers; }
 
 
     public void initTriggerIDMap(JSONObject obj){
@@ -132,7 +136,9 @@ public class TriggerLoader {
                 params.add(attribute.getInt("value"));
             }
             System.out.println(params);
-            triggerSystem.register((Trigger) constructor.newInstance(params.toArray()));
+
+            //triggerSystem.register((Trigger) constructor.newInstance(params.toArray()));
+            triggers.add((Trigger) constructor.newInstance(params.toArray()));
         }
     }
 
@@ -190,14 +196,18 @@ public class TriggerLoader {
         TeleportTrigger t4 = new TeleportTrigger(350,370,100);
         t4.setDestination(t3);
         t1.setDestination(t2);
-        triggerSystem.register(t1);
-        triggerSystem.register(t2);
-        triggerSystem.register(t3);
-        triggerSystem.register(t4);
+//        triggerSystem.register(t1);
+//        triggerSystem.register(t2);
+//        triggerSystem.register(t3);
+//        triggerSystem.register(t4);
+        triggers.add(t1);
+        triggers.add(t2);
+        triggers.add(t3);
+        triggers.add(t4);
     }
 
-    public static void main(String[] args) {
-        new JFXPanel();
-        new TriggerLoader("/test.json");
-    }
+//    public static void main(String[] args) {
+//        new JFXPanel();
+//        new TriggerLoader("/test.json");
+//    }
 }

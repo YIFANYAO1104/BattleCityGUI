@@ -1,4 +1,4 @@
-package com.bham.bc.components.environment.maploaders;
+package com.bham.bc.components.environment;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;

@@ -2,7 +2,6 @@ package com.bham.bc.components.environment;
 
 import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.components.environment.maploaders.Tileset;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;

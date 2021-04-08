@@ -1,21 +1,21 @@
-package com.bham.bc.components.environment.maploaders;
+package com.bham.bc.components.environment;
 
-import com.bham.bc.components.environment.Obstacle;
-import com.bham.bc.components.triggers.Trigger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.InputStream;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-public class JsonMapLoader extends MapLoader {
+public class MapLoader {
     private int mapWidth;
     private int mapHeight;
     private int tileWidth;
     private int tileHeight;
 
+    private List<Obstacle> obstacles;
     private EnumMap<Tileset, Integer> offsets;
     private HashMap<Integer, int[]> animations;
 
@@ -23,9 +23,8 @@ public class JsonMapLoader extends MapLoader {
      * Constructs JSON Map Loader
      * @param resourceName path to resource
      */
-    public JsonMapLoader(String resourceName) {
-        super();
-        if (resourceName==null) return;
+    public MapLoader(String resourceName) {
+        obstacles = new ArrayList<>();
         offsets = new EnumMap<>(Tileset.class);
         animations = new HashMap<>();
 
@@ -37,18 +36,18 @@ public class JsonMapLoader extends MapLoader {
     }
 
     /**
-     * Loads map with obstacles and triggers
+     * Loads map with obstacles
      *
      * @param resourceName path to resource
-     * @throws Exception if resource is not found
+     * @throws Exception
      */
     private void loadMap(String resourceName) throws Exception {
+        JSONObject jsonObject;
         InputStream is = MapLoader.class.getResourceAsStream(resourceName);
-        if (is == null) throw new NullPointerException("Cannot find resource file: " + resourceName);
 
-        JSONObject jsonObject = new JSONObject(new JSONTokener(is));
+        assert is != null;
+        jsonObject = new JSONObject(new JSONTokener(is));
         initMapProperties(jsonObject);
-
 
         // Each group contains multiple layers which make up 1 tileset
         JSONArray layerGroups = jsonObject.getJSONArray("layers");
@@ -124,9 +123,13 @@ public class JsonMapLoader extends MapLoader {
      * @param className     name of the class used to create an obstacle
      * @param obstacleArray array of obstacles in JSON format
      * @return list of generatable game obstacles
-     * @throws Exception    if construction of a class fails
+     * @throws ClassNotFoundException
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     * @throws InstantiationException
      */
-    public List<Obstacle> convertToObstacles(String tilesetName, String className, JSONArray obstacleArray) throws Exception {
+    public List<Obstacle> convertToObstacles(String tilesetName, String className, JSONArray obstacleArray) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // Reflect the names of parameters for constructor
         Tileset tileset = Tileset.valueOf(tilesetName);
         int yo = tileset.getyOffset();
@@ -150,22 +153,42 @@ public class JsonMapLoader extends MapLoader {
         return obstacleInstances;
     }
 
-    @Override
+    /**
+     * Gets all obstacles
+     * @return List of Generic Obstacles
+     */
+    public List<Obstacle> getObstacles() {
+        if(obstacles == null) System.out.println("Damn");
+        return obstacles; }
+
+    /**
+     * Gets the width of the tile
+     * @return width of any tile
+     */
     public int getTileWidth() {
         return tileWidth;
     }
 
-    @Override
+    /**
+     * Gets the height of the tile
+     * @return height of any tile
+     */
     public int getTileHeight() {
         return tileHeight;
     }
 
-    @Override
+    /**
+     * Gets the amount of tiles in X direction
+     * @return number of tiles making up the total width of the map
+     */
     public int getNumTilesX() {
         return mapWidth;
     }
 
-    @Override
+    /**
+     * Gets the amount of tiles in Y direction
+     * @return number of tiles making up the total height of the map
+     */
     public int getNumTilesY() {
         return mapHeight;
     }
