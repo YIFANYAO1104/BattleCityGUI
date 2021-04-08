@@ -124,7 +124,7 @@ public class MainMenu extends AnchorPane {
 
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
-     * "HIGH-SCORES" is clicked and shows top 10 scores.
+     * mode(challenge or survival) is clicked and shows top 10 scores.
      */
     private void createSubMenuScores(SubMenu subMenu,String mode) {
 

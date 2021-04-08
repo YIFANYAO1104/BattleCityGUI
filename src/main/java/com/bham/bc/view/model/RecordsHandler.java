@@ -153,7 +153,11 @@ public class RecordsHandler {
     }
 
 
-
+    /**
+     * sort the Json Array according to score
+     * @param jsonArr json array to be sorted
+     * @return return the sorted json array
+     */
     public static JSONArray jsonArraySort(JSONArray jsonArr) {
 
         JSONArray sortedJsonArray = new JSONArray();

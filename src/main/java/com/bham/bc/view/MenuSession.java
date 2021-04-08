@@ -80,23 +80,6 @@ public class MenuSession {
         }
     }
 
-    /**
-     * Attaches Options menu to the provided game pane and shows (hides) it
-     * @param gamePane game pane the Options menu will be attached (detached) to
-     * @param timer animation timer to be stopped (started)
-     */
-    public static void showOptionsMenu(AnchorPane gamePane, AnimationTimer timer) {
-        if(gamePane.getChildren().contains(pauseMenu)) {
-            pauseMenu.hide(gamePane);
-            timer.start();
-        } else {
-            pauseMenu.showOptionsMenu(gamePane);
-            timer.stop();
-        }
-    }
-
-
-
 
 
     public static void showEndMenu(AnchorPane gamePane, double score) {

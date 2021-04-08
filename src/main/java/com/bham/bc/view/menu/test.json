@@ -1,55 +1,55 @@
 [{
 	"date":"7/3",
-	"score":"762",
-	"name":"Alex",
+	"score":"792",
+	"name":"Shan",
 	"rank":"1"
 },
 {
 	"date":"7/3",
-	"score":"762",
-	"name":"Alex",
+	"score":"792",
+	"name":"Berry",
 	"rank":"2"
 },
 {
 	"date":"7/3",
-	"score":"622",
-	"name":"Mantas",
+	"score":"782",
+	"name":"YIFAN",
 	"rank":"3"
 },
 {
 	"date":"7/3",
-	"score":"622",
-	"name":"Mantas",
+	"score":"782",
+	"name":"YIFAN",
 	"rank":"4"
+},
+{
+	"date":"7/3",
+	"score":"762",
+	"name":"Alex",
+	"rank":"5"
+},
+{
+	"date":"7/3",
+	"score":"762",
+	"name":"Alex",
+	"rank":"6"
 },
 {
 	"date":"7/3",
 	"score":"622",
 	"name":"Mantas",
-	"rank":"5"
+	"rank":"7"
 },
 {
 	"date":"7/3",
 	"score":"322",
 	"name":"Kitty",
-	"rank":"6"
-},
-{
-	"date":"7/3",
-	"score":"222",
-	"name":"Jog",
-	"rank":"7"
-},
-{
-	"date":"7/3",
-	"score":"222",
-	"name":"Dou",
 	"rank":"8"
 },
 {
 	"date":"7/3",
 	"score":"222",
-	"name":"Dou",
+	"name":"Jog",
 	"rank":"9"
 },
 {

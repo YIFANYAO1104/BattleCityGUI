@@ -40,13 +40,13 @@ public class CustomStage extends Stage{
     private double height = 0.00;
 
     private boolean isMax = false;
-    private boolean isRight;// 是否处于右边界调整窗口状态
-    private boolean isBottomRight;// 是否处于右下角调整窗口状态
-    private boolean isBottom;// 是否处于下边界调整窗口状态
+    private boolean isRight;
+    private boolean isBottomRight;
+    private boolean isBottom;
     private double RESIZE_WIDTH = 5.00;
     private double MIN_WIDTH = 400.00;
     private double MIN_HEIGHT = 300.00;
-    private double xOffset = 0, yOffset = 0;//自定义dialog移动横纵坐标
+    private double xOffset = 0, yOffset = 0;
     public static String typeOf;
     private AnchorPane gamePane;
     public static Label setMenu;
@@ -78,9 +78,9 @@ public class CustomStage extends Stage{
     /**
      * create titler bar template
      * @param root
-     * @param Width
-     * @param Height
-     * @param offset
+     * @param Width width of title bar
+     * @param Height height of title bar
+     * @param offset offset of game name
      */
 
     public void titleBar(AnchorPane root, int Width, int Height,int offset,ChoiceBox changeSkin){
@@ -265,31 +265,29 @@ public class CustomStage extends Stage{
             double y = event.getSceneY();
             double width = stage.getWidth();
             double height = stage.getHeight();
-            Cursor cursorType = Cursor.DEFAULT;// 鼠标光标初始为默认类型，若未进入调整窗口状态，保持默认类型
-            // 先将所有调整窗口状态重置
+            Cursor cursorType = Cursor.DEFAULT;
             isRight = isBottomRight = isBottom = false;
             if (y >= height - RESIZE_WIDTH) {
-                if (x <= RESIZE_WIDTH) {// 左下角调整窗口状态
-                    //不处理
+                if (x <= RESIZE_WIDTH) {
 
-                } else if (x >= width - RESIZE_WIDTH) {// 右下角调整窗口状态
+                } else if (x >= width - RESIZE_WIDTH) {
                     isBottomRight = true;
                     cursorType = Cursor.SE_RESIZE;
-                } else {// 下边界调整窗口状态
+                } else {
                     isBottom = true;
                     cursorType = Cursor.S_RESIZE;
                 }
-            } else if (x >= width - RESIZE_WIDTH) {// 右边界调整窗口状态
+            } else if (x >= width - RESIZE_WIDTH) {
                 isRight = true;
                 cursorType = Cursor.E_RESIZE;
             }
-            // 最后改变鼠标光标
+
             root.setCursor(cursorType);
         });
 
         root.setOnMouseDragged((MouseEvent event) -> {
 
-            //根据鼠标的横纵坐标移动dialog位置
+
             event.consume();
             if (yOffset != 0 ) {
                 stage.setX(event.getScreenX() - xOffset);
@@ -302,31 +300,30 @@ public class CustomStage extends Stage{
 
             double x = event.getSceneX();
             double y = event.getSceneY();
-            // 保存窗口改变后的x、y坐标和宽度、高度，用于预判是否会小于最小宽度、最小高度
+
             double nextX = stage.getX();
             double nextY = stage.getY();
             double nextWidth = stage.getWidth();
             double nextHeight = stage.getHeight();
-            if (isRight || isBottomRight) {// 所有右边调整窗口状态
+            if (isRight || isBottomRight) {
                 nextWidth = x;
             }
-            if (isBottomRight || isBottom) {// 所有下边调整窗口状态
+            if (isBottomRight || isBottom) {
                 nextHeight = y;
             }
-            if (nextWidth <= MIN_WIDTH) {// 如果窗口改变后的宽度小于最小宽度，则宽度调整到最小宽度
+            if (nextWidth <= MIN_WIDTH) {
                 nextWidth = MIN_WIDTH;
             }
-            if (nextHeight <= MIN_HEIGHT) {// 如果窗口改变后的高度小于最小高度，则高度调整到最小高度
+            if (nextHeight <= MIN_HEIGHT) {
                 nextHeight = MIN_HEIGHT;
             }
-            // 最后统一改变窗口的x、y坐标和宽度、高度，可以防止刷新频繁出现的屏闪情况
-            stage.setX(nextX);
+
             stage.setY(nextY);
             stage.setWidth(nextWidth);
             stage.setHeight(nextHeight);
 
         });
-        //鼠标点击获取横纵坐标
+
         root.setOnMousePressed(event -> {
             event.consume();
             xOffset = event.getSceneX();
@@ -341,10 +338,10 @@ public class CustomStage extends Stage{
     }
 
     /**
-     * create title bar(without options menu icon) to main interface
+     * create title bar to main interface
      * @param root
-     * @param Width
-     * @param Height
+     * @param Width width of title bar
+     * @param Height height of title bar
      */
 
     public void createCommonTitlebar(AnchorPane root, int Width, int Height){
@@ -355,10 +352,10 @@ public class CustomStage extends Stage{
     }
 
     /**
-     * create title bar(with options Menu icon) to gameSession
+     * create title bar to game interface
      * @param root
-     * @param Width
-     * @param Height
+     * @param Width width of title bar
+     * @param Height height of title bar
      */
 
     public void createTitleBar(AnchorPane root, int Width, int Height){
