@@ -18,7 +18,7 @@ import java.util.List;
 
 public class RecordsHandler {
     private static ArrayList<Records> records=new ArrayList<>();
-    private static JSONArray jsonArrayToFile=new JSONArray();
+    private static JSONArray jsonArrayToFile;
     private static JSONArray jsonArray;
 
 
@@ -29,6 +29,7 @@ public class RecordsHandler {
      * @return
      */
     public ObservableList<Records> createSampleRecords() {
+        jsonArrayToFile=new JSONArray();
         //write to Json file
         createRecord(new Records("1st","Dou","222","7/3"));
         createRecord(new Records("2nd","YIFAN","782","7/3"));
@@ -308,6 +309,7 @@ public class RecordsHandler {
         byte[] array=new byte[1024*1024];
         int num=fileInputStream.read(array);
         String s=new String(array);
+
         parse(s);
     }
 
@@ -318,6 +320,7 @@ public class RecordsHandler {
      */
     public static ArrayList<Records> parse(String responseBody){
         JSONArray albums = new JSONArray(responseBody);
+        System.out.println(albums.length());
         for (int i = 0; i < albums.length(); i++){
             JSONObject album = albums.getJSONObject(i);
             String rank = album.getString("rank");
@@ -325,7 +328,7 @@ public class RecordsHandler {
             String score = album.getString("score");
             String date = album.getString("date");
             records.add(i,new Records(rank,name,score,date));
-            //System.out.println(rank + " | " + name + " | " + score+" | "+date);
+            System.out.println(rank + " | " + name + " | " + score+" | "+date);
 
         }
         return records;
