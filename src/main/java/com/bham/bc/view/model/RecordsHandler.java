@@ -11,13 +11,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class RecordsHandler {
-    private static ArrayList<Records> records=new ArrayList<>();
+    private static ArrayList<Records> records;
     private static JSONArray jsonArrayToFile;
     private static JSONArray jsonArray;
 
@@ -30,6 +27,7 @@ public class RecordsHandler {
      */
     public ObservableList<Records> createSampleRecords() {
         jsonArrayToFile=new JSONArray();
+        records=new ArrayList<>();
         //write to Json file
         createRecord(new Records("1st","Dou","222","7/3"));
         createRecord(new Records("2nd","YIFAN","782","7/3"));
@@ -63,6 +61,8 @@ public class RecordsHandler {
             e.printStackTrace();
         }
         ObservableList<Records> data = FXCollections.observableArrayList(records);
+        for(Records a:data){
+            System.out.println(a.getScore());}
         return data;
     }
 
