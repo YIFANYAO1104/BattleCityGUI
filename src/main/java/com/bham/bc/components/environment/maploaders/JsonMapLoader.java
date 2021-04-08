@@ -129,6 +129,7 @@ public class JsonMapLoader extends MapLoader {
     public List<Obstacle> convertToObstacles(String tilesetName, String className, JSONArray obstacleArray) throws Exception {
         // Reflect the names of parameters for constructor
         Tileset tileset = Tileset.valueOf(tilesetName);
+        int yo = tileset.getyOffset();
         Class cls = Class.forName("com.bham.bc.components.environment.obstacles."+className);
 
         List<Obstacle> obstacleInstances = new ArrayList<>();
@@ -138,7 +139,7 @@ public class JsonMapLoader extends MapLoader {
         for(int i = 0; i < obstacleArray.length(); i++) {
             if(obstacleArray.getInt(i) > 0) {
                 int x= (i % mapWidth) * tileWidth;
-                int y = (i / mapWidth) * tileHeight;
+                int y = (i / mapWidth) * tileHeight - yo;
 
                 int tileID = obstacleArray.getInt(i) - offsets.get(tileset);
                 int[] tileIDs = animations.containsKey(tileID) ? animations.get(tileID) : new int[] {tileID};

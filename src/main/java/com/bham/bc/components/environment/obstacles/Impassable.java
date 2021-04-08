@@ -33,6 +33,11 @@ public class Impassable extends Obstacle {
 
     @Override
     public void handleCharacter(GameCharacter c) {
-        if(intersects(c)) c.move(-1);
+        if(intersects(c)) {
+            c.move(-1);
+            intersects(c);
+            System.out.println(this.getHitBox());
+            System.out.println(c.getHitBox());
+        }
     }
 }
