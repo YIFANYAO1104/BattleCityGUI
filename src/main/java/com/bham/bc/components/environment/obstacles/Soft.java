@@ -2,14 +2,16 @@ package com.bham.bc.components.environment.obstacles;
 
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.maploaders.Tileset;
+import com.bham.bc.entity.ai.navigation.ItemType;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import static com.bham.bc.utils.messaging.MessageTypes.*;
-import static com.bham.bc.utils.messaging.MessageTypes.Msg_interactWithPassable;
+import static com.bham.bc.utils.messaging.MessageTypes.Msg_interactWithSoft;
 import java.util.EnumSet;
+import java.util.List;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
 
@@ -45,9 +47,12 @@ public class Soft extends Obstacle {
     }
 
     @Override
-    public void interactWith(int ID, int indexOfNode , Rectangle r1) {
-        if(getHitBox().intersects(r1.getBoundsInLocal()))
-            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), ID, Msg_interactWithPassable, indexOfNode);
+    public void interactWith(int graphSystemID, int indexOfNode , Rectangle r1) {
+        //set this node as high cost node
+        if(getHitBox().intersects(r1.getBoundsInLocal())){
+            Object[] params = {indexOfNode,this};
+            Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interactWithSoft, params);
+        }
     }
 
 
@@ -59,5 +64,10 @@ public class Soft extends Obstacle {
             exists = false;
             entityManager.removeEntity(this);
         }
+    }
+
+    @Override
+    public ItemType getItemType() {
+        return ItemType.SOFT;
     }
 }

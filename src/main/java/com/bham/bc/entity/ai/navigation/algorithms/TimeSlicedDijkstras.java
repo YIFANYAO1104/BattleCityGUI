@@ -2,10 +2,12 @@ package com.bham.bc.entity.ai.navigation.algorithms;
 
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
-import com.bham.bc.entity.ai.navigation.algorithms.terminationPolicies.TerminationCondition;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.TerminationConditions;
 import com.bham.bc.entity.ai.navigation.impl.PathEdge;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies.*;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -14,30 +16,33 @@ import java.util.*;
  * Dijkstra's algorithm class modified to spread a search over multiple
  * update-steps
  */
-public class TimeSlicedDijkstras<termination_condition extends TerminationCondition>
+public class TimeSlicedDijkstras
         extends TimeSlicedAlgorithm {
 
     private final SparseGraph navGraph;
     private int source;
     private int target;
     private ItemType targetType;
+    private ExpandCondition expandCondition;
     ArrayList<Integer> parent;
     ArrayList<Double> distance;
     Set<Integer> seen;
     Queue<MyPairs> pq;
 
-    termination_condition tm;
+    TerminationConditions.TerminationCondition tm;
 
 
     public TimeSlicedDijkstras(final SparseGraph G,
                                int source,
                                ItemType targetType,
-                                termination_condition terminationCondition) {
+                               TerminationConditions.TerminationCondition terminationCondition,
+                               ExpandCondition expandCondition) {
         this.navGraph = G;
         this.source = source;
         this.target = -1;
         this.targetType = targetType;
         this.tm = terminationCondition;
+        this.expandCondition = expandCondition;
 
 
         int number = this.navGraph.numNodes();
@@ -71,7 +76,7 @@ public class TimeSlicedDijkstras<termination_condition extends TerminationCondit
                 return SearchStatus.target_found;
             }
 
-            SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(this.navGraph, node);
+            SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(this.navGraph, node,expandCondition);
 
             //for each edge connected to the next closest node
             for (GraphEdge pE = ConstEdgeItr.begin(); !ConstEdgeItr.end(); pE = ConstEdgeItr.next()){

@@ -34,8 +34,8 @@ public class Passable extends Obstacle {
         return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/icewall.jpg") };
     }
 
-    @Override
-    public void interactWith(int ID, int indexOfNode , Rectangle r1) {
-        return;
-    }
+//    @Override
+//    public void interactWith(int ID, int indexOfNode , Rectangle r1) {
+//        return;
+//    }
 }

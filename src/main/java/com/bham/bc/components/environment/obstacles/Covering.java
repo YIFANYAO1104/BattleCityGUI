@@ -33,6 +33,6 @@ public class Covering extends Obstacle {
         return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/tree.bmp") };
     }
 
-    @Override
-    public void interactWith(int ID, int indexOfNode , Rectangle r1) { }
+//    @Override
+//    public void interactWith(int ID, int indexOfNode , Rectangle r1) { }
 }

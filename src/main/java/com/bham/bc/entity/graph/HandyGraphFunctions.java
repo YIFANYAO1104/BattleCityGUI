@@ -1,6 +1,7 @@
 package com.bham.bc.entity.graph;
 
 
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.graph.algrithem.Floodfill;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.GraphNode;
@@ -135,7 +136,7 @@ public class HandyGraphFunctions {
         assert (node < graph.numNodes());
 
         //set the cost for each edge
-        graph_type.EdgeIterator ConstEdgeItr = new graph_type.EdgeIterator(graph, node);
+        graph_type.EdgeIterator ConstEdgeItr = new graph_type.EdgeIterator(graph, node,new ExpandPolicies.ExpandAll());
         for (GraphEdge pE = ConstEdgeItr.begin();
              !ConstEdgeItr.end();
              pE = ConstEdgeItr.next()) {

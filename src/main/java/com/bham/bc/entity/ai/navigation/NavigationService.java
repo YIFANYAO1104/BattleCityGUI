@@ -1,5 +1,6 @@
 package com.bham.bc.entity.ai.navigation;
 
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathEdge;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -72,4 +73,6 @@ public interface NavigationService {
      * @return
      */
     public List<Shape> getSmoothingBoxes();
+
+    public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
 }

@@ -10,7 +10,7 @@ public class QuickLaunch extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            GameSession manager = new GameSession(Mode.SURVIVAL, MapType.TEST);
+            GameSession manager = new GameSession(Mode.SURVIVAL, MapType.Map1);
             manager.createNewGame(primaryStage);
         } catch(Exception e) {
             e.printStackTrace();

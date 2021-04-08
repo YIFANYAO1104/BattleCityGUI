@@ -15,6 +15,6 @@ final public class Constants {
     final public static int GRAPH_NUM_CELLS_X = MAP_WIDTH / (SAMPLE_MOVINGENTITY_WIDTH/2);
     final public static int GRAPH_NUM_CELLS_Y = MAP_HEIGHT / (SAMPLE_MOVINGENTITY_HEIGHT/2);
     final public static double HITBOX_RADIUS = Math.sqrt((SAMPLE_MOVINGENTITY_WIDTH/2.0)*(SAMPLE_MOVINGENTITY_WIDTH/2.0));
-    final public static double GRAPH_GRAPH_OBSTACLE_EDGE_COST = 10000.0;
+    final public static double GRAPH_GRAPH_OBSTACLE_EDGE_COST = 30.0;
 
 }

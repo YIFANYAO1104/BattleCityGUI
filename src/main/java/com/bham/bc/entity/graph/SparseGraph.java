@@ -1,6 +1,7 @@
 package com.bham.bc.entity.graph;
 
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.GraphNode;
@@ -511,33 +512,42 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         private SparseGraph<node_type, edge_type> G;
         private final int NodeIndex;
         private boolean end = false;
+        private ExpandPolicies.ExpandCondition expandCondition;
 
         public EdgeIterator(SparseGraph<node_type, edge_type> graph,
-                            int node) {
+                            int node, ExpandPolicies.ExpandCondition expandCondition) {
             G = graph;
             NodeIndex = node;
             /* we don't need to check for an invalid node index since if the node is
              invalid there will be no associated edges
              */
             curEdge = G.edgeListVector.get(NodeIndex).listIterator();
+            this.expandCondition = expandCondition;
         }
 
-        public edge_type begin() {
+        public GraphEdge begin() {
             curEdge = G.edgeListVector.get(NodeIndex).listIterator();
-            if (curEdge.hasNext()) {
-                end = false;
-                return curEdge.next();
+            while (curEdge.hasNext()) {
+                GraphEdge e = curEdge.next();
+                if(expandCondition.isSatisfied(G,e)){
+                    end = false;
+                    return e;
+                }
             }
             end = true;
             return null;
         }
 
-        public edge_type next() {
-            if (!curEdge.hasNext()) {
-                end = true;
-                return null;
+        public GraphEdge next() {
+            while (curEdge.hasNext()) {
+                GraphEdge e = curEdge.next();
+                if(expandCondition.isSatisfied(G,e)){
+                    end = false;
+                    return e;
+                }
             }
-            return curEdge.next();
+            end = true;
+            return null;
         }
 
         //return true if we are at the end of the edge list
@@ -583,6 +593,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             for(NavNode node: obstacleId.get(id)){
                 node.minesNum();
                 if(node.isValid() && (!node.isHit()) ){
+                    node.setExtraInfo(null);
                     setNodeALlEdagesNormal(node.Index());
                 }
             }
@@ -609,11 +620,15 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 //                System.out.println("Find invalid nodes, dealing");
                 getNode((int)msg.ExtraInfo).setInvalid();
                 return true;
-            case Msg_interactWithPassable:
+            case Msg_interactWithSoft:
 //                System.out.println("Set the nodes edges with max");
-                NavNode nn1 = getNode((int) msg.ExtraInfo);
+                //Object[] params = {indexOfNode,this};
+                Object[] params = (Object[]) msg.ExtraInfo;
+                NavNode nn1 = getNode((int) params[0]);
                 addToHashMap(msg.Sender,nn1);
-                setNodeALLEdages((int) msg.ExtraInfo, Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST);
+                setNodeALLEdages((int) params[0], Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST);
+                //attach info on node
+                nn1.setExtraInfo((ExtraInfo) params[1]);
                 return true;
             case Msg_removeSoft:
 //                System.out.println("release the nodewa");

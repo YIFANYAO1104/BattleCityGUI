@@ -3,7 +3,9 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
+import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
 import com.bham.bc.utils.Constants;
 import com.bham.bc.utils.GeometryEnhanced;
@@ -123,7 +125,14 @@ public class Player extends GameCharacter {
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
+			case P: testDijistra();break;
 		}
+	}
+	private void testDijistra(){
+		navigationService.createRequest(ItemType.HEALTH);
+		navigationService.setExpandCondition(new ExpandPolicies.NoSoft());
+		System.out.println(navigationService.peekRequestStatus());
+		navigationService.getPath();
 	}
 
 	/**

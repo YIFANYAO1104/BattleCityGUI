@@ -3,6 +3,8 @@ package com.bham.bc.components.environment;
 import com.bham.bc.components.environment.obstacles.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.environment.maploaders.Tileset;
+import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -17,7 +19,7 @@ import static com.bham.bc.utils.messaging.MessageTypes.Msg_interact;
 /**
  * Class defining common properties for any obstacle
  */
-public abstract class Obstacle extends BaseGameEntity {
+public abstract class Obstacle extends BaseGameEntity implements ExtraInfo {
     protected boolean exists;
     protected int currentFrame;
 
@@ -77,4 +79,14 @@ public abstract class Obstacle extends BaseGameEntity {
 
     @Override
     public String toString() { return "Obstacle"; }
+
+    @Override
+    public boolean active() {
+        return true;
+    }
+
+    @Override
+    public ItemType getItemType() {
+        return null;
+    }
 }

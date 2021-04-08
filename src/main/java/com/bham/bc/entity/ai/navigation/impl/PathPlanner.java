@@ -6,8 +6,9 @@ import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedDijkstras;
 import com.bham.bc.entity.ai.navigation.algorithms.astar.TimeSlicedAStar;
-import com.bham.bc.entity.ai.navigation.algorithms.terminationPolicies.FindActiveTrigger;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.TerminationConditions;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.node.NavNode;
 import javafx.geometry.Point2D;
@@ -46,6 +47,12 @@ public class PathPlanner implements NavigationService {
 
     private SearchStatus taskStatus;
 
+    public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition) {
+        this.expandCondition = expandCondition;
+    }
+
+    private ExpandPolicies.ExpandCondition expandCondition;
+
     // temp value to render the graphlines and getPath
     List<PathEdge> curPath = new ArrayList<PathEdge>();
     List<PathEdge> smoothedPath = new ArrayList<PathEdge>();
@@ -57,6 +64,7 @@ public class PathPlanner implements NavigationService {
         this.navGraph = navGraph;
         curSearchTask =null;
         taskStatus = SearchStatus.no_task;
+        expandCondition = new ExpandPolicies.ExpandAll();
     }
 
     /**
@@ -103,7 +111,9 @@ public class PathPlanner implements NavigationService {
             return false;
         }
         //create algorithm instance
-        curSearchTask = new TimeSlicedDijkstras(navGraph,closestNodeToPlayer,itemType,new FindActiveTrigger());
+        curSearchTask = new TimeSlicedDijkstras(navGraph,closestNodeToPlayer,itemType,
+                new TerminationConditions.FindActiveTrigger(),
+                expandCondition);
         taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
         return true;
