@@ -130,7 +130,7 @@ public class Player extends GameCharacter {
 	}
 	private void testDijistra(){
 		navigationService.createRequest(ItemType.HEALTH);
-//		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
+		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
 		System.out.println(navigationService.peekRequestStatus());
 		navigationService.getPath();
 	}

@@ -21,7 +21,8 @@ public class ExpandPolicies {
     public static class NoShoot implements ExpandCondition {
         @Override
         public boolean isSatisfied(final SparseGraph G, GraphEdge target) {
-            return target.getBehavior()!=GraphEdge.shoot;
+            return (G.getNode(target.To()).Index()!=-1) &&
+                    target.getBehavior()!=GraphEdge.shoot;
         }
     }
 

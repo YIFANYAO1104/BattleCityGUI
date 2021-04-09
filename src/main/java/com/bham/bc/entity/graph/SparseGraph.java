@@ -500,7 +500,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         private ListIterator<edge_type> curEdge;
         private SparseGraph<node_type, edge_type> G;
         private final int NodeIndex;
-        private boolean end = false;
+        private boolean hasNext;
         private ExpandPolicies.ExpandCondition expandCondition;
 
         public EdgeIterator(SparseGraph<node_type, edge_type> graph,
@@ -512,22 +512,30 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
              */
             curEdge = G.edgeListVector.get(NodeIndex).listIterator();
             this.expandCondition = expandCondition;
+            hasNext = !curEdge.hasNext();
         }
 
         public boolean hasNext() {
-            return end;
+            int retrieve = 0;
+            //find the one satisfies condition
+            while (curEdge.hasNext()){
+                retrieve++;
+                GraphEdge e = curEdge.next();
+                if(expandCondition.isSatisfied(G,e)){
+                    curEdge.previous();
+                    return true;
+                }
+            }
+            //no then return false
+            while (retrieve>0){
+                curEdge.previous();
+                retrieve--;
+            }
+            return false;
         }
 
         public GraphEdge next() {
-            while (curEdge.hasNext()) {
-                GraphEdge e = curEdge.next();
-                if(expandCondition.isSatisfied(G,e)){
-                    end = false;
-                    return e;
-                }
-            }
-            end = true;
-            return null;
+            return curEdge.next();
         }
     }
 

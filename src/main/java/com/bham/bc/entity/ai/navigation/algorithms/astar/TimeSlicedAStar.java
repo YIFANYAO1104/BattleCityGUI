@@ -27,15 +27,18 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     private Node root;
     private Node goal;
     private ArrayList<NavNode> routine;
+    private ExpandPolicies.ExpandCondition expandCondition;
 
     public TimeSlicedAStar(final SparseGraph sg1,
                                 int source,
-                                int target
+                                int target,
+                                ExpandPolicies.ExpandCondition expandCondition
                                 /*heuristic h*/) {
         this.root =  new Node(sg1.getNode(source));
         this.goal = new Node(sg1.getNode(target));
         this.sg = sg1;
         this.root =  new Node(root,null,0,getDistance(root));
+        this.expandCondition = expandCondition;
     }
 
     @Override
@@ -78,7 +81,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         for(int i = routine.size()-1;i>0;i--){
             NavNode n1 = routine.get(i);
             NavNode n2 = routine.get(i-1);
-            path.add(new PathEdge(n1.getPosition(),n2.getPosition()));
+            path.add(new PathEdge(n1.getPosition(),n2.getPosition(),sg.getEdge(n1.Index(),n2.Index()).getBehavior()));
         }
 
         return path;
@@ -125,25 +128,14 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     }
 
     private void addNode(Node n1){
-//        SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(
-//                this.sg,
-//                n1.getNode().Index(),
-//                new ExpandPolicies.NoInvalid());
-//        while (ConstEdgeItr.hasNext()) {
-//            GraphEdge gn1 = ConstEdgeItr.next();
-//
-//            Node nn1 = new Node(sg.getNode(gn1.To()));
-//            double edgecost = getCost(n1,nn1);
-//            double diagonalDis = getDiagonalDis(n1);
-//            Node nn2 = new Node(nn1, n1, edgecost+n1.getCost(), diagonalDis);
-//            if(!register.contains(nn2.getNode())){
-//                openList.add(nn2);
-//                register.add(nn2.getNode());
-//            }
-//        }
-        System.out.println(n1.getNode());
-        for(Object gn1: sg.getNodeList(n1.getNode().Index())){
-            Node nn1 = new Node((GraphNode)gn1);
+        SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(
+                this.sg,
+                n1.getNode().Index(),
+                expandCondition);
+        while (ConstEdgeItr.hasNext()) {
+            GraphEdge gn1 = ConstEdgeItr.next();
+
+            Node nn1 = new Node(sg.getNode(gn1.To()));
             double edgecost = getCost(n1,nn1);
             double diagonalDis = getDiagonalDis(n1);
             Node nn2 = new Node(nn1, n1, edgecost+n1.getCost(), diagonalDis);
@@ -152,6 +144,19 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
                 register.add(nn2.getNode());
             }
         }
+
+//        for(Object gn1: sg.getNodeList(n1.getNode().Index())){
+//            Node nn1 = new Node((GraphNode)gn1);
+//            System.out.println("nn1 = "+nn1);
+//            double edgecost = getCost(n1,nn1);
+//            double diagonalDis = getDiagonalDis(n1);
+//            Node nn2 = new Node(nn1, n1, edgecost+n1.getCost(), diagonalDis);
+//            System.out.println("nn2 = "+nn2);
+//            if(!register.contains(nn2.getNode())){
+//                openList.add(nn2);
+//                register.add(nn2.getNode());
+//            }
+//        }
     }
     private double getDiagonalDis(Node n1){
         NavNode node1 = (NavNode)n1.getNode();
@@ -220,5 +225,15 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
             return diagonalDis;
         }
         public Double getCost(){return cost;}
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "node=" + node.Index() +
+                    ", parentNode=" + parentNode +
+                    ", cost=" + cost +
+                    ", diagonalDis=" + diagonalDis +
+                    '}';
+        }
     }
 }

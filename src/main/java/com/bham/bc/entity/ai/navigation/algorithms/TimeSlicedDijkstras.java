@@ -82,7 +82,7 @@ public class TimeSlicedDijkstras
             while (ConstEdgeItr.hasNext()){
                 GraphEdge pE = ConstEdgeItr.next();
                 int tempNode = pE.To();
-                if (!navGraph.getNode(tempNode).isValid()) continue;
+//                if (!navGraph.getNode(tempNode).isValid()) continue;
                 if (!seen.contains(tempNode)){
                     double newCost = dist + pE.Cost();
                     if (newCost < distance.get(tempNode)){

@@ -65,7 +65,7 @@ public class PathPlanner implements NavigationService {
         this.navGraph = navGraph;
         curSearchTask =null;
         taskStatus = SearchStatus.no_task;
-        expandCondition = new ExpandPolicies.ExpandAll();
+        expandCondition = new ExpandPolicies.NoInvalid();
     }
 
     /**
@@ -142,7 +142,7 @@ public class PathPlanner implements NavigationService {
         }
         //create algorithm instance
         destinationPos = new Point2D(targetPos.getX(),targetPos.getY());
-        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget);
+        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget,expandCondition);
         taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
 
