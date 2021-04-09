@@ -76,7 +76,7 @@ public class Wanderer1 extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
+    public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .4);
     }
 

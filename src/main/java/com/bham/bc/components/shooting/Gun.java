@@ -59,7 +59,7 @@ public class Gun {
      * @param rate the milliseconds this gun should wait before allowing to shoot the next bullet
      */
     public void setRate(long rate) {
-        if(bulletType != null) this.rate = Math.min(bulletType.getMinRate(), rate);
+        if(bulletType != null) this.rate = Math.max(bulletType.getMinRate(), rate);
     }
 
     /**

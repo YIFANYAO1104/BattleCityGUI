@@ -9,6 +9,7 @@ import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.impl.PathEdge;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
 import com.bham.bc.entity.ai.behavior.StateMachine;
+import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.GameCharacter;
@@ -31,10 +32,12 @@ import static com.bham.bc.components.CenterController.backendServices;
  */
 public abstract class Enemy extends GameCharacter {
     protected NavigationService navigationService;
-    private LinkedList<PathEdge> pathEdges;
+    protected LinkedList<PathEdge> pathEdges;
+    protected int edgeBehavior;
     private Point2D destination;
     private int timeTillSearch;
-    private final Gun GUN;
+
+    protected final Gun GUN;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -50,6 +53,7 @@ public abstract class Enemy extends GameCharacter {
         pathEdges = new LinkedList<>();
         destination = new Point2D(0, 0);
         timeTillSearch = 20;
+        edgeBehavior = GraphEdge.normal;
         GUN = new Gun(this, BulletType.DEFAULT);
     }
 
@@ -60,27 +64,26 @@ public abstract class Enemy extends GameCharacter {
      */
     public void navigate(ItemType itemType) {
         // If we don't have any points to follow, we need to navigate (it may return 0 edges if it's close)
-        // If there are points in the point array, we still need to update the search for dynamic
+        // Otherwise, if we have points to follow, we still need to update the search if the target is dynamic
         if(pathEdges.isEmpty()) {
-            // Return if the search is still in progress, otherwise we need a new search
             if (navigationService.peekRequestStatus() != SearchStatus.search_incomplete) {
                 switch (itemType) {
                     case HEALTH:
                         navigationService.createRequest(ItemType.HEALTH);
                         break;
                     case HOME:
-                        Point2D home = backendServices.getMapCenterPosition();
-                        navigationService.createRequest(home);
+                        navigationService.createRequest(backendServices.getClosestCenter(getCenterPosition(), ItemType.HOME));
+                        break;
+                    case ENEMY_AREA:
+                        navigationService.createRequest(backendServices.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
                         break;
                     case ALLY:
-                        Point2D ally = backendServices.getNearestOppositeSideCenterPosition(getCenterPosition(), side);
-                        navigationService.createRequest(ally);
+                        navigationService.createRequest(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                         break;
                 }
             }
         } else if(itemType == ItemType.ALLY && (--timeTillSearch <= 0)) {
-            Point2D ally = backendServices.getNearestOppositeSideCenterPosition(getCenterPosition(), side);
-            navigationService.createRequest(ally);
+            navigationService.createRequest(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
         }
 
         //-----test
@@ -88,11 +91,15 @@ public abstract class Enemy extends GameCharacter {
         //---------
 
         // Due to checks on each frame of whether the search is complete or not we always need get the list of points if it is empty
+        // If the search status is completed, we fill our list with points to follow (if it is empty or we need to update the search for dynamic target)
         if((pathEdges.isEmpty() || (itemType == ItemType.ALLY && timeTillSearch <= 0)) && navigationService.peekRequestStatus() == SearchStatus.target_found) {
             pathEdges = navigationService.getPath();
-            pathEdges.add(pathEdges.getLast()); // Repeat the last element for the purposes in the search method when move is performed
-            destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.removeFirst().getDestination();
+
+            // If the target is very close we might have no path edges to follow
+            // Otherwise if we have path edges, do not remove the last edge to keep the list not empty for proper search() functionality
+            destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.getFirst().getDestination();
             steering.setTarget(destination);
+
             timeTillSearch = 20;
             navigationService.resetTaskStatus();
         }
@@ -105,25 +112,21 @@ public abstract class Enemy extends GameCharacter {
     public void search(ItemType itemType) {
         navigate(itemType);
 
-        if(intersects(new Circle(destination.getX(), destination.getY(), 1))) {
+        // Checks if the enemy intersects the point in the list of path edges and gets the next target point if so
+        if(intersects(new Circle(destination.getX(), destination.getY(), 3))) {
             if(!pathEdges.isEmpty()) {
-                destination = pathEdges.removeFirst().getDestination();
+                PathEdge nextEdge = pathEdges.removeFirst();
+                edgeBehavior = nextEdge.getBehavior();
+                destination = nextEdge.getDestination();
                 steering.setTarget(destination);
-//                face(destination);
-//                move();
             }
-        } else if(!pathEdges.isEmpty()) {
-//            move();
         }
 
-        if (pathEdges.isEmpty()) { //last element
-            //arrive
-        } else {
-            //seek
+        // If the list of pathEdges is not empty we need to move forward
+        if(!pathEdges.isEmpty()) {
             steering.seekOn();
             move();
         }
-
     }
 
     /**
@@ -138,21 +141,14 @@ public abstract class Enemy extends GameCharacter {
     }
 
     /**
-     * Changes angle to face the nearest character of an opposite side
-     * <b>Note:</b> if some ally target was followed and found but there is another ally standing closer
-     * but behind an obstacle, this method will make the enemy aim at that ally. So free path condition must be checked.
-     * Alternatively, in <i>getNearestOppositeSideCenterPosition()</i> only those distances could be filtered if they don't
-     * intersect any obstacles.
+     * Changes angle to face the nearest ally
+     *
+     * <p><b>Note:</b> if some ally target was followed and found but there is another ally standing closer but behind an
+     * obstacle, this method will make the enemy aim at that ally. So free path condition must be checked. Alternatively,
+     * in <i>getClosestCenter()</i> only those distances could be filtered if they don't intersect any obstacles.</p>
      */
     protected void aim() {
-        face(backendServices.getNearestOppositeSideCenterPosition(getCenterPosition(), side));
-    }
-
-    /**
-     * Shoots the specified bullet(-s) at the current angle
-     */
-    protected void shoot() {
-        GUN.shoot();
+        face(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
     }
 
     /**
@@ -160,7 +156,7 @@ public abstract class Enemy extends GameCharacter {
      * @param threshold value between 0 and 1 above which the shoot() method would be run
      */
     protected void shoot(double threshold) {
-        if(Math.random() > threshold) shoot();
+        if(Math.random() > threshold) GUN.shoot();
     }
 
 
@@ -212,24 +208,11 @@ public abstract class Enemy extends GameCharacter {
     }
 
     /**
-     * In this behaviour the AI will try to minimise its distance between the closest character of
-     * the opposite side with 2 times increased speed.
-     */
-    protected void charge() {
-        aim();
-        move(2);
-    }
-
-    /**
      * In this behaviour the AI will pathfind to the home base and try to take it over
      */
     protected void takeOver() {
-        //backendServices.occupyHome(-1);
-        //TODO
+        backendServices.occupyHome(this);
     }
-
-
-
 
     /**
      * Abstract method which all child classes must fill with their own unique Finite State Machine
@@ -256,6 +239,10 @@ public abstract class Enemy extends GameCharacter {
         gc.fillRoundRect(destination.getX(),destination.getY(),4,4,1,1);
     }
 
+    public List<Shape> getSmoothingBoxes(){
+        return navigationService.getSmoothingBoxes();
+    }
+
     @Override
     public boolean handleMessage(Telegram msg) {
         switch (msg.Msg.id){
@@ -272,9 +259,7 @@ public abstract class Enemy extends GameCharacter {
     }
 
     @Override
-    public String toString() { return "Enemy"; }
-
-    public List<Shape> getSmoothingBoxes(){
-        return navigationService.getSmoothingBoxes();
+    public String toString() {
+        return "Enemy";
     }
 }

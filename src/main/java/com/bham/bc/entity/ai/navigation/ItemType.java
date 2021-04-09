@@ -4,5 +4,7 @@ public enum ItemType {
     HEALTH,
     WEAPON,
     ALLY,
-    HOME
+    HOME,
+    SOFT,
+    ENEMY_AREA
 }

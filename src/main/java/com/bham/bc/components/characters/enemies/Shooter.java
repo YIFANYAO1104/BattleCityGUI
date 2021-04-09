@@ -2,9 +2,9 @@ package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.graph.edge.GraphEdge;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
 
@@ -14,22 +14,20 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 /**
  * <h1>Shooter - far-end operative</h1>
  *
- * <p>This type of enemy has 4 main states determined by free path condition and its HP</p>
+ * <p>This type of enemy has 3 main states determined by free path condition and its HP</p>
  *
  * <ul>
- *     <li><b>Search</b> - searches for the closest ally if its HP is over 20% and it does not have
- *     "run away" property on. It doesn't care about anything else</li>
+ *     <li><b>Search Ally</b> - searches for the closest ally if its HP is over 20% and it does not
+ *     have "go back" property on. If there are obstacles in a way, it shoots them with increased
+ *     fire rate</li>
  *
- *     <li><b>Attack</b> - shoots at any ally if there are no obstacles in between and if its HP
+ *     <li><b>Attack Ally</b> - shoots at any ally if there are no obstacles in between and if its HP
  *     is over 20%. If the bullets are slow and the target is far, it kinda wastes its energy but
  *     ¯\_(ツ)_/¯</li>
  *
- *     <li><b>Retreat</b> - turns on "run away" property and searches for a "health giver" power-up
- *     or tries to retreat to a safe distance. If there is nowhere to retreat, it turns off "run away"
- *     property and remains in <b>Attack</b> state</li>
- *
- *     <li><b>Regenerate</b> - stops doing everything and regenerates its HP to 80%. Once it hits 80%,
- *     it turns of "run away" property</li>
+ *     <li><b>Retreat</b> - turns on "run away" property and searches for the enemy spawn area to
+ *     retreat to. While it retreats, it gradually regenerates its HP and once if it manages to reach
+ *     its spawn area, it fully restores its health</li>
  * </ul>
  */
 public class Shooter extends Enemy {
@@ -40,13 +38,9 @@ public class Shooter extends Enemy {
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
-    private FreePathCondition noObstaclesCondition;
-    private IntCondition lowHealthCondition;
-    private IntCondition highHealthCondition;
-    private AndCondition attackCondition;
-    private BooleanCondition canRetreatCondition;
-    private AndCondition retreatCondition;
-    private IntCondition safeDistance;
+
+    private FreePathCondition noObstCondition;
+    private BooleanCondition goBackCondition;
 
     /**
      * Constructs an enemy instance with initial speed value set to 1
@@ -58,65 +52,78 @@ public class Shooter extends Enemy {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
+        GUN.setRate(1000);
     }
 
     @Override
     protected StateMachine createFSM(){
         // Define possible states the enemy can be in
-        State searchState = new State(new Action[]{ Action.SEARCHALLY }, null);
-        State attackState = new State(new Action[]{ Action.ATTACKALLY }, null);
-        State retreatState = new State(new Action[]{ Action.RETREAT }, null);
-        State regenerateState = new State(new Action[]{ Action.REGENERATE }, null);
+        State searchState = new State(new Action[]{ Action.SEARCH_ALLY, Action.ATTACK_OBST }, null);
+        State attackState = new State(new Action[]{ Action.ATTACK_ALLY }, null);
+        State retreatState = new State(new Action[]{ Action.RETREAT, Action.REGENERATE, Action.ATTACK_OBST }, null);
+
+        // Set up necessary entry actions for certain states
+        attackState.setEntryActions(new Action[]{ Action.RESET_RATE });
+        searchState.setEntryActions(new Action[]{ Action.RESET_SEARCH, Action.SET_RATE });
+        retreatState.setEntryActions(new Action[]{ Action.RESET_SEARCH, Action.SET_RATE });
 
         // Define all conditions required to change any state
-        lowHealthCondition = new IntCondition(0, (int) (HP * .2));
-        highHealthCondition = new IntCondition((int) (HP * .8), 100);
-        noObstaclesCondition = new FreePathCondition();
-        canRetreatCondition = new BooleanCondition();
-        attackCondition = new AndCondition(new NotCondition(lowHealthCondition), noObstaclesCondition);
-        retreatCondition = new AndCondition(canRetreatCondition, lowHealthCondition);
-        safeDistance = new IntCondition(0, 50); // TODO: Figure out if this is a good distance
+        noObstCondition = new FreePathCondition();
+        goBackCondition = new BooleanCondition();
 
         // Define all state transitions that could happen
-        Transition searchPossibility = new Transition(searchState, new AndCondition(highHealthCondition, new NotCondition(attackCondition)));
-        Transition attackPossibility = new Transition(attackState, attackCondition);
-        Transition retreatPossibility = new Transition(retreatState, retreatCondition);
-        Transition regeneratePossibility = new Transition(regenerateState, safeDistance);
+        Transition searchPossibility = new Transition(searchState, new NotCondition(new OrCondition(goBackCondition, noObstCondition)));
+        Transition attackPossibility = new Transition(attackState, new AndCondition(new NotCondition(goBackCondition), noObstCondition));
+        Transition retreatPossibility = new Transition(retreatState, goBackCondition);
 
         // Define how the states can transit from one another
-        searchState.setTransitions(new Transition[]{ attackPossibility });
+        searchState.setTransitions(new Transition[]{ attackPossibility, retreatPossibility });
         attackState.setTransitions(new Transition[]{ retreatPossibility, searchPossibility });
-        retreatState.setTransitions(new Transition[]{ regeneratePossibility });
-        regenerateState.setTransitions(new Transition[]{ searchPossibility });
+        retreatState.setTransitions(new Transition[]{ searchPossibility, attackPossibility });
 
         return new StateMachine(searchState);
     }
 
     @Override
     public void update() {
-        double distanceToPlayer = getCenterPosition().distance(backendServices.getPlayerCenterPosition());
-
-        safeDistance.setTestValue((int) distanceToPlayer);
-        lowHealthCondition.setTestValue((int) hp);
-        highHealthCondition.setTestValue((int) hp);
-        noObstaclesCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
-        // TODO: canRetreatCondition.setTestValue(SOME FUNCTION);
+        noObstCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
-                case SEARCHALLY:
+                case SEARCH_ALLY:
                     search(ItemType.ALLY);
+                    goBackCondition.setTestValue(hp <= HP * .2);
                     break;
-                case ATTACKALLY:
-                    aim();
-                    shoot(0.3);
+                case ATTACK_ALLY:
+                    face(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+                    shoot(0.5);
+                    goBackCondition.setTestValue(hp <= HP * .2);
+                    break;
+                case ATTACK_OBST:
+                    if(edgeBehavior == GraphEdge.shoot) {
+                        face(backendServices.getClosestCenter(getCenterPosition(), ItemType.SOFT));
+                        GUN.shoot();
+                    }
                     break;
                 case RETREAT:
-                    // TODO: retreat();
+                    search(ItemType.ENEMY_AREA);
+                    if(Arrays.stream(backendServices.getEnemyAreas()).anyMatch(this::intersects)) {
+                        changeHp(HP);
+                        goBackCondition.setTestValue(false);
+                    }
                     break;
                 case REGENERATE:
-                    // TODO: regenerate();
+                    changeHp(HP * .003);
+                    goBackCondition.setTestValue(hp < HP * .8);
+                case SET_RATE:
+                    GUN.setRate(200);
+                    break;
+                case RESET_RATE:
+                    GUN.setRate(1000);
+                    break;
+                case RESET_SEARCH:
+                    pathEdges.clear();
                     break;
             }
         });
@@ -129,10 +136,12 @@ public class Shooter extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
+    public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .4);
     }
 
     @Override
-    public String toString() { return "Default Enemy"; }
+    public String toString() {
+        return "Shooter";
+    }
 }

@@ -146,7 +146,7 @@ public class GameMap {
                 if(interactiveObstacles.stream().anyMatch(o -> o.intersects(enemySpawnAreas[finalI]))) break; // TODO replace with above
             }
             // Apply padding to enemy spawn territory
-            enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - GameCharacter.MAX_RADIUS));
+            enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - GameCharacter.MAX_SIZE));
 
             enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - 16)); //TODO remove
         }

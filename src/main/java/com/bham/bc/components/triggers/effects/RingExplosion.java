@@ -2,11 +2,8 @@ package com.bham.bc.components.triggers.effects;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.ai.navigation.ItemType;
-import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -65,7 +62,7 @@ public class RingExplosion extends Trigger {
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof GameCharacter && intersects(entity) && ((GameCharacter) entity).getSide() != side) {
             active = false;
-            ((GameCharacter) entity).changeHP(-damage);
+            ((GameCharacter) entity).changeHp(-damage);
         }
     }
 
