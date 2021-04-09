@@ -104,14 +104,14 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      */
     @Override
     public void render(GraphicsContext gc){
-
         for(GraphNode node : nodeVector){
             NavNode n1 = (NavNode) node;
             if(n1.isValid()){
                 gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),2,2,1,1);
                 renderNode(gc,Color.BLACK,n1,1);
                 for(GraphNode nn1: getAroundNodes(n1)){
-                    if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).Cost() >= Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST){
+//                    if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).Cost() >= Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST){
+                    if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).getBehavior() == GraphEdge.shoot){
                         renderNode(gc,Color.BLUE,(NavNode) nn1,2);
                         renderline(gc,Color.BLUE,n1,(NavNode) nn1);
                     }
@@ -372,18 +372,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
     }
 
-    /**
-     * set nodes around the (from) node edges all with new Cost
-     * @param from root node
-     * @param newCost
-     */
-    public void setNodeALLEdages(int from, double newCost){
-        for(NavNode n1 :getNodeList(from)){
-            setEdgeCost(from,n1.Index(),newCost);
-            setEdgeCost(n1.Index(),from,newCost);
-        }
 
-    }
 
     public void setNodeALlEdagesNormal(int from) {
         for (NavNode n1 : getNodeList(from)) {
@@ -525,17 +514,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             this.expandCondition = expandCondition;
         }
 
-        public GraphEdge begin() {
-            curEdge = G.edgeListVector.get(NodeIndex).listIterator();
-            while (curEdge.hasNext()) {
-                GraphEdge e = curEdge.next();
-                if(expandCondition.isSatisfied(G,e)){
-                    end = false;
-                    return e;
-                }
-            }
-            end = true;
-            return null;
+        public boolean hasNext() {
+            return end;
         }
 
         public GraphEdge next() {
@@ -548,11 +528,6 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             }
             end = true;
             return null;
-        }
-
-        //return true if we are at the end of the edge list
-        public boolean end() {
-            return end;
         }
     }
 
@@ -588,21 +563,6 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
     }
 
-    private void removeObstacleInHashMap(int id){
-    if(obstacleId.containsKey(id)){
-            for(NavNode node: obstacleId.get(id)){
-                node.minesNum();
-                if(node.isValid() && (!node.isHit()) ){
-                    node.setExtraInfo(null);
-                    setNodeALlEdagesNormal(node.Index());
-                }
-            }
-            obstacleId.remove(id);
-        }else {
-            System.out.println("no this key????");
-        }
-    }
-
     @Override
     public void update() {
 
@@ -623,12 +583,11 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             case Msg_interactWithSoft:
 //                System.out.println("Set the nodes edges with max");
                 //Object[] params = {indexOfNode,this};
-                Object[] params = (Object[]) msg.ExtraInfo;
-                NavNode nn1 = getNode((int) params[0]);
+                int indexOfNode = (int)msg.ExtraInfo;
+                NavNode nn1 = getNode(indexOfNode);
                 addToHashMap(msg.Sender,nn1);
-                setNodeALLEdages((int) params[0], Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST);
-                //attach info on node
-                nn1.setExtraInfo((ExtraInfo) params[1]);
+                setNodeALLEdages(indexOfNode, Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST);
+                setEdgesBehavior(indexOfNode, GraphEdge.shoot);
                 return true;
             case Msg_removeSoft:
 //                System.out.println("release the nodewa");
@@ -638,7 +597,41 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             default:
                 return false;
         }
+    }
 
+    /**
+     * set nodes around the (from) node edges all with new Cost
+     * @param from root node
+     * @param newCost
+     */
+    public void setNodeALLEdages(int from, double newCost){
+        for(NavNode n1 :getNodeList(from)){
+            setEdgeCost(from,n1.Index(),newCost);
+            setEdgeCost(n1.Index(),from,newCost);
+        }
+    }
+
+    public void setEdgesBehavior(int from, int behavior){
+        ListIterator<edge_type> it = edgeListVector.get(from).listIterator();
+        while (it.hasNext()) {
+            edge_type curEdge = it.next();
+            curEdge.setBehavior(behavior);
+        }
+    }
+
+    private void removeObstacleInHashMap(int id){
+        if(obstacleId.containsKey(id)){
+            for(NavNode node: obstacleId.get(id)){
+                node.minesNum();
+                if(node.isValid() && (!node.isHit()) ){
+                    setNodeALlEdagesNormal(node.Index());
+                    setEdgesBehavior(node.Index(), GraphEdge.normal);
+                }
+            }
+            obstacleId.remove(id);
+        }else {
+            System.out.println("no this key????");
+        }
     }
 
     @Override

@@ -18,11 +18,17 @@ public class ExpandPolicies {
         }
     }
 
-    public static class NoSoft implements ExpandCondition {
+    public static class NoShoot implements ExpandCondition {
         @Override
         public boolean isSatisfied(final SparseGraph G, GraphEdge target) {
-            ExtraInfo x = G.getNode(target.To()).getExtraInfo();
-            return x==null || x.getItemType()!=ItemType.SOFT;
+            return target.getBehavior()!=GraphEdge.shoot;
+        }
+    }
+
+    public static class NoInvalid implements ExpandCondition {
+        @Override
+        public boolean isSatisfied(final SparseGraph G, GraphEdge target) {
+            return G.getNode(target.To()).Index()!=-1;
         }
     }
 }

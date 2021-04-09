@@ -10,6 +10,7 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.TerminationConditions;
 import com.bham.bc.entity.graph.SparseGraph;
+import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
 import javafx.geometry.Point2D;
 import com.bham.bc.components.characters.GameCharacter;
@@ -208,7 +209,7 @@ public class PathPlanner implements NavigationService {
             //increment e2 so it points to the edge following e1 (and futher)
             PathEdge e2 = iterator.next();
             //check for obstruction, adjust and remove the edges accordingly
-            if (backendServices.canPass(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
+            if (e2.getBehavior()==GraphEdge.normal && backendServices.canPass(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
                 e1.setDestination(e2.getDestination());
                 iterator.remove(); //remove e2 from the list
             } else {
@@ -271,16 +272,28 @@ public class PathPlanner implements NavigationService {
         for (PathEdge graphEdge : curPath) {
             Point2D n1 = graphEdge.getSource();
             Point2D n2 = graphEdge.getDestination();
-            gc.setStroke(Color.RED);
-            gc.setLineWidth(2.0);
+            switch (graphEdge.getBehavior()){
+                case GraphEdge.normal:
+                    gc.setStroke(Color.RED);
+                    gc.setLineWidth(2.0);break;
+                case GraphEdge.shoot:
+                    gc.setStroke(Color.GOLD);
+                    gc.setLineWidth(10.0);break;
+            }
             gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
         }
 
         for (PathEdge graphEdge : smoothedPath) {
             Point2D n1 = graphEdge.getSource();
             Point2D n2 = graphEdge.getDestination();
-            gc.setStroke(Color.WHITE);
-            gc.setLineWidth(2.0);
+            switch (graphEdge.getBehavior()){
+                case GraphEdge.normal:
+                    gc.setStroke(Color.WHITE);
+                    gc.setLineWidth(2.0);break;
+                case GraphEdge.shoot:
+                    gc.setStroke(Color.GOLD);
+                    gc.setLineWidth(10.0);break;
+            }
             gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
         }
     }

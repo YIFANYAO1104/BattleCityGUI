@@ -79,7 +79,8 @@ public class TimeSlicedDijkstras
             SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(this.navGraph, node,expandCondition);
 
             //for each edge connected to the next closest node
-            for (GraphEdge pE = ConstEdgeItr.begin(); !ConstEdgeItr.end(); pE = ConstEdgeItr.next()){
+            while (ConstEdgeItr.hasNext()){
+                GraphEdge pE = ConstEdgeItr.next();
                 int tempNode = pE.To();
                 if (!navGraph.getNode(tempNode).isValid()) continue;
                 if (!seen.contains(tempNode)){
@@ -127,7 +128,9 @@ public class TimeSlicedDijkstras
 
         while ((nd != source) && (parent.get(nd) != null)) {
             path.add(0, 
-                    new PathEdge(navGraph.getNode(parent.get(nd)).getPosition(), navGraph.getNode(nd).getPosition()));
+                    new PathEdge(navGraph.getNode(parent.get(nd)).getPosition(),
+                            navGraph.getNode(nd).getPosition(),
+                            navGraph.getEdge(parent.get(nd),nd).getBehavior()));
 
             nd = parent.get(nd);
         }

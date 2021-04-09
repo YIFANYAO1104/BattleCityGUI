@@ -6,6 +6,8 @@
  */
 package com.bham.bc.entity.ai.navigation.impl;
 
+import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.graph.node.GraphNode;
 import javafx.geometry.Point2D;
 
 public class PathEdge {
@@ -13,17 +15,29 @@ public class PathEdge {
 
     private Point2D source;
     private Point2D destination;
+
+    public int getBehavior() {
+        return behavior;
+    }
+
+    private int behavior;
     /**
      * the behavior associated with traversing this edge
      */
-
     public PathEdge(Point2D source, Point2D destination) {
         this.source = new Point2D(source.getX(),source.getY());
         this.destination = new Point2D(destination.getX(),destination.getY());
+        behavior = GraphEdge.normal;
+    }
+
+    public PathEdge(Point2D source, Point2D destination, int behavior) {
+        this.source = new Point2D(source.getX(),source.getY());
+        this.destination = new Point2D(destination.getX(),destination.getY());
+        this.behavior = behavior;
     }
 
     public PathEdge(PathEdge edge) {
-        this(edge.source, edge.destination);
+        this(edge.source, edge.destination, edge.behavior);
     }
 
     public Point2D getDestination() {

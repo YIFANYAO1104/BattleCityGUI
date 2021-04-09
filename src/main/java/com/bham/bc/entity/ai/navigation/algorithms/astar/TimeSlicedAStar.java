@@ -3,6 +3,7 @@ package com.bham.bc.entity.ai.navigation.algorithms.astar;
 
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedAlgorithm;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathEdge;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
@@ -124,6 +125,23 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     }
 
     private void addNode(Node n1){
+//        SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(
+//                this.sg,
+//                n1.getNode().Index(),
+//                new ExpandPolicies.NoInvalid());
+//        while (ConstEdgeItr.hasNext()) {
+//            GraphEdge gn1 = ConstEdgeItr.next();
+//
+//            Node nn1 = new Node(sg.getNode(gn1.To()));
+//            double edgecost = getCost(n1,nn1);
+//            double diagonalDis = getDiagonalDis(n1);
+//            Node nn2 = new Node(nn1, n1, edgecost+n1.getCost(), diagonalDis);
+//            if(!register.contains(nn2.getNode())){
+//                openList.add(nn2);
+//                register.add(nn2.getNode());
+//            }
+//        }
+        System.out.println(n1.getNode());
         for(Object gn1: sg.getNodeList(n1.getNode().Index())){
             Node nn1 = new Node((GraphNode)gn1);
             double edgecost = getCost(n1,nn1);

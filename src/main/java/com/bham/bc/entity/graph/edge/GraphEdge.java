@@ -13,27 +13,39 @@ public class GraphEdge {
     //the cost of traversing the edge
     protected double m_dCost;
 
+    final public static int normal = 0;
+    final public static int shoot = 1;
+
+    public void setBehavior(int behavior) {
+        this.behavior = behavior;
+    }
+
+    public int getBehavior() {
+        return behavior;
+    }
+
+    protected int behavior;
+
     //ctors
     public GraphEdge(int from, int to, double cost) {
         m_dCost = cost;
         m_iFrom = from;
         m_iTo = to;
+        behavior = normal;
     }
 
     public GraphEdge(int from, int to) {
         m_dCost = 1.0;
         m_iFrom = from;
         m_iTo = to;
+        behavior = normal;
     }
 
     public GraphEdge() {
         m_dCost = 16.0;                                      // should be the value between two points
         m_iFrom =invalid_node_index;                        // invalid_node_index;
         m_iTo = invalid_node_index ;                        //invalid_node_index;
-    }
-
-    protected void finalize() throws Throwable {
-        super.finalize();
+        behavior = normal;
     }
 
     public int From() {
@@ -84,6 +96,4 @@ public class GraphEdge {
         ps.println();
         return os;
     }
-
-
 }

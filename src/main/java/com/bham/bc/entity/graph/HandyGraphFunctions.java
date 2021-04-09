@@ -137,9 +137,8 @@ public class HandyGraphFunctions {
 
         //set the cost for each edge
         graph_type.EdgeIterator ConstEdgeItr = new graph_type.EdgeIterator(graph, node,new ExpandPolicies.ExpandAll());
-        for (GraphEdge pE = ConstEdgeItr.begin();
-             !ConstEdgeItr.end();
-             pE = ConstEdgeItr.next()) {
+        while (ConstEdgeItr.hasNext()){
+            GraphEdge pE = ConstEdgeItr.next();
             //calculate the distance between nodes
             Point2D p1 = graph.getNode(pE.From()).getPosition();
             Point2D p2 = graph.getNode(pE.To()).getPosition();

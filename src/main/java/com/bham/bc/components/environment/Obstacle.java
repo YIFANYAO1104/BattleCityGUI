@@ -19,7 +19,7 @@ import static com.bham.bc.utils.messaging.MessageTypes.*;
 /**
  * Class defining common properties for any obstacle
  */
-public class Obstacle extends BaseGameEntity implements ExtraInfo {
+public class Obstacle extends BaseGameEntity{
     private double hp;
     private EnumSet<Attribute> attributes;
     protected boolean exists;
@@ -79,8 +79,7 @@ public class Obstacle extends BaseGameEntity implements ExtraInfo {
     public void interactWith(int graphSystemID, int nodeID, Rectangle area) {
         if(getHitBox().intersects(area.getBoundsInLocal())) {
             if(attributes.contains(Attribute.BREAKABLE)) {
-                Object[] params = { nodeID, this };
-                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interactWithSoft, params);
+                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interactWithSoft, nodeID);
             } else {
                 Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interact, nodeID);
             }
@@ -111,19 +110,6 @@ public class Obstacle extends BaseGameEntity implements ExtraInfo {
     @Override
     public Rectangle getHitBox() {
         return new Rectangle(x, y, entityImages[0].getWidth(), entityImages[0].getHeight());
-    }
-
-    @Override
-    public boolean active() {
-        return true;
-    }
-
-    @Override
-    public ItemType getItemType() {
-        if(attributes.contains(Attribute.BREAKABLE)) {
-            return ItemType.SOFT;
-        }
-        return null;
     }
 
     @Override
