@@ -27,6 +27,7 @@ public class BooleanCondition implements Condition{
      * Tests if the test value is in between the min and max value
      * @return True if testValue is between the min and max value, False if not
      */
-    public boolean test(){ return testValue;
+    public boolean test(){
+        return testValue;
     }
 }

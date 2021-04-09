@@ -61,10 +61,10 @@ public class Teaser extends Enemy {
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
-        State searchAllyState = new State(new Action[]{ Action.SEARCHALLY }, null);
-        State attackAllyState = new State(new Action[]{ Action.ATTACKALLY }, null);
-        State searchHomeState = new State(new Action[]{ Action.SEARCHHOME }, null);
-        State attackHomeState = new State(new Action[]{ Action.ATTACKHOME}, null);
+        State searchAllyState = new State(new Action[]{ Action.SEARCH_ALLY}, null);
+        State attackAllyState = new State(new Action[]{ Action.ATTACK_ALLY}, null);
+        State searchHomeState = new State(new Action[]{ Action.SEARCH_HOME}, null);
+        State attackHomeState = new State(new Action[]{ Action.ATTACK_HOME}, null);
 
         // Define all conditions required to change any state
         closeToHome = new IntCondition(0, 50);
@@ -98,16 +98,16 @@ public class Teaser extends Enemy {
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
-                case SEARCHALLY:
+                case SEARCH_ALLY:
                     //TODO: searchAlly();
                     break;
-                case ATTACKALLY:
+                case ATTACK_ALLY:
                     //TODO: attackAlly();
                     break;
-                case SEARCHHOME:
+                case SEARCH_HOME:
                     // TODO: searchHome();
                     break;
-                case ATTACKHOME:
+                case ATTACK_HOME:
                     // TODO: attackHome();
                     break;
             }
@@ -121,7 +121,7 @@ public class Teaser extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
+    public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .43);
     }
 }

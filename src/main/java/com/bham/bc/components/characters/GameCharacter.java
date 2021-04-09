@@ -6,6 +6,7 @@ import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  * Represents a character - this includes enemies, players and AI companions
  */
 abstract public class GameCharacter extends MovingEntity {
-    public static final int MAX_RADIUS = 32;
+    public static final int MAX_SIZE = 32;
 
     // Private properties
     private final double MAX_HP;
@@ -66,8 +67,9 @@ abstract public class GameCharacter extends MovingEntity {
      * Increases or decreases HP for the player
      * @param health amount by which the player's HP is changed
      */
-    public void changeHP(double health) {
+    public void changeHp(double health) {
         hp = Math.min(hp + health, MAX_HP);
+        if(side == Side.ENEMY) System.out.println("Enemy's HP: " + hp);
         if(hp <= 0) destroy();
     }
 
@@ -148,13 +150,24 @@ abstract public class GameCharacter extends MovingEntity {
 
     protected abstract void destroy();
 
+    @Override
+    public abstract Circle getHitBox();
+
+    /**
+     * Gets radius of a circular hit-box
+     * @return radius of a character's hit-box
+     */
+    public double getHitBoxRadius() {
+        return getHitBox().getRadius();
+    }
+
     /**
      *For path smoothing debug
      */
     abstract public List<Shape> getSmoothingBoxes();
     public void teleport(double x,double y){
         this.x = x;
-        this.y =y;
+        this.y = y;
     }
     public void destroyed(){
         this.hp-=200;

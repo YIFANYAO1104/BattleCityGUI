@@ -4,18 +4,41 @@ package com.bham.bc.entity.ai.behavior;
  * Actions are enums which correspond to behaviours that are programmed into the enemy classes
  */
 public enum Action{
-    MOVE,
-    CHARGEALLY,
-    AIMANDSHOOT,
+    // ENEMY
+
+    // Continuous
+    ATTACK_ALLY,
+    ATTACK_HOME,
+    ATTACK_OBST,
+    SEARCH_ALLY,
+    SEARCH_HOME,
+    CHARGE_ALLY,
     RETREAT,
     REGENERATE,
-    ATTACKHOME,
-    ATTACKALLY,
-    SEARCHALLY,
-    SEARCHHOME,
-    SEARCHANDTRAP,
+
+    // Entry
+    SET_RATE,
+    SET_SPEED,
+
+    // Exit
+    RESET_RATE,
+    RESET_SPEED,
+    RESET_SEARCH,
+
+
+
+
+    // DIRECTOR
     BUILDUP,
     PEAK,
     RELAX,
     INCREMENTLOOP,
+
+    MOVE,
+    CHARGEALLY,
+
+    SEARCHANDTRAP,
+
+
+
 }

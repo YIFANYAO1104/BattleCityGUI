@@ -16,7 +16,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 public class DefaultBullet extends Bullet {
 	public static final BulletType TYPE = BulletType.DEFAULT;
 	public static final double SPEED = 5;
-	public static final double DAMAGE = 25;
+	public static final double DAMAGE = 10;
 
 	/**
 	 * Constructs a bullet using default bullet's attributes for speed and damage

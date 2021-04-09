@@ -54,9 +54,9 @@ public class Tank extends Enemy {
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
-        State searchHome = new State(new Action[]{ Action.SEARCHHOME }, null);
-        State attackHome = new State(new Action[]{ Action.ATTACKHOME }, null);
-        State attackAlly = new State(new Action[]{ Action.ATTACKALLY }, null);
+        State searchHome = new State(new Action[]{ Action.SEARCH_HOME}, null);
+        State attackHome = new State(new Action[]{ Action.ATTACK_HOME}, null);
+        State attackAlly = new State(new Action[]{ Action.ATTACK_ALLY}, null);
 
         // Define all conditions required to change any state
         reachedHomeCondition = new IntCondition(0, 50);
@@ -85,13 +85,13 @@ public class Tank extends Enemy {
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
-                case SEARCHHOME:
+                case SEARCH_HOME:
                     search(ItemType.HOME);
                     break;
-                case ATTACKHOME:
+                case ATTACK_HOME:
                     takeOver();
                     break;
-                case ATTACKALLY:
+                case ATTACK_ALLY:
                     aim();
                     shoot(.9);
                     break;
@@ -106,7 +106,7 @@ public class Tank extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
+    public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }
 }

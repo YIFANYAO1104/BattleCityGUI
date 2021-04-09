@@ -118,7 +118,7 @@ abstract public class Bullet extends MovingEntity {
 
     public void handle(BaseGameEntity entity) {
         if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
-            ((GameCharacter) entity).changeHP(-damage);
+            ((GameCharacter) entity).changeHp(-damage);
             destroy();
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {
             destroy();
