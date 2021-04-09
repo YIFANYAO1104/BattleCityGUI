@@ -14,23 +14,20 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 /**
  * <h1>Shooter - far-end operative</h1>
  *
- * <p>This type of enemy has 4 main states determined by free path condition and its HP</p>
+ * <p>This type of enemy has 3 main states determined by free path condition and its HP</p>
  *
  * <ul>
- *     <li><b>Search</b> - searches for the closest ally if its HP is over 20% and it does not have
- *     "go back" property on. If there are obstacles in a way, it shoots them with increased fire
- *     rate.</li>
+ *     <li><b>Search Ally</b> - searches for the closest ally if its HP is over 20% and it does not
+ *     have "go back" property on. If there are obstacles in a way, it shoots them with increased
+ *     fire rate</li>
  *
- *     <li><b>Attack</b> - shoots at any ally if there are no obstacles in between and if its HP
+ *     <li><b>Attack Ally</b> - shoots at any ally if there are no obstacles in between and if its HP
  *     is over 20%. If the bullets are slow and the target is far, it kinda wastes its energy but
  *     ¯\_(ツ)_/¯</li>
  *
- *     <li><b>Retreat</b> - turns on "run away" property and searches for a "health giver" power-up
- *     or tries to retreat to a safe distance. If there is nowhere to retreat, it turns off "run away"
- *     property and remains in <b>Attack</b> state</li>
- *
- *     <li><b>Regenerate</b> - stops doing everything and regenerates its HP to 80%. Once it hits 80%,
- *     it turns of "run away" property</li>
+ *     <li><b>Retreat</b> - turns on "run away" property and searches for the enemy spawn area to
+ *     retreat to. While it retreats, it gradually regenerates its HP and once if it manages to reach
+ *     its spawn area, it fully restores its health</li>
  * </ul>
  */
 public class Shooter extends Enemy {
@@ -89,7 +86,7 @@ public class Shooter extends Enemy {
 
     @Override
     public void update() {
-        noObstCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
+        noObstCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {

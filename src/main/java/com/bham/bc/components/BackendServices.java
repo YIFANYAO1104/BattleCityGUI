@@ -1,5 +1,6 @@
 package com.bham.bc.components;
 
+import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
@@ -112,5 +113,7 @@ public interface BackendServices {
     // TODO: replace / remove or find another usage
     boolean intersectsObstacles(Rectangle hitbox);  // This will be moved to physics package
     Circle[] getEnemyAreas();
+    Circle getHomeArea();
+    void occupyHome(Enemy enemy);
     Point2D getClosestCenter(Point2D position, ItemType item);
 }

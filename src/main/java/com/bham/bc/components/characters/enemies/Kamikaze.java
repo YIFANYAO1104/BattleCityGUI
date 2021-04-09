@@ -17,13 +17,13 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  *
  * <p>This type of enemy has 3 states determined by its distance to ally and free path condition</p>
  * <ul>
- *     <li><b>Search</b> - searches for the closest ally in the game and moves towards it</li>
+ *     <li><b>Search Ally</b> - searches for the closest ally in the game and moves towards it</li>
  *
- *     <li><b>Charge</b> - charges at the nearest ally with increased speed if it is close enough
+ *     <li><b>Charge Ally</b> - charges at the nearest ally with increased speed if it is close enough
  *     and if there are no obstacles in a way to stop it</li>
  *
- *     <li><b>Attack</b> - attacks any ally that is very close to it by self-destructing itself and
- *     dealing area damage to anything but enemies</li>
+ *     <li><b>Attack Ally</b> - attacks any ally that is very close to it by self-destructing itself
+ *     and dealing area damage to anything but allies and obstacles</li>
  * </ul>
  */
 public class Kamikaze extends Enemy {
@@ -81,10 +81,10 @@ public class Kamikaze extends Enemy {
 
     @Override
     public void update() {
-        double distanceToPlayer = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        double distanceToAlly = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
-        attackCondition.setTestValue((int) distanceToPlayer);
-        chargeCondition.setTestValue((int) distanceToPlayer);
+        attackCondition.setTestValue((int) distanceToAlly);
+        chargeCondition.setTestValue((int) distanceToAlly);
         noObstCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();

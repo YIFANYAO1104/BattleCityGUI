@@ -211,8 +211,7 @@ public abstract class Enemy extends GameCharacter {
      * In this behaviour the AI will pathfind to the home base and try to take it over
      */
     protected void takeOver() {
-        //backendServices.occupyHome(-1);
-        //TODO
+        backendServices.occupyHome(this);
     }
 
     /**

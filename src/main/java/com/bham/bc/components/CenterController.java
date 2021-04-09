@@ -1,5 +1,6 @@
 package com.bham.bc.components;
 
+import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.shooting.Bullet;
@@ -41,6 +42,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public static BackendServices backendServices;
 
     protected boolean isGameOver;
+    protected double homeHp;
 
     protected GameMap gameMap;
     protected ArrayList<Trigger> triggers;
@@ -61,6 +63,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
+        homeHp = 1000;
     }
 
     /**
@@ -89,8 +92,19 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public abstract void loadMap(MapType mapType);
     public abstract void startGame();
 
+    public void occupyHome(Enemy enemy) {
+        if(enemy.intersects(gameMap.getHomeTerritory())) {
+            homeHp -= 1;
+            System.out.println("Home HP: " + homeHp);
+        }
+    }
+
     public Circle[] getEnemyAreas() {
         return gameMap.getEnemySpawnAreas();
+    }
+
+    public Circle getHomeArea() {
+        return gameMap.getHomeTerritory();
     }
 
     @Override
