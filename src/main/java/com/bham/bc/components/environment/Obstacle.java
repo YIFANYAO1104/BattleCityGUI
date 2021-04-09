@@ -4,6 +4,7 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
+import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
@@ -79,9 +80,9 @@ public class Obstacle extends BaseGameEntity{
     public void interactWith(int graphSystemID, int nodeID, Rectangle area) {
         if(getHitBox().intersects(area.getBoundsInLocal())) {
             if(attributes.contains(Attribute.BREAKABLE)) {
-                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interactWithSoft, nodeID);
+                Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interactWithSoft, nodeID);
             } else {
-                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interact, nodeID);
+                Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interact, nodeID);
             }
         }
     }
@@ -90,7 +91,7 @@ public class Obstacle extends BaseGameEntity{
         if(attributes.contains(Attribute.BREAKABLE)) {
             hp += health;
             if (hp <= 0.0) {
-                Dispatch.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), backendServices.getGraph().getID(), Msg_removeSoft, NO_ADDITIONAL_INFO);
+                Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), backendServices.getGraph().getID(), Msg_removeSoft, NO_ADDITIONAL_INFO);
                 exists = false;
                 entityManager.removeEntity(this);
             }

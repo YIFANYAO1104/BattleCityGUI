@@ -48,8 +48,8 @@ public class SurvivalController extends CenterController {
      */
     private void initDivision() {
         mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), GameMap.getNumTilesX(), GameMap.getNumTilesY(), 50);
-        mapDivision.addToMapDivision(new ArrayList<>(gameMap.getInteractiveObstacles()));
-        mapDivision.addToMapDivision(new ArrayList<>(characters));
+        mapDivision.addEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
+        mapDivision.addEntities(new ArrayList<>(characters));
     }
 
     @Override

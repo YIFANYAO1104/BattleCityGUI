@@ -3,7 +3,9 @@ package com.bham.bc.entity.physics;
 import javafx.geometry.Point2D;
 
 
-
+/**
+ * The hitbox to check the interaction
+ */
 public class Hitbox {
     private Point2D TopLeft;
     private Point2D BottomRight;
@@ -18,13 +20,6 @@ public class Hitbox {
 
     //Return true if this one is hitted with another one.
     private static Boolean isInteractedWith(Hitbox one, Hitbox another) {
-//        return !(
-//                (another.getTop() > this.getBottom())
-//                ||(another.getBottom() < this.getTop())
-//                ||(another.getLeft() > this.getRight())
-//                ||(another.getRight() < this.getLeft())
-//                );
-
         if(
                 (one.getTop()< another.getBottom() && one.getRight() < another.getRight())
                 && (one.getBottom() > another.getTop() && one.getRight()>another.getLeft() )
@@ -35,6 +30,11 @@ public class Hitbox {
 
     }
 
+    /**
+     * Detect if this and another hitbox are interacting
+     * @param another Hitbox
+     * @return Boolean
+     */
     public Boolean isInteractedWith(Hitbox another){
         if(isInteractedWith(this,another) || isInteractedWith(another,this))
             return true;

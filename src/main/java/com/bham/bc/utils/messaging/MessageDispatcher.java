@@ -19,9 +19,9 @@ public class MessageDispatcher {
     final public static double SEND_MSG_IMMEDIATELY = 0.0f;
     final public static Object NO_ADDITIONAL_INFO = null;
     /**
-     * Create an Object of MessageDispatcher
+     * Create only one Object of MessageDispatcher
      */
-    final public static MessageDispatcher Dispatch = new MessageDispatcher();
+    final public static MessageDispatcher Dispatcher = new MessageDispatcher();
     //a Set is used as the container for the delayed messages
     //because of the benefit of automatic sorting and avoidance
     //of duplicates. Messages are sorted by their dispatch time.
@@ -59,9 +59,9 @@ public class MessageDispatcher {
         throw new CloneNotSupportedException("Cloning not allowed");
     }
 
-    //this class is a singleton
+    //this class is a singletonsd
     public static MessageDispatcher Instance() {
-        return Dispatch;
+        return Dispatcher;
     }
 
     /**
