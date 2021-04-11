@@ -45,6 +45,10 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     public SearchStatus cycleOnce() {
 //        Node n1 = start();
         routine = search();
+        if (routine==null){
+            System.out.println("SearchStatus.target_not_found");
+            return SearchStatus.target_not_found;
+        }
 
         if(routine.get(0) == goal.getNode()){
             System.out.println("SearchStatus.target_found");
@@ -90,6 +94,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
 
     public ArrayList<NavNode> search(){
         Node n1 = start();
+        if (n1==null) return null;
         ArrayList<NavNode> temp = new ArrayList<>();
 
         temp.add((NavNode) n1.getNode());
@@ -104,7 +109,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     public Node start(){
         addNode(root);
 
-        while (isFinish()){
+        while (isContinue()){
             addNode(openList.poll());
 //            System.out.println("finding");
         }
@@ -119,9 +124,9 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         return null;
     }
 
-    private boolean isFinish(){
+    private boolean isContinue(){
 
-        if(register.contains(goal.getNode()))
+        if(register.contains(goal.getNode())||openList.isEmpty())
             return false;
 
         return true;
@@ -176,6 +181,10 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
     private double getCost(Node n1 , Node n2){
         GraphEdge e1 = sg.getEdge(n1.getNode().Index(), n2.getNode().Index());
         return e1.Cost();
+    }
+
+    public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition){
+        this.expandCondition = expandCondition;
     }
 
 

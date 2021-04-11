@@ -49,6 +49,7 @@ public class PathPlanner implements NavigationService {
     private SearchStatus taskStatus;
 
     public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition) {
+        if (curSearchTask!=null) curSearchTask.setExpandCondition(expandCondition);
         this.expandCondition = expandCondition;
     }
 
