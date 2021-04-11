@@ -7,7 +7,6 @@ import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
 
@@ -19,13 +18,13 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  *
  * <p>This type of enemy has 3 states determined by its distance to ally and free path condition</p>
  * <ul>
- *     <li><b>Search</b> - searches for the closest ally in the game and moves towards it</li>
+ *     <li><b>Search Ally</b> - searches for the closest ally in the game and moves towards it</li>
  *
- *     <li><b>Charge</b> - charges at the nearest ally with increased speed if it is close enough
+ *     <li><b>Charge Ally</b> - charges at the nearest ally with increased speed if it is close enough
  *     and if there are no obstacles in a way to stop it</li>
  *
- *     <li><b>Attack</b> - attacks any ally that is very close to it by self-destructing itself and
- *     dealing area damage to anything but enemies</li>
+ *     <li><b>Attack Ally</b> - attacks any ally that is very close to it by self-destructing itself
+ *     and dealing area damage to anything but allies and obstacles</li>
  * </ul>
  */
 public class Kamikaze extends Enemy {
@@ -35,9 +34,8 @@ public class Kamikaze extends Enemy {
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
-    private FreePathCondition noObstaclesCondition;
-    private IntCondition closeRadiusCondition;
-    private AndCondition chargeCondition;
+    private FreePathCondition noObstCondition;
+    private IntCondition chargeCondition;
     private IntCondition attackCondition;
 
     /**
@@ -49,6 +47,7 @@ public class Kamikaze extends Enemy {
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        //navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
     }
@@ -56,19 +55,22 @@ public class Kamikaze extends Enemy {
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
-        State searchState = new State(new Action[]{ Action.SEARCHALLY }, null);
-        State chargeState = new State(new Action[]{ Action.CHARGEALLY }, null);
-        State attackState = new State(new Action[]{ Action.ATTACKALLY }, null);
+        State searchState = new State(new Action[]{ Action.SEARCH_ALLY }, null);
+        State chargeState = new State(new Action[]{ Action.SEARCH_ALLY }, null);
+        State attackState = new State(new Action[]{ Action.ATTACK_ALLY }, null);
+
+        // Set up required entry/exit actions
+        chargeState.setEntryActions(new Action[]{ Action.SET_SPEED });
+        chargeState.setExitActions(new Action[]{ Action.RESET_SPEED });
 
         // Define all conditions required to change any state
-        closeRadiusCondition = new IntCondition(0, 100);
-        noObstaclesCondition = new FreePathCondition();
-        chargeCondition = new AndCondition(closeRadiusCondition, noObstaclesCondition);
-        attackCondition = new IntCondition(0, 40);
+        noObstCondition = new FreePathCondition(getHitBoxRadius());
+        chargeCondition = new IntCondition(0, 150);
+        attackCondition = new IntCondition(0, 50);
 
         // Define all state transitions that could happen
-        Transition searchPossibility = new Transition(searchState, new NotCondition(chargeCondition));
-        Transition chargePossibility = new Transition(chargeState, chargeCondition);
+        Transition searchPossibility = new Transition(searchState, new NotCondition(new AndCondition(chargeCondition, noObstCondition)));
+        Transition chargePossibility = new Transition(chargeState, new AndCondition(chargeCondition, noObstCondition));
         Transition attackPossibility = new Transition(attackState, attackCondition);
 
         // Define how the states can transit from one another
@@ -81,23 +83,30 @@ public class Kamikaze extends Enemy {
 
     @Override
     public void update() {
-        double distanceToPlayer = getCenterPosition().distance(backendServices.getPlayerCenterPosition());
+        double distanceToAlly = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
-        attackCondition.setTestValue((int) distanceToPlayer);
-        closeRadiusCondition.setTestValue((int) distanceToPlayer);
-        noObstaclesCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
+        attackCondition.setTestValue((int) distanceToAlly);
+        chargeCondition.setTestValue((int) distanceToAlly);
+        noObstCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
-                case SEARCHALLY:
+                case SEARCH_ALLY:
                     search(ItemType.ALLY);
                     break;
-                case CHARGEALLY:
-                    charge();
+                case CHARGE_ALLY:
+                    aim();
+                    move();
                     break;
-                case ATTACKALLY:
+                case ATTACK_ALLY:
                     destroy();
+                    break;
+                case SET_SPEED:
+                    setMaxSpeed(SPEED * 2);
+                    break;
+                case RESET_SPEED:
+                    setMaxSpeed(SPEED);
                     break;
             }
         });
@@ -112,7 +121,12 @@ public class Kamikaze extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
+    public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
+    }
+
+    @Override
+    public String toString() {
+        return "Kamikaze";
     }
 }

@@ -2,12 +2,15 @@ package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.characters.Tribe;
 import com.bham.bc.entity.ai.behavior.*;
+import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.graph.edge.GraphEdge;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
 
+import static com.bham.bc.components.CenterController.backendServices;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -26,26 +29,26 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  *     less</li>
  *
  *     <li><b>Attack Home</b> - it attacks the home base by standing in one spot and taking away
- *     "HP" almost as if it was progressively infecting it. It doesn't shoot or run away.</li>
+ *     "HP" almost as if it was progressively infecting it. It doesn't shoot or run away</li>
  * </ul>
  */
 public class Teaser extends Enemy {
     // Constant
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/teaser.png";
     public static final int SIZE = 30;
-    public static final Tribe TYPE = Tribe.TEASER;
+    public static final Tribe TRIBE = Tribe.TEASER;
 
     // Configurable
-    public static final double HP = 50;
+    public static final double HP = 100;
     public static final double SPEED = 5;
 
     // Behavior
     private final StateMachine stateMachine;
-    private IntCondition badHealthCondition;
-    private IntCondition closeToHome;
-    private IntCondition closeToAlly;
-    private AndCondition attackHomeCondition;
-    private AndCondition attackAllyCondition;
+    private FreePathCondition noObstacleCondition;
+    private IntCondition highHealthCondition;
+    private IntCondition nearToAllyCondition;
+    private IntCondition nearToHomeCondition;
+
     /**
      * Constructs a character instance with directionSet initialized to empty
      *
@@ -53,62 +56,95 @@ public class Teaser extends Enemy {
      * @param y top left y coordinate of the character
      */
     public Teaser(double x, double y) {
-        super(x, y, 1, HP);
+        super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-        this.stateMachine = createFSM();
+        stateMachine = createFSM();
     }
 
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
-        State searchAllyState = new State(new Action[]{ Action.SEARCHALLY }, null);
-        State attackAllyState = new State(new Action[]{ Action.ATTACKALLY }, null);
-        State searchHomeState = new State(new Action[]{ Action.SEARCHHOME }, null);
-        State attackHomeState = new State(new Action[]{ Action.ATTACKHOME}, null);
+        State searchAllyState = new State(new Action[]{ Action.SEARCH_ALLY, Action.ATTACK_OBST }, null);
+        State searchHomeState = new State(new Action[]{ Action.SEARCH_HOME, Action.ATTACK_OBST }, null);
+        State attackAllyState = new State(new Action[]{ Action.ATTACK_ALLY }, null);
+        State attackHomeState = new State(new Action[]{ Action.ATTACK_HOME }, null);
+
+        // Set up entry/exit actions
+        searchHomeState.setEntryActions(new Action[]{ Action.SET_SPEED, Action.SET_RATE });
+        searchHomeState.setExitActions(new Action[]{ Action.RESET_SPEED, Action.RESET_RATE });
+        searchAllyState.setEntryActions(new Action[]{ Action.SET_RATE });
+        searchAllyState.setExitActions(new Action[]{ Action.RESET_RATE});
+
+        // Helper conditions to make the code easier to understand
+        AndCondition attackHomeCondition;
+        AndCondition attackAllyCondition;
 
         // Define all conditions required to change any state
-        closeToHome = new IntCondition(0, 50);
-        closeToAlly = new IntCondition(0, 50);
-        badHealthCondition = new IntCondition(0, 10);
-        attackHomeCondition = new AndCondition(closeToHome, badHealthCondition);
-        attackAllyCondition = new AndCondition(closeToAlly, new NotCondition(badHealthCondition));
+        noObstacleCondition = new FreePathCondition();
+        highHealthCondition = new IntCondition((int) (HP * .2), (int) HP);
+        nearToAllyCondition = new IntCondition(0, 200);
+        nearToHomeCondition = new IntCondition(0, (int) (backendServices.getHomeArea().getRadius() * .8));
+        attackAllyCondition = new AndCondition(new AndCondition(noObstacleCondition, nearToAllyCondition), highHealthCondition);
+        attackHomeCondition = new AndCondition(nearToHomeCondition, new NotCondition(highHealthCondition));
 
         // Define all state transitions that could happen
-        Transition attackHomePossibility = new Transition(attackHomeState, attackHomeCondition);
-        Transition searchHomePossibility = new Transition(searchHomeState, badHealthCondition);
+        Transition searchAllyPossibility = new Transition(searchAllyState, new AndCondition(new NotCondition(attackAllyCondition), highHealthCondition));
+        Transition searchHomePossibility = new Transition(searchHomeState, new AndCondition(new NotCondition(attackHomeCondition), new NotCondition(highHealthCondition)));
         Transition attackAllyPossibility = new Transition(attackAllyState, attackAllyCondition);
+        Transition attackHomePossibility = new Transition(attackHomeState, attackHomeCondition);
 
         // Define how the states can transit from one another
-        searchAllyState.setTransitions(new Transition[]{ attackAllyPossibility, searchHomePossibility });
-        attackHomeState.setTransitions(new Transition[]{ });
-        attackAllyState.setTransitions(new Transition[]{ searchHomePossibility});
-        searchHomeState.setTransitions(new Transition[]{ attackHomePossibility });
+        searchAllyState.setTransitions(new Transition[]{ attackAllyPossibility, searchHomePossibility });   // In case enemy runs over a trap and its HP becomes low
+        searchHomeState.setTransitions(new Transition[]{ attackHomePossibility, searchAllyPossibility });   // In case enemy runs over HP buff and is able to attack
+        attackAllyState.setTransitions(new Transition[]{ searchAllyPossibility, searchHomePossibility });
+        attackHomeState.setTransitions(new Transition[]{ searchAllyPossibility });
 
         return new StateMachine(searchAllyState);
     }
 
     @Override
     public void update() {
-        // TODO: double distanceToHome = find distance to home
-        // TODO: closeToHome.setTestValue((int) distanceToHome);
-        // TODO: double distanceToAlly = find distance to nearest ally
-        // TODO: closeToAlly.setTestValue((int) distanceToAlly);
-        badHealthCondition.setTestValue((int) this.hp);
+        double distanceToAlly = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        double distanceToHome = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.HOME));
+
+        noObstacleCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        highHealthCondition.setTestValue((int) hp);
+        nearToAllyCondition.setTestValue((int) distanceToAlly);
+        nearToHomeCondition.setTestValue((int) distanceToHome);
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
-                case SEARCHALLY:
-                    //TODO: searchAlly();
+                case SEARCH_ALLY:
+                    search(ItemType.ALLY);
                     break;
-                case ATTACKALLY:
-                    //TODO: attackAlly();
+                case SEARCH_HOME:
+                    search(ItemType.HOME);
                     break;
-                case SEARCHHOME:
-                    // TODO: searchHome();
+                case ATTACK_ALLY:
+                    aim();
+                    shoot(.5);
                     break;
-                case ATTACKHOME:
-                    // TODO: attackHome();
+                case ATTACK_HOME:
+                    takeOver();
+                    break;
+                case ATTACK_OBST:
+                    if(edgeBehavior == GraphEdge.shoot) {
+                        face(backendServices.getClosestCenter(getCenterPosition(), ItemType.SOFT));
+                        GUN.shoot();
+                    }
+                    break;
+                case SET_SPEED:
+                    setMaxSpeed(SPEED * 3);
+                    break;
+                case RESET_SPEED:
+                    setMaxSpeed(SPEED);
+                    break;
+                case SET_RATE:
+                    GUN.setRate(200);
+                    break;
+                case RESET_RATE:
+                    GUN.setRate(1000);
                     break;
             }
         });
@@ -121,7 +157,12 @@ public class Teaser extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
+    public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .43);
+    }
+
+    @Override
+    public String toString() {
+        return "Teaser";
     }
 }

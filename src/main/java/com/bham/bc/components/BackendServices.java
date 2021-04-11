@@ -1,14 +1,17 @@
 package com.bham.bc.components;
 
+import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
 import javafx.geometry.Point2D;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
@@ -68,6 +71,15 @@ public interface BackendServices {
      * @return Point2D list with all character locations
      */
     ArrayList<Point2D> allCharacterPositions();
+
+    /**
+     * Gets center point of a free area requested around some pivot point
+     * @param pivot       point around which the area should be found
+     * @param pivotRadius radius for the pivot point around which the area is not free
+     * @param areaRadius  radius the free area should have
+     * @return Point2D coordinate of a free area or (-1, -1) point if no area is found
+     */
+    Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius);
     //-------------------------------------------------------------
 
 
@@ -84,7 +96,13 @@ public interface BackendServices {
     void clear();
 
     /**
-     *For path smoothing algorithms
+     * Checks if a path from <i>start</i> to <i>end</i> intersects any obstacles
+     *
+     * @param start  position where the path starts
+     * @param end    position where the path ends
+     * @param radius radius of an entity which should fit
+     * @param array  list to which a straight rectangular path is added regardless if it intersects any obstacles
+     * @return true if the calculated straight path intersects any obstacles and false otherwise
      */
     boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array);
     //-------------------------------------------------------------
@@ -94,6 +112,8 @@ public interface BackendServices {
     // TEMPORARY METHODS -------------------------------------------
     // TODO: replace / remove or find another usage
     boolean intersectsObstacles(Rectangle hitbox);  // This will be moved to physics package
-    Point2D getMapCenterPosition(); // TODO: doc
-    Point2D getNearestOppositeSideCenterPosition(Point2D point, Side side); //TODO: doc
+    Circle[] getEnemyAreas();
+    Circle getHomeArea();
+    void occupyHome(Enemy enemy);
+    Point2D getClosestCenter(Point2D position, ItemType item);
 }

@@ -1,10 +1,14 @@
 package com.bham.bc.components;
 
+import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.environment.Attribute;
+import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
 import com.bham.bc.components.triggers.Trigger;
@@ -20,14 +24,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Class defining the common elements and behavior for both survival and challenge controllers
@@ -38,6 +42,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public static BackendServices backendServices;
 
     protected boolean isGameOver;
+    protected double homeHp;
 
     protected GameMap gameMap;
     protected ArrayList<Trigger> triggers;
@@ -58,6 +63,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
+        homeHp = 1000;
     }
 
     /**
@@ -86,18 +92,53 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     public abstract void loadMap(MapType mapType);
     public abstract void startGame();
 
+    public void occupyHome(Enemy enemy) {
+        if(enemy.intersects(gameMap.getHomeTerritory())) {
+            homeHp -= 1;
+            System.out.println("Home HP: " + homeHp);
+        }
+    }
+
+    public Circle[] getEnemyAreas() {
+        return gameMap.getEnemySpawnAreas();
+    }
+
+    public Circle getHomeArea() {
+        return gameMap.getHomeTerritory();
+    }
+
+    @Override
+    public Point2D getClosestCenter(Point2D position, ItemType item) {
+        Stream<Point2D> closestPoints;
+
+        switch(item) {
+            case ALLY:
+                closestPoints = characters.stream().filter(c -> c.getSide() == Side.ALLY).map(GameCharacter::getCenterPosition);
+                break;
+            case SOFT:
+                Stream<BaseGameEntity> obstacles = mapDivision.calculateNeighborsArray(position, 50).stream().filter(entity -> entity instanceof Obstacle);
+                closestPoints = obstacles.filter(entity -> ((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)).map(BaseGameEntity::getCenterPosition);
+                break;
+            case ENEMY_AREA:
+                closestPoints = Arrays.stream(gameMap.getEnemySpawnAreas()).map(circle -> new Point2D(circle.getCenterX(), circle.getCenterY()));
+                break;
+            case HOME:
+                return new Point2D(gameMap.getHomeTerritory().getCenterX(), gameMap.getHomeTerritory().getCenterY());
+            default:
+                return position;
+        }
+
+        return closestPoints.min(Comparator.comparing(point -> point.distance(position))).orElse(position);
+    }
+
+
+    @Override
+    public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
+        return null;
+    }
+
     public ArrayList<BaseGameEntity> allInfoCharacter(){
         return new ArrayList<>(characters);
-    }
-
-    @Override
-    public Point2D getMapCenterPosition() {
-        return new Point2D(16*32, 16*32);
-    }
-
-    @Override
-    public Point2D getNearestOppositeSideCenterPosition(Point2D point, Side side) {
-        return characters.stream().filter(c -> c.getSide() != side).map(GameCharacter::getCenterPosition).min(Comparator.comparing(c -> c.distance(point))).get();
     }
 
     @Override
@@ -203,7 +244,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
     // OTHER ------------------------------------------------------
     @Override
-    public boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array){
+    public boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array) {
         double angle = end.subtract(start).angle(new Point2D(0,-1));
         //angle between vectors are [0,180), so we need add extra direction info
         if (end.subtract(start).getX()<0) angle = -angle;

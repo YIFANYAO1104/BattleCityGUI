@@ -33,7 +33,7 @@ public class HealthGiver extends RespawnTrigger{
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof GameCharacter && intersects(entity)) {
-            ((GameCharacter) entity).changeHP(health);
+            ((GameCharacter) entity).changeHp(health);
             deactivate();
         }
     }
