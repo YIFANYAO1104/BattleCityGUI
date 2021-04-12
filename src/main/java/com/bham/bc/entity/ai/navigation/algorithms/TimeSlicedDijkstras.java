@@ -171,4 +171,8 @@ public class TimeSlicedDijkstras
             super(node,cost);
         }
     }
+
+    public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition){
+        this.expandCondition = expandCondition;
+    }
 }

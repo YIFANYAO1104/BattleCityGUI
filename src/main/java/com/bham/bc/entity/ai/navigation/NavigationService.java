@@ -74,5 +74,10 @@ public interface NavigationService {
      */
     public List<Shape> getSmoothingBoxes();
 
+    /**
+     * set expand condition for algorithm.
+     * It will also reset the one in algorithm.
+     * @return
+     */
     public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
 }

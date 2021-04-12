@@ -4,6 +4,7 @@ import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
@@ -48,6 +49,7 @@ public class Kamikaze extends Enemy {
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         //navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();
+        navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
     }
 
     @Override

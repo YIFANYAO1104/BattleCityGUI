@@ -1,6 +1,7 @@
 package com.bham.bc.entity.ai.navigation.algorithms;
 
 import com.bham.bc.entity.ai.navigation.SearchStatus;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathEdge;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 
@@ -39,4 +40,6 @@ abstract public class TimeSlicedAlgorithm {
      * returns the path as a list of PathEdges
      */
     public abstract List<PathEdge> getPathAsPathEdges();
+
+    public abstract void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
 }
