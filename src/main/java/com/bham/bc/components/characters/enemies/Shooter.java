@@ -50,7 +50,9 @@ public class Shooter extends Enemy {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
-        GUN.setRate(1000);
+
+        GUN.setRate(600);
+        GUN.setDamageFactor(3);
     }
 
     @Override
@@ -113,8 +115,8 @@ public class Shooter extends Enemy {
                     changeHp(HP * .003);
                     goBackCondition.setTestValue(hp < HP * .8);
                 case SET_RATE:
-                    GUN.setRate(700);
-                    GUN.setDamageFactor(5);
+                    GUN.setRate(500);
+                    GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
                     GUN.setRate(1000);

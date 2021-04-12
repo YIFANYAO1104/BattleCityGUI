@@ -40,8 +40,6 @@ public class DefaultBullet extends Bullet {
 		x += velocity.getX();
 		y += velocity.getY();
 
-		System.out.println("Bul: " + velocity);
-
 		if (x < 0 || y < 0 || x > GameMap.getWidth() || y > GameMap.getHeight()) {
 			entityManager.removeEntity(this);
 			exists = false;
