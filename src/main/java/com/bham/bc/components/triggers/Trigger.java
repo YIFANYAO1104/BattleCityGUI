@@ -1,7 +1,3 @@
-/**
- *  Desc:   base class for a trigger. A trigger is an object that is
- *          activated when an entity moves within its region of influence.
- */
 package com.bham.bc.components.triggers;
 
 
@@ -9,24 +5,22 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
-import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 import java.util.List;
 
+/**
+ *  Desc:   base class for a trigger. A trigger is an object that is
+ *          activated when an entity moves within its region of influence.
+ */
 abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
-    protected boolean exists;
     protected boolean active;
     protected int currentFrame;
 
-
     public Trigger(int x, int y) {
-        super(GetNextValidID(), x, y);
-        exists = true;
+        super(getNextValidID(), x, y);
         active = true;
 
         currentFrame = 0;
@@ -34,13 +28,33 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
     }
 
     /**
-     * returns true if the entity given by a position and bounding radius is
-     * overlapping the trigger region
+     * called each update-step of the game. This methods updates any internal
+     * state the trigger may have
      */
-    // TODO: remove, no usage of it
-    public boolean intersects(Point2D position, Point2D radius) {
-        return (new Rectangle(position.getX(), position.getY(), radius.getX(), radius.getY())).intersects(getHitBox().getBoundsInLocal());
+    public boolean active() {
+        return active;
     }
+
+    /**
+     * Handles intersection of multiple {@link BaseGameEntity} objects
+     * @param entities a list of entities the trigger's region will be checked on
+     * @see #handle(BaseGameEntity)
+     */
+    public void handle(List<BaseGameEntity> entities) {
+        entities.forEach(this::handle);
+    }
+
+    /**
+     * Handles intersection with {@link BaseGameEntity}
+     *
+     * <p>Determines if the entity is within the trigger's region of influence. If it is then the trigger
+     * will be handle the action to be taken</p>
+     *
+     * @param entity game entity on which the collision will be checked
+     */
+    public abstract void handle(BaseGameEntity entity);
+
+    protected abstract Image[] getDefaultImage();
 
     @Override
     public boolean intersects(Shape shape) {
@@ -51,38 +65,6 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
     public boolean intersects(BaseGameEntity entity) {
         return intersects(entity.getHitBox());
     }
-
-    abstract protected Image[] getDefaultImage();
-
-    /**
-     * when this is called the trigger determines if the entity is within the
-     * trigger's region of influence. If it is then the trigger will be
-     * triggered and the appropriate action will be taken.
-     */
-    public abstract void handle(BaseGameEntity entity);
-
-    public void handle(List<BaseGameEntity> entities) {
-        entities.forEach(this::handle);
-    }
-
-    /**
-     * called each update-step of the game. This methods updates any internal
-     * state the trigger may have
-     */
-
-    public boolean active() {
-        return active;
-    }
-
-    public boolean exists() {
-        return exists;
-    }
-
-
-    protected abstract void renderRegion(GraphicsContext gc);
-
-    @Override
-    public abstract void update();
 
     @Override
     public ItemType getItemType() {
@@ -98,16 +80,4 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
     public String toString() {
         return "Trigger";
     }
-
-    // TODO: remove
-    //child classes use one of these methods to initialize the trigger region
-//    protected void addRectangularTriggerRegion(Point2D pos, Point2D radius) {
-//        //triggerRegion = new TriggerRegionRectangle(pos, radius);
-//        region = new Rectangle(pos.getX(), pos.getY(), radius.getX(), radius.getY());
-//    }
-
-//    protected void addRectangularTriggerRegionSurrounded(Point2D imgPos, Point2D imgRadius, Point2D regionRadius) {
-//        Point2D topLeft = imgPos.subtract(regionRadius.subtract(imgRadius).multiply(0.5));
-//        triggerRegion = new TriggerRegionRectangle(topLeft, regionRadius);
-//    }
 }

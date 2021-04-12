@@ -30,20 +30,16 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
  * Class defining the common elements and behavior for both survival and challenge controllers
  */
-public abstract class CenterController extends BaseGameEntity implements FrontendServices, BackendServices {
+public abstract class CenterController extends BaseGameEntity implements Services {
 
-    public static FrontendServices frontendServices;
-    public static BackendServices backendServices;
+    public static Services services;
 
-    protected boolean isGameOver;
     protected double homeHp;
-
     protected GameMap gameMap;
     protected ArrayList<Trigger> triggers;
     protected ArrayList<Bullet> bullets;
@@ -59,7 +55,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
      * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
      */
     public CenterController() {
-        super(GetNextValidID(),-1,-1);
+        super(getNextValidID(),-1,-1);
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
@@ -81,16 +77,24 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
                 centerController = new ChallengeController();
                 break;
         }
-        frontendServices = centerController;
-        backendServices = centerController;
+        services = centerController;
 
         centerController.loadMap(mapType);
         centerController.startGame();
     }
 
     // TEMPORARY METHODS -------------------------------------------
-    public abstract void loadMap(MapType mapType);
-    public abstract void startGame();
+    protected abstract void loadMap(MapType mapType);
+    protected abstract void startGame();
+
+    public double getScore() {
+        return 0;
+    }
+
+    @Override
+    public double getHomeHp() {
+        return homeHp;
+    }
 
     public void occupyHome(Enemy enemy) {
         if(enemy.intersects(gameMap.getHomeTerritory())) {
@@ -116,7 +120,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
                 closestPoints = characters.stream().filter(c -> c.getSide() == Side.ALLY).map(GameCharacter::getCenterPosition);
                 break;
             case SOFT:
-                Stream<BaseGameEntity> obstacles = mapDivision.calculateNeighborsArray(position, 50).stream().filter(entity -> entity instanceof Obstacle);
+                Stream<BaseGameEntity> obstacles = mapDivision.calculateNeighborsArray(position, 120).stream().filter(entity -> entity instanceof Obstacle);
                 closestPoints = obstacles.filter(entity -> ((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)).map(BaseGameEntity::getCenterPosition);
                 break;
             case ENEMY_AREA:
@@ -135,10 +139,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         return null;
     }
 
-    public ArrayList<BaseGameEntity> allInfoCharacter(){
-        return new ArrayList<>(characters);
-    }
-
     @Override
     public boolean intersectsObstacles(Rectangle path) {
         return gameMap.getInteractiveObstacles().stream().anyMatch(o -> o.intersects(path));
@@ -149,48 +149,36 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         hitBoxPane.getChildren().clear();
 
         // Add bullet hit-boxes
-        bullets.forEach(b -> {
-            Shape bulletHitBox = b.getHitBox();
-            bulletHitBox.setFill(Color.TRANSPARENT);
-            bulletHitBox.setStroke(Color.RED);
-            bulletHitBox.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(bulletHitBox);
-        });
+//        bullets.forEach(b -> {
+//            Shape bulletHitBox = b.getHitBox();
+//            bulletHitBox.setFill(Color.TRANSPARENT);
+//            bulletHitBox.setStroke(Color.RED);
+//            bulletHitBox.setStrokeWidth(1);
+//            hitBoxPane.getChildren().add(bulletHitBox);
+//        });
 
         // Add character hit-boxes
-        characters.forEach(c -> {
-            Shape cHitBox = c.getHitBox();
-            cHitBox.setFill(Color.TRANSPARENT);
-            cHitBox.setStroke(Color.RED);
-            cHitBox.setStrokeWidth(1);
-            hitBoxPane.getChildren().add(cHitBox);
-        });
+//        characters.forEach(c -> {
+//            Shape cHitBox = c.getHitBox();
+//            cHitBox.setFill(Color.TRANSPARENT);
+//            cHitBox.setStroke(Color.RED);
+//            cHitBox.setStrokeWidth(1);
+//            hitBoxPane.getChildren().add(cHitBox);
+//        });
 
 
-        characters.forEach(c -> {
-            List<Shape> smoothingBoxes = c.getSmoothingBoxes();
-            for (Shape smoothingBox : smoothingBoxes) {
-                smoothingBox.setFill(Color.TRANSPARENT);
-                smoothingBox.setStroke(Color.GREEN);
-                smoothingBox.setStrokeWidth(1);
-                hitBoxPane.getChildren().add(smoothingBox);
-            }
-        });
+//        characters.forEach(c -> {
+//            List<Shape> smoothingBoxes = c.getSmoothingBoxes();
+//            for (Shape smoothingBox : smoothingBoxes) {
+//                smoothingBox.setFill(Color.TRANSPARENT);
+//                smoothingBox.setStroke(Color.GREEN);
+//                smoothingBox.setStrokeWidth(1);
+//                hitBoxPane.getChildren().add(smoothingBox);
+//            }
+//        });
     }
     // ------------------------------------------------------------
 
-
-    // CHECKERS ---------------------------------------------------
-    @Override
-    public boolean isGameOver() {
-        return isGameOver;
-    }
-
-    @Override
-    public double getPlayerHP() {
-        return player.getHp();
-    }
-    // ------------------------------------------------------------
 
     // UI ---------------------------------------------------------
     @Override
@@ -227,16 +215,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
     @Override
     public SparseGraph<NavNode, GraphEdge> getGraph() {
         return gameMap.getGraph();
-    }
-
-    @Override
-    public Point2D getPlayerCenterPosition() {
-        return player.getCenterPosition();
-    }
-
-    @Override
-    public ArrayList<Point2D> allCharacterPositions() {
-        return (ArrayList<Point2D>) characters.stream().map(GameCharacter::getPosition).collect(Collectors.toList());
     }
     // ------------------------------------------------------------
 
@@ -291,7 +269,7 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
 
         // gameMap.renderTopLayer(gc);
 
-        gameMap.renderGraph(gc, allInfoCharacter());
+        gameMap.renderGraph(gc, new ArrayList<>(characters));
         gameMap.renderTerritories(gc);
     }
 

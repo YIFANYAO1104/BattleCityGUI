@@ -16,7 +16,7 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.utils.Constants.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
 /**
  * <h1>Game Map</h1>
  *
- * <p>This class takes care of the the current game session uses. It generates an appropriate map, adds obstacles and triggers
- * to it and sets up a graph. <b>Note: </b> the class itself only registers constant triggers that come along from the JSON file,
- * it passes them to {@link com.bham.bc.components.CenterController}. It also does not check for obstacle intersection, {@link MapDivision} does that for
- * it. This class only takes care of the visuals of obstacles and provides specific map territories.</p>
+ * <p>This class takes care of the map the current game session uses. It generates an appropriate map, adds obstacles and respawning triggers
+ * to the game, initializes home and enemy territories and sets up a graph. <b>Note: </b> the class itself only passes triggers that come
+ * along from the JSON file to the controller. It also does not check for obstacle intersection, {@link MapDivision} does that for it - this
+ * class only takes care of their visuals.</p>
  */
 public class GameMap {
     // Parameters
@@ -84,7 +84,7 @@ public class GameMap {
     private void initElements(MapLoader mapLoader, TriggerLoader triggerLoader) {
         interactiveObstacles = mapLoader.getObstacles().stream().filter(o -> !o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toList());
         noninteractiveObstacles = mapLoader.getObstacles().stream().filter(o -> o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toList());
-        triggerLoader.getTriggers().forEach(t -> backendServices.addTrigger(t));
+        triggerLoader.getTriggers().forEach(t -> services.addTrigger(t));
     }
 
     /**
@@ -167,7 +167,7 @@ public class GameMap {
 
             for (int i = 0; i < interactiveObstacles.size(); i++) {
                 Obstacle w = interactiveObstacles.get(i);
-                w.interactWith(graphSystem.getID(), index, new Rectangle(
+                w.interacts(graphSystem.getID(), index, new Rectangle(
                         vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
             }
         }
@@ -308,7 +308,7 @@ public class GameMap {
 
     /**
      * Renders the circular areas around the specific territories
-     * @param gc graphics context the hit-boxed will be drawn on
+     * @param gc graphics context the hit-boxes will be drawn on
      */
     public void renderTerritories(GraphicsContext gc) {
         gc.setStroke(Color.RED);

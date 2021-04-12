@@ -2,13 +2,12 @@ package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
-import com.bham.bc.entity.graph.edge.GraphEdge;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
 import java.util.Arrays;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -86,7 +85,7 @@ public class Shooter extends Enemy {
 
     @Override
     public void update() {
-        noObstCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        noObstCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
@@ -96,19 +95,16 @@ public class Shooter extends Enemy {
                     goBackCondition.setTestValue(hp <= HP * .2);
                     break;
                 case ATTACK_ALLY:
-                    aim();
-                    shoot(0.5);
+                    face(ItemType.ALLY);
+                    shoot(0.8);
                     goBackCondition.setTestValue(hp <= HP * .2);
                     break;
                 case ATTACK_OBST:
-                    if(edgeBehavior == GraphEdge.shoot) {
-                        face(backendServices.getClosestCenter(getCenterPosition(), ItemType.SOFT));
-                        GUN.shoot();
-                    }
+                    setMaxSpeed(shootObstacle() ? SPEED * .3 : SPEED);
                     break;
                 case RETREAT:
                     search(ItemType.ENEMY_AREA);
-                    if(Arrays.stream(backendServices.getEnemyAreas()).anyMatch(this::intersects)) {
+                    if(Arrays.stream(services.getEnemyAreas()).anyMatch(this::intersects)) {
                         changeHp(HP);
                         goBackCondition.setTestValue(false);
                     }
@@ -117,10 +113,12 @@ public class Shooter extends Enemy {
                     changeHp(HP * .003);
                     goBackCondition.setTestValue(hp < HP * .8);
                 case SET_RATE:
-                    GUN.setRate(200);
+                    GUN.setRate(700);
+                    GUN.setDamageFactor(5);
                     break;
                 case RESET_RATE:
                     GUN.setRate(1000);
+                    GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
                     steering.setDecelerateOn(false);

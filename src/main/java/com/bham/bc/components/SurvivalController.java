@@ -65,9 +65,4 @@ public class SurvivalController extends CenterController {
         initCharacters();
         initDivision();
     }
-
-    @Override
-    public boolean isGameOver() {
-        return false;
-    }
 }

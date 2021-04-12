@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 
 /**
  * <p>Condition for checking whether a straight path (represented as a rectangle) between 2 points
@@ -116,6 +116,6 @@ public class FreePathCondition implements Condition {
      */
     @Override
     public boolean test() {
-        return !backendServices.intersectsObstacles(getPath());
+        return !services.intersectsObstacles(getPath());
     }
 }

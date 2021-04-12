@@ -1,6 +1,5 @@
 package com.bham.bc.entity.physics;
 
-import com.bham.bc.components.characters.Steering;
 import com.bham.bc.entity.MovingEntity;
 import javafx.geometry.Point2D;
 
@@ -64,7 +63,7 @@ public class CollisionHandler {
         Point2D force = deltaDistance.normalize().multiply(-3 * Steering.FRICTION);
         Point2D acceleration = force.multiply(1/entity2.getMass());
 
-        entity2.addVelocity(acceleration);
+        entity2.setVelocity(entity2.getVelocity().add(acceleration));
     }
 
     /**

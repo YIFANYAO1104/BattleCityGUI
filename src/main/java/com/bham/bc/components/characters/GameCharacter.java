@@ -6,13 +6,12 @@ import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.CollisionHandler;
-import javafx.geometry.Point2D;
+import com.bham.bc.utils.messaging.Telegram;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.List;
-
-import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
  * Represents a character - this includes enemies, players and AI companions
@@ -20,19 +19,11 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
 abstract public class GameCharacter extends MovingEntity {
     public static final int MAX_SIZE = 32;
 
-    // Private properties
     private final double MAX_HP;
     protected double hp;
     protected Side side;
 
-    // Mechanics / movement
-
-    protected Steering steering;
-    protected Point2D acceleration;
-
-    // Triggers
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
-    protected boolean TRAPPED;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -48,69 +39,85 @@ abstract public class GameCharacter extends MovingEntity {
         this.side = side;
 
         mass = 3;
-        steering = new Steering(this);
-        acceleration = new Point2D(0, 0);
+    }
+
+    /**
+     * Gets the HP of the character
+     * @return current HP
+     */
+    public double getHp() {
+        return hp;
+    }
+
+    /**
+     * Gets the MAX HP of the character
+     * @return initial HP (which is MAX) the character was assigned with
+     */
+    public double getMaxHp() {
+        return MAX_HP;
     }
 
     /**
      * Gets character's side
      * @return ALLY or ENEMY side the character belongs to
      */
-    public Side getSide() { return side; }
+    public Side getSide() {
+        return side;
+    }
 
     /**
-     * Gets the HP of the player
-     * @return current HP
-     */
-    public double getHp() { return hp; }
-
-    /**
-     * Increases or decreases HP for the player
-     * @param health amount by which the player's HP is changed
+     * Increases or decreases HP for the character
+     * @param health amount by which the character's HP is changed
      */
     public void changeHp(double health) {
         hp = Math.min(hp + health, MAX_HP);
-        if(side == Side.ENEMY) System.out.println("Enemy's HP: " + hp);
+        if(side == Side.ENEMY)
         if(hp <= 0) destroy();
     }
 
     // TEMP: DOCUMENT ------------------------------------------------
     @Deprecated
     public void switchWeapon(Weapon w) {}
-
     public void toTriple(int numTicks) {
-    	tripleTicks = numTicks;
+        tripleTicks = numTicks;
     }
-
     public void toFreeze(int numTicks) {
-    	freezeTicks = numTicks;
+        freezeTicks = numTicks;
     }
-
     public void toImmune(int numTicks) {
-    	immuneTicks = numTicks;
+        immuneTicks = numTicks;
     }
-
-    // Updates active trigger time ticks
     protected void updateTriggers() {
-    	if(immuneTicks!=0) --immuneTicks;
-    	if(freezeTicks!=0) --freezeTicks;
-    	if(tripleTicks!=0) --tripleTicks;
+        if(immuneTicks!=0) --immuneTicks;
+        if(freezeTicks!=0) --freezeTicks;
+        if(tripleTicks!=0) --tripleTicks;
     }
-
-    public void setTRAPPED(){
-        TRAPPED = true;
+    public void destroyed(){
+        this.hp-=200;
     }
-
-    public void setUNTRAPPED(){
-        TRAPPED = false;
+    public int getImmuneTicks() {
+        return immuneTicks;
+    }
+    public void teleport(double x,double y){
+        this.x = x;
+        this.y = y;
     }
     // -----------------------------------------------------------
 
-
-    public void handle(List<BaseGameEntity> entities) {
-        entities.forEach(this::handle);
-    }
-
+    /**
+     * Handles collision of one {@link BaseGameEntity} object
+     *
+     * <p>This method handles character's collision for 2 base game entities.</p>
+     * <ul>
+     *     <li>{@link GameCharacter} - for this object, the character performs 2 collision resolves: one for impulse collision
+     *     and another one for the continuous collision when the characters push one another</li>
+     *     <li>{@link Obstacle} - for this object, if it doesn't an attribute <i>WALKABLE</i>, the character is simply moved
+     *     back by the same velocity it bumped to this obstacle</li>
+     * </ul>
+     *
+     * @param entity a generic entity that is converted to appropriate child instance the character will handle
+     * @see CollisionHandler
+     */
     public void handle(BaseGameEntity entity) {
         if(entity instanceof GameCharacter && getID() != entity.getID() && intersects(entity)) {
             CollisionHandler.resolveElasticCollision(this, (GameCharacter) entity);
@@ -121,8 +128,16 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     /**
+     * Handles intersection of multiple {@link BaseGameEntity} objects
+     * @param entities a list of entities the character's collision will be checked on
+     * @see #handle(BaseGameEntity)
+     */
+    public void handle(List<BaseGameEntity> entities) {
+        entities.forEach(this::handle);
+    }
+
+    /**
      * Overloads basic <i>move()</i> method with extra speed multiplier parameter
-     * <br>TODO: assure speedMultiplier is within [-5, 5]
      * @param speedMultiplier number by which the speed will be multiplied (use negative to inverse movement)
      */
     public void move(double speedMultiplier) {
@@ -131,29 +146,10 @@ abstract public class GameCharacter extends MovingEntity {
         y += velocity.getY();
     }
 
-    @Override
-    public void move() {
-        Point2D force = steering.calculate();
-        Point2D acceleration = force.multiply(1./mass);
-        //debug
-        this.acceleration = acceleration;
-
-        velocity = velocity.add(acceleration);
-        if(velocity.magnitude()> maxSpeed){
-            velocity = velocity.normalize().multiply(maxSpeed);
-        }
-        if (!isZero(velocity)) {
-            heading = velocity.normalize();
-        }
-
-        x += velocity.getX();
-        y += velocity.getY();
-    }
-
+    /**
+     * Unregisters and prepares to remove the character. Also runs any destruction effects
+     */
     protected abstract void destroy();
-
-    @Override
-    public abstract Circle getHitBox();
 
     /**
      * Gets radius of a circular hit-box
@@ -163,23 +159,33 @@ abstract public class GameCharacter extends MovingEntity {
         return getHitBox().getRadius();
     }
 
-    public double getMass() {
-        return mass;
-    }
-
     /**
-     *For path smoothing debug
+     * TODO: remove?
+     * Gets a list of path areas (used for path smoothing)
+     * @return a list of areas of type Shape
      */
     abstract public List<Shape> getSmoothingBoxes();
-    public void teleport(double x,double y){
-        this.x = x;
-        this.y = y;
-    }
-    public void destroyed(){
-        this.hp-=200;
+
+    @Override
+    public void render(GraphicsContext gc) {
+        drawRotatedImage(gc, entityImages[0], getAngle());
     }
 
-    public int getImmuneTicks() {
-        return immuneTicks;
+    @Override
+    public abstract Circle getHitBox();
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        switch (msg.Msg.id){
+            case 0:
+                System.out.println("you are defeated by id " + msg.Sender);
+                return true;
+            case 3:
+                System.out.println("change the direction");
+                return true;
+            default:
+                System.out.println("no match");
+                return false;
+        }
     }
 }

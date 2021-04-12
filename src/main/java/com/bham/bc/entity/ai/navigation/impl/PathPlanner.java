@@ -23,7 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 
 public class PathPlanner implements NavigationService {
 
@@ -210,7 +210,7 @@ public class PathPlanner implements NavigationService {
             //increment e2 so it points to the edge following e1 (and futher)
             PathEdge e2 = iterator.next();
             //check for obstruction, adjust and remove the edges accordingly
-            if (e2.getBehavior()==GraphEdge.normal && backendServices.canPass(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
+            if (e2.getBehavior()==GraphEdge.normal && services.canPass(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
                 e1.setDestination(e2.getDestination());
                 iterator.remove(); //remove e2 from the list
             } else {

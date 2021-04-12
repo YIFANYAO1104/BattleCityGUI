@@ -14,6 +14,7 @@ abstract public class BaseGameEntity {
     private int id;
 
     protected double x, y;
+    protected boolean exists;
     protected Image[] entityImages;
 
 
@@ -23,7 +24,7 @@ abstract public class BaseGameEntity {
      * equal to the next valid ID, before setting the ID and incrementing the
      * next valid ID
      */
-    private void SetID(int id) {
+    private void setID(int id) {
         //make sure the val is equal to or greater than the next available ID
         assert (id >= nextValidID) : "<BaseGameEntity::SetID>: invalid ID";
 
@@ -35,27 +36,34 @@ abstract public class BaseGameEntity {
     protected void finalize() throws Throwable{super.finalize();}
 
 
-    protected BaseGameEntity(int ID, double x, double y) {
-        SetID(ID);
+    protected BaseGameEntity(int id, double x, double y) {
+        setID(id);
         entityManager.registerEntity(this);
         this.x = x;
         this.y = y;
+        exists = true;
     }
 
     /**
      *
      * @return
      */
-    public static int GetNextValidID() { return nextValidID; }
+    public static int getNextValidID() {
+        return nextValidID;
+    }
 
     /**
      * Gets the ID of this entity
      *
      * @return ID as an integer this entity was registered with
      */
-    public int getID() { return id; }
+    public int getID() {
+        return id;
+    }
 
-    public Point2D getPosition() { return new Point2D(x, y); }
+    public Point2D getPosition() {
+        return new Point2D(x, y);
+    }
 
     public Point2D getCenterPosition() {
         double width = getRadius().getX();
@@ -64,7 +72,9 @@ abstract public class BaseGameEntity {
         return new Point2D(x + width/2, y + height/2);
     }
 
-    public Point2D getRadius() { return new Point2D(entityImages[0].getWidth(), entityImages[0].getHeight()); }
+    public Point2D getRadius() {
+        return new Point2D(entityImages[0].getWidth(), entityImages[0].getHeight());
+    }
 
     /**
      * Checks whether the current entity intersects with the given one
@@ -72,10 +82,20 @@ abstract public class BaseGameEntity {
      * @param entity BaseGameEntity instance we want to check if the this instance is intersecting with
      * @return true if the hit-boxes of two entities intersect and false otherwise
      */
-    public boolean intersects(BaseGameEntity entity) { return intersects(entity.getHitBox()); }
+    public boolean intersects(BaseGameEntity entity) {
+        return intersects(entity.getHitBox());
+    }
 
     public boolean intersects(Shape shape) {
         return ((Path)Shape.intersect(this.getHitBox(), shape)).getElements().size() > 0;
+    }
+
+    /**
+     * Checks if this entity exists
+     * @return true if it exists and false otherwise
+     */
+    public boolean exists() {
+        return exists;
     }
 
     /**

@@ -23,17 +23,9 @@ public class UntrappedTrigger extends RespawnTrigger {
     }
 
     @Override
-    public void render(GraphicsContext gc) {
-        if(active){
-            gc.drawImage(entityImages[0],this.x,this.y);
-            renderRegion(gc);
-        }
-    }
-
-    @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).setUNTRAPPED();
+            ((Player) entity).setInverseKeys(false);
             deactivate();
         }
     }

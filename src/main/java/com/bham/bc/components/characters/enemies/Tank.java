@@ -2,14 +2,12 @@ package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
-import com.bham.bc.entity.graph.edge.GraphEdge;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -53,6 +51,7 @@ public class Tank extends Enemy {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
+        GUN.setRate(1000);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class Tank extends Enemy {
         // Define all conditions required to change any state
         noObstacleCondition = new FreePathCondition();
         highHealthCondition = new IntCondition((int) (HP * .2), (int) HP);
-        nearToHomeCondition = new IntCondition(0, (int) (backendServices.getHomeArea().getRadius() * .8));
+        nearToHomeCondition = new IntCondition(0, (int) (services.getHomeArea().getRadius() * .8));
         attackHomeCondition = new AndCondition(nearToHomeCondition, highHealthCondition);
 
         // Define all state transitions that could happen
@@ -90,7 +89,7 @@ public class Tank extends Enemy {
 
     @Override
     public void update() {
-        double distanceToHome = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.HOME));
+        double distanceToHome = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
 
         highHealthCondition.setTestValue((int) hp);
         nearToHomeCondition.setTestValue((int) distanceToHome);
@@ -105,23 +104,22 @@ public class Tank extends Enemy {
                     takeOver();
                     break;
                 case ATTACK_ALLY:
-                    noObstacleCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+                    noObstacleCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                     if(noObstacleCondition.test()) {
-                        aim();
-                        shoot(.2);
+                        face(ItemType.ALLY);
+                        shoot(.7);
                     }
                     break;
                 case ATTACK_OBST:
-                    if(edgeBehavior == GraphEdge.shoot) {
-                        face(backendServices.getClosestCenter(getCenterPosition(), ItemType.SOFT));
-                        GUN.shoot();
-                    }
+                    setMaxSpeed(shootObstacle() ? SPEED * .5 : SPEED);
                     break;
                 case SET_RATE:
-                    GUN.setRate(200);
+                    GUN.setRate(700);
+                    GUN.setDamageFactor(5);
                     break;
                 case RESET_RATE:
                     GUN.setRate(1000);
+                    GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
                     steering.setDecelerateOn(false);

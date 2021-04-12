@@ -8,15 +8,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.utils.Timer.CLOCK;
 
 /**
- * This class controls the way the bullet can be fired with respect to the game timer. It must be bind with a character.
+ * This class controls the way the bullet can be fired with respect to the game timer. It must be bind to a character.
  */
 public class Gun {
     private final GameCharacter CHARACTER;
     private BulletType bulletType;
+    private double damageFactor;
     private long lastTick;
     private long rate;
 
@@ -26,10 +27,11 @@ public class Gun {
      * @param character {@link GameCharacter} the gun belongs to
      */
     public Gun(GameCharacter character) {
-        this.CHARACTER = character;
-        this.bulletType = null;
-        this.lastTick = CLOCK.getCurrentTime();
-        this.rate = 0;
+        CHARACTER = character;
+        bulletType = null;
+        damageFactor = 1;
+        lastTick = CLOCK.getCurrentTime();
+        rate = 0;
     }
 
     /**
@@ -39,31 +41,15 @@ public class Gun {
      * @param bulletType type of bullet the gun should control
      */
     public Gun(GameCharacter character, BulletType bulletType) {
-        this.CHARACTER = character;
+        CHARACTER = character;
         this.bulletType = bulletType;
-        this.lastTick = CLOCK.getCurrentTime();
-        this.rate = bulletType.getMinRate();
+        damageFactor = 1;
+        lastTick = CLOCK.getCurrentTime();
+        rate = bulletType.getMinRate();
     }
 
     /**
-     * Updates the bullet type this gun is shooting
-     * @param bulletType the type of bullet this gun will handle
-     */
-    public void setBulletType(BulletType bulletType) {
-        this.bulletType = bulletType;
-
-    }
-
-    /**
-     * Sets this weapon's rate assuring it is not faster than the minimum rate
-     * @param rate the milliseconds this gun should wait before allowing to shoot the next bullet
-     */
-    public void setRate(long rate) {
-        if(bulletType != null) this.rate = Math.max(bulletType.getMinRate(), rate);
-    }
-
-    /**
-     * <p>Creates a new bullet object that depends on this class <b>bulletType</b> parameter. If angle offset is set to 0,
+     * <p>Creates a new bullet object that depends on this class' <b>bulletType</b> parameter. If angle offset is set to 0,
      * this method creates a bullet straightly in front of the character just touching its "nose". Otherwise, the bullet is
      * rotated with respect to <i>its</i> center.</p>
      *
@@ -73,7 +59,6 @@ public class Gun {
      * @return the created {@link Bullet} object with respect to the character's location
      */
     private Bullet spawnBullet(double angleOffset) {
-        double positionOffset = 0;
         // Define the bullet's center coordinates
         double centerBulletX = CHARACTER.getCenterPosition().getX();
         double centerBulletY = CHARACTER.getPosition().getY() - bulletType.getHeight() / 2.0;
@@ -102,7 +87,9 @@ public class Gun {
         if(bulletType == null || CLOCK.getCurrentTime() - lastTick < rate) return;
 
         Bullet bullet = spawnBullet(0);
-        backendServices.addBullet(bullet);
+        bullet.setDamage(bullet.getDamage() * damageFactor);
+
+        services.addBullet(bullet);
         lastTick = CLOCK.getCurrentTime();
     }
 
@@ -114,8 +101,31 @@ public class Gun {
         if(bulletType == null || CLOCK.getCurrentTime() - lastTick < rate) return;
 
         List<Bullet> bullets = Arrays.stream(angles).mapToObj(this::spawnBullet).collect(Collectors.toList());
-        bullets.forEach(bullet -> backendServices.addBullet(bullet));
+        bullets.forEach(bullet -> { bullet.setDamage(bullet.getDamage() * damageFactor); services.addBullet(bullet); });
         lastTick = CLOCK.getCurrentTime();
     }
 
+    /**
+     * Updates the bullet type this gun is shooting
+     * @param bulletType the type of bullet this gun will handle
+     */
+    public void setBulletType(BulletType bulletType) {
+        this.bulletType = bulletType;
+    }
+
+    /**
+     * Sets this weapon's rate assuring it is not faster than the minimum rate
+     * @param rate the milliseconds this gun should wait before allowing to shoot the next bullet
+     */
+    public void setRate(long rate) {
+        if(bulletType != null) this.rate = Math.max(bulletType.getMinRate(), rate);
+    }
+
+    /**
+     * Sets this gun's damage factor
+     * @param factor value by which each bullet's damage will be multiplied upon spawn
+     */
+    public void setDamageFactor(double factor) {
+        if(bulletType != null) damageFactor = factor;
+    }
 }

@@ -10,7 +10,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Arrays;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -47,7 +47,6 @@ public class Kamikaze extends Enemy {
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-        //navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
     }
@@ -68,7 +67,7 @@ public class Kamikaze extends Enemy {
         // Define all conditions required to change any state
         noObstacleCondition = new FreePathCondition(getHitBoxRadius());
         chargeAllyCondition = new IntCondition(0, 150);
-        attackAllyCondition = new IntCondition(0, 50);
+        attackAllyCondition = new IntCondition(0, 60);
 
         // Define all state transitions that could happen
         Transition searchPossibility = new Transition(searchState, new NotCondition(new AndCondition(chargeAllyCondition, noObstacleCondition)));
@@ -85,11 +84,11 @@ public class Kamikaze extends Enemy {
 
     @Override
     public void update() {
-        double distanceToAlly = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        double distanceToAlly = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         attackAllyCondition.setTestValue((int) distanceToAlly);
         chargeAllyCondition.setTestValue((int) distanceToAlly);
-        noObstacleCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        noObstacleCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
@@ -98,7 +97,7 @@ public class Kamikaze extends Enemy {
                     search(ItemType.ALLY);
                     break;
                 case CHARGE_ALLY:
-                    aim();
+                    face(ItemType.ALLY);
                     break;
                 case ATTACK_ALLY:
                     destroy();
@@ -128,7 +127,7 @@ public class Kamikaze extends Enemy {
         exists = false;
         entityManager.removeEntity(this);
         Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-        backendServices.addTrigger(explosion);
+        services.addTrigger(explosion);
     }
 
     @Override

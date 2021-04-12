@@ -83,7 +83,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      * @param digraph Boolean, if set this Graph DirectedGraph then true.
      */
     public SparseGraph(boolean digraph) {
-        super(GetNextValidID(),-1,-1);
+        super(getNextValidID(),-1,-1);
         nextNodeIndex = 0;
         isDirectedGraph = digraph;
     }

@@ -9,25 +9,29 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
-// TODO: doc and ask to merge with trigger loader?
+/**
+ * Class which can load a map specifically created with a Tiled Map Editor
+ *
+ * @see  <a href="https://www.mapeditor.org/">mapeditor.org</a>
+ */
 public class MapLoader {
     private int mapWidth;
     private int mapHeight;
     private int tileWidth;
     private int tileHeight;
 
-    private List<Obstacle> obstacles;
-    private EnumMap<Tileset, Integer> offsets;
-    private HashMap<Integer, int[]> animations;
+    private final List<Obstacle> OBSTACLES;
+    private final EnumMap<Tileset, Integer> OFFSETS;
+    private final HashMap<Integer, int[]> ANIMATIONS;
 
     /**
-     * Constructs JSON Map Loader
+     * Constructs Map Loader which loads a map from a JSON file
      * @param resourceName path to resource
      */
     public MapLoader(String resourceName) {
-        obstacles = new ArrayList<>();
-        offsets = new EnumMap<>(Tileset.class);
-        animations = new HashMap<>();
+        OBSTACLES = new ArrayList<>();
+        OFFSETS = new EnumMap<>(Tileset.class);
+        ANIMATIONS = new HashMap<>();
 
         try {
             loadMap(resourceName);
@@ -70,7 +74,7 @@ public class MapLoader {
                     String className = layer.getString("name");
                     JSONArray obstacleArray = layer.getJSONArray("data");
 
-                    obstacles.addAll(convertToObstacles(tilesetName, className, obstacleArray));
+                    OBSTACLES.addAll(convertToObstacles(tilesetName, className, obstacleArray));
                 }
             }
         }
@@ -98,7 +102,7 @@ public class MapLoader {
             String tilesetName = tilesetProperties.getString("name").toUpperCase();
             if (tilesetName.equals("TRIGGERS")) continue;
             int offset = tilesetProperties.getInt("firstgid");
-            offsets.put(Tileset.valueOf(tilesetName), offset);
+            OFFSETS.put(Tileset.valueOf(tilesetName), offset);
 
             if(!tilesetProperties.has("tiles")) continue;
 
@@ -111,7 +115,7 @@ public class MapLoader {
                     int[] tileSequence = new int[jsonTileSequence.length()];
                     for(int k = 0; k < tileSequence.length; k++) tileSequence[k] = jsonTileSequence.getJSONObject(k).getInt("tileid");
 
-                    animations.put(tileID, tileSequence);
+                    ANIMATIONS.put(tileID, tileSequence);
                 }
             }
         }
@@ -121,7 +125,7 @@ public class MapLoader {
      * Converts JSON object attributes to Obstacles in the map
      *
      * @param tilesetName   name of the tileset used to take the tile image from
-     * @param tileName     name of the class used to create an obstacle
+     * @param tileName      name of the class used to create an obstacle
      * @param obstacleArray array of obstacles in JSON format
      * @return list of generatable game obstacles
      * @throws ClassNotFoundException
@@ -133,11 +137,10 @@ public class MapLoader {
     public List<Obstacle> convertToObstacles(String tilesetName, String tileName, JSONArray obstacleArray) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // Reflect the names of parameters for constructor
         Tileset tileset = Tileset.valueOf(tilesetName);
-        int yo = tileset.getyOffset();
+        int yo = tileset.getOffsetY();
         Class cls = Class.forName("com.bham.bc.components.environment.Obstacle");
 
         ArrayList<Attribute> attributes = identifyAttributes(tileName);
-        System.out.println(attributes);
 
         List<Obstacle> obstacleInstances = new ArrayList<>();
         Constructor constructor = cls.getConstructor(int.class, int.class, ArrayList.class, Tileset.class, int[].class);
@@ -148,8 +151,8 @@ public class MapLoader {
                 int x= (i % mapWidth) * tileWidth;
                 int y = (i / mapWidth) * tileHeight - yo;
 
-                int tileID = obstacleArray.getInt(i) - offsets.get(tileset);
-                int[] tileIDs = animations.containsKey(tileID) ? animations.get(tileID) : new int[] {tileID};
+                int tileID = obstacleArray.getInt(i) - OFFSETS.get(tileset);
+                int[] tileIDs = ANIMATIONS.containsKey(tileID) ? ANIMATIONS.get(tileID) : new int[] {tileID};
 
                 obstacleInstances.add((Obstacle) constructor.newInstance(x, y, attributes, tileset, tileIDs));
             }
@@ -160,7 +163,7 @@ public class MapLoader {
     /**
      * Identifies all the attributes a tile to be converted to obstacle instance should have
      * @param tileName name of the tile on which the attributes will depend
-     * @return a list of attributes the obstacle should have or WALKABLE attribute by default
+     * @return a list of attributes the obstacle should have or <i>WALKABLE</i> attribute by default
      */
     private ArrayList<Attribute> identifyAttributes(String tileName) {
         ArrayList<Attribute> attributes = new ArrayList<>();
@@ -205,11 +208,11 @@ public class MapLoader {
 
     /**
      * Gets all obstacles
-     * @return List of Generic Obstacles
+     * @return list of Obstacles
      */
     public List<Obstacle> getObstacles() {
-        if(obstacles == null) System.out.println("Damn");
-        return obstacles; }
+        return OBSTACLES;
+    }
 
     /**
      * Gets the width of the tile

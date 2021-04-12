@@ -3,7 +3,6 @@ package com.bham.bc.components.shooting;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
@@ -41,6 +40,8 @@ public class DefaultBullet extends Bullet {
 		x += velocity.getX();
 		y += velocity.getY();
 
+		System.out.println("Bul: " + velocity);
+
 		if (x < 0 || y < 0 || x > GameMap.getWidth() || y > GameMap.getHeight()) {
 			entityManager.removeEntity(this);
 			exists = false;
@@ -48,10 +49,9 @@ public class DefaultBullet extends Bullet {
 	}
 
 	@Override
-	public void update() { move(); }
-
-	@Override
-	public void render(GraphicsContext gc) { drawRotatedImage(gc, entityImages[0], getAngle()); }
+	public void update() {
+		move();
+	}
 
 	@Override
 	public Rectangle getHitBox() {

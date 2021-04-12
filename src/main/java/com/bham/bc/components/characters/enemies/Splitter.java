@@ -4,13 +4,13 @@ import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
-import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
 import java.util.Arrays;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -48,13 +48,14 @@ public class Splitter extends Enemy {
     public Splitter(double x, double y) {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();
     }
 
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
-        State searchHomeState = new State(new Action[]{ Action.SEARCH_HOME, Action.ATTACK_OBST }, null);
+        State searchHomeState = new State(new Action[]{ Action.SEARCH_HOME }, null);
         State attackHomeState = new State(new Action[]{ Action.ATTACK_HOME }, null);
 
         // Set up entry/exit actions
@@ -62,7 +63,7 @@ public class Splitter extends Enemy {
         searchHomeState.setExitActions(new Action[]{ Action.RESET_SEARCH });
 
         // Define all conditions required to change any state
-        nearToHomeCondition = new IntCondition(0, (int) (backendServices.getHomeArea().getRadius() * .8));
+        nearToHomeCondition = new IntCondition(0, (int) (services.getHomeArea().getRadius() * .8));
 
         // Define all state transitions that could happen
         Transition searchHomePossibility = new Transition(searchHomeState, new NotCondition(nearToHomeCondition));
@@ -77,7 +78,7 @@ public class Splitter extends Enemy {
 
     @Override
     public void update() {
-        double distanceToHome = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.HOME));
+        double distanceToHome = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
         nearToHomeCondition.setTestValue((int) distanceToHome);
 
         Action[] actions = stateMachine.update();
@@ -88,12 +89,6 @@ public class Splitter extends Enemy {
                     break;
                 case ATTACK_HOME:
                     takeOver();
-                    break;
-                case ATTACK_OBST:
-                    if(edgeBehavior == GraphEdge.shoot) {
-                        face(backendServices.getClosestCenter(getCenterPosition(), ItemType.SOFT));
-                        GUN.shoot();
-                    }
                     break;
                 case SET_SEARCH:
                     steering.setDecelerateOn(false);
@@ -114,8 +109,9 @@ public class Splitter extends Enemy {
         exists = false;
         entityManager.removeEntity(this);
         Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-        backendServices.addTrigger(explosion);
-        backendServices.addCharacter(new MiniSplitter(getCenterPosition().getX(), getCenterPosition().getY()));
+        services.addTrigger(explosion);
+        services.addCharacter(new MiniSplitter(getCenterPosition().getX()-8, getCenterPosition().getY()-8));
+        services.addCharacter(new MiniSplitter(getCenterPosition().getX()+8, getCenterPosition().getY()+8));
     }
 
     @Override
@@ -159,7 +155,7 @@ public class Splitter extends Enemy {
          */
         protected MiniSplitter(double x, double y) {
             super(x, y, SPEED, HP);
-            //navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
+            navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
             entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
             stateMachine = createFSM();
         }
@@ -189,7 +185,7 @@ public class Splitter extends Enemy {
 
         @Override
         public void update() {
-            double distanceToAlly = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+            double distanceToAlly = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
             nearToAllyCondition.setTestValue((int) distanceToAlly);
 
             Action[] actions = stateMachine.update();
@@ -220,7 +216,7 @@ public class Splitter extends Enemy {
             exists = false;
             entityManager.removeEntity(this);
             Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-            backendServices.addTrigger(explosion);
+            services.addTrigger(explosion);
         }
 
         @Override
