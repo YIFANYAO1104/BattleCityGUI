@@ -79,18 +79,22 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     /**
-     * iterates through all the edges in the graph and removes any that point to
-     * an invalidated node
+     * Initial the SparseGraph
+     * @param digraph Boolean, if set this Graph DirectedGraph then true.
      */
-//    private void CullInvalidEdges()
-
-    //ctor
     public SparseGraph(boolean digraph) {
         super(GetNextValidID(),-1,-1);
         nextNodeIndex = 0;
         isDirectedGraph = digraph;
     }
 
+    /**
+     * Initial the SparseGraph
+     * @param rowNums               The number of points on the rows
+     * @param columnNums            The number of points on the columnNums
+     * @param eachDisX              The distance between each points on row
+     * @param eachDisY              The distance between each points on column
+     */
     public void SparseGraph(int rowNums, int columnNums, int eachDisX, int eachDisY) {
         this.rowNums = rowNums;
         this.columnNums = columnNums;
@@ -100,7 +104,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     /**
      * rener the graph nodes on the map
-     * @param gc
+     * @param gc GraphicsContext
      */
     @Override
     public void render(GraphicsContext gc){
@@ -120,23 +124,6 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
         }
 
-        // draw edges
-//        for (int i = 0; i<m_Edges.size();i++){
-//            SparseGraph.EdgeList g1 = this.m_Edges.get(i);
-//            for (int j = 0; j < g1.size();j++){
-//                GraphEdge nh1  = (GraphEdge)g1.get(j);
-//                NavNode n1 = (NavNode)this.nodeVector.get(nh1.From());
-//                NavNode n2 = (NavNode)this.nodeVector.get(nh1.To());
-////                Line line1 = new Line(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
-//
-//                gc.setStroke(Color.BLACK);
-//                gc.setLineWidth(1.0);
-//                gc.strokeLine(n1.Pos().getX(), n1.Pos().getY(), n2.Pos().getX(), n2.Pos().getY());
-//
-//
-//            }
-//        }
-
     }
     private void renderNode(GraphicsContext gc,Color color, NavNode n1, int level){
         gc.setFill(color);
@@ -151,10 +138,22 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         gc.strokeLine(
                 n1.getPosition().getX(), n1.getPosition().getY(), n2.getPosition().getX(), n2.getPosition().getY());
     }
-    public void renderTankPoints(ArrayList<BaseGameEntity> entities, GraphicsContext gc){
+
+    /**
+     * Render the given entities with red points on the map
+     * @param entities List of the BaseGameEntity
+     * @param gc GraphicsContext
+     */
+    public void renderTankPoints(List<BaseGameEntity> entities, GraphicsContext gc){
         for(BaseGameEntity e1: entities) renderTankPoint(e1,gc);
     }
 
+    /**
+     * Render red point on map with its entity
+     * @param e1 BaseGameEntity
+     * @param gc GraphicsContext
+     * @return indedx of the node
+     */
     public int renderTankPoint(BaseGameEntity e1 , GraphicsContext gc){
         NavNode n1 = getClosestNodeForEntity(e1);
         if(n1.isValid() ){
@@ -168,6 +167,11 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         return n1.Index();
     }
 
+    /**
+     *
+     * @param entity BaseGameEntity
+     * @return Navnode give the closet node to it's coordinates
+     */
     public NavNode getClosestNodeForEntity(BaseGameEntity entity){
         Point2D location = entity.getPosition();
         Point2D radius = entity.getRadius();
@@ -195,6 +199,13 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
     }
 
+    /**
+     * Get coorespondant coordinates for that Point2D location.
+     * In order to make sure get close with the center of that entity, it needs radius of entity
+     * @param location coordinates
+     * @param radius Point2D
+     * @return NavNode
+     */
     public NavNode getClosestNodeByPosition(Point2D location,Point2D radius){
         int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
         int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
@@ -204,7 +215,6 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     public LinkedList<NavNode> getNodeList(int n1){
-//        if(getNode(n1).isValid()) return null;
         LinkedList<NavNode> nodes = new LinkedList<>();
         LinkedList<GraphEdge> edges = edgeListVector.get(n1);
         for (GraphEdge e1: edges){
@@ -372,8 +382,10 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
     }
 
-
-
+    /**
+     * Set all edges related this node with normal cost
+     * @param from index of the node
+     */
     public void setNodeALlEdagesNormal(int from) {
         for (NavNode n1 : getNodeList(from)) {
             double dis = n1.getPosition().distance(getNode(from).getPosition());
@@ -540,6 +552,9 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
 
+    /**
+     * @return ArrayList of Point2D storeds the coordinates
+     */
     public ArrayList<Point2D> getAllVector(){
         ArrayList<Point2D> i1 = new ArrayList<Point2D>();
 

@@ -5,7 +5,7 @@ public class NavEdge extends GraphEdge{
 
     final public static int normal = 0;
     final public static int shoot = 1;
-//    protected int behavior;
+    //protected int behavior;
 
     //if this edge intersects with an object (such as a door or lift), then
     //this is that object's ID.

@@ -3,11 +3,15 @@ package com.bham.bc.entity.graph.node;
 import com.bham.bc.entity.graph.ExtraInfo;
 import javafx.geometry.Point2D;
 
+/**
+ * The node which would be used in navigation in graoh
+ */
+
 public class NavNode extends GraphNode{
 
-    protected Point2D m_vPosition;
-    protected ExtraInfo m_ExtraInfo;
-    public int numWithObs = 0;
+    protected Point2D m_vPosition;          // The coordinates
+    protected ExtraInfo m_ExtraInfo;        //
+    public int numWithObs = 0;              // The number of obstacles interact with this Navnode
 
     public NavNode(int idx, Point2D pos){
         super(idx);
@@ -29,6 +33,11 @@ public class NavNode extends GraphNode{
     public void minesNum(){
         numWithObs--;
     }
+
+    /**
+     * When numWithObs <0 then it means that this has not interaction with obstacles.
+     * @return Boolean if true then interacting with obstacles.
+     */
     public boolean isHit(){
         if(numWithObs > 0) return true;
         return false;
