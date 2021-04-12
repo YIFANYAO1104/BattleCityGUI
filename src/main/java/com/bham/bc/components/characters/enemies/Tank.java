@@ -63,8 +63,8 @@ public class Tank extends Enemy {
         State attackAllyState = new State(new Action[]{ Action.ATTACK_ALLY }, null);
 
         // Set up entry/exit actions
-        searchHomeState.setEntryActions(new Action[]{ Action.SET_RATE });
-        searchHomeState.setExitActions(new Action[]{ Action.RESET_RATE });
+        searchHomeState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_RATE });
+        searchHomeState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_RATE });
 
         // Helper conditions to make the code easier to understand
         AndCondition attackHomeCondition;
@@ -82,7 +82,7 @@ public class Tank extends Enemy {
 
         // Define how the states can transit from one another
         searchHomeState.setTransitions(new Transition[]{ attackHomePossibility, attackAllyPossibility });
-        attackHomeState.setTransitions(new Transition[]{ attackAllyPossibility });
+        attackHomeState.setTransitions(new Transition[]{ attackAllyPossibility, searchHomePossibility });
         attackAllyState.setTransitions(new Transition[]{ searchHomePossibility });  // Can only happen if it heals up
 
         return new StateMachine(searchHomeState);
@@ -116,14 +116,25 @@ public class Tank extends Enemy {
                         face(backendServices.getClosestCenter(getCenterPosition(), ItemType.SOFT));
                         GUN.shoot();
                     }
+                    break;
                 case SET_RATE:
                     GUN.setRate(200);
                     break;
                 case RESET_RATE:
                     GUN.setRate(1000);
                     break;
+                case SET_SEARCH:
+                    steering.setDecelerateOn(false);
+                    steering.seekOn();
+                    break;
+                case RESET_SEARCH:
+                    steering.seekOff();
+                    steering.setDecelerateOn(true);
+                    pathEdges.clear();
+                    break;
             }
         });
+        move();
     }
 
     @Override

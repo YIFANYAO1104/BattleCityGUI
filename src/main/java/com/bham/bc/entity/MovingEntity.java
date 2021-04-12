@@ -16,6 +16,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     protected double maxSpeed;
     protected Point2D velocity;
     protected Point2D heading; //non-zero, normalized vector for direction, must be updated once the velocity was updated
+    protected double mass;
     protected boolean exists;
 
     /**
@@ -31,6 +32,7 @@ public abstract class MovingEntity extends BaseGameEntity {
         this.velocity = new Point2D(0,0);
         this.heading = new Point2D(0,-1);
         exists = true;
+        mass = 1;
     }
 
     /**
@@ -90,12 +92,22 @@ public abstract class MovingEntity extends BaseGameEntity {
      */
     public abstract void move();
 
+    public double getMass() { return mass; }
+
     public double getMaxSpeed() {
         return maxSpeed;
     }
 
     public Point2D getVelocity() {
         return velocity;
+    }
+
+    public void addVelocity(Point2D velocity) {
+        this.velocity = this.velocity.add(velocity);
+    }
+
+    public void setVelocity(Point2D velocity) {
+        this.velocity = velocity;
     }
 
     public double getMaxForce() {

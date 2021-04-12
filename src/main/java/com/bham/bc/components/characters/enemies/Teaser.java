@@ -4,6 +4,7 @@ import com.bham.bc.components.characters.Tribe;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.edge.GraphEdge;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -70,10 +71,10 @@ public class Teaser extends Enemy {
         State attackHomeState = new State(new Action[]{ Action.ATTACK_HOME }, null);
 
         // Set up entry/exit actions
-        searchHomeState.setEntryActions(new Action[]{ Action.SET_SPEED, Action.SET_RATE });
-        searchHomeState.setExitActions(new Action[]{ Action.RESET_SPEED, Action.RESET_RATE });
-        searchAllyState.setEntryActions(new Action[]{ Action.SET_RATE });
-        searchAllyState.setExitActions(new Action[]{ Action.RESET_RATE});
+        searchHomeState.setEntryActions(new Action[]{ Action.SET_SPEED, Action.SET_RATE, Action.SET_SEARCH });
+        searchHomeState.setExitActions(new Action[]{ Action.RESET_SPEED, Action.RESET_RATE, Action.RESET_SEARCH });
+        searchAllyState.setEntryActions(new Action[]{ Action.SET_RATE, Action.SET_SEARCH });
+        searchAllyState.setExitActions(new Action[]{ Action.RESET_RATE, Action.RESET_SEARCH });
 
         // Helper conditions to make the code easier to understand
         AndCondition attackHomeCondition;
@@ -97,7 +98,7 @@ public class Teaser extends Enemy {
         searchAllyState.setTransitions(new Transition[]{ attackAllyPossibility, searchHomePossibility });   // In case enemy runs over a trap and its HP becomes low
         searchHomeState.setTransitions(new Transition[]{ attackHomePossibility, searchAllyPossibility });   // In case enemy runs over HP buff and is able to attack
         attackAllyState.setTransitions(new Transition[]{ searchAllyPossibility, searchHomePossibility });
-        attackHomeState.setTransitions(new Transition[]{ searchAllyPossibility });
+        attackHomeState.setTransitions(new Transition[]{ searchHomePossibility, searchAllyPossibility });
 
         return new StateMachine(searchAllyState);
     }
@@ -146,8 +147,16 @@ public class Teaser extends Enemy {
                 case RESET_RATE:
                     GUN.setRate(1000);
                     break;
+                case SET_SEARCH:
+                    steering.setDecelerateOn(false);
+                case RESET_SEARCH:
+                    steering.seekOff();
+                    steering.setDecelerateOn(true);
+                    pathEdges.clear();
+                    break;
             }
         });
+        move();
     }
 
     @Override

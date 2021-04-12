@@ -123,10 +123,12 @@ public abstract class Enemy extends GameCharacter {
         }
 
         // If the list of pathEdges is not empty we need to move forward
-        if(!pathEdges.isEmpty()) {
-            steering.seekOn();
-            move();
-        }
+//        if(!pathEdges.isEmpty()) {
+//            //steering.seekOn();
+//            steering.arriveOn();
+//            move();
+//        }
+        steering.seekOn();
     }
 
     /**

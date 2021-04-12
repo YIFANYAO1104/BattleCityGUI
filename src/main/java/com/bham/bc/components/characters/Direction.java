@@ -6,8 +6,8 @@ import javafx.geometry.Point2D;
  * Represents 4 valid directions: up, down, left, right
  */
 public enum Direction {
-	U(0, 1),
-	D(0, -1),
+	U(0, -1),
+	D(0, 1),
 	L(-1, 0),
 	R(1, 0);
 

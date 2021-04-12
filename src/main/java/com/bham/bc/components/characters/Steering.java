@@ -2,14 +2,9 @@ package com.bham.bc.components.characters;
 
 import com.bham.bc.components.BackendServices;
 import com.bham.bc.utils.GeometryEnhanced;
-import com.bham.bc.utils.RandomEnhanced;
 import javafx.geometry.Point2D;
 
-import java.util.Random;
-
 import static com.bham.bc.utils.GeometryEnhanced.*;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 /**
  * Desc: class to encapsulate steering behaviors for a GameCharacter
@@ -55,12 +50,13 @@ public class Steering {
     private double m_dWanderRadius;
     private double m_dWanderDistance;
 
-
     private double m_dWeightSeparation = 10.0;
     private double m_dWeightWander = 1.0;
     private double m_dWeightWallAvoidance = 10.0;
     private double m_dWeightSeek = 0.5;
     private double m_dWeightArrive = 1.0;
+
+    public static final double FRICTION = -1;
 
     public void setTarget(Point2D t) {
         target = t;
@@ -77,6 +73,8 @@ public class Steering {
 
         //calculate how much steering force remains to be used by this vehicle
         double MagnitudeRemaining = agent.getMaxForce() - MagnitudeSoFar;
+//        System.out.println("So far: " + MagnitudeSoFar);
+//        System.out.println("Rem: " + MagnitudeRemaining);
 
         //return false if there is no more force left to use
         if (MagnitudeRemaining <= 1E-8) {
@@ -106,13 +104,101 @@ public class Steering {
 //        return RunningTot;
     }
 
+    /**
+     * Validates acceleration/deceleration value
+     *
+     * <p>Checks if acceleration exceeds the bounds of a preferred min/max speed and returns a new delta velocity
+     * vector which will ensure, once it is added to the current speed, it won't exceed the boundary.</p>
+     *
+     * <p><b>Note: </b> only works when force is perpendicular to velocity, i.e., we can't check for sideways
+     * acceleration/deceleration.</p>
+     *
+     * @param deltaVelocity velocity change we would like to apply to agent's current velocity
+     * @param isForward     true if we want to accelerate and false if we want to decelerate
+     * @return Point2D object representing a velocity change vector needed to accelerate/decelerate to a desired max/min speed (or 0 if that speed is reached)
+     */
+    public Point2D validateAcceleration(Point2D deltaVelocity, boolean isForward) {
+        double minSpeed = 1E-8;
+        double maxSpeed = agent.getMaxSpeed();
+        double nowSpeed = agent.getVelocity().magnitude();
 
+        if(isForward) {
+            if(nowSpeed >= maxSpeed) {
+                //System.out.println("Can't accelerate more: max speed reached");
+                return new Point2D(0, 0);
+            } else if(nowSpeed + deltaVelocity.magnitude() > maxSpeed) {
+                //System.out.println("Only accelerating a bit: max speed almost reached");
+                return agent.getVelocity().normalize().multiply(maxSpeed).subtract(agent.getVelocity());
+            }
+        } else {
+            if(nowSpeed <= minSpeed) {
+                //System.out.println("Can't decelerate more: min speed reached");
+                return new Point2D(0, 0);
+            } else if(nowSpeed - deltaVelocity.magnitude() < 0) {
+                //System.out.println("Only decelerating a bit: min speed almost reached");
+                return agent.getVelocity().multiply(-1);
+            }
+        }
+
+        //System.out.println("Fully accelerating / decelerating: " + deltaVelocity);
+        return deltaVelocity;
+    }
+
+    /**
+     * Validates force perpendicular to velocity
+     *
+     * <p>This method takes force and returns adjusted force which can be applied to agent to increase acceleration/
+     * deceleration without exceeding the min/max speed bounds.</p>
+     *
+     * @param force     force to be applied to agent
+     * @param isForward true if the force is in the same direction as velocity vector and false otherwise
+     * @return Point2D object representing a force vector needed to accelerate/decelerate to a desired max/min speed (or 0 if that speed is reached)
+     *
+     * @see Steering#validateAcceleration(Point2D, boolean)
+     */
+    public Point2D validateForce(Point2D force, boolean isForward) {
+        Point2D acceleration = force.multiply(1/agent.getMass());
+        Point2D validAcceleration = validateAcceleration(acceleration, isForward);
+
+        return validAcceleration.multiply(agent.getMass());
+    }
 
     /* .......................................................
 
      BEGIN BEHAVIOR DECLARATIONS
 
      .......................................................*/
+
+    /**
+     * Calculates force based on whether any key is pressed
+     *
+     * <p>If we have some keys pressed, it means we must have a positive force applied to the direction of the <i>velocity</i>
+     * vector (or heading if velocity is 0). Otherwise, if no keys are pressed, we need to apply a negative force to the
+     * opposite direction of <i>velocity</i>. We also want to apply a bigger force for deceleration to stop faster.</p>
+     *
+     * <p><b>Note:</b> we cannot check for the direction of the <i>heading</i> param because, if a player bumps to something,
+     * their velocity vector may change but heading would remain the same. So we always must apply force to the direction of
+     * <i>velocity</i> param.</p>
+     *
+     * @return positive or negative force to be applied player's velocity
+     */
+    public Point2D keysForce() {
+        if(agent instanceof Player) {
+            double force = -FRICTION;
+            boolean isForward = ((Player) agent).getNumDirKeysPressed() > 0;
+
+            // If velocity is 0, we can only use a positive force as we will never want to go back
+            // If the player was going back and its velocity ended at 0, it will be handled by other methods
+            // Otherwise its the usual case - we add force to the same or the opposite direction of velocity
+            if (isZero(agent.getVelocity())) {
+                return agent.getHeading().multiply(force);
+            } else {
+                return agent.getVelocity().normalize().multiply(isForward ? force : -2.5 * force);
+            }
+        }
+        return new Point2D(0, 0);
+    }
+
     /**
      * Given a target, this behavior returns a steering force which will direct
      * the agent towards the target
@@ -209,7 +295,7 @@ public class Steering {
                 .add(
                         rotate(new Point2D(0,0),
                                 new Point2D(m_dWanderRadius,0),
-                                RandomEnhanced.randDouble(0,360))
+                                GeometryEnhanced.randDouble(0,360))
                 );
 
         //and steer towards it
@@ -279,6 +365,15 @@ public class Steering {
 //            }
 //        }
 
+        if(keysOn) {
+            force = keysForce();
+
+            if(GeometryEnhanced.isZero(force)) {
+                return steeringForce;
+            } else {
+                steeringForce = steeringForce.add(force);
+            }
+        }
 
         if (seekOn) {
 //            System.out.println("seekOn");
@@ -313,12 +408,34 @@ public class Steering {
                 steeringForce = steeringForce.add(temp);
             }
         }
+
+        if(decelerateOn) {
+            double scalarForce = -1;
+            force = agent.getVelocity().normalize().multiply(scalarForce);
+            Point2D temp = validateForce(force, false);
+
+            if (GeometryEnhanced.isZero(temp)) {
+                return steeringForce;
+            } else {
+                steeringForce = steeringForce.add(temp);
+            }
+        }
         return steeringForce;
     }
 
+    private boolean keysOn = false;
+    private boolean decelerateOn = false;
     private boolean seekOn = false;
     private boolean arriveOn = false;
     private boolean wanderOn = false;
+
+    public void setKeysOn(boolean val) {
+        keysOn = val;
+    }
+
+    public void setDecelerateOn(boolean val) {
+        decelerateOn = val;
+    }
 
     public void seekOn() {
         seekOn = true;

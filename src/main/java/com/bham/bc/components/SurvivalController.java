@@ -44,8 +44,9 @@ public class SurvivalController extends CenterController {
         //characters.add(new Tank(16*28, 16*36));
         //characters.add(new Trapper(16*32, 16*32));
 
-        //characters.add(new Shooter(16*4, 16*4));
-        //characters.add(new Kamikaze(16*61, 16*4));
+        characters.add(new Splitter(16*4, 16*4));
+        characters.add(new Shooter(16*6, 16*4));
+        characters.add(new Kamikaze(16*61, 16*4));
         characters.add(new Teaser(16*61, 16*61));
         characters.add(new Tank(16*4, 16*61));
     }

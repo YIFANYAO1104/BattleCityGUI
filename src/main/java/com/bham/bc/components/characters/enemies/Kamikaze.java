@@ -33,9 +33,9 @@ public class Kamikaze extends Enemy {
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
-    private FreePathCondition noObstCondition;
-    private IntCondition chargeCondition;
-    private IntCondition attackCondition;
+    private FreePathCondition noObstacleCondition;
+    private IntCondition chargeAllyCondition;
+    private IntCondition attackAllyCondition;
 
     /**
      * Constructs a kamikaze type enemy
@@ -58,18 +58,20 @@ public class Kamikaze extends Enemy {
         State attackState = new State(new Action[]{ Action.ATTACK_ALLY }, null);
 
         // Set up required entry/exit actions
+        searchState.setEntryActions(new Action[]{ Action.SET_SEARCH });
+        searchState.setExitActions(new Action[]{ Action.RESET_SEARCH });
         chargeState.setEntryActions(new Action[]{ Action.SET_SPEED });
         chargeState.setExitActions(new Action[]{ Action.RESET_SPEED });
 
         // Define all conditions required to change any state
-        noObstCondition = new FreePathCondition(getHitBoxRadius());
-        chargeCondition = new IntCondition(0, 150);
-        attackCondition = new IntCondition(0, 50);
+        noObstacleCondition = new FreePathCondition(getHitBoxRadius());
+        chargeAllyCondition = new IntCondition(0, 150);
+        attackAllyCondition = new IntCondition(0, 50);
 
         // Define all state transitions that could happen
-        Transition searchPossibility = new Transition(searchState, new NotCondition(new AndCondition(chargeCondition, noObstCondition)));
-        Transition chargePossibility = new Transition(chargeState, new AndCondition(chargeCondition, noObstCondition));
-        Transition attackPossibility = new Transition(attackState, attackCondition);
+        Transition searchPossibility = new Transition(searchState, new NotCondition(new AndCondition(chargeAllyCondition, noObstacleCondition)));
+        Transition chargePossibility = new Transition(chargeState, new AndCondition(chargeAllyCondition, noObstacleCondition));
+        Transition attackPossibility = new Transition(attackState, attackAllyCondition);
 
         // Define how the states can transit from one another
         searchState.setTransitions(new Transition[]{ chargePossibility });
@@ -83,9 +85,9 @@ public class Kamikaze extends Enemy {
     public void update() {
         double distanceToAlly = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
-        attackCondition.setTestValue((int) distanceToAlly);
-        chargeCondition.setTestValue((int) distanceToAlly);
-        noObstCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        attackAllyCondition.setTestValue((int) distanceToAlly);
+        chargeAllyCondition.setTestValue((int) distanceToAlly);
+        noObstacleCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
@@ -95,7 +97,6 @@ public class Kamikaze extends Enemy {
                     break;
                 case CHARGE_ALLY:
                     aim();
-                    move();
                     break;
                 case ATTACK_ALLY:
                     destroy();
@@ -106,8 +107,18 @@ public class Kamikaze extends Enemy {
                 case RESET_SPEED:
                     setMaxSpeed(SPEED);
                     break;
+                case SET_SEARCH:
+                    steering.setDecelerateOn(false);
+                    steering.seekOn();
+                    break;
+                case RESET_SEARCH:
+                    steering.seekOff();
+                    steering.setDecelerateOn(true);
+                    pathEdges.clear();
+                    break;
             }
         });
+        move();
     }
 
     @Override

@@ -38,7 +38,6 @@ public class Shooter extends Enemy {
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
-
     private FreePathCondition noObstCondition;
     private BooleanCondition goBackCondition;
 
@@ -63,9 +62,10 @@ public class Shooter extends Enemy {
         State retreatState = new State(new Action[]{ Action.RETREAT, Action.REGENERATE, Action.ATTACK_OBST }, null);
 
         // Set up necessary entry actions for certain states
-        attackState.setEntryActions(new Action[]{ Action.RESET_RATE });
-        searchState.setEntryActions(new Action[]{ Action.RESET_SEARCH, Action.SET_RATE });
-        retreatState.setEntryActions(new Action[]{ Action.RESET_SEARCH, Action.SET_RATE });
+        searchState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_RATE });
+        searchState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_RATE });
+        retreatState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_RATE });
+        retreatState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_RATE });
 
         // Define all conditions required to change any state
         noObstCondition = new FreePathCondition();
@@ -96,7 +96,7 @@ public class Shooter extends Enemy {
                     goBackCondition.setTestValue(hp <= HP * .2);
                     break;
                 case ATTACK_ALLY:
-                    face(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+                    aim();
                     shoot(0.5);
                     goBackCondition.setTestValue(hp <= HP * .2);
                     break;
@@ -122,11 +122,18 @@ public class Shooter extends Enemy {
                 case RESET_RATE:
                     GUN.setRate(1000);
                     break;
+                case SET_SEARCH:
+                    steering.setDecelerateOn(false);
+                    steering.seekOn();
+                    break;
                 case RESET_SEARCH:
+                    steering.seekOff();
+                    steering.setDecelerateOn(true);
                     pathEdges.clear();
                     break;
             }
         });
+        move();
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.entity.physics.CollisionHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -25,7 +26,7 @@ abstract public class GameCharacter extends MovingEntity {
     protected Side side;
 
     // Mechanics / movement
-    protected double mass;
+
     protected Steering steering;
     protected Point2D acceleration;
 
@@ -48,7 +49,7 @@ abstract public class GameCharacter extends MovingEntity {
 
         mass = 3;
         steering = new Steering(this);
-        acceleration = new Point2D(0,0);
+        acceleration = new Point2D(0, 0);
     }
 
     /**
@@ -112,7 +113,8 @@ abstract public class GameCharacter extends MovingEntity {
 
     public void handle(BaseGameEntity entity) {
         if(entity instanceof GameCharacter && getID() != entity.getID() && intersects(entity)) {
-            move(-1);
+            CollisionHandler.resolveElasticCollision(this, (GameCharacter) entity);
+            CollisionHandler.resolveContinuousCollision(this, (GameCharacter) entity);
         } else if(entity instanceof Obstacle && !((Obstacle) entity).getAttributes().contains(Attribute.WALKABLE) && intersects(entity)) {
             move(-1);
         }
@@ -159,6 +161,10 @@ abstract public class GameCharacter extends MovingEntity {
      */
     public double getHitBoxRadius() {
         return getHitBox().getRadius();
+    }
+
+    public double getMass() {
+        return mass;
     }
 
     /**

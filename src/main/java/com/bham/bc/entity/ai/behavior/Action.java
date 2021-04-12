@@ -19,6 +19,7 @@ public enum Action{
     // Entry
     SET_RATE,
     SET_SPEED,
+    SET_SEARCH,
 
     // Exit
     RESET_RATE,

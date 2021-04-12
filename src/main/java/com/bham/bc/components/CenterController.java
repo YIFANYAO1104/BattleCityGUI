@@ -131,8 +131,6 @@ public abstract class CenterController extends BaseGameEntity implements Fronten
         return closestPoints.min(Comparator.comparing(point -> point.distance(position))).orElse(position);
     }
 
-
-    @Override
     public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
         return null;
     }

@@ -3,8 +3,6 @@ package com.bham.bc.components;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.characters.Side;
-import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.SparseGraph;
@@ -17,8 +15,6 @@ import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.bham.bc.entity.physics.BombTank;
 
 /**
  * <h1>Interface defining the required backend services</h1>
@@ -73,13 +69,24 @@ public interface BackendServices {
     ArrayList<Point2D> allCharacterPositions();
 
     /**
-     * Gets center point of a free area requested around some pivot point
-     * @param pivot       point around which the area should be found
-     * @param pivotRadius radius for the pivot point around which the area is not free
-     * @param areaRadius  radius the free area should have
+     * Gets a random position of a free area requested around some center point
+     *
+     * <p>This method checks if there is a free area of the the requested radius withing a constrained area.
+     * Constrained area is determined by a center position and a constraint radius. If <b>pos</b> is set to
+     * <i>TOP_LEFT</i>, it will return the top left position of a circle (i.e., x - areaSize, y - areaSize),
+     * in all other cases, it returns center position.</p>
+     *
+     * <p><b>Note:</b> if a moving entity happens to be spawned on top of another moving entity, they both will
+     * be pushed away from each other's center position.</p>
+     *
+     * @param center         point around which the area should be found
+     * @param constraint     radius for the center point within which the free area should be looked for
+     * @param areaRadius     radius the free area should have
+     * @param pos            TOP_LEFT or CENTER position requested to be returned
+     * @param checkObstacles true or false saying if the obstacles should be checked for intersection
      * @return Point2D coordinate of a free area or (-1, -1) point if no area is found
      */
-    Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius);
+    //Point2D getFreeArea(Point2D center, double constraint, double areaRadius, Pos pos, boolean checkObstacles);
     //-------------------------------------------------------------
 
 

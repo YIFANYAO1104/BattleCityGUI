@@ -47,9 +47,7 @@ public class Wanderer1 extends Enemy {
     @Override
     public void update() {
         steering.wanderOn();
-
         mymove();
-
     }
 
     public void mymove() {

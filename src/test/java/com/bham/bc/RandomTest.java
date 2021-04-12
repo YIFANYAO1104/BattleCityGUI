@@ -1,6 +1,6 @@
 package com.bham.bc;
 
-import com.bham.bc.utils.RandomEnhanced;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.application.Application;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -37,7 +37,7 @@ public class RandomTest extends Application {
         //draw points
         for (int i = 0;i<1000;i++){
             gc.setFill(Color.WHITE);
-            Point2D p = RandomEnhanced.randomPointInCircle(center,radius);
+            Point2D p = GeometryEnhanced.randomPointInCircle(center,radius);
             gc.fillOval(p.getX()-pointRadius,p.getY()-pointRadius,2*pointRadius,2*pointRadius);
         }
 

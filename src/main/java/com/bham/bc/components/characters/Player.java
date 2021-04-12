@@ -59,6 +59,7 @@ public class Player extends GameCharacter {
 		GUN = new Gun(this, BulletType.DEFAULT);
 
 		navigationService = new PathPlanner(this, backendServices.getGraph());
+		steering.setKeysOn(true);
 	}
 
 	// TEMPORARY -------------------------------------------
@@ -92,16 +93,16 @@ public class Player extends GameCharacter {
 		// Sum up direction basis vectors to get a final direction vector
 		Optional<Point2D> directionPoint = DIRECTION_SET.stream().map(Direction::toPoint).map(p -> p.multiply(TRAPPED ? -1 : 1)).reduce(Point2D::add);
 
-		// Convert that direction vector to angle
+		// Normalize direction vector
 		directionPoint.ifPresent(p -> {
-			Point2D p1 = new Point2D(p.getX(), -p.getY());
-
-			velocity = p1.multiply(maxSpeed);
-			//Truncate
-			velocity = GeometryEnhanced.truncate(velocity, maxSpeed);
-			if (!isZero(velocity)) {
-				heading = velocity.normalize();
-			}
+//			velocity = p1.multiply(maxSpeed);
+//			//Truncate
+//			velocity = GeometryEnhanced.truncate(velocity, maxSpeed);
+//			if (!isZero(velocity)) {
+//				heading = velocity.normalize();
+//			}
+			if(!isZero(p)) heading = p.normalize();
+			velocity = p.normalize().multiply(velocity.magnitude());
 		});
 	}
 
@@ -153,6 +154,14 @@ public class Player extends GameCharacter {
 	}
 
 	/**
+	 * Gets the number of direction keys currently pressed (i.e., from a set of WASD)
+	 * @return size of the direction set
+	 */
+	public int getNumDirKeysPressed() {
+		return DIRECTION_SET.size();
+	}
+
+	/**
 	 * Shoots a default bullet (or multiple)
 	 *
 	 * <p>This method creates a new instance of {@link com.bham.bc.components.shooting.DefaultBullet}
@@ -163,12 +172,24 @@ public class Player extends GameCharacter {
 		if(tripleTicks != 0) GUN.shoot(-45, 45);
 	}
 
+//	@Override
+//	public void move() {
+////		if(!DIRECTION_SET.isEmpty()) {
+////			x += velocity.getX();
+////			y += velocity.getY();
+////		}
+//		x += velocity.getX();
+//		y += velocity.getY();
+//	}
+
 	@Override
 	public void move() {
-		if(!DIRECTION_SET.isEmpty()) {
-			x += velocity.getX();
-			y += velocity.getY();
-		}
+		Point2D force = steering.calculate();
+		acceleration = steering.validateAcceleration(force.multiply(1/mass), !DIRECTION_SET.isEmpty());
+		velocity = velocity.add(acceleration);
+
+		x += velocity.getX();
+		y += velocity.getY();
 	}
 
 	@Override
