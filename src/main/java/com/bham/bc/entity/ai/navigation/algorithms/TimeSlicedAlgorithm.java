@@ -2,13 +2,13 @@ package com.bham.bc.entity.ai.navigation.algorithms;
 
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
-import com.bham.bc.entity.ai.navigation.impl.PathEdge;
+import com.bham.bc.entity.ai.navigation.PathEdge;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 
 import java.util.List;
 
 /**
- * base class to define a common interface for graph search algorithms
+ * Base class to define a common interface for graph search algorithms
  */
 abstract public class TimeSlicedAlgorithm {
     /**
@@ -16,30 +16,42 @@ abstract public class TimeSlicedAlgorithm {
      * The method returns an enumerated value (target_found,
      * target_not_found, search_incomplete) indicating the status of the
      * search
+     * @return {@link SearchStatus} to indicate the searching status after a run
      */
-
     public abstract SearchStatus cycleOnce();
 
     /**
+     * called by PathPlanner when a searching task was ended
+     * @return a lst of {@link PathEdge}
+     */
+    public abstract List<PathEdge> getPathAsPathEdges();
+
+    /**
+     * set expand condition for algorithm.
+     * It will also reset the one inside algorithm.
+     * @param expandCondition see{@link ExpandPolicies}
+     */
+    public abstract void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
+
+    //under construction----------------------------------------------------------------------------------
+    /**
      * returns the vector of edges that the algorithm has examined
      */
-    public abstract List<GraphEdge> getSPT();
-
+    public List<GraphEdge> getSPT(){
+        return null;
+    }
     /**
      * returns the total cost to the target
      */
-    public abstract double getCostToTarget();
+    public double getCostToTarget(){
+        return 0;
+    }
 
     /**
      * returns a list of node indexes that comprise the shortest path from
      * the source to the target
      */
-    public abstract List<Integer> getPathToTarget();
-
-    /**
-     * returns the path as a list of PathEdges
-     */
-    public abstract List<PathEdge> getPathAsPathEdges();
-
-    public abstract void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
+    public List<Integer> getPathToTarget() {
+        return null;
+    }
 }

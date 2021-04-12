@@ -4,25 +4,30 @@
  *
  * @author Petr (http://www.sallyx.org/)
  */
-package com.bham.bc.entity.ai.navigation.impl;
+package com.bham.bc.entity.ai.navigation;
 
 import com.bham.bc.entity.graph.edge.GraphEdge;
-import com.bham.bc.entity.graph.node.GraphNode;
 import javafx.geometry.Point2D;
 
+/**
+ * Contains information of a path edge
+ * Will be used when an agent is following a path
+ */
 public class PathEdge {
     //positions of the source and destination nodes this edge connects
 
     private Point2D source;
     private Point2D destination;
-
-    public int getBehavior() {
-        return behavior;
-    }
-
-    private int behavior;
     /**
-     * the behavior associated with traversing this edge
+     * The behavior might be followed by an agent when passing through this path edge
+     * see {@link GraphEdge}
+     */
+    private int behavior;
+
+    /**
+     * Constrcut a path Edge, sets behavior to GraphEdge.normal by default
+     * @param source the start point of this edge
+     * @param destination the end point of this edge
      */
     public PathEdge(Point2D source, Point2D destination) {
         this.source = new Point2D(source.getX(),source.getY());
@@ -30,6 +35,12 @@ public class PathEdge {
         behavior = GraphEdge.normal;
     }
 
+    /**
+     * Constrcut a path edge
+     * @param source
+     * @param destination
+     * @param behavior
+     */
     public PathEdge(Point2D source, Point2D destination, int behavior) {
         this.source = new Point2D(source.getX(),source.getY());
         this.destination = new Point2D(destination.getX(),destination.getY());
@@ -59,5 +70,9 @@ public class PathEdge {
     @Override
     public String toString() {
         return "[" + source + ", " + destination + ']';
+    }
+
+    public int getBehavior() {
+        return behavior;
     }
 }

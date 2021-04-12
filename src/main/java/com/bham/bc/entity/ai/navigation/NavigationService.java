@@ -1,7 +1,6 @@
 package com.bham.bc.entity.ai.navigation;
 
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
-import com.bham.bc.entity.ai.navigation.impl.PathEdge;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Shape;
@@ -9,35 +8,32 @@ import javafx.scene.shape.Shape;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The interface of path finding for agents
+ */
 public interface NavigationService {
 
     /**
-     * Create a path finding request and register it in the time slice service
+     * Create a path finding request and a Dijkstra instance and register it in the time slice service
      * Note: This function is not a searching function, it only register a request
-     * Dijkstras
      * @param itemType for example, triggers
      * @return true if there been a graph node around bot, otherwise false
      */
-    public boolean createRequest(ItemType itemType);
+    boolean createRequest(ItemType itemType);
 
     /**
-     * Create a path finding request and register it in the time slice service
+     * Create a path finding request and an AStar instance register it in the time slice service
      * Note: This function is not a searching function, it only register a request
-     * A*
      * @param targetPos the targetPos that the bot wants to reach
      * @return true if closest nodes exist around both bot and targetPosition, otherwise false
      */
-    public boolean createRequest(Point2D targetPos);
+    boolean createRequest(Point2D targetPos);
 
     /**
      * called by an agent after a request was created
-     * @return
-     * target_found if target found
-     * target_not_found if not found
-     * search_incomplete if the search is not completed
-     * no_task if no closest node around player or target
+     * @return {@link SearchStatus} to indicate searching process
      */
-    public SearchStatus peekRequestStatus();
+    SearchStatus peekRequestStatus();
 
     /**
      * Resets the search status to <i>no_task</i>. This is useful to not repeat the searches
@@ -47,9 +43,32 @@ public interface NavigationService {
     /**
      * called by an agent after it has been notified that a search has
      * terminated successfully.
-     * @return a list of PathEdges
+     * @return a list of {@link PathEdge}
      */
-    public LinkedList<PathEdge> getPath();
+    LinkedList<PathEdge> getPath();
+
+    /**
+     * set expand condition for algorithm.
+     * It will also reset the one inside algorithm.
+     * @param expandCondition see{@link ExpandPolicies}
+     */
+    void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
+
+
+
+    //for testing--------------------------------------------
+    /**
+     * For debug
+     * Render the path stored in the path planner if the search task had completed
+     * @param gc
+     */
+    void render(GraphicsContext gc);
+
+    /**
+     * For debug
+     * @return a list of hitboxes used during path smoothing
+     */
+    List<Shape> getSmoothingBoxes();
 
     //under construction--------------------------------------------
     //utility based AI----------------------------------------------
@@ -58,26 +77,11 @@ public interface NavigationService {
      * This method makes use of the pre-calculated lookup table
      * @return the cost to travel from the bot's current position to a specific graph node.
      */
-    public double getCostToNode(int NodeIdx);
+    double getCostToNode(int NodeIdx);
 
     /**
      * This method makes use of the pre-calculated lookup table.
      * @return -1 if no active trigger found, otherwise the cost to the closest instance of the giver type
      */
-    public double getCostToClosestItem(int GiverType);
-
-    public void render(GraphicsContext gc);
-
-    /**
-     * For path smoothing debug, return a list of hit boxes when smoothing paths
-     * @return
-     */
-    public List<Shape> getSmoothingBoxes();
-
-    /**
-     * set expand condition for algorithm.
-     * It will also reset the one in algorithm.
-     * @return
-     */
-    public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
+    double getCostToClosestItem(int GiverType);
 }

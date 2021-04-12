@@ -4,13 +4,27 @@ import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.node.NavNode;
 
-public class TerminationConditions {
+/**
+ * A class contains many sub classes for Dijkstra Algorithm
+ * Sub classes define conditions that when will Dijkstra Algorithm end
+ */
+public class TerminationPolices {
 
     public static interface TerminationCondition {
-        public boolean isSatisfied(final SparseGraph G, ItemType target, int CurrentNodeIdx);
+        /**
+         * The basic method for condition
+         * Test whether the node we are going to explore satisfies the condition
+         * @param G SparseGraph where the Dijkstra Algorithm is exploring
+         * @param target the item that Dijkstra Algorithm want to find
+         * @param curNodeIndex the node that Dijkstra Algorithm want to explore
+         * @return
+         */
+        public boolean isSatisfied(final SparseGraph G, ItemType target, int curNodeIndex);
     }
 
-
+    /**
+     * a condition class to check whether a node contains the desired active trigger
+     */
     public static class FindActiveTrigger implements TerminationCondition {
         @Override
         public boolean isSatisfied(SparseGraph navGraph, ItemType target, int curNodeIndex) {

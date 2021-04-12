@@ -1,13 +1,12 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.entity.ai.navigation.impl.PathEdge;
+import com.bham.bc.entity.ai.navigation.PathEdge;
 import com.bham.bc.entity.ai.behavior.StateMachine;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 import java.util.LinkedList;
 

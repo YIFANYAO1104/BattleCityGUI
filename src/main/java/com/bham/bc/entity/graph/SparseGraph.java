@@ -70,7 +70,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     private boolean isEdgeNew(int from, int to) {
         ListIterator<edge_type> curEdge = edgeListVector.get(from).listIterator();
         while (curEdge.hasNext()) {
-            if (curEdge.next().To() == to) {
+            if (curEdge.next().getTo() == to) {
                 return false;
             }
         }
@@ -218,7 +218,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         LinkedList<NavNode> nodes = new LinkedList<>();
         LinkedList<GraphEdge> edges = edgeListVector.get(n1);
         for (GraphEdge e1: edges){
-            NavNode nn1 = getNode(e1.To());
+            NavNode nn1 = getNode(e1.getTo());
             if(nn1.isValid()) nodes.add(nn1);
         }
 
@@ -258,7 +258,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         ListIterator<edge_type> it = edgeListVector.get(from).listIterator();
         while (it.hasNext()) {
             edge_type curEdge = it.next();
-            if (curEdge.To() == to) {
+            if (curEdge.getTo() == to) {
                 return curEdge;
             }
         }
@@ -319,37 +319,24 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      */
     public void addEdge(edge_type edge) {
         //first make sure the from and to nodes exist within the graph
-        assert (edge.From() < nextNodeIndex) && (edge.To() < nextNodeIndex) :
+        assert (edge.getFrom() < nextNodeIndex) && (edge.getTo() < nextNodeIndex) :
                 "<SparseGraph::AddEdge>: invalid node index";
 
         //make sure both nodes are active before adding the edge
-        if ((nodeVector.get(edge.To()).Index() != invalid_node_index)
-                && (nodeVector.get(edge.From()).Index() != invalid_node_index)) {
+        if ((nodeVector.get(edge.getTo()).Index() != invalid_node_index)
+                && (nodeVector.get(edge.getFrom()).Index() != invalid_node_index)) {
             //add the edge, first making sure it is unique
-            if (isEdgeNew(edge.From(), edge.To())) {
-                edgeListVector.get(edge.From()).add(edge);
+            if (isEdgeNew(edge.getFrom(), edge.getTo())) {
+                edgeListVector.get(edge.getFrom()).add(edge);
             }
 
             //if the graph is undirected we must add another connection in the opposite
             //direction
             if (!isDirectedGraph) {
                 //check to make sure the edge is unique before adding
-                if (isEdgeNew(edge.To(), edge.From())) {
-//                    edge_type NewEdge = null;
-                    GraphEdge NewEdge = null;
-                    try {
-//                        NewEdge = (edge_type) edge.getClass().getConstructor(edge.getClass()).newInstance(edge);
-                        NewEdge = new GraphEdge();
-                    } catch (Exception ex) {
-
-                        throw new RuntimeException(ex);
-                    }
-
-                    NewEdge.SetTo(edge.From());
-                    NewEdge.SetFrom(edge.To());
-                    NewEdge.SetCost(edge.Cost());
-
-                    edgeListVector.get(edge.To()).add(NewEdge);
+                if (isEdgeNew(edge.getTo(), edge.getFrom())) {
+                    GraphEdge reversedEdge = new GraphEdge(edge.getTo(),edge.getFrom(),edge.getCost());
+                    edgeListVector.get(edge.getTo()).add(reversedEdge);
                 }
             }
         }
@@ -375,8 +362,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         ListIterator<edge_type> it = edgeListVector.get(from).listIterator();
         while (it.hasNext()) {
             edge_type curEdge = it.next();
-            if (curEdge.To() == to) {
-                curEdge.SetCost(newCost);
+            if (curEdge.getTo() == to) {
+                curEdge.setCost(newCost);
                 break;
             }
         }
@@ -464,7 +451,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         if (isNodePresent(from) && isNodePresent(from)) {
             ListIterator<edge_type> curEdge = edgeListVector.get(from).listIterator();
             while (curEdge.hasNext()) {
-                if (curEdge.next().To() == to) {
+                if (curEdge.next().getTo() == to) {
                     return true;
                 }
             }
@@ -490,7 +477,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
 
         for(GraphEdge e1:m1){
-            temp1.add(nodeVector.get(e1.To()));
+            temp1.add(nodeVector.get(e1.getTo()));
         }
         return temp1;
     }
