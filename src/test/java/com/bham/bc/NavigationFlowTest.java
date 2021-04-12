@@ -5,7 +5,7 @@ import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
-import com.bham.bc.entity.ai.navigation.impl.PathEdge;
+import com.bham.bc.entity.ai.navigation.PathEdge;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;

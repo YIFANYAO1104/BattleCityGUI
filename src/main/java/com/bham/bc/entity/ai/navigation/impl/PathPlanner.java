@@ -2,13 +2,14 @@ package com.bham.bc.entity.ai.navigation.impl;
 
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
+import com.bham.bc.entity.ai.navigation.PathEdge;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedDijkstras;
 import com.bham.bc.entity.ai.navigation.algorithms.astar.TimeSlicedAStar;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
-import com.bham.bc.entity.ai.navigation.algorithms.policies.TerminationConditions;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.TerminationPolices;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
@@ -25,6 +26,9 @@ import java.util.ListIterator;
 
 import static com.bham.bc.components.CenterController.services;
 
+/**
+ * The implementation of {@link NavigationService}
+ */
 public class PathPlanner implements NavigationService {
 
     private int no_closest_node_found = -1;
@@ -45,13 +49,7 @@ public class PathPlanner implements NavigationService {
      * being used when getPath() is called
      */
     private Point2D destinationPos;
-
     private SearchStatus taskStatus;
-
-    public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition) {
-        if (curSearchTask!=null) curSearchTask.setExpandCondition(expandCondition);
-        this.expandCondition = expandCondition;
-    }
 
     private ExpandPolicies.ExpandCondition expandCondition;
 
@@ -74,7 +72,6 @@ public class PathPlanner implements NavigationService {
      */
     private int getClosestNode(BaseGameEntity entity){
         NavNode n1 = navGraph.getClosestNodeForEntity(entity);
-
         if(n1.isValid()){
             return n1.Index();
         }
@@ -83,7 +80,6 @@ public class PathPlanner implements NavigationService {
 
     private int getClosestNode(Point2D location,Point2D radius){
         NavNode n1 = navGraph.getClosestNodeByPosition(location,radius);
-
         if(n1.isValid()){
             return n1.Index();
         }
@@ -114,7 +110,7 @@ public class PathPlanner implements NavigationService {
         }
         //create algorithm instance
         curSearchTask = new TimeSlicedDijkstras(navGraph,closestNodeToPlayer,itemType,
-                new TerminationConditions.FindActiveTrigger(),
+                new TerminationPolices.FindActiveTrigger(),
                 expandCondition);
         taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
@@ -184,10 +180,10 @@ public class PathPlanner implements NavigationService {
         //        }
 
         //smooth path
-        for (PathEdge pathEdge : curPath) {
-            smoothedPath.add(new PathEdge(pathEdge));
-        }
-        quickSmooth(smoothedPath);
+//        for (PathEdge pathEdge : curPath) {
+//            smoothedPath.add(new PathEdge(pathEdge));
+//        }
+//        quickSmooth(smoothedPath);
     }
 
     /**
@@ -227,8 +223,6 @@ public class PathPlanner implements NavigationService {
      * @return a list of PathEdges
      */
     public LinkedList<PathEdge> getPath() {
-
-
         LinkedList<PathEdge> tempList = new LinkedList<>();
 
         if (taskStatus==SearchStatus.target_found){
@@ -236,7 +230,7 @@ public class PathPlanner implements NavigationService {
                 fetchPathFromAlgorithm();
             }
             //deep copy
-            for (PathEdge pathEdge : smoothedPath) {
+            for (PathEdge pathEdge : curPath) {
                 tempList.add(new PathEdge(pathEdge));
             }
         }
@@ -319,6 +313,13 @@ public class PathPlanner implements NavigationService {
 
     @Override
     public void resetTaskStatus() {
-        if(taskStatus != SearchStatus.search_incomplete) taskStatus = SearchStatus.no_task;
+        if(taskStatus != SearchStatus.search_incomplete) {
+            clear();
+        }
+    }
+
+    public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition) {
+        if (curSearchTask!=null) curSearchTask.setExpandCondition(expandCondition);
+        this.expandCondition = expandCondition;
     }
 }

@@ -26,7 +26,7 @@ public class NavEdge extends GraphEdge{
     }
 
     public NavEdge(NavEdge e) {
-        this(e.From(), e.To(), e.Cost(), normal);
+        this(e.getFrom(), e.getTo(), e.getCost(), normal);
     }
 
     public int IDofIntersectingEntity() {

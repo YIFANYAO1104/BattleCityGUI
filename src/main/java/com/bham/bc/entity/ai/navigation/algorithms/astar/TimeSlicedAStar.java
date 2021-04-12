@@ -4,7 +4,7 @@ package com.bham.bc.entity.ai.navigation.algorithms.astar;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
-import com.bham.bc.entity.ai.navigation.impl.PathEdge;
+import com.bham.bc.entity.ai.navigation.PathEdge;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.GraphNode;
@@ -59,21 +59,6 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
             return SearchStatus.target_not_found;
         }
 
-    }
-
-    @Override
-    public List<GraphEdge> getSPT() {
-        return null;
-    }
-
-    @Override
-    public double getCostToTarget() {
-        return 0;
-    }
-
-    @Override
-    public List<Integer> getPathToTarget() {
-        return null;
     }
 
 
@@ -140,7 +125,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         while (ConstEdgeItr.hasNext()) {
             GraphEdge gn1 = ConstEdgeItr.next();
 
-            Node nn1 = new Node(sg.getNode(gn1.To()));
+            Node nn1 = new Node(sg.getNode(gn1.getTo()));
             double edgecost = getCost(n1,nn1);
             double diagonalDis = getDiagonalDis(n1);
             Node nn2 = new Node(nn1, n1, edgecost+n1.getCost(), diagonalDis);
@@ -180,7 +165,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
 
     private double getCost(Node n1 , Node n2){
         GraphEdge e1 = sg.getEdge(n1.getNode().Index(), n2.getNode().Index());
-        return e1.Cost();
+        return e1.getCost();
     }
 
     public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition){

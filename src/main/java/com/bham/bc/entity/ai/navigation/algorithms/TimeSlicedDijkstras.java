@@ -3,8 +3,8 @@ package com.bham.bc.entity.ai.navigation.algorithms;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
-import com.bham.bc.entity.ai.navigation.algorithms.policies.TerminationConditions;
-import com.bham.bc.entity.ai.navigation.impl.PathEdge;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.TerminationPolices;
+import com.bham.bc.entity.ai.navigation.PathEdge;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies.*;
@@ -29,13 +29,13 @@ public class TimeSlicedDijkstras
     Set<Integer> seen;
     Queue<MyPairs> pq;
 
-    TerminationConditions.TerminationCondition tm;
+    TerminationPolices.TerminationCondition tm;
 
 
     public TimeSlicedDijkstras(final SparseGraph G,
                                int source,
                                ItemType targetType,
-                               TerminationConditions.TerminationCondition terminationCondition,
+                               TerminationPolices.TerminationCondition terminationCondition,
                                ExpandCondition expandCondition) {
         this.navGraph = G;
         this.source = source;
@@ -81,10 +81,10 @@ public class TimeSlicedDijkstras
             //for each edge connected to the next closest node
             while (ConstEdgeItr.hasNext()){
                 GraphEdge pE = ConstEdgeItr.next();
-                int tempNode = pE.To();
+                int tempNode = pE.getTo();
 //                if (!navGraph.getNode(tempNode).isValid()) continue;
                 if (!seen.contains(tempNode)){
-                    double newCost = dist + pE.Cost();
+                    double newCost = dist + pE.getCost();
                     if (newCost < distance.get(tempNode)){
                         pq.add(new MyPairs(tempNode,newCost));
                         parent.set(tempNode,node);
@@ -98,21 +98,6 @@ public class TimeSlicedDijkstras
 
     public double getDistance(int target) {
         return distance.get(target);
-    }
-
-    @Override
-    public List<GraphEdge> getSPT() {
-        return null;
-    }
-
-    @Override
-    public double getCostToTarget() {
-        return 0;
-    }
-
-    @Override
-    public List<Integer> getPathToTarget() {
-        return null;
     }
 
     @Override

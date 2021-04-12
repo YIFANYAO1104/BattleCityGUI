@@ -6,7 +6,7 @@ import com.bham.bc.components.characters.Side;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
-import com.bham.bc.entity.ai.navigation.impl.PathEdge;
+import com.bham.bc.entity.ai.navigation.PathEdge;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
 import com.bham.bc.entity.ai.behavior.StateMachine;
 import com.bham.bc.entity.graph.edge.GraphEdge;
