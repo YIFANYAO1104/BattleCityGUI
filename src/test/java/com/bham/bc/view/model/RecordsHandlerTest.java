@@ -1,24 +1,19 @@
 package com.bham.bc.view.model;
 
 import junit.framework.TestCase;
-
+import org.junit.Test;
 
 
 public class RecordsHandlerTest extends TestCase {
     private RecordsHandler recordsHandler;
 
-    public void setUp() throws Exception {
-        super.setUp();
 
-    }
-
-    public void tearDown() throws Exception {
-    }
 
 
     /**
      * test createRcord and sort function
      */
+    @Test
     public void testCreateRecord() {
 
         recordsHandler=new RecordsHandler();
