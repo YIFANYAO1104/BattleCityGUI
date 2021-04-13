@@ -28,10 +28,6 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuMode;
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
-    private SubMenu subMenuCScore;
-    private SubMenu subMenuSScore;
-    private TableView<RecordsHandler.Records> tableViewC = new TableView<>();
-    private TableView<RecordsHandler.Records> tableViewS = new TableView<>();
 
     private final NewGameEvent NEW_GAME_EVENT;
     /**
@@ -45,8 +41,7 @@ public class MainMenu extends AnchorPane {
         initBgDim();
 
         createSubMenuMain();
-        createSubMenuMode();
-        createSubMenuTwoScores();
+        createSubMenuScores();
         createSubMenuSettings();
 
         subMenuMain.show();
@@ -67,95 +62,42 @@ public class MainMenu extends AnchorPane {
      * necessary buttons to control the GUI actions and create corresponding sub-menus.
      */
     private void createSubMenuMain() {
-        MenuButton btnSolo = new MenuButton("SOLO");
-        MenuButton btnCoop = new MenuButton("CO-OP");
+        MenuButton btnStart = new MenuButton("START GAME");
         MenuButton btnScores = new MenuButton("HIGH-SCORES");
         MenuButton btnSettings = new MenuButton("SETTINGS");
         MenuButton btnQuit = new MenuButton("QUIT");
 
-        btnSolo.setOnMouseClicked(e -> { NEW_GAME_EVENT.setNumPlayers(1); subMenuMain.hide(); subMenuMode.show(); });
-        btnCoop.setOnMouseClicked(e -> { NEW_GAME_EVENT.setNumPlayers(2); subMenuMain.hide(); subMenuMode.show(); });
+
+        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMode(MODE.SURVIVAL); NEW_GAME_EVENT.setMapType(MapType.Map1);btnStart.fireEvent(NEW_GAME_EVENT); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
 
         subMenuMain = new SubMenu(this);
-        subMenuMain.getChildren().addAll(btnSolo, btnCoop, btnScores, btnSettings, btnQuit);
+        subMenuMain.getChildren().addAll(btnStart, btnScores, btnSettings, btnQuit);
     }
 
-    /**
-     * Creates the sub-menu for mode selection. This menu is observed whenever "SOLO" or
-     * "CO-OP" is clicked and asks {@link com.bham.bc.view.MenuSession} to initiate a
-     * single {@link com.bham.bc.view.GameSession} based on the selected parameters
-     */
-    private void createSubMenuMode() {
-        MenuButton btnSurvival = new MenuButton("SURVIVAL");
-        MenuButton btnChallenge = new MenuButton("CHALLENGE");
-        MenuButton btnBack = new MenuButton("BACK");
-
-        btnSurvival.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMode(MODE.SURVIVAL); NEW_GAME_EVENT.setMapType(MapType.Map1); btnSurvival.fireEvent(NEW_GAME_EVENT); });
-        btnChallenge.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMode(MODE.CHALLENGE); NEW_GAME_EVENT.setMapType(MapType.EmptyMap); btnChallenge.fireEvent(NEW_GAME_EVENT);});
-        btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
-
-        subMenuMode = new SubMenu(this);
-        subMenuMode.getChildren().addAll(btnSurvival, btnChallenge, btnBack);
-    }
-
-    /**
-     * create score subMenu (including challenge and survival)
-     */
-    private void createSubMenuTwoScores(){
-        subMenuScores=new SubMenu(this);
-        MenuButton challengeScore=new MenuButton("Challenge");
-        MenuButton survivalScore=new MenuButton("Survival");
-        subMenuScores.getChildren().addAll(challengeScore,survivalScore);
-        subMenuCScore=new SubMenu(this);
-        subMenuSScore=new SubMenu(this);
-        createSubMenuScores(subMenuCScore,"Challenge");
-        createSubMenuScores(subMenuSScore,"Survival");
-        challengeScore.setOnMouseClicked(e->{subMenuScores.hide();subMenuCScore.show();});
-        survivalScore.setOnMouseClicked(e->{subMenuScores.hide();subMenuSScore.show();});
-        // Get the saved data from record handler
-        RecordsHandler recordsHandler = new RecordsHandler();
-        ObservableList<RecordsHandler.Records> sampleData= recordsHandler.createSampleRecords();
-        handleRecords(subMenuCScore,tableViewC,sampleData);
-        handleRecords(subMenuSScore,tableViewS,sampleData);
-    }
 
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
-     * mode(challenge or survival) is clicked and shows top 10 scores.
+     * "HIGH-SCORES" is clicked and shows top 10 scores.
      */
-    private void createSubMenuScores(SubMenu subMenu,String mode) {
-
+    private void createSubMenuScores() {
+        subMenuScores = new SubMenu(this);
 
         // Increase leaderboard size
-        subMenu.setMinWidth(680);
-        subMenu.setMinHeight(500);
-        subMenu.alignCenter();
+        subMenuScores.setMinWidth(680);
+        subMenuScores.setMinHeight(500);
+        subMenuScores.alignCenter();
 
         // We want a different style from a regular sub-menu
-        subMenu.getStyleClass().clear();
-        subMenu.setId("sub-menu-scores");
+        subMenuScores.getStyleClass().clear();
+        subMenuScores.setId("sub-menu-scores");
 
         // Set up leaderboard label
-        Label leaderboardLabel = new Label(mode);
+        Label leaderboardLabel = new Label("Scores");
         leaderboardLabel.getStyleClass().add("leaderboard-label");
 
-
-        subMenu.setOnMouseClicked(e -> { subMenu.hide(); subMenuMain.show(); });
-
-
-        subMenu.getChildren().addAll(leaderboardLabel);
-    }
-
-    /**
-     * help subMenu handle records
-     * @param subMenu
-     * @param tableView
-     * @param data to feed tableview
-     */
-    public void handleRecords(SubMenu subMenu,TableView tableView,ObservableList<RecordsHandler.Records> data){
         // Create columns for leaderboard table
         TableColumn<RecordsHandler.Records, String> rank, name, score, date;
         rank = new TableColumn<>("Rank");
@@ -173,15 +115,20 @@ public class MainMenu extends AnchorPane {
         score.setCellValueFactory(new PropertyValueFactory<>("score"));
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
 
+        // Get the saved data from record handler
+        RecordsHandler recordsHandler = new RecordsHandler();
+        ObservableList<RecordsHandler.Records> survivalData= recordsHandler.createSampleRecords();
 
-
-        tableView.setMaxSize(subMenu.getMinWidth(), subMenu.getMinHeight());
+        TableView<RecordsHandler.Records> tableView = new TableView<>();
+        tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
         tableView.getColumns().addAll(rank, name, score, date);
-        tableView.setItems(data);
+        tableView.setItems(survivalData);
         tableView.setId("scores-table");
-        tableView.setOnMouseClicked(e -> { subMenu.hide(); subMenuMain.show(); });
-        subMenu.getChildren().addAll(tableView);
 
+        subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
+        tableView.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
+
+        subMenuScores.getChildren().addAll(leaderboardLabel, tableView);
     }
 
     /**
@@ -191,7 +138,6 @@ public class MainMenu extends AnchorPane {
     private void createSubMenuSettings() {
         MenuSlider musicVolume = new MenuSlider("MUSIC", 100);
         MenuSlider sfxVolume = new MenuSlider("EFFECTS", 100);
-
         MenuButton btnBack = new MenuButton("BACK");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
