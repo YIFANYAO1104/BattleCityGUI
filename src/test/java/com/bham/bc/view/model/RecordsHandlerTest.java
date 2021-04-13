@@ -1,9 +1,7 @@
 package com.bham.bc.view.model;
 
 import junit.framework.TestCase;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
 
 
 public class RecordsHandlerTest extends TestCase {
