@@ -41,22 +41,21 @@ public class RecordsHandler {
     public void createSampleRecords() {
 
         //write to Json file
-        createRecord(new Records("1st","Dou","222","7/3"));
-        createRecord(new Records("2nd","YIFAN","782","7/3"));
-        createRecord(new Records("3rd","Alex","762","7/3"));
-        createRecord(new Records("4th","Mantas","622","7/3"));
-        createRecord(new Records("5th","Najd","792","7/3"));
-        createRecord(new Records("6th","Justin","892","7/3"));
-        createRecord(new Records("7th","John","792","7/3"));
-        createRecord(new Records("8th","Shan","792","7/3"));
-        createRecord(new Records("9th","Juily","992","7/3"));
-        createRecord(new Records("10th","Berry","792","7/3"));
+        createRecord(new Records("1st","Dou","999","7/3"));
+        createRecord(new Records("2nd","YIFAN","888","7/3"));
+        createRecord(new Records("3rd","Alex","777","7/3"));
+        createRecord(new Records("4th","Mantas","666","7/3"));
+        createRecord(new Records("5th","Najd","555","7/3"));
+        createRecord(new Records("6th","Justin","444","7/3"));
+        createRecord(new Records("7th","John","333","7/3"));
+        createRecord(new Records("8th","Shan","222","7/3"));
+        createRecord(new Records("9th","Juily","111","7/3"));
+        createRecord(new Records("10th","Berry","99","7/3"));
 
         //first step is to sort before add new records
         jsonArrayToFile=jsonArraySort(jsonArrayToFile);
         //second step is to add new records
-        createRecord(new Records("11th","Kitty","122","7/3"));
-        createRecord(new Records("12th","Jog","212","7/3"));
+
 
 
 
@@ -70,14 +69,14 @@ public class RecordsHandler {
         //third step is to sort after add the new records
         sort();
         try {
-            writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
+            writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\game.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //read from Json file
         try {
-            parseJsonFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\test.json");
+            parseJsonFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\game.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
