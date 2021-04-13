@@ -35,8 +35,8 @@ public class RecordsHandler {
     }
 
     /**
-     * temp
-     * @return
+     * create sample of records
+     *
      */
     public void createSampleRecords() {
 
