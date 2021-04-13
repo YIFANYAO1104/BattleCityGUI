@@ -19,8 +19,16 @@ public class RecordsHandler {
     private static JSONArray jsonArray;
 
 
-    public RecordsHandler() { }
+    public RecordsHandler() {
+        jsonArrayToFile=new JSONArray();
+        records=new ArrayList<>();
+    }
 
+    /**
+     * to test if user gets the right rank
+     * @param i rank
+     * @return the name who has the rank "i"
+     */
     public String equalJsonObjectName(int i){
 
         return jsonArrayToFile.getJSONObject(i-1).getString("name");
@@ -30,11 +38,9 @@ public class RecordsHandler {
      * temp
      * @return
      */
-    public ObservableList<Records> createSampleRecords() {
-        jsonArrayToFile=new JSONArray();
-        records=new ArrayList<>();
-        //write to Json file
+    public void createSampleRecords() {
 
+        //write to Json file
         createRecord(new Records("1st","Dou","222","7/3"));
         createRecord(new Records("2nd","YIFAN","782","7/3"));
         createRecord(new Records("3rd","Alex","762","7/3"));
@@ -51,8 +57,12 @@ public class RecordsHandler {
         //second step is to add new records
         createRecord(new Records("11th","Kitty","122","7/3"));
         createRecord(new Records("12th","Jog","212","7/3"));
-        createRecord(new RecordsHandler.Records("13","Dahn","022","7/3"));
 
+
+
+    }
+
+    public ObservableList<Records> sortAndGetData(){
         //third step is to sort after add the new records
         sort();
         try {
@@ -300,7 +310,7 @@ public class RecordsHandler {
      * create a record and put into a Json array
      * @param record
      */
-    public static void createRecord(Records record){
+    public void createRecord(Records record){
         record.putIntoArray();
     }
 

@@ -117,7 +117,8 @@ public class MainMenu extends AnchorPane {
 
         // Get the saved data from record handler
         RecordsHandler recordsHandler = new RecordsHandler();
-        ObservableList<RecordsHandler.Records> survivalData= recordsHandler.createSampleRecords();
+        recordsHandler.createSampleRecords();
+        ObservableList<RecordsHandler.Records> survivalData= recordsHandler.sortAndGetData();
 
         TableView<RecordsHandler.Records> tableView = new TableView<>();
         tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
