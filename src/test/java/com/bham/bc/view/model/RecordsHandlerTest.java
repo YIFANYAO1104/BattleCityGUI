@@ -23,6 +23,7 @@ public class RecordsHandlerTest extends TestCase {
 
         recordsHandler=new RecordsHandler();
         recordsHandler.createSampleRecords();
+        //the max min and middle value
         recordsHandler.createRecord(new RecordsHandler.Records("13","Dahn","111122","7/3"));
         recordsHandler.createRecord(new RecordsHandler.Records("14","Daaa","022","7/3"));
         recordsHandler.createRecord(new RecordsHandler.Records("13","Dann","666","7/3"));
