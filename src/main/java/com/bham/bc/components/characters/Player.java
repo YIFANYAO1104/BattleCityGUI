@@ -6,7 +6,7 @@ import com.bham.bc.components.shooting.Gun;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
-import com.bham.bc.utils.Constants;
+import com.bham.bc.view.GameSession;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -35,8 +35,8 @@ public class Player extends GameCharacter {
 	public static final double HP = 100;
 	public static final double SPEED = 5;
 
-	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
-	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
+	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
+	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(GameSession.HEIGHT/2.0);
 
 	private final EnumSet<Direction> DIRECTION_SET;
 	private final Gun GUN;

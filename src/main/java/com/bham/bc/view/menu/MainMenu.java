@@ -1,7 +1,6 @@
 package com.bham.bc.view.menu;
 
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.Mode;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.*;
 import javafx.collections.ObservableList;
@@ -68,7 +67,7 @@ public class MainMenu extends AnchorPane {
         MenuButton btnQuit = new MenuButton("QUIT");
 
 
-        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMode(MODE.SURVIVAL); NEW_GAME_EVENT.setMapType(MapType.Map1);btnStart.fireEvent(NEW_GAME_EVENT); });
+        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.Map1); btnStart.fireEvent(NEW_GAME_EVENT); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));

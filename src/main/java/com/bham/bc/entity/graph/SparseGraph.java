@@ -2,7 +2,6 @@ package com.bham.bc.entity.graph;
 
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.GraphNode;
 import com.bham.bc.entity.graph.node.NavNode;
@@ -17,6 +16,7 @@ import static com.bham.bc.entity.graph.NodeTypeEnum.invalid_node_index;
 import java.util.*;
 
 public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> extends BaseGameEntity {
+    public static final double GRAPH_OBSTACLE_EDGE_COST = 30.0;
 
 //    private GraphEdge nh1;
     private int rowNums;
@@ -596,7 +596,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 int indexOfNode = (int)msg.ExtraInfo;
                 NavNode nn1 = getNode(indexOfNode);
                 addToHashMap(msg.Sender,nn1);
-                setNodeALLEdages(indexOfNode, Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST);
+                setNodeALLEdages(indexOfNode, GRAPH_OBSTACLE_EDGE_COST);
                 setEdgesBehavior(indexOfNode, GraphEdge.shoot);
                 return true;
             case Msg_removeSoft:

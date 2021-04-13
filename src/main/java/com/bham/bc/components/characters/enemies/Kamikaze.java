@@ -1,5 +1,6 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
@@ -129,7 +130,7 @@ public class Kamikaze extends Enemy {
         Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
         services.addTrigger(explosion);
 
-        Trigger explosion1 = new Dissolve(getPosition(), entityImages[0], angle);
+        Trigger explosion1 = new Dissolve(getPosition(), entityImages[0], getAngle());
         services.addTrigger(explosion1);
     }
 

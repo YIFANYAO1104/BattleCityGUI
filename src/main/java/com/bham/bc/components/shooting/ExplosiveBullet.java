@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class ExplosiveBullet extends Bullet {
     public static final BulletType TYPE = BulletType.EXPLOSIVE;

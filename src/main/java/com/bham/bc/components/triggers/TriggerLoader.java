@@ -14,11 +14,7 @@ import java.util.List;
 
 public class TriggerLoader {
 
-
-    //private TriggerSystem triggerSystem = new TriggerSystem();
-
     private ArrayList<Trigger> triggers;
-
     private HashMap<Integer, String> classNameMap= new HashMap<>();
 
     public TriggerLoader(String resourceName) {
@@ -32,26 +28,27 @@ public class TriggerLoader {
 //        initTeleportTrigger();
     }
 
-//    public TriggerSystem getTriggerSystem() {
-//        return triggerSystem;
-//    }
-
     public ArrayList<Trigger> getTriggers() { return triggers; }
 
 
     public void initTriggerIDMap(JSONObject obj){
         JSONArray tilesets = obj.getJSONArray("tilesets");
+
         for(int i = 0; i < tilesets.length(); i++) {
             JSONObject tileset = tilesets.getJSONObject(i);
+
             if (tileset.get("name").equals("triggers")){
                 int firstgid = tileset.getInt("firstgid");
                 JSONArray tiles = tileset.getJSONArray("tiles");
+
                 for(int j = 0; j < tiles.length(); j++) {
                     JSONObject tile = tiles.getJSONObject(j);
                     int id = tile.getInt("id");
                     JSONArray properties = tile.getJSONArray("properties");
+
                     for(int k = 0; k < properties.length(); k++) {
                         JSONObject property = properties.getJSONObject(k);
+
                         if (property.get("name").equals("className")){
                             classNameMap.put(firstgid+id,property.getString("value"));
                             System.out.println("id = "+(firstgid+id));
@@ -59,7 +56,6 @@ public class TriggerLoader {
                         }
                     }
                 }
-
             }
         }
     }
@@ -120,13 +116,14 @@ public class TriggerLoader {
         for(int i = 0; i < triggerArray.length(); i++) {
             JSONObject trigger = triggerArray.getJSONObject(i);
             String className = classNameMap.get(trigger.getInt("gid"));
-            Class cls = Class.forName("com.bham.bc.components.triggers."+packageName+"."+className);
+            Class cls = Class.forName("com.bham.bc.components.triggers." + packageName + "." + className);
 
             Constructor constructor = cls.getConstructors()[0];
 
             List<Object> params = new ArrayList<>();
             params.add(trigger.getInt("x"));
             params.add(trigger.getInt("y"));
+
             // Read attributes
             JSONArray attributes = trigger.getJSONArray("properties");
 
@@ -135,9 +132,6 @@ public class TriggerLoader {
                 if (attribute.get("name").equals("className")) continue;
                 params.add(attribute.getInt("value"));
             }
-            System.out.println(params);
-
-            //triggerSystem.register((Trigger) constructor.newInstance(params.toArray()));
             triggers.add((Trigger) constructor.newInstance(params.toArray()));
         }
     }

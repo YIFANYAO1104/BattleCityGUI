@@ -1,16 +1,15 @@
 package com.bham.bc.components.triggers.effects;
 
-import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.components.environment.navigation.ItemType;
+import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.triggers.Trigger;
+import com.bham.bc.entity.ai.navigation.ItemType;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
@@ -33,7 +32,7 @@ public class Dissolve extends Trigger {
      * @param angle    angle at which the image is rotated
      */
     public Dissolve(Point2D position, Image image, double angle) {
-        super(BaseGameEntity.GetNextValidID(), (int) position.getX(), (int) position.getY());
+        super((int) position.getX(), (int) position.getY());
         this.angle = angle;
         particles = new ArrayList<>();
         entityImages = new Image[] { image };
@@ -70,19 +69,26 @@ public class Dissolve extends Trigger {
     }
 
     @Override
+    public Shape getHitBox() {
+        return null;
+    }
+
+    @Override
     public void update() {
         particles.forEach(Particle::update);
 
         if(particles.stream().noneMatch(Particle::exists)) {
-            setToBeRemovedFromGame();
+            exists = false;
         }
     }
 
     @Override
-    public void tryTriggerC(GameCharacter entity) {}
+    public void handle(BaseGameEntity entity) { }
 
     @Override
-    public void tryTriggerO(GenericObstacle entity) {}
+    protected Image[] getDefaultImage() {
+        return new Image[0];
+    }
 
     @Override
     public ItemType getItemType() {

@@ -17,7 +17,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 import static com.bham.bc.components.CenterController.services;
-import static com.bham.bc.utils.Constants.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -159,16 +158,17 @@ public class GameMap {
     public void initGraph(TriggerLoader triggerLoader) {
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         graphSystem = new SparseGraph<>(false); //single direction turn off
-        hgf.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(),GRAPH_NUM_CELLS_Y,GRAPH_NUM_CELLS_X); //make network
+        hgf.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(), getHeight() / (GameCharacter.MAX_SIZE/2), getWidth() / (GameCharacter.MAX_SIZE/2)); //make network
         ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Point2D vv1 = allNodesLocations.get(index);
+            double maxCharacterRadius = Math.sqrt((GameCharacter.MAX_SIZE/2.0)*(GameCharacter.MAX_SIZE/2.0));
 
             for (int i = 0; i < interactiveObstacles.size(); i++) {
                 Obstacle w = interactiveObstacles.get(i);
                 w.interacts(graphSystem.getID(), index, new Rectangle(
-                        vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
+                        vv1.getX()-maxCharacterRadius,vv1.getY()-maxCharacterRadius,maxCharacterRadius* 2,maxCharacterRadius * 2));
             }
         }
         //removed unreachable nodes

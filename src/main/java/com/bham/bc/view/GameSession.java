@@ -1,8 +1,9 @@
 package com.bham.bc.view;
 
+import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.Mode;
-import com.bham.bc.utils.Constants;
+
 import static com.bham.bc.components.CenterController.*;
 
 import com.bham.bc.view.model.MenuSlider;
@@ -21,8 +22,9 @@ import javafx.stage.Stage;
  */
 public class GameSession {
 
-    public static final int GAME_WIDTH = Constants.WINDOW_WIDTH;
-    public static final int GAME_HEIGHT = Constants.WINDOW_HEIGHT;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 600;
+    public static final int FRAME_RATE = 24;
 
     public static AnchorPane gamePane;
     private Scene gameScene;
@@ -49,13 +51,13 @@ public class GameSession {
      * initializes the game stage
      */
     private void initializeStage() {
-        canvas = new Canvas(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
+        canvas = new Canvas(GameMap.getWidth(), GameMap.getHeight());
         gc = canvas.getGraphicsContext2D();
 
         gamePane = new AnchorPane(canvas);
         gamePane.getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/Style.css").toExternalForm());
 
-        gameScene = new Scene(gamePane, GAME_WIDTH, GAME_HEIGHT, Color.GREY);
+        gameScene = new Scene(gamePane, WIDTH, HEIGHT, Color.GREY);
         cmr = new Camera(gc);
 
         gameStage = new Stage();
@@ -66,7 +68,7 @@ public class GameSession {
 
 
         CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
-        customStage.createTitleBar(gamePane,Constants.WINDOW_WIDTH,Constants.WINDOW_HEIGHT);
+        customStage.createTitleBar(gamePane, WIDTH, HEIGHT);
 
     }
 

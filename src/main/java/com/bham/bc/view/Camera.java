@@ -1,7 +1,7 @@
 package com.bham.bc.view;
 
 import com.bham.bc.components.characters.Player;
-import com.bham.bc.utils.Constants;
+import com.bham.bc.components.environment.GameMap;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -24,8 +24,8 @@ public class Camera {
         x = new SimpleDoubleProperty();
         y = new SimpleDoubleProperty();
 
-        x.bind(Bindings.subtract(GameSession.GAME_WIDTH/2.0, Player.TRACKABLE_X));
-        y.bind(Bindings.subtract(GameSession.GAME_HEIGHT/2.0, Player.TRACKABLE_Y));
+        x.bind(Bindings.subtract(GameSession.WIDTH /2.0, Player.TRACKABLE_X));
+        y.bind(Bindings.subtract(GameSession.HEIGHT /2.0, Player.TRACKABLE_Y));
     }
 
     /**
@@ -44,7 +44,7 @@ public class Camera {
      * @return true if camera's view is close and false otherwise
      */
     private boolean isCloseToBorderX(double offset) {
-        return x.get() >= 0 - offset || x.get() <= Constants.WINDOW_WIDTH - Constants.MAP_WIDTH + offset;
+        return x.get() >= 0 - offset || x.get() <= GameSession.WIDTH - GameMap.getWidth() + offset;
     }
 
     /**
@@ -53,6 +53,6 @@ public class Camera {
      * @return true if camera's view is close and false otherwise
      */
     private boolean isCloseToBorderY(double offset) {
-        return y.get() >= 0 - offset || y.get() <=  Constants.WINDOW_HEIGHT - Constants.MAP_HEIGHT + offset;
+        return y.get() >= 0 - offset || y.get() <=  GameSession.HEIGHT - GameMap.getHeight() + offset;
     }
 }

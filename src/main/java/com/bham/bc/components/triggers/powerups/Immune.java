@@ -9,7 +9,7 @@ import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class Immune extends RespawnTrigger {
 	private int activationTime;

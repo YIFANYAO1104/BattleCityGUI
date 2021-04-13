@@ -1,8 +1,6 @@
 package com.bham.bc.view;
 
-import com.bham.bc.audio.TRACK;
 import com.bham.bc.audio.Track;
-import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.Mode;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
@@ -14,8 +12,6 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
@@ -63,7 +59,7 @@ public class MenuSession {
 
         mainPane.getChildren().addAll(menuBackground, mainMenu);
 
-        audioManager.createSequentialPlayer(TRACK.BREAK);
+        audioManager.createSequentialPlayer(Track.BREAK);
         audioManager.play();
     }
 
@@ -95,8 +91,8 @@ public class MenuSession {
      * @param e SURVIVAL or CHALLENGE mode to be set in Controller
      */
     public void createGameSession(NewGameEvent e) {
-        audioManager.createSequentialPlayer(TRACK.CORRUPTION, TRACK.LEAD, TRACK.REVOLUTION);
-        GameSession gameSession = new GameSession(e.getMode(), e.getMapType());
+        audioManager.createSequentialPlayer(Track.CORRUPTION, Track.LEAD, Track.REVOLUTION);
+        GameSession gameSession = new GameSession(Mode.SURVIVAL, e.getMapType());
         gameSession.createNewGame(mainStage);
 
         audioManager.play();
