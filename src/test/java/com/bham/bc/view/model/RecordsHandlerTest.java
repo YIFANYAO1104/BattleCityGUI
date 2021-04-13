@@ -16,9 +16,9 @@ public class RecordsHandlerTest extends TestCase {
     }
 
 
-
-
-
+    /**
+     * test createRcord and sort function
+     */
     public void testCreateRecord() {
 
         recordsHandler=new RecordsHandler();
