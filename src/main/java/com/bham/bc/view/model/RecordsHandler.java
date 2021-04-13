@@ -62,6 +62,10 @@ public class RecordsHandler {
 
     }
 
+    /**
+     * sort the json array after create new records
+     * @return data to fit table
+     */
     public ObservableList<Records> sortAndGetData(){
         //third step is to sort after add the new records
         sort();
