@@ -122,8 +122,8 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
-    public void updateEntities(List<entity> n1){
-        n1.forEach(this::updateEntity);
+    public void updateMovingEntities(List<entity> n1){
+        n1.forEach(this::updateMovingEntity);
     }
 
     /**
@@ -132,7 +132,7 @@ public class MapDivision<entity extends BaseGameEntity>{
      * when they moved to another cell, it will be added in new cell and removed in old cell.
      * @param ent BaseGameEntity
      */
-    public void updateEntity(entity ent){
+    public void updateMovingEntity(entity ent){
         if(!register.containsKey((MovingEntity) ent)){
             System.out.println("Two possible errors:\n1. It is not a MovingEntity\n2. The division does not contain this entity. Make sure to add it first");
             return;

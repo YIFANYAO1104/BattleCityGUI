@@ -23,7 +23,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -250,8 +249,8 @@ public abstract class CenterController extends BaseGameEntity implements Service
         triggers.forEach(trigger -> trigger.handle(mapDivision.calculateNeighborsArray(trigger.getCenterPosition(), 40)));
 
         // Performed before removals
-        bullets.forEach(b -> mapDivision.updateEntity(b));
-        characters.forEach(c -> mapDivision.updateEntity(c));
+        bullets.forEach(b -> mapDivision.updateMovingEntity(b));
+        characters.forEach(c -> mapDivision.updateMovingEntity(c));
 
         // Performed last
         bullets.removeIf(b -> !b.exists());

@@ -18,7 +18,7 @@ import java.util.*;
 
 public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> extends BaseGameEntity {
 
-    private GraphEdge nh1;
+//    private GraphEdge nh1;
     private int rowNums;
     private int eachDisX;
     private int eachDisY;
