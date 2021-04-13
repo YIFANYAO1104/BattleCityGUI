@@ -1,25 +1,29 @@
 package com.bham.bc.components.characters;
 
-import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.environment.triggers.Weapon;
-import com.bham.bc.entity.DIRECTION;
+import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.components.environment.Attribute;
+import com.bham.bc.components.triggers.powerups.Weapon;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
-import javafx.geometry.Point2D;
-import javafx.scene.shape.Rectangle;
+import com.bham.bc.entity.physics.CollisionHandler;
+import com.bham.bc.utils.messaging.Telegram;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Represents a character - this includes enemies, players and AI companions
  */
 abstract public class GameCharacter extends MovingEntity {
+    public static final int MAX_SIZE = 32;
+
     private final double MAX_HP;
     protected double hp;
-    protected SIDE side;
-    protected EnumSet<DIRECTION> directionSet;
+    protected Side side;
+
+    protected int immuneTicks, freezeTicks, tripleTicks = 0;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -28,115 +32,160 @@ abstract public class GameCharacter extends MovingEntity {
      * @param y top left y coordinate of the character
      * @param speed value which defines the initial velocity
      */
-    protected GameCharacter(double x, double y, double speed, double hp, SIDE side) {
+    protected GameCharacter(double x, double y, double speed, double hp, Side side) {
         super(x, y, speed);
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
-        directionSet = EnumSet.noneOf(DIRECTION.class);
-    }
-    //TODO: remove
-    public Shape getLine() {return new Rectangle(0,0,0,0);}
 
-    /**
-     * Updates angle at which the player is facing
-     *
-     * <p>This method goes through every direction in the directionSet, coverts them to basis vectors,
-     * adds them up to get a final direction vector and calculates the angle between it and (0, 1)</p>
-     *
-     * <p><b>Note:</b> the basis vector which is used for angle calculation must be (0, 1) as this is the
-     * way the character in the image is facing (upwards)</p>
-     */
-    protected void updateAngle() {
-        Optional<Point2D> directionPoint = directionSet.stream().map(DIRECTION::toPoint).reduce(Point2D::add);
-        directionPoint.ifPresent(p -> { if(p.getX() != 0 || p.getY() != 0) angle = p.angle(0, 1) * (p.getX() > 0 ? 1 : -1); });
+        mass = 3;
     }
 
     /**
-     * Gets the HP of the player
+     * Gets the HP of the character
      * @return current HP
      */
-    public double getHp() { return hp; }
+    public double getHp() {
+        return hp;
+    }
+
+    /**
+     * Gets the MAX HP of the character
+     * @return initial HP (which is MAX) the character was assigned with
+     */
+    public double getMaxHp() {
+        return MAX_HP;
+    }
 
     /**
      * Gets character's side
      * @return ALLY or ENEMY side the character belongs to
      */
-    public SIDE getSide() { return side; }
+    public Side getSide() {
+        return side;
+    }
 
     /**
-     * Increases or decreases HP for the player
-     * @param health amount by which the player's HP is changed
+     * Increases or decreases HP for the character
+     * @param health amount by which the character's HP is changed
      */
-    public void changeHP(double health) {
+    public void changeHp(double health) {
         hp = Math.min(hp + health, MAX_HP);
+        if(side == Side.ENEMY)
         if(hp <= 0) destroy();
     }
 
+    // TEMP: DOCUMENT ------------------------------------------------
     @Deprecated
     public void switchWeapon(Weapon w) {}
-
+    public void toTriple(int numTicks) {
+        tripleTicks = numTicks;
+    }
+    public void toFreeze(int numTicks) {
+        freezeTicks = numTicks;
+    }
+    public void toImmune(int numTicks) {
+        immuneTicks = numTicks;
+    }
+    protected void updateTriggers() {
+        if(immuneTicks!=0) --immuneTicks;
+        if(freezeTicks!=0) --freezeTicks;
+        if(tripleTicks!=0) --tripleTicks;
+    }
+    public void destroyed(){
+        this.hp-=200;
+    }
+    public int getImmuneTicks() {
+        return immuneTicks;
+    }
+    public void teleport(double x,double y){
+        this.x = x;
+        this.y = y;
+    }
+    // -----------------------------------------------------------
 
     /**
-     * Handles bullet collision - takes damage and destroys bullet
-     * @param bullet bullet to handle
+     * Handles collision of one {@link BaseGameEntity} object
+     *
+     * <p>This method handles character's collision for 2 base game entities.</p>
+     * <ul>
+     *     <li>{@link GameCharacter} - for this object, the character performs 2 collision resolves: one for impulse collision
+     *     and another one for the continuous collision when the characters push one another</li>
+     *     <li>{@link Obstacle} - for this object, if it doesn't an attribute <i>WALKABLE</i>, the character is simply moved
+     *     back by the same velocity it bumped to this obstacle</li>
+     * </ul>
+     *
+     * @param entity a generic entity that is converted to appropriate child instance the character will handle
+     * @see CollisionHandler
      */
-    protected void handleBullet(Bullet bullet) {
-        if(intersects(bullet)) {
-            if(bullet.getSide() != side) {
-                changeHP(-bullet.getDamage());
-            }
-            bullet.destroy();
+    public void handle(BaseGameEntity entity) {
+        if(entity instanceof GameCharacter && getID() != entity.getID() && intersects(entity)) {
+            CollisionHandler.resolveElasticCollision(this, (GameCharacter) entity);
+            CollisionHandler.resolveContinuousCollision(this, (GameCharacter) entity);
+        } else if(entity instanceof Obstacle && !((Obstacle) entity).getAttributes().contains(Attribute.WALKABLE) && intersects(entity)) {
+            move(-1);
         }
     }
 
     /**
-     * Handles character collision - moves back
-     * @param gameCharacter character to handle
+     * Handles intersection of multiple {@link BaseGameEntity} objects
+     * @param entities a list of entities the character's collision will be checked on
+     * @see #handle(BaseGameEntity)
      */
-    protected void handleCharacter(GameCharacter gameCharacter) {
-        if(this.getID() != gameCharacter.getID() && intersects(gameCharacter)) {
-            move(-1, true);
-        }
+    public void handle(List<BaseGameEntity> entities) {
+        entities.forEach(this::handle);
     }
 
     /**
-     * Handles a list of characters and bullets
-     * @param gameCharacters list of characters to handle
-     * @param bullets list of bullets to handle
-     */
-    public void handleAll(List<GameCharacter> gameCharacters, List<Bullet> bullets) {
-        gameCharacters.forEach(this::handleCharacter);
-        bullets.forEach(this::handleBullet);
-    }
-
-
-    /**
-     * Overloads basic <i>move()</i> method with extra parameters
-     * <br>TODO: assure speedMultiplier is within [-5, 5]
+     * Overloads basic <i>move()</i> method with extra speed multiplier parameter
      * @param speedMultiplier number by which the speed will be multiplied (use negative to inverse movement)
-     * @param force boolean indicating if the character should move even if the directionSet is empty
      */
-    public void move(double speedMultiplier, boolean force) {
-        double deltaX = Math.sin(Math.toRadians(angle)) * speed;
-        double deltaY = Math.cos(Math.toRadians(angle)) * speed;
+    public void move(double speedMultiplier) {
+        velocity = velocity.multiply(speedMultiplier);
+        x += velocity.getX();
+        y += velocity.getY();
+    }
 
-        if(force) {
-            x += deltaX * speedMultiplier;
-            y -= deltaY * speedMultiplier;
-        } else if(!directionSet.isEmpty()) {
-            x += deltaX * speedMultiplier;
-            y -= deltaY * speedMultiplier;
-        }
+    /**
+     * Unregisters and prepares to remove the character. Also runs any destruction effects
+     */
+    protected abstract void destroy();
+
+    /**
+     * Gets radius of a circular hit-box
+     * @return radius of a character's hit-box
+     */
+    public double getHitBoxRadius() {
+        return getHitBox().getRadius();
+    }
+
+    /**
+     * TODO: remove?
+     * Gets a list of path areas (used for path smoothing)
+     * @return a list of areas of type Shape
+     */
+    abstract public List<Shape> getSmoothingBoxes();
+
+    @Override
+    public void render(GraphicsContext gc) {
+        drawRotatedImage(gc, entityImages[0], getAngle());
     }
 
     @Override
-    public void move() {
-        if(!directionSet.isEmpty()) {
-            x += Math.sin(Math.toRadians(angle)) * speed;
-            y -= Math.cos(Math.toRadians(angle)) * speed;
+    public abstract Circle getHitBox();
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        switch (msg.Msg.id){
+            case 0:
+                System.out.println("you are defeated by id " + msg.Sender);
+                return true;
+            case 3:
+                System.out.println("change the direction");
+                return true;
+            default:
+                System.out.println("no match");
+                return false;
         }
     }
-
-    protected abstract void destroy();
 }

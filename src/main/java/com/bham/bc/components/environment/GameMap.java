@@ -1,169 +1,328 @@
 package com.bham.bc.components.environment;
 
-import com.bham.bc.components.armory.Bullet;
-import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.environment.obstacles.ATTRIBUTE;
-import com.bham.bc.components.environment.triggers.ExplosiveTrigger;
-import com.bham.bc.components.environment.triggers.HealthGiver;
-import com.bham.bc.components.environment.triggers.Weapon;
-import com.bham.bc.components.environment.triggers.WeaponGenerator;
+import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.triggers.TriggerLoader;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.entity.triggers.TriggerSystem;
-import com.bham.bc.utils.graph.HandyGraphFunctions;
-import com.bham.bc.utils.graph.SparseGraph;
-import com.bham.bc.utils.graph.edge.GraphEdge;
-import com.bham.bc.utils.graph.node.NavNode;
-import com.bham.bc.utils.maploaders.JsonMapLoader;
-import com.bham.bc.utils.maploaders.MapLoader;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.entity.physics.MapDivision;
+import com.bham.bc.entity.graph.HandyGraphFunctions;
+import com.bham.bc.entity.graph.SparseGraph;
+import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.graph.node.NavNode;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import com.bham.bc.components.characters.GameCharacter;
-import javafx.scene.shape.Shape;
 
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.utils.Constants.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-
+/**
+ * <h1>Game Map</h1>
+ *
+ * <p>This class takes care of the map the current game session uses. It generates an appropriate map, adds obstacles and respawning triggers
+ * to the game, initializes home and enemy territories and sets up a graph. <b>Note: </b> the class itself only passes triggers that come
+ * along from the JSON file to the controller. It also does not check for obstacle intersection, {@link MapDivision} does that for it - this
+ * class only takes care of their visuals.</p>
+ */
 public class GameMap {
-    private List<GenericObstacle> obstacles;
-    private TriggerSystem triggerSystem;
-    private SparseGraph graphSystem;
+    // Parameters
+    private static int tileWidth = 0;
+    private static int tileHeight = 0;
+    private static int numTilesX = 0;
+    private static int numTilesY = 0;
 
-    private static int width = MAP_WIDTH;
-    private static int height = MAP_HEIGHT;
+    // Obstacles and territories
+    private List<Obstacle> interactiveObstacles;
+    private List<Obstacle> noninteractiveObstacles;
+    private Circle homeTerritory;
+    private Circle[] enemySpawnAreas;
 
+    // Graph
+    private SparseGraph<NavNode, GraphEdge> graphSystem;
 
     /**
-     * Constructor Of Game Map (Adding All Initial Objects to the Map)
+     * Constructs the map for the active game session. All obstacles are from a JSON file parsed with {@link MapLoader}.
+     * @param mapType type of map to be loaded - it contains a path for the JSON file
      */
     public GameMap(MapType mapType) {
-        MapLoader mapLoader = new JsonMapLoader(mapType.getName());
-        //width = mapLoader.getMapWidth();
-        //height = mapLoader.getMapHeight();
-        obstacles = mapLoader.getObstacles();
-        triggerSystem = mapLoader.getTriggerSystem();
-        addTriggers();
+        MapLoader mapLoader = new MapLoader(mapType.getName());
+        TriggerLoader triggerLoader = new TriggerLoader(mapType.getName());
+
+        initParams(mapLoader);
+        initElements(mapLoader, triggerLoader);
+        initGraph(triggerLoader);
+        initAreas(mapLoader);
     }
 
-    public void addTriggers(){
-        HealthGiver hg = new HealthGiver(400,400,10,10);
-        HealthGiver hg1 = new HealthGiver(600,400,10,10);
-        triggerSystem.register(hg);
-        triggerSystem.register(hg1);
+    // INITIALIZERS --------------------------------------------------------------------
+    /**
+     * Initializes the size parameters of the map
+     * @param mapLoader map loader that will provide the information about the loaded map
+     */
+    private void initParams(MapLoader mapLoader) {
+        tileWidth = mapLoader.getTileWidth();
+        tileHeight = mapLoader.getTileHeight();
+        numTilesX = mapLoader.getNumTilesX();
+        numTilesY = mapLoader.getNumTilesY();
     }
-    /**
 
     /**
-     * Gets map's width (tileSize * amountInX)
-     * @return current map's width or 0 if no map is loaded
+     * Initializes (loads) interactive and non-interactive obstacles as well as constant triggers
+     * <ul>
+     *     <li><b>Noninteractive</b> - obstacles that don't affect any entities in the game</li>
+     *     <li><b>Interactive</b> - obstacles that do affect game entities in some way (hit-boxes are considered)</li>
+     * </ul>
+     * @param mapLoader map loader that will provide all the generated obstacles
      */
-    public static int getWidth() { return width; }
+    private void initElements(MapLoader mapLoader, TriggerLoader triggerLoader) {
+        interactiveObstacles = mapLoader.getObstacles().stream().filter(o -> !o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toList());
+        noninteractiveObstacles = mapLoader.getObstacles().stream().filter(o -> o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toList());
+        triggerLoader.getTriggers().forEach(t -> services.addTrigger(t));
+    }
 
     /**
-     * Gets map's height (tileSize * amountInY)
-     * @return current map's height or 0 if no map is loaded
+     * Initializes spawning areas and the home territory
+     *
+     * <p>This method gets the center points of appropriate areas and creates a circle representing the hit-box of those territories.
+     * It sets the circle as big as it can get without touching other areas (those that do not belong to the same group) and applies
+     * padding to it by reducing its radius by <i>GameCharacter.MAX_RADIUS</i> property. This is to ensure that, if a character is
+     * spawned on the edge of that territory, it does not collide with interactive obstacles.</p>
+     *
+     * TODO: Update this once we have a new map
+     *
+     * @param mapLoader map loader which will provide the territory locations
      */
-    public static int getHeight() {return height; }
+    private void initAreas(MapLoader mapLoader) {
+        // Set up iteration parameters
+        int maxChecks = 9;
+        double radius = 0;
+        double step = Math.min(tileWidth, tileHeight);
+        List<Obstacle> allObstacles = mapLoader.getObstacles();
 
-    public SparseGraph getGraph() { return graphSystem; }
+
+        // TODO: TEMP, REPLACE WITH BELOW
+        Point2D homeCenter = new Point2D(16*32, 16*32);
+        Point2D[] enemySpawnCenters = new Point2D[] { new Point2D(16*4, 16*4), new Point2D(16*60, 16*4), new Point2D(16*4, 16*60), new Point2D(16*60, 16*60)};
+
+        // Get the center points of each territory
+        // Point2D homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(GenericObstacle::getPosition).toArray(Point2D[]::new)[0];  // use first match
+        // Point2D[] enemySpawnCenters = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.ENEMY_SPAWN_CENTER)).map(GenericObstacle::getCenterPosition).toArray(Point2D[]::new);
+
+        // Initialize the territories
+        homeTerritory = new Circle(homeCenter.getX(), homeCenter.getY(), 0);
+        enemySpawnAreas = new Circle[enemySpawnCenters.length];
 
 
-    public void initialGraph(Player p1){
+        // Find out home territory size by incrementing its radius and checking if it intersects with non-home-territory obstacles
+        /*
+        for(int i = 0; i < maxChecks; i++) {
+            radius += step;
+            homeTerritory = new Circle(homeCenter.getX(), homeCenter.getY(), radius);
+            if(allObstacles.stream().noneMatch(o -> !o.getAttributes().contains(Attribute.HOME_AREA) && o.intersectsShape(homeTerritory))) break;
+        }
+        // Apply padding to home territory
+        homeTerritory.setRadius(Math.max(1, homeTerritory.getRadius() - GameCharacter.MAX_RADIUS));
+        */
+        homeTerritory = new Circle(homeCenter.getX(), homeCenter.getY(), 16*4); // TODO: replace with above
+
+
+        // Find enemy spawn areas for each spawn block by incrementing its radius and checking if it intersects with non-enemy-spawn obstacles
+        for(int i = 0; i < enemySpawnCenters.length; i++) {
+            int finalI = i;
+            radius = 0;
+            enemySpawnAreas[i] = new Circle(enemySpawnCenters[i].getX(), enemySpawnCenters[i].getY(), 0);
+
+            for(int j = 0; j < maxChecks; j++) {
+                radius += step;
+                enemySpawnAreas[i].setRadius(radius);
+                // if((allObstacles.stream().noneMatch(o -> !o.getAttributes().contains(Attribute.ENEMY_SPAWN_AREA) && o.intersectsShape(enemySpawnAreas[finalI])))) break;
+                if(interactiveObstacles.stream().anyMatch(o -> o.intersects(enemySpawnAreas[finalI]))) break; // TODO replace with above
+            }
+            // Apply padding to enemy spawn territory
+            enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - GameCharacter.MAX_SIZE));
+
+            enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - 16)); //TODO remove
+        }
+    }
+
+    /**
+     * Initializes the graph for the current map considering triggers locations
+     * @param triggerLoader map loader that will provide the information about constant triggers the graph can point to
+     */
+    public void initGraph(TriggerLoader triggerLoader) {
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
-        graphSystem = new SparseGraph<NavNode, GraphEdge>(false); //single direction turn off
-        hgf.GraphHelper_CreateGrid(graphSystem, MAP_WIDTH,MAP_HEIGHT,GRAPH_NUM_CELLS_Y,GRAPH_NUM_CELLS_X); //make network
+        graphSystem = new SparseGraph<>(false); //single direction turn off
+        hgf.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(),GRAPH_NUM_CELLS_Y,GRAPH_NUM_CELLS_X); //make network
         ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
+        
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Point2D vv1 = allNodesLocations.get(index);
-            collideWithRectangle(graphSystem.getID(),index,new Rectangle(
-                    vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
+
+            for (int i = 0; i < interactiveObstacles.size(); i++) {
+                Obstacle w = interactiveObstacles.get(i);
+                w.interacts(graphSystem.getID(), index, new Rectangle(
+                        vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
+            }
         }
         //removed unreachable nodes
-        graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForEntity(p1));
+        // Consider multiple players and enemies spawning at unreachable nodes
+        // Player dummyEntity = new Player(mapLoader.getHomeTerritory.getCenterX(), mapLoader.getHomeTerritory.getCenterY());
+        // graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForEntity(dummyEntity));
 
-        //let the corresponding navgraph node point to triggers object
-        ArrayList<Trigger> triggers = triggerSystem.getTriggers();
-        for (Trigger trigger : triggers) {
+        for (Trigger trigger : triggerLoader.getTriggers()) {
             NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).Index());
             node.setExtraInfo(trigger);
         }
+
     }
+    // ---------------------------------------------------------------------------------
+
+    // GETTERS -------------------------------------------------------------------------
+    /**
+     * Gets map's width (tileWidth * numTilesX)
+     * @return current map's width or 0 if no map is loaded
+     */
+    public static int getWidth() {
+        return tileWidth * numTilesX;
+    }
+
+    /**
+     * Gets map's height (tileHeight * numTilesY)
+     * @return current map's height or 0 if no map is loaded
+     */
+    public static int getHeight() {
+        return tileHeight * numTilesY;
+    }
+
+    /**
+     * Gets the width of the tile
+     * @return width of any tile or 0 if no map is loaded
+     */
+    public static int getTileWidth() {
+        return tileWidth;
+    }
+
+    /**
+     * Gets the height of the tile
+     * @return height of any tile or 0 if no map is loaded
+     */
+    public static int getTileHeight() {
+        return tileHeight;
+    }
+
+    /**
+     * Gets the amount of tiles in X direction
+     * @return number of tiles making up the total width of the map or 0 if it is not loaded
+     */
+    public static int getNumTilesX() {
+        return numTilesX;
+    }
+
+    /**
+     * Gets the amount of tiles in Y direction
+     * @return number of tiles making up the total height of the map or 0 if it is not loaded
+     */
+    public static int getNumTilesY() {
+        return numTilesY;
+    }
+
+    /**
+     * Gets the graph system of this game map
+     * @return {@link SparseGraph} generated for this map
+     */
+    public SparseGraph<NavNode, GraphEdge> getGraph() {
+        return graphSystem;
+    }
+
+    /**
+     * Gets a copy of interactive obstacles
+     * @return {@link Obstacle} list that do not have PASSABLE attribute
+     */
+    public List<Obstacle> getInteractiveObstacles() {
+        return new ArrayList<>(interactiveObstacles);
+    }
+
+    /**
+     * Gets the sole area of the home territory that can be taken over by enemies
+     * @return circle representing home territory
+     */
+    public Circle getHomeTerritory() {
+        return homeTerritory;
+    }
+
+    /**
+     * Gets all the areas where the enemies can be spawned
+     * @return an array of circles representing areas where at any point int it an enemy can be spawned
+     */
+    public Circle[] getEnemySpawnAreas() {
+        return enemySpawnAreas;
+    }
+    // ---------------------------------------------------------------------------------
+
+    // FRAME ITERATIONS ----------------------------------------------------------------
+    /**
+     * Updates all the obstacles
+     *
+     * <p>Interactive obstacles are removed if they don't exist. Both interactive and non-interactive obstacles
+     * are updated but here collision is not handled (e.g. obstacle can update its frame picture).</p>
+     */
+    public void update() {
+        interactiveObstacles.removeIf(o -> !o.exists());
+        interactiveObstacles.forEach(Obstacle::update);
+        noninteractiveObstacles.forEach(Obstacle::update);
+    }
+
+    /**
+     * Renders all the obstacles as the bottom layer of all the entities
+     * @param gc graphics context on which the the obstacles will be rendered
+     */
+    public void renderBottomLayer(GraphicsContext gc) {
+        noninteractiveObstacles.forEach(o -> { if(!o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
+        interactiveObstacles.forEach(o -> o.render(gc));
+    }
+
+    /**
+     * Renders those obstacles which are at the top layer of all the entities
+     * @param gc graphics context on which the the obstacles will be rendered
+     */
+    public void renderTopLayer(GraphicsContext gc) {
+        noninteractiveObstacles.forEach(o -> { if(o.getAttributes().contains(Attribute.RENDER_TOP)) o.render(gc); });
+    }
+
+    /**
+     * Renders graph (its nodes) and active points of the entities
+     * @param gc       graphics context on which the nodes will be rendered
+     * @param entities entities which will allow active nodes (red) to be rendered at their location
+     */
+    public void renderGraph(GraphicsContext gc, ArrayList<BaseGameEntity> entities){
+        graphSystem.render(gc);
+        graphSystem.renderTankPoints(entities,gc);
+    }
+
+    /**
+     * Renders the circular areas around the specific territories
+     * @param gc graphics context the hit-boxes will be drawn on
+     */
+    public void renderTerritories(GraphicsContext gc) {
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(2);
+        gc.strokeArc(homeTerritory.getCenterX() - homeTerritory.getRadius(), homeTerritory.getCenterY() - homeTerritory.getRadius(), homeTerritory.getRadius()*2, homeTerritory.getRadius()*2, 0, 360, ArcType.ROUND);
+        Arrays.stream(enemySpawnAreas).forEach(area -> gc.strokeArc(area.getCenterX() - area.getRadius(), area.getCenterY() - area.getRadius(), area.getRadius()*2, area.getRadius()*2, 0, 360, ArcType.ROUND));
+    }
+    // ---------------------------------------------------------------------------------
 
     /**
      * Clears all obstacles in the map
      */
-    public void clearAll() {
-        obstacles.clear();
-        triggerSystem.clear();
-    }
-
-
-    //renderers-------------------------------------------------------------------
-    /**
-     * The following methods calls all render methods of particular Objects
-     * @param gc
-     */
-
-    public void renderBottomLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(!o.getAttributes().contains(ATTRIBUTE.RENDER_TOP)) o.render(gc); });
-        renderTriggers(gc);
-    }
-
-    public void renderTopLayer(GraphicsContext gc) {
-        obstacles.forEach(o -> { if(o.getAttributes().contains(ATTRIBUTE.RENDER_TOP)) o.render(gc); });
-    }
-
-//    public void renderGraph(GraphicsContext gc, ArrayList<Point2D> points){
-//        graphSystem.render(gc);     // render network on map
-//        for(Point2D p1 : points)  graphSystem.renderTankPoints(p1,gc);
-//    }
-
-    public void renderGraph(GraphicsContext gc, ArrayList<BaseGameEntity> entities){
-        graphSystem.render(gc);     // render network on map
-        graphSystem.renderTankPoints(entities,gc);
-    }
-    public void renderTriggers(GraphicsContext gc) { triggerSystem.render(gc); }
-
-
-
-    public void update() {
-        obstacles.removeIf(o -> !o.exists());
-        obstacles.forEach(GenericObstacle::update);
-    }
-
-    private void addWeaponGenerator(){
-        WeaponGenerator w = new WeaponGenerator(466, 466, Weapon.ArmourGun, 30,30,30);
-        triggerSystem.register(w);
-
-    }
-
-    public void addTrigger(Trigger t) {
-        triggerSystem.register(t);
-    }
-
-
-    public void handleAll(ArrayList<GameCharacter> characters, ArrayList<Bullet> bullets) {
-        obstacles.forEach(obstacle -> {
-            characters.forEach(obstacle::handleCharacter);
-            bullets.forEach(obstacle::handleBullet);
-        });
-
-        triggerSystem.handleAll(characters, obstacles);
-    }
-
-
-    public void collideWithRectangle(int ID,int indexOfNode, Rectangle r1){
-        for (int i = 0; i < obstacles.size(); i++) {
-            GenericObstacle w = obstacles.get(i);
-            w.interactWith(ID,indexOfNode,r1);
-        }
-    }
-
-    // Temp until physics
-    public boolean intersectsObstacles(Shape shape) {
-        return obstacles.stream().anyMatch(o -> !o.getAttributes().contains(ATTRIBUTE.PASSABLE) && o.intersectsShape(shape));
+    public void clear() {
+        interactiveObstacles.clear();
+        noninteractiveObstacles.clear();
     }
 }

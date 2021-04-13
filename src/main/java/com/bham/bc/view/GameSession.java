@@ -1,7 +1,7 @@
 package com.bham.bc.view;
 
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.mode.MODE;
+import com.bham.bc.components.Mode;
 import com.bham.bc.utils.Constants;
 import static com.bham.bc.components.CenterController.*;
 
@@ -39,7 +39,7 @@ public class GameSession {
     /**
      * Constructs the view manager
      */
-    public GameSession(MODE mode, MapType mapType) {
+    public GameSession(Mode mode, MapType mapType) {
         setMode(mode, mapType);
         initializeStage();
         createKeyListeners();
@@ -94,10 +94,10 @@ public class GameSession {
             if (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
                 showPauseMenu();
             } else {
-                frontendServices.keyPressed(e);
+                services.keyPressed(e);
             }
         });
-        gameScene.setOnKeyReleased(e -> frontendServices.keyReleased(e));
+        gameScene.setOnKeyReleased(e -> services.keyReleased(e));
     }
 
 
@@ -114,7 +114,7 @@ public class GameSession {
         gc.setFont(new Font("Times New Roman", 20));
 
         gc.fillText("Health: ", 580, 70);
-        gc.fillText("" + frontendServices.getPlayerHP(), 650, 70);
+        //gc.fillText("" + frontendServices.getPlayerHP(), 650, 70);
     }
 
 
@@ -123,7 +123,7 @@ public class GameSession {
      * @returns true if game ended and false otherwise
      */
     private boolean gameEnded() {
-        if(frontendServices.isGameOver()){
+        if(false){
             gc.setFill(Color.GREEN);
             gc.setFont(new Font("Times New Roman", 40));
             gc.fillText("Congratulations!", 200, 300);
@@ -135,14 +135,14 @@ public class GameSession {
 
     private void tick() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        frontendServices.render(gc);
+        services.render(gc);
         renderScoreBoard();
 
         cmr.update();
-        backendServices.update();
+        services.update();
 
         if (gameEnded()) {
-            backendServices.clear();
+            services.clear();
             gameTimer.stop();
         }
     }

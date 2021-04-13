@@ -1,7 +1,7 @@
 package com.bham.bc.view.menu;
 
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.mode.MODE;
+import com.bham.bc.components.Mode;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.*;
 import javafx.collections.ObservableList;

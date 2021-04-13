@@ -7,7 +7,7 @@ import java.util.TreeSet;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 import static com.bham.bc.utils.messaging.MessageTypes.MsgToStr;
-import static com.bham.bc.utils.time.CrudeTimer.Clock;
+import static com.bham.bc.utils.Timer.CLOCK;
 
 /**
  * Message System to check and track the Game States
@@ -19,9 +19,9 @@ public class MessageDispatcher {
     final public static double SEND_MSG_IMMEDIATELY = 0.0f;
     final public static Object NO_ADDITIONAL_INFO = null;
     /**
-     * Create an Object of MessageDispatcher
+     * Create only one Object of MessageDispatcher
      */
-    final public static MessageDispatcher Dispatch = new MessageDispatcher();
+    final public static MessageDispatcher Dispatcher = new MessageDispatcher();
     //a Set is used as the container for the delayed messages
     //because of the benefit of automatic sorting and avoidance
     //of duplicates. Messages are sorted by their dispatch time.
@@ -59,9 +59,9 @@ public class MessageDispatcher {
         throw new CloneNotSupportedException("Cloning not allowed");
     }
 
-    //this class is a singleton
+    //this class is a singletonsd
     public static MessageDispatcher Instance() {
-        return Dispatch;
+        return Dispatcher;
     }
 
     /**
@@ -120,14 +120,14 @@ public class MessageDispatcher {
          * Put this message into the TreeSet Container
          */
         else {
-            double CurrentTime = Clock.GetCurrentTime();
+            double CurrentTime = CLOCK.getCurrentTime();
 
             telegram.DispatchTime = CurrentTime + delay;
 
             PriorityQ.add(telegram);
 
             System.out.println("\nDelayed telegram from " + pSender.toString()
-                    + " recorded at time " + Clock.GetCurrentTime() + " for "
+                    + " recorded at time " + CLOCK.getCurrentTime() + " for "
                     + pReceiver.toString() + ". Msg is " + MsgToStr(msg));
         }
     }
@@ -141,7 +141,7 @@ public class MessageDispatcher {
 
 
 
-        double CurrentTime = Clock.GetCurrentTime();
+        double CurrentTime = CLOCK.getCurrentTime();
 
         /**
          * Peek the Queue to check if any telegrams need dispatching

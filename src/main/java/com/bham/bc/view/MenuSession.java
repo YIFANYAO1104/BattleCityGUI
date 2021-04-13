@@ -1,6 +1,9 @@
 package com.bham.bc.view;
 
 import com.bham.bc.audio.TRACK;
+import com.bham.bc.audio.Track;
+import com.bham.bc.components.environment.MapType;
+import com.bham.bc.components.Mode;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;

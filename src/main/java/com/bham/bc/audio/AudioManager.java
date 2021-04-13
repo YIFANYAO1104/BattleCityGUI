@@ -23,9 +23,9 @@ public class AudioManager {
      * creates multiple audio player
      * @param tracks list of TRACK enums as audio sequences for the player
      */
-    public void createSequentialPlayer(TRACK... tracks) {
+    public void createSequentialPlayer(Track... tracks) {
         ArrayList<Media> mediaFiles = new ArrayList<>();
-        for(TRACK track: tracks) mediaFiles.add(track.getMedia());
+        for(Track track: tracks) mediaFiles.add(track.getMedia());
 
         if(player != null && player.isPlaying()) player.stop();
         player = new SequentialAudioPlayer(mediaFiles);
@@ -36,9 +36,9 @@ public class AudioManager {
      * creates parallel audio player
      * @param tracks list of TRACK enums as audio layers for the player
      */
-    public void createParallelPlayer(TRACK... tracks) {
+    public void createParallelPlayer(Track... tracks) {
         ArrayList<Media> mediaFiles = new ArrayList<>();
-        for(TRACK track: tracks) mediaFiles.add(track.getMedia());
+        for(Track track: tracks) mediaFiles.add(track.getMedia());
 
         if(player != null && player.isPlaying()) player.stop();
         player = new ParallelAudioPlayer(mediaFiles);
@@ -70,7 +70,7 @@ public class AudioManager {
      * @param volume
      */
     public void setEffectVolume(double volume) {
-        for(SFX sfx: SFX.values()) {
+        for(Sfx sfx: Sfx.values()) {
             sfx.setVolume(volume);
         }
     }

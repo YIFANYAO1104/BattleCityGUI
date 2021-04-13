@@ -1,80 +1,78 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.characters.SIDE;
-import com.bham.bc.components.environment.GenericObstacle;
-import com.bham.bc.components.environment.navigation.ItemType;
-import com.bham.bc.components.environment.triggers.Dissolve;
-import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.ai.*;
-import com.bham.bc.entity.triggers.Trigger;
-import com.bham.bc.utils.messaging.Telegram;
-import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
+import com.bham.bc.components.triggers.effects.RingExplosion;
+import com.bham.bc.entity.ai.behavior.*;
+import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
- * Represents enemy type which self-destructs near player to deal huge amount of damage
+ * <h1>Kamikaze - fearless suicider</h1>
+ *
+ * <p>This type of enemy has 3 states determined by its distance to ally and free path condition</p>
+ * <ul>
+ *     <li><b>Search Ally</b> - searches for the closest ally in the game and moves towards it</li>
+ *
+ *     <li><b>Charge Ally</b> - charges at the nearest ally with increased speed if it is close enough
+ *     and if there are no obstacles in a way to stop it</li>
+ *
+ *     <li><b>Attack Ally</b> - attacks any ally that is very close to it by self-destructing itself
+ *     and dealing area damage to anything but allies and obstacles</li>
+ * </ul>
  */
 public class Kamikaze extends Enemy {
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/enemy3.png";
+    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/kamikaze.png";
     public static final int SIZE = 30;
-    public static final int MAX_HP = 100;
-    public static final double SPEED = 1;
+    public static final int HP = 100;
+    public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
-    private FreePathCondition noObstaclesCondition;
-    private IntCondition closeRadiusCondition;
-    private AndCondition chargeCondition;
-    private IntCondition attackCondition;
+    private FreePathCondition noObstacleCondition;
+    private IntCondition chargeAllyCondition;
+    private IntCondition attackAllyCondition;
 
     /**
      * Constructs a kamikaze type enemy
      *
-     * @param x top left x coordinate of the character
-     * @param y top left y coordinate of the character
+     * @param x top left x coordinate of the enemy
+     * @param y top left y coordinate of the enemy
      */
     public Kamikaze(double x, double y) {
-        super(x, y, SPEED, MAX_HP);
+        super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-
         stateMachine = createFSM();
-    }
-
-    @Override
-    public void destroy() {
-        exists = false;
-        entityManager.removeEntity(this);
-        Trigger explosion = new Dissolve(getPosition(), entityImages[0], angle);
-        Trigger explosion1 = new ExplosionTrigger(getCenterPosition(), 50, side);
-        backendServices.addTrigger(explosion);
-        backendServices.addTrigger(explosion1);
+        navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
     }
 
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
-        State searchState = new State(new Action[]{ Action.MOVE }, null);
-        State chargeState = new State(new Action[]{ Action.CHARGE }, null);
-        State attackState = new State(new Action[]{ Action.AIMANDSHOOT }, null);
+        State searchState = new State(new Action[]{ Action.SEARCH_ALLY }, null);
+        State chargeState = new State(new Action[]{ Action.SEARCH_ALLY }, null);
+        State attackState = new State(new Action[]{ Action.ATTACK_ALLY }, null);
+
+        // Set up required entry/exit actions
+        searchState.setEntryActions(new Action[]{ Action.SET_SEARCH });
+        searchState.setExitActions(new Action[]{ Action.RESET_SEARCH });
+        chargeState.setEntryActions(new Action[]{ Action.SET_SPEED });
+        chargeState.setExitActions(new Action[]{ Action.RESET_SPEED });
 
         // Define all conditions required to change any state
-        closeRadiusCondition = new IntCondition(0, 100);
-        noObstaclesCondition = new FreePathCondition();
-        chargeCondition = new AndCondition(closeRadiusCondition, noObstaclesCondition);
-        attackCondition = new IntCondition(0, 45);
+        noObstacleCondition = new FreePathCondition(getHitBoxRadius());
+        chargeAllyCondition = new IntCondition(0, 150);
+        attackAllyCondition = new IntCondition(0, 60);
 
         // Define all state transitions that could happen
-        Transition searchPossibility = new Transition(searchState, new NotCondition(chargeCondition));
-        Transition chargePossibility = new Transition(chargeState, chargeCondition);
-        Transition attackPossibility = new Transition(attackState, attackCondition);
+        Transition searchPossibility = new Transition(searchState, new NotCondition(new AndCondition(chargeAllyCondition, noObstacleCondition)));
+        Transition chargePossibility = new Transition(chargeState, new AndCondition(chargeAllyCondition, noObstacleCondition));
+        Transition attackPossibility = new Transition(attackState, attackAllyCondition);
 
         // Define how the states can transit from one another
         searchState.setTransitions(new Transition[]{ chargePossibility });
@@ -85,117 +83,63 @@ public class Kamikaze extends Enemy {
     }
 
     @Override
-    public Shape getHitBox() {
-        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
-    }
-
-    @Override
-    // TODO: remove
-    public Shape getLine() { return noObstaclesCondition.getPath(); }
-
-    @Override
     public void update() {
-        double distanceToPlayer = getCenterPosition().distance(backendServices.getPlayerCenterPosition());
+        double distanceToAlly = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
-        attackCondition.setTestValue((int) distanceToPlayer);
-        closeRadiusCondition.setTestValue((int) distanceToPlayer);
-        noObstaclesCondition.setTestValues(getCenterPosition(), backendServices.getPlayerCenterPosition());
+        attackAllyCondition.setTestValue((int) distanceToAlly);
+        chargeAllyCondition.setTestValue((int) distanceToAlly);
+        noObstacleCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
-                case MOVE:
-                    //move();
+                case SEARCH_ALLY:
+                    search(ItemType.ALLY);
                     break;
-                case CHARGE:
-                    //charge();
+                case CHARGE_ALLY:
+                    face(ItemType.ALLY);
                     break;
-                case AIMANDSHOOT:
+                case ATTACK_ALLY:
                     destroy();
+                    break;
+                case SET_SPEED:
+                    setMaxSpeed(SPEED * 2);
+                    break;
+                case RESET_SPEED:
+                    setMaxSpeed(SPEED);
+                    break;
+                case SET_SEARCH:
+                    steering.setDecelerateOn(false);
+                    steering.seekOn();
+                    break;
+                case RESET_SEARCH:
+                    steering.seekOff();
+                    steering.setDecelerateOn(true);
+                    pathEdges.clear();
                     break;
             }
         });
+        move();
     }
 
-    /**
-     * Represents Kamikaze's explosion effect. This is created as a trigger because it affects player's HP
-     */
-    private static class ExplosionTrigger extends Trigger {
+    @Override
+    public void destroy() {
+        exists = false;
+        entityManager.removeEntity(this);
+        Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
+        services.addTrigger(explosion);
 
-        public static final int SIZE = 60;
-        private int currentFrame;
-        private double damage;
-        private SIDE side;
+        Trigger explosion1 = new Dissolve(getPosition(), entityImages[0], angle);
+        services.addTrigger(explosion1);
+    }
 
-        /**
-         * Constructs explosion at a given location
-         * @param centerPosition x and y coordinates of the trigger image
-         * @param damage amount of damage that will be dealt to specific side
-         * @param side ALLY or ENEMY side trigger belongs to
-         */
-        public ExplosionTrigger(Point2D centerPosition, double damage, SIDE side) {
-            super(BaseGameEntity.GetNextValidID(), (int) (centerPosition.getX() - SIZE/2), (int) (centerPosition.getY() - SIZE/2));
-            this.damage = damage;
-            this.side = side;
-            currentFrame = 0;
-            initImages();
-        }
+    @Override
+    public Circle getHitBox() {
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
+    }
 
-        /**
-         * Initializes all the images for the explosion
-         */
-        private void initImages() {
-            String baseUrl = "file:src/main/resources/img/characters/effects/blueRingExplosion";
-            entityImages = new Image[19];
-
-            for(int i = 1; i <= 19; i++) {
-                String url = baseUrl + i + ".png";
-                entityImages[i-1] = new Image(url, SIZE, SIZE, false, false);
-            }
-        }
-
-        //TODO: Adjust size according to currentFrame
-        @Override
-        public Shape getHitBox() {
-            return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
-        }
-
-        @Override
-        public void render(GraphicsContext gc) {
-            gc.drawImage(entityImages[currentFrame++ % 19], x, y);
-        }
-
-        @Override
-        public void tryTriggerC(GameCharacter character) {
-            if(intersects(character) && character.getSide() != side && isActive()) {
-                setInactive();
-                character.changeHP(-damage);
-            }
-        }
-
-        @Override
-        public void tryTriggerO(GenericObstacle entity) {
-
-        }
-
-        @Override
-        public void update() {
-            if(currentFrame == 19) setToBeRemovedFromGame();
-        }
-
-        @Override
-        public boolean handleMessage(Telegram msg) {
-            return false;
-        }
-
-        @Override
-        public String toString() {
-            return "Kamikaze's explosion";
-        }
-
-        @Override
-        public ItemType getItemType() {
-            return null;
-        }
+    @Override
+    public String toString() {
+        return "Kamikaze";
     }
 }

@@ -17,7 +17,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import static com.bham.bc.audio.SFX.SELECT;
+import static com.bham.bc.audio.Sfx.SELECT;
 
 /**
  * <h1>Menu Button</h1>
