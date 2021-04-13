@@ -21,6 +21,11 @@ public class RecordsHandler {
 
     public RecordsHandler() { }
 
+    public String equalJsonObjectName(int i){
+
+        return jsonArrayToFile.getJSONObject(i-1).getString("name");
+    }
+
     /**
      * temp
      * @return
@@ -29,6 +34,7 @@ public class RecordsHandler {
         jsonArrayToFile=new JSONArray();
         records=new ArrayList<>();
         //write to Json file
+
         createRecord(new Records("1st","Dou","222","7/3"));
         createRecord(new Records("2nd","YIFAN","782","7/3"));
         createRecord(new Records("3rd","Alex","762","7/3"));
@@ -43,8 +49,9 @@ public class RecordsHandler {
         //first step is to sort before add new records
         jsonArrayToFile=jsonArraySort(jsonArrayToFile);
         //second step is to add new records
-        createRecord(new Records("11th","Kitty","322","7/3"));
-        createRecord(new Records("12th","Jog","222","7/3"));
+        createRecord(new Records("11th","Kitty","122","7/3"));
+        createRecord(new Records("12th","Jog","212","7/3"));
+        createRecord(new RecordsHandler.Records("13","Dahn","022","7/3"));
 
         //third step is to sort after add the new records
         sort();
@@ -167,18 +174,18 @@ public class RecordsHandler {
         }
         Collections.sort(jsonValues, new Comparator<JSONObject>() {
             private static final String KEY_NAME = "score";
-            String string1;
-            String string2;
+            int score1;
+            int score2;
             @Override
             public int compare(JSONObject a, JSONObject b) {
                 try {
-                    string1= a.getString(KEY_NAME);
-                    string2= b.getString(KEY_NAME);
+                    score1= Integer.valueOf(a.getString(KEY_NAME));
+                    score2= Integer.valueOf(b.getString(KEY_NAME));
                 } catch (JSONException e) {
                     // 处理异常
                 }
                 //这里是按照时间逆序排列,不加负号为正序排列
-                return -string1.compareTo(string2);
+                return -score1+score2;
             }
         });
         for (int i = 0; i < jsonArr.length(); i++) {
