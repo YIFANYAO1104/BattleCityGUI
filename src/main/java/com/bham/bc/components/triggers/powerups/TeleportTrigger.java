@@ -22,7 +22,7 @@ public class TeleportTrigger extends RespawnTrigger{
     }
 
     protected Image[] getDefaultImage() {
-        return new  Image[]{ new Image("file:src/main/resources/img/tiles/triggers/teleport.png")};
+        return new  Image[]{ new Image("file:src/main/resources/img/triggers/powerups/teleport.png")};
     }
 
     @Override

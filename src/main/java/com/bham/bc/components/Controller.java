@@ -109,7 +109,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
                 closestPoints = characters.stream().filter(c -> c.getSide() == Side.ALLY).map(GameCharacter::getCenterPosition);
                 break;
             case SOFT:
-                Stream<BaseGameEntity> obstacles = mapDivision.calculateNeighborsArray(position, 120).stream().filter(entity -> entity instanceof Obstacle);
+                Stream<BaseGameEntity> obstacles = mapDivision.calculateNeighborsArray(position, 90).stream().filter(entity -> entity instanceof Obstacle);
                 closestPoints = obstacles.filter(entity -> ((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)).map(BaseGameEntity::getCenterPosition);
                 break;
             case ENEMY_AREA:
@@ -196,13 +196,13 @@ public abstract class Controller extends BaseGameEntity implements Services {
         gameMap.update();
 
         characters.forEach(GameCharacter::update);
-        characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character, character.getHitBoxRadius() * 3)));
+        characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character, character.getHitBoxRadius() * 4)));
 
         bullets.forEach(Bullet::update);
-        bullets.forEach(bullet -> bullet.handle(mapDivision.calculateNeighborsArray(bullet, bullet.getHitBoxRadius() * 3)));
+        bullets.forEach(bullet -> bullet.handle(mapDivision.calculateNeighborsArray(bullet, bullet.getHitBoxRadius() * 4)));
 
         triggers.forEach(Trigger::update);
-        triggers.forEach(trigger -> trigger.handle(mapDivision.calculateNeighborsArray(trigger.getCenterPosition(), trigger.getHitBoxRadius() * 3)));
+        triggers.forEach(trigger -> trigger.handle(mapDivision.calculateNeighborsArray(trigger.getCenterPosition(), trigger.getHitBoxRadius() * 4)));
 
         // Performed before removals
         bullets.forEach(b -> mapDivision.updateMovingEntity(b));
@@ -239,15 +239,28 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
     // INHERITED --------------------------------------------------
     @Override
-    public Rectangle getHitBox() { return null; }
+    public Rectangle getHitBox() {
+        return null;
+    }
 
     @Override
-    public boolean intersects(BaseGameEntity b) { return false; }
+    public double getHitBoxRadius() {
+        return 0;
+    }
 
     @Override
-    public boolean handleMessage(Telegram msg) { return false; }
+    public boolean intersects(BaseGameEntity b) {
+        return false;
+    }
 
     @Override
-    public String toString() { return "Controller"; }
+    public boolean handleMessage(Telegram msg) {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Controller";
+    }
     // ------------------------------------------------------------
 }

@@ -27,7 +27,7 @@ public class HealthGiver extends RespawnTrigger{
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/hp.png"), };
+        return new Image[] {new Image("file:src/main/resources/img/triggers/powerups/hp.png"), };
     }
 
     @Override

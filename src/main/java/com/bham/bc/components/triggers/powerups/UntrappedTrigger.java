@@ -16,7 +16,7 @@ public class UntrappedTrigger extends RespawnTrigger {
 
     protected Image[] getDefaultImage() {
         return new Image[]{
-                new Image("file:src/main/resources/img/tiles/triggers/clear.png")
+                new Image("file:src/main/resources/img/triggers/powerups/clear.png")
         };
     }
 

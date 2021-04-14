@@ -6,8 +6,7 @@ import javafx.scene.media.AudioClip;
  * Enum for playing SFX
  */
 public enum Sfx {
-    CLICK("file:src/main/resources/audio/sfx/Blip_select11.wav"),
-    SELECT("file:src/main/resources/GUIResources/clickVoice.wav");
+    SELECT("file:src/main/resources/audio/sfx/select.wav");
 
     private AudioClip clip;
 

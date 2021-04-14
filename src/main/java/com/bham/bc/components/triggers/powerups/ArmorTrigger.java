@@ -19,7 +19,7 @@ public class ArmorTrigger extends  RespawnTrigger{
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[]{ new Image("file:src/main/resources/img/tiles/triggers/armor.png")};
+        return new Image[]{ new Image("file:src/main/resources/img/triggers/powerups/armor.png")};
     }
 
     @Override

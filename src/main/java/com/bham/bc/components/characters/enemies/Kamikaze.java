@@ -130,8 +130,8 @@ public class Kamikaze extends Enemy {
         Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
         services.addTrigger(explosion);
 
-        Trigger explosion1 = new Dissolve(getPosition(), entityImages[0], getAngle());
-        services.addTrigger(explosion1);
+        Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+        services.addTrigger(dissolve);
     }
 
     @Override

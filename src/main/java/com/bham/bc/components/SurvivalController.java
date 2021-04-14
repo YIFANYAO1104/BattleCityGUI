@@ -1,12 +1,18 @@
 package com.bham.bc.components;
 
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.enemies.*;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.physics.MapDivision;
+import com.bham.bc.utils.GeometryEnhanced;
+import javafx.geometry.Point2D;
+import javafx.scene.shape.Circle;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Represents a controller for the survival game mode
@@ -44,10 +50,10 @@ public class SurvivalController extends Controller {
         //characters.add(new Trapper(16*32, 16*32));
 
         //characters.add(new Splitter(16*4, 16*4));
-        characters.add(new Shooter(16*6, 16*4));
+        //characters.add(new Shooter(16*6, 16*4));
         //characters.add(new Kamikaze(16*61, 16*4));
-        characters.add(new Teaser(16*61, 16*61));
-        characters.add(new Tank(16*4, 16*61));
+        //characters.add(new Teaser(16*61, 16*61));
+        //characters.add(new Tank(16*4, 16*61));
     }
 
     /**
@@ -63,5 +69,17 @@ public class SurvivalController extends Controller {
     public void startGame() {
         initCharacters();
         initDivision();
+    }
+
+    @Override
+    public void spawnEnemyRandomly(EnemyType enemyType) {
+        Circle randomEnemyArea = getEnemyAreas()[new Random().nextInt(getEnemyAreas().length)];
+        Point2D spawnPoint = GeometryEnhanced.randomPointInCircle(randomEnemyArea).subtract(GameCharacter.MAX_SIZE*.5, GameCharacter.MAX_SIZE*.5);
+
+        try {
+            addCharacter(enemyType.newInstance(spawnPoint.getX(), spawnPoint.getY()));
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 }

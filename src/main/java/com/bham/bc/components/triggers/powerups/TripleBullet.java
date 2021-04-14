@@ -21,7 +21,7 @@ public class TripleBullet extends RespawnTrigger {
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/three.png"), };
+        return new Image[] {new Image("file:src/main/resources/img/triggers/powerups/three.png"), };
     }
 
     //if triggered, the bot's bullet will split into 3 for few seconds only

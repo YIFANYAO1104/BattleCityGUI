@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment;
 
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import static com.bham.bc.utils.messaging.MessageDispatcher.*;
@@ -47,6 +48,9 @@ public class Obstacle extends BaseGameEntity {
     private void destroy() {
         exists = false;
         entityManager.removeEntity(this);
+
+        Dissolve dissolve = new Dissolve(getPosition(), entityImages[currentFrame], 0);
+        services.addTrigger(dissolve);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import javafx.scene.image.Image;
@@ -140,6 +142,9 @@ public class Tank extends Enemy {
     public void destroy() {
         entityManager.removeEntity(this);
         exists = false;
+
+        Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+        services.addTrigger(dissolve);
     }
 
     @Override

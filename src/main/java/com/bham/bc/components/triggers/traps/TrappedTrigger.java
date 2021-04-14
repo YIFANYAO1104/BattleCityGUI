@@ -15,7 +15,7 @@ public class TrappedTrigger extends RespawnTrigger{
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[]{ new Image("file:src/main/resources/img/tiles/triggers/trap.png")};
+        return new Image[]{ new Image("file:src/main/resources/img/triggers/traps/trap.png")};
     }
 
     @Override

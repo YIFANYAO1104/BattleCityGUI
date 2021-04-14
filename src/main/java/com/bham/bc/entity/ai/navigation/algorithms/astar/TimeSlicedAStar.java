@@ -46,16 +46,16 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
 //        Node n1 = start();
         routine = search();
         if (routine==null){
-            System.out.println("SearchStatus.target_not_found");
+            //System.out.println("SearchStatus.target_not_found");
             return SearchStatus.target_not_found;
         }
 
         if(routine.get(0) == goal.getNode()){
-            System.out.println("SearchStatus.target_found");
+            //System.out.println("SearchStatus.target_found");
             return SearchStatus.target_found;
         }
         else{
-            System.out.println("SearchStatus.target_not_found");
+            //System.out.println("SearchStatus.target_not_found");
             return SearchStatus.target_not_found;
         }
 

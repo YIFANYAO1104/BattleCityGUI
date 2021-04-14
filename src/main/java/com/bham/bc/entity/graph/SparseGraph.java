@@ -584,6 +584,11 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     @Override
+    public double getHitBoxRadius() {
+        return 0;
+    }
+
+    @Override
     public boolean handleMessage(Telegram msg) {
         switch (msg.Msg){
             case Msg_interact :

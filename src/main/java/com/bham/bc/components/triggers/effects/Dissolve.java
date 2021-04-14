@@ -18,14 +18,13 @@ import java.util.ArrayList;
  * Represents effect of any image dissolving to particles
  */
 public class Dissolve extends Trigger {
-    private final double DISSOLVE_SPEED = 5;
-    private final int PIXEL_GAP = 2;
-
-    private double angle;
-    private ArrayList<Particle> particles;
+    private final double ANGLE;
+    private final double DISSOLVE_SPEED;
+    private final int PIXEL_GAP;
+    private final ArrayList<Particle> PARTICLES;
 
     /**
-     * Constructs a dissolve effect by generating a particle array
+     * Constructs a dissolve effect by generating a particle array. Sets dissolve speed to 5 and pixel gap to 2 by default.
      *
      * @param position x and y coordinates of the top-left corner of the image position
      * @param image    the image to be converted to particles
@@ -33,8 +32,29 @@ public class Dissolve extends Trigger {
      */
     public Dissolve(Point2D position, Image image, double angle) {
         super((int) position.getX(), (int) position.getY());
-        this.angle = angle;
-        particles = new ArrayList<>();
+        ANGLE = angle;
+        DISSOLVE_SPEED = 5;
+        PIXEL_GAP = 2;
+        PARTICLES = new ArrayList<>();
+        entityImages = new Image[] { image };
+        initParticles();
+    }
+
+    /**
+     * Alternate constructor allowing to set the speed of moving particles and the gap of pixels that can be skipped.
+     *
+     * @param position      x and y coordinates of the top-left corner of the image position
+     * @param image         the image to be converted to particles
+     * @param angle         angle at which the image is rotated
+     * @param dissolveSpeed how fast the particles will move away from the center
+     * @param pixelGap      number of pixels that will be skipped when each particle is generated
+     */
+    public Dissolve(Point2D position, Image image, double angle, double dissolveSpeed, int pixelGap) {
+        super((int) position.getX(), (int) position.getY());
+        ANGLE = angle;
+        DISSOLVE_SPEED = dissolveSpeed;
+        PIXEL_GAP = pixelGap;
+        PARTICLES = new ArrayList<>();
         entityImages = new Image[] { image };
         initParticles();
     }
@@ -47,7 +67,7 @@ public class Dissolve extends Trigger {
      * particle that will move away from the center on each update.</p>
      */
     private void initParticles() {
-        Rotate rotate = new Rotate(angle, getCenterPosition().getX(), getCenterPosition().getY());
+        Rotate rotate = new Rotate(ANGLE, getCenterPosition().getX(), getCenterPosition().getY());
         PixelReader pr = entityImages[0].getPixelReader();
 
         for(int x = 0; x < entityImages[0].getWidth(); x += PIXEL_GAP) {
@@ -57,7 +77,7 @@ public class Dissolve extends Trigger {
                 if (color.getOpacity() > .01) {
                     Point2D particlePosition = getCenterPosition().subtract(getSize().multiply(.5)).add(x, y);
                     particlePosition = rotate.transform(particlePosition.getX(), particlePosition.getY());
-                    particles.add(new Particle(particlePosition.getX(), particlePosition.getY(), getCenterPosition().getX(), getCenterPosition().getY(), PIXEL_GAP, DISSOLVE_SPEED, color));
+                    PARTICLES.add(new Particle(particlePosition.getX(), particlePosition.getY(), getCenterPosition().getX(), getCenterPosition().getY(), PIXEL_GAP, DISSOLVE_SPEED, color));
                 }
             }
         }
@@ -65,7 +85,7 @@ public class Dissolve extends Trigger {
 
     @Override
     public void render(GraphicsContext gc) {
-        particles.forEach(p -> p.render(gc));
+        PARTICLES.forEach(p -> p.render(gc));
     }
 
     @Override
@@ -74,12 +94,14 @@ public class Dissolve extends Trigger {
     }
 
     @Override
-    public void update() {
-        particles.forEach(Particle::update);
+    public double getHitBoxRadius() {
+        return 0;
+    }
 
-        if(particles.stream().noneMatch(Particle::exists)) {
-            exists = false;
-        }
+    @Override
+    public void update() {
+        PARTICLES.forEach(Particle::update);
+        exists = PARTICLES.stream().anyMatch(Particle::exists);
     }
 
     @Override
@@ -88,11 +110,6 @@ public class Dissolve extends Trigger {
     @Override
     protected Image[] getDefaultImage() {
         return new Image[0];
-    }
-
-    @Override
-    public double getHitBoxRadius() {
-        return 0;
     }
 
     @Override
@@ -107,7 +124,7 @@ public class Dissolve extends Trigger {
      * out as it moves and when it reaches its opacity minimum, it stops existing.</p>
      */
     private static class Particle {
-        private static final double DECELERATION_RATIO = .8;
+        private static final double DECELERATION_RATIO = .9;
 
         private Color color;
         private double x, y;
@@ -155,7 +172,7 @@ public class Dissolve extends Trigger {
          * creates easing out visual effect.</p>
          */
         public void update() {
-            if(color.getOpacity() <= .01) {
+            if(color.getOpacity() <= .1) {
                 exists = false;
             } else {
                 x += moveX * speed;

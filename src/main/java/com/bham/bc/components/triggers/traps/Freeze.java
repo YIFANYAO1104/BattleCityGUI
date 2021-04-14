@@ -24,7 +24,7 @@ public class Freeze extends RespawnTrigger {
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/snowflake.png"), };
+        return new Image[] {new Image("file:src/main/resources/img/triggers/traps/snowflake.png"), };
     }
 
     @Override

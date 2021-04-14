@@ -2,11 +2,14 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
 
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -33,6 +36,9 @@ public class DefaultBullet extends Bullet {
 	public void destroy() {
 		entityManager.removeEntity(this);
 		exists = false;
+
+		Dissolve dissolve = new Dissolve(getPosition(), entityImages[0], getAngle(), 2, 2);
+		services.addTrigger(dissolve);
 	}
 
 	@Override

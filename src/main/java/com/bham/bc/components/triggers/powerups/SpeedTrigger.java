@@ -19,7 +19,7 @@ public class SpeedTrigger extends RespawnTrigger {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[]{new Image("file:src/main/resources/img/tiles/triggers/flash.png")};
+        return new Image[]{new Image("file:src/main/resources/img/triggers/powerups/flash.png")};
     }
 
     @Override

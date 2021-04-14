@@ -88,7 +88,7 @@ public abstract class Enemy extends GameCharacter {
         }
 
         //-----test
-        if(itemType == ItemType.ALLY && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
+        // if(itemType == ItemType.ALLY && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
         //---------
 
         // Due to checks on each frame of whether the search is complete or not we always need get the list of points if it is empty
@@ -139,10 +139,10 @@ public abstract class Enemy extends GameCharacter {
      */
     protected void face(Point2D toward) {
         Point2D direction = toward.subtract(getCenterPosition());
-        if (!GeometryEnhanced.isZero(direction)){
+
+        if (isAiming = !GeometryEnhanced.isZero(direction)){
             heading = direction.normalize();
         }
-        isAiming = true;
     }
 
     /**
@@ -179,6 +179,7 @@ public abstract class Enemy extends GameCharacter {
             face(ItemType.SOFT);
             GUN.shoot();
         }
+
         return canShoot;
     }
 

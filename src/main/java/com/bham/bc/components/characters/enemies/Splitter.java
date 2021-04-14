@@ -1,6 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
 import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
@@ -108,8 +109,13 @@ public class Splitter extends Enemy {
     protected void destroy() {
         exists = false;
         entityManager.removeEntity(this);
+
         Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
         services.addTrigger(explosion);
+
+        Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+        services.addTrigger(dissolve);
+
         services.addCharacter(new MiniSplitter(getCenterPosition().getX()-8, getCenterPosition().getY()-8));
         services.addCharacter(new MiniSplitter(getCenterPosition().getX()+8, getCenterPosition().getY()+8));
     }

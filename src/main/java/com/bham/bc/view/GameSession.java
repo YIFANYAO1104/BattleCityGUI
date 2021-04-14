@@ -54,7 +54,7 @@ public class GameSession {
         gc = canvas.getGraphicsContext2D();
 
         gamePane = new AnchorPane(canvas);
-        gamePane.getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/Style.css").toExternalForm());
+        gamePane.getStylesheets().add(MenuSlider.class.getResource("../../../../../style.css").toExternalForm());
 
         gameScene = new Scene(gamePane, WIDTH, HEIGHT, Color.GREY);
         cmr = new Camera(gc);

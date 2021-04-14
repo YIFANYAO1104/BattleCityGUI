@@ -96,14 +96,14 @@ public class CustomStage extends Stage{
         gpTitle.setMaxWidth(Height);
         gpTitle.setMinHeight(15);
         gpTitle.setMaxHeight(35);
-        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../GUIResources/Style.css").toExternalForm());
+        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
 
 
         btnMin = new Label();
         btnMin.setPrefWidth(33);
         btnMin.setPrefHeight(26);
 
-        BackgroundImage image2=new BackgroundImage(new Image("file:src/main/resources/GUIResources/Min.png",24,10,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        BackgroundImage image2=new BackgroundImage(new Image("file:src/main/resources/img/menu/minimize.png",24,10,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
 
         btnMin.setBackground(new Background(image2));
 
@@ -117,7 +117,7 @@ public class CustomStage extends Stage{
         changeSkin.setId("changeSkin");
         changeSkin.setMaxSize(25,22);
         changeSkin.setMinSize(25,22);
-        BackgroundImage image3=new BackgroundImage(new Image("file:src/main/resources/GUIResources/skinSet.png",25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        BackgroundImage image3=new BackgroundImage(new Image("file:src/main/resources/img/menu/skin.png",25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         changeSkin.setBackground(new Background(image3));
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 

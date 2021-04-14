@@ -38,7 +38,7 @@ public class MenuSession {
     public MenuSession() {
         mainPane = new AnchorPane();
         mainPane.addEventFilter(NewGameEvent.START_GAME, this::createGameSession);
-        mainPane.getStylesheets().add(MenuSlider.class.getResource("../../../../../GUIResources/Style.css").toExternalForm());
+        mainPane.getStylesheets().add(MenuSlider.class.getResource("../../../../../style.css").toExternalForm());
 
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();

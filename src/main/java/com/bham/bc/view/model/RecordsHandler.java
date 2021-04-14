@@ -69,14 +69,14 @@ public class RecordsHandler {
         //third step is to sort after add the new records
         sort();
         try {
-            writeJsonToFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\game.json");
+            writeJsonToFile("src\\main\\resources\\scores.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //read from Json file
         try {
-            parseJsonFile("src\\main\\java\\com\\bham\\bc\\view\\menu\\game.json");
+            parseJsonFile("src\\main\\resources\\scores.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -147,7 +147,7 @@ public class RecordsHandler {
         }else {
             jsonArray=jsonArrayToFile;
         }
-        System.out.println("jsonArray"+jsonArray.toString());
+        //System.out.println("jsonArray"+jsonArray.toString());
         for (int i=0;i<len;i++) {
             if (i<10){
                 jsonArrayToFile.put(i,jsonArray.get(i));
@@ -339,7 +339,7 @@ public class RecordsHandler {
      */
     public static ArrayList<Records> parse(String responseBody){
         JSONArray albums = new JSONArray(responseBody);
-        System.out.println(albums.length());
+        //System.out.println(albums.length());
         for (int i = 0; i < albums.length(); i++){
             JSONObject album = albums.getJSONObject(i);
             String rank = album.getString("rank");
@@ -347,7 +347,7 @@ public class RecordsHandler {
             String score = album.getString("score");
             String date = album.getString("date");
             records.add(i,new Records(rank,name,score,date));
-            System.out.println(rank + " | " + name + " | " + score+" | "+date);
+            //System.out.println(rank + " | " + name + " | " + score+" | "+date);
 
         }
         return records;

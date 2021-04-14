@@ -1,6 +1,7 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.characters.enemies.EnemyType;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
@@ -135,6 +136,17 @@ public interface Services {
      */
     void render(GraphicsContext gc);
 
+
+
+    /**
+     * Clears all objects in the game
+     */
+    void clear();
+    //-------------------------------------------------------------
+
+
+
+    // LOGIC ------------------------------------------------------
     /**
      * Simulates taking over home territory by decreasing home's "HP"
      * @param enemy enemy to be checked if it intersects with the home territory to take it over
@@ -142,9 +154,10 @@ public interface Services {
     void occupyHome(Enemy enemy);
 
     /**
-     * Clears all objects in the game
+     * Spawns enemy at a random enemy territory
+     * @param enemyType type of enemy to spawn
      */
-    void clear();
+    void spawnEnemyRandomly(EnemyType enemyType);
     //-------------------------------------------------------------
 
 
