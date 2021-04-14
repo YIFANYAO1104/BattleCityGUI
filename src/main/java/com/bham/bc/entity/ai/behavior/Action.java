@@ -34,6 +34,7 @@ public enum Action{
     PEAK,
     RELAX,
     INCREMENTLOOP,
+    RESETTIMELIMIT,
 
     MOVE,
     CHARGEALLY,
