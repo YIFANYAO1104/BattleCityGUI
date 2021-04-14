@@ -7,6 +7,7 @@ import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 
@@ -15,11 +16,10 @@ import java.util.List;
 
 /**
  * Represents any bullet and defines common bullet properties
- * <p> TODO: add constrains / asserts / throw exceptions in setters
  */
 abstract public class Bullet extends MovingEntity {
     private final BulletType TYPE;
-    private Side side;
+    private final Side SIDE;
     private double damage;
 
     /**
@@ -37,7 +37,7 @@ abstract public class Bullet extends MovingEntity {
     public Bullet(double x, double y, double speed, Point2D heading, BulletType type, Side side, double damage) {
         super(x, y, speed, heading);
         this.TYPE = type;
-        this.side = side;
+        this.SIDE = side;
         this.damage = damage;
 
         entityImages = new Image[] { TYPE.getImage() };
@@ -47,12 +47,13 @@ abstract public class Bullet extends MovingEntity {
      * Gets bullet's speed
      * @return velocity at which the bullet is moving
      */
-    public double getMaxSpeed() { return maxSpeed; }
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
 
     /**
      * Gets bullet's type
      * @return DEFAULT of EXPLOSIVE type the bullet belongs to
-     * TODO: add more types
      */
     public BulletType getType() {
         return TYPE;
@@ -63,7 +64,7 @@ abstract public class Bullet extends MovingEntity {
      * @return ALLY or ENEMY side the bullet belongs to
      */
     public Side getSide() {
-        return side;
+        return SIDE;
     }
 
     /**
@@ -76,27 +77,17 @@ abstract public class Bullet extends MovingEntity {
 
     /**
      * Sets bullet's speed
-     * <br><b>Note:</b> the speed must be in range [1, 20]
-     * <br>TODO: assert range
      */
-    public void setSpeed(double speed) {
-        this.maxSpeed = speed;
+    public void setSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
     }
 
     /**
      * Sets bullet's damage
-     *
-     * <br><b>Note:</b> the damage must be in range [-500, 500]
-     * <br>TODO: assert range
      */
     public void setDamage(double damage) {
         this.damage = damage;
     }
-
-    /**
-     * Unregisters and prepares to remove the bullet. Also runs any destruction effects
-     */
-    public abstract void destroy();
 
 
     public double getHitboxRadius() {
@@ -106,16 +97,18 @@ abstract public class Bullet extends MovingEntity {
         return n1;
     }
 
-    @Override
-    public boolean handleMessage(Telegram msg) { return false; }
-
-    @Override
-    public String toString() { return "Bullet"; }
-
-    public void handle(List<BaseGameEntity> entities) {
-        entities.forEach(this::handle);
-    }
-
+    /**
+     * Handles collision of one {@link BaseGameEntity} object
+     *
+     * <p>This method hendles bullet's collision for 2 base game entities.</p>
+     * <ul>
+     *     <li>{@link GameCharacter} - for this object, the bullet simply deduces some hp based on its damage and is destroyed</li>
+     *     <li>{@link Obstacle} - for this object, if it has an attribute <i>WALL</i>, the bullet is destroyed and if it has an
+     *     attribute <i>BREAKABLE</i>, the bullet deduces some health pints from it based on its damage</li>
+     * </ul>
+     *
+     * @param entity a generic entity that is converted to appropriate child instance the bullet will handle
+     */
     public void handle(BaseGameEntity entity) {
         if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
             ((GameCharacter) entity).changeHp(-damage);
@@ -128,5 +121,33 @@ abstract public class Bullet extends MovingEntity {
         }
     }
 
+    /**
+     * Handles intersection of multiple {@link BaseGameEntity} objects
+     * @param entities a list of entities the bullet's collision will be checked on
+     * @see #handle(BaseGameEntity)
+     */
+    public void handle(List<BaseGameEntity> entities) {
+        entities.forEach(this::handle);
+    }
 
+
+    /**
+     * Unregisters and prepares to remove the bullet. Also runs any destruction effects
+     */
+    public abstract void destroy();
+
+    @Override
+    public void render(GraphicsContext gc) {
+        drawRotatedImage(gc, entityImages[0], getAngle());
+    }
+
+    @Override
+    public boolean handleMessage(Telegram msg) {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Bullet";
+    }
 }

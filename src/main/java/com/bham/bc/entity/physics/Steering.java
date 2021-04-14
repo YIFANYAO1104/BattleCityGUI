@@ -1,6 +1,8 @@
-package com.bham.bc.components.characters;
+package com.bham.bc.entity.physics;
 
-import com.bham.bc.components.BackendServices;
+import com.bham.bc.components.Services;
+import com.bham.bc.components.characters.Player;
+import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 
@@ -29,11 +31,11 @@ public class Steering {
     /**
      * a pointer to the owner of this instance
      */
-    private GameCharacter agent;
+    private MovingEntity agent;
     /**
      * pointer to the world data
      */
-    private BackendServices world;
+    private Services world;
     /**
      * the steering force created by the combined effect of all the selected
      * behaviors
@@ -308,7 +310,7 @@ public class Steering {
      .......................................................*/
 
 
-    public Steering(GameCharacter agent) {
+    public Steering(MovingEntity agent) {
 
 //        m_pWorld = world;
         this.agent = agent;

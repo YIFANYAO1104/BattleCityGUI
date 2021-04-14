@@ -100,8 +100,8 @@ public class GameSession {
      * creates the input listeners. Key presses are handled by the center controller class.
      */
     private void createKeyListeners() {
-        gameScene.setOnKeyPressed(e -> frontendServices.keyPressed(e));
-        gameScene.setOnKeyReleased(e -> frontendServices.keyReleased(e));
+        gameScene.setOnKeyPressed(e -> services.keyPressed(e));
+        gameScene.setOnKeyReleased(e -> services.keyReleased(e));
     }
 
     /**
@@ -112,7 +112,7 @@ public class GameSession {
         gc.setFont(new Font("Times New Roman", 20));
 
         gc.fillText("Health: ", 580, 70);
-        gc.fillText("" + frontendServices.getPlayerHP(), 650, 70);
+        //gc.fillText("" + frontendServices.getPlayerHP(), 650, 70);
     }
 
 
@@ -121,7 +121,7 @@ public class GameSession {
      * @returns true if game ended and false otherwise
      */
     private boolean gameEnded() {
-        if(frontendServices.isGameOver()){
+        if(false){
             gc.setFill(Color.GREEN);
             gc.setFont(new Font("Times New Roman", 40));
             gc.fillText("Congratulations!", 200, 300);
@@ -134,15 +134,15 @@ public class GameSession {
 
     private void tick() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        frontendServices.render(gc);
-        frontendServices.renderHitBoxes(hbPane);
+        services.render(gc);
+        services.renderHitBoxes(hbPane);
         renderScoreBoard();
 
         cmr.update();
-        backendServices.update();
+        services.update();
 
         if (gameEnded()) {
-            backendServices.clear();
+            services.clear();
             gameTimer.stop();
         }
     }

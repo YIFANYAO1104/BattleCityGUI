@@ -33,6 +33,7 @@ public class GraphNode {
     public void setInvalid(){
         this.m_index = -1;
     }
+
     //for reading and writing to streams.
     public OutputStream print(OutputStream os) {
         PrintStream ps = new PrintStream(os);

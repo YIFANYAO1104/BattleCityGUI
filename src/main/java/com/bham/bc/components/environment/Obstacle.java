@@ -1,55 +1,52 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.ai.navigation.ItemType;
-import com.bham.bc.entity.graph.ExtraInfo;
 import com.bham.bc.utils.messaging.Telegram;
 import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
-import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import static com.bham.bc.utils.messaging.MessageTypes.*;
 
 /**
  * Class defining common properties for any obstacle
  */
-public class Obstacle extends BaseGameEntity{
+public class Obstacle extends BaseGameEntity {
+    private final EnumSet<Attribute> ATTRIBUTES;
     private double hp;
-    private EnumSet<Attribute> attributes;
-    protected boolean exists;
-    protected int currentFrame;
+    private int currentFrame;
 
     /**
-     * Constructs an obstacle
+     * Constructs an obstacle by default giving it 50 HP
      *
-     * @param x       position in x axis
-     * @param y       position in y axis
-     * @param tileset type of tileset
-     * @param tileIDs IDs of tiles in case the obstacle is animated
+     * @param x          top-left position in x axis
+     * @param y          top-left position in y axis
+     * @param attributes array list of {@link Attribute} values which define the obstacle
+     * @param tileset    type of tileset
+     * @param tileIDs    IDs of tiles in case the obstacle is animated (must be 1 or more)
      */
     public Obstacle(int x, int y, ArrayList<Attribute> attributes, Tileset tileset, int... tileIDs) {
-        super(GetNextValidID(), x, y);
+        super(getNextValidID(), x, y);
         hp = 50;
-        exists = true;
         currentFrame = 0;
-        this.attributes = EnumSet.noneOf(Attribute.class);
-        this.attributes.addAll(attributes);
-        entityImages = tileIDs.length == 0 ? getDefaultImage() : tileset.getTiles(tileIDs);
+        ATTRIBUTES = EnumSet.noneOf(Attribute.class);
+        if(attributes != null) ATTRIBUTES.addAll(attributes);
+
+        if(tileIDs.length == 0) throw new IllegalArgumentException("There must be at least one tile ID for the obstacle");
+        entityImages = tileset.getTiles(tileIDs);
     }
 
     /**
-     * Adds all the attributes described in {@link Attribute} this obstacle is defined by
-     * @param attributes a list of attributes that should be possessed by this obstacle
+     * Simulates the destruction effect and removes the obstacle from the entity list
      */
-    public void addAttributes(ArrayList<Attribute> attributes) {
-        this.attributes.addAll(attributes);
+    private void destroy() {
+        exists = false;
+        entityManager.removeEntity(this);
     }
 
     /**
@@ -57,29 +54,21 @@ public class Obstacle extends BaseGameEntity{
      * @return EnumSet containing all the attributes this obstacle possesses
      */
     public EnumSet<Attribute> getAttributes() {
-        return attributes;
+        return ATTRIBUTES;
     }
 
     /**
-     * Checks if the tile exists. Only for breakable obstacles it is possible to not exist
-     * @return true if obstacle exists and false otherwise
+     * Notifies about obstacle's interaction with some rectangular area
+     *
+     * <p>This method is used by the graph system to mainly check the interaction of <i>BREAKABLE</i> obstacles</p>
+     *
+     * @param graphSystemID ID of the graph system to be notified about intersection
+     * @param nodeID        ID of the node intersecting the obstacle
+     * @param area          Rectangle representing an intersection area
      */
-    public boolean exists() {
-        return exists;
-    }
-
-    /**
-     * Gets default image of a tile
-     * @return array of type Image with one image
-     */
-    protected Image[] getDefaultImage() {
-        return new Image[] { new Image("file:src/main/resources/img/tiles/DefaultTiles/icewall.jpg") };
-    }
-
-
-    public void interactWith(int graphSystemID, int nodeID, Rectangle area) {
+    public void interacts(int graphSystemID, int nodeID, Rectangle area) {
         if(getHitBox().intersects(area.getBoundsInLocal())) {
-            if(attributes.contains(Attribute.BREAKABLE)) {
+            if(ATTRIBUTES.contains(Attribute.BREAKABLE)) {
                 Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interactWithSoft, nodeID);
             } else {
                 Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interact, nodeID);
@@ -87,13 +76,20 @@ public class Obstacle extends BaseGameEntity{
         }
     }
 
+    /**
+     * Changes HP of this obstacle
+     *
+     * <p>HP is only changed if the obstacle has <i>BREAKABLE</i> attribute. If the obstacle is destroyed,
+     * the graph system is notified about it to add free graph nodes.</p>
+     *
+     * @param health amount of health points that should be added/subtracted to this obstacle's HP
+     */
     public void changeHp(double health) {
-        if(attributes.contains(Attribute.BREAKABLE)) {
+        if(ATTRIBUTES.contains(Attribute.BREAKABLE)) {
             hp += health;
             if (hp <= 0.0) {
-                Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), backendServices.getGraph().getID(), Msg_removeSoft, NO_ADDITIONAL_INFO);
-                exists = false;
-                entityManager.removeEntity(this);
+                Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), services.getGraph().getID(), Msg_removeSoft, NO_ADDITIONAL_INFO);
+                destroy();
             }
         }
     }

@@ -3,13 +3,11 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
-import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
 import com.bham.bc.utils.Constants;
-import com.bham.bc.utils.GeometryEnhanced;
-import com.bham.bc.utils.messaging.Telegram;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -23,7 +21,7 @@ import java.util.Optional;
 
 import java.util.List;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -37,13 +35,14 @@ public class Player extends GameCharacter {
 	public static final double HP = 100;
 	public static final double SPEED = 5;
 
-	public static final SimpleDoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
-	public static final SimpleDoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
+	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
+	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
 
 	private final EnumSet<Direction> DIRECTION_SET;
 	private final Gun GUN;
 
 	// TODO: remove, player doesn't need
+	private boolean inverseKeys;
 	private NavigationService navigationService;
 
 	/**
@@ -57,20 +56,22 @@ public class Player extends GameCharacter {
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT);
+		inverseKeys = false;
 
-		navigationService = new PathPlanner(this, backendServices.getGraph());
+		navigationService = new PathPlanner(this, services.getGraph());
 		steering.setKeysOn(true);
 	}
 
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
-
 	public void bomb() {
 		Point2D center = getPosition().add(getRadius().multiply(0.5));
 		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), heading, side);
-		backendServices.addBullet(b);
+		services.addBullet(b);
 	}
-
+	public void setInverseKeys(boolean val) {
+		inverseKeys = val;
+	}
 	public void toState1(){
 		this.entityImages =  new Image[] { new Image(IMAGE_PATH2, SIZE, 0, true, false) };
 
@@ -78,36 +79,39 @@ public class Player extends GameCharacter {
 	public List<Shape> getSmoothingBoxes(){
 		return navigationService.getSmoothingBoxes();
 	}
+	private void testDijistra(){
+		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
+		navigationService.createRequest(new Point2D(300,300));
+		System.out.println(navigationService.peekRequestStatus());
+		navigationService.getPath();
+	}
 	// -----------------------------------------------------------
 
 	/**
 	 * Updates angle at which the player is facing
 	 *
 	 * <p>This method goes through every direction in the directionSet, coverts them to basis vectors,
-	 * adds them up to get a final direction vector and calculates the angle between it and (0, 1)</p>
-	 *
-	 * <p><b>Note:</b> the basis vector which is used for angle calculation must be (0, 1) as this is the
-	 * way the character in the image is facing (upwards)</p>
+	 * adds them up to get a final direction vector and normalizes it to set the heading param.</p>
 	 */
 	private void updateAngle() {
-		// Sum up direction basis vectors to get a final direction vector
-		Optional<Point2D> directionPoint = DIRECTION_SET.stream().map(Direction::toPoint).map(p -> p.multiply(TRAPPED ? -1 : 1)).reduce(Point2D::add);
+		Optional<Point2D> directionPoint = DIRECTION_SET.stream().map(Direction::toPoint).map(p -> p.multiply(inverseKeys ? -1 : 1)).reduce(Point2D::add);
 
-		// Normalize direction vector
 		directionPoint.ifPresent(p -> {
-//			velocity = p1.multiply(maxSpeed);
-//			//Truncate
-//			velocity = GeometryEnhanced.truncate(velocity, maxSpeed);
-//			if (!isZero(velocity)) {
-//				heading = velocity.normalize();
-//			}
 			if(!isZero(p)) heading = p.normalize();
 			velocity = p.normalize().multiply(velocity.magnitude());
 		});
 	}
 
-	@Override
-	protected void destroy() { }
+	/**
+	 * Shoots a default bullet (or multiple)
+	 *
+	 * <p>This method creates new instance(-s) of {@link com.bham.bc.components.shooting.DefaultBullet}
+	 * based on player's position and angle</p>
+	 */
+	private void fire() {
+		GUN.shoot();
+		if(tripleTicks != 0) GUN.shoot(-45, 45);
+	}
 
 	/**
 	 * Handles pressed key
@@ -128,12 +132,6 @@ public class Player extends GameCharacter {
 			case D: DIRECTION_SET.add(Direction.R); break;
 			case P: testDijistra();break;
 		}
-	}
-	private void testDijistra(){
-		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
-		navigationService.createRequest(new Point2D(300,300));
-		System.out.println(navigationService.peekRequestStatus());
-		navigationService.getPath();
 	}
 
 	/**
@@ -161,27 +159,6 @@ public class Player extends GameCharacter {
 		return DIRECTION_SET.size();
 	}
 
-	/**
-	 * Shoots a default bullet (or multiple)
-	 *
-	 * <p>This method creates a new instance of {@link com.bham.bc.components.shooting.DefaultBullet}
-	 * based on player's position and angle</p>
-	 */
-	public void fire() {
-		GUN.shoot();
-		if(tripleTicks != 0) GUN.shoot(-45, 45);
-	}
-
-//	@Override
-//	public void move() {
-////		if(!DIRECTION_SET.isEmpty()) {
-////			x += velocity.getX();
-////			y += velocity.getY();
-////		}
-//		x += velocity.getX();
-//		y += velocity.getY();
-//	}
-
 	@Override
 	public void move() {
 		Point2D force = steering.calculate();
@@ -208,25 +185,14 @@ public class Player extends GameCharacter {
 		TRACKABLE_Y.set(getCenterPosition().getY());
 	}
 
-
 	@Override
 	public void render(GraphicsContext gc) {
-		if (navigationService!=null) navigationService.render(gc);
+		if(navigationService!=null) navigationService.render(gc);
 		drawRotatedImage(gc, entityImages[0], getAngle());
 	}
 
 	@Override
-	public boolean handleMessage(Telegram msg) {
-		switch (msg.Msg.id){
-			case 0:
-				System.out.println("you are deafeated by id "+ msg.Sender);
-				return true;
-
-			default:
-				System.out.println("no match");
-				return false;
-		}
-	}
+	protected void destroy() { }
 
 	@Override
 	public String toString() {

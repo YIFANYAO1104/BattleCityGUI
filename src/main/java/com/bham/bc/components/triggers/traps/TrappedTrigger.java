@@ -21,7 +21,7 @@ public class TrappedTrigger extends RespawnTrigger{
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).setTRAPPED();
+            ((Player) entity).setInverseKeys(true);
             deactivate();
         }
     }

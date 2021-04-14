@@ -66,7 +66,6 @@ public class RingExplosion extends Trigger {
         }
     }
 
-    @Override
     protected void renderRegion(GraphicsContext gc) { }
 
     @Override

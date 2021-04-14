@@ -38,15 +38,15 @@ public class SurvivalController extends CenterController {
 
         // Temp: init enemies, later, we will initialize director AI which will spawn enemies automatically
 //        characters.add(new Shooter(16*26, 16*26));
-        characters.add(new Kamikaze(16*61, 16*4));
+        //characters.add(new Kamikaze(16*61, 16*4));
         //characters.add(new Kamikaze(16*26, 16*26));
         //characters.add(new Teaser(16*36, 16*28));
         //characters.add(new Tank(16*28, 16*36));
         //characters.add(new Trapper(16*32, 16*32));
 
-        characters.add(new Splitter(16*4, 16*4));
+        //characters.add(new Splitter(16*4, 16*4));
         characters.add(new Shooter(16*6, 16*4));
-        characters.add(new Kamikaze(16*61, 16*4));
+        //characters.add(new Kamikaze(16*61, 16*4));
         characters.add(new Teaser(16*61, 16*61));
         characters.add(new Tank(16*4, 16*61));
     }
@@ -64,10 +64,5 @@ public class SurvivalController extends CenterController {
     public void startGame() {
         initCharacters();
         initDivision();
-    }
-
-    @Override
-    public boolean isGameOver() {
-        return false;
     }
 }

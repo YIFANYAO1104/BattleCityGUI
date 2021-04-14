@@ -3,15 +3,12 @@ package com.bham.bc.components.characters.enemies;
 import com.bham.bc.components.characters.Tribe;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
-import com.bham.bc.entity.graph.edge.GraphEdge;
-import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
 
-import static com.bham.bc.components.CenterController.backendServices;
+import static com.bham.bc.components.CenterController.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -60,6 +57,9 @@ public class Teaser extends Enemy {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
+
+        GUN.setRate(600);
+        GUN.setDamageFactor(3);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class Teaser extends Enemy {
         noObstacleCondition = new FreePathCondition();
         highHealthCondition = new IntCondition((int) (HP * .2), (int) HP);
         nearToAllyCondition = new IntCondition(0, 200);
-        nearToHomeCondition = new IntCondition(0, (int) (backendServices.getHomeArea().getRadius() * .8));
+        nearToHomeCondition = new IntCondition(0, (int) (services.getHomeArea().getRadius() * .8));
         attackAllyCondition = new AndCondition(new AndCondition(noObstacleCondition, nearToAllyCondition), highHealthCondition);
         attackHomeCondition = new AndCondition(nearToHomeCondition, new NotCondition(highHealthCondition));
 
@@ -105,10 +105,10 @@ public class Teaser extends Enemy {
 
     @Override
     public void update() {
-        double distanceToAlly = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
-        double distanceToHome = getCenterPosition().distance(backendServices.getClosestCenter(getCenterPosition(), ItemType.HOME));
+        double distanceToAlly = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        double distanceToHome = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
 
-        noObstacleCondition.setTestValues(getCenterPosition(), backendServices.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        noObstacleCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
         highHealthCondition.setTestValue((int) hp);
         nearToAllyCondition.setTestValue((int) distanceToAlly);
         nearToHomeCondition.setTestValue((int) distanceToHome);
@@ -123,17 +123,15 @@ public class Teaser extends Enemy {
                     search(ItemType.HOME);
                     break;
                 case ATTACK_ALLY:
-                    aim();
-                    shoot(.5);
+                    face(ItemType.ALLY);
+                    //shoot(.8);
+                    GUN.shoot();
                     break;
                 case ATTACK_HOME:
                     takeOver();
                     break;
                 case ATTACK_OBST:
-                    if(edgeBehavior == GraphEdge.shoot) {
-                        face(backendServices.getClosestCenter(getCenterPosition(), ItemType.SOFT));
-                        GUN.shoot();
-                    }
+                    setMaxSpeed(shootObstacle() ? SPEED * .3 : SPEED);
                     break;
                 case SET_SPEED:
                     setMaxSpeed(SPEED * 3);
@@ -142,10 +140,12 @@ public class Teaser extends Enemy {
                     setMaxSpeed(SPEED);
                     break;
                 case SET_RATE:
-                    GUN.setRate(200);
+                    GUN.setRate(500);
+                    GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
                     GUN.setRate(1000);
+                    GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
                     steering.setDecelerateOn(false);

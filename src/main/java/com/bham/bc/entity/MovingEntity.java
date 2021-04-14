@@ -1,5 +1,6 @@
 package com.bham.bc.entity;
 
+import com.bham.bc.entity.physics.Steering;
 import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -7,36 +8,39 @@ import javafx.scene.image.Image;
 import javafx.scene.transform.Rotate;
 
 /**
- * Represents any entity that can move in any angle
+ * Represents any entity that can move at any angle
  */
 public abstract class MovingEntity extends BaseGameEntity {
-
-
-    //the magnitude of velocity should be less than this value
-    protected double maxSpeed;
-    protected Point2D velocity;
-    protected Point2D heading; //non-zero, normalized vector for direction, must be updated once the velocity was updated
+    public static final double STANDARD_FORCE = 10;
     protected double mass;
-    protected boolean exists;
+    protected double maxSpeed;
+    protected double maxForce;
+    protected Point2D heading;
+    protected Point2D velocity;
+    protected Point2D acceleration;
+    protected Steering steering;
 
     /**
-     * Constructs a single moving entity by default facing up (angle is set to 0) and generates a new valid ID for it
+     * Constructs a single moving entity by default facing up (angle is set to 0), giving it a
+     * mass of 1 and generates a new valid ID for it
      *
      * @param x        top left x coordinate of the entity and its image
      * @param y        top left y coordinate of the entity and its image
      * @param maxSpeed value which defines the initial velocity
      */
     protected MovingEntity(double x, double y, double maxSpeed) {
-        super(GetNextValidID(), x, y);
+        super(getNextValidID(), x, y);
         this.maxSpeed = maxSpeed;
-        this.velocity = new Point2D(0,0);
-        this.heading = new Point2D(0,-1);
-        exists = true;
         mass = 1;
+        maxForce = STANDARD_FORCE;
+        heading = new Point2D(0,-1);
+        velocity = new Point2D(0,0);
+        acceleration = new Point2D(0, 0);
+        steering = new Steering(this);
     }
 
     /**
-     * Alternate constructor allowing to initialize a custom facing direction
+     * Alternate constructor allowing to initialize a custom facing direction with a non-zero velocity
      *
      * @param x        top left x coordinate of the entity and its image
      * @param y        top left y coordinate of the entity and its image
@@ -44,11 +48,14 @@ public abstract class MovingEntity extends BaseGameEntity {
      * @param heading  basis vector indicating the direction the entity is facing
      */
     protected MovingEntity(double x, double y, double maxSpeed, Point2D heading) {
-        super(GetNextValidID(), x, y);
+        super(getNextValidID(), x, y);
         this.maxSpeed = maxSpeed;
-        this.velocity = heading.multiply(maxSpeed);
         this.heading = heading;
-        exists = true;
+        mass = 1;
+        maxForce = STANDARD_FORCE;
+        velocity = heading.multiply(maxSpeed);
+        acceleration = new Point2D(0, 0);
+        steering = new Steering(this);
     }
 
     /**
@@ -72,54 +79,75 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
-     * Gets the current angle
-     * @return angle between -180 and 180 degrees the entity s facing
+     * Calculates the angle the entity is facing
+     *
+     * <p><b>Note:</b> the basis vector which is used for angle calculation must be (0, -1) as this is the
+     * way the entity in the image is facing (upwards).</p>
+     *
+     * @return angle between 0 and 360 degrees the entity is facing
      */
     public double getAngle() {
-        return GeometryEnhanced.antiClockWiseAngle(new Point2D(0,-1),heading);
-//        return Math.toDegrees(Math.atan2(heading.getY(), heading.getX())) + 90;
+        return GeometryEnhanced.antiClockWiseAngle(new Point2D(0,-1), heading);
     }
 
+    /**
+     * Gets the mass this entity was assigned
+     * @return entity's mass
+     */
+    public double getMass() {
+        return mass;
+    }
 
     /**
-     * Checks if this entity exists
-     * @return true if it exists and false otherwise
+     * Gets the maximum speed value this entity can reach
+     * @return maximum speed value of this entity
      */
-    public boolean exists() { return exists; }
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    /**
+     * Gets the maximum force this entity can have (used for acceleration)
+     * @return maximum force value the entity can have
+     */
+    public double getMaxForce() {
+        return maxForce;
+    }
+
+    /**
+     * Gets the normalized vector the entity is facing at
+     * @return Point2D object representing a direction vector the entity is facing
+     */
+    public Point2D getHeading() {
+        return heading;
+    }
+
+    /**
+     * Gets the current velocity
+     * @return Point2D object representing a velocity vector the entity has
+     */
+    public Point2D getVelocity() {
+        return velocity;
+    }
+
+    /**
+     * Sets the maximum speed value for the entity
+     * @param maxSpeed max speed the entity can reach
+     */
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    /**
+     * Sets the current velocity of the entity
+     * @param velocity Point2D object representing a new velocity vector
+     */
+    public void setVelocity(Point2D velocity) {
+        this.velocity = velocity;
+    }
 
     /**
      * Defines how the position of the entity is updated on each frame
      */
     public abstract void move();
-
-    public double getMass() { return mass; }
-
-    public double getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    public Point2D getVelocity() {
-        return velocity;
-    }
-
-    public void addVelocity(Point2D velocity) {
-        this.velocity = this.velocity.add(velocity);
-    }
-
-    public void setVelocity(Point2D velocity) {
-        this.velocity = velocity;
-    }
-
-    public double getMaxForce() {
-        return 10;
-    }
-
-    public Point2D getHeading() {
-        return heading;
-    }
-
-    public void setMaxSpeed(double maxSpeed) {
-        this.maxSpeed = maxSpeed;
-    }
-
 }
