@@ -55,7 +55,7 @@ public class Dissolve extends Trigger {
                 Color color = pr.getColor(x, y);
 
                 if (color.getOpacity() > .01) {
-                    Point2D particlePosition = getCenterPosition().subtract(getRadius().multiply(.5)).add(x, y);
+                    Point2D particlePosition = getCenterPosition().subtract(getSize().multiply(.5)).add(x, y);
                     particlePosition = rotate.transform(particlePosition.getX(), particlePosition.getY());
                     particles.add(new Particle(particlePosition.getX(), particlePosition.getY(), getCenterPosition().getX(), getCenterPosition().getY(), PIXEL_GAP, DISSOLVE_SPEED, color));
                 }
@@ -88,6 +88,11 @@ public class Dissolve extends Trigger {
     @Override
     protected Image[] getDefaultImage() {
         return new Image[0];
+    }
+
+    @Override
+    public double getHitBoxRadius() {
+        return 0;
     }
 
     @Override

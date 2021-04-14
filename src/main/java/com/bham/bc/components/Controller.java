@@ -22,7 +22,6 @@ import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -32,9 +31,9 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * Class defining the common elements and behavior for both survival and challenge controllers
+ * Class defining the common elements and behavior for any controller
  */
-public abstract class CenterController extends BaseGameEntity implements Services {
+public abstract class Controller extends BaseGameEntity implements Services {
 
     public static Services services;
 
@@ -53,7 +52,7 @@ public abstract class CenterController extends BaseGameEntity implements Service
     /**
      * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
      */
-    public CenterController() {
+    public Controller() {
         super(getNextValidID(),-1,-1);
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
@@ -63,23 +62,14 @@ public abstract class CenterController extends BaseGameEntity implements Service
 
     /**
      * Sets the mode of the game the user has chosen
-     * @param mode SURVIVAL or CHALLENGE value to be passed as a game mode
-     * @param mapType layout of map that will be used by a specific mode
+     * @param mapType layout of map that will be used
      */
-    public static void setMode(Mode mode, MapType mapType) {
-        CenterController centerController = null;
-        switch (mode) {
-            case SURVIVAL:
-                centerController = new SurvivalController();
-                break;
-            case CHALLENGE:
-                centerController = new ChallengeController();
-                break;
-        }
-        services = centerController;
+    public static void setMode(MapType mapType) {
+        Controller controller = new SurvivalController();
+        services = controller;
 
-        centerController.loadMap(mapType);
-        centerController.startGame();
+        controller.loadMap(mapType);
+        controller.startGame();
     }
 
     // TEMPORARY METHODS -------------------------------------------
@@ -141,40 +131,6 @@ public abstract class CenterController extends BaseGameEntity implements Service
     @Override
     public boolean intersectsObstacles(Rectangle path) {
         return gameMap.getInteractiveObstacles().stream().anyMatch(o -> o.intersects(path));
-    }
-
-    @Override
-    public void renderHitBoxes(AnchorPane hitBoxPane) {
-        hitBoxPane.getChildren().clear();
-
-        // Add bullet hit-boxes
-//        bullets.forEach(b -> {
-//            Shape bulletHitBox = b.getHitBox();
-//            bulletHitBox.setFill(Color.TRANSPARENT);
-//            bulletHitBox.setStroke(Color.RED);
-//            bulletHitBox.setStrokeWidth(1);
-//            hitBoxPane.getChildren().add(bulletHitBox);
-//        });
-
-        // Add character hit-boxes
-//        characters.forEach(c -> {
-//            Shape cHitBox = c.getHitBox();
-//            cHitBox.setFill(Color.TRANSPARENT);
-//            cHitBox.setStroke(Color.RED);
-//            cHitBox.setStrokeWidth(1);
-//            hitBoxPane.getChildren().add(cHitBox);
-//        });
-
-
-//        characters.forEach(c -> {
-//            List<Shape> smoothingBoxes = c.getSmoothingBoxes();
-//            for (Shape smoothingBox : smoothingBoxes) {
-//                smoothingBox.setFill(Color.TRANSPARENT);
-//                smoothingBox.setStroke(Color.GREEN);
-//                smoothingBox.setStrokeWidth(1);
-//                hitBoxPane.getChildren().add(smoothingBox);
-//            }
-//        });
     }
     // ------------------------------------------------------------
 
@@ -240,13 +196,13 @@ public abstract class CenterController extends BaseGameEntity implements Service
         gameMap.update();
 
         characters.forEach(GameCharacter::update);
-        characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character,40)));
+        characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character, character.getHitBoxRadius() * 3)));
 
         bullets.forEach(Bullet::update);
-        bullets.forEach(bullet -> bullet.handle(mapDivision.calculateNeighborsArray(bullet, bullet.getHitboxRadius())));
+        bullets.forEach(bullet -> bullet.handle(mapDivision.calculateNeighborsArray(bullet, bullet.getHitBoxRadius() * 3)));
 
         triggers.forEach(Trigger::update);
-        triggers.forEach(trigger -> trigger.handle(mapDivision.calculateNeighborsArray(trigger.getCenterPosition(), 40)));
+        triggers.forEach(trigger -> trigger.handle(mapDivision.calculateNeighborsArray(trigger.getCenterPosition(), trigger.getHitBoxRadius() * 3)));
 
         // Performed before removals
         bullets.forEach(b -> mapDivision.updateMovingEntity(b));
@@ -266,9 +222,9 @@ public abstract class CenterController extends BaseGameEntity implements Service
         bullets.forEach(bullet -> bullet.render(gc));
         characters.forEach(character -> character.render(gc));
 
-        // gameMap.renderTopLayer(gc);
+        gameMap.renderTopLayer(gc);
 
-        gameMap.renderGraph(gc, new ArrayList<>(characters));
+        //gameMap.renderGraph(gc, new ArrayList<>(characters));
         gameMap.renderTerritories(gc);
     }
 

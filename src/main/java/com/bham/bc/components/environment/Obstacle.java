@@ -9,7 +9,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.messaging.MessageTypes.*;
 
@@ -107,6 +107,11 @@ public class Obstacle extends BaseGameEntity {
     @Override
     public Rectangle getHitBox() {
         return new Rectangle(x, y, entityImages[0].getWidth(), entityImages[0].getHeight());
+    }
+
+    @Override
+    public double getHitBoxRadius() {
+        return Math.hypot(getHitBox().getWidth()/2, getHitBox().getHeight()/2);
     }
 
     @Override

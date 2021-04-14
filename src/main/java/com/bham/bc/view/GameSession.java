@@ -2,9 +2,8 @@ package com.bham.bc.view;
 
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.Mode;
 
-import static com.bham.bc.components.CenterController.*;
+import static com.bham.bc.components.Controller.*;
 
 import com.bham.bc.view.model.MenuSlider;
 import javafx.animation.AnimationTimer;
@@ -41,8 +40,8 @@ public class GameSession {
     /**
      * Constructs the view manager
      */
-    public GameSession(Mode mode, MapType mapType) {
-        setMode(mode, mapType);
+    public GameSession(MapType mapType) {
+        setMode(mapType);
         initializeStage();
         createKeyListeners();
     }

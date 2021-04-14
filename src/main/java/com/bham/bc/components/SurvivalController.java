@@ -5,14 +5,13 @@ import com.bham.bc.components.characters.enemies.*;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.physics.MapDivision;
-import javafx.geometry.Point2D;
 
 import java.util.ArrayList;
 
 /**
  * Represents a controller for the survival game mode
  */
-public class SurvivalController extends CenterController {
+public class SurvivalController extends Controller {
 
     /**
      * Constructs the controller by selecting a specific map and preparing that map for the game session

@@ -44,14 +44,6 @@ abstract public class Bullet extends MovingEntity {
     }
 
     /**
-     * Gets bullet's speed
-     * @return velocity at which the bullet is moving
-     */
-    public double getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    /**
      * Gets bullet's type
      * @return DEFAULT of EXPLOSIVE type the bullet belongs to
      */
@@ -76,25 +68,10 @@ abstract public class Bullet extends MovingEntity {
     }
 
     /**
-     * Sets bullet's speed
-     */
-    public void setSpeed(double maxSpeed) {
-        this.maxSpeed = maxSpeed;
-    }
-
-    /**
      * Sets bullet's damage
      */
     public void setDamage(double damage) {
         this.damage = damage;
-    }
-
-
-    public double getHitboxRadius() {
-        Point2D p1 = super.getRadius();
-        double n1 = Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
-        if(n1<42.0) return 42.0;                // 20.0 means the mini check hitbox radius
-        return n1;
     }
 
     /**
@@ -129,7 +106,6 @@ abstract public class Bullet extends MovingEntity {
     public void handle(List<BaseGameEntity> entities) {
         entities.forEach(this::handle);
     }
-
 
     /**
      * Unregisters and prepares to remove the bullet. Also runs any destruction effects

@@ -63,7 +63,7 @@ public class ExplosiveBullet extends Bullet {
         //get bound rectangle top left pos
         //calculate region radius according to current time
         Point2D regionRadius = new Point2D(MAX_BOUND_WIDTH, MAX_BOUND_HEIGHT).multiply(existTime/(double)LIFETIME);
-        Point2D topLeft = getPosition().subtract(regionRadius.subtract(getRadius()).multiply(0.5));
+        Point2D topLeft = getPosition().subtract(regionRadius.subtract(getSize()).multiply(0.5));
 
         //create hit box according to bound rectangle
         Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), regionRadius.getX(), regionRadius.getY());
@@ -73,7 +73,7 @@ public class ExplosiveBullet extends Bullet {
     }
 
     @Override
-    public double getHitboxRadius() {
+    public double getHitBoxRadius() {
         Point2D p1 = new Point2D(MAX_BOUND_WIDTH, MAX_BOUND_HEIGHT);
         return Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
     }

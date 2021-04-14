@@ -174,15 +174,4 @@ public interface Services {
      */
     double getHomeHp();
     //-------------------------------------------------------------
-
-
-    // TEMPORARY METHODS -------------------------------------------
-    // TEMPORARY
-    /**
-     * Renders hit-boxes of characters and armory
-     * <br>TODO: remove before release
-     * @param gamePane layout where hit-boxes will be rendered
-     */
-    void renderHitBoxes(AnchorPane gamePane);
-
 }

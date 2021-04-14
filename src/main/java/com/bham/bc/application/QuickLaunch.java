@@ -1,7 +1,6 @@
 package com.bham.bc.application;
 
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.Mode;
 import com.bham.bc.view.GameSession;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -10,7 +9,7 @@ public class QuickLaunch extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            GameSession manager = new GameSession(Mode.SURVIVAL, MapType.Map1);
+            GameSession manager = new GameSession(MapType.Map1);
             manager.createNewGame(primaryStage);
         } catch(Exception e) {
             e.printStackTrace();

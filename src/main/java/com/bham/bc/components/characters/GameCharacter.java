@@ -152,14 +152,6 @@ abstract public class GameCharacter extends MovingEntity {
     protected abstract void destroy();
 
     /**
-     * Gets radius of a circular hit-box
-     * @return radius of a character's hit-box
-     */
-    public double getHitBoxRadius() {
-        return getHitBox().getRadius();
-    }
-
-    /**
      * TODO: remove?
      * Gets a list of path areas (used for path smoothing)
      * @return a list of areas of type Shape
@@ -173,6 +165,11 @@ abstract public class GameCharacter extends MovingEntity {
 
     @Override
     public abstract Circle getHitBox();
+
+    @Override
+    public double getHitBoxRadius() {
+        return getHitBox().getRadius();
+    }
 
     @Override
     public boolean handleMessage(Telegram msg) {

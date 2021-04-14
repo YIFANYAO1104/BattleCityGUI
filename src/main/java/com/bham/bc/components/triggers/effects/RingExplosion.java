@@ -47,10 +47,17 @@ public class RingExplosion extends Trigger {
         return entityImages;
     }
 
+
+
     //TODO: Adjust size according to currentFrame
     @Override
-    public Shape getHitBox() {
+    public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
+    }
+
+    @Override
+    public double getHitBoxRadius() {
+        return getHitBox().getRadius();
     }
 
     @Override

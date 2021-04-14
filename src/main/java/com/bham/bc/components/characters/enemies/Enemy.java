@@ -20,7 +20,7 @@ import javafx.scene.shape.Shape;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**

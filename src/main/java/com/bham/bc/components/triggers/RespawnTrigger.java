@@ -72,4 +72,9 @@ abstract public class RespawnTrigger extends Trigger {
     public Rectangle getHitBox() {
         return new Rectangle(x, y, GameMap.getTileWidth(), GameMap.getTileHeight());
     }
+
+    @Override
+    public double getHitBoxRadius() {
+        return Math.hypot(getHitBox().getWidth()/2, getHitBox().getHeight()/2);
+    }
 }

@@ -174,7 +174,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      */
     public NavNode getClosestNodeForEntity(BaseGameEntity entity){
         Point2D location = entity.getPosition();
-        Point2D radius = entity.getRadius();
+        Point2D radius = entity.getSize();
         int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
         int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
         int c = j*rowNums + i;

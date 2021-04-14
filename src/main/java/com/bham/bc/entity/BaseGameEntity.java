@@ -66,13 +66,10 @@ abstract public class BaseGameEntity {
     }
 
     public Point2D getCenterPosition() {
-        double width = getRadius().getX();
-        double height = getRadius().getY();
-
-        return new Point2D(x + width/2, y + height/2);
+        return new Point2D(x + getSize().getX()/2, y + getSize().getY()/2);
     }
 
-    public Point2D getRadius() {
+    public Point2D getSize() {
         return new Point2D(entityImages[0].getWidth(), entityImages[0].getHeight());
     }
 
@@ -99,10 +96,23 @@ abstract public class BaseGameEntity {
     }
 
     /**
+     * Gets the hit-box of the entity
      *
-     * @return
+     * <p>Hit-box is a shape with size and location properties. In most cases it is either a circle or a rectangle.</p>
+     *
+     * @return the shape of the hit-box
      */
     abstract public Shape getHitBox();
+
+    /**
+     * Gets the outer radius of the hit-box
+     *
+     * <p>If it's a circle it gets its radius, if its any other shape, it gets the radius of the outer
+     * circle that would be generated around the hit-box.</p>
+     *
+     * @return size of hit-box radius
+     */
+    abstract public double getHitBoxRadius();
 
     /**
      *

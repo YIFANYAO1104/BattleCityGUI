@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import java.util.List;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -65,7 +65,7 @@ public class Player extends GameCharacter {
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
 	public void bomb() {
-		Point2D center = getPosition().add(getRadius().multiply(0.5));
+		Point2D center = getPosition().add(getSize().multiply(0.5));
 		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), heading, side);
 		services.addBullet(b);
 	}
