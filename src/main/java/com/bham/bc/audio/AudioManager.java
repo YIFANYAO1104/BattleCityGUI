@@ -3,9 +3,11 @@ package com.bham.bc.audio;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
+import javafx.scene.media.MediaPlayer;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <h1>Manages all audio in the game</h1>
@@ -21,15 +23,18 @@ import java.util.stream.Collectors;
 public class AudioManager {
     public static AudioManager audioManager = new AudioManager();
 
-    private static AudioPlayer player;
     private final EnumMap<SoundEffect, AudioClip> SFX;
-    private double volume;
+    private static AudioPlayer player;
+    private double effectsVolume;
+    private double musicVolume;
+
 
     /**
      * Constructs audio manager and sets initial volume to 100%
      */
     public AudioManager() {
-        volume = 1;
+        effectsVolume = .5;
+        musicVolume = .3;
         SFX = createSFX();
     }
 
@@ -80,21 +85,19 @@ public class AudioManager {
      * @param players list of players that will be put in a sequential loop
      */
     private void loadSequence(boolean loop, List<AudioPlayer> players) {
-        if(players.size() == 0) return;
+        player = players.size() == 0 ? null : players.get(0);
 
-        player = players.get(0);
         for (int i = 0; i < players.size() - (loop ? 0 : 1); i++) {
             AudioPlayer curr = players.get(i);
             AudioPlayer next = players.get((i + 1) % players.size());
 
             curr.setOnEndOfAudio(() -> {
                 curr.stop();
-                next.setVolume(volume);
+                next.setVolume(musicVolume);
                 next.play();
                 player = next;
             });
         }
-
     }
 
     /**
@@ -104,8 +107,15 @@ public class AudioManager {
      */
     public void loadSequentialPlayer(boolean loop, SoundTrack... soundTracks) {
         if(player != null && player.isPlaying()) player.stop();
-        loadSequence(loop, Arrays.asList(new SequentialAudioPlayer(createTracks(soundTracks))));
-        if(player != null) player.setVolume(volume);
+        ArrayList<Media> mediaList = createTracks(soundTracks);
+
+        if(mediaList.size() == 0) {
+            player = null;
+            return;
+        }
+
+        loadSequence(loop, Arrays.asList(new SequentialAudioPlayer(mediaList)));
+        if(player != null) player.setVolume(musicVolume);
     }
 
     /**
@@ -120,8 +130,9 @@ public class AudioManager {
      */
     public void loadSequentialPlayer(boolean loop, SoundTrack[]... soundTrackBatches) {
         if(player != null && player.isPlaying()) player.stop();
-        loadSequence(loop, Arrays.stream(soundTrackBatches).map(this::createTracks).map(ParallelAudioPlayer::new).collect(Collectors.toList()));
-        if(player != null) player.setVolume(volume);
+        Stream<ArrayList<Media>> listStream = Arrays.stream(soundTrackBatches).map(this::createTracks).filter(list -> !list.isEmpty());
+        loadSequence(loop, listStream.map(ParallelAudioPlayer::new).collect(Collectors.toList()));
+        if(player != null) player.setVolume(musicVolume);
     }
 
     /**
@@ -132,8 +143,7 @@ public class AudioManager {
     public void loadParallelPlayer(boolean loop, SoundTrack... soundTracks) {
         if(player != null && player.isPlaying()) player.stop();
         loadSequentialPlayer(loop, soundTracks, new SoundTrack[]{});
-        player = new SequentialAudioPlayer(createTracks(soundTracks));
-        player.setVolume(volume);
+        if(player != null) player.setVolume(musicVolume);
     }
 
 
@@ -142,7 +152,9 @@ public class AudioManager {
      * @param effect type of {@link SoundEffect} to be played
      */
     public void playEffect(SoundEffect effect) {
-        if(SFX.containsKey(effect)) SFX.get(effect).play();
+        if(SFX.containsKey(effect)) {
+            SFX.get(effect).play();
+        }
     }
 
     /**
@@ -171,16 +183,32 @@ public class AudioManager {
      * @param volume value between 0 and 1 indicating a new balance of the current player
      */
     public void setMusicVolume(double volume) {
-        this.volume = Math.max(0, Math.min(1, volume));
-        new Thread(() -> { if(player != null) player.setVolume(this.volume); }).start();
+        musicVolume = Math.max(0, Math.min(1, volume));
+        new Thread(() -> { if(player != null) player.setVolume(musicVolume); }).start();
     }
 
     /**
      * Sets volume for every sound effect on a new thread to interfere less with the running thread
      * @param volume value between 0 and 1 indicating a new balance of each sound effect
      */
-    public void setEffectVolume(double volume) {
-        this.volume = Math.max(0, Math.min(1, volume));
-        new Thread(() -> SFX.values().forEach(sfx -> sfx.setVolume(this.volume))).start();
+    public void setEffectsVolume(double volume) {
+        effectsVolume = Math.max(0, Math.min(1, volume));
+        new Thread(() -> SFX.values().forEach(sfx -> sfx.setVolume(effectsVolume))).start();
+    }
+
+    /**
+     * Gets the current music volume
+     * @return value between 0 and 1 indicating the current volume of the player
+     */
+    public double getMusicVolume() {
+        return musicVolume;
+    }
+
+    /**
+     * Gets the current effects volume
+     * @return value between 0 and 1 indicating the current volume of the effects
+     */
+    public double getEffectsVolume() {
+        return effectsVolume;
     }
 }

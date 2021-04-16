@@ -44,6 +44,9 @@ public class MenuSession {
         mainStage = new Stage();
         mainStage.setScene(mainScene);
 
+        mainScene.getRoot().applyCss();
+        mainScene.getRoot().layout();
+
         initMainMenu();
         CustomStage customStage=new CustomStage(mainStage,mainScene,mainPane);
         customStage.createCommonTitlebar(mainPane, WIDTH, HEIGHT);
@@ -60,7 +63,9 @@ public class MenuSession {
 
         //audioManager.loadSequentialPlayer(SoundTrack.BREAK);
 
-        audioManager.loadSequentialPlayer(true, SoundTrack.TEST1, SoundTrack.TEST2, SoundTrack.TEST3);
+        //AudioPlayer audioPlayer = new SequentialAudioPlayer();
+
+        audioManager.loadSequentialPlayer(true, SoundTrack.TEST2, SoundTrack.TEST1);
         audioManager.playMusic();
     }
 

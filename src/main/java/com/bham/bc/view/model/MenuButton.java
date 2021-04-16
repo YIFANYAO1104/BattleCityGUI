@@ -90,12 +90,14 @@ public class MenuButton extends StackPane {
         // Hover animation
         setOnMouseEntered((e) -> {
             ft.playFromStart();
+            scaleDown.stop();
             bg.setStrokeWidth(0);
             sideBar.setStrokeWidth(0);
             scaleUp.play();
         });
         setOnMouseExited(e -> {
             ft.stop();
+            scaleUp.stop();
             bg.setFill(gradient);
             bg.setStrokeWidth(1);
             sideBar.setStrokeWidth(1);

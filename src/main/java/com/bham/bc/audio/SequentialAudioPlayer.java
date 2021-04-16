@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * they were constructed from. The player resets itself after all tracks finish playing to the first track but
  * does not start paying again.</p>
  */
-public class SequentialAudioPlayer implements AudioPlayer {
+class SequentialAudioPlayer implements AudioPlayer {
     private final ArrayList<MediaPlayer> PLAYERS;
     private final ObjectProperty<Runnable> ON_END;
 
@@ -28,7 +28,7 @@ public class SequentialAudioPlayer implements AudioPlayer {
      * @param mediaFiles audio files to be put into playlist
      * @throws IllegalArgumentException thrown when the list of audio files is empty
      */
-    protected SequentialAudioPlayer(ArrayList<Media> mediaFiles) throws IllegalArgumentException {
+    SequentialAudioPlayer(ArrayList<Media> mediaFiles) throws IllegalArgumentException {
         if(mediaFiles.isEmpty()) throw new IllegalArgumentException("There must be at least one media file to play");
 
         PLAYERS = mediaFiles.stream().map(MediaPlayer::new).collect(Collectors.toCollection(ArrayList::new));
@@ -46,6 +46,7 @@ public class SequentialAudioPlayer implements AudioPlayer {
         PLAYERS.get(PLAYERS.size() - 1).setOnEndOfMedia(() -> {
             isPlaying = false;
             currentTrack = PLAYERS.get(0);
+            PLAYERS.get(PLAYERS.size() - 1).stop();
             if(getOnEndOfAudio() != null) Platform.runLater(getOnEndOfAudio());
         });
 

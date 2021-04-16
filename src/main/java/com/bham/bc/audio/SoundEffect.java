@@ -6,7 +6,8 @@ import javafx.scene.media.AudioClip;
  * Enum for all sound effects in the game
  */
 public enum SoundEffect {
-    SELECT("audio/sfx/select.wav");
+    SELECT("audio/sfx/select.mp3"),
+    BUILD("audio/sfx/build3.mp3");
 
     private final String PATH;
 

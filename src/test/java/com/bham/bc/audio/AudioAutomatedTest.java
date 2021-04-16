@@ -1,8 +1,11 @@
 package com.bham.bc.audio;
 
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
 import org.junit.Test;
+import sun.audio.AudioPlayer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.Assert.fail;
@@ -64,5 +67,14 @@ public class AudioAutomatedTest {
             System.err.println("setMusicVolume() should have no effect on a non-loaded audio manager");
             fail();
         }
+    }
+
+    @Test
+    public void volumeShouldNotGoOverUpperBound() {
+        AudioManager audioManager = new AudioManager();
+        audioManager.loadParallelPlayer(false, SoundTrack.CORRUPTION);
+        audioManager.setMusicVolume(999);
+        //ssertT
+        //assert audioManager.getVolume() <= 1;
     }
 }

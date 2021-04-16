@@ -12,7 +12,6 @@ public enum SoundTrack {
     REVOLUTION("src/main/resources/audio/music/survival/voxel-revolution.mp3"),
 
     TEST1("audio/music/challenge/DeepSpaceB.mp3"),
-    //TEST1("audio/sfx/select.wav"),
     TEST2("audio/music/challenge/RhytmicBounceA.mp3"),
     TEST3("audio/music/challenge/RhytmicBounceB.mp3");
 

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  *
  * <p><b>NB</b> Each layer must be of the same length and of similar metadata</p>
  */
-public class ParallelAudioPlayer implements AudioPlayer {
+class ParallelAudioPlayer implements AudioPlayer {
     private final List<MediaPlayer> PLAYERS;
     private final List<AudioAnalyser> ANALYSERS;
     private final CyclicBarrier GATE;
@@ -35,13 +35,14 @@ public class ParallelAudioPlayer implements AudioPlayer {
      * @param mediaFiles audio files to be played as 1 audio
      * @throws IllegalArgumentException thrown when the list of audio files is empty
      */
-    public ParallelAudioPlayer(ArrayList<Media> mediaFiles) throws IllegalArgumentException {
+    ParallelAudioPlayer(ArrayList<Media> mediaFiles) throws IllegalArgumentException {
         if(mediaFiles.isEmpty()) throw new IllegalArgumentException("There must be at least one media file to play");
 
         PLAYERS = mediaFiles.stream().map(MediaPlayer::new).collect(Collectors.toList());
         ANALYSERS = PLAYERS.stream().map(mp -> new AudioAnalyser(mp,.06, 96)).collect(Collectors.toList());
 
         PLAYERS.forEach(player -> player.setOnEndOfMedia(() -> {
+            player.stop();
             if(--countdown == 0) {
                 isPlaying = false;
                 countdown = mediaFiles.size();
