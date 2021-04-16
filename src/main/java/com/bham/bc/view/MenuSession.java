@@ -1,6 +1,6 @@
 package com.bham.bc.view;
 
-import com.bham.bc.audio.Track;
+import com.bham.bc.audio.SoundTrack;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
@@ -58,8 +58,10 @@ public class MenuSession {
 
         mainPane.getChildren().addAll(menuBackground, mainMenu);
 
-        audioManager.createSequentialPlayer(Track.BREAK);
-        audioManager.play();
+        //audioManager.loadSequentialPlayer(SoundTrack.BREAK);
+
+        audioManager.loadSequentialPlayer(true, SoundTrack.TEST1, SoundTrack.TEST2, SoundTrack.TEST3);
+        audioManager.playMusic();
     }
 
 
@@ -90,11 +92,11 @@ public class MenuSession {
      * @param e SURVIVAL or CHALLENGE mode to be set in Controller
      */
     public void createGameSession(NewGameEvent e) {
-        audioManager.createSequentialPlayer(Track.CORRUPTION, Track.LEAD, Track.REVOLUTION);
+        //audioManager.loadSequentialPlayer(SoundTrack.CORRUPTION, SoundTrack.LEAD, SoundTrack.REVOLUTION);
         GameSession gameSession = new GameSession(e.getMapType());
         gameSession.createNewGame(mainStage);
 
-        audioManager.play();
+        audioManager.playMusic();
     }
 
     /**

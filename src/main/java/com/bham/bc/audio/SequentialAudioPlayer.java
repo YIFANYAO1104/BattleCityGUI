@@ -1,80 +1,102 @@
 package com.bham.bc.audio;
 
+import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
+/**
+ * <h1>Sequential Audio Player</h1>
+ *
+ * <p>Used to play multiple tracks in sequence. Tracks are played one by one from start to finish in a sequence
+ * they were constructed from. The player resets itself after all tracks finish playing to the first track but
+ * does not start paying again.</p>
+ */
 public class SequentialAudioPlayer implements AudioPlayer {
-    private ArrayList<MediaPlayer> players;
+    private final ArrayList<MediaPlayer> PLAYERS;
+    private final ObjectProperty<Runnable> ON_END;
+
     private MediaPlayer currentTrack;
     private boolean isPlaying;
 
     /**
-     * Constructs a sequential media player
+     * Constructs a sequential audio player with at least one song playing
      * @param mediaFiles audio files to be put into playlist
+     * @throws IllegalArgumentException thrown when the list of audio files is empty
      */
-    public SequentialAudioPlayer(ArrayList<Media> mediaFiles) {
-        players = new ArrayList<>();
-        for(Media media: mediaFiles) players.add(new MediaPlayer(media));
+    protected SequentialAudioPlayer(ArrayList<Media> mediaFiles) throws IllegalArgumentException {
+        if(mediaFiles.isEmpty()) throw new IllegalArgumentException("There must be at least one media file to play");
 
-        initPlaylist();
+        PLAYERS = mediaFiles.stream().map(MediaPlayer::new).collect(Collectors.toCollection(ArrayList::new));
+        ON_END = new SimpleObjectProperty<>(this, "onEndOfAudio");
         isPlaying = false;
+        initPlaylist();
     }
 
     /**
-     * initializes a cyclic sequence of media players
+     * Initializes a one-time sequence of media players
      */
     private void initPlaylist() {
-        if(!players.isEmpty()) currentTrack = players.get(0);
+        currentTrack = PLAYERS.get(0);
 
-        if(players.size() == 1) {
-            currentTrack.setCycleCount(MediaPlayer.INDEFINITE);
-        } else {
-            for (int i = 0; i < players.size(); i++) {
-                MediaPlayer curr = players.get(i);
-                MediaPlayer next = players.get((i + 1) % players.size());
+        PLAYERS.get(PLAYERS.size() - 1).setOnEndOfMedia(() -> {
+            isPlaying = false;
+            currentTrack = PLAYERS.get(0);
+            if(getOnEndOfAudio() != null) Platform.runLater(getOnEndOfAudio());
+        });
 
-                curr.setOnEndOfMedia(() -> {
-                    curr.stop();
-                    next.play();
-                    currentTrack = next;
-                });
-            }
+        for (int i = 0; i < PLAYERS.size() - 1; i++) {
+            MediaPlayer curr = PLAYERS.get(i);
+            MediaPlayer next = PLAYERS.get(i + 1);
+
+            curr.setOnEndOfMedia(() -> {
+                curr.stop();
+                next.setVolume(curr.getVolume());
+                next.play();
+                currentTrack = next;
+            });
         }
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return isPlaying;
     }
 
     @Override
     public void play() {
-        if(currentTrack != null && !isPlaying) {
-            new Thread(() -> currentTrack.play()).start();
-            isPlaying = true;
-        }
+        currentTrack.play();
+        isPlaying = true;
     }
 
     @Override
     public void pause() {
-        if(currentTrack != null && isPlaying) {
-            new Thread(() -> currentTrack.pause()).start();
-            isPlaying = false;
-        }
+        currentTrack.pause();
+        isPlaying = false;
     }
 
     @Override
     public void stop() {
-        if(currentTrack != null) {
-            new Thread(() -> currentTrack.stop()).start();
-            isPlaying = false;
-        }
+        currentTrack.stop();
+        isPlaying = false;
     }
 
     @Override
     public void setVolume(double volume) {
-        for(MediaPlayer player: players) {
-            new Thread(() -> player.setVolume(volume)).start();
-        }
+        currentTrack.setVolume(volume);
     }
 
     @Override
-    public boolean isPlaying() { return isPlaying; }
+    public void setOnEndOfAudio(Runnable value) {
+        ON_END.set(value);
+    }
+
+    @Override
+    public Runnable getOnEndOfAudio() {
+        return ON_END == null ? null : ON_END.get();
+    }
 }
