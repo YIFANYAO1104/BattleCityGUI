@@ -1,6 +1,7 @@
 package com.bham.bc.view;
 
 import com.bham.bc.audio.Track;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
@@ -91,7 +92,7 @@ public class MenuSession {
      */
     public void createGameSession(NewGameEvent e) {
         audioManager.createSequentialPlayer(Track.CORRUPTION, Track.LEAD, Track.REVOLUTION);
-        GameSession gameSession = new GameSession(e.getMapType());
+        GameSession gameSession = new GameSession(MapType.MAP2);
         gameSession.createNewGame(mainStage);
 
         audioManager.play();
