@@ -172,10 +172,18 @@ public class MapLoader {
                 int x= (i % mapWidth) * tileWidth;
                 int y = (i / mapWidth) * tileHeight - yo;
 
+                System.out.println(obstacleArray.getInt(i));
+                System.out.println(tileset);
                 int tileID = obstacleArray.getInt(i) - OFFSETS.get(tileset);
                 int[] tileIDs = ANIMATIONS.containsKey(tileID) ? ANIMATIONS.get(tileID) : new int[] {tileID};
 
-                obstacleInstances.add((Obstacle) constructor.newInstance(x, y, attributes, tileset, tileIDs));
+                System.out.println(tileset);
+                try{
+                    obstacleInstances.add((Obstacle) constructor.newInstance(x, y, attributes, tileset, tileIDs));
+                }catch (Exception e){
+
+                }
+
             }
         }
         return obstacleInstances;
