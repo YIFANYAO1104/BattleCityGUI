@@ -95,7 +95,7 @@ public class EndMenu extends AnchorPane {
             primaryStage = manager.getMainStage();
             System.out.println(nameInput.getText());
             primaryStage.show(); MainMenu.recordsHandler.createRecord(new RecordsHandler.Records("13",nameInput.getText(),score+"",RecordsHandler.getDate()));
-            MainMenu.tableView.setItems(MainMenu.recordsHandler.sortAndGetData());
+            MainMenu.tableView.setItems(MainMenu.recordsHandler.sortAndGetData());isshown=false;
         });
 
         // Container to store all the elements of this end menu
@@ -106,6 +106,7 @@ public class EndMenu extends AnchorPane {
 
         subMenuEnd = new SubMenu(this);
         subMenuEnd.getChildren().addAll(container);
+
     }
 
     /**
@@ -122,12 +123,13 @@ public class EndMenu extends AnchorPane {
         btnReturn.setOnMouseClicked(e -> { GameSession.gameStage.hide();
             MenuSession manager = new MenuSession();
             primaryStage = manager.getMainStage();
-            primaryStage.show(); });
+            primaryStage.show(); isshown=false;});
         vBox.getChildren().addAll(endMenuLabel, btnReturn);
         vBox.setSpacing(30);
         vBox.setAlignment(Pos.CENTER);
         subMenuEnd = new SubMenu(this);
         subMenuEnd.getChildren().addAll(vBox);
+
 
     }
 
@@ -139,10 +141,8 @@ public class EndMenu extends AnchorPane {
         isshown=true;
         gamePane.getChildren().add(this);
         score=sco;
-        System.out.println(RecordsHandler.jsonArrayToFile.length());
-        if (RecordsHandler.jsonArrayToFile.length()==0){
-            showWhenHigh();
-        }else {
+
+
         jsObject= (JSONObject) RecordsHandler.jsonArrayToFile.get(RecordsHandler.jsonArrayToFile.length()-1);
         if (Double.valueOf(jsObject.getString("score"))>score){
             System.out.println("low");
@@ -150,7 +150,7 @@ public class EndMenu extends AnchorPane {
         }else {
             System.out.println("high");
             showWhenHigh();
-        } }
+        }
 
         FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
         ft.setFromValue(0);

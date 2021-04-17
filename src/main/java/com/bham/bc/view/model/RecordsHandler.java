@@ -15,9 +15,10 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class RecordsHandler {
-    private static ArrayList<Records> records;
+    public static ArrayList<Records> records;
     public static JSONArray jsonArrayToFile;
     private static JSONArray jsonArray;
+    private static JSONArray albums;
 
 
     public RecordsHandler() {
@@ -28,6 +29,26 @@ public class RecordsHandler {
     static {
 
         jsonArrayToFile=new JSONArray();
+    }
+
+    public static ObservableList<Records> initTable(){
+
+
+
+        //read from Json file
+        try {
+            parseJsonFile("src\\main\\resources\\scores.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ObservableList<Records> data = FXCollections.observableArrayList(records);
+        System.out.println("data len="+data.size());
+
+        for (int i = 0; i < albums.length(); i++) {
+            jsonArrayToFile.put(albums.get(i));
+        }
+        return data;
+
     }
 
     /**
@@ -364,7 +385,7 @@ public class RecordsHandler {
      */
     public static ArrayList<Records> parse(String responseBody){
         records=new ArrayList<>();
-        JSONArray albums = new JSONArray(responseBody);
+        albums = new JSONArray(responseBody);
         //System.out.println(albums.length());
         for (int i = 0; i < albums.length(); i++){
             JSONObject album = albums.getJSONObject(i);

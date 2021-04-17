@@ -3,6 +3,7 @@ package com.bham.bc.view.menu;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -12,6 +13,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.IOException;
 import java.util.Arrays;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
@@ -80,6 +82,11 @@ public class MainMenu extends AnchorPane {
         subMenuMain.getChildren().addAll(btnStart, btnScores, btnSettings, btnQuit);
     }
 
+    static {
+        ObservableList<RecordsHandler.Records> data=RecordsHandler.initTable();
+        tableView.setItems(data);
+    }
+
 
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
@@ -123,6 +130,11 @@ public class MainMenu extends AnchorPane {
         tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
         tableView.getColumns().addAll(rank, name, score, date);
         tableView.setId("scores-table");
+
+
+
+
+
 
         subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
         tableView.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });

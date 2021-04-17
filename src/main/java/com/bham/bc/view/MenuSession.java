@@ -72,7 +72,7 @@ public class MenuSession {
         if(gamePane.getChildren().contains(pauseMenu)) {
             pauseMenu.hide(gamePane);
             timer.start();
-
+            showEndMenu(gamePane,103);
         } else {
             pauseMenu.show(gamePane);
             timer.stop();
