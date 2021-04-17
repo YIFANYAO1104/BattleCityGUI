@@ -4,7 +4,7 @@
 package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -27,8 +27,8 @@ public class Immune extends RespawnTrigger {
 
     @Override
     public void handle(BaseGameEntity entity) {
-        if(active && entity instanceof GameCharacter && intersects(entity)) {
-            ((GameCharacter) entity).toImmune(activationTime * FRAME_RATE);
+        if(active && entity instanceof Player && intersects(entity)) {
+            ((Player) entity).toImmune(activationTime * FRAME_RATE);
             deactivate();
         }
     }

@@ -74,30 +74,23 @@ abstract public class GameCharacter extends MovingEntity {
         if(side == Side.ENEMY)
         if(hp <= 0) destroy();
     }
+    
+    /**
+     * Get immune activation time
+     * @return immune activation time (if it's 0 meaning character is not in immune state)
+     */
+    public int getImmuneTicks() {
+        return immuneTicks;
+    }
 
     // TEMP: DOCUMENT ------------------------------------------------
     @Deprecated
     public void switchWeapon(Weapon w) {}
-    public void toTriple(int numTicks) {
-        tripleTicks = numTicks;
-    }
-    public void toFreeze(int numTicks) {
-        freezeTicks = numTicks;
-    }
-    public void toImmune(int numTicks) {
-        immuneTicks = numTicks;
-    }
-    protected void updateTriggers() {
-        if(immuneTicks!=0) --immuneTicks;
-        if(freezeTicks!=0) --freezeTicks;
-        if(tripleTicks!=0) --tripleTicks;
-    }
+
     public void destroyed(){
         this.hp-=200;
     }
-    public int getImmuneTicks() {
-        return immuneTicks;
-    }
+    
     public void teleport(double x,double y){
         this.x = x;
         this.y = y;

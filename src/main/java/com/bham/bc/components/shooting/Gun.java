@@ -64,7 +64,7 @@ public class Gun {
         double centerBulletY = CHARACTER.getPosition().getY() - bulletType.getHeight() / 2.0;
 
         // Rotate bullet's center point around character
-        Rotate rotateAroundCharacter = new Rotate(CHARACTER.getAngle(), CHARACTER.getCenterPosition().getX(), CHARACTER.getCenterPosition().getY());
+        Rotate rotateAroundCharacter = new Rotate(CHARACTER.getAngle()+angleOffset, CHARACTER.getCenterPosition().getX(), CHARACTER.getCenterPosition().getY());
         Point2D transformedCenterXY = rotateAroundCharacter.transform(centerBulletX, centerBulletY);
 
         // Define the bullet's top left coordinates
@@ -74,9 +74,9 @@ public class Gun {
         // Return an instance which corresponds to the bullet type
         switch(bulletType) {
             case EXPLOSIVE:
-                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
+                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
             default:
-                return new DefaultBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
+                return new DefaultBullet(topLeftBulletX, topLeftBulletY, rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
         }
     }
 
@@ -127,5 +127,18 @@ public class Gun {
      */
     public void setDamageFactor(double factor) {
         if(bulletType != null) damageFactor = factor;
+    }
+    
+    /**
+     * Rotates a given point (heading vector) by some angle
+     * @param velocity a vector to be rotated
+     * @param angle    angle in radians by which the point is rotated
+     * @return a rotated Point2D object
+     */
+    public static Point2D rotate(Point2D heading, double angle) {
+        double x = (heading.getX() * Math.cos(Math.toRadians(angle))) - (heading.getY() * Math.sin(Math.toRadians(angle)));
+        double y = (heading.getX() * Math.sin(Math.toRadians(angle))) + (heading.getY() * Math.cos(Math.toRadians(angle)));
+
+        return new Point2D(x, y);
     }
 }
