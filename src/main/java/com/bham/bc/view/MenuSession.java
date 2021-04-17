@@ -38,14 +38,11 @@ public class MenuSession {
     public MenuSession() {
         mainPane = new AnchorPane();
         mainPane.addEventFilter(NewGameEvent.START_GAME, this::createGameSession);
-        mainPane.getStylesheets().add(MenuSlider.class.getResource("../../../../../style.css").toExternalForm());
+        mainPane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
 
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
-
-        mainScene.getRoot().applyCss();
-        mainScene.getRoot().layout();
 
         initMainMenu();
         CustomStage customStage=new CustomStage(mainStage,mainScene,mainPane);
@@ -61,11 +58,7 @@ public class MenuSession {
 
         mainPane.getChildren().addAll(menuBackground, mainMenu);
 
-        //audioManager.loadSequentialPlayer(SoundTrack.BREAK);
-
-        //AudioPlayer audioPlayer = new SequentialAudioPlayer();
-
-        audioManager.loadSequentialPlayer(true, SoundTrack.TEST2, SoundTrack.TEST1);
+        audioManager.loadSequentialPlayer(true, SoundTrack.BREAK);
         audioManager.playMusic();
     }
 

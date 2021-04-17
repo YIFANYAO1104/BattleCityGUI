@@ -6,10 +6,10 @@ import javafx.scene.media.Media;
  * Enum for all tracks in the game
  */
 public enum SoundTrack {
-    BREAK("src/main/resources/audio/music/menu/night-break.mp3"),
-    CORRUPTION("src/main/resources/audio/music/survival/corruption.mp3"),
-    LEAD("src/main/resources/audio/music/survival/take-the-lead.mp3"),
-    REVOLUTION("src/main/resources/audio/music/survival/voxel-revolution.mp3"),
+    BREAK("audio/music/menu/night-break.mp3"),
+    CORRUPTION("audio/music/survival/corruption.mp3"),
+    LEAD("audio/music/survival/take-the-lead.mp3"),
+    REVOLUTION("audio/music/survival/voxel-revolution.mp3"),
 
     TEST1("audio/music/challenge/DeepSpaceB.mp3"),
     TEST2("audio/music/challenge/RhytmicBounceA.mp3"),
