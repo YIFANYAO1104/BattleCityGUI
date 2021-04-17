@@ -25,6 +25,10 @@ public class RecordsHandler {
         records=new ArrayList<>();
     }
 
+    /**
+     * get the string format of date
+     * @return string format of date
+     */
 
     public static String getDate(){
 
