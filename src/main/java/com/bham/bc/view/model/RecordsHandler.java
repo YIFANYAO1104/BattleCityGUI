@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class RecordsHandler {
@@ -22,6 +23,19 @@ public class RecordsHandler {
     public RecordsHandler() {
         jsonArrayToFile=new JSONArray();
         records=new ArrayList<>();
+    }
+
+
+    public static String getDate(){
+
+        String[] strNow1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString().split("-");
+
+        Integer.parseInt(strNow1[0]);			//获取年
+        Integer.parseInt(strNow1[1]);			//获取月
+        Integer.parseInt(strNow1[2]);			//获取日
+
+        return strNow1[2]+"/"+strNow1[1]+"/"+strNow1[0];
+
     }
 
     /**
@@ -41,16 +55,16 @@ public class RecordsHandler {
     public void createSampleRecords() {
 
         //write to Json file
-        createRecord(new Records("1st","Dou","999","7/3"));
-        createRecord(new Records("2nd","YIFAN","888","7/3"));
-        createRecord(new Records("3rd","Alex","777","7/3"));
-        createRecord(new Records("4th","Mantas","666","7/3"));
-        createRecord(new Records("5th","Najd","555","7/3"));
-        createRecord(new Records("6th","Justin","444","7/3"));
-        createRecord(new Records("7th","John","333","7/3"));
-        createRecord(new Records("8th","Shan","222","7/3"));
-        createRecord(new Records("9th","Juily","111","7/3"));
-        createRecord(new Records("10th","Berry","99","7/3"));
+        createRecord(new Records("1st","Dou","999",getDate()));
+        createRecord(new Records("2nd","YIFAN","888",getDate()));
+        createRecord(new Records("3rd","Alex","777",getDate()));
+        createRecord(new Records("4th","Mantas","666",getDate()));
+        createRecord(new Records("5th","Najd","555",getDate()));
+        createRecord(new Records("6th","Justin","444",getDate()));
+        createRecord(new Records("7th","John","333",getDate()));
+        createRecord(new Records("8th","Shan","222",getDate()));
+        createRecord(new Records("9th","Juily","111",getDate()));
+        createRecord(new Records("10th","Berry","99",getDate()));
 
         //first step is to sort before add new records
         jsonArrayToFile=jsonArraySort(jsonArrayToFile);

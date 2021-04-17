@@ -11,5 +11,8 @@
       <entry name="!?*.kt" />
       <entry name="!?*.clj" />
     </wildcardResourcePatterns>
+    <bytecodeTargetLevel target="8">
+      <module name="BattleCity" target="8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
