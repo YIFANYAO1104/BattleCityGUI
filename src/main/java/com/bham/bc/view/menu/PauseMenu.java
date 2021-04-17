@@ -81,8 +81,8 @@ public class PauseMenu extends AnchorPane {
      * Creates layout for options in the pause menu
      */
     private void createSubMenuSettings() {
-        MenuSlider musicVolume = new MenuSlider("MUSIC", 100);
-        MenuSlider sfxVolume = new MenuSlider("EFFECTS", 100);
+        MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));
+        MenuSlider sfxVolume = new MenuSlider("EFFECTS", (int) (audioManager.getMusicVolume() * 100));
         MenuButton btnBack = new MenuButton("BACK");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));

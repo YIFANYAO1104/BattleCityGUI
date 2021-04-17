@@ -93,7 +93,7 @@ public class MenuSession {
      * @param e SURVIVAL or CHALLENGE mode to be set in Controller
      */
     public void createGameSession(NewGameEvent e) {
-        //audioManager.loadSequentialPlayer(SoundTrack.CORRUPTION, SoundTrack.LEAD, SoundTrack.REVOLUTION);
+        audioManager.loadSequentialPlayer(true, SoundTrack.REVOLUTION, SoundTrack.CORRUPTION, SoundTrack.LEAD);
         GameSession gameSession = new GameSession(e.getMapType());
         gameSession.createNewGame(mainStage);
 

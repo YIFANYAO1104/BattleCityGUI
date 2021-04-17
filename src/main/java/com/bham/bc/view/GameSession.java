@@ -92,9 +92,11 @@ public class GameSession {
      * creates the input listeners. Key presses are handled by the center controller class.
      */
     private void createKeyListeners() {
-
         gameScene.setOnKeyPressed(e -> {
-            if (EndMenu.isshown==false&&(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE)) {
+            if(e.getCode() == KeyCode.Q) {  // Testing purposes
+                gameTimer.stop();
+                MenuSession.showEndMenu(gamePane, 999);
+            } else if(!EndMenu.isshown && (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE)) {
                 showPauseMenu();
             } else {
                 services.keyPressed(e);

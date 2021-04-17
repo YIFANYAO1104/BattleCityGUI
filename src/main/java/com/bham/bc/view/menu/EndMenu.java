@@ -6,6 +6,8 @@ import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.RecordsHandler;
 import com.bham.bc.view.model.SubMenu;
 import javafx.animation.FadeTransition;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -14,6 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.json.JSONObject;
@@ -23,8 +26,8 @@ import org.json.JSONObject;
  * <h1>End Menu</h1>
  *
  * <p>Represents the end screen for a finished game session. End menu is observed every time
- * a player finishes a game. It asks the player to enter their name and saves their score of
- * a particular game mode</p>
+ * a player finishes a game. It asks the player to enter their name and saves their score to
+ * a JSON file to be loaded to the leaderboard.</p>
  *
  * <b>Note:</b> the Menu asks for a name and allows to submit the score <i>only</i> if it makes
  * to the leaderboard of up to 10 highest all-time scores
@@ -63,29 +66,46 @@ public class EndMenu extends AnchorPane {
      * show when user get high socres
      */
     private void showWhenHigh() {
-        VBox vBox=new VBox();
-        Text tip=new Text("YOU GET HIGH SCORE!");
-        tip.setStyle("-fx-fill: gold;-fx-font-size: 40px;-fx-font-weight: bold;");
-        HBox hBox=new HBox();
-        Text name=new Text("User name: ");
-        name.setStyle("-fx-fill: white;-fx-font-size: 20px;-fx-font-weight: bold;");
-        TextField userName=new TextField();
-        hBox.getChildren().addAll(name,userName);
+        // Main label to show on the end menu
+        Label endMenuLabel = new Label("Congratulations!\nYou made it to the top!");
+        endMenuLabel.getStyleClass().add("leaderboard-label");
+        endMenuLabel.setTextAlignment(TextAlignment.CENTER);
 
-        btnSubmit = new MenuButton("Submit");
+        // Label to ask user's name
+        Label nameLabel = new Label("Enter your name:");
+        nameLabel.getStyleClass().add("slider-label");
+
+        // Input field to get user's name
+        TextField nameInput = new TextField();
+        nameInput.setMaxWidth(GameSession.WIDTH/3.0);
+
+        // TODO: replace the above 2 lines with this 1 line:
+        // TextField nameInput = new MenuTextField();
+
+        // Label and input field for user's name
+        VBox labelAndInput = new VBox();
+        labelAndInput.setSpacing(15);
+        labelAndInput.setAlignment(Pos.CENTER);
+        labelAndInput.getChildren().addAll(nameLabel,nameInput);
+
+        // Submit button to push the record to the leaderboard
+        btnSubmit = new MenuButton("SUBMIT");
         btnSubmit.setOnMouseClicked(e -> { GameSession.gameStage.hide();
             MenuSession manager = new MenuSession();
             primaryStage = manager.getMainStage();
-            System.out.println(userName.getText());
-            primaryStage.show(); MainMenu.recordsHandler.createRecord(new RecordsHandler.Records("13",userName.getText(),score+"",RecordsHandler.getDate()));
+            System.out.println(nameInput.getText());
+            primaryStage.show(); MainMenu.recordsHandler.createRecord(new RecordsHandler.Records("13",nameInput.getText(),score+"",RecordsHandler.getDate()));
             MainMenu.tableView.setItems(MainMenu.recordsHandler.sortAndGetData());
         });
-        vBox.getChildren().addAll(tip,hBox,btnSubmit);
-        vBox.setSpacing(30);
-        vBox.setTranslateX(100);
+
+        // Container to store all the elements of this end menu
+        VBox container = new VBox();
+        container.setSpacing(45);
+        container.setAlignment(Pos.CENTER);
+        container.getChildren().addAll(endMenuLabel,labelAndInput,btnSubmit);
 
         subMenuEnd = new SubMenu(this);
-        subMenuEnd.getChildren().addAll(vBox);
+        subMenuEnd.getChildren().addAll(container);
     }
 
     /**
@@ -93,16 +113,19 @@ public class EndMenu extends AnchorPane {
      */
     private void showWhenLow(){
         VBox vBox=new VBox();
-        Text tip=new Text("SORRY, YOU GET LOW SCORE!");
-        tip.setStyle("-fx-fill: gold;-fx-font-size: 40px;-fx-font-weight: bold;");
+
+        Label endMenuLabel = new Label("Your score didn't make it\nto the leaderboard this time...");
+        endMenuLabel.getStyleClass().add("leaderboard-label");
+        endMenuLabel.setTextAlignment(TextAlignment.CENTER);
+
         MenuButton btnReturn = new MenuButton("RETURN TO MENU");
         btnReturn.setOnMouseClicked(e -> { GameSession.gameStage.hide();
             MenuSession manager = new MenuSession();
             primaryStage = manager.getMainStage();
             primaryStage.show(); });
-        vBox.getChildren().addAll(tip,btnReturn);
+        vBox.getChildren().addAll(endMenuLabel, btnReturn);
         vBox.setSpacing(30);
-        vBox.setTranslateX(60);
+        vBox.setAlignment(Pos.CENTER);
         subMenuEnd = new SubMenu(this);
         subMenuEnd.getChildren().addAll(vBox);
 
