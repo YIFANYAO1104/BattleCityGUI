@@ -61,6 +61,39 @@ public class Player extends GameCharacter {
 		navigationService = new PathPlanner(this, services.getGraph());
 		steering.setKeysOn(true);
 	}
+	
+	/**
+	 * Assign activation time of Triple Bullet trigger
+	 * @param numTicks activation time in ticks
+	 */
+    public void toTriple(int numTicks) {
+        tripleTicks = numTicks;
+    }
+    
+    /**
+	 * Assign activation time of Freeze trigger
+	 * @param numTicks activation time in ticks
+	 */
+    public void toFreeze(int numTicks) {
+        freezeTicks = numTicks;
+    }
+    
+    /**
+	 * Assign activation time of Immune trigger
+	 * @param numTicks activation time in ticks
+	 */
+    public void toImmune(int numTicks) {
+        immuneTicks = numTicks;
+    }
+    
+    /**
+	 * Update trigger(s) activation time
+	 */
+    protected void updateTriggers() {
+        if(immuneTicks!=0) --immuneTicks;
+        if(freezeTicks!=0) --freezeTicks;
+        if(tripleTicks!=0) --tripleTicks;
+    }
 
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
@@ -109,8 +142,8 @@ public class Player extends GameCharacter {
 	 * based on player's position and angle</p>
 	 */
 	private void fire() {
-		GUN.shoot();
-		if(tripleTicks != 0) GUN.shoot(-45, 45);
+		if(tripleTicks == 0) GUN.shoot();
+		else GUN.shoot(-45, 0, 45);
 	}
 
 	/**

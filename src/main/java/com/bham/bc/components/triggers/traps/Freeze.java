@@ -4,7 +4,7 @@
 package com.bham.bc.components.triggers.traps;
 
 import com.bham.bc.components.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
@@ -29,8 +29,8 @@ public class Freeze extends RespawnTrigger {
 
     @Override
     public void handle(BaseGameEntity entity) {
-        if(active && entity instanceof GameCharacter && intersects(entity)) {
-            ((GameCharacter) entity).toFreeze(activationTime * FRAME_RATE);
+        if(active && entity instanceof Player && intersects(entity)) {
+            ((Player) entity).toFreeze(activationTime * FRAME_RATE);
             deactivate();
         }
     }

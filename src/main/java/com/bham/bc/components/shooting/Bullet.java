@@ -45,7 +45,7 @@ abstract public class Bullet extends MovingEntity {
 
     /**
      * Gets bullet's type
-     * @return DEFAULT of EXPLOSIVE type the bullet belongs to
+     * @return DEFAULT or EXPLOSIVE type the bullet belongs to
      */
     public BulletType getType() {
         return TYPE;
