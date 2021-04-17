@@ -16,13 +16,18 @@ import java.util.*;
 
 public class RecordsHandler {
     private static ArrayList<Records> records;
-    private static JSONArray jsonArrayToFile;
+    public static JSONArray jsonArrayToFile;
     private static JSONArray jsonArray;
 
 
     public RecordsHandler() {
+
+
+        System.out.println("size="+jsonArrayToFile.length());
+    }
+    static {
+
         jsonArrayToFile=new JSONArray();
-        records=new ArrayList<>();
     }
 
     /**
@@ -86,6 +91,7 @@ public class RecordsHandler {
     public ObservableList<Records> sortAndGetData(){
         //third step is to sort after add the new records
         sort();
+
         try {
             writeJsonToFile("src\\main\\resources\\scores.json");
         } catch (Exception e) {
@@ -99,6 +105,7 @@ public class RecordsHandler {
             e.printStackTrace();
         }
         ObservableList<Records> data = FXCollections.observableArrayList(records);
+        System.out.println("data len="+data.size());
 
         return data;
     }
@@ -205,18 +212,18 @@ public class RecordsHandler {
         }
         Collections.sort(jsonValues, new Comparator<JSONObject>() {
             private static final String KEY_NAME = "score";
-            int score1;
-            int score2;
+            double score1;
+            double score2;
             @Override
             public int compare(JSONObject a, JSONObject b) {
                 try {
-                    score1= Integer.valueOf(a.getString(KEY_NAME));
-                    score2= Integer.valueOf(b.getString(KEY_NAME));
+                    score1= Double.valueOf(a.getString(KEY_NAME));
+                    score2= Double.valueOf(b.getString(KEY_NAME));
                 } catch (JSONException e) {
                     // 处理异常
                 }
                 //这里是按照时间逆序排列,不加负号为正序排列
-                return -score1+score2;
+                return (int) (-score1+score2);
             }
         });
         for (int i = 0; i < jsonArr.length(); i++) {
@@ -356,6 +363,7 @@ public class RecordsHandler {
      * @return
      */
     public static ArrayList<Records> parse(String responseBody){
+        records=new ArrayList<>();
         JSONArray albums = new JSONArray(responseBody);
         //System.out.println(albums.length());
         for (int i = 0; i < albums.length(); i++){

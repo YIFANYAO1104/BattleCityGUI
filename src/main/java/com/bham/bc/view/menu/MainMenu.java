@@ -12,6 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.Arrays;
+
 import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
@@ -27,6 +29,8 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuMode;
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
+    public static RecordsHandler recordsHandler = new RecordsHandler();;
+    public static TableView<RecordsHandler.Records> tableView = new TableView<>();;
 
     private final NewGameEvent NEW_GAME_EVENT;
     /**
@@ -114,15 +118,10 @@ public class MainMenu extends AnchorPane {
         score.setCellValueFactory(new PropertyValueFactory<>("score"));
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        // Get the saved data from record handler
-        RecordsHandler recordsHandler = new RecordsHandler();
-        recordsHandler.createSampleRecords();
-        ObservableList<RecordsHandler.Records> survivalData= recordsHandler.sortAndGetData();
 
-        TableView<RecordsHandler.Records> tableView = new TableView<>();
+
         tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
         tableView.getColumns().addAll(rank, name, score, date);
-        tableView.setItems(survivalData);
         tableView.setId("scores-table");
 
         subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
