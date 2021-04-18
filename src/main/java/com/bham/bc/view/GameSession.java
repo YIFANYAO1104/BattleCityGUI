@@ -93,7 +93,7 @@ public class GameSession {
      */
     private void createKeyListeners() {
         gameScene.setOnKeyPressed(e -> {
-            if(e.getCode() == KeyCode.Q) {  // Testing purposes
+            if(!EndMenu.isshown&&e.getCode() == KeyCode.Q) {  // Testing purposes
                 gameTimer.stop();
                 MenuSession.showEndMenu(gamePane, 999);
             } else if(!EndMenu.isshown && (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE)) {

@@ -35,6 +35,7 @@ public class RecordsHandler {
 
 
 
+
         //read from Json file
         try {
             parseJsonFile("src\\main\\resources\\scores.json");

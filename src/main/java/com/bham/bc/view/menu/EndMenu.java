@@ -142,6 +142,10 @@ public class EndMenu extends AnchorPane {
         gamePane.getChildren().add(this);
         score=sco;
 
+        if (RecordsHandler.jsonArrayToFile.length()==0){
+            System.out.println("high");
+            showWhenHigh();
+        }else {
 
         jsObject= (JSONObject) RecordsHandler.jsonArrayToFile.get(RecordsHandler.jsonArrayToFile.length()-1);
         if (Double.valueOf(jsObject.getString("score"))>score){
@@ -150,7 +154,7 @@ public class EndMenu extends AnchorPane {
         }else {
             System.out.println("high");
             showWhenHigh();
-        }
+        }}
 
         FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
         ft.setFromValue(0);
