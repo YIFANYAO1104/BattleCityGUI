@@ -38,6 +38,7 @@ public class MapLoader {
         TRIGGERS = new ArrayList<>();
         TRIGGER_CLASSES = new HashMap<>();
 
+        if (resourceName==null) return;
         try {
             loadMap(resourceName);
         } catch (Exception e) {

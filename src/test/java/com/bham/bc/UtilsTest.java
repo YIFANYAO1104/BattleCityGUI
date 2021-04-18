@@ -9,7 +9,7 @@ import static com.bham.bc.utils.GeometryEnhanced.*;
 import static org.junit.Assert.assertTrue;
 
 
-public class TransformTest {
+public class UtilsTest {
     @Test
     public void angleExperiment1(){
         Point2D p1 = new Point2D(1,1);
