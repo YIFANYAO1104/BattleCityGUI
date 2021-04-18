@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
 
 import java.util.*;
 
+import static com.bham.bc.utils.GeometryEnhanced.isZero;
+
 /**
  * The fundamental section of whole map. It has the list which stores all the base elements.
  * And it also has the Hitbox attribute which will be used to tell if interact with another.
@@ -48,8 +50,8 @@ public class MapDivision<entity extends BaseGameEntity>{
      */
     private int PositionToIndex(Point2D pos) {
 
-        int idx = (int) (m_NumCellsX * pos.getX() / m_Width)
-                + ((int) ((m_NumCellsY) * pos.getY() / m_Height) * m_NumCellsX);
+        int idx = (int) (pos.getX() / cellWidth)
+                + ((int) (pos.getY() / cellHeight) * m_NumCellsX);
 
         //if the entity's position is equal to Point2d(m_Width, m_Height)
         //then the index will overshoot. We need to check for this and adjust
@@ -58,6 +60,34 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
 
         return idx;
+    }
+
+    private List<Integer> getCellIndexes(Point2D pos,Point2D size) {
+
+        int ix1 = (int) (pos.getX() / cellWidth);
+        int iy1 = (int) (pos.getY() / cellHeight);
+
+        Point2D br = pos.add(size);
+        int ix2 = (int) (br.getX() / cellWidth);
+        int iy2 = (int) (br.getY() / cellHeight);
+        if (br.getX()-ix2*cellWidth<1E-8){
+            ix2--;
+        }
+        if (br.getY()-iy2*cellHeight<1E-8){
+            iy2--;
+        }
+
+        List<Integer> idxes = new ArrayList<>();
+        for (int i = ix1; i <= ix2; i++) {
+            for (int j = iy1; j <= iy2; j++) {
+                int idx = i + j*m_NumCellsX;
+                if (idx < m_Cells.size()){
+                    idxes.add(idx);
+                }
+            }
+        }
+
+        return idxes;
     }
 
     /**
