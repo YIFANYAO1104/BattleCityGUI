@@ -63,6 +63,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     //Map the closet node for that entities
     private  HashMap<BaseGameEntity, NavNode> trcikingTable = new HashMap<>();
 
+    private double realContrustPercentage = 0.0;
+
     /**
      * @return true if the edge is not present in the graph. Used when adding
      * edges to prevent duplication
@@ -652,6 +654,14 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     @Override
     public String toString() {
         return "Sparse Graph type";
+    }
+
+    public double getRealContrustPercentage() {
+        return realContrustPercentage;
+    }
+
+    public void setRealContrustPercentage(double realContrustPercentage) {
+        this.realContrustPercentage = realContrustPercentage;
     }
 
 }

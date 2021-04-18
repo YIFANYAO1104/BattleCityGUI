@@ -97,12 +97,18 @@ public class HandyGraphFunctions {
         double midY = CellHeight / 2;
 
 
+        double realTimeNodes = 0;
         //first create all the nodes
         for (int row = 0; row < NumCellsY; ++row) {
             for (int col = 0; col < NumCellsX; ++col) {
                 graph.addNode(new NavNode(graph.getNextFreeNodeIndex(),
                         new Point2D(midX + (col * CellWidth),
                                 midY + (row * CellHeight))));
+
+                realTimeNodes = realTimeNodes+1.0;
+                double total = NumCellsX * NumCellsY;
+                double realPer  = realTimeNodes / (total*2);
+                graph.setRealContrustPercentage(realPer);
 
             }
         }
@@ -112,6 +118,11 @@ public class HandyGraphFunctions {
         for (int row = 0; row < NumCellsY; ++row) {
             for (int col = 0; col < NumCellsX; ++col) {
                 GraphHelper_AddAllNeighboursToGridNode(graph, row, col, NumCellsX, NumCellsY);
+
+                double total = NumCellsX * NumCellsY;
+                double realPer = 1.0 / (total*2) + graph.getRealContrustPercentage();
+                graph.setRealContrustPercentage(realPer);
+//                System.out.println(graph.getRealContrustPercentage());
             }
         }
     }
