@@ -4,7 +4,10 @@ package com.bham.bc.entity.physics;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.entity.graph.node.NavNode;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.util.*;
 
@@ -250,11 +253,26 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
-    public void Render(){}
+    public void Render(GraphicsContext gc){
+        for(double i = 0; i<m_Height;i = + cellHeight){
+            renderline(gc,Color.RED,new Point2D(0,i),new Point2D(m_Width,i));
+        }
+        for(double i = 0; i<m_Width;i = + cellWidth){
+            renderline(gc,Color.RED,new Point2D(i,0),new Point2D(i,m_Height));
+        }
+    }
+
+    private void renderline(GraphicsContext gc, Color color, Point2D n1, Point2D n2){
+        gc.setStroke(color);
+        gc.setLineWidth(1.0);
+        gc.strokeLine(
+                n1.getX(), n1.getY(), n2.getX(), n2.getY());
+    }
 
     public int sizeOfCells(){
         return m_Cells.size();
     }
+
     public double getCellWidth(){
         return cellWidth;
     }

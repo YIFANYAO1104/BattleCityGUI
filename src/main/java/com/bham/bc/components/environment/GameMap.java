@@ -302,6 +302,7 @@ public class GameMap {
     public void renderGraph(GraphicsContext gc, ArrayList<BaseGameEntity> entities){
         graphSystem.render(gc);
         graphSystem.renderTankPoints(entities,gc);
+
     }
 
     /**

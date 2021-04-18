@@ -649,6 +649,10 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
     }
 
+    public int ALlNodesNum(){
+        return nodeVector.size();
+    }
+
     @Override
     public String toString() {
         return "Sparse Graph type";
