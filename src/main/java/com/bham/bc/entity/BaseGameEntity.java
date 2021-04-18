@@ -4,8 +4,8 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Shape;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
 
@@ -138,5 +138,18 @@ abstract public class BaseGameEntity {
      */
     abstract public String toString();
 
-
+    // TODO: remove
+    public void renderHitBox(GraphicsContext gc) {
+        if(getHitBox() instanceof Rectangle) {
+            Rectangle hb = (Rectangle) getHitBox();
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1);
+            gc.strokeRect(hb.getX(), hb.getY(), hb.getWidth(), hb.getHeight());
+        } else if(getHitBox() instanceof Circle) {
+            Circle hb = (Circle) getHitBox();
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1);
+            gc.strokeArc(hb.getCenterX() - hb.getRadius(), hb.getCenterY() - hb.getRadius(), hb.getRadius()*2, hb.getRadius()*2, 0, 360, ArcType.OPEN);
+        }
+    }
 }

@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 /**
  * Represents Kamikaze's explosion effect. This is created as a trigger because it affects player's HP
@@ -47,12 +46,11 @@ public class RingExplosion extends Trigger {
         return entityImages;
     }
 
-
-
-    //TODO: Adjust size according to currentFrame
     @Override
     public Circle getHitBox() {
-        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
+        // f(x) = -x^2/250 + .8
+        double y = -Math.pow((currentFrame - 14), 2)/250 + .8;
+        return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0 * y);
     }
 
     @Override
@@ -72,8 +70,6 @@ public class RingExplosion extends Trigger {
             ((GameCharacter) entity).changeHp(-damage);
         }
     }
-
-    protected void renderRegion(GraphicsContext gc) { }
 
     @Override
     public void update() {

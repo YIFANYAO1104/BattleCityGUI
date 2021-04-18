@@ -3,6 +3,8 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
@@ -97,6 +99,12 @@ public class Player extends GameCharacter {
 
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
+	// TODO: remove, this is another example of bomb()
+	public void ring() {
+		Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
+		services.addTrigger(explosion);
+	}
+
 	public void bomb() {
 		Point2D center = getPosition().add(getSize().multiply(0.5));
 		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), heading, side);
@@ -159,6 +167,7 @@ public class Player extends GameCharacter {
 		switch (e.getCode()){
 			case F: fire(); break;
 			case B: bomb(); break;
+			case R: ring(); break;
 			case W: DIRECTION_SET.add(Direction.U); break;
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
