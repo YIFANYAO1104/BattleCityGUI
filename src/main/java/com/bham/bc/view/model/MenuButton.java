@@ -17,7 +17,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-import static com.bham.bc.audio.Sfx.SELECT;
+import static com.bham.bc.audio.AudioManager.audioManager;
+import static com.bham.bc.audio.SoundEffect.SELECT;
 
 /**
  * <h1>Menu Button</h1>
@@ -89,12 +90,14 @@ public class MenuButton extends StackPane {
         // Hover animation
         setOnMouseEntered((e) -> {
             ft.playFromStart();
+            scaleDown.stop();
             bg.setStrokeWidth(0);
             sideBar.setStrokeWidth(0);
             scaleUp.play();
         });
         setOnMouseExited(e -> {
             ft.stop();
+            scaleUp.stop();
             bg.setFill(gradient);
             bg.setStrokeWidth(1);
             sideBar.setStrokeWidth(1);
@@ -102,7 +105,7 @@ public class MenuButton extends StackPane {
         });
 
         // Click animations
-        setOnMousePressed(e -> { ft.stop(); bg.setFill(Color.web(HIGH, .3)); SELECT.play(); });
+        setOnMousePressed(e -> { ft.stop(); bg.setFill(Color.web(HIGH, .3)); audioManager.playEffect(SELECT); });
         setOnMouseReleased(e -> bg.setFill(gradient));
 
         // Add parts that make up the button

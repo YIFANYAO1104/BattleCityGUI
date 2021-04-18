@@ -80,7 +80,7 @@ public class PauseMenu extends AnchorPane {
         MenuButton btnBack = new MenuButton("BACK");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
-        sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectVolume(newVal.doubleValue()/100));
+        sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectsVolume(newVal.doubleValue()/100));
         btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuPause.show(); });
 
         subMenuSettings = new SubMenu(this);

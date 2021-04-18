@@ -1,5 +1,6 @@
 package com.bham.bc.view.model;
 
+import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;
 import javafx.animation.ScaleTransition;
 import javafx.geometry.Pos;
@@ -65,8 +66,14 @@ public class SubMenu extends VBox {
             scaleDown.setToX(1);
             scaleDown.setToY(1);
 
+            FadeTransition fadeIn = new FadeTransition(Duration.millis(150), this);
+            fadeIn.setInterpolator(Interpolator.EASE_OUT);
+            fadeIn.setFromValue(0);
+            fadeIn.setToValue(1);
+
             scaleUp.setOnFinished(e -> scaleDown.play());
             scaleUp.play();
+            fadeIn.play();
         }
     }
 
@@ -75,13 +82,19 @@ public class SubMenu extends VBox {
      */
     public void hide() {
         if(PARENT.getChildren().contains(this)) {
-            ScaleTransition st = new ScaleTransition(Duration.millis(150), this);
-            st.setInterpolator(Interpolator.EASE_OUT);
-            st.setToX(.1);
-            st.setToY(.1);
+            ScaleTransition scaleDown = new ScaleTransition(Duration.millis(150), this);
+            scaleDown.setInterpolator(Interpolator.EASE_OUT);
+            scaleDown.setToX(.1);
+            scaleDown.setToY(.1);
 
-            st.setOnFinished(e -> PARENT.getChildren().remove(this));
-            st.play();
+            FadeTransition fadeOut = new FadeTransition(Duration.millis(150), this);
+            fadeOut.setInterpolator(Interpolator.EASE_OUT);
+            fadeOut.setFromValue(1);
+            fadeOut.setToValue(0);
+
+            scaleDown.setOnFinished(e -> PARENT.getChildren().remove(this));
+            scaleDown.play();
+            fadeOut.play();
         }
     }
 }

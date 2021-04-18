@@ -7,6 +7,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.effect.Glow;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 
 /**
  * <h1>Menu Slider</h1>
@@ -41,7 +42,23 @@ public class MenuSlider extends HBox {
         SLIDER.setEffect(new Glow(.8));
         SLIDER.setPrefWidth(WIDTH*.5);
         SLIDER.getStyleClass().add("slider");
-        SLIDER.valueProperty().addListener((obsVal, oldVal, newVal) -> SLIDER.lookup(".track").setStyle(String.format("-fx-background-color: linear-gradient(to right, -fx-primary-color %d%%, -fx-secondary-color %d%%);", newVal.intValue(), newVal.intValue())));
+
+        // Slider track
+        StackPane sliderTrack = new StackPane();
+        sliderTrack.setMaxWidth(WIDTH*.48);
+        sliderTrack.setMaxHeight(HEIGHT*.18);
+        sliderTrack.getStyleClass().add(".slider-track");
+        sliderTrack.setStyle(
+                "-fx-background-radius: 20px;" + "-fx-border-width: 0;" + "-fx-effect: innershadow(gaussian, -fx-darken-color, 4, .1, 0, 0);" +
+                String.format("-fx-background-color: linear-gradient(to right, -fx-primary-color %d%%, -fx-secondary-color %d%%);", initialValue, initialValue));
+        SLIDER.valueProperty().addListener((obsVal, oldVal, newVal) -> sliderTrack.setStyle(
+                "-fx-background-radius: 20px;" + "-fx-border-width: 0;" + "-fx-effect: innershadow(gaussian, -fx-darken-color, 4, .1, 0, 0);" +
+                String.format("-fx-background-color: linear-gradient(to right, -fx-primary-color %d%%, -fx-secondary-color %d%%);", newVal.intValue(), newVal.intValue())));
+
+        // Container for the slider and its track
+        StackPane sliderContainer = new StackPane();
+        sliderContainer.setAlignment(Pos.CENTER);
+        sliderContainer.getChildren().addAll(sliderTrack, SLIDER);
 
         // Label for slider
         Label sliderLabel = new Label();
@@ -55,7 +72,7 @@ public class MenuSlider extends HBox {
         valueLabel.getStyleClass().add("value-label");
 
         // Add all children
-        getChildren().addAll(sliderLabel, SLIDER, valueLabel);
+        getChildren().addAll(sliderLabel, sliderContainer, valueLabel);
     }
 
     /**
