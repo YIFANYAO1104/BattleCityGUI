@@ -1,6 +1,7 @@
 package com.bham.bc.entity.physics;
 
 
+import com.bham.bc.components.Controller;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
@@ -27,6 +28,14 @@ class Cell <entity extends Object>{
 
     public Cell(Point2D topleft, Point2D bottomright){
         cBox = new Hitbox(topleft,bottomright);
+    }
+
+    public void render(GraphicsContext gc, double cellWidth, double cellHeight,int NumCellsX){
+        Point2D p = cBox.getTopLeft();
+        int idx = (int) (p.getX() / cellWidth)
+                + ((int) (p.getY() / cellHeight) * NumCellsX);
+        gc.setFill(Color.GOLD);
+        gc.fillText(String.valueOf(idx),p.getX(),p.getY()+15);
     }
 
 }
@@ -155,6 +164,20 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
+    public void addObstacles(List<entity> m1){
+        for(entity b1:m1){
+            assert (b1 != null);
+
+            List<Integer> idxes = getCellIndexes(b1.getPosition(),b1.getSize());
+            if (b1.getSize().getX()==80){
+                System.out.println(idxes);
+            }
+            for (Integer idx : idxes) {
+                m_Cells.get(idx).Unites.add(b1);
+            }
+        }
+    }
+
     public void updateMovingEntities(List<entity> n1){
         n1.forEach(this::updateMovingEntity);
     }
@@ -216,8 +239,12 @@ public class MapDivision<entity extends BaseGameEntity>{
         try {
             Obstacle g1 = (Obstacle) genericObstacle;
             if(!g1.exists()){
-                int idx = PositionToIndex(genericObstacle.getPosition());
-                removedEntity(genericObstacle, idx);
+                List<Integer> idxes = getCellIndexes(genericObstacle.getPosition(),genericObstacle.getSize());
+                for (Integer idx : idxes) {
+                    removedEntity(genericObstacle, idx);
+                }
+//                int idx = PositionToIndex(genericObstacle.getPosition());
+//                removedEntity(genericObstacle, idx);
             }
         }catch (Exception e){}
     }
@@ -296,6 +323,11 @@ public class MapDivision<entity extends BaseGameEntity>{
         for(double i = 0; i<m_Width;i = i + cellWidth){
             renderline(gc,Color.BISQUE,new Point2D(i,0),new Point2D(i,m_Height));
         }
+
+        for (Cell<entity> m_cell : m_Cells) {
+            m_cell.render(gc,cellWidth,cellHeight,m_NumCellsX);
+        }
+
     }
 
     private void renderNode(GraphicsContext gc,Color color, Point2D n1, int level){
