@@ -14,7 +14,7 @@ public class RecordsHandlerTest extends TestCase {
      * test createRcord and sort function
      */
     @Test
-    public void testCreateRecord() {
+    public void shouldSortScoresCorrectly() {
 
         recordsHandler=new RecordsHandler();
         recordsHandler.createSampleRecords();
