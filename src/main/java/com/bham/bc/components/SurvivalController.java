@@ -60,8 +60,10 @@ public class SurvivalController extends Controller {
      * Once all the entities are initialized, they can be added to map division which will handle collision checks much faster
      */
     private void initDivision() {
-        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), GameMap.getNumTilesX(), GameMap.getNumTilesY(), 50);
+//        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), GameMap.getNumTilesX(), GameMap.getNumTilesY(), 50);
+        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(),10,10, 50);
         mapDivision.addEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
+
         mapDivision.addEntities(new ArrayList<>(characters));
     }
 

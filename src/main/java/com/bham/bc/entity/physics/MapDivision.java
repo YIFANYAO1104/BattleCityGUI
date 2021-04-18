@@ -4,7 +4,10 @@ package com.bham.bc.entity.physics;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.entity.graph.node.NavNode;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.util.*;
 
@@ -280,11 +283,38 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
-    public void Render(){}
+    public void render(GraphicsContext gc){
+
+//        renderNode(gc, Color.RED,new Point2D(400,400),7);
+//        System.out.println(cellWidth);
+//        System.out.println(cellHeight);
+//        renderline(gc, Color.RED, new Point2D(cellWidth,0), new Point2D(cellWidth, m_Height));
+        for(double i = 0; i<m_Height;i = i + cellHeight){
+//            System.out.println("rendering");
+            renderline(gc,Color.BISQUE,new Point2D(0,i),new Point2D(m_Width,i));
+        }
+        for(double i = 0; i<m_Width;i = i + cellWidth){
+            renderline(gc,Color.BISQUE,new Point2D(i,0),new Point2D(i,m_Height));
+        }
+    }
+
+    private void renderNode(GraphicsContext gc,Color color, Point2D n1, int level){
+        gc.setFill(color);
+        gc.fillRoundRect(
+                n1.getX(),n1.getY(),2*level,2*level,1*level,1*level);
+    }
+
+    private void renderline(GraphicsContext gc, Color color, Point2D n1, Point2D n2){
+        gc.setStroke(color);
+        gc.setLineWidth(1.5);
+        gc.strokeLine(
+                n1.getX(), n1.getY(), n2.getX(), n2.getY());
+    }
 
     public int sizeOfCells(){
         return m_Cells.size();
     }
+
     public double getCellWidth(){
         return cellWidth;
     }
