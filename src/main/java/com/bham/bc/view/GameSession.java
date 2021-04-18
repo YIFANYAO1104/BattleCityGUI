@@ -17,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+import java.util.Random;
+
 /**
  * Class managing the animations of a running game
  */
@@ -95,7 +97,8 @@ public class GameSession {
         gameScene.setOnKeyPressed(e -> {
             if(!EndMenu.isshown&&e.getCode() == KeyCode.Q) {  // Testing purposes
                 gameTimer.stop();
-                MenuSession.showEndMenu(gamePane, 999);
+                Random r=new Random();
+                MenuSession.showEndMenu(gamePane, r.nextDouble()*999);
             } else if(!EndMenu.isshown && (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE)) {
                 showPauseMenu();
             } else {
