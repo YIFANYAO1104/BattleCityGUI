@@ -61,7 +61,7 @@ public class SurvivalController extends Controller {
      */
     private void initDivision() {
 //        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), GameMap.getNumTilesX(), GameMap.getNumTilesY(), 50);
-        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(),40,40, 50);
+        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(),10,10, 50);
         mapDivision.addEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
 
         mapDivision.addEntities(new ArrayList<>(characters));
