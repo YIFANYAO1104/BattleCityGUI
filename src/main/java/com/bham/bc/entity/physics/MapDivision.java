@@ -2,6 +2,7 @@ package com.bham.bc.entity.physics;
 
 
 import com.bham.bc.components.Controller;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
@@ -167,11 +168,7 @@ public class MapDivision<entity extends BaseGameEntity>{
     public void addObstacles(List<entity> m1){
         for(entity b1:m1){
             assert (b1 != null);
-
             List<Integer> idxes = getCellIndexes(b1.getPosition(),b1.getSize());
-            if (b1.getSize().getX()==80){
-                System.out.println(idxes);
-            }
             for (Integer idx : idxes) {
                 m_Cells.get(idx).Unites.add(b1);
             }
@@ -257,9 +254,7 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     public List<entity> calculateNeighborsArray(entity entity, double radius){
         surround_entities.clear();
-        Point2D target = entity.getCenterPosition();
-        // creat the hitbox whcih is the interact test box of the target area
-        Hitbox targetBox = new Hitbox(target.subtract(radius,radius),target.add(radius,radius));
+        Hitbox targetBox = new Hitbox(entity.getPosition(),entity.getPosition().add(entity.getSize()));
 
 
         ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
@@ -268,7 +263,7 @@ public class MapDivision<entity extends BaseGameEntity>{
 
             if(!curCell.Unites.isEmpty() && curCell.cBox.isInteractedWith(targetBox)){
                 for(entity ent :curCell.Unites){
-                    if(!curCell.Unites.isEmpty() && ent != entity &&  ent.getPosition().distance(target) < radius)
+                    if(!curCell.Unites.isEmpty() && ent != entity &&  ent.intersects(entity))
                         surround_entities.add(ent);
                 }
             }
