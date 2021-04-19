@@ -158,6 +158,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      */
     public int renderTankPoint(BaseGameEntity e1 , GraphicsContext gc){
         NavNode n1 = getClosestNodeForEntity(e1);
+
         if(n1.isValid() ){
             gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),8,8,1,1);
             renderNode(gc,Color.RED,n1,4);
