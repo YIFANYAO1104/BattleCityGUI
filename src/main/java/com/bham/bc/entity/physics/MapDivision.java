@@ -255,7 +255,8 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     public List<entity> calculateNeighborsArray(entity entity, double radius){
         surround_entities.clear();
-        Hitbox targetBox = new Hitbox(entity.getPosition(),entity.getPosition().add(entity.getSize()));
+        Hitbox targetBox = new Hitbox(new Point2D(entity.getPosition().getX()-radius,entity.getPosition().getY()-radius), new Point2D(entity.getPosition().getX()+radius,entity.getPosition().getY()+radius));
+
 
 
         ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
