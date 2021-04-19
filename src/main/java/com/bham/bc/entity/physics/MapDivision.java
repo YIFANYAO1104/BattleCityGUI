@@ -1,12 +1,19 @@
 package com.bham.bc.entity.physics;
 
 
+import com.bham.bc.components.Controller;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.entity.graph.node.NavNode;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import java.util.*;
+
+import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
  * The fundamental section of whole map. It has the list which stores all the base elements.
@@ -22,6 +29,14 @@ class Cell <entity extends Object>{
 
     public Cell(Point2D topleft, Point2D bottomright){
         cBox = new Hitbox(topleft,bottomright);
+    }
+
+    public void render(GraphicsContext gc, double cellWidth, double cellHeight,int NumCellsX){
+        Point2D p = cBox.getTopLeft();
+        int idx = (int) (p.getX() / cellWidth)
+                + ((int) (p.getY() / cellHeight) * NumCellsX);
+        gc.setFill(Color.GOLD);
+        gc.fillText(String.valueOf(idx),p.getX(),p.getY()+15);
     }
 
 }
@@ -48,8 +63,8 @@ public class MapDivision<entity extends BaseGameEntity>{
      */
     private int PositionToIndex(Point2D pos) {
 
-        int idx = (int) (m_NumCellsX * pos.getX() / m_Width)
-                + ((int) ((m_NumCellsY) * pos.getY() / m_Height) * m_NumCellsX);
+        int idx = (int) (pos.getX() / cellWidth)
+                + ((int) (pos.getY() / cellHeight) * m_NumCellsX);
 
         //if the entity's position is equal to Point2d(m_Width, m_Height)
         //then the index will overshoot. We need to check for this and adjust
@@ -58,6 +73,34 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
 
         return idx;
+    }
+
+    private List<Integer> getCellIndexes(Point2D pos,Point2D size) {
+
+        int ix1 = (int) (pos.getX() / cellWidth);
+        int iy1 = (int) (pos.getY() / cellHeight);
+
+        Point2D br = pos.add(size);
+        int ix2 = (int) (br.getX() / cellWidth);
+        int iy2 = (int) (br.getY() / cellHeight);
+        if (br.getX()-ix2*cellWidth<1E-8){
+            ix2--;
+        }
+        if (br.getY()-iy2*cellHeight<1E-8){
+            iy2--;
+        }
+
+        List<Integer> idxes = new ArrayList<>();
+        for (int i = ix1; i <= ix2; i++) {
+            for (int j = iy1; j <= iy2; j++) {
+                int idx = i + j*m_NumCellsX;
+                if (idx < m_Cells.size()){
+                    idxes.add(idx);
+                }
+            }
+        }
+
+        return idxes;
     }
 
     /**
@@ -122,6 +165,16 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
+    public void addObstacles(List<entity> m1){
+        for(entity b1:m1){
+            assert (b1 != null);
+            List<Integer> idxes = getCellIndexes(b1.getPosition(),b1.getSize());
+            for (Integer idx : idxes) {
+                m_Cells.get(idx).Unites.add(b1);
+            }
+        }
+    }
+
     public void updateMovingEntities(List<entity> n1){
         n1.forEach(this::updateMovingEntity);
     }
@@ -183,8 +236,12 @@ public class MapDivision<entity extends BaseGameEntity>{
         try {
             Obstacle g1 = (Obstacle) genericObstacle;
             if(!g1.exists()){
-                int idx = PositionToIndex(genericObstacle.getPosition());
-                removedEntity(genericObstacle, idx);
+                List<Integer> idxes = getCellIndexes(genericObstacle.getPosition(),genericObstacle.getSize());
+                for (Integer idx : idxes) {
+                    removedEntity(genericObstacle, idx);
+                }
+//                int idx = PositionToIndex(genericObstacle.getPosition());
+//                removedEntity(genericObstacle, idx);
             }
         }catch (Exception e){}
     }
@@ -197,9 +254,7 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     public List<entity> calculateNeighborsArray(entity entity, double radius){
         surround_entities.clear();
-        Point2D target = entity.getCenterPosition();
-        // creat the hitbox whcih is the interact test box of the target area
-        Hitbox targetBox = new Hitbox(target.subtract(radius,radius),target.add(radius,radius));
+        Hitbox targetBox = new Hitbox(entity.getPosition(),entity.getPosition().add(entity.getSize()));
 
 
         ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
@@ -208,7 +263,7 @@ public class MapDivision<entity extends BaseGameEntity>{
 
             if(!curCell.Unites.isEmpty() && curCell.cBox.isInteractedWith(targetBox)){
                 for(entity ent :curCell.Unites){
-                    if(!curCell.Unites.isEmpty() && ent != entity &&  ent.getPosition().distance(target) < radius)
+                    if(!curCell.Unites.isEmpty() && ent != entity &&  ent.intersects(entity))
                         surround_entities.add(ent);
                 }
             }
@@ -250,11 +305,43 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
-    public void Render(){}
+    public void render(GraphicsContext gc){
+
+//        renderNode(gc, Color.RED,new Point2D(400,400),7);
+//        System.out.println(cellWidth);
+//        System.out.println(cellHeight);
+//        renderline(gc, Color.RED, new Point2D(cellWidth,0), new Point2D(cellWidth, m_Height));
+        for(double i = 0; i<m_Height;i = i + cellHeight){
+//            System.out.println("rendering");
+            renderline(gc,Color.BISQUE,new Point2D(0,i),new Point2D(m_Width,i));
+        }
+        for(double i = 0; i<m_Width;i = i + cellWidth){
+            renderline(gc,Color.BISQUE,new Point2D(i,0),new Point2D(i,m_Height));
+        }
+
+        for (Cell<entity> m_cell : m_Cells) {
+            m_cell.render(gc,cellWidth,cellHeight,m_NumCellsX);
+        }
+
+    }
+
+    private void renderNode(GraphicsContext gc,Color color, Point2D n1, int level){
+        gc.setFill(color);
+        gc.fillRoundRect(
+                n1.getX(),n1.getY(),2*level,2*level,1*level,1*level);
+    }
+
+    private void renderline(GraphicsContext gc, Color color, Point2D n1, Point2D n2){
+        gc.setStroke(color);
+        gc.setLineWidth(1.5);
+        gc.strokeLine(
+                n1.getX(), n1.getY(), n2.getX(), n2.getY());
+    }
 
     public int sizeOfCells(){
         return m_Cells.size();
     }
+
     public double getCellWidth(){
         return cellWidth;
     }

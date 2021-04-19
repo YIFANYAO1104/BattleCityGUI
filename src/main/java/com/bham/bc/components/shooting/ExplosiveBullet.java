@@ -38,8 +38,6 @@ public class ExplosiveBullet extends Bullet {
 
     @Override
     public void destroy() {
-        exists = false;
-        entityManager.removeEntity(this);
     }
 
     @Override
@@ -50,7 +48,8 @@ public class ExplosiveBullet extends Bullet {
         existTime++;
         hitBox = updateHitBox(existTime);
         if (existTime >= LIFETIME) {
-            destroy();
+            exists = false;
+            entityManager.removeEntity(this);
         }
     }
 
