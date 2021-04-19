@@ -252,7 +252,6 @@ public class MapDivision<entity extends BaseGameEntity>{
      * @param entity the entity should be check collision
      * @param radius is the raidus of Hitbox
      */
-
     public List<entity> calculateNeighborsArray(entity entity, double radius){
         surround_entities.clear();
         Hitbox targetBox = new Hitbox(new Point2D(entity.getPosition().getX()-radius,entity.getPosition().getY()-radius), new Point2D(entity.getPosition().getX()+radius,entity.getPosition().getY()+radius));
