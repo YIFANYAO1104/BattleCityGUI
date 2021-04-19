@@ -165,6 +165,7 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
+    //test update
     public void addObstacles(List<entity> m1){
         for(entity b1:m1){
             assert (b1 != null);
