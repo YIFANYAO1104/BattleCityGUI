@@ -157,18 +157,20 @@ public class GameMap {
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         graphSystem = new SparseGraph<>(false); //single direction turn off
         hgf.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(), getHeight() / (GameCharacter.MAX_SIZE/2), getWidth() / (GameCharacter.MAX_SIZE/2)); //make network
-        ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
-        
-        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
-            Point2D vv1 = allNodesLocations.get(index);
-            double maxCharacterRadius = Math.sqrt((GameCharacter.MAX_SIZE/2.0)*(GameCharacter.MAX_SIZE/2.0));
-
-            for (int i = 0; i < interactiveObstacles.size(); i++) {
-                Obstacle w = interactiveObstacles.get(i);
-                w.interacts(graphSystem.getID(), index, new Rectangle(
-                        vv1.getX()-maxCharacterRadius,vv1.getY()-maxCharacterRadius,maxCharacterRadius* 2,maxCharacterRadius * 2));
-            }
-        }
+//        ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
+//        System.out.println("start");
+//        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
+//            Point2D vv1 = allNodesLocations.get(index);
+//            double maxCharacterRadius = Math.sqrt((GameCharacter.MAX_SIZE/2.0)*(GameCharacter.MAX_SIZE/2.0));
+//
+//            for (int i = 0; i < interactiveObstacles.size(); i++) {
+//                Obstacle w = interactiveObstacles.get(i);
+//                w.interacts(graphSystem.getID(), index, new Rectangle(
+//                        vv1.getX()-maxCharacterRadius,vv1.getY()-maxCharacterRadius,maxCharacterRadius* 2,maxCharacterRadius * 2));
+//            }
+//
+//        }
+//        System.out.println("over");
         //removed unreachable nodes
         // Consider multiple players and enemies spawning at unreachable nodes
         // Player dummyEntity = new Player(mapLoader.getHomeTerritory.getCenterX(), mapLoader.getHomeTerritory.getCenterY());
