@@ -142,6 +142,14 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
+     * Sets the maximum force value for the entity
+     * @param maxForce max force the entity can stand
+     */
+    public void setMaxForce(double maxForce) {
+        this.maxForce = maxForce;
+    }
+
+    /**
      * Sets the current velocity of the entity
      * @param velocity Point2D object representing a new velocity vector
      */

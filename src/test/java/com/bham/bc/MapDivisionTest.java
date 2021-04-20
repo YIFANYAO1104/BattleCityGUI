@@ -44,7 +44,7 @@ public class MapDivisionTest {
         m1.addEntity(en2);
         m1.addEntity(en3);
 
-        List<BaseGameEntity> b1 = m1.calculateNeighborsArray(en1,10);
+        List<BaseGameEntity> b1 = m1.calculateNeighborsArray(en1);
         List<BaseGameEntity> ans1 = new ArrayList<>();
 
         assertEquals(ans1, b1);
@@ -65,7 +65,7 @@ public class MapDivisionTest {
         m1.addEntity(en2);
         m1.addEntity(en3);
 
-        List<BaseGameEntity> b1 = m1.calculateNeighborsArray(en1,40);
+        List<BaseGameEntity> b1 = m1.calculateNeighborsArray(en1);
         List<BaseGameEntity> ans1 = new ArrayList<>();
         ans1.add(en2);
         HashSet<BaseGameEntity> ss1 = new HashSet<>(b1);

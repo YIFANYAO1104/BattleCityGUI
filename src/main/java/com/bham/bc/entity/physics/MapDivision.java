@@ -1,19 +1,15 @@
 package com.bham.bc.entity.physics;
 
 
-import com.bham.bc.components.Controller;
-import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
-import com.bham.bc.entity.graph.node.NavNode;
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.*;
-
-import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
  * The fundamental section of whole map. It has the list which stores all the base elements.
@@ -250,23 +246,18 @@ public class MapDivision<entity extends BaseGameEntity>{
     /**
      * Get the List of the Entity that should be consider if interacting with target.
      * @param entity the entity should be check collision
-     * @param radius is the raidus of Hitbox
      */
-    public List<entity> calculateNeighborsArray(entity entity, double radius){
+    public List<entity> calculateNeighborsArray(entity entity){
         surround_entities.clear();
-        Hitbox targetBox = new Hitbox(new Point2D(entity.getPosition().getX()-radius,entity.getPosition().getY()-radius), new Point2D(entity.getPosition().getX()+radius,entity.getPosition().getY()+radius));
 
+        Bounds b = entity.getHitBox().getBoundsInParent();
+        List<Integer> idxes = getCellIndexes(new Point2D(b.getMinX(), b.getMinY()), new Point2D(b.getWidth(), b.getHeight()));
 
-
-        ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
-        while (c_iter.hasNext()){
-            Cell<entity> curCell = c_iter.next();
-
-            if(!curCell.Unites.isEmpty() && curCell.cBox.isInteractedWith(targetBox)){
-                for(entity ent :curCell.Unites){
-                    if(!curCell.Unites.isEmpty() && ent != entity &&  ent.intersects(entity))
-                        surround_entities.add(ent);
-                }
+        for (Integer idx : idxes) {
+            Cell<entity> curCell = m_Cells.get(idx);
+            for(entity ent :curCell.Unites){
+                if(ent != entity &&  ent.intersects(entity))
+                    surround_entities.add(ent);
             }
         }
         return surround_entities;
