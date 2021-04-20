@@ -3,6 +3,7 @@ package com.bham.bc.view.menu;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.*;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -11,6 +12,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
@@ -27,6 +31,8 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuMode;
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
+    public static RecordsHandler recordsHandler = new RecordsHandler();;
+    public static TableView<RecordsHandler.Records> tableView = new TableView<>();;
 
     private final NewGameEvent NEW_GAME_EVENT;
     /**
@@ -76,6 +82,11 @@ public class MainMenu extends AnchorPane {
         subMenuMain.getChildren().addAll(btnStart, btnScores, btnSettings, btnQuit);
     }
 
+    static {
+        ObservableList<RecordsHandler.Records> data=RecordsHandler.initTable();
+        tableView.setItems(data);
+    }
+
 
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
@@ -114,16 +125,16 @@ public class MainMenu extends AnchorPane {
         score.setCellValueFactory(new PropertyValueFactory<>("score"));
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-        // Get the saved data from record handler
-        RecordsHandler recordsHandler = new RecordsHandler();
-        recordsHandler.createSampleRecords();
-        ObservableList<RecordsHandler.Records> survivalData= recordsHandler.sortAndGetData();
 
-        TableView<RecordsHandler.Records> tableView = new TableView<>();
+
         tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
         tableView.getColumns().addAll(rank, name, score, date);
-        tableView.setItems(survivalData);
         tableView.setId("scores-table");
+
+
+
+
+
 
         subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
         tableView.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });

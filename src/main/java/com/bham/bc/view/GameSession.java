@@ -5,6 +5,7 @@ import com.bham.bc.components.environment.MapType;
 
 import static com.bham.bc.components.Controller.*;
 
+import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.model.MenuSlider;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
@@ -15,6 +16,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+
+import java.util.Random;
 
 /**
  * Class managing the animations of a running game
@@ -92,7 +95,11 @@ public class GameSession {
      */
     private void createKeyListeners() {
         gameScene.setOnKeyPressed(e -> {
-            if (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
+            if(!EndMenu.isshown&&e.getCode() == KeyCode.Q) {  // Testing purposes
+                gameTimer.stop();
+                Random r=new Random();
+                MenuSession.showEndMenu(gamePane, r.nextDouble()*999);
+            } else if(!EndMenu.isshown && (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE)) {
                 showPauseMenu();
             } else {
                 services.keyPressed(e);

@@ -11,17 +11,62 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class RecordsHandler {
-    private static ArrayList<Records> records;
-    private static JSONArray jsonArrayToFile;
+    public static ArrayList<Records> records;
+    public static JSONArray jsonArrayToFile;
     private static JSONArray jsonArray;
+    private static JSONArray albums;
 
 
     public RecordsHandler() {
+
+
+        System.out.println("size="+jsonArrayToFile.length());
+    }
+    static {
+
         jsonArrayToFile=new JSONArray();
-        records=new ArrayList<>();
+    }
+
+    public static ObservableList<Records> initTable(){
+
+
+
+
+        //read from Json file
+        try {
+            parseJsonFile("src\\main\\resources\\scores.json");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ObservableList<Records> data = FXCollections.observableArrayList(records);
+        System.out.println("data len="+data.size());
+
+        for (int i = 0; i < albums.length(); i++) {
+            jsonArrayToFile.put(albums.get(i));
+        }
+        return data;
+
+    }
+
+    /**
+     * get the string format of date
+     * @return string format of date
+     */
+
+    public static String getDate(){
+
+        String[] strNow1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString().split("-");
+
+        Integer.parseInt(strNow1[0]);			//获取年
+        Integer.parseInt(strNow1[1]);			//获取月
+        Integer.parseInt(strNow1[2]);			//获取日
+
+        return strNow1[2]+"/"+strNow1[1]+"/"+strNow1[0];
+
     }
 
     /**
@@ -41,16 +86,16 @@ public class RecordsHandler {
     public void createSampleRecords() {
 
         //write to Json file
-        createRecord(new Records("1st","Dou","999","7/3"));
-        createRecord(new Records("2nd","YIFAN","888","7/3"));
-        createRecord(new Records("3rd","Alex","777","7/3"));
-        createRecord(new Records("4th","Mantas","666","7/3"));
-        createRecord(new Records("5th","Najd","555","7/3"));
-        createRecord(new Records("6th","Justin","444","7/3"));
-        createRecord(new Records("7th","John","333","7/3"));
-        createRecord(new Records("8th","Shan","222","7/3"));
-        createRecord(new Records("9th","Juily","111","7/3"));
-        createRecord(new Records("10th","Berry","99","7/3"));
+        createRecord(new Records("1st","Dou","999",getDate()));
+        createRecord(new Records("2nd","YIFAN","888",getDate()));
+        createRecord(new Records("3rd","Alex","777",getDate()));
+        createRecord(new Records("4th","Mantas","666",getDate()));
+        createRecord(new Records("5th","Najd","555",getDate()));
+        createRecord(new Records("6th","Justin","444",getDate()));
+        createRecord(new Records("7th","John","333",getDate()));
+        createRecord(new Records("8th","Shan","222",getDate()));
+        createRecord(new Records("9th","Juily","111",getDate()));
+        createRecord(new Records("10th","Berry","99",getDate()));
 
         //first step is to sort before add new records
         jsonArrayToFile=jsonArraySort(jsonArrayToFile);
@@ -68,6 +113,7 @@ public class RecordsHandler {
     public ObservableList<Records> sortAndGetData(){
         //third step is to sort after add the new records
         sort();
+
         try {
             writeJsonToFile("src\\main\\resources\\scores.json");
         } catch (Exception e) {
@@ -81,6 +127,7 @@ public class RecordsHandler {
             e.printStackTrace();
         }
         ObservableList<Records> data = FXCollections.observableArrayList(records);
+        System.out.println("data len="+data.size());
 
         return data;
     }
@@ -187,18 +234,18 @@ public class RecordsHandler {
         }
         Collections.sort(jsonValues, new Comparator<JSONObject>() {
             private static final String KEY_NAME = "score";
-            int score1;
-            int score2;
+            double score1;
+            double score2;
             @Override
             public int compare(JSONObject a, JSONObject b) {
                 try {
-                    score1= Integer.valueOf(a.getString(KEY_NAME));
-                    score2= Integer.valueOf(b.getString(KEY_NAME));
+                    score1= Double.valueOf(a.getString(KEY_NAME));
+                    score2= Double.valueOf(b.getString(KEY_NAME));
                 } catch (JSONException e) {
                     // 处理异常
                 }
                 //这里是按照时间逆序排列,不加负号为正序排列
-                return -score1+score2;
+                return (int) (-score1+score2);
             }
         });
         for (int i = 0; i < jsonArr.length(); i++) {
@@ -338,7 +385,8 @@ public class RecordsHandler {
      * @return
      */
     public static ArrayList<Records> parse(String responseBody){
-        JSONArray albums = new JSONArray(responseBody);
+        records=new ArrayList<>();
+        albums = new JSONArray(responseBody);
         //System.out.println(albums.length());
         for (int i = 0; i < albums.length(); i++){
             JSONObject album = albums.getJSONObject(i);

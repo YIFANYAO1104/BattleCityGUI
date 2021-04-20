@@ -66,12 +66,13 @@ public class MenuSession {
     /**
      * Attaches (detaches) pause menu to the provided game pane and shows (hides) it
      * @param gamePane game pane the pause menu will be attached (detached) to
-     * @param timer animation timer to be stopped (started)
+     * @param timer animation timer to be stoppedF (started)
      */
     public static void showPauseMenu(AnchorPane gamePane, AnimationTimer timer) {
         if(gamePane.getChildren().contains(pauseMenu)) {
             pauseMenu.hide(gamePane);
             timer.start();
+
         } else {
             pauseMenu.show(gamePane);
             timer.stop();
@@ -81,7 +82,9 @@ public class MenuSession {
 
 
     public static void showEndMenu(AnchorPane gamePane, double score) {
+
         EndMenu endMenu = new EndMenu();
+        endMenu.show(gamePane,score);
     }
 
 
@@ -90,7 +93,7 @@ public class MenuSession {
      * @param e SURVIVAL or CHALLENGE mode to be set in Controller
      */
     public void createGameSession(NewGameEvent e) {
-        //audioManager.loadSequentialPlayer(SoundTrack.CORRUPTION, SoundTrack.LEAD, SoundTrack.REVOLUTION);
+        audioManager.loadSequentialPlayer(true, SoundTrack.REVOLUTION, SoundTrack.CORRUPTION, SoundTrack.LEAD);
         GameSession gameSession = new GameSession(e.getMapType());
         gameSession.createNewGame(mainStage);
 
