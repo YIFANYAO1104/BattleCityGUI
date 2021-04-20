@@ -11,6 +11,21 @@ import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
+/**
+ * <h1>Automated audio tests</h1>
+ *
+ * <p>This class runs a couple of JUnits tests to check some instantiation of players and the volume parameters.</p>
+ * <ul>
+ *     <li>{@link #shouldCreateAudioClipFromEveryEffect()} - ensures an audio object for every {@link SoundEffect} can be created properly</li>
+ *     <li>{@link #shouldCreateMediaFromEveryTrack()} - ensures an audio object for every {@link SoundTrack} can be created properly</li>
+ *     <li>{@link #shouldHaveNoEffectOnNullPlayer()} - ensures no UI method call (e.g., play(), pause()) has effect on non-loaded {@link AudioManager}</li>
+ *     <li>{@link #shouldNotCreateEmptySequentialPlayer(SoundTrack[])} - ensures {@link SequentialAudioPlayer} is not created on empty array of sound tracks</li>
+ *     <li>{@link #shouldNotCreateEmptySequentialPlayer(SoundTrack[][])} - ensures {@link SequentialAudioPlayer} is not created on empty array of arrays of sound tracks</li>
+ *     <li>{@link #shouldNotCreateEmptySequentialPlayer(SoundTrack[])} - ensures {@link ParallelAudioPlayer} is not created on empty array of sound tracks</li>
+ *     <li>{@link #volumeUpperBound()} - ensures anything above 1 is set back to 1 for audio volume</li>
+ *     <li>{@link #volumeLowerBound()} - ensures anything below 0 is set back to 0 for audio volume</li>
+ * </ul>
+ */
 @RunWith(JUnitParamsRunner.class)
 public class AudioAutomatedTest {
 
