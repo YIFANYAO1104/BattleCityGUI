@@ -80,6 +80,7 @@ public class SurvivalController extends Controller {
 
         ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
         System.out.println("start");
+        double percen = 1 / (double) allNodesLocations.size() * 0.4;
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Point2D vv1 = allNodesLocations.get(index);
             double maxCharacterRadius = Math.sqrt((GameCharacter.MAX_SIZE/2.0)*(GameCharacter.MAX_SIZE/2.0));
@@ -94,6 +95,8 @@ public class SurvivalController extends Controller {
                 }catch (Exception e){}
 
             }
+            graphSystem.setRealContrustPercentage(percen + graphSystem.getRealContrustPercentage());
+            System.out.println(graphSystem.getRealContrustPercentage());
 
         }
         System.out.println("over");

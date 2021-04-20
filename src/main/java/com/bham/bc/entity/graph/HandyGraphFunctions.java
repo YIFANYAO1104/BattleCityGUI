@@ -108,7 +108,7 @@ public class HandyGraphFunctions {
                 realTimeNodes = realTimeNodes+1.0;
                 double total = NumCellsX * NumCellsY;
                 double realPer  = realTimeNodes / (total*2);
-                graph.setRealContrustPercentage(realPer);
+                graph.setRealContrustPercentage(realPer * 0.6);
                 System.out.println("grph comstruct:  "+graph.getRealContrustPercentage());
 
             }
@@ -121,7 +121,7 @@ public class HandyGraphFunctions {
                 GraphHelper_AddAllNeighboursToGridNode(graph, row, col, NumCellsX, NumCellsY);
 
                 double total = NumCellsX * NumCellsY;
-                double realPer = 1.0 / (total*2) + graph.getRealContrustPercentage();
+                double realPer = 1.0 / (total*2) * 0.6 + graph.getRealContrustPercentage();
                 graph.setRealContrustPercentage(realPer);
                 System.out.println("grph comstruct:  "+ graph.getRealContrustPercentage());
             }
