@@ -79,7 +79,7 @@ public class SurvivalController extends Controller {
         SparseGraph graphSystem =  gameMap.getGraph();
 
         ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
-        System.out.println("start");
+//        System.out.println("start");
         double percen = 1 / (double) allNodesLocations.size() * 0.4;
         for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
             Point2D vv1 = allNodesLocations.get(index);
@@ -96,10 +96,10 @@ public class SurvivalController extends Controller {
 
             }
             graphSystem.setRealContrustPercentage(percen + graphSystem.getRealContrustPercentage());
-            System.out.println(graphSystem.getRealContrustPercentage());
+//            System.out.println(graphSystem.getRealContrustPercentage());
 
         }
-        System.out.println("over");
+//        System.out.println("over");
     }
 
     @Override

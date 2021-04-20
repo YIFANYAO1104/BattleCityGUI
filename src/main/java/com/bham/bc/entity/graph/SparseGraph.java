@@ -561,12 +561,12 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         if(obstacleId.containsKey(id)){
             ArrayList<NavNode> temp1 = obstacleId.get(id);
             if(temp1.contains(node))
-                System.out.println("this node has been registered in graph HashMap");
+                return;
+//                System.out.println("this node has been registered in graph HashMap");
             else{
                 node.addNum();
                 temp1.add(node);
             }
-
 
         }else{
             ArrayList<NavNode> temp2 = new ArrayList<>();
