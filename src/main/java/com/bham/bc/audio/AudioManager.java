@@ -39,6 +39,15 @@ public class AudioManager {
     }
 
     /**
+     * Gets the sequential or parallel player audio manager uses
+     * <p><b>Note:</b> classes outside audio package cannot access it - it is mainly used for testing</p>
+     * @return currently used {@link AudioPlayer} or {@code null} if it is not loaded
+     */
+    protected AudioPlayer getPlayer() {
+        return player;
+    }
+
+    /**
      * Creates an enum set of audio clips
      *
      * <p>Maps all values of {@link SoundEffect} to corresponding audio files acquired by enum's <i>createAudio()</i>
@@ -70,7 +79,7 @@ public class AudioManager {
      * @return an {@code ArrayList} of sound tracks as media objects
      */
     private ArrayList<Media> createTracks(SoundTrack[] soundTracks) {
-        return Arrays.stream(soundTracks).map(track -> {
+        return soundTracks == null ? new ArrayList<>() : Arrays.stream(soundTracks).map(track -> {
             try{
                 return track.createAudio();
             } catch(NullPointerException | MediaException e) {

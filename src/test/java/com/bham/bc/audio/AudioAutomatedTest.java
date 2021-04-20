@@ -1,6 +1,5 @@
 package com.bham.bc.audio;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.MediaException;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -15,6 +14,10 @@ import static org.junit.Assert.*;
 @RunWith(JUnitParamsRunner.class)
 public class AudioAutomatedTest {
 
+    /**
+     * Provides an array of parameters to test audio manager's upper volume bound
+     * @return array of possible values which should not set the volume over 1.0
+     */
     private Object[] volumeUpperBound() {
         return new Object[][]{
                 { 1 },
@@ -24,12 +27,57 @@ public class AudioAutomatedTest {
         };
     }
 
+    /**
+     * Provides an array of parameters to test audio manager's lower volume bound
+     * @return array of possible values which should not set the volume below 0.0
+     */
     private Object[] volumeLowerBound() {
         return new Object[][]{
                 { 0 },
                 { -0.000001 },
                 { -4.894 },
                 { -9999 }
+        };
+    }
+
+    /**
+     * Provides an array of parameters to test 1D creation of an empty player
+     * <p><b>Note:</b> we don't test for potential {@code null} values a sound track array might have:</p>
+     * <ul>
+     *     <li>{@code new SoundTrack[]{ null } }</li>
+     *     <li>{@code new SoundTrack[]{ null, null } }</li>
+     * </ul>
+     * <p>This is because such errors are caught and we already did a test ensuring no value for any {@link SoundTrack} converted
+     * to {@link javafx.scene.media.Media} is null.</p>
+     *
+     * @return array of possible values which should not load the player
+     */
+    private Object[] oneDimensionalEmptyPlayer() {
+        return new Object[][]{
+                { null },
+                { new SoundTrack[]{} }
+        };
+    }
+
+    /**
+     * Provides an array of parameters to test 2D creation of an empty player
+     * <p><b>Note:</b> we don't test for potential {@code null} values a sound track array might have:</p>
+     * <ul>
+     *     <li>{@code new SoundTrack[][]{ new SoundTrack[]{ null } } }</li>
+     *     <li>{@code new SoundTrack[][]{ new SoundTrack[]{ null, null }, new SoundTrack[]{} } }</li>
+     * </ul>
+     * <p>This is because such errors are caught and we already did a test ensuring no value for any {@link SoundTrack} converted
+     * to {@link javafx.scene.media.Media} is null.</p>
+     *
+     * @return array of possible values which should not load the player
+     */
+    private Object[] twoDimensionalEmptyPlayer() {
+        return new Object[][]{
+                { new SoundTrack[][]{} },
+                { new SoundTrack[][]{ null } },
+                { new SoundTrack[][]{ new SoundTrack[]{} } },
+                { new SoundTrack[][]{ new SoundTrack[]{}, null } },
+                { new SoundTrack[][]{ new SoundTrack[]{}, new SoundTrack[]{} } }
         };
     }
 
@@ -91,10 +139,36 @@ public class AudioAutomatedTest {
     }
 
     @Test
+    @Parameters(method = "oneDimensionalEmptyPlayer")
+    @TestCaseName("[{index}] Empty sequential player (1D) creation: {params}")
+    public void shouldNotCreateEmptySequentialPlayer(SoundTrack[] soundTracks) {
+        AudioManager audioManager = new AudioManager();
+        audioManager.loadSequentialPlayer(false, soundTracks);
+        assertNull(audioManager.getPlayer());
+    }
+
+    @Test
+    @Parameters(method = "twoDimensionalEmptyPlayer")
+    @TestCaseName("[{index}] Empty sequential player (2D) creation: {params}")
+    public void shouldNotCreateEmptySequentialPlayer(SoundTrack[][] soundTracks) {
+        AudioManager audioManager = new AudioManager();
+        audioManager.loadSequentialPlayer(false, soundTracks);
+        assertNull(audioManager.getPlayer());
+    }
+
+    @Test
+    @Parameters(method = "oneDimensionalEmptyPlayer")
+    @TestCaseName("[{index}] Empty parallel player (1D) creation: {params}")
+    public void shouldNotCreateEmptyParallelPlayer(SoundTrack[] soundTracks) {
+        AudioManager audioManager = new AudioManager();
+        audioManager.loadParallelPlayer(false, soundTracks);
+        assertNull(audioManager.getPlayer());
+    }
+
+    @Test
     @Parameters(method = "volumeUpperBound")
     @TestCaseName("[{index}] Upper bound volume test: {params}")
     public void volumeShouldNotGoOverUpperBound(double volume) {
-        new JFXPanel();
         AudioManager audioManager = new AudioManager();
 
         // We want to try changing music volume from when it is 0.5
@@ -118,7 +192,6 @@ public class AudioAutomatedTest {
     @Parameters(method = "volumeLowerBound")
     @TestCaseName("[{index}] Lower bound volume test: {params}")
     public void volumeShouldNotGoOverLowerBound(double volume) {
-        new JFXPanel();
         AudioManager audioManager = new AudioManager();
 
         // We want to try changing music volume from when it is 0.5
