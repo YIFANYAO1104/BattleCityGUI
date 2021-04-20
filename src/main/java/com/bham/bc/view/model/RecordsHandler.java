@@ -115,14 +115,14 @@ public class RecordsHandler {
         sort();
 
         try {
-            writeJsonToFile("src\\main\\resources\\scores.json");
+            writeJsonToFile("src/main/resources/scores.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //read from Json file
         try {
-            parseJsonFile("src\\main\\resources\\scores.json");
+            parseJsonFile("src/main/resources/scores.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
