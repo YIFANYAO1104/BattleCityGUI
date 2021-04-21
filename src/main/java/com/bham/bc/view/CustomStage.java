@@ -119,6 +119,11 @@ public class CustomStage extends Stage{
         changeSkin.setMinSize(25,22);
         BackgroundImage image3=new BackgroundImage(new Image("file:src/main/resources/img/menu/skin.png",25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         changeSkin.setBackground(new Background(image3));
+        Glow glow1=new Glow();
+        glow1.setLevel(1);
+        changeSkin.setEffect(glow1);
+        btnMin.setEffect(glow1);
+        btnClose.setEffect(glow1);
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 
             selected=new_val.intValue();
@@ -191,11 +196,11 @@ public class CustomStage extends Stage{
 
         gpTitle.getChildren().addAll(lbTitle,hBox);
 
-//        VBox titleAndRoot = new VBox();
-//        root.getScene().setRoot(titleAndRoot);
-//        titleAndRoot.getChildren().addAll(gpTitle, root);
-//        stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
-        root.getChildren().add(gpTitle);
+        VBox titleAndRoot = new VBox();
+        root.getScene().setRoot(titleAndRoot);
+        titleAndRoot.getChildren().addAll(gpTitle, root);
+        stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
+//        root.getChildren().add(gpTitle);
 
         gpTitle.setLayoutX(0);
         gpTitle.setLayoutY(0);
@@ -258,7 +263,7 @@ public class CustomStage extends Stage{
             }
         });
 
-        root.setOnMouseMoved((MouseEvent event) -> {
+        titleAndRoot.setOnMouseMoved((MouseEvent event) -> {
             event.consume();
             double x = event.getSceneX();
             double y = event.getSceneY();
@@ -284,7 +289,7 @@ public class CustomStage extends Stage{
             root.setCursor(cursorType);
         });
 
-        root.setOnMouseDragged((MouseEvent event) -> {
+        titleAndRoot.setOnMouseDragged((MouseEvent event) -> {
 
 
             event.consume();
@@ -323,7 +328,7 @@ public class CustomStage extends Stage{
 
         });
 
-        root.setOnMousePressed(event -> {
+        titleAndRoot.setOnMousePressed(event -> {
             event.consume();
             xOffset = event.getSceneX();
             if (event.getSceneY() > 46) {

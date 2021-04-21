@@ -55,9 +55,9 @@ public class GameSession {
         gc = canvas.getGraphicsContext2D();
         camera = new Camera(gc);
 
-        canvas.setTranslateY(35);
+
         gamePane = new AnchorPane(canvas);
-        gameScene = new Scene(gamePane, WIDTH, HEIGHT+35);
+        gameScene = new Scene(gamePane, WIDTH, HEIGHT);
 
 
         gameStage = new Stage();

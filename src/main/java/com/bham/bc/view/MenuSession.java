@@ -23,7 +23,7 @@ import static com.bham.bc.audio.AudioManager.audioManager;
 public class MenuSession {
 
     public static final int WIDTH = 1024;
-    public static final int HEIGHT = 768+35;
+    public static final int HEIGHT = 768;
 
     private AnchorPane mainPane;
     private Scene mainScene;
@@ -57,7 +57,7 @@ public class MenuSession {
 
         mainPane.getChildren().addAll(menuBackground, mainMenu);
 
-        menuBackground.setTranslateY(35);
+
         audioManager.loadSequentialPlayer(true, SoundTrack.NIGHT_BREAK);
         audioManager.playMusic();
     }
