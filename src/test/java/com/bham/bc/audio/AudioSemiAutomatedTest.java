@@ -2,13 +2,14 @@ package com.bham.bc.audio;
 
 import com.bham.bc.application.TestApplication;
 import com.bham.bc.view.GameSession;
-import javafx.embed.swing.JFXPanel;
+import com.sun.javafx.application.PlatformImpl;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.TextAlignment;
+import org.junit.Before;
 import org.junit.Test;
 
 import static junit.framework.TestCase.fail;
@@ -31,7 +32,6 @@ public class AudioSemiAutomatedTest {
      * @return layout with 6 buttons which start a player, 1 which stops it and a slider to control volume
      */
     private VBox getLoopPlayground() {
-        new JFXPanel();
         AudioManager audioManager = new AudioManager();
 
         // Description
@@ -127,7 +127,6 @@ public class AudioSemiAutomatedTest {
      * @return layout with start and stop buttons and a slider to control music volume
      */
     public VBox getParallelPlayground() {
-        new JFXPanel();
         AudioManager audioManager = new AudioManager();
 
         // Description
@@ -168,7 +167,6 @@ public class AudioSemiAutomatedTest {
      * @return layout with start and stop buttons and a slider to control music volume
      */
     public VBox getInputPlayground() {
-        new JFXPanel();
         AudioManager audioManager = new AudioManager();
         audioManager.loadSequentialPlayer(false, SoundTrack.REVOLUTION);
 
@@ -227,6 +225,16 @@ public class AudioSemiAutomatedTest {
         container.getChildren().addAll(description, effectBtn, playBtn, pauseBtn, stopBtn, effectsVolumeLayout, musicVolumeLayout);
 
         return container;
+    }
+
+    @Before
+    public void setup() {
+        try {
+            PlatformImpl.startup(() -> {});
+        } catch(IllegalStateException e) {
+            System.err.println("Please launch the tests one by one. JavaFX does not support launching the application more than once.");
+            System.exit(-1);
+        }
     }
 
     @Test

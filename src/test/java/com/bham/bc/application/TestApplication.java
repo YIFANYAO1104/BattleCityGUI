@@ -1,6 +1,5 @@
 package com.bham.bc.application;
 
-import com.bham.bc.view.GameSession;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Pos;
@@ -52,6 +51,8 @@ public class TestApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        Platform.setImplicitExit(false);
+
         // Set up the pass/fail buttons
         Button passBtn = new Button("Pass");
         Button failBtn = new Button("Fail");

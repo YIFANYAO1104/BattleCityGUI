@@ -1,5 +1,6 @@
 package com.bham.bc.components.characters;
 
+import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.triggers.powerups.Weapon;
@@ -12,6 +13,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.List;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
  * Represents a character - this includes enemies, players and AI companions
@@ -71,8 +74,11 @@ abstract public class GameCharacter extends MovingEntity {
      */
     public void changeHp(double health) {
         hp = Math.min(hp + health, MAX_HP);
-        if(side == Side.ENEMY)
-        if(hp <= 0) destroy();
+
+        if(hp <= 0) {
+            audioManager.playEffect(SoundEffect.DESTROY_SOFT);
+            destroy();
+        }
     }
     
     /**

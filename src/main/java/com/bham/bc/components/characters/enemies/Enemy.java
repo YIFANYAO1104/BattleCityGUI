@@ -168,12 +168,12 @@ public abstract class Enemy extends GameCharacter {
     }
 
     /**
-     * Shoots a bullet at an obstacle from a distance of at max 5 nodes to the obstacle
+     * Shoots a bullet at an obstacle from a distance of at max 4 nodes to the obstacle
      * @return true if it is needed to shoot to at an obstacle and false otherwise
      */
     protected boolean shootObstacle() {
-        int numNodesDistance = 4;
-        boolean canShoot = edgeBehavior == GraphEdge.shoot || pathEdges.stream().limit(numNodesDistance).anyMatch(edge -> edge.getBehavior() == GraphEdge.shoot);
+        int numNodesToObstacle = 4;
+        boolean canShoot = edgeBehavior == GraphEdge.shoot || pathEdges.stream().limit(numNodesToObstacle).anyMatch(edge -> edge.getBehavior() == GraphEdge.shoot);
 
         if(canShoot) {
             face(ItemType.SOFT);

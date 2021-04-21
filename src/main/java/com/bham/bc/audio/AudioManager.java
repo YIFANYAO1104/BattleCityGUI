@@ -3,7 +3,6 @@ package com.bham.bc.audio;
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaException;
-import javafx.scene.media.MediaPlayer;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ public class AudioManager {
      * Constructs audio manager and sets initial volume to 100%
      */
     public AudioManager() {
-        effectsVolume = .5;
+        effectsVolume = .7;
         musicVolume = .3;
         SFX = createSFX();
     }

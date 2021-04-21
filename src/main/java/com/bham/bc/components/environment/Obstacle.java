@@ -1,8 +1,11 @@
 package com.bham.bc.components.environment;
 
+import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
 import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
@@ -51,6 +54,7 @@ public class Obstacle extends BaseGameEntity {
 
         Dissolve dissolve = new Dissolve(getPosition(), entityImages[currentFrame], 0);
         services.addTrigger(dissolve);
+        audioManager.playEffect(SoundEffect.DESTROY_SOFT);
     }
 
     /**

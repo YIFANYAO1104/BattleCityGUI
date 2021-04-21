@@ -1,5 +1,6 @@
 package com.bham.bc.components.shooting;
 
+import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.Obstacle;
@@ -12,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 
 import java.util.List;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
 
 
 /**
@@ -89,11 +92,15 @@ abstract public class Bullet extends MovingEntity {
     public void handle(BaseGameEntity entity) {
         if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
             ((GameCharacter) entity).changeHp(-damage);
+            audioManager.playEffect(SoundEffect.HIT_CHARACTER);
             destroy();
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {
             destroy();
             if(((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)) {
                 ((Obstacle) entity).changeHp(-damage);
+                audioManager.playEffect(SoundEffect.HIT_SOFT);
+            } else {
+                audioManager.playEffect(SoundEffect.HIT_HARD);
             }
         }
     }

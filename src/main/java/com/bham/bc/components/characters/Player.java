@@ -147,7 +147,7 @@ public class Player extends GameCharacter {
 	 * Shoots a default bullet (or multiple)
 	 *
 	 * <p>This method creates new instance(-s) of {@link com.bham.bc.components.shooting.DefaultBullet}
-	 * based on player's position and angle</p>
+	 * based on player's position and angle.</p>
 	 */
 	private void fire() {
 		if(tripleTicks == 0) GUN.shoot();
@@ -158,8 +158,8 @@ public class Player extends GameCharacter {
 	 * Handles pressed key
 	 *
 	 * <p>If one of the control keys are pressed, namely, W, A, S or D, a corresponding
-	 * {@link Direction} is added to the directionSet. If the key F
-	 * is pressed, then an appropriate bullet is fired</p>
+	 * {@link Direction} is added to the directionSet. If the key F is pressed, then an
+	 * appropriate bullet is fired</p>
 	 *
 	 * @param e key to handle
 	 */
