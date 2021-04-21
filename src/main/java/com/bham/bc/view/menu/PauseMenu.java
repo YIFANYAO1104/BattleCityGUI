@@ -1,7 +1,7 @@
 package com.bham.bc.view.menu;
 
 import com.bham.bc.view.GameSession;
-import com.bham.bc.view.MenuSession;
+import com.bham.bc.view.model.GameFlowEvent;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.SubMenu;
@@ -9,12 +9,7 @@ import javafx.animation.FadeTransition;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import javafx.util.Duration;
-
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
@@ -30,21 +25,25 @@ public class PauseMenu extends AnchorPane {
 
     private SubMenu subMenuPause;
     public SubMenu subMenuSettings;
-    public Rectangle bg;
-    public static Stage primaryStage;
+    public Rectangle dim;
+
+    private final GameFlowEvent PAUSE_GAME_EVENT;
+    private final GameFlowEvent LEAVE_GAME_EVENT;
 
 
     /**
      * Constructs a pause menu based on Game window's size parameters
      */
     public PauseMenu() {
+        PAUSE_GAME_EVENT = new GameFlowEvent(GameFlowEvent.PAUSE_GAME);
+        LEAVE_GAME_EVENT = new GameFlowEvent(GameFlowEvent.LEAVE_GAME);
+
         setMinWidth(GameSession.WIDTH);
         setMinHeight(GameSession.HEIGHT);
 
         initBgDim();
         createSubMenuPause();
         createSubMenuSettings();
-
     }
 
 
@@ -52,10 +51,10 @@ public class PauseMenu extends AnchorPane {
      * Adds background dim to the menu
      */
     private void initBgDim() {
-        bg = new Rectangle(GameSession.WIDTH, GameSession.HEIGHT);
-        bg.setFill(Color.BLACK);
-        bg.setOpacity(0.5);
-        getChildren().add(bg);
+        dim = new Rectangle(GameSession.WIDTH, GameSession.HEIGHT);
+        dim.setFill(Color.NAVY);
+        dim.setOpacity(0.4);
+        getChildren().add(dim);
     }
 
     /**
@@ -66,12 +65,9 @@ public class PauseMenu extends AnchorPane {
         MenuButton btnSettings = new MenuButton("SETTINGS");
         MenuButton btnReturn = new MenuButton("RETURN TO MENU");
 
-        btnResume.setOnMouseClicked(e -> { MenuSession.showPauseMenu(GameSession.gamePane,GameSession.gameTimer); });
+        btnResume.setOnMouseClicked(e -> btnResume.fireEvent(PAUSE_GAME_EVENT));
         btnSettings.setOnMouseClicked(e -> { subMenuPause.hide(); subMenuSettings.show(); });
-        btnReturn.setOnMouseClicked(e -> { GameSession.gameStage.hide();
-            MenuSession manager = new MenuSession();
-            primaryStage = manager.getMainStage();
-            primaryStage.show(); });
+        btnReturn.setOnMouseClicked(e -> btnReturn.fireEvent(LEAVE_GAME_EVENT));
 
         subMenuPause = new SubMenu(this);
         subMenuPause.getChildren().addAll(btnResume, btnSettings, btnReturn);
@@ -100,7 +96,7 @@ public class PauseMenu extends AnchorPane {
     public void show(AnchorPane gamePane) {
         gamePane.getChildren().add(this);
 
-        FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
+        FadeTransition ft = new FadeTransition(Duration.millis(300), dim);
         ft.setFromValue(0);
         ft.setToValue(0.7);
 
@@ -113,7 +109,7 @@ public class PauseMenu extends AnchorPane {
      * @param gamePane game pane menu will be detached from
      */
     public void hide(AnchorPane gamePane) {
-        FadeTransition ft = new FadeTransition(Duration.millis(300), bg);
+        FadeTransition ft = new FadeTransition(Duration.millis(300), dim);
         ft.setFromValue(0.7);
         ft.setToValue(0);
 

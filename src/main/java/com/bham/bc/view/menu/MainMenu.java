@@ -3,8 +3,6 @@ package com.bham.bc.view.menu;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -12,9 +10,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-
-import java.io.IOException;
-import java.util.Arrays;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
@@ -28,18 +23,17 @@ import static com.bham.bc.audio.AudioManager.audioManager;
 public class MainMenu extends AnchorPane {
 
     private SubMenu subMenuMain;
-    private SubMenu subMenuMode;
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
-    public static RecordsHandler recordsHandler = new RecordsHandler();;
-    public static TableView<RecordsHandler.Records> tableView = new TableView<>();;
+    public static RecordsHandler recordsHandler = new RecordsHandler();
+    public static TableView<RecordsHandler.Records> tableView = new TableView<>();
 
-    private final NewGameEvent NEW_GAME_EVENT;
+    private final GameFlowEvent NEW_GAME_EVENT;
     /**
      * Constructs an AnchorPane layout as the Main Menu
      */
     public MainMenu() {
-        NEW_GAME_EVENT = new NewGameEvent(NewGameEvent.START_GAME);
+        NEW_GAME_EVENT = new GameFlowEvent(GameFlowEvent.START_GAME);
         setMinWidth(MenuSession.WIDTH);
         setMinHeight(MenuSession.HEIGHT);
 
@@ -58,7 +52,7 @@ public class MainMenu extends AnchorPane {
     private void initBgDim() {
         Rectangle dim = new Rectangle(getWidth(), getHeight());
         dim.setFill(Color.NAVY);
-        dim.setOpacity(0.3);
+        dim.setOpacity(0.4);
         getChildren().add(dim);
     }
 
@@ -82,10 +76,10 @@ public class MainMenu extends AnchorPane {
         subMenuMain.getChildren().addAll(btnStart, btnScores, btnSettings, btnQuit);
     }
 
-    static {
-        ObservableList<RecordsHandler.Records> data=RecordsHandler.initTable();
-        tableView.setItems(data);
-    }
+//    static {
+//        ObservableList<RecordsHandler.Records> data=RecordsHandler.initTable();
+//        tableView.setItems(data);
+//    }
 
 
     /**
@@ -115,26 +109,14 @@ public class MainMenu extends AnchorPane {
         score = new TableColumn<>("Score");
         date = new TableColumn<>("Date");
 
-        rank.setMinWidth(160);
-        name.setMinWidth(160);
-        score.setMinWidth(160);
-        date.setMinWidth(160);
-
         rank.setCellValueFactory(new PropertyValueFactory<>("rank"));
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         score.setCellValueFactory(new PropertyValueFactory<>("score"));
         date.setCellValueFactory(new PropertyValueFactory<>("date"));
 
-
-
         tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
         tableView.getColumns().addAll(rank, name, score, date);
         tableView.setId("scores-table");
-
-
-
-
-
 
         subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
         tableView.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });

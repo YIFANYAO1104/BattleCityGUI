@@ -5,7 +5,7 @@ import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
-import com.bham.bc.view.model.NewGameEvent;
+import com.bham.bc.view.model.GameFlowEvent;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -24,6 +24,7 @@ public class MenuSession {
 
     public static final int WIDTH = 1024;
     public static final int HEIGHT = 768;
+    public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.NIGHT_BREAK };
 
     private AnchorPane mainPane;
     private Scene mainScene;
@@ -36,7 +37,7 @@ public class MenuSession {
      */
     public MenuSession() {
         mainPane = new AnchorPane();
-        mainPane.addEventFilter(NewGameEvent.START_GAME, this::createGameSession);
+        mainPane.addEventFilter(GameFlowEvent.START_GAME, this::createGameSession);
         mainPane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
 
         mainScene = new Scene(mainPane, WIDTH, HEIGHT);
@@ -58,7 +59,7 @@ public class MenuSession {
         mainPane.getChildren().addAll(menuBackground, mainMenu);
 
 
-        audioManager.loadSequentialPlayer(true, SoundTrack.NIGHT_BREAK);
+        audioManager.loadSequentialPlayer(true, PLAYLIST);
         audioManager.playMusic();
     }
 
@@ -92,10 +93,10 @@ public class MenuSession {
      * Creates a single Game Session based on a chosen MODE
      * @param e SURVIVAL or CHALLENGE mode to be set in Controller
      */
-    public void createGameSession(NewGameEvent e) {
-        audioManager.loadSequentialPlayer(true, SoundTrack.REVOLUTION, SoundTrack.CORRUPTION, SoundTrack.TAKE_LEAD);
+    public void createGameSession(GameFlowEvent e) {
+        audioManager.loadSequentialPlayer(true, GameSession.PLAYLIST);
         GameSession gameSession = new GameSession(e.getMapType());
-        gameSession.createNewGame(mainStage);
+        gameSession.startGame(mainStage);
 
         audioManager.playMusic();
     }

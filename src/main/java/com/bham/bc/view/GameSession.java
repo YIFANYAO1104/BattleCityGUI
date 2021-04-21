@@ -1,11 +1,15 @@
 package com.bham.bc.view;
 
+import com.bham.bc.audio.SoundTrack;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 
+import static com.bham.bc.audio.AudioManager.audioManager;
 import static com.bham.bc.components.Controller.*;
 
 import com.bham.bc.view.menu.EndMenu;
+import com.bham.bc.view.menu.PauseMenu;
+import com.bham.bc.view.model.GameFlowEvent;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -26,15 +30,19 @@ public class GameSession {
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
     public static final int FRAME_RATE = 24;
+    public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.REVOLUTION, SoundTrack.CORRUPTION, SoundTrack.TAKE_LEAD };
 
-    public static AnchorPane gamePane;
+
+    private final PauseMenu PAUSE_MENU;
+
+    private AnchorPane gamePane;
     private Scene gameScene;
     public static Stage gameStage;
     private GraphicsContext gc;
 
     private Stage menuStage;
 
-    public static AnimationTimer gameTimer;
+    private AnimationTimer gameTimer;
 
     private Camera camera;
 
@@ -43,8 +51,14 @@ public class GameSession {
      */
     public GameSession(MapType mapType) {
         setMode(mapType);
+
+        PAUSE_MENU = new PauseMenu();
+
+
         initializeStage();
         createKeyListeners();
+        gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, e -> pauseGame());
+        gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, e -> leaveGame());
     }
 
     /**
@@ -63,7 +77,7 @@ public class GameSession {
         gameStage = new Stage();
 
         gameStage.setScene(gameScene);
-        gameStage.setTitle("Defenders");
+        gameStage.setTitle("Blueland Defenders");
         gameStage.setResizable(false);
 
         try {
@@ -71,8 +85,6 @@ public class GameSession {
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             e.printStackTrace();
         }
-
-
 
         CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
         customStage.createTitleBar(gamePane, WIDTH, HEIGHT);
@@ -82,15 +94,11 @@ public class GameSession {
      * starts the game loop and shows the game view
      * @param menuStage menu stage to be hidden
      */
-    public void createNewGame(Stage menuStage) {
+    public void startGame(Stage menuStage) {
         this.menuStage = menuStage;
         this.menuStage.hide();
 
         createGameLoop();
-        gameStage.show();
-    }
-
-    public void show() {
         gameStage.show();
     }
 
@@ -99,12 +107,12 @@ public class GameSession {
      */
     private void createKeyListeners() {
         gameScene.setOnKeyPressed(e -> {
-            if(!EndMenu.isshown&&e.getCode() == KeyCode.Q) {  // Testing purposes
+            if(e.getCode() == KeyCode.Q) {  // Testing purposes
                 gameTimer.stop();
                 Random r=new Random();
                 MenuSession.showEndMenu(gamePane, r.nextDouble()*999);
-            } else if(!EndMenu.isshown && (e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE)) {
-                showPauseMenu();
+            } else if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
+                pauseGame();
             } else {
                 services.keyPressed(e);
             }
@@ -113,9 +121,36 @@ public class GameSession {
     }
 
 
-    public void showPauseMenu() {
-        MenuSession.showPauseMenu(gamePane, gameTimer);
+    /**
+     * Handles the event of pausing the game
+     *
+     * <p>If the pause menu is contained within the <i>gamePane</i>, it removes the pause menu, resumes the <i>gameTimer</i>
+     * and the background music. Otherwise, it attaches the pause menu, stops the game and the playing music.</p>
+     */
+    private void pauseGame() {
+        if(gamePane.getChildren().contains(PAUSE_MENU)) {
+            audioManager.playMusic();
+            PAUSE_MENU.hide(gamePane);
+            gameTimer.start();
+        } else {
+            audioManager.pauseMusic();
+            PAUSE_MENU.show(gamePane);
+            gameTimer.stop();
+        }
     }
+
+    /**
+     * Handles the event of leaving the game
+     *
+     * <p>This method simply closes the game window and returns to the menu window which was passed when the stages were
+     * swapped together in {@link #startGame(Stage)}. It should not be called during the actual gameplay, i.e., when the
+     * <i>gameTimer</i> is running.</p>
+     */
+    private void leaveGame() {
+        gameStage.hide();
+        menuStage.show();
+    }
+
 
 
     /**
