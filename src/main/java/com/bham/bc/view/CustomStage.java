@@ -191,11 +191,11 @@ public class CustomStage extends Stage{
 
         gpTitle.getChildren().addAll(lbTitle,hBox);
 
-        VBox titleAndRoot = new VBox();
-        root.getScene().setRoot(titleAndRoot);
-        titleAndRoot.getChildren().addAll(gpTitle, root);
-        stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
-        //root.getChildren().add(gpTitle);
+//        VBox titleAndRoot = new VBox();
+//        root.getScene().setRoot(titleAndRoot);
+//        titleAndRoot.getChildren().addAll(gpTitle, root);
+//        stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
+        root.getChildren().add(gpTitle);
 
         gpTitle.setLayoutX(0);
         gpTitle.setLayoutY(0);
