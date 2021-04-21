@@ -6,7 +6,6 @@ import com.bham.bc.components.environment.MapType;
 import static com.bham.bc.components.Controller.*;
 
 import com.bham.bc.view.menu.EndMenu;
-import com.bham.bc.view.model.MenuSlider;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -31,14 +30,13 @@ public class GameSession {
     public static AnchorPane gamePane;
     private Scene gameScene;
     public static Stage gameStage;
-    private Canvas canvas;
     private GraphicsContext gc;
 
     private Stage menuStage;
 
     public static AnimationTimer gameTimer;
 
-    private Camera cmr;
+    private Camera camera;
 
     /**
      * Constructs the view manager
@@ -53,14 +51,13 @@ public class GameSession {
      * initializes the game stage
      */
     private void initializeStage() {
-        canvas = new Canvas(GameMap.getWidth(), GameMap.getHeight());
+        Canvas canvas = new Canvas(GameMap.getWidth(), GameMap.getHeight());
         gc = canvas.getGraphicsContext2D();
+        camera = new Camera(gc);
 
         gamePane = new AnchorPane(canvas);
-        gamePane.getStylesheets().add(MenuSlider.class.getResource("../../../../../style.css").toExternalForm());
+        gameScene = new Scene(gamePane, WIDTH, HEIGHT);
 
-        gameScene = new Scene(gamePane, WIDTH, HEIGHT, Color.GREY);
-        cmr = new Camera(gc);
 
         gameStage = new Stage();
 
@@ -68,10 +65,16 @@ public class GameSession {
         gameStage.setTitle("Defenders");
         gameStage.setResizable(false);
 
+        try {
+            gameScene.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
+        } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
+            e.printStackTrace();
+        }
+
+
 
         CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
         customStage.createTitleBar(gamePane, WIDTH, HEIGHT);
-
     }
 
     /**
@@ -141,12 +144,15 @@ public class GameSession {
         return false;
     }
 
+    /**
+     * Runs methods which update the state of the game (i.e., renderings, entity updates)
+     */
     private void tick() {
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         services.render(gc);
         renderScoreBoard();
 
-        cmr.update();
+        camera.update();
         services.update();
 
         if (gameEnded()) {
@@ -156,25 +162,18 @@ public class GameSession {
     }
 
     /**
-     * runs methods which update the state of the game
+     * Creates animation timer which updates the game state every {@code n} seconds where {@code n = 1/FRAME_RATE}
      */
     private void createGameLoop() {
         gameTimer = new AnimationTimer() {
             long lastTick = 0;
             @Override
             public void handle(long now) {
-                if(lastTick == 0) {
-                    lastTick = now;
-                    tick();
-                    return;
-                }
-
-                if(now - lastTick > 1_000_000_000 / 20) {
+                if(now - lastTick >= 1_000_000_000. / FRAME_RATE) {
                     lastTick = now;
                     tick();
                 }
             }
-
         };
         gameTimer.start();
     }

@@ -86,7 +86,7 @@ public class CustomStage extends Stage{
         gpTitle.setId("title");
         gpTitle.setSpacing(4);
         gpTitle.setPadding(new Insets(15,5,17,5));
-        Label lbTitle = new Label("Battle City");
+        Label lbTitle = new Label(stage.getTitle());
         lbTitle.setId("name");
         Glow glow=new Glow();
         lbTitle.setEffect(glow);
@@ -94,7 +94,7 @@ public class CustomStage extends Stage{
 
         gpTitle.setMinWidth(Width);
         gpTitle.setMaxWidth(Height);
-        gpTitle.setMinHeight(15);
+        gpTitle.setMinHeight(35);
         gpTitle.setMaxHeight(35);
         gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
 
@@ -191,7 +191,11 @@ public class CustomStage extends Stage{
 
         gpTitle.getChildren().addAll(lbTitle,hBox);
 
-        root.getChildren().add(gpTitle);
+        VBox titleAndRoot = new VBox();
+        root.getScene().setRoot(titleAndRoot);
+        titleAndRoot.getChildren().addAll(gpTitle, root);
+        stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
+        //root.getChildren().add(gpTitle);
 
         gpTitle.setLayoutX(0);
         gpTitle.setLayoutY(0);
