@@ -206,18 +206,11 @@ public abstract class Enemy extends GameCharacter {
 //        if (navigationService!=null) navigationService.render(gc);
         drawRotatedImage(gc, entityImages[0], getAngle());
 
-//        gc.setStroke(Color.GOLD);
-//        gc.setLineWidth(2.0);
-//
-//        gc.strokeLine(x, y, x+velocity.getX()*10, y+velocity.getY()*10);
-//
 //        gc.setStroke(Color.WHITE);
 //        gc.setLineWidth(2.0);
-//
 //        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
 //
-//        gc.setFill(Color.WHITE);
-//        gc.fillRoundRect(destination.getX(),destination.getY(),4,4,1,1);
+//        steering.render(gc);
     }
 
     @Override

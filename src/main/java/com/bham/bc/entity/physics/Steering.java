@@ -4,6 +4,8 @@ import com.bham.bc.components.characters.Player;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 import static com.bham.bc.utils.GeometryEnhanced.*;
 
@@ -246,5 +248,24 @@ public class Steering {
             }
         }
         return steeringForce;
+    }
+
+    public void render(GraphicsContext gc){
+        double x =agent.getPosition().getX();
+        double y = agent.getPosition().getY();
+        Point2D velocity = agent.getVelocity();
+
+        gc.setStroke(Color.GOLD);
+        gc.setLineWidth(2.0);
+
+        gc.strokeLine(x, y, x + velocity.getX() * 10, y + velocity.getY() * 10);
+
+//        gc.setStroke(Color.WHITE);
+//        gc.setLineWidth(2.0);
+//
+//        gc.strokeLine(x, y, x + acceleration.getX() * 10, x + acceleration.getY() * 10);
+
+        gc.setFill(Color.WHITE);
+        gc.fillRoundRect(target.getX(),target.getY(),4,4,1,1);
     }
 }

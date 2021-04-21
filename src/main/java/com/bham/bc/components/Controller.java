@@ -199,7 +199,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character)));
 
         bullets.forEach(Bullet::update);
-        bullets.forEach(bullet -> bullet.handle(mapDivision.calculateNeighborsArray(bullet))); //TODO why multiple 4 ???
+        bullets.forEach(bullet -> bullet.handle(mapDivision.calculateNeighborsArray(bullet)));
 
         triggers.forEach(Trigger::update);
         triggers.forEach(trigger -> trigger.handle(mapDivision.calculateNeighborsArray(trigger.getCenterPosition(), trigger.getHitBoxRadius() * 4)));

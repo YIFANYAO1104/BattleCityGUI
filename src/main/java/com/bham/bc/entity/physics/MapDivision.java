@@ -8,6 +8,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 
 import java.util.*;
 
@@ -265,27 +267,43 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     /**
      * Get the List of the Entity that should be consider if interacting with target the location.
-     * @param target Point2D the location should be check collision
+     * @param centerPos Point2D the location should be check collision
      * @param radius is the raidus of Hitbox
      */
-    public List<entity> calculateNeighborsArray(Point2D target, double radius){
+    public List<entity> calculateNeighborsArray(Point2D centerPos, double radius){
         surround_entities.clear();
         // creat the hitbox whcih is the interact test box of the target area
-        Hitbox targetBox = new Hitbox(target.subtract(radius,radius),target.add(radius,radius));
+        Point2D tl = centerPos.subtract(radius,radius);
+        Point2D size = new Point2D(2*radius,2*radius);
+        List<Integer> idxes = getCellIndexes(tl, size);
 
-
-        ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
-        while (c_iter.hasNext()){
-            Cell<entity> curCell = c_iter.next();
-
-            if(!curCell.Unites.isEmpty() && curCell.cBox.isInteractedWith(targetBox)){
-                for(entity ent :curCell.Unites){
-                    if(ent.getPosition().distance(target) < radius)
-                        surround_entities.add(ent);
-                }
+        for (Integer idx : idxes) {
+            Cell<entity> curCell = m_Cells.get(idx);
+            for(entity ent :curCell.Unites){
+                if(ent.getCenterPosition().distance(centerPos) < radius+ent.getHitBoxRadius())
+                    surround_entities.add(ent);
             }
         }
         return surround_entities;
+
+
+//        surround_entities.clear();
+//        // creat the hitbox whcih is the interact test box of the target area
+//        Hitbox targetBox = new Hitbox(centerPos.subtract(radius,radius),centerPos.add(radius,radius));
+//
+//
+//        ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
+//        while (c_iter.hasNext()){
+//            Cell<entity> curCell = c_iter.next();
+//
+//            if(!curCell.Unites.isEmpty() && curCell.cBox.isInteractedWith(targetBox)){
+//                for(entity ent :curCell.Unites){
+//                    if(ent.getPosition().distance(centerPos) < radius)
+//                        surround_entities.add(ent);
+//                }
+//            }
+//        }
+//        return surround_entities;
     }
 
     /**
