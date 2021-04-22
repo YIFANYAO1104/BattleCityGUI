@@ -59,7 +59,7 @@
 }
 .leaderboard-label {
     -fx-font-size: 30px;
-    -fx-alignment: center;
+    -fx-text-alignment: center;
     -fx-text-fill: -fx-secondary-color;
     -fx-font-family: 'Zen Dots', cursive;
     -fx-font-weight: bold;
@@ -76,13 +76,14 @@
     -fx-alignment: center;
     -fx-font-size: 18px;
     -fx-pref-width: 150px;
-    -fx-font-family: 'Zen Dots', cursive;
+    -fx-font-family: 'Ubuntu';
     -fx-text-fill: -fx-lighten-color;
     -fx-font-weight: bold;
 }
 #scores-table .column-header .label {
     -fx-font-size: 24px;
     -fx-text-fill: -fx-secondary-color;
+    -fx-font-family: 'Zen Dots', cursive;
     -fx-effect: dropshadow(gaussian, -fx-primary-color, 8, .6, 0, 0);
 }
 #scores-table .table-cell {
@@ -108,7 +109,7 @@
     -fx-font-size: 20px;
     -fx-text-alignment: center;
     -fx-text-fill: -fx-secondary-color;
-    -fx-font-family: "Ubuntu";
+    -fx-font-family: 'Zen Dots', cursive;
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, -fx-primary-color, 8, .6, 0, 0);
 }
@@ -121,8 +122,9 @@
     -fx-effect: innershadow(gaussian, -fx-darken-color, 4, .1, 0, 0);
 }
 .progress-pane #home-health-label {
-    -fx-font-size: 15px;
-    -fx-max-width: 240px;
+    -fx-font-size: 13px;
+    -fx-max-width: 242px;
+    -fx-font-family: 'Zen Dots', cursive;
 }
 
 /* OTHER */

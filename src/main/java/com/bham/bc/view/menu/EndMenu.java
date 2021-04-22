@@ -9,6 +9,7 @@ import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -70,18 +71,14 @@ public class EndMenu extends AnchorPane {
 
         // Input field to get user's name
         TextField nameInput = new TextField();
-        nameInput.setPromptText("e.g. John");
-        nameInput.getStyleClass().add("src/main/resources/style.css");
         nameInput.setMaxWidth(GameSession.WIDTH/3.0);
-
-        // TODO: replace the above 2 lines with this 1 line:
-        // TextField nameInput = new MenuTextField();
+        nameInput.setTextFormatter(new TextFormatter<>(change -> change.getControlNewText().length() <= 10 ? change : null));
 
         // Label and input field for user's name
         VBox labelAndInput = new VBox();
         labelAndInput.setSpacing(15);
         labelAndInput.setAlignment(Pos.CENTER);
-        labelAndInput.getChildren().addAll(nameLabel,nameInput);
+        labelAndInput.getChildren().addAll(nameLabel, nameInput);
 
         // Submit button to push the record to the leaderboard
         MenuButton btnSubmit = new MenuButton("SUBMIT");
@@ -93,7 +90,7 @@ public class EndMenu extends AnchorPane {
 
         // Add all elements to the layout (with a bigger than default spacing)
         subMenuEnd = new SubMenu(this);
-        subMenuEnd.setSpacing(35);
+        subMenuEnd.setSpacing(25);
         subMenuEnd.getChildren().addAll(endMenuLabel, scoreLabel, labelAndInput, btnSubmit);
     }
 

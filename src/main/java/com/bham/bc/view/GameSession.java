@@ -120,7 +120,7 @@ public class GameSession {
         homeHealthBar.setId("home-health-bar");
 
         // Set up home health label
-        Label homeHealthTxt = new Label("         Territory taken over         ");
+        Label homeHealthTxt = new Label("        Territory taken over       ");
         homeHealthTxt.setTextFill(Color.web(FG_2));
         homeHealthTxt.setEffect(new Glow(1));
         homeHealthTxt.setId("home-health-label");

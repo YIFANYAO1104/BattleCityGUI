@@ -45,7 +45,7 @@ public class MenuSlider extends HBox {
 
         // Slider track
         StackPane sliderTrack = new StackPane();
-        sliderTrack.setMaxSize(WIDTH*.48, HEIGHT*.18);
+        sliderTrack.setMaxSize(WIDTH*.46, HEIGHT*.18);
         sliderTrack.getStyleClass().add(".slider-track");
         sliderTrack.setStyle(
                 "-fx-background-radius: 20px;" + "-fx-border-width: 0;" + "-fx-effect: innershadow(gaussian, -fx-darken-color, 4, .1, 0, 0);" +
@@ -62,7 +62,7 @@ public class MenuSlider extends HBox {
         // Label for slider
         Label sliderLabel = new Label();
         sliderLabel.setText(name);
-        sliderLabel.setPrefWidth(WIDTH*.25);
+        sliderLabel.setPrefWidth(WIDTH*.26);
         sliderLabel.getStyleClass().add("slider-label");
 
         // Label for slider's value
