@@ -45,8 +45,7 @@ public class MenuSlider extends HBox {
 
         // Slider track
         StackPane sliderTrack = new StackPane();
-        sliderTrack.setMaxWidth(WIDTH*.48);
-        sliderTrack.setMaxHeight(HEIGHT*.18);
+        sliderTrack.setMaxSize(WIDTH*.48, HEIGHT*.18);
         sliderTrack.getStyleClass().add(".slider-track");
         sliderTrack.setStyle(
                 "-fx-background-radius: 20px;" + "-fx-border-width: 0;" + "-fx-effect: innershadow(gaussian, -fx-darken-color, 4, .1, 0, 0);" +

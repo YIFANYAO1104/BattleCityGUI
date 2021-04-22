@@ -125,7 +125,7 @@ public class CustomStage extends Stage{
             selected=new_val.intValue();
             typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#2a3ade, #091376);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right, -fx-bg-color 0%, -fx-primary-color 50%, -fx-bg-color 100%);");
                 lbTitle.requestFocus();
 
 
@@ -310,7 +310,7 @@ public class CustomStage extends Stage{
      */
 
     public void createCommonTitlebar(AnchorPane root, int Width){
-           titleBar(root,Width,-690,changeMainSkin);
+           titleBar(root,Width,-310,changeMainSkin);
            changeMainSkin.getSelectionModel().select(selected);
 
 
@@ -324,7 +324,7 @@ public class CustomStage extends Stage{
 
     public void createTitleBar(AnchorPane root, int Width){
 
-        titleBar(root,Width,-480,changePauseSkin);
+        titleBar(root,Width,-190,changePauseSkin);
         changePauseSkin.getSelectionModel().select(selected);
 
 

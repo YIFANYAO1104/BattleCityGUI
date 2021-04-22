@@ -38,6 +38,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
     public static Services services;
 
     protected double homeHp;
+    protected double score;
     protected GameMap gameMap;
     protected ArrayList<Trigger> triggers;
     protected ArrayList<Bullet> bullets;
@@ -49,6 +50,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
     protected Player player;
 
 
+
     /**
      * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
      */
@@ -58,6 +60,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
         homeHp = 1000;
+        score = 0;
     }
 
     /**
@@ -76,8 +79,12 @@ public abstract class Controller extends BaseGameEntity implements Services {
     protected abstract void loadMap(MapType mapType);
     protected abstract void startGame();
 
+    public void changeScore(double score) {
+        this.score = Math.max(0, this.score + score);
+    }
+
     public double getScore() {
-        return new Random().nextDouble()*800;
+        return score;
     }
 
     @Override
@@ -85,10 +92,14 @@ public abstract class Controller extends BaseGameEntity implements Services {
         return homeHp;
     }
 
+    @Override
+    public double getHomeHpFraction() {
+        return Math.max(0, homeHp/1000);
+    }
+
     public void occupyHome(Enemy enemy) {
         if(enemy.intersects(gameMap.getHomeTerritory())) {
             homeHp -= 1;
-            System.out.println("Home HP: " + homeHp);
         }
     }
 

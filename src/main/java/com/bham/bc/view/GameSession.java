@@ -9,18 +9,29 @@ import static com.bham.bc.components.Controller.*;
 import static com.bham.bc.utils.Timer.CLOCK;
 
 import com.bham.bc.view.menu.EndMenu;
-import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.GameFlowEvent;
 import javafx.animation.AnimationTimer;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
+import javafx.scene.effect.Glow;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 /**
  * Class managing the animations of a running game
@@ -41,6 +52,11 @@ public class GameSession {
     private Stage menuStage;
     private AnimationTimer gameTimer;
 
+    private long startTimestamp;
+    private StringProperty timeSurvived;
+    private StringProperty scoreAchieved;
+    private DoubleProperty healthFraction;
+
     /**
      * Constructs the game session
      */
@@ -49,6 +65,7 @@ public class GameSession {
         setMode(mapType);
         initLayout();
         initWindow();
+        initProgressPane();
         createKeyListeners();
     }
 
@@ -84,6 +101,69 @@ public class GameSession {
     }
 
     /**
+     * Initializes the progress pane, i.e., sets up the home health bar, score and time labels
+     */
+    private void initProgressPane() {
+        // Declare the global colors used in the CSS file
+        String FG_1 = "#135ADD";  // -fx-primary-color (foreground primary)
+        String FG_2 = "#B0CAFF";  // -fx-lighten-color (foreground secondary)
+        String BG_1 = "#080A1E";  // -fx-bg-color (background primary)
+
+        // Define all the properties out game pane will depend on
+        timeSurvived = new SimpleStringProperty("00:00");
+        scoreAchieved = new SimpleStringProperty("0");
+        healthFraction = new SimpleDoubleProperty(1);
+
+        // Set up home health bar
+        StackPane homeHealthBar = new StackPane();
+        homeHealthBar.setBackground(new Background(new BackgroundFill(Color.web(FG_1), new CornerRadii(20), new Insets(0))));
+        homeHealthBar.setId("home-health-bar");
+
+        // Set up home health label
+        Label homeHealthTxt = new Label("         Territory taken over         ");
+        homeHealthTxt.setTextFill(Color.web(FG_2));
+        homeHealthTxt.setEffect(new Glow(1));
+        homeHealthTxt.setId("home-health-label");
+
+        // Make the colors of the home health bar and t dynamic
+        healthFraction.addListener((obsVal, oldVal, newVal) -> {
+            Stop[] homeHealthBarStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_1)), new Stop(newVal.doubleValue(), Color.web(BG_1)) };
+            Stop[] homeHealthTxtStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_2)), new Stop(newVal.doubleValue(), Color.web(FG_1)) };
+            LinearGradient homeHealthBarGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, homeHealthBarStops);
+            LinearGradient homeHealthTxtGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, homeHealthTxtStops);
+            homeHealthBar.setBackground(new Background(new BackgroundFill(homeHealthBarGradient, new CornerRadii(20), new Insets(0))));
+            homeHealthTxt.setTextFill(homeHealthTxtGradient);
+        });
+
+        // Add home health bar and label to container
+        StackPane healthProgress = new StackPane();
+        healthProgress.getChildren().addAll(homeHealthBar, homeHealthTxt);
+
+        // Set up score label and add to container
+        Label scoreLabel = new Label();
+        scoreLabel.textProperty().bind(scoreAchieved);
+        HBox scoreProgress = new HBox();
+        scoreProgress.getChildren().add(scoreLabel);
+        scoreProgress.getStyleClass().add("progress-cell");
+
+        // Set up time label and add to container
+        Label timeLabel = new Label();
+        timeLabel.textProperty().bind(timeSurvived);
+        HBox timeProgress = new HBox();
+        timeProgress.getChildren().add(timeLabel);
+        timeProgress.getStyleClass().add("progress-cell");
+
+        // Add home health bar, score and time containers to the progress layout
+        TilePane progressPane = new TilePane();
+        progressPane.setMinSize(WIDTH, HEIGHT);
+        progressPane.getChildren().addAll(healthProgress, scoreProgress, timeProgress);
+        progressPane.getStyleClass().add("progress-pane");
+
+        // Add the progress layout to the game pane
+        gamePane.getChildren().add(progressPane);
+    }
+
+    /**
      * Creates the input listeners. Key presses are handled by the center controller class (except for {@code P} and {@code ESC}).
      */
     private void createKeyListeners() {
@@ -91,7 +171,6 @@ public class GameSession {
             if(e.getCode() == KeyCode.Q) {  // TODO: remove
                 endGame();
             } else if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
-                //pauseGame();
                 gamePane.fireEvent(new GameFlowEvent(GameFlowEvent.PAUSE_GAME));
             } else {
                 services.keyPressed(e);
@@ -164,27 +243,24 @@ public class GameSession {
     }
 
     private void updateGameState() {
-        long startTick = CLOCK.getCurrentTime();
+        long currentTime = CLOCK.getCurrentTime() - startTimestamp;
+
+
+        DateFormat timeFormat = new SimpleDateFormat("mm:ss");
+        timeSurvived.set(timeFormat.format(currentTime));
+
+        scoreAchieved.set(String.format("%.0f", services.getScore()));
+        healthFraction.set(services.getHomeHpFraction());
     }
 
     /**
-     * renders the score of a currently running game
-     */
-    private void renderScoreBoard(){
-        gc.setFill(Color.BLUE);
-        gc.setFont(new Font("Times New Roman", 20));
-
-        gc.fillText("Health: ", 580, 70);
-        //gc.fillText("" + frontendServices.getPlayerHP(), 650, 70);
-    }
-
-    /**
-     * starts the game loop and shows the game view
+     * Starts the game loop and shows the game view
      * @param menuStage menu stage to be hidden
      */
     public void startGame(Stage menuStage) {
         this.menuStage = menuStage;
         this.menuStage.hide();
+        startTimestamp = CLOCK.getCurrentTime();
 
         createGameLoop();
         gameStage.show();
@@ -197,7 +273,6 @@ public class GameSession {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
         updateGameState();
         services.render(gc);
-        renderScoreBoard();
 
         camera.update();
         services.update();
@@ -212,7 +287,6 @@ public class GameSession {
             @Override
             public void handle(long now) {
                 if(now - lastTick >= 1_000_000_000. / FRAME_RATE) {
-                    //System.out.println(now);
                     lastTick = now;
                     tick();
                 }

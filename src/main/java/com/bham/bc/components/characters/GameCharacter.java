@@ -15,6 +15,7 @@ import javafx.scene.shape.Shape;
 import java.util.List;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
+import static com.bham.bc.components.Controller.services;
 
 /**
  * Represents a character - this includes enemies, players and AI companions
@@ -76,7 +77,8 @@ abstract public class GameCharacter extends MovingEntity {
         hp = Math.min(hp + health, MAX_HP);
 
         if(hp <= 0) {
-            audioManager.playEffect(SoundEffect.DESTROY_SOFT);
+            audioManager.playEffect(SoundEffect.DESTROY_CHARACTER);
+            if(side == Side.ENEMY) services.changeScore(50);
             destroy();
         }
     }

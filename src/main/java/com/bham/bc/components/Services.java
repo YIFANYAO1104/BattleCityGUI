@@ -147,6 +147,13 @@ public interface Services {
 
 
     // LOGIC ------------------------------------------------------
+
+    /**
+     * Changes the score of the game
+     * @param score value to be added to the overall score
+     */
+    void changeScore(double score);
+
     /**
      * Simulates taking over home territory by decreasing home's "HP"
      * @param enemy enemy to be checked if it intersects with the home territory to take it over
@@ -183,8 +190,14 @@ public interface Services {
 
     /**
      * Gets the remaining home "HP" indicating how much territory is not yet taken over by the enemies
-     * @return home "HP" value to be shown on the screen
+     * @return home "HP" value
      */
     double getHomeHp();
+
+    /**
+     * Gets the remaining home "HP" fraction indicating how much territory is not yet taken over by the enemies
+     * @return home "HP" fraction value
+     */
+    double getHomeHpFraction();
     //-------------------------------------------------------------
 }

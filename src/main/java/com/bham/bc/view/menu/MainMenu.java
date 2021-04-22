@@ -11,8 +11,6 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.bham.bc.audio.AudioManager.audioManager;

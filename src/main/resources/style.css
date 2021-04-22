@@ -88,6 +88,40 @@
     -fx-border-color: transparent;
 }
 
+/* PROGRESS PANE */
+.progress-pane {
+    -fx-pref-columns: 3;
+    -fx-pref-tile-height: 35px;
+    -fx-pref-tile-width: 265px;
+    -fx-hgap: 2px;
+    -fx-min-height: 35px;
+    -fx-alignment: center;
+    -fx-background-color: linear-gradient(to left, -fx-darken-color 0%, rgba(8, 10, 30, .6) 50%, -fx-darken-color 100%);
+}
+.progress-pane .progress-cell {
+    -fx-alignment: center;
+}
+.progress-pane .progress-cell .label {
+    -fx-font-size: 20px;
+    -fx-text-alignment: center;
+    -fx-text-fill: -fx-secondary-color;
+    -fx-font-family: "Ubuntu";
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(gaussian, -fx-primary-color, 8, .6, 0, 0);
+}
+.progress-pane #home-health-bar {
+    -fx-max-width: 240px;
+    -fx-max-height: 25px;
+    -fx-border-radius: 20px;
+    -fx-border-width: 2px;
+    -fx-border-color: -fx-primary-color;
+    -fx-effect: innershadow(gaussian, -fx-darken-color, 4, .1, 0, 0);
+}
+.progress-pane #home-health-label {
+    -fx-font-size: 15px;
+    -fx-max-width: 240px;
+}
+
 /* OTHER */
 #text-effect{
    -fx-font: 50px Tahoma;
@@ -161,31 +195,10 @@
     -fx-background-repeat:no-repeat;
 }
 #name{
-    -fx-font-size: 18px;
-    -fx-text-fill: gold;
-    -fx-font-family: "Arial Narrow";
+    -fx-font-size: 15px;
+    -fx-text-fill: -fx-lighten-color;
+    -fx-font-family: "Ubuntu";
     -fx-font-weight: bold;
-
-    -fx-stroke: #ba7b16;
-}
-
-#changeSkin .arrow {
-    -fx-background-color:transparent;
-}
-
-
-#winClose{
-    -fx-background-image:url("img/menu/close.png");
-    -fx-background-size: 20px;
-    -fx-background-repeat:no-repeat;
-}
-#name{
-    -fx-font-size: 18px;
-    -fx-text-fill: #808fe0;
-    -fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-
-
 }
 
 #changeSkin .arrow {
