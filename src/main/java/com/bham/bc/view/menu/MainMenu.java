@@ -106,7 +106,7 @@ public class MainMenu extends AnchorPane {
             tableView.getColumns().add(column);
         });
 
-        // Initialize the current records and listen for new ones
+//         Initialize the current records and listen for new ones
         tableView.setItems(RecordsHandler.initTable());
         addEventFilter(GameFlowEvent.LEAVE_GAME, e -> {
             if(e.getScore() >= 0) {
@@ -115,6 +115,7 @@ public class MainMenu extends AnchorPane {
                 tableView.setItems(recordsHandler.sortAndGetData());
             }
         });
+
 
         // Event handler to go back to the main menu
         subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
