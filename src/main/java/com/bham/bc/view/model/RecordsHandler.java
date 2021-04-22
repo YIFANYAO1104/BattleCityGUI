@@ -68,7 +68,7 @@ public class RecordsHandler {
      * @return string format of date
      */
 
-    public static String getDate(){
+    public static String getDateOfG(){
 
         String[] strNow1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString().split("-");
 
@@ -251,10 +251,10 @@ public class RecordsHandler {
      * create the class for data in the table
      */
     public static class Records{
-        private final SimpleStringProperty rank;
-        private final SimpleStringProperty name;
-        private final SimpleStringProperty score;
-        private final SimpleStringProperty date;
+        private  SimpleStringProperty rank;
+        private  SimpleStringProperty name;
+        private  SimpleStringProperty score;
+        private  SimpleStringProperty date;
 
         public Records( String name,String  score, String date) {
             this.rank=new SimpleStringProperty("0");
@@ -272,25 +272,57 @@ public class RecordsHandler {
             this.rank=new SimpleStringProperty("0");
             this.name = new SimpleStringProperty(name);
             this.score = new SimpleStringProperty(score + "");
-            this.date =new SimpleStringProperty(getDate());
+            this.date =new SimpleStringProperty(getDateOfG());
         }
 
+
+        public String getRank() {
+            return rank.get();
+        }
+
+        public SimpleStringProperty rankProperty() {
+            return rank;
+        }
+
+        public void setRank(String rank) {
+            this.rank.set(rank);
+        }
 
         public String getName() {
             return name.get();
         }
+
+        public SimpleStringProperty nameProperty() {
+            return name;
+        }
+
         public void setName(String name) {
             this.name.set(name);
         }
+
         public String getScore() {
             return score.get();
+        }
+
+        public SimpleStringProperty scoreProperty() {
+            return score;
         }
 
         public void setScore(String score) {
             this.score.set(score);
         }
 
+        public String getDate() {
+            return date.get();
+        }
 
+        public SimpleStringProperty dateProperty() {
+            return date;
+        }
+
+        public void setDate(String date) {
+            this.date.set(date);
+        }
 
         /**
          * to convert java object to JSon Object
@@ -349,11 +381,13 @@ public class RecordsHandler {
         //System.out.println(albums.length());
         for (int i = 0; i < albums.length(); i++){
             JSONObject album = albums.getJSONObject(i);
-
+            String rank=album.getString("rank");
             String name = album.getString("name");
             String score = album.getString("score");
             String date = album.getString("date");
-            records.add(i,new Records(name,score,date));
+            Records record=new Records(name,score,date);
+            record.setRank(rank);
+            records.add(i,record);
             //System.out.println(rank + " | " + name + " | " + score+" | "+date);
 
         }

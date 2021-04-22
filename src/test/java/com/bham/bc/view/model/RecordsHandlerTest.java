@@ -10,16 +10,16 @@ public class RecordsHandlerTest extends TestCase {
     public void createSampleRecords(RecordsHandler recordsHandler) {
 
         //write to Json file
-        recordsHandler.createRecord(new RecordsHandler.Records("Dou","999",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("YIFAN","888",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Alex","777",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Mantas","666",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Najd","555",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Justin","444",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("John","333",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Shan","222",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Juily","111",recordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Berry","99",recordsHandler.getDate()));
+        recordsHandler.createRecord(new RecordsHandler.Records("Dou",999));
+        recordsHandler.createRecord(new RecordsHandler.Records("YIFAN",888));
+        recordsHandler.createRecord(new RecordsHandler.Records("Alex",777));
+        recordsHandler.createRecord(new RecordsHandler.Records("Mantas",666));
+        recordsHandler.createRecord(new RecordsHandler.Records("Najd",555));
+        recordsHandler.createRecord(new RecordsHandler.Records("Justin",444));
+        recordsHandler.createRecord(new RecordsHandler.Records("John",333));
+        recordsHandler.createRecord(new RecordsHandler.Records("Shan",222));
+        recordsHandler.createRecord(new RecordsHandler.Records("Juily",111));
+        recordsHandler.createRecord(new RecordsHandler.Records("Berry",99));
 
         //first step is to sort before add new records
         recordsHandler.jsonArrayToFile=recordsHandler.jsonArraySort(recordsHandler.jsonArrayToFile);
@@ -50,14 +50,14 @@ public class RecordsHandlerTest extends TestCase {
         recordsHandler=new RecordsHandler();
         createSampleRecords(recordsHandler);
         //the max min and middle value
-        recordsHandler.createRecord(new RecordsHandler.Records("Dahn","111122",RecordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Daaa","022",RecordsHandler.getDate()));
-        recordsHandler.createRecord(new RecordsHandler.Records("Dann","664",RecordsHandler.getDate()));
+        recordsHandler.createRecord(new RecordsHandler.Records("Dahn",111122));
+        recordsHandler.createRecord(new RecordsHandler.Records("Daaa",022));
+        recordsHandler.createRecord(new RecordsHandler.Records("Dann",664));
         recordsHandler.sortAndGetData();
         assertEquals("Dahn",equalJsonObjectName(1,recordsHandler));
         assertEquals("Daaa",equalJsonObjectName(10,recordsHandler));
         assertEquals("Dann",equalJsonObjectName(6,recordsHandler));
-        recordsHandler.createRecord(new RecordsHandler.Records("Dnnn","665",RecordsHandler.getDate()));
+        recordsHandler.createRecord(new RecordsHandler.Records("Dnnn",665));
         recordsHandler.sortAndGetData();
         assertEquals("Dnnn",equalJsonObjectName(6,recordsHandler));
 

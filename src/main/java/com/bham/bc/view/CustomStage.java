@@ -225,31 +225,7 @@ public class CustomStage extends Stage{
 
 
 
-        titleAndRoot.setOnMouseMoved((MouseEvent event) -> {
-            event.consume();
-            double x = event.getSceneX();
-            double y = event.getSceneY();
-            double width = stage.getWidth();
-            double height = stage.getHeight();
-            Cursor cursorType = Cursor.DEFAULT;
-            isRight = isBottomRight = isBottom = false;
-            if (y >= height - RESIZE_WIDTH) {
-                if (x <= RESIZE_WIDTH) {
 
-                } else if (x >= width - RESIZE_WIDTH) {
-                    isBottomRight = true;
-                    cursorType = Cursor.SE_RESIZE;
-                } else {
-                    isBottom = true;
-                    cursorType = Cursor.S_RESIZE;
-                }
-            } else if (x >= width - RESIZE_WIDTH) {
-                isRight = true;
-                cursorType = Cursor.E_RESIZE;
-            }
-
-            root.setCursor(cursorType);
-        });
 
         titleAndRoot.setOnMouseDragged((MouseEvent event) -> {
 
