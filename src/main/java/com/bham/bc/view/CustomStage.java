@@ -29,10 +29,7 @@ public class CustomStage extends Stage{
 
     private Stage stage;
     private Scene gamescene;
-    private double x = 0.00;
-    private double y = 0.00;
-    private double width = 0.00;
-    private double height = 0.00;
+
 
     private boolean isMax = false;
     private boolean isRight;
@@ -74,11 +71,10 @@ public class CustomStage extends Stage{
      * create titler bar template
      * @param root
      * @param Width width of title bar
-     * @param Height height of title bar
      * @param offset offset of game name
      */
 
-    public void titleBar(AnchorPane root, int Width, int Height,int offset,ChoiceBox changeSkin){
+    public void titleBar(AnchorPane root, int Width,int offset,ChoiceBox changeSkin){
 
         stage.initStyle(StageStyle.TRANSPARENT);
 
@@ -93,7 +89,7 @@ public class CustomStage extends Stage{
         glow.setLevel(0.6);
 
         gpTitle.setMinWidth(Width);
-        gpTitle.setMaxWidth(Height);
+
         gpTitle.setMinHeight(35);
         gpTitle.setMaxHeight(35);
         gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
@@ -225,43 +221,9 @@ public class CustomStage extends Stage{
             }
         });
 
-        stage.xProperty().addListener(new ChangeListener<Number>() {
 
 
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (newValue != null && !isMax) {
-                    x = newValue.doubleValue();
-                }
-            }
-        });
-        stage.yProperty().addListener(new ChangeListener<Number>() {
 
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (newValue != null && !isMax) {
-                    y = newValue.doubleValue();
-                }
-            }
-        });
-        stage.widthProperty().addListener(new ChangeListener<Number>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (newValue != null && !isMax) {
-                    width = newValue.doubleValue();
-                }
-            }
-        });
-        stage.heightProperty().addListener(new ChangeListener<Number>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (newValue != null && !isMax) {
-                    height = newValue.doubleValue();
-                }
-            }
-        });
 
         titleAndRoot.setOnMouseMoved((MouseEvent event) -> {
             event.consume();
@@ -348,8 +310,8 @@ public class CustomStage extends Stage{
      * @param Height height of title bar
      */
 
-    public void createCommonTitlebar(AnchorPane root, int Width, int Height){
-           titleBar(root,Width,Height,-780,changeMainSkin);
+    public void createCommonTitlebar(AnchorPane root, int Width){
+           titleBar(root,Width,-710,changeMainSkin);
            changeMainSkin.getSelectionModel().select(selected);
 
 
@@ -362,9 +324,9 @@ public class CustomStage extends Stage{
      * @param Height height of title bar
      */
 
-    public void createTitleBar(AnchorPane root, int Width, int Height){
+    public void createTitleBar(AnchorPane root, int Width){
 
-        titleBar(root,Width,Height,-560,changePauseSkin);
+        titleBar(root,Width,-480,changePauseSkin);
         changePauseSkin.getSelectionModel().select(selected);
 
 

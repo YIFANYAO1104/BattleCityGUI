@@ -58,7 +58,7 @@ public class MenuSession {
         mainStage.setScene(mainScene);
         mainStage.setTitle("Blueland Defenders");
         CustomStage customStage = new CustomStage(mainStage, mainScene, mainPane);
-        customStage.createCommonTitlebar(mainPane, WIDTH, HEIGHT);
+        customStage.createCommonTitlebar(mainPane, WIDTH);
     }
 
     /**

@@ -87,7 +87,7 @@ public class GameSession {
         }
 
         CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
-        customStage.createTitleBar(gamePane, WIDTH, HEIGHT);
+        customStage.createTitleBar(gamePane, WIDTH);
     }
 
     /**

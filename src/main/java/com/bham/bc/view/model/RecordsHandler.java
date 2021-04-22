@@ -24,7 +24,6 @@ public class RecordsHandler {
     public RecordsHandler() {
 
 
-        //System.out.println("size="+jsonArrayToFile.length());
     }
     static {
 
@@ -69,42 +68,9 @@ public class RecordsHandler {
 
     }
 
-    /**
-     * to test if user gets the right rank
-     * @param i rank
-     * @return the name who has the rank "i"
-     */
-    public String equalJsonObjectName(int i){
-
-        return jsonArrayToFile.getJSONObject(i-1).getString("name");
-    }
-
-    /**
-     * create sample of records
-     *
-     */
-    public void createSampleRecords() {
-
-        //write to Json file
-        createRecord(new Records("1st","Dou","999",getDate()));
-        createRecord(new Records("2nd","YIFAN","888",getDate()));
-        createRecord(new Records("3rd","Alex","777",getDate()));
-        createRecord(new Records("4th","Mantas","666",getDate()));
-        createRecord(new Records("5th","Najd","555",getDate()));
-        createRecord(new Records("6th","Justin","444",getDate()));
-        createRecord(new Records("7th","John","333",getDate()));
-        createRecord(new Records("8th","Shan","222",getDate()));
-        createRecord(new Records("9th","Juily","111",getDate()));
-        createRecord(new Records("10th","Berry","99",getDate()));
-
-        //first step is to sort before add new records
-        jsonArrayToFile=jsonArraySort(jsonArrayToFile);
-        //second step is to add new records
 
 
 
-
-    }
 
     /**
      * sort the json array after create new records
@@ -278,60 +244,29 @@ public class RecordsHandler {
         private final SimpleStringProperty score;
         private final SimpleStringProperty date;
 
-        public Records(String rank, String name,String  score, String date) {
-            this.rank = new SimpleStringProperty(rank);
+        public Records( String name,String  score, String date) {
+            this.rank=new SimpleStringProperty("0");
             this.name = new SimpleStringProperty(name);
             this.score = new SimpleStringProperty(score);
             this.date =new SimpleStringProperty(date);
         }
 
-        public String getRank() {
-            return rank.get();
-        }
-
-        public SimpleStringProperty rankProperty() {
-            return rank;
-        }
-
-        public void setRank(String rank) {
-            this.rank.set(rank);
-        }
 
         public String getName() {
             return name.get();
         }
-
-        public SimpleStringProperty nameProperty() {
-            return name;
-        }
-
         public void setName(String name) {
             this.name.set(name);
         }
-
         public String getScore() {
             return score.get();
-        }
-
-        public SimpleStringProperty scoreProperty() {
-            return score;
         }
 
         public void setScore(String score) {
             this.score.set(score);
         }
 
-        public String getDate() {
-            return date.get();
-        }
 
-        public SimpleStringProperty dateProperty() {
-            return date;
-        }
-
-        public void setDate(String date) {
-            this.date.set(date);
-        }
 
         /**
          * to convert java object to JSon Object
@@ -390,11 +325,11 @@ public class RecordsHandler {
         //System.out.println(albums.length());
         for (int i = 0; i < albums.length(); i++){
             JSONObject album = albums.getJSONObject(i);
-            String rank = album.getString("rank");
+
             String name = album.getString("name");
             String score = album.getString("score");
             String date = album.getString("date");
-            records.add(i,new Records(rank,name,score,date));
+            records.add(i,new Records(name,score,date));
             //System.out.println(rank + " | " + name + " | " + score+" | "+date);
 
         }
