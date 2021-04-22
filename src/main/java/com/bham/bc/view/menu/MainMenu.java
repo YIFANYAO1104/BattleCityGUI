@@ -107,29 +107,11 @@ public class MainMenu extends AnchorPane {
         });
 
         // Initialize the current records and listen for new ones
-        File file = new File("src/main/resources/scores.json");
-        if (!file.exists()) {
-            try {
-
-                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/scores.json");
-                byte[] data="[]".getBytes();
-                fileOutputStream.write(data);
-                fileOutputStream.flush();
-                fileOutputStream.close();
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        } else {
-
-            tableView.setItems(RecordsHandler.initTable());
-        }
-
-        tableView.addEventFilter(GameFlowEvent.LEAVE_GAME, e -> {
+        tableView.setItems(RecordsHandler.initTable());
+        addEventFilter(GameFlowEvent.LEAVE_GAME, e -> {
             if(e.getScore() >= 0) {
                 RecordsHandler recordsHandler = new RecordsHandler();
-                recordsHandler.createRecord(new RecordsHandler.Records( e.getName(), e.getScore()+"", RecordsHandler.getDate()));
+                recordsHandler.createRecord(new RecordsHandler.Records(e.getName(), e.getScore()));
                 tableView.setItems(recordsHandler.sortAndGetData());
             }
         });

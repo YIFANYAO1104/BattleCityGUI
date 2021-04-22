@@ -307,11 +307,10 @@ public class CustomStage extends Stage{
      * create title bar to main interface
      * @param root
      * @param Width width of title bar
-     * @param Height height of title bar
      */
 
     public void createCommonTitlebar(AnchorPane root, int Width){
-           titleBar(root,Width,-710,changeMainSkin);
+           titleBar(root,Width,-690,changeMainSkin);
            changeMainSkin.getSelectionModel().select(selected);
 
 
@@ -321,7 +320,6 @@ public class CustomStage extends Stage{
      * create title bar to game interface
      * @param root
      * @param Width width of title bar
-     * @param Height height of title bar
      */
 
     public void createTitleBar(AnchorPane root, int Width){

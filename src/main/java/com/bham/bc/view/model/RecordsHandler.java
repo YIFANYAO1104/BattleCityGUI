@@ -7,7 +7,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -31,9 +33,19 @@ public class RecordsHandler {
     }
 
     public static ObservableList<Records> initTable(){
+        File file = new File("src/main/resources/scores.json");
+        if (!file.exists()) {
+            try {
+                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/scores.json");
+                byte[] data="[]".getBytes();
+                fileOutputStream.write(data);
+                fileOutputStream.flush();
+                fileOutputStream.close();
 
-
-
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         //read from Json file
         try {
@@ -47,8 +59,8 @@ public class RecordsHandler {
         for (int i = 0; i < albums.length(); i++) {
             jsonArrayToFile.put(albums.get(i));
         }
-        return data;
 
+        return data;
     }
 
     /**
@@ -249,6 +261,18 @@ public class RecordsHandler {
             this.name = new SimpleStringProperty(name);
             this.score = new SimpleStringProperty(score);
             this.date =new SimpleStringProperty(date);
+        }
+
+        /**
+         * Alternate constructor which sets the current date for the record automatically
+         * @param name  user's name to be put in the records list
+         * @param score user's score their position in the leaderboard will depend on
+         */
+        public Records(String name, double score) {
+            this.rank=new SimpleStringProperty("0");
+            this.name = new SimpleStringProperty(name);
+            this.score = new SimpleStringProperty(score + "");
+            this.date =new SimpleStringProperty(getDate());
         }
 
 

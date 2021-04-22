@@ -9,6 +9,7 @@ import static com.bham.bc.components.Controller.*;
 import static com.bham.bc.utils.Timer.CLOCK;
 
 import com.bham.bc.view.menu.EndMenu;
+import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.GameFlowEvent;
 import javafx.animation.AnimationTimer;
@@ -59,8 +60,8 @@ public class GameSession {
         gc = canvas.getGraphicsContext2D();
         camera = new Camera(gc);
         gamePane = new AnchorPane(canvas);
-        gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, e -> pauseGame());
-        gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, e -> leaveGame());
+        gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, this::pauseGame);
+        gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, this::leaveGame);
 
         try {
             gamePane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
@@ -86,16 +87,17 @@ public class GameSession {
      * Creates the input listeners. Key presses are handled by the center controller class (except for {@code P} and {@code ESC}).
      */
     private void createKeyListeners() {
-        gamePane.setOnKeyPressed(e -> {
+        gamePane.getScene().setOnKeyPressed(e -> {
             if(e.getCode() == KeyCode.Q) {  // TODO: remove
                 endGame();
             } else if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
-                pauseGame();
+                //pauseGame();
+                gamePane.fireEvent(new GameFlowEvent(GameFlowEvent.PAUSE_GAME));
             } else {
                 services.keyPressed(e);
             }
         });
-        gamePane.setOnKeyReleased(e -> services.keyReleased(e));
+        gamePane.getScene().setOnKeyReleased(e -> services.keyReleased(e));
     }
 
     /**
@@ -103,8 +105,10 @@ public class GameSession {
      *
      * <p>If the pause menu is contained within the <i>gamePane</i>, it removes the pause menu, resumes the <i>gameTimer</i>
      * and the background music. Otherwise, it attaches the pause menu, stops the game and the playing music.</p>
+     *
+     * @param e <i>PAUSE_GAME_EVENT</i> which is not used anywhere, purely just to denote a pause event was fired
      */
-    private void pauseGame() {
+    private void pauseGame(GameFlowEvent e) {
         if(gamePane.getChildren().contains(PAUSE_MENU)) {
             audioManager.playMusic();
             PAUSE_MENU.hide(gamePane);
@@ -136,10 +140,25 @@ public class GameSession {
      * <p>This method simply closes the game window and returns to the menu window which was passed when the stages were
      * swapped together in {@link #startGame(Stage)}. It should not be called during the actual gameplay, i.e., when the
      * <i>gameTimer</i> is running. The playlist of menu songs also starts playing.</p>
+     *
+     * <p><b>Note:</b> this is bad practice but currently <i>LEAVE_GAME_EVENT</i> is handled by MainMenu layout to update
+     * the scores table and therefore its location is hardcoded. This is based how the {@link MenuSession} and the
+     * {@link CustomStage} structure their layouts.</p>
+     *
+     * @param e <i>LEAVE_GAME_EVENT</i> which provides details about the name and the score to be saved in the leaderboard
      */
-    private void leaveGame() {
+    private void leaveGame(GameFlowEvent e) {
         gameStage.hide();
         menuStage.show();
+
+        try {
+            AnchorPane mainPane = (AnchorPane) menuStage.getScene().getRoot().getChildrenUnmodifiable().get(1);
+            mainPane.getChildren().get(1).fireEvent(e);
+        } catch(ClassCastException | NullPointerException exception) {
+            exception.printStackTrace();
+            System.out.println("Make sure MainMenu is located as follows:\nStage -> Scene -> Root -> (AnchorPane)Child(1) -> Child(1)");
+        }
+
         audioManager.loadSequentialPlayer(true, MenuSession.PLAYLIST);
         audioManager.playMusic();
     }
@@ -193,7 +212,7 @@ public class GameSession {
             @Override
             public void handle(long now) {
                 if(now - lastTick >= 1_000_000_000. / FRAME_RATE) {
-                    System.out.println(now);
+                    //System.out.println(now);
                     lastTick = now;
                     tick();
                 }
