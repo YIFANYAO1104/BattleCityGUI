@@ -6,7 +6,9 @@ import com.bham.bc.components.environment.MapType;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 import static com.bham.bc.components.Controller.*;
+import static com.bham.bc.utils.Timer.CLOCK;
 
+import com.bham.bc.utils.Timer;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.GameFlowEvent;
@@ -20,8 +22,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-import java.util.Random;
-
 /**
  * Class managing the animations of a running game
  */
@@ -32,81 +32,62 @@ public class GameSession {
     public static final int FRAME_RATE = 24;
     public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.REVOLUTION, SoundTrack.CORRUPTION, SoundTrack.TAKE_LEAD };
 
-
     private final PauseMenu PAUSE_MENU;
 
-    private AnchorPane gamePane;
-    private Scene gameScene;
-    public static Stage gameStage;
+    private Camera camera;
     private GraphicsContext gc;
-
+    private AnchorPane gamePane;
+    private Stage gameStage;
     private Stage menuStage;
-
     private AnimationTimer gameTimer;
 
-    private Camera camera;
-
     /**
-     * Constructs the view manager
+     * Constructs the game session
      */
     public GameSession(MapType mapType) {
-        setMode(mapType);
-
         PAUSE_MENU = new PauseMenu();
-
-
-        initializeStage();
+        setMode(mapType);
+        initLayout();
+        initWindow();
         createKeyListeners();
-        gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, e -> pauseGame());
-        gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, e -> leaveGame());
     }
 
     /**
-     * initializes the game stage
+     * Initializes the layout of the game session, i.e., sets up the root pane and event filters
      */
-    private void initializeStage() {
+    private void initLayout() {
         Canvas canvas = new Canvas(GameMap.getWidth(), GameMap.getHeight());
         gc = canvas.getGraphicsContext2D();
         camera = new Camera(gc);
-
-
         gamePane = new AnchorPane(canvas);
-        gameScene = new Scene(gamePane, WIDTH, HEIGHT);
-
-
-        gameStage = new Stage();
-
-        gameStage.setScene(gameScene);
-        gameStage.setTitle("Blueland Defenders");
-        gameStage.setResizable(false);
+        gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, e -> pauseGame());
+        gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, e -> leaveGame());
 
         try {
-            gameScene.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
+            gamePane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             e.printStackTrace();
         }
+    }
 
-        CustomStage customStage=new CustomStage(gameStage,gameScene,gamePane);
+    /**
+     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage
+     */
+    private void initWindow() {
+        Scene gameScene = new Scene(gamePane, WIDTH, HEIGHT);
+        gameStage = new Stage();
+        gameStage.setScene(gameScene);
+        gameStage.setResizable(false);
+        gameStage.setTitle("Blueland Defenders");
+        CustomStage customStage=new CustomStage(gameStage, gameScene,gamePane);
         customStage.createTitleBar(gamePane, WIDTH, HEIGHT);
     }
 
     /**
-     * starts the game loop and shows the game view
-     * @param menuStage menu stage to be hidden
-     */
-    public void startGame(Stage menuStage) {
-        this.menuStage = menuStage;
-        this.menuStage.hide();
-
-        createGameLoop();
-        gameStage.show();
-    }
-
-    /**
-     * creates the input listeners. Key presses are handled by the center controller class.
+     * Creates the input listeners. Key presses are handled by the center controller class (except for {@code P} and {@code ESC}).
      */
     private void createKeyListeners() {
-        gameScene.setOnKeyPressed(e -> {
+        gamePane.setOnKeyPressed(e -> {
             if(e.getCode() == KeyCode.Q) {  // TODO: remove
                 endGame();
             } else if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
@@ -115,9 +96,8 @@ public class GameSession {
                 services.keyPressed(e);
             }
         });
-        gameScene.setOnKeyReleased(e -> services.keyReleased(e));
+        gamePane.setOnKeyReleased(e -> services.keyReleased(e));
     }
-
 
     /**
      * Handles the event of pausing the game
@@ -139,9 +119,13 @@ public class GameSession {
 
     /**
      * Handles the event of ending the game
+     *
+     * <p>This method stops the <i>gameTimer</i> and the background music, clears the content present in services,
+     * attaches end menu to game session's root pane and passes the final game score the player acquired.</p>
      */
     private void endGame() {
         gameTimer.stop();
+        services.clear();
         audioManager.stopMusic();
         EndMenu endMenu = new EndMenu();
         endMenu.show(gamePane, services.getScore());
@@ -161,7 +145,9 @@ public class GameSession {
         audioManager.playMusic();
     }
 
-
+    private void updateGameState() {
+        long startTick = CLOCK.getCurrentTime();
+    }
 
     /**
      * renders the score of a currently running game
@@ -174,20 +160,16 @@ public class GameSession {
         //gc.fillText("" + frontendServices.getPlayerHP(), 650, 70);
     }
 
-
     /**
-     * handles state of a finished game
-     * @returns true if game ended and false otherwise
+     * starts the game loop and shows the game view
+     * @param menuStage menu stage to be hidden
      */
-    private boolean gameEnded() {
-        if(false){
-            gc.setFill(Color.GREEN);
-            gc.setFont(new Font("Times New Roman", 40));
-            gc.fillText("Congratulations!", 200, 300);
+    public void startGame(Stage menuStage) {
+        this.menuStage = menuStage;
+        this.menuStage.hide();
 
-            return true;
-        }
-        return false;
+        createGameLoop();
+        gameStage.show();
     }
 
     /**
@@ -195,16 +177,12 @@ public class GameSession {
      */
     private void tick() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
+        updateGameState();
         services.render(gc);
         renderScoreBoard();
 
         camera.update();
         services.update();
-
-        if (gameEnded()) {
-            services.clear();
-            gameTimer.stop();
-        }
     }
 
     /**
@@ -216,6 +194,7 @@ public class GameSession {
             @Override
             public void handle(long now) {
                 if(now - lastTick >= 1_000_000_000. / FRAME_RATE) {
+                    System.out.println(now);
                     lastTick = now;
                     tick();
                 }
