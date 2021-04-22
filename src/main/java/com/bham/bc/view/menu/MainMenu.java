@@ -11,6 +11,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Locale;
+
 import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
@@ -25,20 +29,17 @@ public class MainMenu extends AnchorPane {
     private SubMenu subMenuMain;
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
-    public static RecordsHandler recordsHandler = new RecordsHandler();
-    public static TableView<RecordsHandler.Records> tableView = new TableView<>();
 
     private final GameFlowEvent NEW_GAME_EVENT;
+
     /**
-     * Constructs an AnchorPane layout as the Main Menu
+     * Constructs an {@link AnchorPane} layout as the Main Menu
      */
     public MainMenu() {
         NEW_GAME_EVENT = new GameFlowEvent(GameFlowEvent.START_GAME);
-        setMinWidth(MenuSession.WIDTH);
-        setMinHeight(MenuSession.HEIGHT);
+        setMinSize(MenuSession.WIDTH, MenuSession.HEIGHT);
 
         initBgDim();
-
         createSubMenuMain();
         createSubMenuScores();
         createSubMenuSettings();
@@ -76,11 +77,6 @@ public class MainMenu extends AnchorPane {
         subMenuMain.getChildren().addAll(btnStart, btnScores, btnSettings, btnQuit);
     }
 
-//    static {
-//        ObservableList<RecordsHandler.Records> data=RecordsHandler.initTable();
-//        tableView.setItems(data);
-//    }
-
 
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
@@ -89,12 +85,9 @@ public class MainMenu extends AnchorPane {
     private void createSubMenuScores() {
         subMenuScores = new SubMenu(this);
 
-        // Increase leaderboard size
-        subMenuScores.setMinWidth(680);
-        subMenuScores.setMinHeight(500);
+        // Increase leaderboard size and set up a different style from a regular sub-menu
+        subMenuScores.setMinSize(680, 500);
         subMenuScores.alignCenter();
-
-        // We want a different style from a regular sub-menu
         subMenuScores.getStyleClass().clear();
         subMenuScores.setId("sub-menu-scores");
 
@@ -102,25 +95,32 @@ public class MainMenu extends AnchorPane {
         Label leaderboardLabel = new Label("Scores");
         leaderboardLabel.getStyleClass().add("leaderboard-label");
 
-        // Create columns for leaderboard table
-        TableColumn<RecordsHandler.Records, String> rank, name, score, date;
-        rank = new TableColumn<>("Rank");
-        name = new TableColumn<>("Name");
-        score = new TableColumn<>("Score");
-        date = new TableColumn<>("Date");
-
-        rank.setCellValueFactory(new PropertyValueFactory<>("rank"));
-        name.setCellValueFactory(new PropertyValueFactory<>("name"));
-        score.setCellValueFactory(new PropertyValueFactory<>("score"));
-        date.setCellValueFactory(new PropertyValueFactory<>("date"));
-
-        tableView.setMaxSize(subMenuScores.getMinWidth(), subMenuScores.getMinHeight());
-        tableView.getColumns().addAll(rank, name, score, date);
+        // Create the leaderboard table
+        TableView<RecordsHandler.Records> tableView = new TableView<>();
         tableView.setId("scores-table");
 
+        // Add 5 columns to the table
+        Arrays.stream(new String[]{"Rank", "Name", "Score", "Date"}).forEach(columnName -> {
+            TableColumn<RecordsHandler.Records, String> column = new TableColumn<>(columnName);
+            column.setCellValueFactory(new PropertyValueFactory<>(columnName.toLowerCase()));
+            tableView.getColumns().add(column);
+        });
+
+        // Initialize the current records and listen for new ones
+        //tableView.setItems(RecordsHandler.initTable());
+        tableView.addEventFilter(GameFlowEvent.LEAVE_GAME, e -> {
+            if(e.getScore() >= 0) {
+                RecordsHandler recordsHandler = new RecordsHandler();
+                recordsHandler.createRecord(new RecordsHandler.Records("13", e.getName(), e.getScore()+"", RecordsHandler.getDate()));
+                tableView.setItems(recordsHandler.sortAndGetData());
+            }
+        });
+
+        // Event handler to go back to the main menu
         subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
         tableView.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
 
+        // Add the table to the scores sub-menu
         subMenuScores.getChildren().addAll(leaderboardLabel, tableView);
     }
 
@@ -136,8 +136,6 @@ public class MainMenu extends AnchorPane {
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
         sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectsVolume(newVal.doubleValue()/100));
         btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
-
-        musicVolume.getValueProperty().setValue((int) (audioManager.getMusicVolume() * 100));
 
         subMenuSettings = new SubMenu(this);
         subMenuSettings.getChildren().addAll(musicVolume, sfxVolume, btnBack);

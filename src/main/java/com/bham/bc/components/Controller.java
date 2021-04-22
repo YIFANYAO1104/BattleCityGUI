@@ -77,7 +77,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
     protected abstract void startGame();
 
     public double getScore() {
-        return 0;
+        return new Random().nextDouble()*800;
     }
 
     @Override

@@ -1,12 +1,9 @@
 package com.bham.bc.view;
 
 import com.bham.bc.audio.SoundTrack;
-import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
-import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
 import com.bham.bc.view.model.GameFlowEvent;
-import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -27,71 +24,62 @@ public class MenuSession {
     public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.NIGHT_BREAK };
 
     private AnchorPane mainPane;
-    private Scene mainScene;
     private Stage mainStage;
 
-    private static PauseMenu pauseMenu = new PauseMenu();
-
     /**
-     * Constructs the menu view manager
+     * Constructs the menu session
      */
     public MenuSession() {
+        initLayout();
+        initWindow();
+        initMainMenu();
+    }
+
+    /**
+     * Initializes the layout of the menu session, i.e., sets up the root pane and event filters
+     */
+    private void initLayout() {
         mainPane = new AnchorPane();
         mainPane.addEventFilter(GameFlowEvent.START_GAME, this::createGameSession);
-        mainPane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
 
-        mainScene = new Scene(mainPane, WIDTH, HEIGHT);
+        try {
+            mainPane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
+        } catch(IllegalArgumentException | IllegalStateException | NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage
+     */
+    private void initWindow() {
+        Scene mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
-
-        initMainMenu();
-        CustomStage customStage=new CustomStage(mainStage,mainScene,mainPane);
+        mainStage.setTitle("Blueland Defenders");
+        CustomStage customStage = new CustomStage(mainStage, mainScene, mainPane);
         customStage.createCommonTitlebar(mainPane, WIDTH, HEIGHT);
     }
 
     /**
-     * Creates the main menu from where the user can start a new game session
+     * Initializes the main menu which the user will see and from where they can start a new game session
      */
     private void initMainMenu() {
         MainMenu mainMenu = new MainMenu();
         MenuBackground menuBackground = new MenuBackground();
-
         mainPane.getChildren().addAll(menuBackground, mainMenu);
-
 
         audioManager.loadSequentialPlayer(true, PLAYLIST);
         audioManager.playMusic();
     }
 
-
     /**
-     * Attaches (detaches) pause menu to the provided game pane and shows (hides) it
-     * @param gamePane game pane the pause menu will be attached (detached) to
-     * @param timer animation timer to be stoppedF (started)
-     */
-    public static void showPauseMenu(AnchorPane gamePane, AnimationTimer timer) {
-        if(gamePane.getChildren().contains(pauseMenu)) {
-            pauseMenu.hide(gamePane);
-            timer.start();
-
-        } else {
-            pauseMenu.show(gamePane);
-            timer.stop();
-        }
-    }
-
-
-
-    public static void showEndMenu(AnchorPane gamePane, double score) {
-
-        EndMenu endMenu = new EndMenu();
-        endMenu.show(gamePane,score);
-    }
-
-
-    /**
-     * Creates a single Game Session based on a chosen MODE
-     * @param e SURVIVAL or CHALLENGE mode to be set in Controller
+     * Handles the event of starting the game
+     *
+     * <p>Creates a single Game Session based on the chosen parameters. The parameters can be the number of players,
+     * type of map and the game mode. Currently only 1 player and survival mode is supported.</p>
+     *
+     * @param e event from which the parameters of a new game session are checked
      */
     public void createGameSession(GameFlowEvent e) {
         audioManager.loadSequentialPlayer(true, GameSession.PLAYLIST);

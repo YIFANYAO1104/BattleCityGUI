@@ -24,7 +24,7 @@ public class RecordsHandler {
     public RecordsHandler() {
 
 
-        System.out.println("size="+jsonArrayToFile.length());
+        //System.out.println("size="+jsonArrayToFile.length());
     }
     static {
 
@@ -43,7 +43,7 @@ public class RecordsHandler {
             e.printStackTrace();
         }
         ObservableList<Records> data = FXCollections.observableArrayList(records);
-        System.out.println("data len="+data.size());
+        //System.out.println("data len="+data.size());
 
         for (int i = 0; i < albums.length(); i++) {
             jsonArrayToFile.put(albums.get(i));
@@ -127,7 +127,7 @@ public class RecordsHandler {
             e.printStackTrace();
         }
         ObservableList<Records> data = FXCollections.observableArrayList(records);
-        System.out.println("data len="+data.size());
+        //System.out.println("data len="+data.size());
 
         return data;
     }

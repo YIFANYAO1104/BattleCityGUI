@@ -21,12 +21,11 @@ public class GameFlowEvent extends Event {
 
     private MapType mapType;
     private int numPlayers;
-    private boolean leaveGame;
     private double score;
     private String name;
 
     /**
-     * Constructs a default event with 1 player, default map and
+     * Constructs a default event with 1 player, default map, negative score and empty name
      *
      * @param eventType type of event we want to create - only START_GAME will be passed
      */
@@ -34,7 +33,6 @@ public class GameFlowEvent extends Event {
         super(eventType);
         mapType = MapType.Map1;
         numPlayers = 1;
-        leaveGame = false;
         score = -1;
         name = "";
     }
@@ -56,17 +54,17 @@ public class GameFlowEvent extends Event {
     }
 
     /**
-     * Sets the boolean value to indicate if the game session has ended
-     * @param leaveGame {@code true} if the controller finished the game and {@code false} otherwise
+     * Sets the name of the player (joint name if 2 players) who was active during the game session
+     * @param name name to potentially appear on the leaderboard
      */
-    public void setLeaveGame(boolean leaveGame) {
-        this.leaveGame = leaveGame;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Sets the score which is achieved when the game ends
+     * @param score end game score
+     */
     public void setScore(double score) {
         this.score = score;
     }
@@ -88,17 +86,17 @@ public class GameFlowEvent extends Event {
     }
 
     /**
-     * Gets the boolean value showing if the game ended naturally (not aborted)
-     * @return {@code true} if the controller finished the game and {@code false} otherwise
+     * Gets the name of the player (joint name if 2 players) who was active during the game session
+     * @return name to be put to the leaderboard
      */
-    public boolean getLeaveGame() {
-        return leaveGame;
-    }
-
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the score that was achieved when the game ended
+     * @return final game score or {@code -1} if the game session was aborted
+     */
     public double getScore() {
         return score;
     }

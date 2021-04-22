@@ -107,10 +107,8 @@ public class GameSession {
      */
     private void createKeyListeners() {
         gameScene.setOnKeyPressed(e -> {
-            if(e.getCode() == KeyCode.Q) {  // Testing purposes
-                gameTimer.stop();
-                Random r=new Random();
-                MenuSession.showEndMenu(gamePane, r.nextDouble()*999);
+            if(e.getCode() == KeyCode.Q) {  // TODO: remove
+                endGame();
             } else if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
                 pauseGame();
             } else {
@@ -140,15 +138,27 @@ public class GameSession {
     }
 
     /**
+     * Handles the event of ending the game
+     */
+    private void endGame() {
+        gameTimer.stop();
+        audioManager.stopMusic();
+        EndMenu endMenu = new EndMenu();
+        endMenu.show(gamePane, services.getScore());
+    }
+
+    /**
      * Handles the event of leaving the game
      *
      * <p>This method simply closes the game window and returns to the menu window which was passed when the stages were
      * swapped together in {@link #startGame(Stage)}. It should not be called during the actual gameplay, i.e., when the
-     * <i>gameTimer</i> is running.</p>
+     * <i>gameTimer</i> is running. The playlist of menu songs also starts playing.</p>
      */
     private void leaveGame() {
         gameStage.hide();
         menuStage.show();
+        audioManager.loadSequentialPlayer(true, MenuSession.PLAYLIST);
+        audioManager.playMusic();
     }
 
 

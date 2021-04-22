@@ -25,7 +25,7 @@ public class MenuSlider extends HBox {
     /**
      * Constructs a slider with its name and initial value
      *
-     * @param name         label's name above the slider
+     * @param name         label's name to the left of the slider
      * @param initialValue value the slider should be set to initially
      */
     public MenuSlider(String name, int initialValue) {

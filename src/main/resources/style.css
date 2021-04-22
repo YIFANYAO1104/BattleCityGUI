@@ -15,6 +15,7 @@
 
 /* SUB-MENU */
 .sub-menu {
+    -fx-alignment: center;
     -fx-background-color: linear-gradient(to right, -fx-darken-color 0%, transparent 50%, -fx-darken-color 100%);
     -fx-background-radius: 70px;
 }
@@ -53,7 +54,6 @@
     -fx-spacing: 25;
     -fx-padding: 80 40 10 40;
 }
-
 .leaderboard-label {
     -fx-font-size: 30px;
     -fx-text-alignment: center;
@@ -62,11 +62,13 @@
     -fx-font-weight: bold;
     -fx-effect: dropshadow(gaussian, -fx-primary-color, 8, .6, 0, 0);
 }
-
+#scores-table {
+    -fx-max-width: 680;
+    -fx-max-height: 500;
+}
 #scores-table, #scores-table * {
     -fx-background-color: transparent;
 }
-
 #scores-table .table-column {
     -fx-alignment: center;
     -fx-font-size: 18px;
@@ -75,13 +77,11 @@
     -fx-text-fill: -fx-lighten-color;
     -fx-font-weight: bold;
 }
-
 #scores-table .column-header .label {
     -fx-font-size: 24px;
     -fx-text-fill: -fx-secondary-color;
     -fx-effect: dropshadow(gaussian, -fx-primary-color, 8, .6, 0, 0);
 }
-
 #scores-table .table-cell {
     -fx-border-width: 0;
     -fx-min-height: 30px;

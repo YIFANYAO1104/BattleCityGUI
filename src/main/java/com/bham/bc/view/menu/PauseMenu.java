@@ -32,15 +32,12 @@ public class PauseMenu extends AnchorPane {
 
 
     /**
-     * Constructs a pause menu based on Game window's size parameters
+     * Constructs an {@link AnchorPane} layout as the Pause Menu
      */
     public PauseMenu() {
         PAUSE_GAME_EVENT = new GameFlowEvent(GameFlowEvent.PAUSE_GAME);
         LEAVE_GAME_EVENT = new GameFlowEvent(GameFlowEvent.LEAVE_GAME);
-
-        setMinWidth(GameSession.WIDTH);
-        setMinHeight(GameSession.HEIGHT);
-
+        setMinSize(GameSession.WIDTH, GameSession.HEIGHT);
         initBgDim();
         createSubMenuPause();
         createSubMenuSettings();
@@ -52,8 +49,8 @@ public class PauseMenu extends AnchorPane {
      */
     private void initBgDim() {
         dim = new Rectangle(GameSession.WIDTH, GameSession.HEIGHT);
-        dim.setFill(Color.NAVY);
-        dim.setOpacity(0.4);
+        dim.setFill(Color.BLACK);
+        dim.setOpacity(0.5);
         getChildren().add(dim);
     }
 

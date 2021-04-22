@@ -28,8 +28,7 @@ public class SubMenu extends VBox {
     public SubMenu(AnchorPane parent) {
         super(15);
         PARENT = parent;
-        setMinWidth(WIDTH);
-        setMinHeight(HEIGHT);
+        setMinSize(WIDTH, HEIGHT);
         setAlignment(Pos.CENTER);
         alignCenter();
         getStyleClass().add("sub-menu");
