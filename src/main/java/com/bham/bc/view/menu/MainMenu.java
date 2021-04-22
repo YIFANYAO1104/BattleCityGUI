@@ -11,6 +11,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
@@ -105,11 +107,29 @@ public class MainMenu extends AnchorPane {
         });
 
         // Initialize the current records and listen for new ones
-        //tableView.setItems(RecordsHandler.initTable());
+        File file = new File("src/main/resources/scores.json");
+        if (!file.exists()) {
+            try {
+
+                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/scores.json");
+                byte[] data="[]".getBytes();
+                fileOutputStream.write(data);
+                fileOutputStream.flush();
+                fileOutputStream.close();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+
+            tableView.setItems(RecordsHandler.initTable());
+        }
+
         tableView.addEventFilter(GameFlowEvent.LEAVE_GAME, e -> {
             if(e.getScore() >= 0) {
                 RecordsHandler recordsHandler = new RecordsHandler();
-                recordsHandler.createRecord(new RecordsHandler.Records("13", e.getName(), e.getScore()+"", RecordsHandler.getDate()));
+                recordsHandler.createRecord(new RecordsHandler.Records( e.getName(), e.getScore()+"", RecordsHandler.getDate()));
                 tableView.setItems(recordsHandler.sortAndGetData());
             }
         });

@@ -8,7 +8,6 @@ import static com.bham.bc.audio.AudioManager.audioManager;
 import static com.bham.bc.components.Controller.*;
 import static com.bham.bc.utils.Timer.CLOCK;
 
-import com.bham.bc.utils.Timer;
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.GameFlowEvent;
@@ -80,7 +79,7 @@ public class GameSession {
         gameStage.setResizable(false);
         gameStage.setTitle("Blueland Defenders");
         CustomStage customStage=new CustomStage(gameStage, gameScene,gamePane);
-        customStage.createTitleBar(gamePane, WIDTH, HEIGHT);
+        customStage.createTitleBar(gamePane, WIDTH);
     }
 
     /**
