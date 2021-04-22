@@ -70,6 +70,8 @@ public class EndMenu extends AnchorPane {
 
         // Input field to get user's name
         TextField nameInput = new TextField();
+        nameInput.setPromptText("e.g. John");
+        nameInput.getStyleClass().add("src/main/resources/style.css");
         nameInput.setMaxWidth(GameSession.WIDTH/3.0);
 
         // TODO: replace the above 2 lines with this 1 line:
