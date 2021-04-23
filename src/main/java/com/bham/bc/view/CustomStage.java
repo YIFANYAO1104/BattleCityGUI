@@ -136,7 +136,7 @@ public class CustomStage extends Stage{
             }else if (typeOf.equals("TYPE 2")){
 
 
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#61a2b1 0%, #2A5058 50%,#61a2b1 100%);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#36656f 0%, #052026 50%,#36656f 100%);");
                 lbTitle.requestFocus();
 
 
@@ -144,14 +144,14 @@ public class CustomStage extends Stage{
 
             }else if (typeOf.equals("TYPE 3")){
 
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#636060 0%, #000000 50%,#636060 100% );");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#636060 0%, #1d1c1c 50%,#636060 100% );");
                 lbTitle.requestFocus();
 
 
 
 
             }else if (typeOf.equals("TYPE 4")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#bb741b 0%, #552d03 50%,#bb741b 100%);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#8e5812 0%, #3b2006 50%,#8e5812 100%);");
 
                 lbTitle.requestFocus();
 
