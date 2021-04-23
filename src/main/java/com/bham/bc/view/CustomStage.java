@@ -42,7 +42,7 @@ public class CustomStage extends Stage{
     public static String typeOf;
     private AnchorPane gamePane;
     public static Label setMenu;
-    public static HBox gpTitle;
+    private   HBox gpTitle;
     public static String[] types;
     private HBox hBox;
     public  ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
@@ -150,6 +150,7 @@ public class CustomStage extends Stage{
 
 
 
+
             }else if (typeOf.equals("TYPE 4")){
                 gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#8e5812 0%, #3b2006 50%,#8e5812 100%);");
 
@@ -167,6 +168,7 @@ public class CustomStage extends Stage{
             @Override
             public void handle(MouseEvent mouseEvent) {
                 lbTitle.requestFocus();;
+
             }
         });
 

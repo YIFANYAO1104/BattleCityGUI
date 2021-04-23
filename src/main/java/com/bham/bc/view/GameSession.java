@@ -230,6 +230,9 @@ public class GameSession {
         gameStage.hide();
         menuStage.show();
 
+        MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
+
+
         try {
             AnchorPane mainPane = (AnchorPane) menuStage.getScene().getRoot().getChildrenUnmodifiable().get(1);
             mainPane.getChildren().get(1).fireEvent(e);
