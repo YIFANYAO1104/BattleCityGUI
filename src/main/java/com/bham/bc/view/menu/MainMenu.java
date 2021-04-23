@@ -96,6 +96,7 @@ public class MainMenu extends AnchorPane {
         // Create the leaderboard table
         TableView<RecordsHandler.Records> tableView = new TableView<>();
         tableView.setId("scores-table");
+        tableView.setPlaceholder(new Label(""));
 
         // Add 5 columns to the table
         Arrays.stream(new String[]{"Rank", "Name", "Score", "Date"}).forEach(columnName -> {
