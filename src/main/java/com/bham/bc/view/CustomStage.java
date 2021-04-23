@@ -125,7 +125,7 @@ public class CustomStage extends Stage{
             selected=new_val.intValue();
             typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right, -fx-bg-color 0%, -fx-primary-color 50%, -fx-bg-color 100%);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right, #334e9e 0%, #06065f 50%, #334e9e 100%);");
                 lbTitle.requestFocus();
 
 
@@ -136,7 +136,7 @@ public class CustomStage extends Stage{
             }else if (typeOf.equals("TYPE 2")){
 
 
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#61a2b1, #2A5058);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#61a2b1 0%, #2A5058 50%,#61a2b1 100%);");
                 lbTitle.requestFocus();
 
 
@@ -144,14 +144,14 @@ public class CustomStage extends Stage{
 
             }else if (typeOf.equals("TYPE 3")){
 
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#636060, #000000);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#636060 0%, #000000 50%,#636060 100% );");
                 lbTitle.requestFocus();
 
 
 
 
             }else if (typeOf.equals("TYPE 4")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#bb741b, #552d03);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#bb741b 0%, #552d03 50%,#bb741b 100%);");
 
                 lbTitle.requestFocus();
 
