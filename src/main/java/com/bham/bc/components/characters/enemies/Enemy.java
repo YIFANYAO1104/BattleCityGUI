@@ -55,7 +55,7 @@ public abstract class Enemy extends GameCharacter {
         destination = new Point2D(0, 0);
         timeTillSearch = 20;
         edgeBehavior = GraphEdge.normal;
-        GUN = new Gun(this, BulletType.DEFAULT);
+        GUN = new Gun(this, BulletType.DEFAULT,null);
         isAiming = false;
     }
 

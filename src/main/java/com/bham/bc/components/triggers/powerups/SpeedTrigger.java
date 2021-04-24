@@ -25,7 +25,7 @@ public class SpeedTrigger extends RespawnTrigger {
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof GameCharacter && intersects(entity)) {
-            //((GameCharacter) entity).speedUp(speed);
+            ((GameCharacter) entity).speedUp(speed);
             deactivate();
         }
     }

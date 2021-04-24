@@ -25,7 +25,7 @@ public class ArmorTrigger extends  RespawnTrigger{
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof GameCharacter && intersects(entity)) {
-            //entity.armorUP(HP);
+            ((GameCharacter)entity).armorUP(HP);
             deactivate();
         }
     }

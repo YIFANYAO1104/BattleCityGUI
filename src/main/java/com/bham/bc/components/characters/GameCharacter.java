@@ -19,9 +19,10 @@ import java.util.List;
 abstract public class GameCharacter extends MovingEntity {
     public static final int MAX_SIZE = 32;
 
-    private final double MAX_HP;
+    private  double MAX_HP;
     protected double hp;
     protected Side side;
+
 
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
 
@@ -74,6 +75,9 @@ abstract public class GameCharacter extends MovingEntity {
         if(side == Side.ENEMY)
         if(hp <= 0) destroy();
     }
+    public void speedUp(double x){
+        this.maxSpeed=x;
+    }
 
     // TEMP: DOCUMENT ------------------------------------------------
     @Deprecated
@@ -82,7 +86,7 @@ abstract public class GameCharacter extends MovingEntity {
         tripleTicks = numTicks;
     }
     public void toFreeze(int numTicks) {
-        freezeTicks = numTicks;
+        this.freezeTicks = numTicks;
     }
     public void toImmune(int numTicks) {
         immuneTicks = numTicks;
@@ -150,6 +154,11 @@ abstract public class GameCharacter extends MovingEntity {
      * Unregisters and prepares to remove the character. Also runs any destruction effects
      */
     protected abstract void destroy();
+    public void armorUP(double max){
+        this.MAX_HP =max;
+        this.hp = max;
+        System.out.println("The max HP of character has been changed to " + hp);
+    }
 
     /**
      * Gets radius of a circular hit-box

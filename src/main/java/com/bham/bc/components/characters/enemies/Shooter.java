@@ -87,6 +87,11 @@ public class Shooter extends Enemy {
 
     @Override
     public void update() {
+        if(freezeTicks!=0){
+            System.out.println("\n -----------"+ freezeTicks);
+            freezeTicks--;
+            return;
+        }
         noObstCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();

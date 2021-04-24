@@ -7,6 +7,7 @@ import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
+import com.bham.bc.components.shooting.LaserGun;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.edge.GraphEdge;
@@ -264,6 +265,7 @@ public abstract class CenterController extends BaseGameEntity implements Service
 
         triggers.forEach(trigger -> trigger.render(gc));
         bullets.forEach(bullet -> bullet.render(gc));
+
         characters.forEach(character -> character.render(gc));
 
         // gameMap.renderTopLayer(gc);

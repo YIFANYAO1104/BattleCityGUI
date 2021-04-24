@@ -42,6 +42,14 @@ abstract public class Bullet extends MovingEntity {
 
         entityImages = new Image[] { TYPE.getImage() };
     }
+//    public Bullet(double x, double y, double speed, Point2D heading, LaserType type, Side side, double damage) {
+//        super(x, y, speed, heading);
+//        this.LaserType = type;
+//        this.SIDE = side;
+//        this.damage = damage;
+//
+//        entityImages = new Image[] { LaserType.getImage() };
+//    }
 
     /**
      * Gets bullet's speed
@@ -110,6 +118,7 @@ abstract public class Bullet extends MovingEntity {
      * @param entity a generic entity that is converted to appropriate child instance the bullet will handle
      */
     public void handle(BaseGameEntity entity) {
+
         if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
             ((GameCharacter) entity).changeHp(-damage);
             destroy();
@@ -150,4 +159,6 @@ abstract public class Bullet extends MovingEntity {
     public String toString() {
         return "Bullet";
     }
+
+    public abstract void setTime();
 }
