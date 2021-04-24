@@ -1,6 +1,7 @@
 package com.bham.bc.entity.physics;
 
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 
 /**
@@ -33,14 +34,14 @@ public class CollisionHandler {
             double mass1 = entity1.getMass();
             double mass2 = entity1.getMass();
 
-            Point2D u1 = rotate(entity1.getVelocity(), angle);
-            Point2D u2 = rotate(entity2.getVelocity(), angle);
+            Point2D u1 = GeometryEnhanced.rotate(entity1.getVelocity(), angle);
+            Point2D u2 = GeometryEnhanced.rotate(entity2.getVelocity(), angle);
 
             Point2D v1 = new Point2D(u1.getX() * (mass1 - mass2) / (mass1 + mass2) + u2.getX() * 2 * mass2 / (mass1 + mass2), u1.getY());
             Point2D v2 = new Point2D(u2.getX() * (mass1 - mass2) / (mass1 + mass2) + u1.getX() * 2 * mass1 / (mass1 + mass2), u2.getY());
 
-            v1 = rotate(v1, -angle);
-            v2 = rotate(v2, -angle);
+            v1 = GeometryEnhanced.rotate(v1, -angle);
+            v2 = GeometryEnhanced.rotate(v2, -angle);
 
             entity1.setVelocity(v1);
             entity2.setVelocity(v2);
@@ -64,18 +65,5 @@ public class CollisionHandler {
         Point2D acceleration = force.multiply(1/entity2.getMass());
 
         entity2.setVelocity(entity2.getVelocity().add(acceleration));
-    }
-
-    /**
-     * Rotates a given point (velocity vector) by some angle
-     * @param velocity a vector to be rotated
-     * @param angle    angle in radians by which the point is rotated
-     * @return a rotated Point2D object
-     */
-    public static Point2D rotate(Point2D velocity, double angle) {
-        double x = velocity.getX() * Math.cos(angle) - velocity.getY() * Math.sin(angle);
-        double y = velocity.getX() * Math.sin(angle) + velocity.getY() * Math.cos(angle);
-
-        return new Point2D(x, y);
     }
 }

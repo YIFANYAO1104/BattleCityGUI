@@ -4,11 +4,11 @@
 package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class TripleBullet extends RespawnTrigger {
 
@@ -21,15 +21,15 @@ public class TripleBullet extends RespawnTrigger {
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/three.png"), };
+        return new Image[] {new Image("file:src/main/resources/img/triggers/powerups/three.png"), };
     }
 
     //if triggered, the bot's bullet will split into 3 for few seconds only
 
     @Override
     public void handle(BaseGameEntity entity) {
-        if(active && entity instanceof GameCharacter && intersects(entity)) {
-            ((GameCharacter) entity).toTriple(activationTime * FRAME_RATE);
+        if(active && entity instanceof Player && intersects(entity)) {
+            ((Player) entity).toTriple(activationTime * FRAME_RATE);
             deactivate();
         }
     }

@@ -20,7 +20,7 @@ import javafx.scene.shape.Shape;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -88,7 +88,7 @@ public abstract class Enemy extends GameCharacter {
         }
 
         //-----test
-        if(itemType == ItemType.ALLY && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
+        // if(itemType == ItemType.ALLY && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
         //---------
 
         // Due to checks on each frame of whether the search is complete or not we always need get the list of points if it is empty
@@ -139,10 +139,10 @@ public abstract class Enemy extends GameCharacter {
      */
     protected void face(Point2D toward) {
         Point2D direction = toward.subtract(getCenterPosition());
-        if (!GeometryEnhanced.isZero(direction)){
+
+        if (isAiming = !GeometryEnhanced.isZero(direction)){
             heading = direction.normalize();
         }
-        isAiming = true;
     }
 
     /**
@@ -168,17 +168,18 @@ public abstract class Enemy extends GameCharacter {
     }
 
     /**
-     * Shoots a bullet at an obstacle from a distance of at max 5 nodes to the obstacle
+     * Shoots a bullet at an obstacle from a distance of at max 4 nodes to the obstacle
      * @return true if it is needed to shoot to at an obstacle and false otherwise
      */
     protected boolean shootObstacle() {
-        int numNodesDistance = 4;
-        boolean canShoot = edgeBehavior == GraphEdge.shoot || pathEdges.stream().limit(numNodesDistance).anyMatch(edge -> edge.getBehavior() == GraphEdge.shoot);
+        int numNodesToObstacle = 4;
+        boolean canShoot = edgeBehavior == GraphEdge.shoot || pathEdges.stream().limit(numNodesToObstacle).anyMatch(edge -> edge.getBehavior() == GraphEdge.shoot);
 
         if(canShoot) {
             face(ItemType.SOFT);
             GUN.shoot();
         }
+
         return canShoot;
     }
 
@@ -205,18 +206,11 @@ public abstract class Enemy extends GameCharacter {
 //        if (navigationService!=null) navigationService.render(gc);
         drawRotatedImage(gc, entityImages[0], getAngle());
 
-//        gc.setStroke(Color.GOLD);
-//        gc.setLineWidth(2.0);
-//
-//        gc.strokeLine(x, y, x+velocity.getX()*10, y+velocity.getY()*10);
-//
 //        gc.setStroke(Color.WHITE);
 //        gc.setLineWidth(2.0);
-//
 //        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
 //
-//        gc.setFill(Color.WHITE);
-//        gc.fillRoundRect(destination.getX(),destination.getY(),4,4,1,1);
+//        steering.render(gc);
     }
 
     @Override

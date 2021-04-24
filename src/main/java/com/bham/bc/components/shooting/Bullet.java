@@ -1,5 +1,6 @@
 package com.bham.bc.components.shooting;
 
+import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.Obstacle;
@@ -12,6 +13,8 @@ import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 
 import java.util.List;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
 
 
 /**
@@ -52,16 +55,8 @@ abstract public class Bullet extends MovingEntity {
 //    }
 
     /**
-     * Gets bullet's speed
-     * @return velocity at which the bullet is moving
-     */
-    public double getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    /**
      * Gets bullet's type
-     * @return DEFAULT of EXPLOSIVE type the bullet belongs to
+     * @return DEFAULT or EXPLOSIVE type the bullet belongs to
      */
     public BulletType getType() {
         return TYPE;
@@ -84,25 +79,10 @@ abstract public class Bullet extends MovingEntity {
     }
 
     /**
-     * Sets bullet's speed
-     */
-    public void setSpeed(double maxSpeed) {
-        this.maxSpeed = maxSpeed;
-    }
-
-    /**
      * Sets bullet's damage
      */
     public void setDamage(double damage) {
         this.damage = damage;
-    }
-
-
-    public double getHitboxRadius() {
-        Point2D p1 = super.getRadius();
-        double n1 = Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
-        if(n1<42.0) return 42.0;                // 20.0 means the mini check hitbox radius
-        return n1;
     }
 
     /**
@@ -121,11 +101,15 @@ abstract public class Bullet extends MovingEntity {
 
         if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
             ((GameCharacter) entity).changeHp(-damage);
+            audioManager.playEffect(SoundEffect.HIT_CHARACTER);
             destroy();
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {
             destroy();
             if(((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)) {
                 ((Obstacle) entity).changeHp(-damage);
+                audioManager.playEffect(SoundEffect.HIT_SOFT);
+            } else {
+                audioManager.playEffect(SoundEffect.HIT_HARD);
             }
         }
     }
@@ -138,7 +122,6 @@ abstract public class Bullet extends MovingEntity {
     public void handle(List<BaseGameEntity> entities) {
         entities.forEach(this::handle);
     }
-
 
     /**
      * Unregisters and prepares to remove the bullet. Also runs any destruction effects

@@ -1,6 +1,7 @@
 package com.bham.bc.components;
 
 import com.bham.bc.components.characters.enemies.Enemy;
+import com.bham.bc.components.characters.enemies.EnemyType;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
@@ -135,6 +136,24 @@ public interface Services {
      */
     void render(GraphicsContext gc);
 
+
+
+    /**
+     * Clears all objects in the game
+     */
+    void clear();
+    //-------------------------------------------------------------
+
+
+
+    // LOGIC ------------------------------------------------------
+
+    /**
+     * Changes the score of the game
+     * @param score value to be added to the overall score
+     */
+    void changeScore(double score);
+
     /**
      * Simulates taking over home territory by decreasing home's "HP"
      * @param enemy enemy to be checked if it intersects with the home territory to take it over
@@ -142,9 +161,10 @@ public interface Services {
     void occupyHome(Enemy enemy);
 
     /**
-     * Clears all objects in the game
+     * Spawns enemy at a random enemy territory
+     * @param enemyType type of enemy to spawn
      */
-    void clear();
+    void spawnEnemyRandomly(EnemyType enemyType);
     //-------------------------------------------------------------
 
 
@@ -170,19 +190,14 @@ public interface Services {
 
     /**
      * Gets the remaining home "HP" indicating how much territory is not yet taken over by the enemies
-     * @return home "HP" value to be shown on the screen
+     * @return home "HP" value
      */
     double getHomeHp();
-    //-------------------------------------------------------------
 
-
-    // TEMPORARY METHODS -------------------------------------------
-    // TEMPORARY
     /**
-     * Renders hit-boxes of characters and armory
-     * <br>TODO: remove before release
-     * @param gamePane layout where hit-boxes will be rendered
+     * Gets the remaining home "HP" fraction indicating how much territory is not yet taken over by the enemies
+     * @return home "HP" fraction value
      */
-    void renderHitBoxes(AnchorPane gamePane);
-
+    double getHomeHpFraction();
+    //-------------------------------------------------------------
 }

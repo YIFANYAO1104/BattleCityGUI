@@ -2,11 +2,14 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
 
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -33,6 +36,9 @@ public class DefaultBullet extends Bullet {
 	public void destroy() {
 		entityManager.removeEntity(this);
 		exists = false;
+
+		Dissolve dissolve = new Dissolve(getPosition(), entityImages[0], getAngle(), 2, 2);
+		services.addTrigger(dissolve);
 	}
 
 	@Override
@@ -58,9 +64,14 @@ public class DefaultBullet extends Bullet {
 
 	@Override
 	public Rectangle getHitBox() {
-		Rectangle hitBox = new Rectangle(x, y, getRadius().getX(), getRadius().getY());
-		hitBox.getTransforms().add(new Rotate(getAngle(), x + getRadius().getX()/2,y + getRadius().getY()/2));
+		Rectangle hitBox = new Rectangle(x, y, getSize().getX(), getSize().getY());
+		hitBox.getTransforms().add(new Rotate(getAngle(), x + getSize().getX()/2,y + getSize().getY()/2));
 
 		return hitBox;
+	}
+
+	@Override
+	public double getHitBoxRadius() {
+		return Math.hypot(getHitBox().getWidth()/2, getHitBox().getHeight()/2);
 	}
 }

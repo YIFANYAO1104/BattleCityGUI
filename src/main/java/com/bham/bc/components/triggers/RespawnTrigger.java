@@ -45,21 +45,10 @@ abstract public class RespawnTrigger extends Trigger {
         }
     }
 
-    /**
-     * Renders the boundary of the trigger's hit-box
-     * @param gc Graphics Context on which the region will be drawn
-     */
-    protected void renderRegion(GraphicsContext gc) {
-        gc.setStroke(Color.RED);
-        gc.setLineWidth(2.0);
-        gc.strokeRect(getHitBox().getX(), getHitBox().getY(), getHitBox().getWidth(), getHitBox().getHeight());
-    }
-
     @Override
     public void render(GraphicsContext gc) {
         if(active) {
             gc.drawImage(entityImages[0], x, y);
-            renderRegion(gc);
         }
     }
 
@@ -71,5 +60,10 @@ abstract public class RespawnTrigger extends Trigger {
     @Override
     public Rectangle getHitBox() {
         return new Rectangle(x, y, GameMap.getTileWidth(), GameMap.getTileHeight());
+    }
+
+    @Override
+    public double getHitBoxRadius() {
+        return Math.hypot(getHitBox().getWidth()/2, getHitBox().getHeight()/2);
     }
 }

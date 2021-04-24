@@ -1,7 +1,6 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.triggers.TriggerLoader;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.physics.MapDivision;
@@ -16,8 +15,7 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.CenterController.services;
-import static com.bham.bc.utils.Constants.*;
+import static com.bham.bc.components.Controller.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,8 +37,8 @@ public class GameMap {
     private static int numTilesY = 0;
 
     // Obstacles and territories
-    private List<Obstacle> interactiveObstacles;
-    private List<Obstacle> noninteractiveObstacles;
+    private ArrayList<Obstacle> interactiveObstacles;
+    private ArrayList<Obstacle> noninteractiveObstacles;
     private Circle homeTerritory;
     private Circle[] enemySpawnAreas;
 
@@ -53,11 +51,10 @@ public class GameMap {
      */
     public GameMap(MapType mapType) {
         MapLoader mapLoader = new MapLoader(mapType.getName());
-        TriggerLoader triggerLoader = new TriggerLoader(mapType.getName());
 
         initParams(mapLoader);
-        initElements(mapLoader, triggerLoader);
-        initGraph(triggerLoader);
+        initElements(mapLoader);
+        initGraph(mapLoader);
         initAreas(mapLoader);
     }
 
@@ -79,12 +76,12 @@ public class GameMap {
      *     <li><b>Noninteractive</b> - obstacles that don't affect any entities in the game</li>
      *     <li><b>Interactive</b> - obstacles that do affect game entities in some way (hit-boxes are considered)</li>
      * </ul>
-     * @param mapLoader map loader that will provide all the generated obstacles
+     * @param mapLoader map loader that will provide all the generated obstacles and triggers
      */
-    private void initElements(MapLoader mapLoader, TriggerLoader triggerLoader) {
-        interactiveObstacles = mapLoader.getObstacles().stream().filter(o -> !o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toList());
-        noninteractiveObstacles = mapLoader.getObstacles().stream().filter(o -> o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toList());
-        triggerLoader.getTriggers().forEach(t -> services.addTrigger(t));
+    private void initElements(MapLoader mapLoader) {
+        interactiveObstacles = mapLoader.getObstacles().stream().filter(o -> !o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toCollection(ArrayList::new));
+        noninteractiveObstacles = mapLoader.getObstacles().stream().filter(o -> o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toCollection(ArrayList::new));
+        mapLoader.getTriggers().forEach(t -> services.addTrigger(t));
     }
 
     /**
@@ -154,29 +151,32 @@ public class GameMap {
 
     /**
      * Initializes the graph for the current map considering triggers locations
-     * @param triggerLoader map loader that will provide the information about constant triggers the graph can point to
+     * @param mapLoader map loader that will provide the information about constant triggers the graph can point to
      */
-    public void initGraph(TriggerLoader triggerLoader) {
+    public void initGraph(MapLoader mapLoader) {
         HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
         graphSystem = new SparseGraph<>(false); //single direction turn off
-        hgf.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(),GRAPH_NUM_CELLS_Y,GRAPH_NUM_CELLS_X); //make network
-        ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
-        
-        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
-            Point2D vv1 = allNodesLocations.get(index);
-
-            for (int i = 0; i < interactiveObstacles.size(); i++) {
-                Obstacle w = interactiveObstacles.get(i);
-                w.interacts(graphSystem.getID(), index, new Rectangle(
-                        vv1.getX()-HITBOX_RADIUS,vv1.getY()-HITBOX_RADIUS,HITBOX_RADIUS * 2,HITBOX_RADIUS * 2));
-            }
-        }
+        hgf.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(), getHeight() / (GameCharacter.MAX_SIZE/2), getWidth() / (GameCharacter.MAX_SIZE/2)); //make network
+//        ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
+//        System.out.println("start");
+//        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
+//            Point2D vv1 = allNodesLocations.get(index);
+//            double maxCharacterRadius = Math.sqrt((GameCharacter.MAX_SIZE/2.0)*(GameCharacter.MAX_SIZE/2.0));
+//
+//            for (int i = 0; i < interactiveObstacles.size(); i++) {
+//                Obstacle w = interactiveObstacles.get(i);
+//                w.interacts(graphSystem.getID(), index, new Rectangle(
+//                        vv1.getX()-maxCharacterRadius,vv1.getY()-maxCharacterRadius,maxCharacterRadius* 2,maxCharacterRadius * 2));
+//            }
+//
+//        }
+//        System.out.println("over");
         //removed unreachable nodes
         // Consider multiple players and enemies spawning at unreachable nodes
         // Player dummyEntity = new Player(mapLoader.getHomeTerritory.getCenterX(), mapLoader.getHomeTerritory.getCenterY());
         // graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForEntity(dummyEntity));
 
-        for (Trigger trigger : triggerLoader.getTriggers()) {
+        for (Trigger trigger : mapLoader.getTriggers()) {
             NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).Index());
             node.setExtraInfo(trigger);
         }
@@ -304,6 +304,7 @@ public class GameMap {
     public void renderGraph(GraphicsContext gc, ArrayList<BaseGameEntity> entities){
         graphSystem.render(gc);
         graphSystem.renderTankPoints(entities,gc);
+
     }
 
     /**

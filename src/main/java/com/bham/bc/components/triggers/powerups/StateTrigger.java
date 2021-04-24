@@ -4,11 +4,10 @@ import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.LaserType;
 import com.bham.bc.components.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class StateTrigger extends RespawnTrigger {
 
@@ -19,7 +18,7 @@ public class StateTrigger extends RespawnTrigger {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[]{ new Image("file:src/main/resources/img/tiles/triggers/state1.png") };
+        return new Image[]{ new Image("file:src/main/resources/img/triggers/powerups/state1.png") };
     }
 
     @Override

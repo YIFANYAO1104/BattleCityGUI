@@ -1,10 +1,15 @@
 package com.bham.bc.components.characters;
 
 import com.bham.bc.components.shooting.*;
+import com.bham.bc.components.shooting.BulletType;
+import com.bham.bc.components.shooting.ExplosiveBullet;
+import com.bham.bc.components.shooting.Gun;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
-import com.bham.bc.utils.Constants;
+import com.bham.bc.view.GameSession;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
@@ -19,7 +24,7 @@ import java.util.Optional;
 
 import java.util.List;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -33,8 +38,8 @@ public class Player extends GameCharacter {
 	public static  double HP = 100;
 	public static final double SPEED = 5;
 
-	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(Constants.WINDOW_WIDTH/2.0);
-	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(Constants.WINDOW_HEIGHT/2.0);
+	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
+	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(GameSession.HEIGHT/2.0);
 
 	private final EnumSet<Direction> DIRECTION_SET;
 	private final Gun GUN;
@@ -70,10 +75,49 @@ public class Player extends GameCharacter {
 		steering.setKeysOn(true);
 	}
 
+	/**
+	 * Assign activation time of Triple Bullet trigger
+	 * @param numTicks activation time in ticks
+	 */
+    public void toTriple(int numTicks) {
+        tripleTicks = numTicks;
+    }
+
+    /**
+	 * Assign activation time of Freeze trigger
+	 * @param numTicks activation time in ticks
+	 */
+    public void toFreeze(int numTicks) {
+        freezeTicks = numTicks;
+    }
+
+    /**
+	 * Assign activation time of Immune trigger
+	 * @param numTicks activation time in ticks
+	 */
+    public void toImmune(int numTicks) {
+        immuneTicks = numTicks;
+    }
+
+    /**
+	 * Update trigger(s) activation time
+	 */
+    protected void updateTriggers() {
+        if(immuneTicks!=0) --immuneTicks;
+        if(freezeTicks!=0) --freezeTicks;
+        if(tripleTicks!=0) --tripleTicks;
+    }
+
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
+	// TODO: remove, this is another example of bomb()
+	public void ring() {
+		Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
+		services.addTrigger(explosion);
+	}
+
 	public void bomb() {
-		Point2D center = getPosition().add(getRadius().multiply(0.5));
+		Point2D center = getPosition().add(getSize().multiply(0.5));
 		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), heading, side);
 		services.addBullet(b);
 	}
@@ -123,11 +167,11 @@ public class Player extends GameCharacter {
 	 * Shoots a default bullet (or multiple)
 	 *
 	 * <p>This method creates new instance(-s) of {@link com.bham.bc.components.shooting.DefaultBullet}
-	 * based on player's position and angle</p>
+	 * based on player's position and angle.</p>
 	 */
 	private void fire() {
-		GUN.shoot();
-		if(tripleTicks != 0) GUN.shoot(-45, 45);
+		if(tripleTicks == 0) GUN.shoot();
+		else GUN.shoot(-45, 0, 45);
 	}
 	private  void FireLaser(){
 		GUN.shootLaser();
@@ -137,8 +181,8 @@ public class Player extends GameCharacter {
 	 * Handles pressed key
 	 *
 	 * <p>If one of the control keys are pressed, namely, W, A, S or D, a corresponding
-	 * {@link Direction} is added to the directionSet. If the key F
-	 * is pressed, then an appropriate bullet is fired</p>
+	 * {@link Direction} is added to the directionSet. If the key F is pressed, then an
+	 * appropriate bullet is fired</p>
 	 *
 	 * @param e key to handle
 	 */
@@ -147,6 +191,7 @@ public class Player extends GameCharacter {
 			case F: fire(); break;
 			case R: FireLaser(); break;
 			case B: bomb(); break;
+			case R: ring(); break;
 			case W: DIRECTION_SET.add(Direction.U); break;
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;

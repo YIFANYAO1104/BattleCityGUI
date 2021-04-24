@@ -9,7 +9,7 @@ import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class HealthGiver extends RespawnTrigger{
     /**
@@ -27,7 +27,7 @@ public class HealthGiver extends RespawnTrigger{
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/hp.png"), };
+        return new Image[] {new Image("file:src/main/resources/img/triggers/powerups/hp.png"), };
     }
 
     @Override

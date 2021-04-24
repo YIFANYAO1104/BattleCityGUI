@@ -2,12 +2,10 @@ package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.BaseGameEntity;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class UntrappedTrigger extends RespawnTrigger {
 
@@ -18,7 +16,7 @@ public class UntrappedTrigger extends RespawnTrigger {
 
     protected Image[] getDefaultImage() {
         return new Image[]{
-                new Image("file:src/main/resources/img/tiles/triggers/clear.png")
+                new Image("file:src/main/resources/img/triggers/powerups/clear.png")
         };
     }
 

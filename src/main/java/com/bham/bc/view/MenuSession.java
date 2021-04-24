@@ -1,12 +1,9 @@
 package com.bham.bc.view;
 
-import com.bham.bc.audio.Track;
-import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.Mode;
-import com.bham.bc.view.menu.EndMenu;
+import com.bham.bc.audio.SoundTrack;
 import com.bham.bc.view.menu.MainMenu;
-import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.MenuBackground;
+import com.bham.bc.view.model.GameFlowEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -14,76 +11,87 @@ import javafx.stage.Stage;
 import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
- * Class managing the behavior of the main menu
+ * <h1>Menu Session</h1>
+ *
+ * <p>This class manages all the menus. Not only it sets up a stage for the main menu, it also is
+ * responsible for bringing up pause menu and end screen during the gameplay. Therefore, it has a
+ * strong communication with {@link com.bham.bc.view.GameSession}</p>
  */
 public class MenuSession {
 
-    private static final int HEIGHT = 768;
-    private static final int WIDTH = 1024;
+    public static final int WIDTH = 1024;
+    public static final int HEIGHT = 768;
+    public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.NIGHT_BREAK };
 
     private AnchorPane mainPane;
-    private Scene mainScene;
     private Stage mainStage;
 
-    private MainMenu mainMenu;
-    private static PauseMenu pauseMenu;
-
     /**
-     * Constructs the menu view manager
+     * Constructs the menu session
      */
     public MenuSession() {
+        initLayout();
+        initWindow();
+        initMainMenu();
+    }
+
+    /**
+     * Initializes the layout of the menu session, i.e., sets up the root pane and event filters
+     */
+    private void initLayout() {
         mainPane = new AnchorPane();
-        mainScene = new Scene(mainPane, WIDTH, HEIGHT);
+        mainPane.addEventFilter(GameFlowEvent.START_GAME, this::createGameSession);
+
+        try {
+            mainPane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
+        } catch(IllegalArgumentException | IllegalStateException | NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage
+     */
+    private void initWindow() {
+        Scene mainScene = new Scene(mainPane, WIDTH, HEIGHT);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
-
-        mainMenu = new MainMenu(this, WIDTH, HEIGHT);
-        pauseMenu = new PauseMenu(this);
-
-        initMainMenu();
-
+        mainStage.setResizable(false);
+        mainStage.setTitle("Blueland Defenders");
+        CustomStage customStage = new CustomStage(mainStage, mainScene, mainPane);
+        customStage.createCommonTitlebar(mainPane, WIDTH);
     }
 
     /**
-     * Creates the main menu from where the user can start a new game session
+     * Initializes the main menu which the user will see and from where they can start a new game session
      */
     private void initMainMenu() {
-        audioManager.createSequentialPlayer(Track.BREAK);
-
-        MenuBackground menuBackground = new MenuBackground(WIDTH, HEIGHT);
+        MainMenu mainMenu = new MainMenu();
+        MenuBackground menuBackground = new MenuBackground();
         mainPane.getChildren().addAll(menuBackground, mainMenu);
 
-        audioManager.play();
+        audioManager.loadSequentialPlayer(true, PLAYLIST);
+        audioManager.playMusic();
     }
-
-    public static void showPauseMenu(AnchorPane gamePane) {
-        if(gamePane.getChildren().contains(pauseMenu)) {
-            gamePane.getChildren().remove(pauseMenu);
-        } else {
-            gamePane.getChildren().add(pauseMenu);
-        }
-
-    }
-
-    private MainMenu getMainMenu() { return mainMenu; }
-    private EndMenu getEndMenu(double score) { return new EndMenu(); }
-
 
     /**
-     * Creates a single Game Session based on a chosen MODE
-     * @param mode SURVIVAL or CHALLENGE mode to be set in Controller
+     * Handles the event of starting the game
+     *
+     * <p>Creates a single Game Session based on the chosen parameters. The parameters can be the number of players,
+     * type of map and the game mode. Currently only 1 player and survival mode is supported.</p>
+     *
+     * @param e event from which the parameters of a new game session are checked
      */
-    public void createGameSession(Mode mode, MapType mapType) {
-        audioManager.createSequentialPlayer(Track.CORRUPTION, Track.LEAD, Track.REVOLUTION);
+    public void createGameSession(GameFlowEvent e) {
+        audioManager.loadSequentialPlayer(true, GameSession.PLAYLIST);
+        GameSession gameSession = new GameSession(e.getMapType());
+        gameSession.startGame(mainStage);
 
-        GameSession gameSession = new GameSession(mode, mapType);
-        gameSession.createNewGame(mainStage);
-
-        audioManager.play();
+        audioManager.playMusic();
     }
 
     /**
-     * returns the main stage used for the menu
+     * Returns the main stage used for the main menu
      * @return the menu stage
      */
     public Stage getMainStage() {

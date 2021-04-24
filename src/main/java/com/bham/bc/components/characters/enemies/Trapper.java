@@ -54,7 +54,7 @@ public class Trapper extends Enemy {
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
-        State searchAndTrapState = new State(new Action[]{ Action.SEARCHANDTRAP }, null);
+        State searchAndTrapState = new State(new Action[]{ Action.SEARCH_HOME }, null);
         State retreatState = new State(new Action[]{ Action.RETREAT }, null);
         State regenerateState = new State(new Action[]{ Action.REGENERATE }, null);
 
@@ -86,7 +86,7 @@ public class Trapper extends Enemy {
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
-                case SEARCHANDTRAP:
+                case SEARCH_HOME:
                     //TODO: searchAndTrap();
                     break;
                 case RETREAT:

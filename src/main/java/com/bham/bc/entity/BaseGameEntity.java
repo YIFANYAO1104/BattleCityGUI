@@ -4,8 +4,8 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Shape;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
 
@@ -66,13 +66,10 @@ abstract public class BaseGameEntity {
     }
 
     public Point2D getCenterPosition() {
-        double width = getRadius().getX();
-        double height = getRadius().getY();
-
-        return new Point2D(x + width/2, y + height/2);
+        return new Point2D(x + getSize().getX()/2, y + getSize().getY()/2);
     }
 
-    public Point2D getRadius() {
+    public Point2D getSize() {
         return new Point2D(entityImages[0].getWidth(), entityImages[0].getHeight());
     }
 
@@ -99,10 +96,23 @@ abstract public class BaseGameEntity {
     }
 
     /**
+     * Gets the hit-box of the entity
      *
-     * @return
+     * <p>Hit-box is a shape with size and location properties. In most cases it is either a circle or a rectangle.</p>
+     *
+     * @return the shape of the hit-box
      */
     abstract public Shape getHitBox();
+
+    /**
+     * Gets the outer radius of the hit-box
+     *
+     * <p>If it's a circle it gets its radius, if its any other shape, it gets the radius of the outer
+     * circle that would be generated around the hit-box.</p>
+     *
+     * @return size of hit-box radius
+     */
+    abstract public double getHitBoxRadius();
 
     /**
      *
@@ -128,5 +138,18 @@ abstract public class BaseGameEntity {
      */
     abstract public String toString();
 
-
+    // TODO: remove
+    public void renderHitBox(GraphicsContext gc) {
+        if(getHitBox() instanceof Rectangle) {
+            Rectangle hb = (Rectangle) getHitBox();
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1);
+            gc.strokeRect(hb.getX(), hb.getY(), hb.getWidth(), hb.getHeight());
+        } else if(getHitBox() instanceof Circle) {
+            Circle hb = (Circle) getHitBox();
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1);
+            gc.strokeArc(hb.getCenterX() - hb.getRadius(), hb.getCenterY() - hb.getRadius(), hb.getRadius()*2, hb.getRadius()*2, 0, 360, ArcType.OPEN);
+        }
+    }
 }

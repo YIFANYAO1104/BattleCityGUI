@@ -4,11 +4,11 @@
 package com.bham.bc.components.triggers.traps;
 
 import com.bham.bc.components.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class Freeze extends RespawnTrigger {
 
@@ -24,13 +24,13 @@ public class Freeze extends RespawnTrigger {
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/snowflake.png"), };
+        return new Image[] {new Image("file:src/main/resources/img/triggers/traps/snowflake.png"), };
     }
 
     @Override
     public void handle(BaseGameEntity entity) {
-        if(active && entity instanceof GameCharacter && intersects(entity)) {
-            ((GameCharacter) entity).toFreeze(activationTime * FRAME_RATE);
+        if(active && entity instanceof Player && intersects(entity)) {
+            ((Player) entity).toFreeze(activationTime * FRAME_RATE);
             deactivate();
         }
     }

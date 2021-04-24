@@ -24,7 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 
 /**
  * The implementation of {@link NavigationService}
@@ -72,6 +72,7 @@ public class PathPlanner implements NavigationService {
      */
     private int getClosestNode(BaseGameEntity entity){
         NavNode n1 = navGraph.getClosestNodeForEntity(entity);
+        if (n1==null) return no_closest_node_found;
         if(n1.isValid()){
             return n1.Index();
         }
@@ -133,7 +134,7 @@ public class PathPlanner implements NavigationService {
             return false;
         }
         //find closest node around target, if no return false
-        int closestNodeToTarget = getClosestNode(targetPos,owner.getRadius());
+        int closestNodeToTarget = getClosestNode(targetPos,owner.getSize());
         if (closestNodeToTarget == no_closest_node_found){
             return false;
         }
@@ -169,7 +170,7 @@ public class PathPlanner implements NavigationService {
         //add start and end node
 
         curPath.add(0,
-                new PathEdge(getCenter(owner.getPosition(),owner.getRadius()), navGraph.getNode(closest).getPosition())
+                new PathEdge(getCenter(owner.getPosition(),owner.getSize()), navGraph.getNode(closest).getPosition())
         );
 
         //        PathEdge lastEdge = path.get(path.size()-1);
@@ -206,7 +207,7 @@ public class PathPlanner implements NavigationService {
             //increment e2 so it points to the edge following e1 (and futher)
             PathEdge e2 = iterator.next();
             //check for obstruction, adjust and remove the edges accordingly
-            if (e2.getBehavior()==GraphEdge.normal && services.canPass(e1.getSource(), e2.getDestination(),owner.getRadius(),array)) {
+            if (e2.getBehavior()==GraphEdge.normal && services.canPass(e1.getSource(), e2.getDestination(),owner.getSize(),array)) {
                 e1.setDestination(e2.getDestination());
                 iterator.remove(); //remove e2 from the list
             } else {

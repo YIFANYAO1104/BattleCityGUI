@@ -2,11 +2,10 @@ package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 public class TeleportTrigger extends RespawnTrigger{
     private double destX;
     private double destY;
@@ -23,7 +22,7 @@ public class TeleportTrigger extends RespawnTrigger{
     }
 
     protected Image[] getDefaultImage() {
-        return new  Image[]{ new Image("file:src/main/resources/img/tiles/triggers/teleport.png")};
+        return new  Image[]{ new Image("file:src/main/resources/img/triggers/powerups/teleport.png")};
     }
 
     @Override

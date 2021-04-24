@@ -58,8 +58,10 @@ public class GraphTest {
         };
         SparseGraph graph = new SparseGraph<NavNode, GraphEdge>(false);
         addNodes(graph,input);
-        addEdges(graph,input);
 
+        System.out.println(graph.ALlNodesNum());
+        addEdges(graph,input);
+        System.out.println(graph.ALlNodesNum());
 //        TimeSlicedDijkstras tsdj = new TimeSlicedDijkstras(graph, source, target);
 //        tsdj.cycleOnce();
 //

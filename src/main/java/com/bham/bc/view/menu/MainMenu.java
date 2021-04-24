@@ -1,18 +1,19 @@
 package com.bham.bc.view.menu;
 
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.Mode;
 import com.bham.bc.view.MenuSession;
-import com.bham.bc.view.model.MenuButton;
-import com.bham.bc.view.model.SubMenu;
-import javafx.geometry.Pos;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.StackPane;
+import com.bham.bc.view.model.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
+
+import java.util.Arrays;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
 
 /**
  * <h1>Main Menu</h1>
@@ -22,35 +23,25 @@ import javafx.scene.text.Text;
  * a game session is not active.</p>
  */
 public class MainMenu extends AnchorPane {
-    
-    private MenuSession menuSession;
 
     private SubMenu subMenuMain;
-    private SubMenu subMenuMode;
     private SubMenu subMenuScores;
     private SubMenu subMenuSettings;
 
+    private final GameFlowEvent NEW_GAME_EVENT;
+
     /**
-     * Constructs an AnchorPane layout as the Main Menu
-     *
-     * @param menuSession the manager of the menus
-     * @param width       menu window's length
-     * @param height      menu window's height
+     * Constructs an {@link AnchorPane} layout as the Main Menu
      */
-    public MainMenu(MenuSession menuSession, double width, double height) {
-        this.menuSession = menuSession;
-        setWidth(width);
-        setHeight(height);
+    public MainMenu() {
+        NEW_GAME_EVENT = new GameFlowEvent(GameFlowEvent.START_GAME);
+        setMinSize(MenuSession.WIDTH, MenuSession.HEIGHT);
 
         initBgDim();
-        initTitle();
-
         createSubMenuMain();
-        createSubMenuMode();
         createSubMenuScores();
         createSubMenuSettings();
 
-        getChildren().addAll(subMenuMain);
         subMenuMain.show();
     }
 
@@ -58,22 +49,10 @@ public class MainMenu extends AnchorPane {
      * Adds background dim to the menu
      */
     private void initBgDim() {
-        Rectangle bg = new Rectangle(getWidth(), getHeight());
-        bg.setFill(Color.GRAY);
-        bg.setOpacity(0.2);
-
-        getChildren().add(bg);
-    }
-
-    /**
-     * Adds title to the menu
-     */
-    private void initTitle() {
-        Title title = new Title("T A N K 1 G A M E");
-        title.setTranslateY(100);
-        title.setTranslateX(getWidth()/2 - title.getWidth()/2);
-
-        getChildren().add(title);
+        Rectangle dim = new Rectangle(getWidth(), getHeight());
+        dim.setFill(Color.NAVY);
+        dim.setOpacity(0.4);
+        getChildren().add(dim);
     }
 
     /**
@@ -81,39 +60,21 @@ public class MainMenu extends AnchorPane {
      * necessary buttons to control the GUI actions and create corresponding sub-menus.
      */
     private void createSubMenuMain() {
-        MenuButton btnSolo = new MenuButton("SOLO");
-        MenuButton btnCoop = new MenuButton("CO-OP");
+        MenuButton btnStart = new MenuButton("START GAME");
         MenuButton btnScores = new MenuButton("HIGH-SCORES");
         MenuButton btnSettings = new MenuButton("SETTINGS");
         MenuButton btnQuit = new MenuButton("QUIT");
 
-        btnSolo.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMode.show(); });
-        btnCoop.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMode.show(); });
+
+        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.Map1); btnStart.fireEvent(NEW_GAME_EVENT); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
 
         subMenuMain = new SubMenu(this);
-        subMenuMain.getChildren().addAll(btnSolo, btnCoop, btnScores, btnSettings, btnQuit);
+        subMenuMain.getChildren().addAll(btnStart, btnScores, btnSettings, btnQuit);
     }
 
-    /**
-     * Creates the sub-menu for mode selection. This menu is observed whenever "SOLO" or
-     * "CO-OP" is clicked and asks {@link com.bham.bc.view.MenuSession} to initiate a
-     * single {@link com.bham.bc.view.GameSession} based on the selected parameters
-     */
-    private void createSubMenuMode() {
-        MenuButton btnBack = new MenuButton("BACK");
-        MenuButton btnSurvival = new MenuButton("SURVIVAL");
-        MenuButton btnChallenge = new MenuButton("CHALLENGE");
-
-        btnBack.setOnMouseClicked(e -> { subMenuMode.hide(); subMenuMain.show(); });
-        btnSurvival.setOnMouseClicked(e -> menuSession.createGameSession(Mode.SURVIVAL, MapType.Map1));
-        btnChallenge.setOnMouseClicked(e -> menuSession.createGameSession(Mode.CHALLENGE, MapType.EmptyMap));
-
-        subMenuMode = new SubMenu(this);
-        subMenuMode.getChildren().addAll(btnBack, btnSurvival, btnChallenge);
-    }
 
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
@@ -121,6 +82,45 @@ public class MainMenu extends AnchorPane {
      */
     private void createSubMenuScores() {
         subMenuScores = new SubMenu(this);
+
+        // Increase leaderboard size and set up a different style from a regular sub-menu
+        subMenuScores.setMinSize(680, 500);
+        subMenuScores.alignCenter();
+        subMenuScores.getStyleClass().clear();
+        subMenuScores.setId("sub-menu-scores");
+
+        // Set up leaderboard label
+        Label leaderboardLabel = new Label("Scores");
+        leaderboardLabel.getStyleClass().add("leaderboard-label");
+
+        // Create the leaderboard table
+        TableView<RecordsHandler.Records> tableView = new TableView<>();
+        tableView.setId("scores-table");
+
+        // Add 5 columns to the table
+        Arrays.stream(new String[]{"Rank", "Name", "Score", "Date"}).forEach(columnName -> {
+            TableColumn<RecordsHandler.Records, String> column = new TableColumn<>(columnName);
+            column.setCellValueFactory(new PropertyValueFactory<>(columnName.toLowerCase()));
+            tableView.getColumns().add(column);
+        });
+
+//         Initialize the current records and listen for new ones
+        tableView.setItems(RecordsHandler.initTable());
+        addEventFilter(GameFlowEvent.LEAVE_GAME, e -> {
+            if(e.getScore() >= 0) {
+                RecordsHandler recordsHandler = new RecordsHandler();
+                recordsHandler.createRecord(new RecordsHandler.Records(e.getName(), e.getScore()));
+                tableView.setItems(recordsHandler.sortAndGetData());
+            }
+        });
+
+
+        // Event handler to go back to the main menu
+        subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
+        tableView.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });
+
+        // Add the table to the scores sub-menu
+        subMenuScores.getChildren().addAll(leaderboardLabel, tableView);
     }
 
     /**
@@ -128,48 +128,15 @@ public class MainMenu extends AnchorPane {
      * and allows the user to configure UI parameters, such as SFX or MUSIC volume
      */
     private void createSubMenuSettings() {
+        MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));
+        MenuSlider sfxVolume = new MenuSlider("EFFECTS", (int) (audioManager.getEffectsVolume() * 100));
         MenuButton btnBack = new MenuButton("BACK");
-        MenuButton btnSFX = new MenuButton("SFX VOLUME");
-        MenuButton btnMusic = new MenuButton("MUSIC VOLUME");
 
+        musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
+        sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectsVolume(newVal.doubleValue()/100));
         btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
 
         subMenuSettings = new SubMenu(this);
-        subMenuSettings.getChildren().addAll(btnBack, btnSFX, btnMusic);
-    }
-
-
-    /**
-     *  <h1>Title of the game</h1>
-     *
-     *  <p>This is a unique component provided by a parent {@link com.bham.bc.view.menu.MainMenu}.
-     *  This is because the Title should always be part of the Main Menu node.
-     */
-    private static class Title extends StackPane {
-
-        private static final double WIDTH = 475;
-        private static final double HEIGHT = 60;
-
-        /**
-         * Constructs a title used in the Main Menu layout
-         * @param name the title of the game
-         * TODO: look for fancier/more game-like fonts
-         */
-        public Title(String name) {
-            Rectangle bg = new Rectangle(WIDTH, HEIGHT);
-            setWidth(WIDTH);
-            setHeight(HEIGHT);
-            bg.setStroke(Color.WHITE);
-            bg.setStrokeWidth(3);
-            bg.setFill(null);
-
-
-            Text text = new Text(name);
-            text.setFill(Color.WHITE);
-            text.setFont(Font.font("Times New Roman", FontWeight.SEMI_BOLD, 50));
-
-            setAlignment(Pos.TOP_CENTER);
-            getChildren().addAll(bg,text);
-        }
+        subMenuSettings.getChildren().addAll(musicVolume, sfxVolume, btnBack);
     }
 }

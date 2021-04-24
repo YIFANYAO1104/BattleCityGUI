@@ -5,7 +5,7 @@ import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 
 public class LandmineTrigger extends RespawnTrigger{
@@ -17,7 +17,7 @@ public class LandmineTrigger extends RespawnTrigger{
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[]{ new Image("file:src/main/resources/img/tiles/triggers/Landmine.png")};
+        return new Image[]{ new Image("file:src/main/resources/img/triggers/traps/Landmine.png")};
     }
 
     @Override

@@ -1,7 +1,11 @@
 package com.bham.bc.components.environment;
 
+import com.bham.bc.audio.SoundEffect;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
 import static com.bham.bc.utils.messaging.MessageDispatcher.*;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.shape.Rectangle;
@@ -9,7 +13,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.EnumSet;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.messaging.MessageTypes.*;
 
@@ -47,6 +51,10 @@ public class Obstacle extends BaseGameEntity {
     private void destroy() {
         exists = false;
         entityManager.removeEntity(this);
+
+        Dissolve dissolve = new Dissolve(getPosition(), entityImages[currentFrame], 0);
+        services.addTrigger(dissolve);
+        audioManager.playEffect(SoundEffect.DESTROY_SOFT);
     }
 
     /**
@@ -107,6 +115,11 @@ public class Obstacle extends BaseGameEntity {
     @Override
     public Rectangle getHitBox() {
         return new Rectangle(x, y, entityImages[0].getWidth(), entityImages[0].getHeight());
+    }
+
+    @Override
+    public double getHitBoxRadius() {
+        return Math.hypot(getHitBox().getWidth()/2, getHitBox().getHeight()/2);
     }
 
     @Override

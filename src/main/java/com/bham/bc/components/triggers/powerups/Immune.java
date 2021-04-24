@@ -4,12 +4,12 @@
 package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.triggers.RespawnTrigger;
-import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class Immune extends RespawnTrigger {
 	private int activationTime;
@@ -22,13 +22,13 @@ public class Immune extends RespawnTrigger {
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/tiles/triggers/green_heart.png"), };
+        return new Image[] {new Image("file:src/main/resources/img/triggers/powerups/green_heart.png"), };
     }
 
     @Override
     public void handle(BaseGameEntity entity) {
-        if(active && entity instanceof GameCharacter && intersects(entity)) {
-            ((GameCharacter) entity).toImmune(activationTime * FRAME_RATE);
+        if(active && entity instanceof Player && intersects(entity)) {
+            ((Player) entity).toImmune(activationTime * FRAME_RATE);
             deactivate();
         }
     }

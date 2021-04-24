@@ -1,5 +1,6 @@
 package com.bham.bc.components.characters;
 
+import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.triggers.powerups.Weapon;
@@ -12,6 +13,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.List;
+
+import static com.bham.bc.audio.AudioManager.audioManager;
+import static com.bham.bc.components.Controller.services;
 
 /**
  * Represents a character - this includes enemies, players and AI companions
@@ -72,8 +76,20 @@ abstract public class GameCharacter extends MovingEntity {
      */
     public void changeHp(double health) {
         hp = Math.min(hp + health, MAX_HP);
-        if(side == Side.ENEMY)
-        if(hp <= 0) destroy();
+
+        if(hp <= 0) {
+            audioManager.playEffect(SoundEffect.DESTROY_CHARACTER);
+            if(side == Side.ENEMY) services.changeScore(50);
+            destroy();
+        }
+    }
+
+    /**
+     * Get immune activation time
+     * @return immune activation time (if it's 0 meaning character is not in immune state)
+     */
+    public int getImmuneTicks() {
+        return immuneTicks;
     }
     public void speedUp(double x){
         this.maxSpeed=x;
@@ -82,6 +98,7 @@ abstract public class GameCharacter extends MovingEntity {
     // TEMP: DOCUMENT ------------------------------------------------
     @Deprecated
     public void switchWeapon(Weapon w) {}
+
     public void toTriple(int numTicks) {
         tripleTicks = numTicks;
     }
@@ -99,9 +116,7 @@ abstract public class GameCharacter extends MovingEntity {
     public void destroyed(){
         this.hp-=200;
     }
-    public int getImmuneTicks() {
-        return immuneTicks;
-    }
+
     public void teleport(double x,double y){
         this.x = x;
         this.y = y;
@@ -164,6 +179,7 @@ abstract public class GameCharacter extends MovingEntity {
      * Gets radius of a circular hit-box
      * @return radius of a character's hit-box
      */
+    @Override
     public double getHitBoxRadius() {
         return getHitBox().getRadius();
     }
@@ -182,6 +198,8 @@ abstract public class GameCharacter extends MovingEntity {
 
     @Override
     public abstract Circle getHitBox();
+
+
 
     @Override
     public boolean handleMessage(Telegram msg) {

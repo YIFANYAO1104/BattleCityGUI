@@ -26,21 +26,10 @@ public enum Action{
     RESET_SPEED,
     RESET_SEARCH,
 
-
-
-
     // DIRECTOR
     BUILDUP,
     PEAK,
     RELAX,
     INCREMENTLOOP,
     RESETTIMELIMIT,
-
-    MOVE,
-    CHARGEALLY,
-
-    SEARCHANDTRAP,
-
-
-
 }

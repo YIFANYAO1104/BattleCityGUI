@@ -15,12 +15,25 @@ public class GeometryEnhanced {
         return p.dotProduct(p) < eps;
     }
 
-    //Ensure the magnitude of a vector is less than speed
-    static public Point2D truncate(Point2D velocity, double speed){
-        if(velocity.magnitude()>speed){
-            return velocity.normalize().multiply(speed);
-        }
-        return velocity;
+//    //Ensure the magnitude of a vector is less than speed
+//    static public Point2D truncate(Point2D velocity, double speed){
+//        if(velocity.magnitude()>speed){
+//            return velocity.normalize().multiply(speed);
+//        }
+//        return velocity;
+//    }
+
+    /**
+     * Rotates a given point (vector) by some angle
+     * @param point a vector to be rotated
+     * @param angle angle in radians by which the point is rotated
+     * @return a rotated Point2D object
+     */
+    public static Point2D rotate(Point2D point, double angle) {
+        double x = point.getX() * Math.cos(angle) - point.getY() * Math.sin(angle);
+        double y = point.getX() * Math.sin(angle) + point.getY() * Math.cos(angle);
+
+        return new Point2D(x, y);
     }
 
     // rotate a point around center point, anti-clockwise angle 15ms in test

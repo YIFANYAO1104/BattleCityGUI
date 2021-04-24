@@ -5,7 +5,7 @@ import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
 
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class SpeedTrigger extends RespawnTrigger {
     private int speed;
@@ -19,7 +19,7 @@ public class SpeedTrigger extends RespawnTrigger {
 
     @Override
     protected Image[] getDefaultImage() {
-        return new Image[]{new Image("file:src/main/resources/img/tiles/triggers/flash.png")};
+        return new Image[]{new Image("file:src/main/resources/img/triggers/powerups/flash.png")};
     }
 
     @Override

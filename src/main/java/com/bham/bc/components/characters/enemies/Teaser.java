@@ -1,6 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
-import com.bham.bc.components.characters.Tribe;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import javafx.scene.image.Image;
@@ -8,7 +9,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Arrays;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -34,7 +35,7 @@ public class Teaser extends Enemy {
     // Constant
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/teaser.png";
     public static final int SIZE = 30;
-    public static final Tribe TRIBE = Tribe.TEASER;
+    public static final EnemyType TRIBE = EnemyType.TEASER;
 
     // Configurable
     public static final double HP = 100;
@@ -131,7 +132,7 @@ public class Teaser extends Enemy {
                     takeOver();
                     break;
                 case ATTACK_OBST:
-                    setMaxSpeed(shootObstacle() ? SPEED * .3 : SPEED);
+                    setMaxSpeed(shootObstacle() ? SPEED * .5 : SPEED);
                     break;
                 case SET_SPEED:
                     setMaxSpeed(SPEED * 3);
@@ -163,6 +164,9 @@ public class Teaser extends Enemy {
     public void destroy() {
         entityManager.removeEntity(this);
         exists = false;
+
+        Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+        services.addTrigger(dissolve);
     }
 
     @Override

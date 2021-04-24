@@ -16,8 +16,7 @@ import java.util.*;
  * Dijkstra's algorithm class modified to spread a search over multiple
  * update-steps
  */
-public class TimeSlicedDijkstras
-        extends TimeSlicedAlgorithm {
+public class TimeSlicedDijkstras extends TimeSlicedAlgorithm {
 
     private final SparseGraph navGraph;
     private int source;

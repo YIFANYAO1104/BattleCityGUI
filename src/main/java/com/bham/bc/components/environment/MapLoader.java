@@ -1,5 +1,6 @@
 package com.bham.bc.components.environment;
 
+import com.bham.bc.components.triggers.Trigger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -12,7 +13,7 @@ import java.util.*;
 /**
  * Class which can load a map specifically created with a Tiled Map Editor
  *
- * @see  <a href="https://www.mapeditor.org/">mapeditor.org</a>
+ * @see <a href="https://www.mapeditor.org/">mapeditor.org</a>
  */
 public class MapLoader {
     private int mapWidth;
@@ -20,9 +21,11 @@ public class MapLoader {
     private int tileWidth;
     private int tileHeight;
 
-    private final List<Obstacle> OBSTACLES;
+    private final ArrayList<Obstacle> OBSTACLES;
     private final EnumMap<Tileset, Integer> OFFSETS;
     private final HashMap<Integer, int[]> ANIMATIONS;
+    private final ArrayList<Trigger> TRIGGERS;
+    private final HashMap<Integer, String> TRIGGER_CLASSES;
 
     /**
      * Constructs Map Loader which loads a map from a JSON file
@@ -32,7 +35,10 @@ public class MapLoader {
         OBSTACLES = new ArrayList<>();
         OFFSETS = new EnumMap<>(Tileset.class);
         ANIMATIONS = new HashMap<>();
+        TRIGGERS = new ArrayList<>();
+        TRIGGER_CLASSES = new HashMap<>();
 
+        if (resourceName==null) return;
         try {
             loadMap(resourceName);
         } catch (Exception e) {
@@ -75,6 +81,11 @@ public class MapLoader {
                     JSONArray obstacleArray = layer.getJSONArray("data");
 
                     OBSTACLES.addAll(convertToObstacles(tilesetName, className, obstacleArray));
+                } else if(layer.has("objects")) {
+                    String packageName = layer.getString("name");
+                    JSONArray triggerArray = layer.getJSONArray("objects");
+
+                    TRIGGERS.addAll(convertToTriggers(packageName, triggerArray));
                 }
             }
         }
@@ -95,20 +106,31 @@ public class MapLoader {
         JSONArray tilesets = jsonObject.getJSONArray("tilesets");
 
         // Determine from where each tileset starts counting its tiles
-        // Determine animated tiles for each tileset
         for(int i = 0; i < tilesets.length(); i++) {
             JSONObject tilesetProperties = tilesets.getJSONObject(i);
 
             String tilesetName = tilesetProperties.getString("name").toUpperCase();
-            if (tilesetName.equals("TRIGGERS")) continue;
             int offset = tilesetProperties.getInt("firstgid");
-            OFFSETS.put(Tileset.valueOf(tilesetName), offset);
+
+            try {
+                OFFSETS.put(Tileset.valueOf(tilesetName), offset);
+            } catch (IllegalArgumentException e) {
+                if(!tilesetName.equals("TRIGGERS")) {
+                    e.printStackTrace();
+                }
+            }
 
             if(!tilesetProperties.has("tiles")) continue;
-
             JSONArray tiles = tilesetProperties.getJSONArray("tiles");
 
             for(int j = 0; j < tiles.length(); j++) {
+                // If tile has properties, it is a trigger so we need to map IDs with the class name
+                if(tiles.getJSONObject(j).has("properties")) {
+                    int tileID = tiles.getJSONObject(j).getInt("id");
+                    JSONArray properties = tiles.getJSONObject(j).getJSONArray("properties");
+                    for(int k = 0; k < properties.length(); k++) if(properties.getJSONObject(k).get("name").equals("className")) TRIGGER_CLASSES.put(offset + tileID, properties.getJSONObject(k).getString("value"));
+                }
+                // If tile has animations, add tile IDs which make up the animation to array and map it
                 if(tiles.getJSONObject(j).has("animation")) {
                     int tileID = tiles.getJSONObject(j).getInt("id");
                     JSONArray jsonTileSequence = tiles.getJSONObject(j).getJSONArray("animation");
@@ -134,16 +156,16 @@ public class MapLoader {
      * @throws InvocationTargetException
      * @throws InstantiationException
      */
-    public List<Obstacle> convertToObstacles(String tilesetName, String tileName, JSONArray obstacleArray) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public ArrayList<Obstacle> convertToObstacles(String tilesetName, String tileName, JSONArray obstacleArray) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         // Reflect the names of parameters for constructor
         Tileset tileset = Tileset.valueOf(tilesetName);
         int yo = tileset.getOffsetY();
-        Class cls = Class.forName("com.bham.bc.components.environment.Obstacle");
+        Class<?> cls = Class.forName("com.bham.bc.components.environment.Obstacle");
 
         ArrayList<Attribute> attributes = identifyAttributes(tileName);
 
-        List<Obstacle> obstacleInstances = new ArrayList<>();
-        Constructor constructor = cls.getConstructor(int.class, int.class, ArrayList.class, Tileset.class, int[].class);
+        ArrayList<Obstacle> obstacleInstances = new ArrayList<>();
+        Constructor<?> constructor = cls.getConstructor(int.class, int.class, ArrayList.class, Tileset.class, int[].class);
 
         // Construct a GenericObstacle for each existing tile in obstacleArray
         for(int i = 0; i < obstacleArray.length(); i++) {
@@ -158,6 +180,39 @@ public class MapLoader {
             }
         }
         return obstacleInstances;
+    }
+
+    /**
+     * Converts JSON object attributes to Triggers in the map
+     *
+     * @param packageName    name of the class used to create a trigger
+     * @param triggerArray array of triggers in JSON format
+     * @throws Exception   if construction of a class fails
+     */
+    public ArrayList<Trigger> convertToTriggers(String packageName, JSONArray triggerArray) throws Exception {
+        ArrayList<Trigger> triggerInstances = new ArrayList<>();
+
+        for(int i = 0; i < triggerArray.length(); i++) {
+            JSONObject trigger = triggerArray.getJSONObject(i);
+            String className = TRIGGER_CLASSES.get(trigger.getInt("gid"));
+            Class<?> cls = Class.forName("com.bham.bc.components.triggers." + packageName + "." + className);
+            Constructor<?> constructor = cls.getConstructors()[0];
+
+            ArrayList<Object> params = new ArrayList<>();
+            params.add(trigger.getInt("x"));
+            params.add(trigger.getInt("y"));
+
+            // Read attributes
+            JSONArray attributes = trigger.getJSONArray("properties");
+
+            for (int j = 0; j < attributes.length(); j++) {
+                JSONObject attribute = attributes.getJSONObject(j);
+                if(attribute.get("name").equals("className")) continue;
+                params.add(attribute.getInt("value"));
+            }
+            triggerInstances.add((Trigger) constructor.newInstance(params.toArray()));
+        }
+        return triggerInstances;
     }
 
     /**
@@ -210,8 +265,16 @@ public class MapLoader {
      * Gets all obstacles
      * @return list of Obstacles
      */
-    public List<Obstacle> getObstacles() {
+    public ArrayList<Obstacle> getObstacles() {
         return OBSTACLES;
+    }
+
+    /**
+     * Gets all respawning triggers
+     * @return list of Triggers
+     */
+    public ArrayList<Trigger> getTriggers() {
+        return TRIGGERS;
     }
 
     /**

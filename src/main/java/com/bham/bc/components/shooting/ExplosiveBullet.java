@@ -7,7 +7,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
-import static com.bham.bc.utils.Constants.FRAME_RATE;
+import static com.bham.bc.view.GameSession.FRAME_RATE;
 
 public class ExplosiveBullet extends Bullet {
     public static final BulletType TYPE = BulletType.EXPLOSIVE;
@@ -38,8 +38,6 @@ public class ExplosiveBullet extends Bullet {
 
     @Override
     public void destroy() {
-        exists = false;
-        entityManager.removeEntity(this);
     }
 
     @Override
@@ -55,7 +53,8 @@ public class ExplosiveBullet extends Bullet {
         existTime++;
         hitBox = updateHitBox(existTime);
         if (existTime >= LIFETIME) {
-            destroy();
+            exists = false;
+            entityManager.removeEntity(this);
         }
     }
 
@@ -68,7 +67,7 @@ public class ExplosiveBullet extends Bullet {
         //get bound rectangle top left pos
         //calculate region radius according to current time
         Point2D regionRadius = new Point2D(MAX_BOUND_WIDTH, MAX_BOUND_HEIGHT).multiply(existTime/(double)LIFETIME);
-        Point2D topLeft = getPosition().subtract(regionRadius.subtract(getRadius()).multiply(0.5));
+        Point2D topLeft = getPosition().subtract(regionRadius.subtract(getSize()).multiply(0.5));
 
         //create hit box according to bound rectangle
         Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), regionRadius.getX(), regionRadius.getY());
@@ -78,9 +77,9 @@ public class ExplosiveBullet extends Bullet {
     }
 
     @Override
-    public double getHitboxRadius() {
+    public double getHitBoxRadius() {
         Point2D p1 = new Point2D(MAX_BOUND_WIDTH, MAX_BOUND_HEIGHT);
-        return Math.sqrt(p1.getX()/2*p1.getX()/2 + p1.getY()/2*p1.getY()/2);
+        return Math.sqrt(p1.getX()/2 * p1.getX()/2 + p1.getY()/2*p1.getY()/2);
     }
 
 }

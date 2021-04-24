@@ -9,10 +9,10 @@ import javafx.scene.paint.Color;
 import java.util.Arrays;
 
 public enum Tileset {
-    ASHLANDS("file:src/main/resources/img/tiles/tilesets/ashlands.png", 16,16),
-    ATLANTIS("file:src/main/resources/img/tiles/tilesets/atlantis.png", 16,16),
-    BASIC("file:src/main/resources/img/tiles/tilesets/basic.png", 16,16),
-    ZWATER("file:src/main/resources/img/tiles/tilesets/Zwater1(80x32).png", 80,32);
+    ASHLANDS("file:src/main/resources/img/tilesets/ashlands.png", 16,16),
+    ATLANTIS("file:src/main/resources/img/tilesets/atlantis.png", 16,16),
+    BASIC("file:src/main/resources/img/tilesets/basic.png", 16,16),
+    ZWATER("file:src/main/resources/img/tilesets/Zwater1(80x32).png", 80,32);
 
     private final Image[] TILES;
     private final int OFFSET_Y;
@@ -27,29 +27,6 @@ public enum Tileset {
         OFFSET_Y = tileHeight-16;
         Image tileset = new Image(path);
         TILES = toSubImages(tileset, tileWidth, tileHeight);
-
-//        int rows = (int) tileset.getHeight() / tileHeight;
-//        int cols = (int) tileset.getWidth() / tileWidth;
-//
-//        tiles = new Image[rows * cols];
-//
-//        PixelReader pr = tileset.getPixelReader();
-//
-//        for(int i = 0; i < tiles.length; i++) {
-//            WritableImage tile = new WritableImage(tileWidth, tileHeight);
-//            PixelWriter pw = tile.getPixelWriter();
-//
-//            int y0 = (i / cols) * tileHeight;
-//            int x0 = (i % cols) * tileWidth;
-//
-//            for(int y = y0; y < y0 + tileHeight; y++) {
-//                for(int x = x0; x < x0 + tileWidth; x++) {
-//                    Color color = pr.getColor(x, y);
-//                    pw.setColor(x - x0, y - y0, color);
-//                }
-//            }
-//            tiles[i] = tile;
-//        }
     }
 
     /**
@@ -82,7 +59,6 @@ public enum Tileset {
             }
             subImages[i] = subImage;
         }
-
         return subImages;
     }
 

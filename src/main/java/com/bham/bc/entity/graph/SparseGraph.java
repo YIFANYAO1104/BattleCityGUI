@@ -2,7 +2,6 @@ package com.bham.bc.entity.graph;
 
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
-import com.bham.bc.utils.Constants;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.GraphNode;
 import com.bham.bc.entity.graph.node.NavNode;
@@ -17,6 +16,7 @@ import static com.bham.bc.entity.graph.NodeTypeEnum.invalid_node_index;
 import java.util.*;
 
 public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> extends BaseGameEntity {
+    public static final double GRAPH_OBSTACLE_EDGE_COST = 30.0;
 
 //    private GraphEdge nh1;
     private int rowNums;
@@ -62,6 +62,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     private HashMap<Integer, ArrayList<NavNode>> obstacleId = new HashMap<>();
     //Map the closet node for that entities
     private  HashMap<BaseGameEntity, NavNode> trcikingTable = new HashMap<>();
+
+    private double realContrustPercentage = 0.0;
 
     /**
      * @return true if the edge is not present in the graph. Used when adding
@@ -156,6 +158,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      */
     public int renderTankPoint(BaseGameEntity e1 , GraphicsContext gc){
         NavNode n1 = getClosestNodeForEntity(e1);
+
         if(n1.isValid() ){
             gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),8,8,1,1);
             renderNode(gc,Color.RED,n1,4);
@@ -174,7 +177,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      */
     public NavNode getClosestNodeForEntity(BaseGameEntity entity){
         Point2D location = entity.getPosition();
-        Point2D radius = entity.getRadius();
+        Point2D radius = entity.getSize();
         int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
         int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
         int c = j*rowNums + i;
@@ -558,12 +561,12 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         if(obstacleId.containsKey(id)){
             ArrayList<NavNode> temp1 = obstacleId.get(id);
             if(temp1.contains(node))
-                System.out.println("this node has been registered in graph HashMap");
+                return;
+//                System.out.println("this node has been registered in graph HashMap");
             else{
                 node.addNum();
                 temp1.add(node);
             }
-
 
         }else{
             ArrayList<NavNode> temp2 = new ArrayList<>();
@@ -584,6 +587,11 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     }
 
     @Override
+    public double getHitBoxRadius() {
+        return 0;
+    }
+
+    @Override
     public boolean handleMessage(Telegram msg) {
         switch (msg.Msg){
             case Msg_interact :
@@ -596,7 +604,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 int indexOfNode = (int)msg.ExtraInfo;
                 NavNode nn1 = getNode(indexOfNode);
                 addToHashMap(msg.Sender,nn1);
-                setNodeALLEdages(indexOfNode, Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST);
+                setNodeALLEdages(indexOfNode, GRAPH_OBSTACLE_EDGE_COST);
                 setEdgesBehavior(indexOfNode, GraphEdge.shoot);
                 return true;
             case Msg_removeSoft:
@@ -644,9 +652,21 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
     }
 
+    public int ALlNodesNum(){
+        return nodeVector.size();
+    }
+
     @Override
     public String toString() {
         return "Sparse Graph type";
+    }
+
+    public double getRealContrustPercentage() {
+        return realContrustPercentage;
+    }
+
+    public void setRealContrustPercentage(double realContrustPercentage) {
+        this.realContrustPercentage = realContrustPercentage;
     }
 
 }

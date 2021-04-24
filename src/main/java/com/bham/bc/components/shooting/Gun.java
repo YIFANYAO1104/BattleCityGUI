@@ -1,6 +1,8 @@
 package com.bham.bc.components.shooting;
 
+import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
 
@@ -9,7 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.audio.AudioManager.audioManager;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.utils.Timer.CLOCK;
 
 /**
@@ -68,7 +71,7 @@ public class Gun {
         double centerBulletY = CHARACTER.getPosition().getY() - bulletType.getHeight() / 2.0;
 
         // Rotate bullet's center point around character
-        Rotate rotateAroundCharacter = new Rotate(CHARACTER.getAngle(), CHARACTER.getCenterPosition().getX(), CHARACTER.getCenterPosition().getY());
+        Rotate rotateAroundCharacter = new Rotate(CHARACTER.getAngle()+angleOffset, CHARACTER.getCenterPosition().getX(), CHARACTER.getCenterPosition().getY());
         Point2D transformedCenterXY = rotateAroundCharacter.transform(centerBulletX, centerBulletY);
 
         // Define the bullet's top left coordinates
@@ -147,6 +150,7 @@ public class Gun {
         bullet.setDamage(bullet.getDamage() * damageFactor);
 
         services.addBullet(bullet);
+        audioManager.playEffect(getShotSoundEffect());
         lastTick = CLOCK.getCurrentTime();
     }
     public void shootLaser() {
@@ -167,7 +171,11 @@ public class Gun {
         if(bulletType == null || CLOCK.getCurrentTime() - lastTick < rate) return;
 
         List<Bullet> bullets = Arrays.stream(angles).mapToObj(this::spawnBullet).collect(Collectors.toList());
-        bullets.forEach(bullet -> { bullet.setDamage(bullet.getDamage() * damageFactor); services.addBullet(bullet); });
+        bullets.forEach(bullet -> {
+            bullet.setDamage(bullet.getDamage() * damageFactor);
+            services.addBullet(bullet);
+            audioManager.playEffect(getShotSoundEffect());
+        });
         lastTick = CLOCK.getCurrentTime();
     }
 
@@ -196,5 +204,16 @@ public class Gun {
      */
     public void setDamageFactor(double factor) {
         if(bulletType != null) damageFactor = factor;
+    }
+
+    /**
+     * Gets the sound effect mapped to a requested type of bullet this gun will make when spawning a bullet
+     * @return {@link SoundEffect} value which will provide audio object to play
+     */
+    public SoundEffect getShotSoundEffect() {
+        switch(bulletType) {
+            default:
+                return SoundEffect.SHOT_DEFAULT;
+        }
     }
 }

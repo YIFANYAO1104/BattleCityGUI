@@ -1,5 +1,7 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import javafx.scene.image.Image;
@@ -7,7 +9,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Arrays;
 
-import static com.bham.bc.components.CenterController.services;
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -46,7 +48,7 @@ public class Shooter extends Enemy {
      * @param x top left x coordinate of the enemy
      * @param y top left y coordinate of the enemy
      */
-    public Shooter(int x, int y) {
+    public Shooter(double x, double y) {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
@@ -145,6 +147,9 @@ public class Shooter extends Enemy {
     public void destroy() {
         entityManager.removeEntity(this);
         exists = false;
+
+        Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+        services.addTrigger(dissolve);
     }
 
     @Override

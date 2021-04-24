@@ -5,6 +5,10 @@ import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
 /**
@@ -67,13 +71,12 @@ public abstract class MovingEntity extends BaseGameEntity {
      * @param gc graphics context the image is to be drawn on
      * @param angle rotation angle
      *
-     * @see <a href="https://stackoverflow.com/questions/18260421/how-to-draw-image-rotated-on-javafx-canvas">stackoverflow.com</a>
      * @see <a href="https://docs.oracle.com/javase/8/javafx/api/javafx/scene/transform/Rotate.html">docs.oracle.com</a>
      */
     protected void drawRotatedImage(GraphicsContext gc, Image image, double angle) {
         gc.save();
         Rotate r = new Rotate(angle, x + image.getWidth() / 2, y + image.getHeight() / 2);
-        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+        gc.transform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
         gc.drawImage(image, x, y);
         gc.restore();
     }
@@ -139,6 +142,14 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
+     * Sets the maximum force value for the entity
+     * @param maxForce max force the entity can stand
+     */
+    public void setMaxForce(double maxForce) {
+        this.maxForce = maxForce;
+    }
+
+    /**
      * Sets the current velocity of the entity
      * @param velocity Point2D object representing a new velocity vector
      */
@@ -150,4 +161,23 @@ public abstract class MovingEntity extends BaseGameEntity {
      * Defines how the position of the entity is updated on each frame
      */
     public abstract void move();
+
+    // TODO: remove
+    public void renderHitBox(GraphicsContext gc) {
+        if(getHitBox() instanceof Rectangle) {
+            Rectangle hb = (Rectangle) getHitBox();
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1);
+            gc.save();
+            Rotate r = new Rotate(getAngle(), x + hb.getWidth() / 2, y + hb.getHeight() / 2);
+            gc.transform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+            gc.strokeRect(hb.getX(), hb.getY(), hb.getWidth(), hb.getHeight());
+            gc.restore();
+        } else if(getHitBox() instanceof Circle) {
+            Circle hb = (Circle) getHitBox();
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1);
+            gc.strokeArc(hb.getCenterX() - hb.getRadius(), hb.getCenterY() - hb.getRadius(), hb.getRadius()*2, hb.getRadius()*2, 0, 360, ArcType.OPEN);
+        }
+    }
 }
