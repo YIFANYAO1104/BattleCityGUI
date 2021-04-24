@@ -144,7 +144,7 @@ public class CustomStage extends Stage{
 
             }else if (typeOf.equals("TYPE 3")){
 
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#636060 0%, #1d1c1c 50%,#636060 100% );");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#524e4e 0%, #181818 50%,#524e4e 100% );");
                 lbTitle.requestFocus();
 
 
