@@ -191,7 +191,7 @@ public class Player extends GameCharacter {
 			case F: fire(); break;
 			case R: FireLaser(); break;
 			case B: bomb(); break;
-			case R: ring(); break;
+			case G: ring(); break;
 			case W: DIRECTION_SET.add(Direction.U); break;
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;

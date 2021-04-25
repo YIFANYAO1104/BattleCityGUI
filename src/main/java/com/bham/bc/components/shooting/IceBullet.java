@@ -104,9 +104,14 @@ public class IceBullet extends Bullet {
 
     @Override
     public Rectangle getHitBox() {
-        Rectangle hitBox = new Rectangle(x, y, getRadius().getX(), getRadius().getY());
-        hitBox.getTransforms().add(new Rotate(getAngle(), x + getRadius().getX()/2,y + getRadius().getY()/2));
+        Rectangle hitBox = new Rectangle(x, y, getSize().getX(), getSize().getY());
+        hitBox.getTransforms().add(new Rotate(getAngle(), x + getSize().getX()/2,y + getSize().getY()/2));
 
         return hitBox;
+    }
+
+    @Override
+    public double getHitBoxRadius() {
+        return Math.hypot(getHitBox().getWidth()/2, getHitBox().getHeight()/2);
     }
 }
