@@ -43,8 +43,8 @@ public class SurvivalController extends Controller {
         // Init players
         //double playerX = gameMap.getHomeTerritory().getCenterX() - Player.SIZE/2.0;
         //double playerY = gameMap.getHomeTerritory().getCenterY() - Player.SIZE;
-        double playerX = 16 * 81;
-        double playerY = 16 * 81;
+        double playerX = 16 * 30;
+        double playerY = 16 * 30;
         player = new Player(playerX, playerY);
         characters.add(player);
 
