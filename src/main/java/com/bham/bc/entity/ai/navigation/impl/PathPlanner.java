@@ -125,7 +125,6 @@ public class PathPlanner implements NavigationService {
      * @return true if closest nodes exist around both bot and targetPosition, otherwise false
      */
     public boolean createRequest(Point2D targetPos) {
-
         //unregister current search
         clear();
         //find closest node around bot, if no return false

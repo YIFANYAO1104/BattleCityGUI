@@ -79,6 +79,9 @@ public abstract class Enemy extends GameCharacter {
                         navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
                         break;
                     case ALLY:
+                        if(services.getClosestCenter(getCenterPosition(), ItemType.ALLY).getX()>1300){
+                            System.out.println("ALLY");
+                        }
                         navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                         break;
                 }
