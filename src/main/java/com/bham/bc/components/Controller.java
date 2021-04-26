@@ -10,6 +10,7 @@ import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.shooting.LaserGun;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
 import com.bham.bc.components.triggers.Trigger;
@@ -46,6 +47,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
     protected ArrayList<GameCharacter> characters;
 
     protected MapDivision<BaseGameEntity> mapDivision;
+    protected AlgorithmDriver driver;
 
     //temp
     protected Player player;
@@ -60,6 +62,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
+        driver = new AlgorithmDriver(1000);
         homeHp = 1000;
         score = 0;
     }
@@ -183,6 +186,11 @@ public abstract class Controller extends BaseGameEntity implements Services {
     public SparseGraph<NavNode, GraphEdge> getGraph() {
         return gameMap.getGraph();
     }
+
+    @Override
+    public AlgorithmDriver getDriver() {
+        return driver;
+    }
     // ------------------------------------------------------------
 
     // OTHER ------------------------------------------------------
@@ -204,6 +212,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
     @Override
     public void update() {
+        driver.runAlgorithm();
         mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
 

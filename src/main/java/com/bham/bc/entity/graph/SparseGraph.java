@@ -154,10 +154,14 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      * Render red point on map with its entity
      * @param e1 BaseGameEntity
      * @param gc GraphicsContext
-     * @return indedx of the node
      */
-    public int renderTankPoint(BaseGameEntity e1 , GraphicsContext gc){
+    public void renderTankPoint(BaseGameEntity e1 , GraphicsContext gc){
         NavNode n1 = getClosestNodeForEntity(e1);
+
+        if (n1==null){
+//            System.out.println("invalid position for agent");
+            return;
+        }
 
         if(n1.isValid() ){
             gc.fillRoundRect(n1.getPosition().getX(),n1.getPosition().getY(),8,8,1,1);
@@ -166,8 +170,6 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         Point2D location = e1.getPosition();
         gc.setFill(Color.BLUE);
         gc.fillRoundRect(location.getX(),location.getY(),4,4,1,1);
-
-        return n1.Index();
     }
 
     /**

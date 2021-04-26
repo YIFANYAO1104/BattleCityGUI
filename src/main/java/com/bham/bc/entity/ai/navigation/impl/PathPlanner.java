@@ -1,5 +1,6 @@
 package com.bham.bc.entity.ai.navigation.impl;
 
+import com.bham.bc.components.characters.enemies.Teaser;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.PathEdge;
@@ -88,6 +89,7 @@ public class PathPlanner implements NavigationService {
     }
 
     private void clear() {
+        services.getDriver().unRegister(this);
         curSearchTask = null;
         taskStatus = SearchStatus.no_task;
         curPath.clear();
@@ -115,6 +117,7 @@ public class PathPlanner implements NavigationService {
                 expandCondition);
         taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
+        services.getDriver().register(this);
         return true;
     }
 
@@ -142,17 +145,18 @@ public class PathPlanner implements NavigationService {
         curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget,expandCondition);
         taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
-
+        services.getDriver().register(this);
         return true;
     }
 
     @Override
     public SearchStatus peekRequestStatus() {
-        //carry on searching if not finished
-        if (taskStatus == SearchStatus.search_incomplete){
-            taskStatus = curSearchTask.cycleOnce();
-        }
         return taskStatus;
+    }
+
+    @Override
+    public boolean isComplete(){
+        return (taskStatus == SearchStatus.target_found) || (taskStatus == SearchStatus.target_not_found);
     }
 
     private Point2D getCenter(Point2D topLeft, Point2D radius){
@@ -304,11 +308,16 @@ public class PathPlanner implements NavigationService {
      * 1 if not found
      * 2 if the search is not completed;
      */
-    public int cycleOnce() {
-        //exec current search
-        //if found, notice agent by msg, also attach pointer to the target if there been a object
-        //the agent will call getpath() after received the msg
-        return 0;
+    public SearchStatus cycleOnce() {
+        //carry on searching if not finished
+//        if (owner instanceof Teaser){
+//            System.out.println(curSearchTask);
+//            System.out.println(taskStatus);
+//        }
+        if (taskStatus == SearchStatus.search_incomplete){
+            taskStatus = curSearchTask.cycleOnce();
+        }
+        return taskStatus;
     }
 
     @Override

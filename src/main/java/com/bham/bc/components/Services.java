@@ -6,6 +6,7 @@ import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
@@ -56,6 +57,8 @@ public interface Services {
      * @return SparseGraph object used for searching algorithms
      */
     SparseGraph<NavNode, GraphEdge> getGraph();
+
+    public AlgorithmDriver getDriver();
 
     /**
      * Gets all enemy areas initialized by the {@link com.bham.bc.components.environment.GameMap}

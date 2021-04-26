@@ -35,6 +35,8 @@ public interface NavigationService {
      */
     SearchStatus peekRequestStatus();
 
+    boolean isComplete();
+
     /**
      * Resets the search status to <i>no_task</i>. This is useful to not repeat the searches
      */
