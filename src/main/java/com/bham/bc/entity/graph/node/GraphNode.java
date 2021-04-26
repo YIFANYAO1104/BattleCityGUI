@@ -23,7 +23,7 @@ public class GraphNode {
         return m_index;
     }
 
-    public void SetIndex(int NewIndex) {
+    public void setIndex(int NewIndex) {
         m_index = NewIndex;
     }
 

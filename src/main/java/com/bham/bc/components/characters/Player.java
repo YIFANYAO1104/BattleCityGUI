@@ -1,5 +1,7 @@
 package com.bham.bc.components.characters;
 
+import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.shooting.*;
 import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
@@ -8,6 +10,7 @@ import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
+import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.view.GameSession;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -34,7 +37,7 @@ public class Player extends GameCharacter {
 	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
 	public static final String IMAGE_PATH2 ="file:src/main/resources/img/characters/state1.png";
 	public static final int SIZE = 25;
-	public static final double HP = 100;
+	public static  double HP = 100;
 	public static final double SPEED = 5;
 
 	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
@@ -48,6 +51,16 @@ public class Player extends GameCharacter {
 	private NavigationService navigationService;
 
 	/**
+	 * Used For testing
+	 */
+	public void  testDIRECTION_SET(){
+		this.DIRECTION_SET.add(Direction.L);
+	}
+	public void testDIRECTION_SET1(){
+		this.DIRECTION_SET.clear();
+	}
+
+	/**
 	 * Constructs a player instance with directionSet initialized to empty
 	 *
 	 * @param x top left x coordinate of the player
@@ -57,13 +70,13 @@ public class Player extends GameCharacter {
 		super(x, y, SPEED, HP, Side.ALLY);
 		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
-		GUN = new Gun(this, BulletType.DEFAULT);
+		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
 		inverseKeys = false;
 
 		navigationService = new PathPlanner(this, services.getGraph());
 		steering.setKeysOn(true);
 	}
-	
+
 	/**
 	 * Assign activation time of Triple Bullet trigger
 	 * @param numTicks activation time in ticks
@@ -71,7 +84,7 @@ public class Player extends GameCharacter {
     public void toTriple(int numTicks) {
         tripleTicks = numTicks;
     }
-    
+
     /**
 	 * Assign activation time of Freeze trigger
 	 * @param numTicks activation time in ticks
@@ -79,7 +92,7 @@ public class Player extends GameCharacter {
     public void toFreeze(int numTicks) {
         freezeTicks = numTicks;
     }
-    
+
     /**
 	 * Assign activation time of Immune trigger
 	 * @param numTicks activation time in ticks
@@ -87,7 +100,7 @@ public class Player extends GameCharacter {
     public void toImmune(int numTicks) {
         immuneTicks = numTicks;
     }
-    
+
     /**
 	 * Update trigger(s) activation time
 	 */
@@ -142,6 +155,15 @@ public class Player extends GameCharacter {
 			velocity = p.normalize().multiply(velocity.magnitude());
 		});
 	}
+	public void gunChange(BulletType bullet){
+		this.GUN.setBulletType(bullet);
+	}
+	public void laserChange(LaserType laser){
+		this.GUN.setLaserType(laser);
+	}
+	public Gun testGun(){
+		return this.GUN;
+	}
 
 	/**
 	 * Shoots a default bullet (or multiple)
@@ -152,6 +174,9 @@ public class Player extends GameCharacter {
 	private void fire() {
 		if(tripleTicks == 0) GUN.shoot();
 		else GUN.shoot(-45, 0, 45);
+	}
+	private  void FireLaser(){
+		GUN.shootLaser();
 	}
 
 	/**
@@ -166,8 +191,9 @@ public class Player extends GameCharacter {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getCode()){
 			case F: fire(); break;
+			case R: FireLaser(); break;
 			case B: bomb(); break;
-			case R: ring(); break;
+			case G: ring(); break;
 			case W: DIRECTION_SET.add(Direction.U); break;
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
@@ -209,6 +235,10 @@ public class Player extends GameCharacter {
 
 		x += velocity.getX();
 		y += velocity.getY();
+
+		Point2D pos = GeometryEnhanced.bound(new Point2D(x,y),getSize(), GameMap.getWidth(),GameMap.getHeight());
+		x = pos.getX();
+		y = pos.getY();
 	}
 
 	@Override

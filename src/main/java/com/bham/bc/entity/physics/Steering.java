@@ -62,7 +62,7 @@ public class Steering {
         double MagnitudeRemaining = agent.getMaxForce() - MagnitudeSoFar;
         
         //return false if there is no more force left to use
-        if (MagnitudeRemaining <= 1E-8) {
+        if (MagnitudeRemaining <= 1E-16) {
             return new Point2D(0,0);
         }
 

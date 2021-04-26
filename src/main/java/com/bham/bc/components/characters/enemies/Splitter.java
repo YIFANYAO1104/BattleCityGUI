@@ -79,8 +79,15 @@ public class Splitter extends Enemy {
 
     @Override
     public void update() {
+        if(freezeTicks!=0){
+            System.out.println("\n -----------"+ freezeTicks);
+            freezeTicks--;
+            return;
+        }
+
         double distanceToHome = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
         nearToHomeCondition.setTestValue((int) distanceToHome);
+
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
@@ -102,7 +109,7 @@ public class Splitter extends Enemy {
                     break;
             }
         });
-        move();
+       move();
     }
 
     @Override

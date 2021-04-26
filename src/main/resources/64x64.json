@@ -241,13 +241,13 @@
                                 {
                                  "name":"speed",
                                  "type":"int",
-                                 "value":3
+                                 "value":30
                                 }],
                          "rotation":0,
                          "type":"",
                          "visible":true,
                          "width":16,
-                         "x":672,
+                         "x":612,
                          "y":688
                         }, 
                         {
