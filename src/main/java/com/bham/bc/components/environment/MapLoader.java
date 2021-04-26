@@ -179,8 +179,8 @@ public class MapLoader {
                 try{
                     obstacleInstances.add((Obstacle) constructor.newInstance(x, y, attributes, tileset, tileIDs));
                 }catch (Exception e){
-                    System.out.println("Invalid tile under "+tileset+"folder");
-                    System.out.println("tileID is "+obstacleArray.getInt(i));
+                    System.out.println("Invalid tile under " + tileset + " folder");
+                    System.out.println("tileID is " + obstacleArray.getInt(i));
                 }
 
             }

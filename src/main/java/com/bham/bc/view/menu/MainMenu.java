@@ -66,7 +66,7 @@ public class MainMenu extends AnchorPane {
         MenuButton btnQuit = new MenuButton("QUIT");
 
 
-        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.Map1); btnStart.fireEvent(NEW_GAME_EVENT); });
+        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.MAP2); btnStart.fireEvent(NEW_GAME_EVENT); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
