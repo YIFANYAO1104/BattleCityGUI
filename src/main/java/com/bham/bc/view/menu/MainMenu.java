@@ -49,9 +49,9 @@ public class MainMenu extends AnchorPane {
      * Adds background dim to the menu
      */
     private void initBgDim() {
-        Rectangle dim = new Rectangle(getWidth(), getHeight());
+        Rectangle dim = new Rectangle(getMinWidth(), getMinHeight());
         dim.setFill(Color.NAVY);
-        dim.setOpacity(0.4);
+        dim.setOpacity(0.25);
         getChildren().add(dim);
     }
 
@@ -99,13 +99,13 @@ public class MainMenu extends AnchorPane {
         tableView.setPlaceholder(new Label(""));
 
         // Add 5 columns to the table
-        Arrays.stream(new String[]{"Rank", "Name", "Score", "Date"}).forEach(columnName -> {
+        Arrays.stream(new String[]{ "Rank", "Name", "Score", "Date" }).forEach(columnName -> {
             TableColumn<RecordsHandler.Records, String> column = new TableColumn<>(columnName);
             column.setCellValueFactory(new PropertyValueFactory<>(columnName.toLowerCase()));
             tableView.getColumns().add(column);
         });
 
-//         Initialize the current records and listen for new ones
+        // Initialize the current records and listen for new ones
         tableView.setItems(RecordsHandler.initTable());
         addEventFilter(GameFlowEvent.LEAVE_GAME, e -> {
             if(e.getScore() >= 0) {

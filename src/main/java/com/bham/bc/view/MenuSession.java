@@ -15,7 +15,7 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  *
  * <p>This class manages all the menus. Not only it sets up a stage for the main menu, it also is
  * responsible for bringing up pause menu and end screen during the gameplay. Therefore, it has a
- * strong communication with {@link com.bham.bc.view.GameSession}</p>
+ * strong communication with {@link com.bham.bc.view.GameSession}.</p>
  */
 public class MenuSession {
 
