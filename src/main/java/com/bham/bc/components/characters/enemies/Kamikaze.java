@@ -85,6 +85,12 @@ public class Kamikaze extends Enemy {
 
     @Override
     public void update() {
+
+        if(freezeTicks!=0){
+            System.out.println("\n -----------"+ freezeTicks);
+            freezeTicks--;
+            return;
+        }
         double distanceToAlly = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         attackAllyCondition.setTestValue((int) distanceToAlly);

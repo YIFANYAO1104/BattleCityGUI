@@ -42,6 +42,11 @@ public class DefaultBullet extends Bullet {
 	}
 
 	@Override
+	public void setTime() {
+
+	}
+
+	@Override
 	public void move() {
 		x += velocity.getX();
 		y += velocity.getY();

@@ -1,6 +1,8 @@
 package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.shooting.BulletType;
+import com.bham.bc.components.shooting.LaserType;
 import com.bham.bc.components.triggers.RespawnTrigger;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.scene.image.Image;
@@ -23,6 +25,8 @@ public class StateTrigger extends RespawnTrigger {
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
             ((Player) entity).toState1();
+            ((Player) entity).gunChange(BulletType.IceBullet);
+            ((Player) entity).laserChange(LaserType.ThunderLaser);
             deactivate();
         }
     }

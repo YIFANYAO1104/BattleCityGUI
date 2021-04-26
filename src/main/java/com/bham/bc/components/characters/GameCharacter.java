@@ -23,9 +23,10 @@ import static com.bham.bc.components.Controller.services;
 abstract public class GameCharacter extends MovingEntity {
     public static final int MAX_SIZE = 32;
 
-    private final double MAX_HP;
+    private  double MAX_HP;
     protected double hp;
     protected Side side;
+
 
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
 
@@ -82,7 +83,7 @@ abstract public class GameCharacter extends MovingEntity {
             destroy();
         }
     }
-    
+
     /**
      * Get immune activation time
      * @return immune activation time (if it's 0 meaning character is not in immune state)
@@ -90,15 +91,32 @@ abstract public class GameCharacter extends MovingEntity {
     public int getImmuneTicks() {
         return immuneTicks;
     }
+    public void speedUp(double x){
+        this.maxSpeed=x;
+    }
 
     // TEMP: DOCUMENT ------------------------------------------------
     @Deprecated
     public void switchWeapon(Weapon w) {}
 
+    public void toTriple(int numTicks) {
+        tripleTicks = numTicks;
+    }
+    public void toFreeze(int numTicks) {
+        this.freezeTicks = numTicks;
+    }
+    public void toImmune(int numTicks) {
+        immuneTicks = numTicks;
+    }
+    protected void updateTriggers() {
+        if(immuneTicks!=0) --immuneTicks;
+        if(freezeTicks!=0) --freezeTicks;
+        if(tripleTicks!=0) --tripleTicks;
+    }
     public void destroyed(){
         this.hp-=200;
     }
-    
+
     public void teleport(double x,double y){
         this.x = x;
         this.y = y;
@@ -151,6 +169,20 @@ abstract public class GameCharacter extends MovingEntity {
      * Unregisters and prepares to remove the character. Also runs any destruction effects
      */
     protected abstract void destroy();
+    public void armorUP(double max){
+        this.MAX_HP =max;
+        this.hp = max;
+        System.out.println("The max HP of character has been changed to " + hp);
+    }
+
+    /**
+     * Gets radius of a circular hit-box
+     * @return radius of a character's hit-box
+     */
+    @Override
+    public double getHitBoxRadius() {
+        return getHitBox().getRadius();
+    }
 
     /**
      * TODO: remove?
@@ -167,10 +199,7 @@ abstract public class GameCharacter extends MovingEntity {
     @Override
     public abstract Circle getHitBox();
 
-    @Override
-    public double getHitBoxRadius() {
-        return getHitBox().getRadius();
-    }
+
 
     @Override
     public boolean handleMessage(Telegram msg) {

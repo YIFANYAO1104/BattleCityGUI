@@ -7,12 +7,32 @@ import javafx.scene.image.Image;
  */
 public enum BulletType {
     DEFAULT(200, 6, 12, "file:src/main/resources/img/shooting/defaultBullet.png"),
-    EXPLOSIVE(2000, 6, 12, "file:src/main/resources/img/shooting/defaultBullet.png");
+    EXPLOSIVE(2000, 6, 12, "file:src/main/resources/img/shooting/defaultBullet.png"),
+    IceBullet(2000, 6, 12, "file:src/main/resources/img/shooting/2.png"),
+    DefaultLaser(200,20,10,
+        new Image[]{
+                (new Image("file:src/main/resources/img/shooting/l0.png")),
+                (new Image("file:src/main/resources/img/shooting/l1.png")),
+                (new Image("file:src/main/resources/img/shooting/l2.png")),
+                (new Image("file:src/main/resources/img/shooting/l3.png")),
+                (new Image("file:src/main/resources/img/shooting/l4.png")),
+                (new Image("file:src/main/resources/img/shooting/l5.png")),
+                (new Image("file:src/main/resources/img/shooting/l6.png")),
+                (new Image("file:src/main/resources/img/shooting/l7.png")),
+                (new Image("file:src/main/resources/img/shooting/l6.png")),
+                (new Image("file:src/main/resources/img/shooting/l5.png")),
+                (new Image("file:src/main/resources/img/shooting/l4.png")),
+                (new Image("file:src/main/resources/img/shooting/l3.png")),
+                (new Image("file:src/main/resources/img/shooting/l2.png")),
+                (new Image("file:src/main/resources/img/shooting/l2.png")),
+                (new Image("file:src/main/resources/img/shooting/l0.png")),}
+            );
 
     private long minRate;
     private int width;
     private int height;
     private Image image;
+    private  Image[] images;
 
     /**
      * <p>Constructs a specific bullet with the provided image. The width and height properties will be used to render
@@ -28,8 +48,13 @@ public enum BulletType {
         this.minRate = minRate;
         this.width = width;
         this.height = height;
-
         image = new Image(imagePath, width, height, false, false);
+    }
+    BulletType(long minRate, int width, int height, Image[] images) {
+        this.minRate = minRate;
+        this.width = width;
+        this.height = height;
+        images = images;
     }
 
     /**
@@ -62,5 +87,9 @@ public enum BulletType {
      */
     public Image getImage() {
         return image;
+    }
+
+    public Image[] getImages(){
+        return images;
     }
 }
