@@ -86,6 +86,8 @@ public interface Services {
      */
     Point2D getClosestCenter(Point2D position, ItemType item);
 
+    GameCharacter getClosestALLY(Point2D position);
+
     /**
      * Gets a random position of a free area requested around some center point
      *

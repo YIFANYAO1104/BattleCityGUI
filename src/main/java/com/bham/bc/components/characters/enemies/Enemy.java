@@ -69,38 +69,41 @@ public abstract class Enemy extends GameCharacter {
     protected void navigate(ItemType itemType) {
         // If we don't have any points to follow, we need to navigate (it may return 0 edges if it's close)
         // Otherwise, if we have points to follow, we still need to update the search if the target is dynamic
-        if(nextSearch==true) {
-            if (navigationService.peekRequestStatus() != SearchStatus.search_incomplete) {
-                switch (itemType) {
-                    case HEALTH:
-                        navigationService.createRequest(ItemType.HEALTH);
-                        break;
-                    case HOME:
-                        navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
-                        break;
-                    case ENEMY_AREA:
-                        navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
-                        break;
-                    case ALLY:
-                        navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
-                        break;
-                }
-                nextSearch=false;
-                destination = new Point2D(0, 0);
-            }
-        } else if(itemType == ItemType.ALLY && (--timeTillSearch <= 0)) {
-            navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+        if(itemType == ItemType.ALLY && (--timeTillSearch <= 0)) {
+            destination = new Point2D(0, 0);
+            pathEdges.clear();
+            nextSearch=true;
             timeTillSearch = 20;
         }
+        if(nextSearch==true) {
+//            if (this instanceof Teaser)System.out.println("nextSearch==true");
+            switch (itemType) {
+                case HEALTH:
+                    navigationService.createRequest(ItemType.HEALTH);
+                    break;
+                case HOME:
+                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
+                    break;
+                case ENEMY_AREA:
+                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
+                    break;
+                case ALLY:
+                    navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
+                    break;
+            }
+            nextSearch=false;
+        }
+
 
         //-----test
-         if(this instanceof Teaser && itemType == ItemType.ALLY && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
+//         if(itemType == ItemType.ALLY && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
         //---------
 
         // Due to checks on each frame of whether the search is complete or not we always need get the list of points if it is empty
-        // If the search status is completed, we fill our list with points to follow (if it is empty or we need to update the search for dynamic target)
-        if((pathEdges.isEmpty() || (itemType == ItemType.ALLY && timeTillSearch <= 0)) &&
-                navigationService.peekRequestStatus() == SearchStatus.target_found) {
+        // If the search status is completed, we fill our lists with points to follow (if it is empty or we need to update the search for dynamic target)
+//        if (this instanceof Teaser)System.out.println(pathEdges.isEmpty());
+//        if (this instanceof Teaser)System.out.println(navigationService.peekRequestStatus());
+        if(pathEdges.isEmpty()  && navigationService.peekRequestStatus() == SearchStatus.target_found) {
             pathEdges = navigationService.getPath();
 
             // If the target is very close we might have no path edges to follow
@@ -108,8 +111,8 @@ public abstract class Enemy extends GameCharacter {
             destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.getFirst().getDestination();
             steering.setTarget(destination);
 
-            timeTillSearch = 20;
-            navigationService.resetTaskStatus();
+//            timeTillSearch = 20;
+//            navigationService.resetTaskStatus();
         }
     }
 
@@ -123,11 +126,13 @@ public abstract class Enemy extends GameCharacter {
         // Checks if the enemy intersects the point in the list of path edges and gets the next target point if so
         if(intersects(new Circle(destination.getX(), destination.getY(), 3))) {
             if(!pathEdges.isEmpty()) {
+//                if (this instanceof Teaser)System.out.println("getting next target");
                 PathEdge nextEdge = pathEdges.removeFirst();
                 edgeBehavior = nextEdge.getBehavior();
                 destination = nextEdge.getDestination();
                 steering.setTarget(destination);
             } else {
+//                if (this instanceof Teaser)System.out.println("pathEdges.isEmpty()");
                 nextSearch = true;
             }
         }

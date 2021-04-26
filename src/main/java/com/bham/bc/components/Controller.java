@@ -139,6 +139,24 @@ public abstract class Controller extends BaseGameEntity implements Services {
         return closestPoints.min(Comparator.comparing(point -> point.distance(position))).orElse(position);
     }
 
+    @Override
+    public GameCharacter getClosestALLY(Point2D position){
+        GameCharacter gc = null;
+        double min = Double.MAX_VALUE;
+
+        for (GameCharacter character : characters) {
+            if (character.getSide() == Side.ALLY && character.getCenterPosition().distance(position)<min){
+                gc = character;
+            }
+        }
+        if (gc == null){
+            System.out.println("no ally!!!!!!!!!!!!");
+            System.out.println("no ally!!!!!!!!!!!!");
+            System.out.println("no ally!!!!!!!!!!!!");
+        }
+        return gc;
+    }
+
     public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
         return null;
     }

@@ -1,5 +1,6 @@
 package com.bham.bc.entity.ai.navigation;
 
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -28,6 +29,8 @@ public interface NavigationService {
      * @return true if closest nodes exist around both bot and targetPosition, otherwise false
      */
     boolean createRequest(Point2D targetPos);
+
+    boolean createRequest(GameCharacter entity);
 
     /**
      * called by an agent after a request was created

@@ -178,10 +178,9 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      * @return Navnode give the closet node to it's coordinates
      */
     public NavNode getClosestNodeForEntity(BaseGameEntity entity){
-        Point2D location = entity.getPosition();
-        Point2D radius = entity.getSize();
-        int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
-        int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
+        Point2D location = entity.getCenterPosition();
+        int i = (int) (location.getX() /eachDisY);   // 16.0 means the value of tanks 1/2 width and height
+        int j = (int) (location.getY() / eachDisX);
         int c = j*rowNums + i;
         if(c<0 || c>= nodeVector.size()) c=0;
         NavNode n1 = (NavNode)this.nodeVector.get(c);
@@ -214,6 +213,20 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     public NavNode getClosestNodeByPosition(Point2D location,Point2D radius){
         int i = (int) (location.getX() + radius.getX()/2) /eachDisY;   // 16.0 means the value of tanks 1/2 width and height
         int j = (int) (location.getY() + radius.getY()/2) / eachDisX;
+        int c = j*rowNums + i;
+        NavNode n1 = (NavNode)this.nodeVector.get(c);
+        return n1;
+    }
+
+    /**
+     * Get coorespondant coordinates for that Point2D location.
+     * In order to make sure get close with the center of that entity, it needs radius of entity
+     * @param location coordinates
+     * @return NavNode
+     */
+    public NavNode getClosestNodeByCenterPosition(Point2D location){
+        int i = (int) (location.getX() /eachDisY);   // 16.0 means the value of tanks 1/2 width and height
+        int j = (int) (location.getY() / eachDisX);
         int c = j*rowNums + i;
         NavNode n1 = (NavNode)this.nodeVector.get(c);
         return n1;

@@ -1,5 +1,6 @@
 package com.bham.bc.entity.ai.navigation.impl;
 
+import com.bham.bc.components.characters.enemies.Tank;
 import com.bham.bc.components.characters.enemies.Teaser;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
@@ -71,17 +72,20 @@ public class PathPlanner implements NavigationService {
     /**
      * @return node index. -1 if no closest node found
      */
-    private int getClosestNode(BaseGameEntity entity){
+    private int getClosestNode(GameCharacter entity){
         NavNode n1 = navGraph.getClosestNodeForEntity(entity);
-        if (n1==null) return no_closest_node_found;
+        if (n1==null) {
+            System.out.println("null node for entity");
+            return no_closest_node_found;
+        }
         if(n1.isValid()){
             return n1.Index();
         }
         return no_closest_node_found;
     }
 
-    private int getClosestNode(Point2D location,Point2D radius){
-        NavNode n1 = navGraph.getClosestNodeByPosition(location,radius);
+    private int getClosestNode(Point2D location){
+        NavNode n1 = navGraph.getClosestNodeByCenterPosition(location);
         if(n1.isValid()){
             return n1.Index();
         }
@@ -133,15 +137,42 @@ public class PathPlanner implements NavigationService {
         //find closest node around bot, if no return false
         int closestNodeToPlayer = getClosestNode(owner);
         if (closestNodeToPlayer == no_closest_node_found){
+            System.out.println("no_closest_node_found bot");
             return false;
         }
         //find closest node around target, if no return false
-        int closestNodeToTarget = getClosestNode(targetPos,owner.getSize());
+        int closestNodeToTarget = getClosestNode(targetPos);
         if (closestNodeToTarget == no_closest_node_found){
+            System.out.println(targetPos);
+            System.out.println("no_closest_node_found target");
             return false;
         }
         //create algorithm instance
         destinationPos = new Point2D(targetPos.getX(),targetPos.getY());
+        curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget,expandCondition);
+        taskStatus = SearchStatus.search_incomplete;
+        //register task in time slice service
+        services.getDriver().register(this);
+        return true;
+    }
+
+    public boolean createRequest(GameCharacter gc) {
+        //unregister current search
+        clear();
+        //find closest node around bot, if no return false
+        int closestNodeToPlayer = getClosestNode(owner);
+        if (closestNodeToPlayer == no_closest_node_found){
+            System.out.println("no_closest_node_found bot");
+            return false;
+        }
+        //find closest node around target, if no return false
+        int closestNodeToTarget = getClosestNode(gc);
+        if (closestNodeToTarget == no_closest_node_found){
+            System.out.println("no_closest_node_found target");
+            return false;
+        }
+        //create algorithm instance
+        destinationPos = gc.getCenterPosition();
         curSearchTask = new TimeSlicedAStar(navGraph, closestNodeToPlayer, closestNodeToTarget,expandCondition);
         taskStatus = SearchStatus.search_incomplete;
         //register task in time slice service
@@ -173,7 +204,7 @@ public class PathPlanner implements NavigationService {
         //add start and end node
 
         curPath.add(0,
-                new PathEdge(getCenter(owner.getPosition(),owner.getSize()), navGraph.getNode(closest).getPosition())
+                new PathEdge(owner.getCenterPosition(), navGraph.getNode(closest).getPosition())
         );
 
         //        PathEdge lastEdge = path.get(path.size()-1);
