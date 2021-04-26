@@ -2,6 +2,7 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.enemies.EnemyType;
+import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
@@ -58,7 +59,9 @@ public interface Services {
      */
     SparseGraph<NavNode, GraphEdge> getGraph();
 
-    public AlgorithmDriver getDriver();
+    AlgorithmDriver getDriver();
+
+    GameMap getMap();
 
     /**
      * Gets all enemy areas initialized by the {@link com.bham.bc.components.environment.GameMap}

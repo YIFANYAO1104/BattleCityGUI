@@ -62,7 +62,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
-        driver = new AlgorithmDriver(1000);
+        driver = new AlgorithmDriver(500);
         homeHp = 1000;
         score = 0;
     }
@@ -208,6 +208,11 @@ public abstract class Controller extends BaseGameEntity implements Services {
     @Override
     public AlgorithmDriver getDriver() {
         return driver;
+    }
+
+    @Override
+    public GameMap getMap(){
+        return gameMap;
     }
     // ------------------------------------------------------------
 

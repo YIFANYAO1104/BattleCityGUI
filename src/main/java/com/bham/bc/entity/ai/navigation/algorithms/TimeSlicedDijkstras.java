@@ -64,7 +64,8 @@ public class TimeSlicedDijkstras extends TimeSlicedAlgorithm {
 
     @Override
     public SearchStatus cycleOnce() {
-        while (!pq.isEmpty()){
+        if (pq.isEmpty()) return SearchStatus.target_not_found;
+        if (!pq.isEmpty()){
             MyPairs pair = pq.poll();
             double dist = pair.getValue();
             int node = pair.getKey();
@@ -92,7 +93,7 @@ public class TimeSlicedDijkstras extends TimeSlicedAlgorithm {
                 }
             }
         }
-        return SearchStatus.target_not_found;
+        return SearchStatus.search_incomplete;
     }
 
     public double getDistance(int target) {

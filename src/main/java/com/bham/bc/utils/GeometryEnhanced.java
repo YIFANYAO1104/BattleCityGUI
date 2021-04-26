@@ -124,6 +124,26 @@ public class GeometryEnhanced {
         return randomPointInCircle(new Point2D(circle.getCenterX(), circle.getCenterY()), circle.getRadius());
     }
 
+    public static Point2D bound(Point2D pos,Point2D size, int spaceWidth, int spaceHeight) {
+        double x = pos.getX();
+        double y = pos.getY();
+        if (x+size.getX() > spaceWidth) {
+            x = spaceWidth-size.getX();
+        }
+
+        if (x < 0) {
+            x = 0;
+        }
+
+        if (y < 0) {
+            y = 0;
+        }
+
+        if (y+size.getY() > spaceHeight) {
+            y = spaceHeight-size.getY();
+        }
+        return new Point2D(x,y);
+    }
 
 
     //rotate a point around center point, anti-clockwise angle, 31ms in test
