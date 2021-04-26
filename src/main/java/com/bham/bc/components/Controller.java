@@ -10,6 +10,7 @@ import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.shooting.LaserGun;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
 import com.bham.bc.components.triggers.Trigger;
@@ -46,6 +47,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
     protected ArrayList<GameCharacter> characters;
 
     protected MapDivision<BaseGameEntity> mapDivision;
+    protected AlgorithmDriver driver;
 
     //temp
     protected Player player;
@@ -60,6 +62,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
+        driver = new AlgorithmDriver(500);
         homeHp = 1000;
         score = 0;
     }
@@ -136,6 +139,24 @@ public abstract class Controller extends BaseGameEntity implements Services {
         return closestPoints.min(Comparator.comparing(point -> point.distance(position))).orElse(position);
     }
 
+    @Override
+    public GameCharacter getClosestALLY(Point2D position){
+        GameCharacter gc = null;
+        double min = Double.MAX_VALUE;
+
+        for (GameCharacter character : characters) {
+            if (character.getSide() == Side.ALLY && character.getCenterPosition().distance(position)<min){
+                gc = character;
+            }
+        }
+        if (gc == null){
+            System.out.println("no ally!!!!!!!!!!!!");
+            System.out.println("no ally!!!!!!!!!!!!");
+            System.out.println("no ally!!!!!!!!!!!!");
+        }
+        return gc;
+    }
+
     public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
         return null;
     }
@@ -183,6 +204,16 @@ public abstract class Controller extends BaseGameEntity implements Services {
     public SparseGraph<NavNode, GraphEdge> getGraph() {
         return gameMap.getGraph();
     }
+
+    @Override
+    public AlgorithmDriver getDriver() {
+        return driver;
+    }
+
+    @Override
+    public GameMap getMap(){
+        return gameMap;
+    }
     // ------------------------------------------------------------
 
     // OTHER ------------------------------------------------------
@@ -204,6 +235,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
     @Override
     public void update() {
+        driver.runAlgorithm();
         mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
 
@@ -243,8 +275,8 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         gameMap.renderTopLayer(gc);
 
-//        gameMap.renderGraph(gc, new ArrayList<>(characters));
-//        mapDivision.render(gc);
+        gameMap.renderGraph(gc, new ArrayList<>(characters));
+        mapDivision.render(gc);
 //        System.out.println(mapDivision.sizeOfCells());
         gameMap.renderTerritories(gc);
     }

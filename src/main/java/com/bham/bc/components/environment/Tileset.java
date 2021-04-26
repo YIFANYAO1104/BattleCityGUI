@@ -12,7 +12,15 @@ public enum Tileset {
     ASHLANDS("file:src/main/resources/img/tilesets/ashlands.png", 16,16),
     ATLANTIS("file:src/main/resources/img/tilesets/atlantis.png", 16,16),
     BASIC("file:src/main/resources/img/tilesets/basic.png", 16,16),
-    ZWATER("file:src/main/resources/img/tilesets/Zwater1(80x32).png", 80,32);
+    ZWATER("file:src/main/resources/img/tilesets/Zwater1(80x32).png", 80,32),
+    GREEN_IRON("file:src/main/resources/img/tilesets/greenIron.png", 16,16),
+    BRICKS2("file:src/main/resources/img/tilesets/bricks2.png", 16,16),
+    MOCKUP("file:src/main/resources/img/tilesets/mockup.png", 16,16),
+    OLDTILESET("file:src/main/resources/img/tilesets/oldTileset.png", 16,16),
+    FLOOR("file:src/main/resources/img/tilesets/floor.png", 16,16),
+    ROCKS("file:src/main/resources/img/tilesets/rocks.png", 16,16),
+    PIMPLES("file:src/main/resources/img/tilesets/pimples.png",16,16);
+
 
     private final Image[] TILES;
     private final int OFFSET_Y;
