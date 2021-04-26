@@ -1,9 +1,10 @@
 package com.bham.bc.entity.ai.director;
 
 import com.bham.bc.entity.ai.behavior.*;
-import static com.bham.bc.utils.Timer.CLOCK;
 
 import java.util.Arrays;
+
+import static com.bham.bc.utils.Timer.CLOCK;
 
 public class Director {
 
