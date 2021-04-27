@@ -45,12 +45,30 @@ public class CustomStage extends Stage{
     private   HBox gpTitle;
     public static String[] types;
     private HBox hBox;
-    public  ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
-            "Classic Blue","Classic Green","Classic Black","Classic Orange"
-    ));;
-    public  ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
-            "Classic Blue","Classic Green","Classic Black","Classic Orange"
-    ));;
+    public  ChoiceBox changeMainSkin;
+
+
+    {
+        changeMainSkin = new ChoiceBox(FXCollections.observableArrayList(
+                "Classic Blue", "Classic Green", "Classic Black", "Classic Orange"
+        ));
+
+        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+    }
+
+
+    public  ChoiceBox changePauseSkin;
+
+    {
+        changePauseSkin = new ChoiceBox(FXCollections.observableArrayList(
+                "Classic Blue", "Classic Green", "Classic Black", "Classic Orange"
+        ));
+
+
+        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+    }
+
+
     private Label btnMin;
     private Label btnClose;
     public static int selected=0;
