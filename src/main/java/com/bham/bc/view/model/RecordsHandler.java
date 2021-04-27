@@ -117,7 +117,7 @@ public class RecordsHandler {
         //read from Json file
         parseJsonFile("src/main/resources/scores.json");
         ObservableList<Records> data = FXCollections.observableArrayList(records);
-        //System.out.println("data len="+data.size());
+
 
         return data;
     }
