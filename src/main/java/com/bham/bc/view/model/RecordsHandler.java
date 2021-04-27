@@ -127,7 +127,7 @@ public class RecordsHandler {
      */
     public static class Tool {
         /**
-         * wether is Tab
+         * whether is Tab
          */
         private boolean isTab = true;
         public String stringToJSON(String strJson) {
