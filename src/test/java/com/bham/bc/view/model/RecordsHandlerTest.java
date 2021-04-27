@@ -1,11 +1,14 @@
 package com.bham.bc.view.model;
 
 import junit.framework.TestCase;
+import junitparams.JUnitParamsRunner;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-
+@RunWith(JUnitParamsRunner.class)
 public class RecordsHandlerTest extends TestCase {
     private RecordsHandler recordsHandler;
+
 
     public void createSampleRecords(RecordsHandler recordsHandler) {
 
