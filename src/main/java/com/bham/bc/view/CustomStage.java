@@ -46,6 +46,9 @@ public class CustomStage extends Stage{
 
     private double MIN_WIDTH = 800.00;
     private double MIN_HEIGHT = 600.00;
+    /**
+     * offset of x and y
+     */
     private double xOffset = 0, yOffset = 0;
     /**
      * the type of skin color

@@ -32,9 +32,18 @@ public class PauseMenu extends AnchorPane {
      * use custom subMenu {@link SubMenu}
      */
     public SubMenu subMenuSettings;
+    /**
+     * background dim to the menu
+     */
     public Rectangle dim;
 
+    /**
+     * create pause_game_event
+     */
     private final GameFlowEvent PAUSE_GAME_EVENT;
+    /**
+     * create leave_game_event
+     */
     private final GameFlowEvent LEAVE_GAME_EVENT;
 
 
