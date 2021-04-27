@@ -37,7 +37,7 @@ public class Player extends GameCharacter {
 	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
 	public static final String IMAGE_PATH2 ="file:src/main/resources/img/characters/state1.png";
 	public static final int SIZE = 25;
-	public static  double HP = 100;
+	public static double HP = 100;
 	public static final double SPEED = 5;
 
 	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);

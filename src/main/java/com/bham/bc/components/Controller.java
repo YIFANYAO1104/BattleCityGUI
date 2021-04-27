@@ -9,6 +9,7 @@ import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.shooting.LaserGun;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.Constants;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.edge.GraphEdge;
@@ -63,7 +64,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
         driver = new AlgorithmDriver(500);
-        homeHp = 1000;
+        homeHp = Constants.MAX_HOME_HP;
         score = 0;
     }
 
@@ -98,12 +99,12 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
     @Override
     public double getHomeHpFraction() {
-        return Math.max(0, homeHp/1000);
+        return Math.max(0, homeHp/Constants.MAX_HOME_HP);
     }
 
     public void occupyHome(Enemy enemy) {
         if(enemy.intersects(gameMap.getHomeTerritory())) {
-            homeHp -= 1;
+            homeHp -= Constants.MAX_HOME_DAMAGE;
         }
     }
 
