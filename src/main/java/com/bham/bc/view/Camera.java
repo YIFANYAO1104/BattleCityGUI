@@ -8,6 +8,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Translate;
 
+/**
+ * <h1>Camera</h1>
+ */
 public class Camera {
     private final Translate translate;
 

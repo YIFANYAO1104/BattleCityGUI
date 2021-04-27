@@ -34,6 +34,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
+ * <h1>GameSession</h1>
+ *
  * Class managing the animations of a running game
  */
 public class GameSession {
