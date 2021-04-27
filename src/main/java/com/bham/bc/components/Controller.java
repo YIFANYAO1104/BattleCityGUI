@@ -30,6 +30,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -139,22 +140,32 @@ public abstract class Controller extends BaseGameEntity implements Services {
         return closestPoints.min(Comparator.comparing(point -> point.distance(position))).orElse(position);
     }
 
-    @Override
-    public GameCharacter getClosestALLY(Point2D position){
-        GameCharacter gc = null;
-        double min = Double.MAX_VALUE;
+//    @Override
+//    public GameCharacter getClosestALLY(Point2D position){
+//        GameCharacter gc = null;
+//        double min = Double.MAX_VALUE;
+//
+//        for (GameCharacter character : characters) {
+//            if (character.getSide() == Side.ALLY && character.getCenterPosition().distance(position)<min){
+//                gc = character;
+//            }
+//        }
+//        if (gc == null){
+//            System.out.println("no ally!!!!!!!!!!!!");
+//            System.out.println("no ally!!!!!!!!!!!!");
+//            System.out.println("no ally!!!!!!!!!!!!");
+//        }
+//        return gc;
+//    }
 
-        for (GameCharacter character : characters) {
-            if (character.getSide() == Side.ALLY && character.getCenterPosition().distance(position)<min){
-                gc = character;
-            }
-        }
-        if (gc == null){
-            System.out.println("no ally!!!!!!!!!!!!");
-            System.out.println("no ally!!!!!!!!!!!!");
-            System.out.println("no ally!!!!!!!!!!!!");
-        }
-        return gc;
+    @Override
+    public int getCharacterCount(Side side) {
+        return (int) characters.stream().filter(c -> c.getSide() == side).count();
+    }
+
+    @Override
+    public ArrayList<GameCharacter> getCharacters(Side side) {
+        return characters.stream().filter(c -> c.getSide() == side).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
@@ -210,10 +221,10 @@ public abstract class Controller extends BaseGameEntity implements Services {
         return driver;
     }
 
-    @Override
-    public GameMap getMap(){
-        return gameMap;
-    }
+//    @Override
+//    public GameMap getMap(){
+//        return gameMap;
+//    }
     // ------------------------------------------------------------
 
     // OTHER ------------------------------------------------------

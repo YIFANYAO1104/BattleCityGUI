@@ -1,11 +1,13 @@
 package com.bham.bc.entity.ai.director;
-
-//import com.bham.bc.components.FrontendServices;
+import com.bham.bc.components.characters.Side;
+import com.bham.bc.components.characters.enemies.EnemyType;
 import com.bham.bc.entity.ai.behavior.*;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import static com.bham.bc.utils.Timer.CLOCK;
+import static com.bham.bc.components.Controller.services;
 
 public class Director {
 
@@ -18,10 +20,10 @@ public class Director {
     private BooleanCondition playerStressLimit;
     private OrCondition endBuildUp;
     private int enemyCount;
-    private double playerHP; // Holds the player's health from the last check
-    private double homeHP; // Holds the home's health from the last check
-    private long lastTimeChecked = -1; // Holds the time in which the director last checked the game state
-    private long stateTime = -1; // Holds the start time of a state in the state machine
+    private double allyHpFraction; // Holds the player's health from the last check
+    private double homeHpFraction; // Holds the home's health from the last check
+    private long lastTick; // Holds the time in which the director last checked the game state
+    private long stateTime; // Holds the start time of a state in the state machine
 
     /**
      * Constructor for the Director. It sets the initial values and generates the FSM that the Director will use.
@@ -29,6 +31,12 @@ public class Director {
     public Director(){
         this.stateTimeModifier = 0;
         stateMachine = createFSM();
+
+        enemyCount = 0;
+        allyHpFraction = 1;
+        homeHpFraction = 1;
+        lastTick = 0;
+        stateTime = -1;
     }
 
     /**
@@ -102,30 +110,31 @@ public class Director {
      * If the player kills enemies in the last 5 seconds, the number of enemies spawned will increase such that the enemyCount
      * always increases by at least 1. For example, if the player kills 2 enemies in the last 5 seconds, then 3 enemies will be spawned in this wave
      */
-    private void buildUp(){
-        // Checks if it's been 5 seconds since an enemy has spawned, or checks if lastEnemySpawn is -1 which indictaes this the first time an enemy is spawned
-        if (lastTimeChecked == -1 || (CLOCK.getCurrentTime() - lastTimeChecked) >= 5){
-            lastTimeChecked = CLOCK.getCurrentTime();
+    private void buildUp() {
+        // Checks if it's been 5 seconds since an enemy has spawned, or checks if lastEnemySpawn is -1 which indicates this is the first time an enemy is spawned
+        if(CLOCK.getCurrentTime() - lastTick >= 5000) {
+            lastTick = CLOCK.getCurrentTime();
 
-            //TODO int newEnemyCount = getEnemyCount();
-            int newEnemyCount = 0; //TEMPORARY
-            int changeInEnemy = newEnemyCount - enemyCount;
-            int numOfEnemies2Spawn = 0;
-            //TODO double newPlayerHP = getPlayerHealth();
-            double newPlayerHP = 50; //TEMPORARY
-            double changeInPlayerHP = newPlayerHP - playerHP;
-            //TODO double newHomeHP = getHomeHealth();
-            double newHomeHP = 500; //TEMPORARY
-            double changeInHomeHP = newHomeHP - homeHP;
-            double percentageChangeInHealth = (changeInPlayerHP / 100 + changeInHomeHP / 1000) * 50;
+            // Calculate change in enemy count
+            int newEnemyCount = services.getCharacters(Side.ENEMY).size();
+            int changeInEnemyCount = newEnemyCount - enemyCount;
 
-            spawnEnemies(findNumEnemies2Spawn(changeInEnemy, percentageChangeInHealth));
+            // Calculate change in ally hp fraction
+            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getMaxHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
+            double changeInAllyHpFraction = newAllyHpFraction - allyHpFraction;
 
-            // TODO: enemyCount = getEnemyCount();
-            // TODO: playerHP = getPlayerHealth();
-            // TODO: homeHP = getHomeHealth();
+            // Calculate change in home hp fraction
+            double newHomeHpFraction = services.getHomeHpFraction();
+            double changeInHomeHpFraction = newHomeHpFraction - homeHpFraction;
+
+            // Spawn the calculated number of enemies
+            spawnRandomEnemies(findNumEnemies2Spawn(changeInEnemyCount, (changeInAllyHpFraction + changeInHomeHpFraction) * .5));
+
+            // Update the stored values
+            enemyCount = newEnemyCount;
+            allyHpFraction = newAllyHpFraction;
+            homeHpFraction = newHomeHpFraction;
         }
-
     }
 
     /**
@@ -137,11 +146,11 @@ public class Director {
         int numOfEnemies2Spawn;
         if (changeInEnemy <= 0){
             //Case where the player has killed no enemies
-            if (percentageChangeInHealth <= 10){
+            if (percentageChangeInHealth <= .1){
                 // Case where the player hasn't taken much or at all any damage
                 // So that the player does not get any lee-way
                 numOfEnemies2Spawn = 2;
-            } else if (percentageChangeInHealth <= 30) {
+            } else if (percentageChangeInHealth <= .3) {
                 // Case where the player has taken some damage so the number of enemies spawned is reduced
                 numOfEnemies2Spawn = 1;
             } else{
@@ -155,9 +164,14 @@ public class Director {
         return numOfEnemies2Spawn;
     }
 
-    private void spawnEnemies(int number2BeSpawned){
-        for (int i = 0; i < number2BeSpawned; i++){
-            //TODO spawnEnemy();
+    /**
+     * Spawns a provided number of random enemies defined in {@link EnemyType}
+     * @param numEnemiesToSpawn amount of enemies to be spawned
+     */
+    private void spawnRandomEnemies(int numEnemiesToSpawn) {
+        for(int i = 0; i < numEnemiesToSpawn; i++) {
+            int randomI = new Random().nextInt(EnemyType.values().length);
+            services.spawnEnemyRandomly(EnemyType.values()[randomI]);
         }
     }
 
@@ -167,19 +181,18 @@ public class Director {
      * In this state the Director may spawn helpful powerups for the player if they are struggling
      */
     private void peak(){
+        if (lastTick == -1 || (CLOCK.getCurrentTime() - lastTick) >= 10000) {
+            lastTick = CLOCK.getCurrentTime();
 
-        if (lastTimeChecked == -1 || (CLOCK.getCurrentTime() - lastTimeChecked) >= 10) {
-            lastTimeChecked = CLOCK.getCurrentTime();
+            // Calculate change in ally hp fraction
+            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getMaxHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
+            double changeInAllyHpFraction = newAllyHpFraction - allyHpFraction;
 
-            //TODO double newPlayerHP = getPlayerHealth();
-            double newPlayerHP = 50; //TEMPORARY
-            double changeInPlayerHP = newPlayerHP - playerHP;
-            //TODO double newHomeHP = getHomeHealth();
-            double newHomeHP = 500; //TEMPORARY
-            double changeInHomeHP = newHomeHP - homeHP;
-            double percentageChangeInHealth = (changeInPlayerHP / 100 + changeInHomeHP / 1000) * 50;
+            // Calculate change in home hp fraction
+            double newHomeHpFraction = services.getHomeHpFraction();
+            double changeInHomeHpFraction = newHomeHpFraction - homeHpFraction;
 
-            if (percentageChangeInHealth >= 50){
+            if((changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5){
                 //TODO: spawnPowerups();
             }
         }
@@ -192,27 +205,23 @@ public class Director {
      * And will spawn powerups if the player is still struggling
      */
     private void relax() {
+        if(CLOCK.getCurrentTime() - lastTick >= 10000) {
+            lastTick = CLOCK.getCurrentTime();
 
-        if (lastTimeChecked == -1 || (CLOCK.getCurrentTime() - lastTimeChecked) >= 10) {
-            lastTimeChecked = CLOCK.getCurrentTime();
+            // Calculate change in ally hp fraction
+            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getMaxHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
+            double changeInAllyHpFraction = newAllyHpFraction - allyHpFraction;
 
-            int numOfEnemies2Spawn = 1;
-            //TODO double newPlayerHP = getPlayerHealth();
-            double newPlayerHP = 50; //TEMPORARY
-            double changeInPlayerHP = newPlayerHP - playerHP;
-            //TODO double newHomeHP = getHomeHealth();
-            double newHomeHP = 500; //TEMPORARY
-            double changeInHomeHP = newHomeHP - homeHP;
-            double percentageChangeInHealth = (changeInPlayerHP / 100 + changeInHomeHP / 1000) * 50;
+            // Calculate change in home hp fraction
+            double newHomeHpFraction = services.getHomeHpFraction();
+            double changeInHomeHpFraction = newHomeHpFraction - homeHpFraction;
 
             // Ensures the player isn't struggling too much and gives help if so
-            if (percentageChangeInHealth >= 50) {
+            if ((changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5) {
                 //TODO: spawnPowerups();
-                numOfEnemies2Spawn = 0;
+            } else {
+                spawnRandomEnemies(1);
             }
-
-            spawnEnemies(numOfEnemies2Spawn);
-
         }
     }
 
@@ -236,27 +245,22 @@ public class Director {
      * Checks if the time limit for a state has been reached
      * @return
      */
-    private boolean checkTimeUp(){
-        if (stateTime == -1){ // Case where the stateTime has not been set
+    private boolean checkTimeUp() {
+        if (stateTime == -1) { // Case where the stateTime has not been set
             stateTime = CLOCK.getCurrentTime();
-            return false; }
-        if ((CLOCK.getCurrentTime() - stateTime) >= (STATETIMELENGTH + stateTimeModifier)){
-            return true;
-        } else {
             return false;
         }
+
+        return CLOCK.getCurrentTime() - stateTime >= STATETIMELENGTH + stateTimeModifier;
     }
 
-    private boolean checkTimeDown(){
-        if (stateTime == -1){ // Case where the stateTime has not been set
+    private boolean checkTimeDown() {
+        if (stateTime == -1) { // Case where the stateTime has not been set
             stateTime = CLOCK.getCurrentTime();
             return false;
         }
-        if ((CLOCK.getCurrentTime() - stateTime) >= (STATETIMELENGTH - stateTimeModifier)){
-            return true;
-        } else {
-            return false;
-        }
+
+        return CLOCK.getCurrentTime() - stateTime >= STATETIMELENGTH - stateTimeModifier;
     }
 
     /**
@@ -264,20 +268,17 @@ public class Director {
      * This calculated by calculating the damage taken by the player and home in the last 5 seconds
      * @return
      */
-    private boolean checkPlayerStressLimit(){
+    private boolean checkPlayerStressLimit() {
 
         //double newPlayerHP = FrontendServices.getPlayerHP();
-        double newPlayerHP = 50; //TEMPORARY
-        double changeInPlayerHP = newPlayerHP - playerHP;
-        //TODO double newHomeHP = getHomeHealth();
-        double newHomeHP = 500; //TEMPORARY
-        double changeInHomeHP = newHomeHP - homeHP;
-        double percentageChangeInHealth = (changeInPlayerHP / 100 + changeInHomeHP / 1000) * 50;
+        // Calculate change in ally hp fraction
+        double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getMaxHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
+        double changeInAllyHpFraction = newAllyHpFraction - allyHpFraction;
 
-        if (percentageChangeInHealth >= 50){
-            return true;
-        } else {
-            return false;
-        }
+        // Calculate change in home hp fraction
+        double newHomeHpFraction = services.getHomeHpFraction();
+        double changeInHomeHpFraction = newHomeHpFraction - homeHpFraction;
+
+        return (changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5;
     }
 }

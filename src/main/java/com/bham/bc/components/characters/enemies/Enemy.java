@@ -88,7 +88,8 @@ public abstract class Enemy extends GameCharacter {
                     navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
                     break;
                 case ALLY:
-                    navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
+                    // navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
+                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                     break;
             }
             nextSearch=false;
@@ -183,7 +184,7 @@ public abstract class Enemy extends GameCharacter {
 
     /**
      * Shoots a bullet at an obstacle from a distance of at max 4 nodes to the obstacle
-     * @return true if it is needed to shoot to at an obstacle and false otherwise
+     * @return true if it is needed to shoot at an obstacle and false otherwise
      */
     protected boolean shootObstacle() {
         int numNodesToObstacle = 4;

@@ -1,5 +1,6 @@
 package com.bham.bc.components;
 
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.enemies.EnemyType;
 import com.bham.bc.components.environment.GameMap;
@@ -19,6 +20,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -61,7 +63,16 @@ public interface Services {
 
     AlgorithmDriver getDriver();
 
-    GameMap getMap();
+//    GameMap getMap();
+
+    /**
+     * Gets the number of active characters at the request time
+     * @param side {@code ALLY} or {@code ENEMY} type the characters belong to
+     * @return the number of requested type of characters the game session contains
+     */
+    int getCharacterCount(Side side);
+
+    ArrayList<GameCharacter> getCharacters(Side side);
 
     /**
      * Gets all enemy areas initialized by the {@link com.bham.bc.components.environment.GameMap}
@@ -89,7 +100,7 @@ public interface Services {
      */
     Point2D getClosestCenter(Point2D position, ItemType item);
 
-    GameCharacter getClosestALLY(Point2D position);
+//    GameCharacter getClosestALLY(Point2D position);
 
     /**
      * Gets a random position of a free area requested around some center point
@@ -143,8 +154,6 @@ public interface Services {
      * @param gc graphics context where things will be rendered
      */
     void render(GraphicsContext gc);
-
-
 
     /**
      * Clears all objects in the game
