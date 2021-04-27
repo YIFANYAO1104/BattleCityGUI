@@ -49,7 +49,7 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
             expandNode(openList.poll());
 
             if (register.contains(goal.getNode())) {
-                System.out.println("SearchStatus.target_found");
+//                System.out.println("SearchStatus.target_found");
                 return SearchStatus.target_found;
             }
         }

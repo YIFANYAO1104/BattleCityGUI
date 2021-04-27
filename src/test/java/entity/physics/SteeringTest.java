@@ -1,4 +1,4 @@
-package com.bham.bc;
+package entity.physics;
 
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.characters.Player;
