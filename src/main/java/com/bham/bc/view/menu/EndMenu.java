@@ -26,15 +26,20 @@ import org.json.JSONObject;
  *
  * <b>Note:</b> the Menu asks for a name and allows to submit the score <i>only</i> if it makes
  * to the leaderboard of up to 10 highest all-time scores
+ *
  */
 public class EndMenu extends AnchorPane {
 
+
     private final GameFlowEvent LEAVE_GAME_EVENT;
+    /**
+     * use custom subMenu {@link SubMenu}
+     */
     private SubMenu subMenuEnd;
     private Rectangle dim;
 
     /**
-     * Constructs an {@link AnchorPane} layout as the End Menu
+     * Constructs an {@link AnchorPane} layout as the End Menu and initialize End Menu
      */
     public EndMenu() {
         LEAVE_GAME_EVENT = new GameFlowEvent(GameFlowEvent.LEAVE_GAME);
@@ -53,7 +58,8 @@ public class EndMenu extends AnchorPane {
     }
 
     /**
-     * Layout to be shown if the score makes it to the top 10 of all time scores
+     * <p>Layout to be shown if the score makes it to the top 10 of all time scores</p>
+     * <p>use custom menu button ({@link MenuButton}) as submit button</p>
      * @param score score to be shown on the layout and saved to the JSON file
      */
     private void showWhenHigh(double score) {
@@ -97,7 +103,8 @@ public class EndMenu extends AnchorPane {
     }
 
     /**
-     * Layout to be shown if the score is too low to make it to the leaderboard
+     * <p>Layout to be shown if the score is too low to make it to the leaderboard</p>
+     * <p>use custom menu button ({@link MenuButton}) as return button</p>
      * @param score score to be shown on the layout
      */
     private void showWhenLow(double score) {
@@ -120,8 +127,13 @@ public class EndMenu extends AnchorPane {
     }
 
     /**
-     * Shows end menu with fade in transition
+     * <p>Shows end menu with fade in transition</p>
+     * <p>if the number of records in record array ({@link RecordsHandler#jsonArrayToFile}) is less than 10
+     * or if the score the user gets is larger than the last score on the leaderboard,
+     * the score and name are shown on the leaderboard by function {@link #showWhenHigh(double)} </p>
+     * <p>end menu is shown by animation of {@link FadeTransition}</p>
      * @param gamePane game pane menu will be attached to
+     * @param score the score user gets
      */
     public void show(AnchorPane gamePane, double score) {
         gamePane.getChildren().add(this);

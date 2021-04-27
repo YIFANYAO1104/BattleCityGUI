@@ -28,7 +28,7 @@ public class MenuSession {
     public static CustomStage customStage;
 
     /**
-     * Constructs the menu session
+     * Constructs the menu session and initialize
      */
     public MenuSession() {
         initLayout();
@@ -60,7 +60,7 @@ public class MenuSession {
         mainStage.setResizable(false);
         mainStage.setTitle("Blueland Defenders");
         customStage = new CustomStage(mainStage, mainScene, mainPane);
-        customStage.createCommonTitlebar(mainPane, WIDTH);
+        customStage.createMainTitlebar(mainPane, WIDTH);
     }
 
     /**

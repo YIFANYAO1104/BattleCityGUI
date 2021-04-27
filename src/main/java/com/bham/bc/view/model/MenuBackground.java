@@ -17,7 +17,7 @@ public class MenuBackground extends AnchorPane {
     private static final String BG_PATH = "file:src/main/resources/img/menu/FB6.gif";
 
     /**
-     * Constructs a Stack Pane node with an animated background and particles
+     * Constructs a Stack Pane node with an animated background and particles and initialize
      */
     public MenuBackground() {
         setWidth(MenuSession.WIDTH);

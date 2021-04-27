@@ -48,6 +48,7 @@ public class SubMenu extends VBox {
 
     /**
      * Animates the appearance of the sub-menu
+     * <p>show sub-menu with fade in transition</p>
      */
     public void show() {
         if(!PARENT.getChildren().contains(this)) {
@@ -78,6 +79,7 @@ public class SubMenu extends VBox {
 
     /**
      * Animates the disappearance of the sub-menu
+     * <p>show sub-menu with fade out transition</p>
      */
     public void hide() {
         if(PARENT.getChildren().contains(this)) {

@@ -72,9 +72,9 @@ public class RecordsHandler {
 
         String[] strNow1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString().split("-");
 
-        Integer.parseInt(strNow1[0]);			//获取年
-        Integer.parseInt(strNow1[1]);			//获取月
-        Integer.parseInt(strNow1[2]);			//获取日
+        Integer.parseInt(strNow1[0]);
+        Integer.parseInt(strNow1[1]);
+        Integer.parseInt(strNow1[2]);
 
         return strNow1[2]+"/"+strNow1[1]+"/"+strNow1[0];
 
@@ -220,9 +220,9 @@ public class RecordsHandler {
                     score1= Double.valueOf(a.getString(KEY_NAME));
                     score2= Double.valueOf(b.getString(KEY_NAME));
                 } catch (JSONException e) {
-                    // 处理异常
+
                 }
-                //这里是按照时间逆序排列,不加负号为正序排列
+
                 return (int) (-score1+score2);
             }
         });
@@ -234,7 +234,7 @@ public class RecordsHandler {
 
     /**
      * write Json array to the file
-     * @param filename
+     * @param filename the name of json file
      */
     public static void writeJsonToFile(String filename) throws Exception {
         Tool tool=new Tool();
@@ -248,7 +248,7 @@ public class RecordsHandler {
 
 
     /**
-     * create the class for data in the table
+     * create the class for data (Record) in the table
      */
     public static class Records{
         private  SimpleStringProperty rank;

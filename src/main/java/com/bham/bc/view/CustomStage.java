@@ -36,8 +36,8 @@ public class CustomStage extends Stage{
     private boolean isBottomRight;
     private boolean isBottom;
     private double RESIZE_WIDTH = 5.00;
-    private double MIN_WIDTH = 400.00;
-    private double MIN_HEIGHT = 300.00;
+    private double MIN_WIDTH = 800.00;
+    private double MIN_HEIGHT = 600.00;
     private double xOffset = 0, yOffset = 0;
     public static String typeOf;
     private AnchorPane gamePane;
@@ -45,14 +45,23 @@ public class CustomStage extends Stage{
     private   HBox gpTitle;
     public static String[] types;
     private HBox hBox;
+    /**
+     * the {@link ChoiceBox} for changing the style of title bar in Main interface
+     */
     public  ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
             "Classic Blue","Classic Green","Classic Black","Classic Orange"
     ));;
+    /**
+     * the {@link ChoiceBox} for changing the style of title bar in Game interface
+     */
     public  ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
             "Classic Blue","Classic Green","Classic Black","Classic Orange"
     ));;
     private Label btnMin;
     private Label btnClose;
+    /**
+     * the index of skin color
+     */
     public static int selected=0;
 
 
@@ -274,11 +283,11 @@ public class CustomStage extends Stage{
 
     /**
      * create title bar to main interface
-     * @param root
+     * @param root root pane title bar will be attached to
      * @param Width width of title bar
      */
 
-    public void createCommonTitlebar(AnchorPane root, int Width){
+    public void createMainTitlebar(AnchorPane root, int Width){
            titleBar(root,Width,-310,changeMainSkin);
            changeMainSkin.getSelectionModel().select(selected);
 
@@ -287,11 +296,11 @@ public class CustomStage extends Stage{
 
     /**
      * create title bar to game interface
-     * @param root
+     * @param root root pane title bar will be attached to
      * @param Width width of title bar
      */
 
-    public void createTitleBar(AnchorPane root, int Width){
+    public void createGameTitleBar(AnchorPane root, int Width){
 
         titleBar(root,Width,-190,changePauseSkin);
         changePauseSkin.getSelectionModel().select(selected);
