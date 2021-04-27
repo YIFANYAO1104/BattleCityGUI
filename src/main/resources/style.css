@@ -12,7 +12,7 @@
 
 /* CUSTOM UBUNTU FONT */
 @font-face {
-    font-family: 'Ubuntu';
+    font-family: 'Zen Dots', cursive;
     src: url('Ubuntu-Medium.ttf');
 }
 
@@ -76,7 +76,7 @@
     -fx-alignment: center;
     -fx-font-size: 18px;
     -fx-pref-width: 150px;
-    -fx-font-family: 'Ubuntu';
+    -fx-font-family: 'Zen Dots', cursive;
     -fx-text-fill: -fx-lighten-color;
     -fx-font-weight: bold;
 }
@@ -202,7 +202,7 @@
 #name{
     -fx-font-size: 15px;
     -fx-text-fill: -fx-lighten-color;
-    -fx-font-family: "Ubuntu";
+    -fx-font-family: 'Zen Dots', cursive;
     -fx-font-weight: bold;
 }
 
@@ -244,3 +244,20 @@
     -fx-display-caret: True;
     -fx-font-family: 'Zen Dots', cursive;
 }
+
+.choice-box .context-menu {
+    -fx-background-color: #000080 ;
+}
+.choice-box .menu-item:focused {
+    -fx-background-color: #faf0e6;
+}
+.choice-box .menu-item > .label {
+    -fx-text-fill: white;
+    -fx-font-family: 'Zen Dots', cursive;
+}
+.choice-box .menu-item:focused > .label {
+    -fx-text-fill: black;
+    -fx-font-family: 'Zen Dots', cursive;
+}
+
+

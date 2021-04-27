@@ -92,8 +92,6 @@ public class GameMap {
      * padding to it by reducing its radius by <i>GameCharacter.MAX_RADIUS</i> property. This is to ensure that, if a character is
      * spawned on the edge of that territory, it does not collide with interactive obstacles.</p>
      *
-     * TODO: Update this once we have a new map
-     *
      * @param mapLoader map loader which will provide the territory locations
      */
     private void initAreas(MapLoader mapLoader) {
@@ -103,32 +101,33 @@ public class GameMap {
         double step = Math.min(tileWidth, tileHeight);
         List<Obstacle> allObstacles = mapLoader.getObstacles();
 
-
-        // TODO: TEMP, REPLACE WITH BELOW
-        Point2D homeCenter = new Point2D(16*32, 16*32);
-        Point2D[] enemySpawnCenters = new Point2D[] { new Point2D(16*4, 16*4), new Point2D(16*60, 16*4), new Point2D(16*4, 16*60), new Point2D(16*60, 16*60)};
-
         // Get the center points of each territory
-        // Point2D homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(GenericObstacle::getPosition).toArray(Point2D[]::new)[0];  // use first match
-        // Point2D[] enemySpawnCenters = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.ENEMY_SPAWN_CENTER)).map(GenericObstacle::getCenterPosition).toArray(Point2D[]::new);
+        Point2D homeCenter = new Point2D(getWidth()/2., getHeight()/2.);
+        try {
+            homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(Obstacle::getPosition).toArray(Point2D[]::new)[0];  // use first match
+        } catch(ArrayIndexOutOfBoundsException e) {
+            System.out.println("This map does not have a home spawn center defined! Setting it in the middle of the map...");
+        }
+
+        Point2D[] enemySpawnCenters = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.ENEMY_SPAWN_CENTER)).map(Obstacle::getCenterPosition).toArray(Point2D[]::new);
+
+        if(enemySpawnCenters.length == 0) {
+            System.out.println("This map does not have any enemy spawn centers defined! Setting one in the middle of the map...");
+            enemySpawnCenters = new Point2D[] { new Point2D(getWidth()/2., getHeight()/2.) };
+        }
 
         // Initialize the territories
         homeTerritory = new Circle(homeCenter.getX(), homeCenter.getY(), 0);
         enemySpawnAreas = new Circle[enemySpawnCenters.length];
 
-
         // Find out home territory size by incrementing its radius and checking if it intersects with non-home-territory obstacles
-        /*
         for(int i = 0; i < maxChecks; i++) {
             radius += step;
             homeTerritory = new Circle(homeCenter.getX(), homeCenter.getY(), radius);
-            if(allObstacles.stream().noneMatch(o -> !o.getAttributes().contains(Attribute.HOME_AREA) && o.intersectsShape(homeTerritory))) break;
+            if(allObstacles.stream().anyMatch(o -> !o.getAttributes().contains(Attribute.HOME_AREA) && o.intersects(homeTerritory))) break;
         }
         // Apply padding to home territory
-        homeTerritory.setRadius(Math.max(1, homeTerritory.getRadius() - GameCharacter.MAX_RADIUS));
-        */
-        homeTerritory = new Circle(homeCenter.getX(), homeCenter.getY(), 16*4); // TODO: replace with above
-
+        homeTerritory.setRadius(Math.max(1, homeTerritory.getRadius() - GameCharacter.MAX_SIZE));
 
         // Find enemy spawn areas for each spawn block by incrementing its radius and checking if it intersects with non-enemy-spawn obstacles
         for(int i = 0; i < enemySpawnCenters.length; i++) {
@@ -139,13 +138,10 @@ public class GameMap {
             for(int j = 0; j < maxChecks; j++) {
                 radius += step;
                 enemySpawnAreas[i].setRadius(radius);
-                // if((allObstacles.stream().noneMatch(o -> !o.getAttributes().contains(Attribute.ENEMY_SPAWN_AREA) && o.intersectsShape(enemySpawnAreas[finalI])))) break;
-                if(interactiveObstacles.stream().anyMatch(o -> o.intersects(enemySpawnAreas[finalI]))) break; // TODO replace with above
+                if((allObstacles.stream().anyMatch(o -> !o.getAttributes().contains(Attribute.ENEMY_SPAWN_AREA) && o.intersects(enemySpawnAreas[finalI])))) break;
             }
             // Apply padding to enemy spawn territory
             enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - GameCharacter.MAX_SIZE));
-
-            enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - 16)); //TODO remove
         }
     }
 
@@ -312,10 +308,10 @@ public class GameMap {
      * @param gc graphics context the hit-boxes will be drawn on
      */
     public void renderTerritories(GraphicsContext gc) {
-        gc.setStroke(Color.RED);
+        gc.setStroke(Color.PURPLE);
         gc.setLineWidth(2);
-        gc.strokeArc(homeTerritory.getCenterX() - homeTerritory.getRadius(), homeTerritory.getCenterY() - homeTerritory.getRadius(), homeTerritory.getRadius()*2, homeTerritory.getRadius()*2, 0, 360, ArcType.ROUND);
-        Arrays.stream(enemySpawnAreas).forEach(area -> gc.strokeArc(area.getCenterX() - area.getRadius(), area.getCenterY() - area.getRadius(), area.getRadius()*2, area.getRadius()*2, 0, 360, ArcType.ROUND));
+        gc.strokeArc(homeTerritory.getCenterX() - homeTerritory.getRadius(), homeTerritory.getCenterY() - homeTerritory.getRadius(), homeTerritory.getRadius()*2, homeTerritory.getRadius()*2, 0, 360, ArcType.OPEN);
+        Arrays.stream(enemySpawnAreas).forEach(area -> gc.strokeArc(area.getCenterX() - area.getRadius(), area.getCenterY() - area.getRadius(), area.getRadius()*2, area.getRadius()*2, 0, 360, ArcType.OPEN));
     }
     // ---------------------------------------------------------------------------------
 
