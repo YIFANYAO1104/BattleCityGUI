@@ -18,31 +18,46 @@ import javafx.beans.value.ChangeListener;
 
 
 /**
- * @author : YiFan Yaao
- * @version : 1.0
- * @project: BattleCityGUI
- * @name : CustomStageSubscene.java
- * @data : 2021/2/28
- * @time : 14:43
+ * <h1>Sub-menu</h1>
+ *
+ * <p>Custom stage for every window.</p>
+ * <p>it only has for elements, e.g game title, skin color, Min button and Close button</p>
  */
 public class CustomStage extends Stage{
 
+    /**
+     * original game stage
+     */
     private Stage stage;
-    private Scene gamescene;
 
 
-    private boolean isMax = false;
+    /**
+     * state of window
+     */
     private boolean isRight;
+    /**
+     * state of window
+     */
     private boolean isBottomRight;
+    /**
+     * state of window
+     */
     private boolean isBottom;
-    private double RESIZE_WIDTH = 5.00;
+
     private double MIN_WIDTH = 800.00;
     private double MIN_HEIGHT = 600.00;
     private double xOffset = 0, yOffset = 0;
+    /**
+     * the type of skin color
+     */
     public static String typeOf;
-    private AnchorPane gamePane;
-
+    /**
+     * title bar
+     */
     private   HBox gpTitle;
+    /**
+     * the string array for types of skin color
+     */
     public static String[] types;
     private HBox hBox;
     /**
@@ -65,12 +80,14 @@ public class CustomStage extends Stage{
     public static int selected=0;
 
 
-
-
-    public CustomStage(Stage gameStage, Scene gameScene,AnchorPane pane) {
+    /**
+     *
+     * @param gameStage original game stage
+     */
+    public CustomStage(Stage gameStage) {
         stage=gameStage;
-        gamescene=gameScene;
-        gamePane=pane;
+
+
 
     }
 

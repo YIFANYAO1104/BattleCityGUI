@@ -16,6 +16,13 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * <h1> RecordsHandler</h1>
+ *
+ * <p>the class for handling records in leaderboard table</p>
+ * <p>For Json: it has functions for writing records into json file and reading from json file</p>
+ * <p>For data in table: it has functions for sorting records</p>
+ */
 public class RecordsHandler {
     public static ArrayList<Records> records;
     public static JSONArray jsonArrayToFile;
@@ -32,6 +39,10 @@ public class RecordsHandler {
         jsonArrayToFile=new JSONArray();
     }
 
+    /**
+     * when game starts every time, the table will be initialized by reading data from json file。
+     * @return list of Records to be fitted into table
+     */
     public static ObservableList<Records> initTable(){
         File file = new File("src/main/resources/scores.json");
         if (!file.exists()) {

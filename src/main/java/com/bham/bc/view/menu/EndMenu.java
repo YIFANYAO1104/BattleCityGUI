@@ -31,6 +31,9 @@ import org.json.JSONObject;
 public class EndMenu extends AnchorPane {
 
 
+    /**
+     * create leave_game_event
+     */
     private final GameFlowEvent LEAVE_GAME_EVENT;
     /**
      * use custom subMenu {@link SubMenu}

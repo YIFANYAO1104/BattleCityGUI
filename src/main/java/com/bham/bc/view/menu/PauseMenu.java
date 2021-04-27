@@ -24,6 +24,9 @@ import static com.bham.bc.audio.AudioManager.audioManager;
 public class PauseMenu extends AnchorPane {
 
 
+    /**
+     * use custom subMenu {@link SubMenu}
+     */
     private SubMenu subMenuPause;
     /**
      * use custom subMenu {@link SubMenu}

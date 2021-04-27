@@ -37,6 +37,9 @@ public class MainMenu extends AnchorPane {
      */
     private SubMenu subMenuSettings;
 
+    /**
+     * create new_game_event
+     */
     private final GameFlowEvent NEW_GAME_EVENT;
 
     /**

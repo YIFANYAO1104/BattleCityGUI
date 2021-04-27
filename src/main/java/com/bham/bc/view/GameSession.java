@@ -96,7 +96,7 @@ public class GameSession {
         gameStage.setScene(gameScene);
         gameStage.setResizable(false);
         gameStage.setTitle("Blueland Defenders");
-        CustomStage customStage=new CustomStage(gameStage, gameScene,gamePane);
+        CustomStage customStage=new CustomStage(gameStage);
         customStage.createGameTitleBar(gamePane, WIDTH);
     }
 
