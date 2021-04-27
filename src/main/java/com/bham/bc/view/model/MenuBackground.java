@@ -14,6 +14,9 @@ import javafx.scene.shape.Rectangle;
  */
 public class MenuBackground extends AnchorPane {
 
+    /**
+     * path of background
+     */
     private static final String BG_PATH = "file:src/main/resources/img/menu/FB6.gif";
 
     /**

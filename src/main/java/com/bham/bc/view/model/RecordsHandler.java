@@ -7,10 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -24,9 +21,21 @@ import java.util.*;
  * <p>For data in table: it has functions for sorting records</p>
  */
 public class RecordsHandler {
+    /**
+     * array of Records
+     */
     public static ArrayList<Records> records;
+    /**
+     * json array for writing into json file and reading from json file
+     */
     public static JSONArray jsonArrayToFile;
+    /**
+     * temporary json array
+     */
     private static JSONArray jsonArray;
+    /**
+     * temporary json array
+     */
     private static JSONArray albums;
 
 
@@ -59,11 +68,7 @@ public class RecordsHandler {
         }
 
         //read from Json file
-        try {
-            parseJsonFile("src/main/resources/scores.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        parseJsonFile("src/main/resources/scores.json");
         ObservableList<Records> data = FXCollections.observableArrayList(records);
         //System.out.println("data len="+data.size());
 
@@ -110,11 +115,7 @@ public class RecordsHandler {
         }
 
         //read from Json file
-        try {
-            parseJsonFile("src/main/resources/scores.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        parseJsonFile("src/main/resources/scores.json");
         ObservableList<Records> data = FXCollections.observableArrayList(records);
         //System.out.println("data len="+data.size());
 
@@ -337,7 +338,7 @@ public class RecordsHandler {
 
         /**
          * to convert java object to JSon Object
-         * @return
+         * @return json object of Record instance
          */
         public JSONObject toJSON() {
 
@@ -360,7 +361,7 @@ public class RecordsHandler {
 
     /**
      * create a record and put into a Json array
-     * @param record
+     * @param record instance of Record
      */
     public void createRecord(Records record){
         record.putIntoArray();
@@ -369,13 +370,22 @@ public class RecordsHandler {
 
     /**
      * read file to get a string and parse string
-     * @param fileName
-     * @throws IOException
+     * @param fileName the name of Json file
+
      */
-    public static void parseJsonFile(String fileName) throws IOException {
-        FileInputStream fileInputStream=new FileInputStream(fileName);
+    public static void parseJsonFile(String fileName)  {
+        FileInputStream fileInputStream= null;
+        try {
+            fileInputStream = new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         byte[] array=new byte[1024*1024];
-        int num=fileInputStream.read(array);
+        try {
+            int num=fileInputStream.read(array);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String s=new String(array);
 
         parse(s);
@@ -383,8 +393,8 @@ public class RecordsHandler {
 
     /**
      * parse the string and make a array of records
-     * @param responseBody
-     * @return
+     * @param responseBody the string of content in json file
+     * @return array of records
      */
     public static ArrayList<Records> parse(String responseBody){
         records=new ArrayList<>();

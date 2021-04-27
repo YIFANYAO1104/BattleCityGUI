@@ -16,10 +16,18 @@ import javafx.scene.layout.StackPane;
  * slider body (track), slider ball (thumb), slider label (name) and its value label (%).</p>
  */
 public class MenuSlider extends HBox {
-
+    /**
+     * width of custom slider
+     */
     public static final int WIDTH = 480;
+    /**
+     * height of custom slider
+     */
     public static final int HEIGHT = 50;
 
+    /**
+     * instance of Slider
+     */
     private final Slider SLIDER;
 
     /**
