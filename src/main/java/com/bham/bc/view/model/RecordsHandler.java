@@ -40,7 +40,7 @@ public class RecordsHandler {
     }
 
     /**
-     * when game starts every time, the table will be initialized by reading data from json file。
+     * when game starts every time, the table will be initialized by reading data from json file.
      * @return list of Records to be fitted into table
      */
     public static ObservableList<Records> initTable(){

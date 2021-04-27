@@ -72,7 +72,13 @@ public class CustomStage extends Stage{
     public  ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
             "Classic Blue","Classic Green","Classic Black","Classic Orange"
     ));;
+    /**
+     * label for Min button
+     */
     private Label btnMin;
+    /**
+     * label for Close button
+     */
     private Label btnClose;
     /**
      * the index of skin color
