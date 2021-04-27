@@ -16,9 +16,18 @@ import javafx.util.Duration;
 public class SubMenu extends VBox {
 
     // Note: must be lower than MenuSession and GameSession size
+    /**
+     * width of sub-menu
+     */
     public static final int WIDTH = 700;
+    /**
+     * height of sub-menu
+     */
     public static final int HEIGHT = 384;
 
+    /**
+     * parent node to which the sub-menu will be attached (detached)
+     */
     private final AnchorPane PARENT;
 
     /**
