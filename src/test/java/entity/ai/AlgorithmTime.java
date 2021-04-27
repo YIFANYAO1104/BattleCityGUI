@@ -1,4 +1,4 @@
-package com.bham.bc;
+package entity.ai;
 
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.environment.MapType;
@@ -88,6 +88,6 @@ public class AlgorithmTime {
 
         }
         long endTime=System.currentTimeMillis();
-        assertTrue(endTime-startTime < 40);
+        assertTrue(endTime-startTime < 150);
     }
 }
