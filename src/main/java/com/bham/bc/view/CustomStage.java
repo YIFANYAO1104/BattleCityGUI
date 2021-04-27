@@ -41,7 +41,7 @@ public class CustomStage extends Stage{
     private double xOffset = 0, yOffset = 0;
     public static String typeOf;
     private AnchorPane gamePane;
-    public static Label setMenu;
+
     private   HBox gpTitle;
     public static String[] types;
     private HBox hBox;
@@ -76,50 +76,58 @@ public class CustomStage extends Stage{
 
     public void titleBar(AnchorPane root, int Width,int offset,ChoiceBox changeSkin){
 
+        // set the original stage transparent
         stage.initStyle(StageStyle.TRANSPARENT);
 
+        //set the title bar
         gpTitle = new HBox();
         gpTitle.setId("title");
         gpTitle.setSpacing(4);
         gpTitle.setPadding(new Insets(15,5,17,5));
+        gpTitle.setMinWidth(Width);
+        gpTitle.setMinHeight(35);
+        gpTitle.setMaxHeight(35);
+        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+        gpTitle.setLayoutX(0);
+        gpTitle.setLayoutY(0);
+        gpTitle.setAlignment(Pos.CENTER_RIGHT);
+
+        //set the game name of title bar
         Label lbTitle = new Label(stage.getTitle());
         lbTitle.setId("name");
         Glow glow=new Glow();
         lbTitle.setEffect(glow);
         glow.setLevel(0.6);
-
-        gpTitle.setMinWidth(Width);
-
-        gpTitle.setMinHeight(35);
-        gpTitle.setMaxHeight(35);
-        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+        lbTitle.setTranslateX(offset);
 
 
+        //make the Min and Close buttons
         btnMin = new Label();
         btnMin.setPrefWidth(33);
         btnMin.setPrefHeight(26);
-
         BackgroundImage image2=new BackgroundImage(new Image("file:src/main/resources/img/menu/minimize.png",24,10,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
-
         btnMin.setBackground(new Background(image2));
-
         btnClose = new Label();
         btnClose.setPrefWidth(33);
         btnClose.setPrefHeight(26);
+        Glow glow1=new Glow();
+        glow1.setLevel(1);
+        btnMin.setEffect(glow1);
+        btnClose.setEffect(glow1);
+        btnClose.setId("winClose");
+        btnMin.setId("winMin");
+        btnMin.setTranslateY(6);
+        btnMin.setTranslateX(3);
 
 
+        //set the skin of title bar
         types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
-
         changeSkin.setId("changeSkin");
         changeSkin.setMaxSize(25,22);
         changeSkin.setMinSize(25,22);
         BackgroundImage image3=new BackgroundImage(new Image("file:src/main/resources/img/menu/skin.png",25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         changeSkin.setBackground(new Background(image3));
-        Glow glow1=new Glow();
-        glow1.setLevel(1);
         changeSkin.setEffect(glow1);
-        btnMin.setEffect(glow1);
-        btnClose.setEffect(glow1);
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 
             selected=new_val.intValue();
@@ -173,36 +181,18 @@ public class CustomStage extends Stage{
         });
 
 
-
-
-
-
-        btnClose.setId("winClose");
-        btnMin.setId("winMin");
-        //-540 -760
-        lbTitle.setTranslateX(offset);
-        btnMin.setTranslateY(6);
-        btnMin.setTranslateX(3);
-
-
-
-        if (setMenu==null){
-            hBox=new HBox(5,changeSkin,btnMin,btnClose);
-        }else {
-            hBox=new HBox(5,setMenu,changeSkin,btnMin,btnClose);
-        }
-
+        //add elements
+        hBox=new HBox(5,changeSkin,btnMin,btnClose);
         gpTitle.getChildren().addAll(lbTitle,hBox);
 
+        //add container
         VBox titleAndRoot = new VBox();
         root.getScene().setRoot(titleAndRoot);
         titleAndRoot.getChildren().addAll(gpTitle, root);
         stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
-//        root.getChildren().add(gpTitle);
 
-        gpTitle.setLayoutX(0);
-        gpTitle.setLayoutY(0);
-        gpTitle.setAlignment(Pos.CENTER_RIGHT);
+
+
 
 
 
@@ -228,7 +218,7 @@ public class CustomStage extends Stage{
 
 
 
-
+        //set event of dragging window
         titleAndRoot.setOnMouseDragged((MouseEvent event) -> {
 
 
