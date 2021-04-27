@@ -36,7 +36,7 @@ public class EnemyTestDemo extends GameCharacter {
 
     @Override
     public Circle getHitBox() {
-        return null;
+        return  new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }
 
     @Override
