@@ -71,9 +71,9 @@ public class PauseMenu extends AnchorPane {
     }
 
     /**
-     * <p>Creates layout for primary view for pause menu</p>
-     * <p>use custom menu button ({@link MenuButton})</p>
-     * <p>Pause Menu has three buttons, e.g. resume button, setting button and return button </p>
+     * <p>Creates layout for primary view for pause menu.</p>
+     * <p>use custom menu button ({@link MenuButton}).</p>
+     * <p>Pause Menu has three buttons, e.g. resume button, setting button and return button. </p>
      */
     private void createSubMenuPause() {
         MenuButton btnResume = new MenuButton("RESUME");
@@ -89,8 +89,8 @@ public class PauseMenu extends AnchorPane {
     }
 
     /**
-     * <p>Creates layout for settings in the pause menu</p>
-     * <p>settings have  {@link MenuSlider} for control of volume </p>
+     * <p>Creates layout for settings in the pause menu.</p>
+     * <p>settings have  {@link MenuSlider} for control of volume.</p>
      */
     private void createSubMenuSettings() {
         MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));

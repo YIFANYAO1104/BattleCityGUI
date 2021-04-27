@@ -51,7 +51,7 @@ public class EndMenu extends AnchorPane {
     }
 
     /**
-     * Adds background dim to the menu
+     * Adds background dim to the menu.
      */
     private void initBgDim() {
         dim = new Rectangle(GameSession.WIDTH, GameSession.HEIGHT);
@@ -61,8 +61,8 @@ public class EndMenu extends AnchorPane {
     }
 
     /**
-     * <p>Layout to be shown if the score makes it to the top 10 of all time scores</p>
-     * <p>use custom menu button ({@link MenuButton}) as submit button</p>
+     * <p>Layout to be shown if the score makes it to the top 10 of all time scores.</p>
+     * <p>use custom menu button ({@link MenuButton}) as submit button.</p>
      * @param score score to be shown on the layout and saved to the JSON file
      */
     private void showWhenHigh(double score) {
@@ -106,8 +106,8 @@ public class EndMenu extends AnchorPane {
     }
 
     /**
-     * <p>Layout to be shown if the score is too low to make it to the leaderboard</p>
-     * <p>use custom menu button ({@link MenuButton}) as return button</p>
+     * <p>Layout to be shown if the score is too low to make it to the leaderboard.</p>
+     * <p>use custom menu button ({@link MenuButton}) as return button.</p>
      * @param score score to be shown on the layout
      */
     private void showWhenLow(double score) {
@@ -133,8 +133,8 @@ public class EndMenu extends AnchorPane {
      * <p>Shows end menu with fade in transition</p>
      * <p>if the number of records in record array ({@link RecordsHandler#jsonArrayToFile}) is less than 10
      * or if the score the user gets is larger than the last score on the leaderboard,
-     * the score and name are shown on the leaderboard by function {@link #showWhenHigh(double)} </p>
-     * <p>end menu is shown by animation of {@link FadeTransition}</p>
+     * the score and name are shown on the leaderboard by function {@link #showWhenHigh(double)}.</p>
+     * <p>end menu is shown by animation of {@link FadeTransition}.</p>
      * @param gamePane game pane menu will be attached to
      * @param score the score user gets
      */

@@ -60,7 +60,7 @@ public class GameSession {
     private DoubleProperty healthFraction;
 
     /**
-     * Constructs the game session
+     * Constructs the game session.
      */
     public GameSession(MapType mapType) {
         PAUSE_MENU = new PauseMenu();
@@ -72,7 +72,7 @@ public class GameSession {
     }
 
     /**
-     * Initializes the layout of the game session, i.e., sets up the root pane and event filters
+     * Initializes the layout of the game session, i.e., sets up the root pane and event filters.
      */
     private void initLayout() {
         Canvas canvas = new Canvas(GameMap.getWidth(), GameMap.getHeight());
@@ -90,7 +90,7 @@ public class GameSession {
     }
 
     /**
-     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage
+     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage.
      */
     private void initWindow() {
         Scene gameScene = new Scene(gamePane, WIDTH, HEIGHT);
@@ -103,7 +103,7 @@ public class GameSession {
     }
 
     /**
-     * Initializes the progress pane, i.e., sets up the home health bar, score and time labels
+     * Initializes the progress pane, i.e., sets up the home health bar, score and time labels.
      */
     private void initProgressPane() {
         // Declare the global colors used in the CSS file

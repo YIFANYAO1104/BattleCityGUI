@@ -31,7 +31,7 @@ public class MenuSlider extends HBox {
     private final Slider SLIDER;
 
     /**
-     * Constructs a slider with its name and initial value
+     * Constructs a slider with its name and initial value.
      *
      * @param name         label's name to the left of the slider
      * @param initialValue value the slider should be set to initially
@@ -83,7 +83,7 @@ public class MenuSlider extends HBox {
     }
 
     /**
-     * Gets slider's value property which is used to change the audio volume
+     * Gets slider's value property which is used to change the audio volume.
      * @return DoubleProperty object to be bind with audio volume changes
      */
     public DoubleProperty getValueProperty() {

@@ -22,7 +22,7 @@ public class SubMenu extends VBox {
     private final AnchorPane PARENT;
 
     /**
-     * Constructs an AnchorPane as layout for the sub-menu
+     * Constructs an AnchorPane as layout for the sub-menu.
      * @param parent node to which the sub-menu will be attached (detached)
      */
     public SubMenu(AnchorPane parent) {
@@ -39,7 +39,7 @@ public class SubMenu extends VBox {
     }
 
     /**
-     * Aligns itself at the center of the parent node
+     * Aligns itself at the center of the parent node.
      */
     public void alignCenter() {
         setTranslateX(PARENT.getMinWidth()*.5 - getMinWidth()*.5);
@@ -47,7 +47,7 @@ public class SubMenu extends VBox {
     }
 
     /**
-     * Animates the appearance of the sub-menu
+     * Animates the appearance of the sub-menu.
      * <p>show sub-menu with fade in transition</p>
      */
     public void show() {
@@ -78,7 +78,7 @@ public class SubMenu extends VBox {
     }
 
     /**
-     * Animates the disappearance of the sub-menu
+     * Animates the disappearance of the sub-menu.
      * <p>show sub-menu with fade out transition</p>
      */
     public void hide() {

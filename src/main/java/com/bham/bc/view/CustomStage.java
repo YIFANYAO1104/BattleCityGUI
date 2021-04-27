@@ -21,7 +21,7 @@ import javafx.beans.value.ChangeListener;
  * <h1>Sub-menu</h1>
  *
  * <p>Custom stage for every window.</p>
- * <p>it only has for elements, e.g game title, skin color, Min button and Close button</p>
+ * <p>it only has for elements, e.g game title, skin color, Min button and Close button.</p>
  */
 public class CustomStage extends Stage{
 
@@ -103,7 +103,7 @@ public class CustomStage extends Stage{
 
 
     /**
-     * create titler bar template
+     * create titler bar template.
      * @param root
      * @param Width width of title bar
      * @param offset offset of game name
@@ -308,7 +308,7 @@ public class CustomStage extends Stage{
     }
 
     /**
-     * create title bar to main interface
+     * create title bar to main interface.
      * @param root root pane title bar will be attached to
      * @param Width width of title bar
      */
@@ -321,7 +321,7 @@ public class CustomStage extends Stage{
     }
 
     /**
-     * create title bar to game interface
+     * create title bar to game interface.
      * @param root root pane title bar will be attached to
      * @param Width width of title bar
      */

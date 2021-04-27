@@ -44,7 +44,7 @@ public class MenuButton extends StackPane {
     private final String HIGH = "#B0CAFF";  // -fx-lighten-color (highlight)
 
     /**
-     * Constructs a custom animated menu button
+     * Constructs a custom animated menu button.
      * @param name text the button should contain
      */
     public MenuButton(String name) {

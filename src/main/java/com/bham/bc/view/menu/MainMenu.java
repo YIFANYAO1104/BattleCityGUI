@@ -92,7 +92,7 @@ public class MainMenu extends AnchorPane {
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
-     * <p>Create the leaderboard table and initialize the leaderboard table</p>
+     * <p>Create the leaderboard table and initialize the leaderboard table.</p>
      */
     private void createSubMenuScores() {
         subMenuScores = new SubMenu(this);
@@ -140,8 +140,8 @@ public class MainMenu extends AnchorPane {
 
     /**
      * Creates a sub-menu for settings. This menu is observed whenever "SETTINGS" is clicked
-     * and allows the user to configure UI parameters, such as SFX or MUSIC volume
-     * <p>settings have  {@link MenuSlider} for control of volume </p>
+     * and allows the user to configure UI parameters, such as SFX or MUSIC volume.
+     * <p>settings have  {@link MenuSlider} for control of volume.</p>
      */
     private void createSubMenuSettings() {
         MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));

@@ -211,7 +211,7 @@ public class RecordsHandler {
 
 
     /**
-     * sort the Json Array according to score
+     * sort the Json Array according to score.
      * @param jsonArr json array to be sorted
      * @return return the sorted json array
      */
@@ -245,7 +245,7 @@ public class RecordsHandler {
     }
 
     /**
-     * write Json array to the file
+     * write Json array to the file.
      * @param filename the name of json file
      */
     public static void writeJsonToFile(String filename) throws Exception {
@@ -260,7 +260,7 @@ public class RecordsHandler {
 
 
     /**
-     * create the class for data (Record) in the table
+     * create the class for data (Record) in the table.
      */
     public static class Records{
         private  SimpleStringProperty rank;
@@ -276,7 +276,7 @@ public class RecordsHandler {
         }
 
         /**
-         * Alternate constructor which sets the current date for the record automatically
+         * Alternate constructor which sets the current date for the record automatically.
          * @param name  user's name to be put in the records list
          * @param score user's score their position in the leaderboard will depend on
          */
@@ -337,7 +337,7 @@ public class RecordsHandler {
         }
 
         /**
-         * to convert java object to JSon Object
+         * to convert java object to JSon Object.
          * @return json object of Record instance
          */
         public JSONObject toJSON() {
@@ -352,7 +352,7 @@ public class RecordsHandler {
         }
 
         /**
-         * put json object in to Json array (for Json file)
+         * put json object in to Json array (for Json file).
          */
         public void putIntoArray(){
             jsonArrayToFile.put(toJSON());
@@ -360,7 +360,7 @@ public class RecordsHandler {
     }
 
     /**
-     * create a record and put into a Json array
+     * create a record and put into a Json array.
      * @param record instance of Record
      */
     public void createRecord(Records record){
@@ -369,7 +369,7 @@ public class RecordsHandler {
 
 
     /**
-     * read file to get a string and parse string
+     * read file to get a string and parse string.
      * @param fileName the name of Json file
 
      */
@@ -392,7 +392,7 @@ public class RecordsHandler {
     }
 
     /**
-     * parse the string and make a array of records
+     * parse the string and make a array of records.
      * @param responseBody the string of content in json file
      * @return array of records
      */
