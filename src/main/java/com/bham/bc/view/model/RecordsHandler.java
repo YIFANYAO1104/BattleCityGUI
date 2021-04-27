@@ -126,6 +126,9 @@ public class RecordsHandler {
      * to format json
      */
     public static class Tool {
+        /**
+         * wether is Tab
+         */
         private boolean isTab = true;
         public String stringToJSON(String strJson) {
             int tabNum = 0;
