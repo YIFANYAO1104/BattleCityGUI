@@ -25,15 +25,15 @@ import static com.bham.bc.audio.AudioManager.audioManager;
 public class MainMenu extends AnchorPane {
 
     /**
-     * use custom subMenu {@link SubMenu}
+     * use custom {@link SubMenu}
      */
     private SubMenu subMenuMain;
     /**
-     * use custom subMenu {@link SubMenu}
+     * use custom {@link SubMenu}
      */
     private SubMenu subMenuScores;
     /**
-     * use custom subMenu {@link SubMenu}
+     * use custom {@link SubMenu}
      */
     private SubMenu subMenuSettings;
 

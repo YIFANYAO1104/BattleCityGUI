@@ -25,11 +25,11 @@ public class PauseMenu extends AnchorPane {
 
 
     /**
-     * use custom subMenu {@link SubMenu}
+     * use custom {@link SubMenu}
      */
     private SubMenu subMenuPause;
     /**
-     * use custom subMenu {@link SubMenu}
+     * use custom {@link SubMenu}
      */
     public SubMenu subMenuSettings;
     /**

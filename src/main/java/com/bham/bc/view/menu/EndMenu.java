@@ -36,7 +36,7 @@ public class EndMenu extends AnchorPane {
      */
     private final GameFlowEvent LEAVE_GAME_EVENT;
     /**
-     * use custom subMenu {@link SubMenu}
+     * use custom {@link SubMenu}
      */
     private SubMenu subMenuEnd;
     private Rectangle dim;
