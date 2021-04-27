@@ -38,86 +38,33 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
         this.goal = new Node(sg1.getNode(target));
         this.sg = sg1;
         this.root =  new Node(root,null,0,getDistance(root));
+        openList.add(root);
         this.expandCondition = expandCondition;
     }
 
     @Override
     public SearchStatus cycleOnce() {
-//        Node n1 = start();
-        routine = search();
-        if (routine==null){
-            //System.out.println("SearchStatus.target_not_found");
-            return SearchStatus.target_not_found;
-        }
+        if (openList.isEmpty()) return SearchStatus.target_not_found;
+        if (!openList.isEmpty()){
+            expandNode(openList.poll());
 
-        if(routine.get(0) == goal.getNode()){
-            //System.out.println("SearchStatus.target_found");
-            return SearchStatus.target_found;
+            if (register.contains(goal.getNode())) {
+//                System.out.println("SearchStatus.target_found");
+                return SearchStatus.target_found;
+            }
         }
-        else{
-            //System.out.println("SearchStatus.target_not_found");
-            return SearchStatus.target_not_found;
-        }
-
+        return SearchStatus.search_incomplete;
+//        while (!openList.isEmpty()){
+//            expandNode(openList.poll());
+//
+//            if (register.contains(goal.getNode())) {
+//                return SearchStatus.target_found;
+//            }
+//        }
+//        return SearchStatus.target_not_found;
     }
 
-
-    @Override
-    public List<PathEdge> getPathAsPathEdges() {
-        List<PathEdge> path = new LinkedList<PathEdge>();
-
-
-        for(int i = routine.size()-1;i>0;i--){
-            NavNode n1 = routine.get(i);
-            NavNode n2 = routine.get(i-1);
-            path.add(new PathEdge(n1.getPosition(),n2.getPosition(),sg.getEdge(n1.Index(),n2.Index()).getBehavior()));
-        }
-
-        return path;
-    }
-
-
-    public ArrayList<NavNode> search(){
-        Node n1 = start();
-        if (n1==null) return null;
-        ArrayList<NavNode> temp = new ArrayList<>();
-
-        temp.add((NavNode) n1.getNode());
-        while (n1.getParentNode() != null){
-            temp.add((NavNode) n1.getParentNode().getNode());
-            n1 = n1.getParentNode();
-        }
-
-        return temp;
-    }
-
-    public Node start(){
-        addNode(root);
-
-        while (isContinue()){
-            addNode(openList.poll());
-//            System.out.println("finding");
-        }
-//        System.out.println("find that !");
-        while (!openList.isEmpty()){
-            if (openList.peek().getNode() == goal.getNode())
-                return openList.peek();
-            else
-                openList.poll();
-        }
-
-        return null;
-    }
-
-    private boolean isContinue(){
-
-        if(register.contains(goal.getNode())||openList.isEmpty())
-            return false;
-
-        return true;
-    }
-
-    private void addNode(Node n1){
+    private void expandNode(Node n1){
         SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(
                 this.sg,
                 n1.getNode().Index(),
@@ -134,20 +81,81 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
                 register.add(nn2.getNode());
             }
         }
-
-//        for(Object gn1: sg.getNodeList(n1.getNode().Index())){
-//            Node nn1 = new Node((GraphNode)gn1);
-//            System.out.println("nn1 = "+nn1);
-//            double edgecost = getCost(n1,nn1);
-//            double diagonalDis = getDiagonalDis(n1);
-//            Node nn2 = new Node(nn1, n1, edgecost+n1.getCost(), diagonalDis);
-//            System.out.println("nn2 = "+nn2);
-//            if(!register.contains(nn2.getNode())){
-//                openList.add(nn2);
-//                register.add(nn2.getNode());
-//            }
-//        }
     }
+
+
+    @Override
+    public List<PathEdge> getPathAsPathEdges() {
+        Node nn1 = null;
+        while (!openList.isEmpty()){
+            if (openList.peek().getNode() == goal.getNode()){
+                nn1 = openList.peek();
+                break;
+            } else{
+                openList.poll();
+            }
+        }
+
+        ArrayList<NavNode> temp = new ArrayList<>();
+        temp.add((NavNode) goal.getNode());
+        while (nn1.getParentNode() != null){
+            temp.add((NavNode) nn1.getParentNode().getNode());
+            nn1 = nn1.getParentNode();
+        }
+        routine = temp;
+
+
+
+        List<PathEdge> path = new LinkedList<PathEdge>();
+
+        for(int i = routine.size()-1;i>0;i--){
+            NavNode n1 = routine.get(i);
+            NavNode n2 = routine.get(i-1);
+            path.add(new PathEdge(n1.getPosition(),n2.getPosition(),sg.getEdge(n1.Index(),n2.Index()).getBehavior()));
+        }
+
+        return path;
+    }
+
+
+//    public ArrayList<NavNode> search(){
+//        Node n1 = start();
+//        if (n1==null) return null;
+//
+//
+//        ArrayList<NavNode> temp = new ArrayList<>();
+//
+//        temp.add((NavNode) goal.getNode());
+//        while (n1.getParentNode() != null){
+//            temp.add((NavNode) n1.getParentNode().getNode());
+//            n1 = n1.getParentNode();
+//        }
+//
+//        return temp;
+//    }
+
+//    public Node start(){
+////        expandNode(root);
+//
+//        while (!openList.isEmpty()){
+//            expandNode(openList.poll());
+//            if (register.contains(goal.getNode())) return SearchStatus.target_found;
+////            System.out.println("finding");
+//        }
+////        System.out.println("find that !");
+//        while (!openList.isEmpty()){
+//            if (openList.peek().getNode() == goal.getNode())
+//                return openList.peek();
+//            else
+//                openList.poll();
+//        }
+//
+//        return null;
+//    }
+
+
+
+
     private double getDiagonalDis(Node n1){
         NavNode node1 = (NavNode)n1.getNode();
         NavNode node2 = (NavNode)goal.getNode();

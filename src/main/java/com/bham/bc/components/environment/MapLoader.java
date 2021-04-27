@@ -173,16 +173,14 @@ public class MapLoader {
                 int x= (i % mapWidth) * tileWidth;
                 int y = (i / mapWidth) * tileHeight - yo;
 
-                System.out.println(obstacleArray.getInt(i));
-                System.out.println(tileset);
                 int tileID = obstacleArray.getInt(i) - OFFSETS.get(tileset);
                 int[] tileIDs = ANIMATIONS.containsKey(tileID) ? ANIMATIONS.get(tileID) : new int[] {tileID};
 
-                System.out.println(tileset);
                 try{
                     obstacleInstances.add((Obstacle) constructor.newInstance(x, y, attributes, tileset, tileIDs));
                 }catch (Exception e){
-
+                    System.out.println("Invalid tile under " + tileset + " folder");
+                    System.out.println("tileID is " + obstacleArray.getInt(i));
                 }
 
             }

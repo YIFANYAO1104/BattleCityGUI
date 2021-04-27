@@ -2,10 +2,12 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.enemies.EnemyType;
+import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
@@ -57,6 +59,10 @@ public interface Services {
      */
     SparseGraph<NavNode, GraphEdge> getGraph();
 
+    AlgorithmDriver getDriver();
+
+    GameMap getMap();
+
     /**
      * Gets all enemy areas initialized by the {@link com.bham.bc.components.environment.GameMap}
      * @return array of Circle objects representing enemy spawn areas
@@ -82,6 +88,8 @@ public interface Services {
      *         position if there is no closest point
      */
     Point2D getClosestCenter(Point2D position, ItemType item);
+
+    GameCharacter getClosestALLY(Point2D position);
 
     /**
      * Gets a random position of a free area requested around some center point

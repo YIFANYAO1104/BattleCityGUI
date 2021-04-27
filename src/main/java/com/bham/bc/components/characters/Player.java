@@ -1,5 +1,6 @@
 package com.bham.bc.components.characters;
 
+import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.shooting.*;
 import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
@@ -9,6 +10,7 @@ import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
+import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.view.GameSession;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -133,7 +135,7 @@ public class Player extends GameCharacter {
 	}
 	private void testDijistra(){
 		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
-		navigationService.createRequest(new Point2D(300,300));
+		System.out.println(navigationService.createRequest(new Point2D(850,758)));;
 		System.out.println(navigationService.peekRequestStatus());
 		navigationService.getPath();
 	}
@@ -196,7 +198,7 @@ public class Player extends GameCharacter {
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
-			case P: testDijistra();break;
+			case H: testDijistra();		System.out.println(getCenterPosition());break;
 		}
 	}
 
@@ -233,6 +235,10 @@ public class Player extends GameCharacter {
 
 		x += velocity.getX();
 		y += velocity.getY();
+
+		Point2D pos = GeometryEnhanced.bound(new Point2D(x,y),getSize(), GameMap.getWidth(),GameMap.getHeight());
+		x = pos.getX();
+		y = pos.getY();
 	}
 
 	@Override
