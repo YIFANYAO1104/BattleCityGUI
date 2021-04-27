@@ -118,6 +118,23 @@ public class CustomStage extends Stage{
         btnMin.setId("winMin");
         btnMin.setTranslateY(6);
         btnMin.setTranslateX(3);
+        btnMin.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                stage.setIconified(true);
+            }
+
+
+
+        });
+
+        btnClose.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                stage.close();
+            }
+        });
+
 
 
         //set the skin of title bar
@@ -196,22 +213,6 @@ public class CustomStage extends Stage{
 
 
 
-        btnMin.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                stage.setIconified(true);
-            }
-
-
-
-        });
-
-        btnClose.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                stage.close();
-            }
-        });
 
 
 
