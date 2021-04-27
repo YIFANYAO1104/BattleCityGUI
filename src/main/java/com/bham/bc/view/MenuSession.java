@@ -19,12 +19,24 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  */
 public class MenuSession {
 
+    /**
+     * width of main interface
+     */
     public static final int WIDTH = 1024;
+    /**
+     * height of main interface
+     */
     public static final int HEIGHT = 768;
     public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.NIGHT_BREAK };
 
     private AnchorPane mainPane;
+    /**
+     * stage of main interfacee
+     */
     private Stage mainStage;
+    /**
+     * the actual stage of main interface
+     */
     public static CustomStage customStage;
 
     /**

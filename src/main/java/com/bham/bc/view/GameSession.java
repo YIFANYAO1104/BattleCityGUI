@@ -40,17 +40,33 @@ import java.text.SimpleDateFormat;
  */
 public class GameSession {
 
+    /**
+     * width of game window
+     */
     public static final int WIDTH = 800;
+    /**
+     * height of game window
+     */
     public static final int HEIGHT = 600;
     public static final int FRAME_RATE = 24;
     public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.REVOLUTION, SoundTrack.CORRUPTION, SoundTrack.TAKE_LEAD };
 
+    /**
+     * instance of Pause Menu
+     */
     private final PauseMenu PAUSE_MENU;
 
+    /**
+     * instance of Camera
+     */
     private Camera camera;
     private GraphicsContext gc;
     private AnchorPane gamePane;
+    /**
+     * stage of game
+     */
     private Stage gameStage;
+
     private Stage menuStage;
     private AnimationTimer gameTimer;
 

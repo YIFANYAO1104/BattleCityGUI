@@ -51,7 +51,7 @@ public class CustomStage extends Stage{
      */
     private double xOffset = 0;
     /**
-     * offset of Y
+     * offset of y
      */
     private double yOffset = 0;
     /**
