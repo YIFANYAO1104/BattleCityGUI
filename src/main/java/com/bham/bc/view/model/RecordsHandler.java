@@ -275,9 +275,21 @@ public class RecordsHandler {
      * create the class for data (Record) in the table.
      */
     public static class Records{
+        /**
+         * rank of user
+         */
         private  SimpleStringProperty rank;
+        /**
+         * name of user
+         */
         private  SimpleStringProperty name;
+        /**
+         * score of user
+         */
         private  SimpleStringProperty score;
+        /**
+         * date when record is created
+         */
         private  SimpleStringProperty date;
 
         public Records( String name,String  score, String date) {
