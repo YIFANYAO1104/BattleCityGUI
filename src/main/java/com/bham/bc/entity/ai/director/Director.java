@@ -111,7 +111,7 @@ public class Director {
      * always increases by at least 1. For example, if the player kills 2 enemies in the last 5 seconds, then 3 enemies will be spawned in this wave
      */
     private void buildUp() {
-        // Checks if it's been 5 seconds since an enemy has spawned, or checks if lastEnemySpawn is -1 which indicates this is the first time an enemy is spawned
+        // Checks if it's been 5 seconds since an enemy has spawned
         if(CLOCK.getCurrentTime() - lastTick >= 5000) {
             lastTick = CLOCK.getCurrentTime();
 

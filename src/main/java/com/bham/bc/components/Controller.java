@@ -9,6 +9,7 @@ import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.shooting.LaserGun;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.ai.director.Director;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.edge.GraphEdge;
@@ -46,6 +47,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
     protected ArrayList<Trigger> triggers;
     protected ArrayList<Bullet> bullets;
     protected ArrayList<GameCharacter> characters;
+    protected Director director;
 
     protected MapDivision<BaseGameEntity> mapDivision;
     protected AlgorithmDriver driver;
@@ -63,6 +65,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
+        director = new Director();
         driver = new AlgorithmDriver(500);
         homeHp = 1000;
         score = 0;
@@ -249,6 +252,8 @@ public abstract class Controller extends BaseGameEntity implements Services {
         driver.runAlgorithm();
         mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
+
+        director.update();
 
         characters.forEach(GameCharacter::update);
         characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character)));
