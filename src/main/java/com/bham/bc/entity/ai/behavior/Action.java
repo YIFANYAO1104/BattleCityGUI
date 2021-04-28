@@ -6,7 +6,7 @@ package com.bham.bc.entity.ai.behavior;
 public enum Action{
     // ENEMY
 
-    // Continuous
+    //Continuous
     ATTACK_ALLY,
     ATTACK_HOME,
     ATTACK_OBST,
