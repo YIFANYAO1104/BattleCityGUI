@@ -49,6 +49,7 @@ public class RecordsHandler {
     }
 
     /**
+     * Returns the list of Records to be fitted into table
      * when game starts every time, the table will be initialized by reading data from json file.
      * @return list of Records to be fitted into table
      */
@@ -80,7 +81,7 @@ public class RecordsHandler {
     }
 
     /**
-     * get the string format of date
+     * Returns the string format of date
      * @return string format of date
      */
 
@@ -101,7 +102,7 @@ public class RecordsHandler {
 
 
     /**
-     * sort the json array after create new records
+     * Return a list of Records after sort the json array a
      * @return data to fit table
      */
     public ObservableList<Records> sortAndGetData(){
@@ -130,6 +131,12 @@ public class RecordsHandler {
          * whether is Tab
          */
         private boolean isTab = true;
+
+        /**
+         * Returns a String of Json format
+         * @param strJson String to be formatted
+         * @return  a String of Json format
+         */
         public String stringToJSON(String strJson) {
             int tabNum = 0;
             StringBuffer jsonFormat = new StringBuffer();
@@ -154,6 +161,8 @@ public class RecordsHandler {
             }
             return jsonFormat.toString();
         }
+
+
         public String getSpaceOrTab(int tabNum) {
             StringBuffer sbTab = new StringBuffer();
             for (int i = 0; i < tabNum; i++) {
@@ -214,7 +223,7 @@ public class RecordsHandler {
 
 
     /**
-     * sort the Json Array according to score.
+     * Returns a Json Array after sort the Json Array according to score.
      * @param jsonArr json array to be sorted
      * @return return the sorted json array
      */
@@ -340,7 +349,7 @@ public class RecordsHandler {
         }
 
         /**
-         * to convert java object to JSon Object.
+         * Returns a Json Object converted from Record Object.
          * @return json object of Record instance
          */
         public JSONObject toJSON() {
@@ -395,7 +404,7 @@ public class RecordsHandler {
     }
 
     /**
-     * parse the string and make a array of records.
+     * Returns a array of records after parse a string
      * @param responseBody the string of content in json file
      * @return array of records
      */
