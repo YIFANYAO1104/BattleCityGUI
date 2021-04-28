@@ -26,15 +26,15 @@ public class RecordsHandler {
      */
     public static ArrayList<Records> records;
     /**
-     * json array for writing into json file and reading from json file
+     * {@link JSONArray} for writing into json file and reading from json file
      */
     public static JSONArray jsonArrayToFile;
     /**
-     * temporary json array
+     * temporary {@link JSONArray}
      */
     private static JSONArray jsonArray;
     /**
-     * temporary json array
+     * temporary {@link JSONArray}
      */
     private static JSONArray albums;
 
@@ -102,7 +102,7 @@ public class RecordsHandler {
 
 
     /**
-     * Return a list of Records after sort the json array a
+     * Return a list of Records after sort the {@link JSONArray}
      * @return data to fit table
      */
     public ObservableList<Records> sortAndGetData(){
@@ -223,7 +223,7 @@ public class RecordsHandler {
 
 
     /**
-     * Returns a Json Array after sort the Json Array according to score.
+     * Returns a JSONArray after sort that JSONArray according to score.
      * @param jsonArr json array to be sorted
      * @return return the sorted json array
      */
@@ -257,7 +257,7 @@ public class RecordsHandler {
     }
 
     /**
-     * write Json array to the file.
+     * write {@link #jsonArrayToFile} into the file.
      * @param filename the name of json file
      */
     public static void writeJsonToFile(String filename) throws Exception {
@@ -300,7 +300,7 @@ public class RecordsHandler {
         }
 
         /**
-         * Alternate constructor which sets the current date for the record automatically.
+         * Alternate constructor which sets the current date for the Records automatically.
          * @param name  user's name to be put in the records list
          * @param score user's score their position in the leaderboard will depend on
          */
@@ -361,7 +361,7 @@ public class RecordsHandler {
         }
 
         /**
-         * Returns a Json Object converted from Record Object.
+         * Returns a {@link JSONObject} converted from Record Object.
          * @return json object of Record instance
          */
         public JSONObject toJSON() {
@@ -384,7 +384,7 @@ public class RecordsHandler {
     }
 
     /**
-     * create a record and put into a Json array.
+     * create a record and put into {@link #jsonArrayToFile}.
      * @param record instance of Record
      */
     public void createRecord(Records record){
@@ -416,7 +416,7 @@ public class RecordsHandler {
     }
 
     /**
-     * Returns a array of records after parse a string
+     * Returns a array of Records after parse a string
      * @param responseBody the string of content in json file
      * @return array of records
      */
