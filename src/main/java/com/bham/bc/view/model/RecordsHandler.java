@@ -49,7 +49,7 @@ public class RecordsHandler {
     }
 
     /**
-     * Returns the list of Records to be fitted into table
+     * <p>Returns the list of Records to be fitted into table.</p>
      * when game starts every time, the table will be initialized by reading data from json file.
      * @return list of Records to be fitted into table
      */
