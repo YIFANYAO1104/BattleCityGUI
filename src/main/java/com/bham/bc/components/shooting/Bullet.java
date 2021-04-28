@@ -6,6 +6,7 @@ import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import javafx.scene.canvas.GraphicsContext;
@@ -39,6 +40,8 @@ abstract public class Bullet extends MovingEntity {
      */
     public Bullet(double x, double y, double speed, Point2D heading, BulletType type, Side side, double damage) {
         super(x, y, speed, heading);
+        assert (speed <= Constants.MAX_BULLET_SPEED) : "<Bullet::Constructor>: invalid speed";
+        assert (damage <= Constants.MAX_BULLET_HURT) : "<Bullet::Constructor>: invalid damage";
         this.TYPE = type;
         this.SIDE = side;
         this.damage = damage;

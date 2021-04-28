@@ -37,7 +37,7 @@ public class Player extends GameCharacter {
 	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
 	public static final String IMAGE_PATH2 ="file:src/main/resources/img/characters/state1.png";
 	public static final int SIZE = 25;
-	public static  double HP = 100;
+	public static double HP = 100;
 	public static final double SPEED = 5;
 
 	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
@@ -135,7 +135,7 @@ public class Player extends GameCharacter {
 	}
 	private void testDijistra(){
 		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
-		navigationService.createRequest(new Point2D(300,300));
+		System.out.println(navigationService.createRequest(new Point2D(850,758)));;
 		System.out.println(navigationService.peekRequestStatus());
 		navigationService.getPath();
 	}
@@ -198,7 +198,7 @@ public class Player extends GameCharacter {
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
-			case P: testDijistra();break;
+			case H: testDijistra();		System.out.println(getCenterPosition());break;
 		}
 	}
 

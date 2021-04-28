@@ -42,15 +42,33 @@ public class CustomStage extends Stage{
     public static String typeOf;
     private AnchorPane gamePane;
     public static Label setMenu;
-    public static HBox gpTitle;
+    private   HBox gpTitle;
     public static String[] types;
     private HBox hBox;
-    public  ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
-            "Classic Blue","Classic Green","Classic Black","Classic Orange"
-    ));;
-    public  ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
-            "Classic Blue","Classic Green","Classic Black","Classic Orange"
-    ));;
+    public  ChoiceBox changeMainSkin;
+
+
+    {
+        changeMainSkin = new ChoiceBox(FXCollections.observableArrayList(
+                "Classic Blue", "Classic Green", "Classic Black", "Classic Orange"
+        ));
+
+        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+    }
+
+
+    public  ChoiceBox changePauseSkin;
+
+    {
+        changePauseSkin = new ChoiceBox(FXCollections.observableArrayList(
+                "Classic Blue", "Classic Green", "Classic Black", "Classic Orange"
+        ));
+
+
+        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+    }
+
+
     private Label btnMin;
     private Label btnClose;
     public static int selected=0;
@@ -125,7 +143,7 @@ public class CustomStage extends Stage{
             selected=new_val.intValue();
             typeOf=types[selected];
             if (typeOf.equals("TYPE 1")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right, -fx-bg-color 0%, -fx-primary-color 50%, -fx-bg-color 100%);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right, #334e9e 0%, #06065f 50%, #334e9e 100%);");
                 lbTitle.requestFocus();
 
 
@@ -136,7 +154,7 @@ public class CustomStage extends Stage{
             }else if (typeOf.equals("TYPE 2")){
 
 
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#61a2b1, #2A5058);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#36656f 0%, #052026 50%,#36656f 100%);");
                 lbTitle.requestFocus();
 
 
@@ -144,14 +162,15 @@ public class CustomStage extends Stage{
 
             }else if (typeOf.equals("TYPE 3")){
 
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#636060, #000000);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#524e4e 0%, #181818 50%,#524e4e 100% );");
                 lbTitle.requestFocus();
 
 
 
 
+
             }else if (typeOf.equals("TYPE 4")){
-                gpTitle.setStyle(" -fx-background-color: linear-gradient(#bb741b, #552d03);");
+                gpTitle.setStyle(" -fx-background-color: linear-gradient(to right,#8e5812 0%, #3b2006 50%,#8e5812 100%);");
 
                 lbTitle.requestFocus();
 
@@ -167,6 +186,7 @@ public class CustomStage extends Stage{
             @Override
             public void handle(MouseEvent mouseEvent) {
                 lbTitle.requestFocus();;
+
             }
         });
 

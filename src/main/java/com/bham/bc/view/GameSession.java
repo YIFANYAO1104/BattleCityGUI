@@ -125,7 +125,7 @@ public class GameSession {
         homeHealthTxt.setEffect(new Glow(1));
         homeHealthTxt.setId("home-health-label");
 
-        // Make the colors of the home health bar and t dynamic
+        // Make the colors of the home health bar and text dynamic
         healthFraction.addListener((obsVal, oldVal, newVal) -> {
             Stop[] homeHealthBarStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_1)), new Stop(newVal.doubleValue(), Color.web(BG_1)) };
             Stop[] homeHealthTxtStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_2)), new Stop(newVal.doubleValue(), Color.web(FG_1)) };
@@ -229,6 +229,8 @@ public class GameSession {
     private void leaveGame(GameFlowEvent e) {
         gameStage.hide();
         menuStage.show();
+
+        MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
 
         try {
             AnchorPane mainPane = (AnchorPane) menuStage.getScene().getRoot().getChildrenUnmodifiable().get(1);

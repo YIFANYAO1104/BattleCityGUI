@@ -15,7 +15,7 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  *
  * <p>This class manages all the menus. Not only it sets up a stage for the main menu, it also is
  * responsible for bringing up pause menu and end screen during the gameplay. Therefore, it has a
- * strong communication with {@link com.bham.bc.view.GameSession}</p>
+ * strong communication with {@link com.bham.bc.view.GameSession}.</p>
  */
 public class MenuSession {
 
@@ -25,6 +25,7 @@ public class MenuSession {
 
     private AnchorPane mainPane;
     private Stage mainStage;
+    public static CustomStage customStage;
 
     /**
      * Constructs the menu session
@@ -58,7 +59,7 @@ public class MenuSession {
         mainStage.setScene(mainScene);
         mainStage.setResizable(false);
         mainStage.setTitle("Blueland Defenders");
-        CustomStage customStage = new CustomStage(mainStage, mainScene, mainPane);
+        customStage = new CustomStage(mainStage, mainScene, mainPane);
         customStage.createCommonTitlebar(mainPane, WIDTH);
     }
 
@@ -97,4 +98,6 @@ public class MenuSession {
     public Stage getMainStage() {
         return mainStage;
     }
+
+
 }

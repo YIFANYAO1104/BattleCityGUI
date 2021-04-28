@@ -5,6 +5,7 @@ import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.Constants;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.CollisionHandler;
 import com.bham.bc.utils.messaging.Telegram;
@@ -23,7 +24,7 @@ import static com.bham.bc.components.Controller.services;
 abstract public class GameCharacter extends MovingEntity {
     public static final int MAX_SIZE = 32;
 
-    private  double MAX_HP;
+    private double MAX_HP;
     protected double hp;
     protected Side side;
 
@@ -39,6 +40,8 @@ abstract public class GameCharacter extends MovingEntity {
      */
     protected GameCharacter(double x, double y, double speed, double hp, Side side) {
         super(x, y, speed);
+        assert (speed <= Constants.MAX_CHARACTER_SPEED) : "<GameCharacter::Constructor>: invalid speed";
+        assert (hp <= Constants.MAX_CHARACTER_HEALTH) : "<GameCharacter::Constructor>: invalid hp";
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
