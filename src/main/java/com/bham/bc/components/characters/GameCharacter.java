@@ -169,6 +169,7 @@ abstract public class GameCharacter extends MovingEntity {
      * Unregisters and prepares to remove the character. Also runs any destruction effects
      */
     protected abstract void destroy();
+
     public void armorUP(double max){
         this.MAX_HP =max;
         this.hp = max;

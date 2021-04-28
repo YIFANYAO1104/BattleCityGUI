@@ -56,9 +56,10 @@ public class GameSession {
     private StringProperty timeSurvived;
     private StringProperty scoreAchieved;
     private DoubleProperty healthFraction;
+    private DoubleProperty playerHealthFraction;
 
     /**
-     * Constructs the game session
+     * Constructs the game sessionentityManager
      */
     public GameSession(MapType mapType) {
         PAUSE_MENU = new PauseMenu();
@@ -113,17 +114,29 @@ public class GameSession {
         timeSurvived = new SimpleStringProperty("00:00");
         scoreAchieved = new SimpleStringProperty("0");
         healthFraction = new SimpleDoubleProperty(1);
+        playerHealthFraction = new SimpleDoubleProperty(1);
 
         // Set up home health bar
         StackPane homeHealthBar = new StackPane();
         homeHealthBar.setBackground(new Background(new BackgroundFill(Color.web(FG_1), new CornerRadii(20), new Insets(0))));
         homeHealthBar.setId("home-health-bar");
 
+        // Set up player health bar
+        StackPane playerHealthBar = new StackPane();
+        playerHealthBar.setBackground(new Background(new BackgroundFill(Color.web(FG_1), new CornerRadii(20), new Insets(0))));
+        playerHealthBar.setId("player-health-bar");
+
         // Set up home health label
-        Label homeHealthTxt = new Label("        Territory taken over       ");
+        Label homeHealthTxt = new Label(" Territory Control ");
         homeHealthTxt.setTextFill(Color.web(FG_2));
         homeHealthTxt.setEffect(new Glow(1));
         homeHealthTxt.setId("home-health-label");
+
+        // Set up player health label
+        Label playerHealthTxt = new Label("       Health      ");
+        homeHealthTxt.setTextFill(Color.web(FG_2));
+        homeHealthTxt.setEffect(new Glow(1));
+        homeHealthTxt.setId("player-health-label");
 
         // Make the colors of the home health bar and text dynamic
         healthFraction.addListener((obsVal, oldVal, newVal) -> {
@@ -135,9 +148,23 @@ public class GameSession {
             homeHealthTxt.setTextFill(homeHealthTxtGradient);
         });
 
+        // Make the colors of the player health bar and text dynamic
+        playerHealthFraction.addListener((obsVal, oldVal, newVal) -> {
+            Stop[] playerHealthBarStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_1)), new Stop(newVal.doubleValue(), Color.web(BG_1)) };
+            Stop[] playerHealthTxtStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_2)), new Stop(newVal.doubleValue(), Color.web(FG_1)) };
+            LinearGradient playerHealthBarGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, playerHealthBarStops);
+            LinearGradient playerHealthTxtGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, playerHealthTxtStops);
+            playerHealthBar.setBackground(new Background(new BackgroundFill(playerHealthBarGradient, new CornerRadii(20), new Insets(0))));
+            playerHealthTxt.setTextFill(playerHealthTxtGradient);
+        });
+
         // Add home health bar and label to container
         StackPane healthProgress = new StackPane();
         healthProgress.getChildren().addAll(homeHealthBar, homeHealthTxt);
+
+        // Add player health bar and label to container
+        StackPane playerHealthProgress = new StackPane();
+        playerHealthProgress.getChildren().addAll(playerHealthBar, playerHealthTxt);
 
         // Set up score label and add to container
         Label scoreLabel = new Label();
@@ -156,7 +183,7 @@ public class GameSession {
         // Add home health bar, score and time containers to the progress layout
         TilePane progressPane = new TilePane();
         progressPane.setMinSize(WIDTH, HEIGHT);
-        progressPane.getChildren().addAll(healthProgress, scoreProgress, timeProgress);
+        progressPane.getChildren().addAll(playerHealthProgress, healthProgress, scoreProgress, timeProgress);
         progressPane.getStyleClass().add("progress-pane");
 
         // Add the progress layout to the game pane
@@ -168,9 +195,7 @@ public class GameSession {
      */
     private void createKeyListeners() {
         gamePane.getScene().setOnKeyPressed(e -> {
-            if(e.getCode() == KeyCode.Q) {  // TODO: remove
-                endGame();
-            } else if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
+            if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
                 gamePane.fireEvent(new GameFlowEvent(GameFlowEvent.PAUSE_GAME));
             } else {
                 services.keyPressed(e);
@@ -205,9 +230,9 @@ public class GameSession {
      * <p>This method stops the <i>gameTimer</i> and the background music, clears the content present in services,
      * attaches end menu to game session's root pane and passes the final game score the player acquired.</p>
      */
-    private void endGame() {
+    public void endGame() {
         gameTimer.stop();
-        services.clear();
+        //services.clear(); TODO: figure out if we want to keep this or not
         audioManager.stopMusic();
         EndMenu endMenu = new EndMenu();
         endMenu.show(gamePane, services.getScore());
@@ -247,12 +272,16 @@ public class GameSession {
     private void updateGameState() {
         long currentTime = CLOCK.getCurrentTime() - startTimestamp;
 
+        if(services.gameOver()){
+            endGame();
+        }
 
         DateFormat timeFormat = new SimpleDateFormat("mm:ss");
         timeSurvived.set(timeFormat.format(currentTime));
 
         scoreAchieved.set(String.format("%.0f", services.getScore()));
         healthFraction.set(services.getHomeHpFraction());
+        playerHealthFraction.set(services.getPlayerHpFraction());
     }
 
     /**

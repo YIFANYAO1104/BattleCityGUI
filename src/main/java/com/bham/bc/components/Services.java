@@ -212,9 +212,33 @@ public interface Services {
     double getHomeHp();
 
     /**
+     * Gets the remaining home "HP" indicating how much health the player has left
+     * @return player "HP" value
+     */
+    double getPlayerHp();
+
+    /**
+     * Checks if the player is alive
+     * @return true if the player is alive, false if not
+     */
+    boolean isPlayerAlive();
+
+    /**
      * Gets the remaining home "HP" fraction indicating how much territory is not yet taken over by the enemies
      * @return home "HP" fraction value
      */
     double getHomeHpFraction();
+
+    /**
+     * Gets the remaining home player "HP" fraction showing how much heatlh the player has left
+     * @return player "HP" fraction value
+     */
+    double getPlayerHpFraction();
+
+    /**
+     * Checks if the player has reached a game over state
+     * @return True if the player has lost, false if not
+     */
+    boolean gameOver();
     //-------------------------------------------------------------
 }

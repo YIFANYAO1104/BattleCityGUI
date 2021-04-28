@@ -101,9 +101,29 @@ public abstract class Controller extends BaseGameEntity implements Services {
     }
 
     @Override
+    public double getPlayerHp(){
+        try{
+            return services.getCharacters(Side.ALLY).get(0).getHp();
+        } catch (Exception e){
+            return 0; // Error typically caused by player being destroyed and so cannot be accessed so return 0 to indicated death
+        }
+    }
+
+    @Override
+    public boolean isPlayerAlive(){ return !services.getCharacters(Side.ALLY).isEmpty();}
+
+    @Override
     public double getHomeHpFraction() {
         return Math.max(0, homeHp/1000);
     }
+
+    @Override
+    public double getPlayerHpFraction(){
+        return Math.max(0, getPlayerHp()/100);
+    }
+
+    @Override
+    public boolean gameOver() { return (getHomeHp() <= 0 || !isPlayerAlive()) ? true : false; }
 
     public void occupyHome(Enemy enemy) {
         if(enemy.intersects(gameMap.getHomeTerritory())) {
