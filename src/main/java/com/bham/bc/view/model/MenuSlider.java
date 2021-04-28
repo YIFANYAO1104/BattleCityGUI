@@ -83,7 +83,7 @@ public class MenuSlider extends HBox {
     }
 
     /**
-     * Gets slider's value property which is used to change the audio volume.
+     * Returns slider's value property which is used to change the audio volume.
      * @return DoubleProperty object to be bind with audio volume changes
      */
     public DoubleProperty getValueProperty() {
