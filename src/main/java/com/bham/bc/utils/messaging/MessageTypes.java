@@ -3,12 +3,25 @@ package com.bham.bc.utils.messaging;
  * enum for Message Types
  */
 public enum MessageTypes {
-
-
+    /**
+     * Test info_1
+     */
     Msg_IfindYou(0),
+    /**
+     * Test info_2
+     */
     Msg_Gotta(1),
+    /**
+     * interact with obstacle
+     */
     Msg_interact(2),
+    /**
+     * interact with removable obstacle
+     */
     Msg_interactWithSoft(3),
+    /**
+     * remove the obstacle
+     */
     Msg_removeSoft(4);
 
     final public int id;

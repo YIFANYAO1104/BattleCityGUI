@@ -79,9 +79,9 @@ public class Obstacle extends BaseGameEntity {
     public void interacts(int graphSystemID, int nodeID, Rectangle area) {
         if(getHitBox().intersects(area.getBoundsInLocal())) {
             if(ATTRIBUTES.contains(Attribute.BREAKABLE)) {
-                Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interactWithSoft, nodeID);
+                Dispatcher.dispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interactWithSoft, nodeID);
             } else {
-                Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interact, nodeID);
+                Dispatcher.dispatchMessage(SEND_MSG_IMMEDIATELY, getID(), graphSystemID, Msg_interact, nodeID);
             }
         }
     }
@@ -98,7 +98,7 @@ public class Obstacle extends BaseGameEntity {
         if(ATTRIBUTES.contains(Attribute.BREAKABLE)) {
             hp += health;
             if (hp <= 0.0) {
-                Dispatcher.DispatchMessage(SEND_MSG_IMMEDIATELY, getID(), services.getGraph().getID(), Msg_removeSoft, NO_ADDITIONAL_INFO);
+                Dispatcher.dispatchMessage(SEND_MSG_IMMEDIATELY, getID(), services.getGraph().getID(), Msg_removeSoft, NO_ADDITIONAL_INFO);
                 destroy();
             }
         }

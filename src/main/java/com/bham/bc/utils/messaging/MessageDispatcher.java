@@ -13,21 +13,21 @@ import static com.bham.bc.utils.Timer.CLOCK;
  * Message System to check and track the Game States
  */
 public class MessageDispatcher {
+
     /**
      * Initialization
      */
     final public static double SEND_MSG_IMMEDIATELY = 0.0f;
     final public static Object NO_ADDITIONAL_INFO = null;
+
     /**
      * Create only one Object of MessageDispatcher
      */
     final public static MessageDispatcher Dispatcher = new MessageDispatcher();
-    //a Set is used as the container for the delayed messages
-    //because of the benefit of automatic sorting and avoidance
-    //of duplicates. Messages are sorted by their dispatch time.
+
     /**
-     * We use Treeset As container for the delayed messages
-     * Treeset: providing automatic sorting and avoidance of duplicates
+     * We use PriorityQ{@link TreeSet} As container for the delayed messages
+     * PriorityQ: providing automatic sorting and avoidance of duplicates
      * Messages are sorted by dispatch time
      */
     private TreeSet<Telegram> PriorityQ = new TreeSet<Telegram>();
@@ -72,7 +72,7 @@ public class MessageDispatcher {
      * @param msg
      * @param ExtraInfo
      */
-    public void DispatchMessage(double delay,
+    public void dispatchMessage(double delay,
                                 int sender,
                                 int receiver,
                                 MessageTypes msg,
@@ -103,11 +103,6 @@ public class MessageDispatcher {
          * Print out the message with its other info(CurrentTime, sender and receiver,and message content
          */
         if (delay <= 0.0f) {
-//            System.out.println("\nInstant telegram dispatched at time: " + Clock.GetCurrentTime()
-//                    + " by " + pSender.toString() + " to "
-//                    + pReceiver.toString()
-//                    + ". Msg is: " + MsgToStr(msg));
-
             /**
              * send the telegram to the receiver
              */
