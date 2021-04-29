@@ -28,7 +28,10 @@ abstract public class GameCharacter extends MovingEntity {
     protected double hp;
     protected Side side;
 
-
+    /**
+     * Trigger(s) activation time
+     * <p> if it's 0 meaning trigger is not active or character is not in corresponding trigger state <p>
+     */
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
 
     /**
@@ -88,8 +91,8 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     /**
-     * Get immune activation time
-     * @return immune activation time (if it's 0 meaning character is not in immune state)
+     * Get immune activation time or {@link #immuneTicks}
+     * @return immune activation time
      */
     public int getImmuneTicks() {
         return immuneTicks;
@@ -102,20 +105,6 @@ abstract public class GameCharacter extends MovingEntity {
     @Deprecated
     public void switchWeapon(Weapon w) {}
 
-    public void toTriple(int numTicks) {
-        tripleTicks = numTicks;
-    }
-    public void toFreeze(int numTicks) {
-        this.freezeTicks = numTicks;
-    }
-    public void toImmune(int numTicks) {
-        immuneTicks = numTicks;
-    }
-    protected void updateTriggers() {
-        if(immuneTicks!=0) --immuneTicks;
-        if(freezeTicks!=0) --freezeTicks;
-        if(tripleTicks!=0) --tripleTicks;
-    }
     public void destroyed(){
         this.hp-=200;
     }
