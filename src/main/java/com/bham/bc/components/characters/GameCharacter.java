@@ -3,6 +3,10 @@ package com.bham.bc.components.characters;
 import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
+import com.bham.bc.components.triggers.effects.HitMarker;
+import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
@@ -106,6 +110,8 @@ abstract public class GameCharacter extends MovingEntity {
      */
     public void changeHp(double health) {
         hp = Math.min(hp + health, MAX_HP);
+        Trigger hitMarker = new HitMarker(this, entityImages[0], getAngle());
+        services.addTrigger(hitMarker);
 
         if(hp <= 0) {
             audioManager.playEffect(SoundEffect.DESTROY_CHARACTER);

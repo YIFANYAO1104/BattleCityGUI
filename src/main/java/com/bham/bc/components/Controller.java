@@ -295,9 +295,9 @@ public abstract class Controller extends BaseGameEntity implements Services {
     public void render(GraphicsContext gc) {
         gameMap.renderBottomLayer(gc);
 
-        triggers.forEach(trigger -> trigger.render(gc));
         bullets.forEach(bullet -> bullet.render(gc));
         characters.forEach(character -> character.render(gc));
+        triggers.forEach(trigger -> trigger.render(gc)); //MOVED THIS TO RENDER LAST, IF THIS NEEDS CHANGING THAT'S OK
 
         // TODO: remove
         triggers.forEach(trigger -> trigger.renderHitBox(gc));

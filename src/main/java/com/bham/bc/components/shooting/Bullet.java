@@ -5,6 +5,9 @@ import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.HitMarker;
+import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
@@ -15,6 +18,7 @@ import javafx.geometry.Point2D;
 import java.util.List;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
+import static com.bham.bc.components.Controller.services;
 
 
 /**
