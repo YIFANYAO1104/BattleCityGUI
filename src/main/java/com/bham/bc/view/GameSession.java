@@ -59,7 +59,7 @@ public class GameSession {
     private DoubleProperty playerHealthFraction;
 
     /**
-     * Constructs the game sessionentityManager
+     * Constructs the game session
      */
     public GameSession(MapType mapType) {
         PAUSE_MENU = new PauseMenu();
@@ -121,22 +121,11 @@ public class GameSession {
         homeHealthBar.setBackground(new Background(new BackgroundFill(Color.web(FG_1), new CornerRadii(20), new Insets(0))));
         homeHealthBar.setId("home-health-bar");
 
-        // Set up player health bar
-        StackPane playerHealthBar = new StackPane();
-        playerHealthBar.setBackground(new Background(new BackgroundFill(Color.web(FG_1), new CornerRadii(20), new Insets(0))));
-        playerHealthBar.setId("player-health-bar");
-
         // Set up home health label
         Label homeHealthTxt = new Label(" Territory Control ");
         homeHealthTxt.setTextFill(Color.web(FG_2));
         homeHealthTxt.setEffect(new Glow(1));
         homeHealthTxt.setId("home-health-label");
-
-        // Set up player health label
-        Label playerHealthTxt = new Label("       Health      ");
-        homeHealthTxt.setTextFill(Color.web(FG_2));
-        homeHealthTxt.setEffect(new Glow(1));
-        homeHealthTxt.setId("player-health-label");
 
         // Make the colors of the home health bar and text dynamic
         healthFraction.addListener((obsVal, oldVal, newVal) -> {
@@ -148,6 +137,22 @@ public class GameSession {
             homeHealthTxt.setTextFill(homeHealthTxtGradient);
         });
 
+        // Add home health bar and label to container
+        StackPane healthProgress = new StackPane();
+        healthProgress.getChildren().addAll(homeHealthBar, homeHealthTxt);
+
+        /*
+        // Set up player health bar
+        StackPane playerHealthBar = new StackPane();
+        playerHealthBar.setBackground(new Background(new BackgroundFill(Color.web(FG_1), new CornerRadii(20), new Insets(0))));
+        playerHealthBar.setId("player-health-bar");
+
+        // Set up player health label
+        Label playerHealthTxt = new Label("       Health      ");
+        homeHealthTxt.setTextFill(Color.web(FG_2));
+        homeHealthTxt.setEffect(new Glow(1));
+        homeHealthTxt.setId("player-health-label");
+
         // Make the colors of the player health bar and text dynamic
         playerHealthFraction.addListener((obsVal, oldVal, newVal) -> {
             Stop[] playerHealthBarStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_1)), new Stop(newVal.doubleValue(), Color.web(BG_1)) };
@@ -158,13 +163,10 @@ public class GameSession {
             playerHealthTxt.setTextFill(playerHealthTxtGradient);
         });
 
-        // Add home health bar and label to container
-        StackPane healthProgress = new StackPane();
-        healthProgress.getChildren().addAll(homeHealthBar, homeHealthTxt);
-
         // Add player health bar and label to container
         StackPane playerHealthProgress = new StackPane();
         playerHealthProgress.getChildren().addAll(playerHealthBar, playerHealthTxt);
+         */
 
         // Set up score label and add to container
         Label scoreLabel = new Label();
@@ -183,7 +185,7 @@ public class GameSession {
         // Add home health bar, score and time containers to the progress layout
         TilePane progressPane = new TilePane();
         progressPane.setMinSize(WIDTH, HEIGHT);
-        progressPane.getChildren().addAll(playerHealthProgress, healthProgress, scoreProgress, timeProgress);
+        progressPane.getChildren().addAll(healthProgress, scoreProgress, timeProgress);
         progressPane.getStyleClass().add("progress-pane");
 
         // Add the progress layout to the game pane

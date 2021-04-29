@@ -300,7 +300,6 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         triggers.forEach(trigger -> trigger.render(gc));
         bullets.forEach(bullet -> bullet.render(gc));
-
         characters.forEach(character -> character.render(gc));
 
         // TODO: remove
@@ -311,8 +310,8 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         gameMap.renderTopLayer(gc);
 
-        gameMap.renderGraph(gc, new ArrayList<>(characters));
-        mapDivision.render(gc);
+        //gameMap.renderGraph(gc, new ArrayList<>(characters));
+        //mapDivision.render(gc);
 //        System.out.println(mapDivision.sizeOfCells());
         gameMap.renderTerritories(gc);
     }

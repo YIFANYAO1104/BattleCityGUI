@@ -1,10 +1,8 @@
 package entity.ai;
 
 import com.bham.bc.components.Controller;
-import com.bham.bc.components.SurvivalController;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
@@ -19,10 +17,7 @@ import junitparams.naming.TestCaseName;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 
 import static org.junit.Assert.*;
 
@@ -36,7 +31,7 @@ public class NavigationFlowTest {
     private Object[] testParams()
     {
         new JFXPanel();
-        Controller.setMode(MapType.Map1);
+        Controller.setMode(MapType.SMALL);
         Player player = new Player(16*32, 16*32);
         SparseGraph sg = Controller.services.getGraph();
 

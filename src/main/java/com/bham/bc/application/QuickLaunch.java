@@ -9,7 +9,7 @@ public class QuickLaunch extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            GameSession manager = new GameSession(MapType.Map1);
+            GameSession manager = new GameSession(MapType.SMALL);
             manager.startGame(primaryStage);
         } catch(Exception e) {
             e.printStackTrace();

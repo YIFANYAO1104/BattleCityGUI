@@ -2,21 +2,14 @@ package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.Controller;
 
-import com.bham.bc.components.characters.Direction;
 import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.LaserType;
-import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;
-import javafx.scene.input.KeyEvent;
 import org.junit.Test;
-import com.bham.bc.components.SurvivalController;
-
-import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
 
@@ -25,9 +18,9 @@ public class TriggerTest {
     @Test
     public void test1() throws Exception{
             new JFXPanel();
-            Controller.setMode(MapType.Map1);
+            Controller.setMode(MapType.SMALL);
             Player player = new Player(510, 480);
-            GameMap gameMap = new GameMap(MapType.Map1);
+            GameMap gameMap = new GameMap(MapType.SMALL);
             SpeedTrigger sp= new SpeedTrigger(540,490,30,20);
             //PathPlanner p = new PathPlanner(player, gameMap.getGraph());
              player.testDIRECTION_SET();
@@ -47,9 +40,9 @@ public class TriggerTest {
     @Test
     public void test2() throws Exception{
         new JFXPanel();
-        Controller.setMode(MapType.Map1);
+        Controller.setMode(MapType.SMALL);
         Player player = new Player(240, 480);
-        GameMap gameMap = new GameMap(MapType.Map1);
+        GameMap gameMap = new GameMap(MapType.SMALL);
         ArmorTrigger ap= new ArmorTrigger(260,480,200,20);
         //PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         player.testDIRECTION_SET();
@@ -69,9 +62,9 @@ public class TriggerTest {
     @Test
     public void test3() throws Exception{
         new JFXPanel();
-        Controller.setMode(MapType.Map1);
+        Controller.setMode(MapType.SMALL);
         Player player = new Player(410, 400);
-        GameMap gameMap = new GameMap(MapType.Map1);
+        GameMap gameMap = new GameMap(MapType.SMALL);
         StateTrigger st= new StateTrigger(440,400,20);
         //PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         player.testDIRECTION_SET();

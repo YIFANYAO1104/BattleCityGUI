@@ -17,7 +17,6 @@ import junitparams.naming.TestCaseName;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static com.bham.bc.utils.GeometryEnhanced.isZero;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(JUnitParamsRunner.class)
@@ -26,7 +25,7 @@ public class AlgorithmTime {
     private Object[] map1AStarParams()
     {
         new JFXPanel();
-        Controller.setMode(MapType.Map1);
+        Controller.setMode(MapType.SMALL);
         SparseGraph sg = Controller.services.getGraph();
         Object[][] typeListList = { //
                 { 2016, 149  , sg},
@@ -46,7 +45,7 @@ public class AlgorithmTime {
     private Object[] map1DijkstraParams()
     {
         new JFXPanel();
-        Controller.setMode(MapType.Map1);
+        Controller.setMode(MapType.SMALL);
         SparseGraph sg = Controller.services.getGraph();
         Object[][] typeListList = { //
                 { 149  , sg},

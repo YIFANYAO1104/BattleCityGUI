@@ -31,7 +31,7 @@ public class GameFlowEvent extends Event {
      */
     public GameFlowEvent(EventType<? extends Event> eventType) {
         super(eventType);
-        mapType = MapType.Map1;
+        mapType = MapType.SMALL;
         numPlayers = 1;
         score = -1;
         name = "";

@@ -16,7 +16,7 @@ public class GameCharacterTest {
 	@Test
 	public void healthTest() {
 		new JFXPanel();		
-		Controller.setMode(MapType.Map1);
+		Controller.setMode(MapType.SMALL);
 		Player x =  new Player(10,10);
 		
 		assertTrue(100==x.getHp());
@@ -29,7 +29,7 @@ public class GameCharacterTest {
 	@Test
 	public void speedTest() throws Exception {
 		new JFXPanel();		
-		Controller.setMode(MapType.Map1);
+		Controller.setMode(MapType.SMALL);
 		Player x =  new Player(10,10);
 	
 		assertTrue(x.getVelocity().magnitude() == 0);
@@ -46,7 +46,7 @@ public class GameCharacterTest {
 	@Test
 	public void hitboxTest() {
 		new JFXPanel();		
-		Controller.setMode(MapType.Map1);
+		Controller.setMode(MapType.SMALL);
 		Player a =  new Player(0,0);
 		Player b =  new Player(0,24.99);
 		Player c =  new Player(0,25);

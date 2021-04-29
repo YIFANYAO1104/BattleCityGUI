@@ -22,7 +22,7 @@ public class SteeringTest {
     private Object[] normalCaseParams()
     {
         new JFXPanel();
-        Controller.setMode(MapType.Map1);
+        Controller.setMode(MapType.SMALL);
         Object[][] typeListList = { //
                 { new Point2D(0,0) , new Point2D(1,0) },
                 { new Point2D(0,0) , new Point2D(0,1) },
@@ -63,7 +63,7 @@ public class SteeringTest {
     private Object[] maxSpeedParams()
     {
         new JFXPanel();
-        Controller.setMode(MapType.Map1);
+        Controller.setMode(MapType.SMALL);
         Object[][] typeListList = { //
                 { new Point2D(0,0) ,  new Point2D(5,0 )  ,  1 , 1000 },
                 { new Point2D(0,0) ,  new Point2D(0,5 )  ,  2 , 1000 },
@@ -99,7 +99,7 @@ public class SteeringTest {
     private Object[] maxForceParams()
     {
         new JFXPanel();
-        Controller.setMode(MapType.Map1);
+        Controller.setMode(MapType.SMALL);
         Object[][] typeListList = { //
                 { new Point2D(0,0) ,  new Point2D(5,0 )  , 1000 , 1},
                 { new Point2D(0,0) ,  new Point2D(0,5 )  , 1000 , 2},
