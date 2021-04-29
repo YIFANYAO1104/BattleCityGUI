@@ -20,8 +20,7 @@ public class HandyGraphFunctions {
     }
 
     /**
-     *
-     *  use to add he eight neighboring edges of a graph node that
+     *  use to add the eight neighboring edges of a graph node that
      *  is positioned in a grid layout
      */
     public static <graph_type extends SparseGraph> void GraphHelper_AddAllNeighboursToGridNode(graph_type graph,
@@ -34,11 +33,6 @@ public class HandyGraphFunctions {
             for (int j = -1; j < 2; ++j) {
                 int nodeX = col + j;
                 int nodeY = row + i;
-
-
-//                if (!(i+j==1)) {                 ///now is 4 direction
-//                    continue;
-//                }
 
                 if ((i == 0) && (j == 0)) {         // It is 8 direction
                     continue;
@@ -109,7 +103,6 @@ public class HandyGraphFunctions {
                 double total = NumCellsX * NumCellsY;
                 double realPer  = realTimeNodes / (total*2);
                 graph.setRealContrustPercentage(realPer * 0.6);
-//                System.out.println("grph comstruct:  "+graph.getRealContrustPercentage());
 
             }
         }
@@ -129,7 +122,6 @@ public class HandyGraphFunctions {
     }
 
     /**
-     *
      * @param sg the Sparse graph on the mao
      * @param gn the node which tricking the player
      * @return Sparse graph by using SparseGraph
@@ -139,43 +131,5 @@ public class HandyGraphFunctions {
 
         return fl.stratFLood(sg);
     }
-
-
-
-
-    /**
-     * Given a cost value and an index to a valid node this function examines
-     * all a node's edges, calculates their length, and multiplies
-     * the value with the weight. Useful for setting terrain costs.
-     */
-//    public static <graph_type extends SparseGraph>
-//    void WeightNavGraphNodeEdges(graph_type graph, int node, double weight) {
-//        //make sure the node is present
-//        assert (node < graph.numNodes());
-//
-//        //set the cost for each edge
-//        graph_type.EdgeIterator ConstEdgeItr = new graph_type.EdgeIterator(graph, node,new ExpandPolicies.ExpandAll());
-//        while (ConstEdgeItr.hasNext()){
-//            GraphEdge pE = ConstEdgeItr.next();
-//            //calculate the distance between nodes
-//            Point2D p1 = graph.getNode(pE.From()).getPosition();
-//            Point2D p2 = graph.getNode(pE.To()).getPosition();
-//            double dist = p1.distance(p2);
-////            double dist = Vec2DDistance(graph.getNode(pE.From()).Pos(),
-////                    graph.getNode(pE.To()).Pos());
-//
-//            //set the cost of this edge
-//            graph.setEdgeCost(pE.From(), pE.To(), dist * weight);
-//
-//            //if not a digraph, set the cost of the parallel edge to be the same
-//            if (!graph.isDigraph()) {
-//                graph.setEdgeCost(pE.To(), pE.From(), dist * weight);
-//            }
-//        }
-//    }
-
-
-
-
 
 }

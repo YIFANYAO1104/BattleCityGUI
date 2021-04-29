@@ -9,9 +9,17 @@ import javafx.geometry.Point2D;
 
 public class NavNode extends GraphNode{
 
-    protected Point2D m_vPosition;          // The coordinates
-    protected ExtraInfo m_ExtraInfo;        //
-    public int numWithObs = 0;              // The number of obstacles interact with this Navnode
+    /**
+     * Every GraohNode have their coordinates{@link Point2D}
+     */
+    protected Point2D m_vPosition;
+
+    protected ExtraInfo m_ExtraInfo;
+
+    /**
+     * The number{@link Integer} of obstacles interact with this Navnode
+     */
+    public int numWithObs = 0;
 
     public NavNode(int idx, Point2D pos){
         super(idx);
