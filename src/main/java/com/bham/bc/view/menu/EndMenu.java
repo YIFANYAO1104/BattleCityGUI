@@ -1,9 +1,9 @@
 package com.bham.bc.view.menu;
 
 import com.bham.bc.view.GameSession;
-import com.bham.bc.view.model.GameFlowEvent;
+import com.bham.bc.view.tools.GameFlowEvent;
 import com.bham.bc.view.model.MenuButton;
-import com.bham.bc.view.model.RecordsHandler;
+import com.bham.bc.view.tools.RecordsHandler;
 import com.bham.bc.view.model.SubMenu;
 import javafx.animation.FadeTransition;
 import javafx.geometry.Pos;

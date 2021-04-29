@@ -74,7 +74,7 @@ public class TriggerTest {
             if(player.intersects(st)){
                 System.out.println("New State touched");
                 st.handle(player);
-                assertEquals(player.testGun().testBullet(), BulletType.IceBullet);
+                assertEquals(player.testGun().testBullet(), BulletType.ICE);
                 assertEquals(player.testGun().testLaser(), LaserType.ThunderLaser);
                 System.out.println("Current bullet successfully switch to " + player.testGun().testBullet());
                 System.out.println("Current laser  successfully switch to " + player.testGun().testLaser());

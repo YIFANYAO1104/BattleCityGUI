@@ -1,4 +1,4 @@
-package com.bham.bc.view.model;
+package com.bham.bc.view.tools;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -33,10 +33,10 @@ public class RecordsHandler {
     }
 
     public static ObservableList<Records> initTable(){
-        File file = new File("src/main/resources/scores.json");
+        File file = new File("src/main/resources/model/scores.json");
         if (!file.exists()) {
             try {
-                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/scores.json");
+                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/model/scores.json");
                 byte[] data="[]".getBytes();
                 fileOutputStream.write(data);
                 fileOutputStream.flush();
@@ -49,7 +49,7 @@ public class RecordsHandler {
 
         //read from Json file
         try {
-            parseJsonFile("src/main/resources/scores.json");
+            parseJsonFile("src/main/resources/model/scores.json");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,14 +93,14 @@ public class RecordsHandler {
         sort();
 
         try {
-            writeJsonToFile("src/main/resources/scores.json");
+            writeJsonToFile("src/main/resources/model/scores.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //read from Json file
         try {
-            parseJsonFile("src/main/resources/scores.json");
+            parseJsonFile("src/main/resources/model/scores.json");
         } catch (IOException e) {
             e.printStackTrace();
         }

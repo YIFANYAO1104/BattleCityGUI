@@ -9,6 +9,10 @@ import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.CollisionHandler;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
@@ -27,7 +31,6 @@ abstract public class GameCharacter extends MovingEntity {
     protected double hp;
     protected Side side;
 
-
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
 
     /**
@@ -44,6 +47,33 @@ abstract public class GameCharacter extends MovingEntity {
         this.side = side;
 
         mass = 3;
+    }
+
+    /**
+     * Renders the health bar below character
+     * @param gc graphics context to render the hp bar
+     */
+    protected void renderHp(GraphicsContext gc) {
+        // Declare the global colors used in the CSS file
+        String FG_1 = "#135ADD";  // -fx-primary-color (foreground primary)
+        String BG_1 = "#080A1E";  // -fx-bg-color (background primary)
+
+        // Set the current active health of the character
+        Stop[] healthBarStops = new Stop[]{ new Stop(hp/MAX_HP, Color.web(FG_1)), new Stop(hp/MAX_HP, Color.web(BG_1)) };
+        LinearGradient healthBarGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, healthBarStops);
+
+        // Set the fill nad the stroke of the health bar
+        gc.setFill(healthBarGradient);
+        gc.setStroke(Color.web(BG_1));
+        gc.setLineWidth(1);
+
+        // Set the width (e.g. dependent on hp or on character's width)
+        // double barWidth = MAX_SIZE;
+        double barWidth = MAX_HP/3;
+
+        // Draw the health bar
+        gc.fillRect(getCenterPosition().getX() - barWidth*.5, getCenterPosition().getY() + MAX_SIZE*.5, barWidth, 3);
+        gc.strokeRect(getCenterPosition().getX() - barWidth*.5, getCenterPosition().getY() + MAX_SIZE*.5, barWidth, 3);
     }
 
     /**
@@ -173,7 +203,6 @@ abstract public class GameCharacter extends MovingEntity {
     public void armorUP(double max){
         this.MAX_HP =max;
         this.hp = max;
-        System.out.println("The max HP of character has been changed to " + hp);
     }
 
     /**
@@ -195,12 +224,11 @@ abstract public class GameCharacter extends MovingEntity {
     @Override
     public void render(GraphicsContext gc) {
         drawRotatedImage(gc, entityImages[0], getAngle());
+        renderHp(gc);
     }
 
     @Override
     public abstract Circle getHitBox();
-
-
 
     @Override
     public boolean handleMessage(Telegram msg) {

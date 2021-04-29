@@ -22,7 +22,6 @@ public enum Tileset {
     ROCKS("file:src/main/resources/img/tilesets/rocks.png", 16,16),
     PIMPLES("file:src/main/resources/img/tilesets/pimples.png",16,16);
 
-
     private final Image[] TILES;
     private final int OFFSET_Y;
 
@@ -50,7 +49,6 @@ public enum Tileset {
         int cols = (int) image.getWidth() / subImageWidth;
 
         Image[] subImages = new Image[rows * cols];
-
         PixelReader pr = image.getPixelReader();
 
         for(int i = 0; i < subImages.length; i++) {
@@ -76,14 +74,18 @@ public enum Tileset {
      * @param i index of tile
      * @return image of tile at the specified index
      */
-    public Image getTile(int i) { return TILES[i]; }
+    public Image getTile(int i) {
+        return TILES[i];
+    }
 
     /**
      * Gets the specified tiles
      * @param a array of indexes
      * @return array of images at the specified indexes
      */
-    public Image[] getTiles(int[] a) { return Arrays.stream(a).mapToObj(this::getTile).toArray(Image[]::new); }
+    public Image[] getTiles(int[] a) {
+        return Arrays.stream(a).mapToObj(this::getTile).toArray(Image[]::new);
+    }
 
     /**
      * Gets y offset

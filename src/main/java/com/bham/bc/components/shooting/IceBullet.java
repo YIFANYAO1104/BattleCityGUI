@@ -9,7 +9,6 @@ import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
@@ -20,7 +19,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * Represents a default bullet the player starts with
  */
 public class IceBullet extends Bullet {
-    public static final BulletType TYPE = BulletType.IceBullet;
+    public static final BulletType TYPE = BulletType.ICE;
     public static final double SPEED = 5;
     public static final double DAMAGE = 10;
 

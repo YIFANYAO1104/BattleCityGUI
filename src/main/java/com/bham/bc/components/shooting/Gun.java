@@ -2,11 +2,9 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -80,7 +78,7 @@ public class Gun {
 
         // Return an instance which corresponds to the bullet type
         switch(bulletType) {
-            case IceBullet:
+            case ICE:
                 return  new IceBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
             case EXPLOSIVE:
                 return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());

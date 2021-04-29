@@ -1,11 +1,10 @@
-package com.bham.bc.view;
+package com.bham.bc.view.model;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
@@ -14,7 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.beans.value.ChangeListener;
 
 
 /**
@@ -53,7 +51,7 @@ public class CustomStage extends Stage{
                 "Classic Blue", "Classic Green", "Classic Black", "Classic Orange"
         ));
 
-        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../../model/style.css").toExternalForm());
     }
 
 
@@ -65,7 +63,7 @@ public class CustomStage extends Stage{
         ));
 
 
-        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../../model/style.css").toExternalForm());
     }
 
 
@@ -110,7 +108,7 @@ public class CustomStage extends Stage{
 
         gpTitle.setMinHeight(35);
         gpTitle.setMaxHeight(35);
-        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../../model/style.css").toExternalForm());
 
 
         btnMin = new Label();

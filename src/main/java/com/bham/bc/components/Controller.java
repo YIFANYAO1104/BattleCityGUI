@@ -123,7 +123,9 @@ public abstract class Controller extends BaseGameEntity implements Services {
     }
 
     @Override
-    public boolean gameOver() { return (getHomeHp() <= 0 || !isPlayerAlive()) ? true : false; }
+    public boolean gameOver() {
+        return getHomeHp() <= 0 || !isPlayerAlive();
+    }
 
     public void occupyHome(Enemy enemy) {
         if(enemy.intersects(gameMap.getHomeTerritory())) {
@@ -243,11 +245,6 @@ public abstract class Controller extends BaseGameEntity implements Services {
     public AlgorithmDriver getDriver() {
         return driver;
     }
-
-//    @Override
-//    public GameMap getMap(){
-//        return gameMap;
-//    }
     // ------------------------------------------------------------
 
     // OTHER ------------------------------------------------------
@@ -304,8 +301,8 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         // TODO: remove
         triggers.forEach(trigger -> trigger.renderHitBox(gc));
-        bullets.forEach(bullet -> bullet.renderHitBox(gc));
-        characters.forEach(character -> character.renderHitBox(gc));
+//        bullets.forEach(bullet -> bullet.renderHitBox(gc));
+//        characters.forEach(character -> character.renderHitBox(gc));
 
 
         gameMap.renderTopLayer(gc);

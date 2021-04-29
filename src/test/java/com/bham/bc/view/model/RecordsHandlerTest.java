@@ -1,5 +1,6 @@
 package com.bham.bc.view.model;
 
+import com.bham.bc.view.tools.RecordsHandler;
 import junit.framework.TestCase;
 import org.junit.Test;
 

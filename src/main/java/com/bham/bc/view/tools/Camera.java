@@ -1,7 +1,8 @@
-package com.bham.bc.view;
+package com.bham.bc.view.tools;
 
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.view.GameSession;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;

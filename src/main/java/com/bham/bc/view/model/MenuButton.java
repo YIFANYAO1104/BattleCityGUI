@@ -66,7 +66,7 @@ public class MenuButton extends StackPane {
 
         // Set up button text
         Text text = new Text(name);
-        Font font = Font.loadFont("file:src/main/resources/Ubuntu-Medium.ttf", 26);
+        Font font = Font.loadFont("file:src/main/resources/model/Ubuntu-Medium.ttf", 26);
         text.setFont(font);
         text.fillProperty().bind(Bindings.when(hoverProperty()).then(Color.web(FG_2)).otherwise(Color.web(FG_1)));
 

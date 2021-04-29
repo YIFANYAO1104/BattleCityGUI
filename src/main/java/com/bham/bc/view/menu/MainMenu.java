@@ -3,6 +3,8 @@ package com.bham.bc.view.menu;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.*;
+import com.bham.bc.view.tools.GameFlowEvent;
+import com.bham.bc.view.tools.RecordsHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;

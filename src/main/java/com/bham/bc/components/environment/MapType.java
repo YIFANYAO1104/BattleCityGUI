@@ -2,11 +2,11 @@ package com.bham.bc.components.environment;
 
 public enum MapType {
 
-    SMALL("/64x64.json"),
-    MEDIUM("/86x86.json"),
-    LARGE("/162x162.json"),
-    TEST1("/com.bham.bc/floodMap1.json"),
-    TEST2("/test.json"),
+    SMALL("/model/maps/64x64.json"),
+    MEDIUM("/model/maps/86x86.json"),
+    LARGE("/model/maps/162x162.json"),
+    TEST1("/model/maps/floodMap1.json"),
+    TEST2("/model/maps/test.json"),
     EMPTY(null);
 
     MapType(String name) {

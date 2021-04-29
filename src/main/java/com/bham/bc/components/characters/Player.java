@@ -259,11 +259,11 @@ public class Player extends GameCharacter {
 		TRACKABLE_Y.set(getCenterPosition().getY());
 	}
 
-	@Override
-	public void render(GraphicsContext gc) {
-		if(navigationService!=null) navigationService.render(gc);
-		drawRotatedImage(gc, entityImages[0], getAngle());
-	}
+//	@Override
+//	public void render(GraphicsContext gc) {
+//		if(navigationService!=null) navigationService.render(gc);
+//		drawRotatedImage(gc, entityImages[0], getAngle());
+//	}
 
 	@Override
 	protected void destroy() {

@@ -10,7 +10,9 @@ import static com.bham.bc.utils.Timer.CLOCK;
 
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.PauseMenu;
-import com.bham.bc.view.model.GameFlowEvent;
+import com.bham.bc.view.model.CustomStage;
+import com.bham.bc.view.tools.GameFlowEvent;
+import com.bham.bc.view.tools.Camera;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -56,7 +58,6 @@ public class GameSession {
     private StringProperty timeSurvived;
     private StringProperty scoreAchieved;
     private DoubleProperty healthFraction;
-    private DoubleProperty playerHealthFraction;
 
     /**
      * Constructs the game session
@@ -82,7 +83,7 @@ public class GameSession {
         gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, this::leaveGame);
 
         try {
-            gamePane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
+            gamePane.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             e.printStackTrace();
         }
@@ -114,7 +115,6 @@ public class GameSession {
         timeSurvived = new SimpleStringProperty("00:00");
         scoreAchieved = new SimpleStringProperty("0");
         healthFraction = new SimpleDoubleProperty(1);
-        playerHealthFraction = new SimpleDoubleProperty(1);
 
         // Set up home health bar
         StackPane homeHealthBar = new StackPane();
@@ -122,7 +122,7 @@ public class GameSession {
         homeHealthBar.setId("home-health-bar");
 
         // Set up home health label
-        Label homeHealthTxt = new Label(" Territory Control ");
+        Label homeHealthTxt = new Label("        Territory taken over       ");
         homeHealthTxt.setTextFill(Color.web(FG_2));
         homeHealthTxt.setEffect(new Glow(1));
         homeHealthTxt.setId("home-health-label");
@@ -140,33 +140,6 @@ public class GameSession {
         // Add home health bar and label to container
         StackPane healthProgress = new StackPane();
         healthProgress.getChildren().addAll(homeHealthBar, homeHealthTxt);
-
-        /*
-        // Set up player health bar
-        StackPane playerHealthBar = new StackPane();
-        playerHealthBar.setBackground(new Background(new BackgroundFill(Color.web(FG_1), new CornerRadii(20), new Insets(0))));
-        playerHealthBar.setId("player-health-bar");
-
-        // Set up player health label
-        Label playerHealthTxt = new Label("       Health      ");
-        homeHealthTxt.setTextFill(Color.web(FG_2));
-        homeHealthTxt.setEffect(new Glow(1));
-        homeHealthTxt.setId("player-health-label");
-
-        // Make the colors of the player health bar and text dynamic
-        playerHealthFraction.addListener((obsVal, oldVal, newVal) -> {
-            Stop[] playerHealthBarStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_1)), new Stop(newVal.doubleValue(), Color.web(BG_1)) };
-            Stop[] playerHealthTxtStops = new Stop[]{ new Stop(newVal.doubleValue(), Color.web(FG_2)), new Stop(newVal.doubleValue(), Color.web(FG_1)) };
-            LinearGradient playerHealthBarGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, playerHealthBarStops);
-            LinearGradient playerHealthTxtGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, playerHealthTxtStops);
-            playerHealthBar.setBackground(new Background(new BackgroundFill(playerHealthBarGradient, new CornerRadii(20), new Insets(0))));
-            playerHealthTxt.setTextFill(playerHealthTxtGradient);
-        });
-
-        // Add player health bar and label to container
-        StackPane playerHealthProgress = new StackPane();
-        playerHealthProgress.getChildren().addAll(playerHealthBar, playerHealthTxt);
-         */
 
         // Set up score label and add to container
         Label scoreLabel = new Label();
@@ -197,7 +170,7 @@ public class GameSession {
      */
     private void createKeyListeners() {
         gamePane.getScene().setOnKeyPressed(e -> {
-            if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
+            if((e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) && !services.gameOver()) {
                 gamePane.fireEvent(new GameFlowEvent(GameFlowEvent.PAUSE_GAME));
             } else {
                 services.keyPressed(e);
@@ -283,7 +256,6 @@ public class GameSession {
 
         scoreAchieved.set(String.format("%.0f", services.getScore()));
         healthFraction.set(services.getHomeHpFraction());
-        playerHealthFraction.set(services.getPlayerHpFraction());
     }
 
     /**

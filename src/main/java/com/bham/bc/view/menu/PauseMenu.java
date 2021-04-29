@@ -1,7 +1,7 @@
 package com.bham.bc.view.menu;
 
 import com.bham.bc.view.GameSession;
-import com.bham.bc.view.model.GameFlowEvent;
+import com.bham.bc.view.tools.GameFlowEvent;
 import com.bham.bc.view.model.MenuButton;
 import com.bham.bc.view.model.MenuSlider;
 import com.bham.bc.view.model.SubMenu;

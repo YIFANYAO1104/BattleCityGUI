@@ -1,4 +1,4 @@
-package com.bham.bc.view.model;
+package com.bham.bc.view.tools;
 
 import com.bham.bc.components.environment.MapType;
 import javafx.event.Event;

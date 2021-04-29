@@ -2,8 +2,9 @@ package com.bham.bc.view;
 
 import com.bham.bc.audio.SoundTrack;
 import com.bham.bc.view.menu.MainMenu;
+import com.bham.bc.view.model.CustomStage;
 import com.bham.bc.view.model.MenuBackground;
-import com.bham.bc.view.model.GameFlowEvent;
+import com.bham.bc.view.tools.GameFlowEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -44,7 +45,7 @@ public class MenuSession {
         mainPane.addEventFilter(GameFlowEvent.START_GAME, this::createGameSession);
 
         try {
-            mainPane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
+            mainPane.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
         } catch(IllegalArgumentException | IllegalStateException | NullPointerException e) {
             e.printStackTrace();
         }

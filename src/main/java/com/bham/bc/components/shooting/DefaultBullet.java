@@ -2,7 +2,6 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Rectangle;
