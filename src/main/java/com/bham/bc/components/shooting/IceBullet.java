@@ -63,8 +63,6 @@ public class IceBullet extends Bullet {
     public void handle(BaseGameEntity entity) {
 
         if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
-            System.out.println("!!!!!!!!!!\n!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!");
-            ((Enemy) entity).toFreeze(11);
             ((GameCharacter) entity).changeHp(-DAMAGE);
             destroy();
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {
