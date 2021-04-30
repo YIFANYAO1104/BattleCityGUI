@@ -26,7 +26,7 @@
 -->
 [![Contributors][contributors-shield]][contributors-url]
 [![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
+[![Apache License][license-shield]][license-url]
 
 
 
@@ -127,7 +127,7 @@ To get a local copy up and running follow these simple steps.
 
 ## License
 
-Distributed under the MIT License. See `LICENSE` for more information.
+Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE">`LICENSE` </a>for more information.
 
 
 
@@ -155,6 +155,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
 [issues-url]: https://github.com/github_username/repo/issues
 [license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo/blob/master/LICENSE.txt
+[license-url]: https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/github_username
