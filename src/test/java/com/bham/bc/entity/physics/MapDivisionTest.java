@@ -1,22 +1,14 @@
-package com.bham.bc.physics;
+package com.bham.bc.entity.physics;
 
 
-import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.characters.enemies.EnemyTestDemo;
-import com.bham.bc.components.characters.enemies.Shooter;
-import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.physics.MapDivision;
 import javafx.embed.swing.JFXPanel;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 

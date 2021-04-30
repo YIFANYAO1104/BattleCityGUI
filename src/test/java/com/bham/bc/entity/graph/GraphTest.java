@@ -1,4 +1,4 @@
-package entity;
+package com.bham.bc.entity.graph;
 
 
 import com.bham.bc.entity.graph.SparseGraph;

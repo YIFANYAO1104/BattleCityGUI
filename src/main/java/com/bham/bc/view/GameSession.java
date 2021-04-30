@@ -225,7 +225,7 @@ public class GameSession {
      */
     public void endGame() {
         gameTimer.stop();
-        //services.clear(); TODO: figure out if we want to keep this or not
+        services.clear();
         audioManager.stopMusic();
         EndMenu endMenu = new EndMenu();
         endMenu.show(gamePane, services.getScore());
@@ -265,15 +265,15 @@ public class GameSession {
     private void updateGameState() {
         long currentTime = CLOCK.getCurrentTime() - startTimestamp;
 
-        if(services.gameOver()){
-            endGame();
-        }
-
         DateFormat timeFormat = new SimpleDateFormat("mm:ss");
         timeSurvived.set(timeFormat.format(currentTime));
 
         scoreAchieved.set(String.format("%.0f", services.getScore()));
         healthFraction.set(services.getHomeHpFraction());
+
+        if(services.gameOver()){
+            endGame();
+        }
     }
 
     /**
@@ -294,11 +294,10 @@ public class GameSession {
      */
     private void tick() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        updateGameState();
         services.render(gc);
-
         camera.update();
         services.update();
+        updateGameState();
     }
 
     /**

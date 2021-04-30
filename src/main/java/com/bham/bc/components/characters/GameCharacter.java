@@ -4,12 +4,9 @@ import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.triggers.Trigger;
-import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.HitMarker;
-import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.Constants;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.CollisionHandler;
 import com.bham.bc.utils.messaging.Telegram;
@@ -31,8 +28,10 @@ import static com.bham.bc.components.Controller.services;
  */
 abstract public class GameCharacter extends MovingEntity {
     public static final int MAX_SIZE = 32;
+    public static final double MAX_HP = 300;
+    public static final double MAX_SPEED = 5;
 
-    private double MAX_HP;
+    protected double fullHp;
     protected double hp;
     protected Side side;
 
@@ -51,9 +50,9 @@ abstract public class GameCharacter extends MovingEntity {
      */
     protected GameCharacter(double x, double y, double speed, double hp, Side side) {
         super(x, y, speed);
-        assert (speed <= Constants.MAX_CHARACTER_SPEED) : "<GameCharacter::Constructor>: invalid speed";
-        assert (hp <= Constants.MAX_CHARACTER_HEALTH) : "<GameCharacter::Constructor>: invalid hp";
-        MAX_HP = hp;
+        assert -MAX_SPEED <= speed && speed <= MAX_SPEED : "<GameCharacter::Constructor>: invalid speed";
+        assert 0 <= hp && hp <= MAX_HP : "<GameCharacter::Constructor>: invalid hp";
+        fullHp = hp;
         this.hp = hp;
         this.side = side;
 
@@ -70,7 +69,7 @@ abstract public class GameCharacter extends MovingEntity {
         String BG_1 = "#080A1E";  // -fx-bg-color (background primary)
 
         // Set the current active health of the character
-        Stop[] healthBarStops = new Stop[]{ new Stop(hp/MAX_HP, Color.web(FG_1)), new Stop(hp/MAX_HP, Color.web(BG_1)) };
+        Stop[] healthBarStops = new Stop[]{ new Stop(hp/ fullHp, Color.web(FG_1)), new Stop(hp/ fullHp, Color.web(BG_1)) };
         LinearGradient healthBarGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, healthBarStops);
 
         // Set the fill nad the stroke of the health bar
@@ -80,7 +79,7 @@ abstract public class GameCharacter extends MovingEntity {
 
         // Set the width (e.g. dependent on hp or on character's width)
         // double barWidth = MAX_SIZE;
-        double barWidth = MAX_HP/3;
+        double barWidth = fullHp /3;
 
         // Draw the health bar
         gc.fillRect(getCenterPosition().getX() - barWidth*.5, getCenterPosition().getY() + MAX_SIZE*.5, barWidth, 3);
@@ -96,11 +95,11 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     /**
-     * Gets the MAX HP of the character
-     * @return initial HP (which is MAX) the character was assigned with
+     * Gets the full possible HP of the character
+     * @return initial HP (which is full) the character was assigned with
      */
-    public double getMaxHp() {
-        return MAX_HP;
+    public double getFullHp() {
+        return fullHp;
     }
 
     /**
@@ -116,7 +115,7 @@ abstract public class GameCharacter extends MovingEntity {
      * @param health amount by which the character's HP is changed
      */
     public void changeHp(double health) {
-        hp = Math.min(hp + health, MAX_HP);
+        hp = Math.min(hp + health, fullHp);
         Trigger hitMarker = new HitMarker(this, entityImages[0], getAngle());
         services.addTrigger(hitMarker);
 
@@ -200,7 +199,7 @@ abstract public class GameCharacter extends MovingEntity {
     protected abstract void destroy();
 
     public void armorUP(double max){
-        this.MAX_HP =max;
+        this.fullHp =max;
         this.hp = max;
     }
 

@@ -2,110 +2,145 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.characters.enemies.*;
+import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.SparseGraph;
+import com.bham.bc.entity.graph.edge.GraphEdge;
+import com.bham.bc.entity.graph.node.NavNode;
 import com.bham.bc.entity.physics.MapDivision;
 import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Stream;
 
 /**
  * Represents a controller for the survival game mode
  */
 public class SurvivalController extends Controller {
+    public static final double MAX_HOME_HP = 10_000;
+    public static final double MAX_HOME_DAMAGE = 5;
 
     /**
      * Constructs the controller by selecting a specific map and preparing that map for the game session
      */
-    public SurvivalController(){
+    public SurvivalController() {
         super();
     }
 
-    @Override
-    public void loadMap(MapType mapType) {
-        gameMap = new GameMap(mapType);
+    /**
+     * Loads the graph of the map
+     *
+     * <p>This method goes through every node and with the help of {@link MapDivision} initializes them based on whether there is an
+     * obstacle or not. To be more precise, it removes the nodes which are invalid/covered by obstacles.</p>
+     */
+    private void loadGraph() {
+        SparseGraph<NavNode, GraphEdge> graphSystem =  gameMap.getGraph();
+        ArrayList<Point2D> allNodePositions = graphSystem.getAllVector();
+        double percent = .4 / allNodePositions.size();
+
+        for (int i = 0; i < allNodePositions.size(); i++) {
+            Point2D nodePosition = allNodePositions.get(i);
+            double maxCharacterRadius = Math.hypot(GameCharacter.MAX_SIZE/2.0, GameCharacter.MAX_SIZE/2.0);
+            List<BaseGameEntity> surroundingEntities = mapDivision.calculateNeighborsArray(nodePosition, maxCharacterRadius);
+
+            for(BaseGameEntity entity : surroundingEntities) {
+                if(entity instanceof Obstacle) {
+                    ((Obstacle) entity).interacts(graphSystem.getID(), i, new Rectangle(nodePosition.getX()-maxCharacterRadius, nodePosition.getY()-maxCharacterRadius, maxCharacterRadius*2, maxCharacterRadius*2));
+                }
+            }
+
+            graphSystem.setRealContrustPercentage(percent + graphSystem.getRealContrustPercentage());
+        }
     }
 
-    /**
-     * Spawns all the initial characters
-     */
-    private void initCharacters() {
-        // Init players
+    @Override
+    public void loadGame(MapType mapType) {
+        gameMap = new GameMap(mapType);
+
         double playerX = gameMap.getHomeTerritory().getCenterX() - Player.SIZE/2.0;
         double playerY = gameMap.getHomeTerritory().getCenterY() - Player.SIZE;
-        player = new Player(playerX, playerY);
-        characters.add(player);
+        characters.add(new Player(playerX, playerY));
 
-        // Temp: init enemies, later, we will initialize director AI which will spawn enemies automatically
-//        characters.add(new Shooter(16*26, 16*26));
-        //characters.add(new Kamikaze(16*61, 16*4));
-        //characters.add(new Kamikaze(16*26, 16*26));
-        //characters.add(new Teaser(16*36, 16*28));
-        //characters.add(new Tank(16*28, 16*36));
-        //characters.add(new Trapper(16*32, 16*32));
-
-        //characters.add(new Splitter(16*4, 16*4));
-        //characters.add(new Shooter(16*6, 16*4));
-        //characters.add(new Kamikaze(16*61, 16*4));
-        //characters.add(new Teaser(16*61, 16*61));
-        //characters.add(new Tank(16*4, 16*61));
-    }
-
-    /**
-     * Once all the entities are initialized, they can be added to map division which will handle collision checks much faster
-     * and Intial the second step of graph system here
-     */
-    private void initDivisionAndGraph2() {
-//        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), GameMap.getNumTilesX(), GameMap.getNumTilesY(), 50);
-        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(),10,10, 200);
+        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), 10, 10, 500);
         mapDivision.addObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
-//        mapDivision.addEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
-
         mapDivision.addEntities(new ArrayList<>(characters));
 
-        /**
-         * It is wired initial graph here
-         */
-        SparseGraph graphSystem =  gameMap.getGraph();
+        loadGraph();
+    }
 
-        ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
-//        System.out.println("start");
-        double percen = 1 / (double) allNodesLocations.size() * 0.4;
-        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
-            Point2D vv1 = allNodesLocations.get(index);
-            double maxCharacterRadius = Math.sqrt((GameCharacter.MAX_SIZE/2.0)*(GameCharacter.MAX_SIZE/2.0));
+    // CALCULATIONS -----------------------------------------------
+    @Override
+    public Point2D getClosestCenter(Point2D position, ItemType item) {
+        Stream<Point2D> closestPoints;
 
-            List<BaseGameEntity> list1 = mapDivision.calculateNeighborsArray(vv1,maxCharacterRadius);
-
-            for (BaseGameEntity b1 : list1){
-                try{
-                    Obstacle o1 = (Obstacle) b1;
-                    o1.interacts(graphSystem.getID(), index, new Rectangle(
-                            vv1.getX()-maxCharacterRadius,vv1.getY()-maxCharacterRadius,maxCharacterRadius* 2,maxCharacterRadius * 2));
-                }catch (Exception e){}
-
-            }
-            graphSystem.setRealContrustPercentage(percen + graphSystem.getRealContrustPercentage());
-//            System.out.println(graphSystem.getRealContrustPercentage());
-
+        switch(item) {
+            case ALLY:
+                closestPoints = characters.stream().filter(c -> c.getSide() == Side.ALLY).map(GameCharacter::getCenterPosition);
+                break;
+            case SOFT:
+                Stream<BaseGameEntity> obstacles = mapDivision.calculateNeighborsArray(position, 90).stream().filter(entity -> entity instanceof Obstacle);
+                closestPoints = obstacles.filter(entity -> ((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)).map(BaseGameEntity::getCenterPosition);
+                break;
+            case ENEMY_AREA:
+                closestPoints = Arrays.stream(gameMap.getEnemySpawnAreas()).map(circle -> new Point2D(circle.getCenterX(), circle.getCenterY()));
+                break;
+            case HOME:
+                return new Point2D(gameMap.getHomeTerritory().getCenterX(), gameMap.getHomeTerritory().getCenterY());
+            default:
+                return position;
         }
-//        System.out.println("over");
+
+        return closestPoints.min(Comparator.comparing(point -> point.distance(position))).orElse(position);
+    }
+
+    public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
+        return null;
     }
 
     @Override
-    public void startGame() {
-        initCharacters();
-        initDivisionAndGraph2();
+    public boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array) {
+        double angle = end.subtract(start).angle(new Point2D(0,-1));
+        //angle between vectors are [0,180), so we need add extra direction info
+        if (end.subtract(start).getX()<0) angle = -angle;
+        double dis = start.distance(end);
+
+        Point2D center = start.midpoint(end);
+        Point2D topLeft = center.subtract(radius.multiply(0.5)).subtract(0,dis/2);
+        Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), radius.getX()+10, radius.getY()+dis+5);
+        hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
+        array.add(hitBox);
+
+        return !intersectsObstacles(hitBox);
+    }
+
+    @Override
+    public boolean intersectsObstacles(Rectangle path) {
+        return gameMap.getInteractiveObstacles().stream().anyMatch(o -> o.intersects(path));
+    }
+    // ------------------------------------------------------------
+
+    // LOGIC ------------------------------------------------------
+    public void changeScore(double score) {
+        this.score = Math.max(0, this.score + score);
+    }
+
+    @Override
+    public void occupyHome(Enemy enemy) {
+        if(enemy.intersects(gameMap.getHomeTerritory())) {
+            homeHp -= SurvivalController.MAX_HOME_DAMAGE;
+        }
     }
 
     @Override
@@ -119,4 +154,5 @@ public class SurvivalController extends Controller {
             e.printStackTrace();
         }
     }
+    //-------------------------------------------------------------
 }

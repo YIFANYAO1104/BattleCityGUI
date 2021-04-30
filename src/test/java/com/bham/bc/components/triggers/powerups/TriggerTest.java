@@ -46,14 +46,14 @@ public class TriggerTest {
         ArmorTrigger ap= new ArmorTrigger(260,480,200,20);
         //PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         player.testDIRECTION_SET();
-        System.out.println(player.getMaxHp());
+        System.out.println(player.getFullHp());
         player.setVelocity(new Point2D(5,0));
         for(;;){
             player.move();
             if(player.intersects(ap)){
                 System.out.println("Armor trigger touched");
                 ap.handle(player);
-                assertEquals(player.getMaxHp(),200,0);
+                assertEquals(player.getFullHp(),200,0);
 
                 break;
             }

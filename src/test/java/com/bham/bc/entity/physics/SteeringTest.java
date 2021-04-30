@@ -1,9 +1,8 @@
-package entity.physics;
+package com.bham.bc.entity.physics;
 
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.entity.physics.Steering;
 import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;
 import junitparams.JUnitParamsRunner;

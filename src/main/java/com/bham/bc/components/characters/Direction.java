@@ -11,7 +11,7 @@ public enum Direction {
 	L(-1, 0),
 	R(1, 0);
 
-	private Point2D point2D;
+	private final Point2D POINT;
 
 	/**
 	 * Constructs DIRECTION as a basis vector in 2D space
@@ -19,11 +19,15 @@ public enum Direction {
 	 * @param x basis coordinate in x axis
 	 * @param y basis coordinate in y axis
 	 */
-	Direction(int x, int y) { point2D = new Point2D(x, y); }
+	Direction(int x, int y) {
+		POINT = new Point2D(x, y);
+	}
 
 	/**
 	 * Gets the value of enum as a point (basis vector)
 	 * @return Point2D object with one coordinate in specific direction defined by this enum value
 	 */
-	public Point2D toPoint() { return point2D; }
+	public Point2D toPoint() {
+		return POINT;
+	}
 }

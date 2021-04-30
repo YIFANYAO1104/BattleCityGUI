@@ -55,7 +55,7 @@ public class Player extends GameCharacter {
 	/**
 	 * Used For testing
 	 */
-	public void  testDIRECTION_SET(){
+	public void testDIRECTION_SET(){
 		this.DIRECTION_SET.add(Direction.L);
 	}
 	public void testDIRECTION_SET1(){

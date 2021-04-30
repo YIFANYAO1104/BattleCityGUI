@@ -1,4 +1,4 @@
-package com.bham.bc;
+package com.bham.bc.components.characters;
 
 import com.bham.bc.components.characters.Direction;
 import com.bham.bc.components.Controller;

@@ -1,4 +1,4 @@
-package entity.ai;
+package com.bham.bc.entity.ai.navigation;
 
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.characters.GameCharacter;

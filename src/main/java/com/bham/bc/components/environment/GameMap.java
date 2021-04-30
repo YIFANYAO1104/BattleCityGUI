@@ -13,13 +13,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.Controller.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.bham.bc.components.Controller.services;
 
 /**
  * <h1>Game Map</h1>

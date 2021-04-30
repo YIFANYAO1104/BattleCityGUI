@@ -120,7 +120,7 @@ public class Director {
             int changeInEnemyCount = newEnemyCount - enemyCount;
 
             // Calculate change in ally hp fraction
-            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getMaxHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
+            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getFullHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
             double changeInAllyHpFraction = newAllyHpFraction - allyHpFraction;
 
             // Calculate change in home hp fraction
@@ -185,7 +185,7 @@ public class Director {
             lastTick = CLOCK.getCurrentTime();
 
             // Calculate change in ally hp fraction
-            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getMaxHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
+            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getFullHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
             double changeInAllyHpFraction = newAllyHpFraction - allyHpFraction;
 
             // Calculate change in home hp fraction
@@ -209,7 +209,7 @@ public class Director {
             lastTick = CLOCK.getCurrentTime();
 
             // Calculate change in ally hp fraction
-            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getMaxHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
+            double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getFullHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
             double changeInAllyHpFraction = newAllyHpFraction - allyHpFraction;
 
             // Calculate change in home hp fraction
@@ -272,7 +272,7 @@ public class Director {
 
         //double newPlayerHP = FrontendServices.getPlayerHP();
         // Calculate change in ally hp fraction
-        double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getMaxHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
+        double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getFullHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
         double changeInAllyHpFraction = newAllyHpFraction - allyHpFraction;
 
         // Calculate change in home hp fraction

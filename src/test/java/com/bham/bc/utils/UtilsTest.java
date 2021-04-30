@@ -1,6 +1,5 @@
-package utils;
+package com.bham.bc.utils;
 
-import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import org.junit.Test;
 import javafx.scene.transform.*;

@@ -3,7 +3,6 @@ package com.bham.bc.components.environment;
 import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
@@ -38,7 +37,6 @@ public class Obstacle extends BaseGameEntity {
     public Obstacle(int x, int y, ArrayList<Attribute> attributes, Tileset tileset, int... tileIDs) {
         super(getNextValidID(), x, y);
         hp = 50;
-        assert (hp <= Constants.MAX_OBSTACLE_HEALTH) : "<Obstacle::Constructor>: invalid health";
         currentFrame = 0;
         ATTRIBUTES = EnumSet.noneOf(Attribute.class);
         if(attributes != null) ATTRIBUTES.addAll(attributes);
