@@ -6,8 +6,10 @@ import java.io.PrintStream;
 import static com.bham.bc.entity.graph.NodeTypeEnum.invalid_node_index;
 
 public class GraphNode {
-    //every node has an index. a Valid index >= 0
 
+    /**
+     * every node has an index{@link Integer}. a Valid index >= 0
+     */
     protected  int m_index;
 
     public GraphNode(){m_index = invalid_node_index;} // invalid index <0

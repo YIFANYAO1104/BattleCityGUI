@@ -16,21 +16,35 @@ import static com.bham.bc.entity.graph.NodeTypeEnum.invalid_node_index;
 import java.util.*;
 
 public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge> extends BaseGameEntity {
+
+    /**
+     * define the cost{@link Double} of node interact with obstacle
+     */
     public static final double GRAPH_OBSTACLE_EDGE_COST = 30.0;
 
-//    private GraphEdge nh1;
+    /**
+     * The number{@link Integer} of nodes on a row
+     */
     private int rowNums;
+
+    /**
+     * The number{@link Integer} of nodes on a row
+     */
     private int eachDisX;
+
+    /**
+     * The number{@link Integer} of nodes on a column
+     */
     private int eachDisY;
+
+    /**
+     * The number{@link Integer} of nodes on a colunn
+     */
     private int columnNums;
 
-    //enable easy client access to the edge and node types used in the graph
-    //typedef edge_type                EdgeType;
-    //typedef node_type                NodeType;
-    //a couple more typedefs to save my fingers and to help with the formatting
-    //of the code on the printed page
-    public class NodeVector extends ArrayList<GraphNode> {
 
+
+    public class NodeVector extends ArrayList<GraphNode> {
         public NodeVector() {
             super();
         }
@@ -44,23 +58,39 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     };
 
     public class EdgeListVector extends ArrayList<EdgeList> {
-
         public EdgeListVector() {
             super();
         }
     };
-    //the nodes that comprise this graph
+
+    /**
+     * The set{@link NodeVector} of nodes that comprise this graph
+     */
     private NodeVector nodeVector = new NodeVector();
-    //a vector of adjacency edge lists. (each node index keys into the
-    //list of edges associated with that node)
+
+    /**
+     * A vector{@link NodeVector} of adjacency edge lists. (each node index keys into the list of edges associated with that node)
+     */
     private EdgeListVector edgeListVector = new EdgeListVector();
-    //is this a directed graph?
+
+    /**
+     * Decide create a Directed graph or undirected graph
+     */
     private boolean isDirectedGraph;
-    //the index of the next node to be added
+
+    /**
+     * the index{@link Integer} of the next node to be added
+     */
     private int nextNodeIndex;
-    // Map the obstacle's ID to the index of nodes interacting with
+
+    /**
+     * Map the obstacle's ID{@link Integer} to the list{@link ArrayList} of nodes interacting with
+     */
     private HashMap<Integer, ArrayList<NavNode>> obstacleId = new HashMap<>();
-    //Map the closet node for that entities
+
+    /**
+     * Map the entity{@link BaseGameEntity} to the node{@link NavNode}
+     */
     private  HashMap<BaseGameEntity, NavNode> trcikingTable = new HashMap<>();
 
     private double realContrustPercentage = 0.0;
@@ -285,12 +315,6 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         return null;
     }
 
-    /**
-     * const and non const methods for obtaining a reference to a specific edge
-     */
-//    public edge_type GetEdge(int from, int to)
-
-    //retrieves the next free node index
     public int getNextFreeNodeIndex() {
         return nextNodeIndex;
     }
