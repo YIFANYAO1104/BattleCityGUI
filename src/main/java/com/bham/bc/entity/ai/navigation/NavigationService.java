@@ -80,6 +80,7 @@ public interface NavigationService {
 
     /**
      * This method makes use of the pre-calculated lookup table
+     * @param NodeIdx
      * @return the cost to travel from the bot's current position to a specific graph node.
      */
     double getCostToNode(int NodeIdx);
