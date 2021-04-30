@@ -114,6 +114,7 @@ public class CustomStage extends Stage{
 
         // set the original stage transparent
         stage.initStyle(StageStyle.TRANSPARENT);
+        stage.getIcons().add(new Image(CustomStage.class.getResourceAsStream("../../../../../img/characters/tank.png")));
 
         //set the title bar
         gpTitle = new HBox();
