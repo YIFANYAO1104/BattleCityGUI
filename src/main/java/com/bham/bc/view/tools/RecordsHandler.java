@@ -231,7 +231,7 @@ public class RecordsHandler {
 
 
     /**
-     * Returns a JSONArray after sort that JSONArray according to score.
+     * Returns a {@link JSONArray} after sort that {@link JSONArray} according to score.
      * @param jsonArr json array to be sorted
      * @return return the sorted json array
      */
@@ -320,6 +320,10 @@ public class RecordsHandler {
         }
 
 
+        /**
+         * Returns the rank of Record Object
+         * @return rank
+         */
         public String getRank() {
             return rank.get();
         }
@@ -328,10 +332,18 @@ public class RecordsHandler {
             return rank;
         }
 
+        /**
+         * set tne rank of Record Object
+         * @param rank of Record Object
+         */
         public void setRank(String rank) {
             this.rank.set(rank);
         }
 
+        /**
+         * Returns the name of Record Object
+         * @return name
+         */
         public String getName() {
             return name.get();
         }
@@ -340,10 +352,18 @@ public class RecordsHandler {
             return name;
         }
 
+        /**
+         * set tne name of Record Object
+         * @param name of Record Object
+         */
         public void setName(String name) {
             this.name.set(name);
         }
 
+        /**
+         * Returns the score of Record Object
+         * @return rank
+         */
         public String getScore() {
             return score.get();
         }
@@ -352,10 +372,18 @@ public class RecordsHandler {
             return score;
         }
 
+        /**
+         * set tne score of Record Object
+         * @param score of Record Object
+         */
         public void setScore(String score) {
             this.score.set(score);
         }
 
+        /**
+         * Returns the date of Record Object
+         * @return date
+         */
         public String getDate() {
             return date.get();
         }
@@ -364,6 +392,10 @@ public class RecordsHandler {
             return date;
         }
 
+        /**
+         * set tne date of Record Object
+         * @param date of Record Object
+         */
         public void setDate(String date) {
             this.date.set(date);
         }
