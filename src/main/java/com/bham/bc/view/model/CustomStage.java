@@ -123,7 +123,8 @@ public class CustomStage extends Stage{
         gpTitle.setMinWidth(Width);
         gpTitle.setMinHeight(35);
         gpTitle.setMaxHeight(35);
-        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../../model/style.css").toExternalForm());
+        gpTitle.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
+
         gpTitle.setLayoutX(0);
         gpTitle.setLayoutY(0);
         gpTitle.setAlignment(Pos.CENTER_RIGHT);
