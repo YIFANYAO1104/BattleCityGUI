@@ -38,6 +38,12 @@ public class RecordsHandler {
      */
     private static JSONArray albums;
 
+    /**
+     * path of json file
+     */
+    private static String path;
+
+
 
     public RecordsHandler() {
 
@@ -45,6 +51,8 @@ public class RecordsHandler {
     }
     static {
 
+        String root = System.getProperty("user.dir");
+        path = root +"/scores.json";
         jsonArrayToFile=new JSONArray();
     }
 
@@ -54,10 +62,10 @@ public class RecordsHandler {
      * @return list of Records to be fitted into table
      */
     public static ObservableList<Records> initTable(){
-        File file = new File("src/main/resources/model/scores.json");
+        File file = new File(path);
         if (!file.exists()) {
             try {
-                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/model/scores.json");
+                FileOutputStream fileOutputStream=new FileOutputStream(path);
                 byte[] data="[]".getBytes();
                 fileOutputStream.write(data);
                 fileOutputStream.flush();
@@ -69,7 +77,7 @@ public class RecordsHandler {
         }
 
         //read from Json file
-        parseJsonFile("src/main/resources/model/scores.json");
+        parseJsonFile(path);
         ObservableList<Records> data = FXCollections.observableArrayList(records);
         //System.out.println("data len="+data.size());
 
@@ -110,13 +118,13 @@ public class RecordsHandler {
         sort();
 
         try {
-            writeJsonToFile("src/main/resources/model/scores.json");
+            writeJsonToFile(path);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //read from Json file
-        parseJsonFile("src/main/resources/model/scores.json");
+        parseJsonFile(path);
         ObservableList<Records> data = FXCollections.observableArrayList(records);
 
 

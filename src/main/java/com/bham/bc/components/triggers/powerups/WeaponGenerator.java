@@ -19,6 +19,7 @@ public class WeaponGenerator extends RespawnTrigger {
     }
 
 
+    @Override
     protected Image[] getDefaultImage() {
         return new Image[] {new Image("file:src/main/resources/img/tmp.jpg"), };
     }
