@@ -23,16 +23,32 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  */
 public class PauseMenu extends AnchorPane {
 
+
+    /**
+     * use custom {@link SubMenu} to create Pause Menu
+     */
     private SubMenu subMenuPause;
+    /**
+     * use custom {@link SubMenu} to create Settings Menu
+     */
     public SubMenu subMenuSettings;
+    /**
+     * background dim to the menu
+     */
     public Rectangle dim;
 
+    /**
+     * create pause_game_event
+     */
     private final GameFlowEvent PAUSE_GAME_EVENT;
+    /**
+     * create leave_game_event
+     */
     private final GameFlowEvent LEAVE_GAME_EVENT;
 
 
     /**
-     * Constructs an {@link AnchorPane} layout as the Pause Menu
+     * Constructs an {@link AnchorPane} layout as the Pause Menu and initialize Pause Menu
      */
     public PauseMenu() {
         PAUSE_GAME_EVENT = new GameFlowEvent(GameFlowEvent.PAUSE_GAME);
@@ -55,7 +71,9 @@ public class PauseMenu extends AnchorPane {
     }
 
     /**
-     * Creates layout for primary view for pause menu
+     * <p>Creates layout for primary view for pause menu.</p>
+     * <p>use custom menu button ({@link MenuButton}).</p>
+     * <p>Pause Menu has three buttons, e.g. resume button, setting button and return button. </p>
      */
     private void createSubMenuPause() {
         MenuButton btnResume = new MenuButton("RESUME");
@@ -71,7 +89,8 @@ public class PauseMenu extends AnchorPane {
     }
 
     /**
-     * Creates layout for options in the pause menu
+     * <p>Creates layout for settings in the pause menu.</p>
+     * <p>settings have  {@link MenuSlider} for control of volume.</p>
      */
     private void createSubMenuSettings() {
         MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));

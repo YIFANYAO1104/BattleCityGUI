@@ -1,10 +1,11 @@
-package com.bham.bc.view.model;
+package com.bham.bc.view;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.Glow;
@@ -13,78 +14,100 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.beans.value.ChangeListener;
 
 
 /**
- * @author : YiFan Yaao
- * @version : 1.0
- * @project: BattleCityGUI
- * @name : CustomStageSubscene.java
- * @data : 2021/2/28
- * @time : 14:43
+ * <h1>Sub-menu</h1>
+ *
+ * <p>Custom stage for every window.</p>
+ * <p>it only has for elements, e.g game title, skin color, Min button and Close button.</p>
  */
 public class CustomStage extends Stage{
 
+    /**
+     * original game stage
+     */
     private Stage stage;
-    private Scene gamescene;
 
 
-    private boolean isMax = false;
+    /**
+     * state of window
+     */
     private boolean isRight;
+    /**
+     * state of window
+     */
     private boolean isBottomRight;
+    /**
+     * state of window
+     */
     private boolean isBottom;
-    private double RESIZE_WIDTH = 5.00;
-    private double MIN_WIDTH = 400.00;
-    private double MIN_HEIGHT = 300.00;
-    private double xOffset = 0, yOffset = 0;
+
+    private double MIN_WIDTH = 800.00;
+    private double MIN_HEIGHT = 600.00;
+    /**
+     * offset of x
+     */
+    private double xOffset = 0;
+    /**
+     * offset of y
+     */
+    private double yOffset = 0;
+    /**
+     * the type of skin color
+     */
     public static String typeOf;
-    private AnchorPane gamePane;
-    public static Label setMenu;
+    /**
+     * title bar
+     */
     private   HBox gpTitle;
+    /**
+     * the string array for types of skin color
+     */
     public static String[] types;
     private HBox hBox;
-    public  ChoiceBox changeMainSkin;
-
-
-    {
-        changeMainSkin = new ChoiceBox(FXCollections.observableArrayList(
-                "Classic Blue", "Classic Green", "Classic Black", "Classic Orange"
-        ));
-
-        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../../model/style.css").toExternalForm());
-    }
-
-
-    public  ChoiceBox changePauseSkin;
-
-    {
-        changePauseSkin = new ChoiceBox(FXCollections.observableArrayList(
-                "Classic Blue", "Classic Green", "Classic Black", "Classic Orange"
-        ));
-
-
-        changeMainSkin.getStylesheets().add(CustomStage.class.getResource("../../../../../model/style.css").toExternalForm());
-    }
-
-
+    /**
+     * the {@link ChoiceBox} for changing the style of title bar in Main interface
+     */
+    public  ChoiceBox changeMainSkin=new ChoiceBox(FXCollections.observableArrayList(
+            "Classic Blue","Classic Green","Classic Black","Classic Orange"
+    ));;
+    /**
+     * the {@link ChoiceBox} for changing the style of title bar in Game interface
+     */
+    public  ChoiceBox changePauseSkin=new ChoiceBox(FXCollections.observableArrayList(
+            "Classic Blue","Classic Green","Classic Black","Classic Orange"
+    ));;
+    /**
+     * label for Min button
+     */
     private Label btnMin;
+    /**
+     * label for Close button
+     */
     private Label btnClose;
+    /**
+     * the index of skin color
+     */
     public static int selected=0;
 
 
-
-
-    public CustomStage(Stage gameStage, Scene gameScene,AnchorPane pane) {
+    /**
+     *
+     * @param gameStage original game stage
+     */
+    public CustomStage(Stage gameStage) {
         stage=gameStage;
-        gamescene=gameScene;
-        gamePane=pane;
+
+
 
     }
 
 
 
     /**
-     * create titler bar template
+     * create titler bar template.
      * @param root
      * @param Width width of title bar
      * @param offset offset of game name
@@ -92,50 +115,75 @@ public class CustomStage extends Stage{
 
     public void titleBar(AnchorPane root, int Width,int offset,ChoiceBox changeSkin){
 
+        // set the original stage transparent
         stage.initStyle(StageStyle.TRANSPARENT);
 
+        //set the title bar
         gpTitle = new HBox();
         gpTitle.setId("title");
         gpTitle.setSpacing(4);
         gpTitle.setPadding(new Insets(15,5,17,5));
+        gpTitle.setMinWidth(Width);
+        gpTitle.setMinHeight(35);
+        gpTitle.setMaxHeight(35);
+        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../style.css").toExternalForm());
+        gpTitle.setLayoutX(0);
+        gpTitle.setLayoutY(0);
+        gpTitle.setAlignment(Pos.CENTER_RIGHT);
+
+        //set the game name of title bar
         Label lbTitle = new Label(stage.getTitle());
         lbTitle.setId("name");
         Glow glow=new Glow();
         lbTitle.setEffect(glow);
         glow.setLevel(0.6);
-
-        gpTitle.setMinWidth(Width);
-
-        gpTitle.setMinHeight(35);
-        gpTitle.setMaxHeight(35);
-        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../../model/style.css").toExternalForm());
+        lbTitle.setTranslateX(offset);
 
 
+        //make the Min and Close buttons
         btnMin = new Label();
         btnMin.setPrefWidth(33);
         btnMin.setPrefHeight(26);
-
         BackgroundImage image2=new BackgroundImage(new Image("file:src/main/resources/img/menu/minimize.png",24,10,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
-
         btnMin.setBackground(new Background(image2));
-
         btnClose = new Label();
         btnClose.setPrefWidth(33);
         btnClose.setPrefHeight(26);
+        Glow glow1=new Glow();
+        glow1.setLevel(1);
+        btnMin.setEffect(glow1);
+        btnClose.setEffect(glow1);
+        btnClose.setId("winClose");
+        btnMin.setId("winMin");
+        btnMin.setTranslateY(6);
+        btnMin.setTranslateX(3);
+        btnMin.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                stage.setIconified(true);
+            }
 
 
+
+        });
+
+        btnClose.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                stage.close();
+            }
+        });
+
+
+
+        //set the skin of title bar
         types=new String[]{"TYPE 1","TYPE 2","TYPE 3","TYPE 4","TYPE 5"};
-
         changeSkin.setId("changeSkin");
         changeSkin.setMaxSize(25,22);
         changeSkin.setMinSize(25,22);
         BackgroundImage image3=new BackgroundImage(new Image("file:src/main/resources/img/menu/skin.png",25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         changeSkin.setBackground(new Background(image3));
-        Glow glow1=new Glow();
-        glow1.setLevel(1);
         changeSkin.setEffect(glow1);
-        btnMin.setEffect(glow1);
-        btnClose.setEffect(glow1);
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 
             selected=new_val.intValue();
@@ -189,55 +237,15 @@ public class CustomStage extends Stage{
         });
 
 
-
-
-
-
-        btnClose.setId("winClose");
-        btnMin.setId("winMin");
-        //-540 -760
-        lbTitle.setTranslateX(offset);
-        btnMin.setTranslateY(6);
-        btnMin.setTranslateX(3);
-
-
-
-        if (setMenu==null){
-            hBox=new HBox(5,changeSkin,btnMin,btnClose);
-        }else {
-            hBox=new HBox(5,setMenu,changeSkin,btnMin,btnClose);
-        }
-
+        //add elements
+        hBox=new HBox(5,changeSkin,btnMin,btnClose);
         gpTitle.getChildren().addAll(lbTitle,hBox);
 
+        //add container
         VBox titleAndRoot = new VBox();
         root.getScene().setRoot(titleAndRoot);
         titleAndRoot.getChildren().addAll(gpTitle, root);
         stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
-//        root.getChildren().add(gpTitle);
-
-        gpTitle.setLayoutX(0);
-        gpTitle.setLayoutY(0);
-        gpTitle.setAlignment(Pos.CENTER_RIGHT);
-
-
-
-        btnMin.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                stage.setIconified(true);
-            }
-
-
-
-        });
-
-        btnClose.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                stage.close();
-            }
-        });
 
 
 
@@ -245,6 +253,12 @@ public class CustomStage extends Stage{
 
 
 
+
+
+
+
+
+        //set event of dragging window
         titleAndRoot.setOnMouseDragged((MouseEvent event) -> {
 
 
@@ -298,12 +312,12 @@ public class CustomStage extends Stage{
     }
 
     /**
-     * create title bar to main interface
-     * @param root
+     * create title bar to main interface.
+     * @param root root pane title bar will be attached to
      * @param Width width of title bar
      */
 
-    public void createCommonTitlebar(AnchorPane root, int Width){
+    public void createMainTitlebar(AnchorPane root, int Width){
            titleBar(root,Width,-310,changeMainSkin);
            changeMainSkin.getSelectionModel().select(selected);
 
@@ -311,12 +325,12 @@ public class CustomStage extends Stage{
     }
 
     /**
-     * create title bar to game interface
-     * @param root
+     * create title bar to game interface.
+     * @param root root pane title bar will be attached to
      * @param Width width of title bar
      */
 
-    public void createTitleBar(AnchorPane root, int Width){
+    public void createGameTitleBar(AnchorPane root, int Width){
 
         titleBar(root,Width,-190,changePauseSkin);
         changePauseSkin.getSelectionModel().select(selected);

@@ -20,16 +20,28 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  */
 public class MenuSession {
 
+    /**
+     * width of main interface
+     */
     public static final int WIDTH = 1024;
+    /**
+     * height of main interface
+     */
     public static final int HEIGHT = 768;
     public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.NIGHT_BREAK };
 
     private AnchorPane mainPane;
+    /**
+     * stage of main interfacee
+     */
     private Stage mainStage;
+    /**
+     * the actual stage of main interface
+     */
     public static CustomStage customStage;
 
     /**
-     * Constructs the menu session
+     * Constructs the menu session and initialize
      */
     public MenuSession() {
         initLayout();
@@ -38,7 +50,7 @@ public class MenuSession {
     }
 
     /**
-     * Initializes the layout of the menu session, i.e., sets up the root pane and event filters
+     * Initializes the layout of the menu session, i.e., sets up the root pane and event filters.
      */
     private void initLayout() {
         mainPane = new AnchorPane();
@@ -52,7 +64,7 @@ public class MenuSession {
     }
 
     /**
-     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage
+     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage.
      */
     private void initWindow() {
         Scene mainScene = new Scene(mainPane, WIDTH, HEIGHT);
@@ -60,12 +72,12 @@ public class MenuSession {
         mainStage.setScene(mainScene);
         mainStage.setResizable(false);
         mainStage.setTitle("Blueland Defenders");
-        customStage = new CustomStage(mainStage, mainScene, mainPane);
-        customStage.createCommonTitlebar(mainPane, WIDTH);
+        customStage = new CustomStage(mainStage);
+        customStage.createMainTitlebar(mainPane, WIDTH);
     }
 
     /**
-     * Initializes the main menu which the user will see and from where they can start a new game session
+     * Initializes the main menu which the user will see and from where they can start a new game session.
      */
     private void initMainMenu() {
         MainMenu mainMenu = new MainMenu();
@@ -93,7 +105,7 @@ public class MenuSession {
     }
 
     /**
-     * Returns the main stage used for the main menu
+     * Returns the main stage used for the main menu.
      * @return the menu stage
      */
     public Stage getMainStage() {

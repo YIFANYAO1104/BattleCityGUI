@@ -26,10 +26,22 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  */
 public class MainMenu extends AnchorPane {
 
+    /**
+     * use custom {@link SubMenu} to create Main Menu
+     */
     private SubMenu subMenuMain;
+    /**
+     * use custom {@link SubMenu} to create Scores Menu
+     */
     private SubMenu subMenuScores;
+    /**
+     * use custom {@link SubMenu} to create Settings Mneu
+     */
     private SubMenu subMenuSettings;
 
+    /**
+     * create new_game_event
+     */
     private final GameFlowEvent NEW_GAME_EVENT;
 
     /**
@@ -60,6 +72,7 @@ public class MainMenu extends AnchorPane {
     /**
      * Creates the primary sub-menu for the main menu. This defines the behavior of all the
      * necessary buttons to control the GUI actions and create corresponding sub-menus.
+     * <p>use custom menu button ({@link MenuButton})</p>
      */
     private void createSubMenuMain() {
         MenuButton btnStart = new MenuButton("START GAME");
@@ -81,6 +94,7 @@ public class MainMenu extends AnchorPane {
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
+     * <p>Create the leaderboard table and initialize the leaderboard table.</p>
      */
     private void createSubMenuScores() {
         subMenuScores = new SubMenu(this);
@@ -128,7 +142,8 @@ public class MainMenu extends AnchorPane {
 
     /**
      * Creates a sub-menu for settings. This menu is observed whenever "SETTINGS" is clicked
-     * and allows the user to configure UI parameters, such as SFX or MUSIC volume
+     * and allows the user to configure UI parameters, such as SFX or MUSIC volume.
+     * <p>settings have  {@link MenuSlider} for control of volume.</p>
      */
     private void createSubMenuSettings() {
         MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));

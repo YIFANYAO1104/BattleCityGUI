@@ -2,12 +2,25 @@ package com.bham.bc.view.model;
 
 import com.bham.bc.view.tools.RecordsHandler;
 import junit.framework.TestCase;
+import junitparams.JUnitParamsRunner;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-
+/**
+ * the class for testing the createRcord and sort function of {@link RecordsHandler}
+ */
+@RunWith(JUnitParamsRunner.class)
 public class RecordsHandlerTest extends TestCase {
+    /**
+     * the instance of {@link RecordsHandler}
+     */
     private RecordsHandler recordsHandler;
 
+
+    /**
+     * create sample of records
+     * @param recordsHandler the instance of {@link RecordsHandler}
+     */
     public void createSampleRecords(RecordsHandler recordsHandler) {
 
         //write to Json file
@@ -43,7 +56,7 @@ public class RecordsHandlerTest extends TestCase {
 
 
     /**
-     * test createRcord and sort function
+     * test {@link RecordsHandler#createRecord(RecordsHandler.Records)} and  {@link RecordsHandler#sortAndGetData()}
      */
     @Test
     public void shouldSortScoresCorrectly() {

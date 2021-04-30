@@ -70,7 +70,7 @@ public class GameFlowEvent extends Event {
     }
 
     /**
-     * Gets the type of map that was set
+     * Returns the type of map that was set
      * @return enum EmptyMap or Map1 representing the type of map the game should be initialized with
      */
     public MapType getMapType() {
@@ -78,7 +78,7 @@ public class GameFlowEvent extends Event {
     }
 
     /**
-     * Gets the number of players the game should be initialized with
+     * Returns the number of players the game should be initialized with
      * @return integer 1 or 2 representing active players the game should be initialized with
      */
     public int getNumPlayers() {
@@ -86,7 +86,7 @@ public class GameFlowEvent extends Event {
     }
 
     /**
-     * Gets the name of the player (joint name if 2 players) who was active during the game session
+     * Returns the name of the player (joint name if 2 players) who was active during the game session
      * @return name to be put to the leaderboard
      */
     public String getName() {
@@ -94,7 +94,7 @@ public class GameFlowEvent extends Event {
     }
 
     /**
-     * Gets the score that was achieved when the game ended
+     * Returns the score that was achieved when the game ended
      * @return final game score or {@code -1} if the game session was aborted
      */
     public double getScore() {

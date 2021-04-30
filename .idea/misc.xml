@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$USER_HOME$/Desktop/projectJavadoc" />
+    <option name="OPTION_SCOPE" value="private" />
+    <option name="OTHER_OPTIONS" value="-windowtitle &quot;Blueland Defenders&quot; -link https://docs.oracle.com/javase/8/javafx/api -link https://docs.oracle.com/javase/8/docs/api -link https://stleary.github.io/JSON-java/" />
+    <option name="LOCALE" value="en_US" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="liberica-1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>

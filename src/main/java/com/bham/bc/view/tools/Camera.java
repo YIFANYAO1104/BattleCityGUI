@@ -9,6 +9,9 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.transform.Translate;
 
+/**
+ * <h1>Camera</h1>
+ */
 public class Camera {
     private final Translate translate;
 
@@ -17,7 +20,7 @@ public class Camera {
     private final GraphicsContext gc;
 
     /**
-     * Constructs camera which tracks 1 character
+     * Constructs camera which tracks 1 character.
      */
     public Camera(GraphicsContext gc) {
         this.gc = gc;
@@ -30,7 +33,7 @@ public class Camera {
     }
 
     /**
-     * updates camera position
+     * updates camera position.
      */
     public void update() {
         if(!isCloseToBorderX(0)) translate.setX(x.get());
@@ -40,7 +43,7 @@ public class Camera {
     }
 
     /**
-     * checks if camera's view is close to the border horizontally
+     * checks if camera's view is close to the border horizontally.
      * @param offset additional width constrain
      * @return true if camera's view is close and false otherwise
      */
@@ -49,7 +52,7 @@ public class Camera {
     }
 
     /**
-     * checks if camera's view is close to the border vertically
+     * checks if camera's view is close to the border vertically.
      * @param offset additional height constrain
      * @return true if camera's view is close and false otherwise
      */

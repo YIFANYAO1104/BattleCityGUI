@@ -1,4 +1,4 @@
-package com.bham.bc.view.tools;
+package com.bham.bc.view.model;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -7,19 +7,35 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+/**
+ * <h1> RecordsHandler</h1>
+ *
+ * <p>the class for handling records in leaderboard table</p>
+ * <p>For Json: it has functions for writing records into json file and reading from json file</p>
+ * <p>For data in table: it has functions for sorting records</p>
+ */
 public class RecordsHandler {
+    /**
+     * array of Records
+     */
     public static ArrayList<Records> records;
+    /**
+     * {@link JSONArray} for writing into json file and reading from json file
+     */
     public static JSONArray jsonArrayToFile;
+    /**
+     * temporary {@link JSONArray}
+     */
     private static JSONArray jsonArray;
+    /**
+     * temporary {@link JSONArray}
+     */
     private static JSONArray albums;
 
 
@@ -32,11 +48,16 @@ public class RecordsHandler {
         jsonArrayToFile=new JSONArray();
     }
 
+    /**
+     * <p>Returns the list of Records to be fitted into table.</p>
+     * when game starts every time, the table will be initialized by reading data from json file.
+     * @return list of Records to be fitted into table
+     */
     public static ObservableList<Records> initTable(){
-        File file = new File("src/main/resources/model/scores.json");
+        File file = new File("src/main/resources/scores.json");
         if (!file.exists()) {
             try {
-                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/model/scores.json");
+                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/scores.json");
                 byte[] data="[]".getBytes();
                 fileOutputStream.write(data);
                 fileOutputStream.flush();
@@ -48,11 +69,7 @@ public class RecordsHandler {
         }
 
         //read from Json file
-        try {
-            parseJsonFile("src/main/resources/model/scores.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        parseJsonFile("src/main/resources/scores.json");
         ObservableList<Records> data = FXCollections.observableArrayList(records);
         //System.out.println("data len="+data.size());
 
@@ -64,7 +81,7 @@ public class RecordsHandler {
     }
 
     /**
-     * get the string format of date
+     * Returns the string format of date
      * @return string format of date
      */
 
@@ -72,9 +89,9 @@ public class RecordsHandler {
 
         String[] strNow1 = new SimpleDateFormat("yyyy-MM-dd").format(new Date()).toString().split("-");
 
-        Integer.parseInt(strNow1[0]);			//获取年
-        Integer.parseInt(strNow1[1]);			//获取月
-        Integer.parseInt(strNow1[2]);			//获取日
+        Integer.parseInt(strNow1[0]);
+        Integer.parseInt(strNow1[1]);
+        Integer.parseInt(strNow1[2]);
 
         return strNow1[2]+"/"+strNow1[1]+"/"+strNow1[0];
 
@@ -85,7 +102,7 @@ public class RecordsHandler {
 
 
     /**
-     * sort the json array after create new records
+     * Return a list of Records after sort the {@link JSONArray}
      * @return data to fit table
      */
     public ObservableList<Records> sortAndGetData(){
@@ -93,19 +110,15 @@ public class RecordsHandler {
         sort();
 
         try {
-            writeJsonToFile("src/main/resources/model/scores.json");
+            writeJsonToFile("src/main/resources/scores.json");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //read from Json file
-        try {
-            parseJsonFile("src/main/resources/model/scores.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        parseJsonFile("src/main/resources/scores.json");
         ObservableList<Records> data = FXCollections.observableArrayList(records);
-        //System.out.println("data len="+data.size());
+
 
         return data;
     }
@@ -114,7 +127,16 @@ public class RecordsHandler {
      * to format json
      */
     public static class Tool {
+        /**
+         * whether is Tab
+         */
         private boolean isTab = true;
+
+        /**
+         * Returns a String of Json format
+         * @param strJson String to be formatted
+         * @return  a String of Json format
+         */
         public String stringToJSON(String strJson) {
             int tabNum = 0;
             StringBuffer jsonFormat = new StringBuffer();
@@ -139,6 +161,8 @@ public class RecordsHandler {
             }
             return jsonFormat.toString();
         }
+
+
         public String getSpaceOrTab(int tabNum) {
             StringBuffer sbTab = new StringBuffer();
             for (int i = 0; i < tabNum; i++) {
@@ -199,7 +223,7 @@ public class RecordsHandler {
 
 
     /**
-     * sort the Json Array according to score
+     * Returns a JSONArray after sort that JSONArray according to score.
      * @param jsonArr json array to be sorted
      * @return return the sorted json array
      */
@@ -220,9 +244,9 @@ public class RecordsHandler {
                     score1= Double.valueOf(a.getString(KEY_NAME));
                     score2= Double.valueOf(b.getString(KEY_NAME));
                 } catch (JSONException e) {
-                    // 处理异常
+
                 }
-                //这里是按照时间逆序排列,不加负号为正序排列
+
                 return (int) (-score1+score2);
             }
         });
@@ -233,8 +257,8 @@ public class RecordsHandler {
     }
 
     /**
-     * write Json array to the file
-     * @param filename
+     * write {@link #jsonArrayToFile} into the file.
+     * @param filename the name of json file
      */
     public static void writeJsonToFile(String filename) throws Exception {
         Tool tool=new Tool();
@@ -248,12 +272,24 @@ public class RecordsHandler {
 
 
     /**
-     * create the class for data in the table
+     * create the class for data (Record) in the table.
      */
     public static class Records{
+        /**
+         * rank of user
+         */
         private  SimpleStringProperty rank;
+        /**
+         * name of user
+         */
         private  SimpleStringProperty name;
+        /**
+         * score of user
+         */
         private  SimpleStringProperty score;
+        /**
+         * date when record is created
+         */
         private  SimpleStringProperty date;
 
         public Records( String name,String  score, String date) {
@@ -264,7 +300,7 @@ public class RecordsHandler {
         }
 
         /**
-         * Alternate constructor which sets the current date for the record automatically
+         * Alternate constructor which sets the current date for the Records automatically.
          * @param name  user's name to be put in the records list
          * @param score user's score their position in the leaderboard will depend on
          */
@@ -325,8 +361,8 @@ public class RecordsHandler {
         }
 
         /**
-         * to convert java object to JSon Object
-         * @return
+         * Returns a {@link JSONObject} converted from Record Object.
+         * @return json object of Record instance
          */
         public JSONObject toJSON() {
 
@@ -340,7 +376,7 @@ public class RecordsHandler {
         }
 
         /**
-         * put json object in to Json array (for Json file)
+         * put json object in to Json array (for Json file).
          */
         public void putIntoArray(){
             jsonArrayToFile.put(toJSON());
@@ -348,8 +384,8 @@ public class RecordsHandler {
     }
 
     /**
-     * create a record and put into a Json array
-     * @param record
+     * create a record and put into {@link #jsonArrayToFile}.
+     * @param record instance of Record
      */
     public void createRecord(Records record){
         record.putIntoArray();
@@ -357,23 +393,32 @@ public class RecordsHandler {
 
 
     /**
-     * read file to get a string and parse string
-     * @param fileName
-     * @throws IOException
+     * read file to get a string and parse string.
+     * @param fileName the name of Json file
+
      */
-    public static void parseJsonFile(String fileName) throws IOException {
-        FileInputStream fileInputStream=new FileInputStream(fileName);
+    public static void parseJsonFile(String fileName)  {
+        FileInputStream fileInputStream= null;
+        try {
+            fileInputStream = new FileInputStream(fileName);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         byte[] array=new byte[1024*1024];
-        int num=fileInputStream.read(array);
+        try {
+            int num=fileInputStream.read(array);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String s=new String(array);
 
         parse(s);
     }
 
     /**
-     * parse the string and make a array of records
-     * @param responseBody
-     * @return
+     * Returns a array of Records after parse a string
+     * @param responseBody the string of content in json file
+     * @return array of records
      */
     public static ArrayList<Records> parse(String responseBody){
         records=new ArrayList<>();

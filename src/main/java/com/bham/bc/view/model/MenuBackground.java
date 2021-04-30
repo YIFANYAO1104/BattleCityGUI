@@ -14,10 +14,13 @@ import javafx.scene.shape.Rectangle;
  */
 public class MenuBackground extends AnchorPane {
 
+    /**
+     * path of background
+     */
     private static final String BG_PATH = "file:src/main/resources/img/menu/FB6.gif";
 
     /**
-     * Constructs a Stack Pane node with an animated background and particles
+     * Constructs a Stack Pane node with an animated background and particles and initialize.
      */
     public MenuBackground() {
         setWidth(MenuSession.WIDTH);
@@ -27,7 +30,7 @@ public class MenuBackground extends AnchorPane {
     }
 
     /**
-     * Creates a background image animation and adds it to the background layout
+     * Creates a background image animation and adds it to the background layout.
      * TODO: surround with try-catch
      */
     private void initBackgroundAnimation() {
@@ -39,7 +42,7 @@ public class MenuBackground extends AnchorPane {
     }
 
     /**
-     * Creates particle animation and adds it to the background layout
+     * Creates particle animation and adds it to the background layout.
      * <b>NOTE:</b> to be implemented
      */
     private void initParticleAnimation() {}
