@@ -104,7 +104,7 @@ public class GameMap {
         // Get the center points of each territory
         Point2D homeCenter = new Point2D(getWidth()/2., getHeight()/2.);
         try {
-            homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(Obstacle::getPosition).toArray(Point2D[]::new)[0];  // use first match
+            homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(Obstacle::getPosition).findFirst().get();
         } catch(ArrayIndexOutOfBoundsException e) {
             System.out.println("This map does not have a home spawn center defined! Setting it in the middle of the map...");
         }
