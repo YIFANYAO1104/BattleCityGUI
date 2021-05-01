@@ -80,6 +80,7 @@ public class Goal_FollowPath extends Goal_Composite {
     @Override
     public void Terminate() {
 		RemoveAllSubgoals();
+		agent.brake();
     }
 
     @Override

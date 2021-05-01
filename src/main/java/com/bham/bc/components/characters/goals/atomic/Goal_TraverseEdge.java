@@ -68,8 +68,6 @@ public class Goal_TraverseEdge extends Goal {
         //if status is inactive, call Activate()
         ActivateIfInactive();
 
-        System.out.println(agent.getCenterPosition());
-        System.out.println(m_Edge.getDestination());
         if (agent.isReached(m_Edge.getDestination())) {
             status = completed;
         }

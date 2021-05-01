@@ -242,8 +242,4 @@ abstract public class GameCharacter extends MovingEntity {
     public void brake(){
         velocity=new Point2D(0,0);
     }
-
-    public void renderHitBoxes(AnchorPane hitBoxPane){
-        return;
-    }
 }

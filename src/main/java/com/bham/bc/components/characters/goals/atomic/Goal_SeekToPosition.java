@@ -46,6 +46,7 @@ public class Goal_SeekToPosition extends Goal {
     @Override
     public void Terminate() {
         agent.getSteering().seekOff();
+        agent.brake();
         //TODO: ADD ARRIVE
 //        agent.getSteering().arriveOff();
 

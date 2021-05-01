@@ -33,8 +33,9 @@ public class Goal_Think extends Goal_Composite {
 //            case 2:AddGoal_AttackTarget();break;
 //            case 3:AddGoal_Explore();break;
 //        }
-        AddGoal_AttackTarget();
-
+//        AddGoal_AttackTarget();
+//        AddGoal_Explore();
+        AddGoal_GetItem(ItemType.HEALTH);
         assert (index >=0 && index<4) : "<Goal_Think::Arbitrate>: no evaluator selected";
     }
 

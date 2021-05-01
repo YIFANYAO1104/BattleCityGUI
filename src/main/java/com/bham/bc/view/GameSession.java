@@ -75,6 +75,7 @@ public class GameSession {
     private void initLayout() {
         Canvas canvas = new Canvas(GameMap.getWidth(), GameMap.getHeight());
         gc = canvas.getGraphicsContext2D();
+
         camera = new Camera(gc);
         gamePane = new AnchorPane(canvas);
         gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, this::pauseGame);

@@ -2,6 +2,7 @@ package com.bham.bc.components.characters.goals.composite;
 
 
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.goals.atomic.Goal;
 import com.bham.bc.components.characters.goals.atomic.Goal_WaitForPath;
 import com.bham.bc.entity.ai.navigation.ItemType;
 
@@ -10,29 +11,12 @@ import static com.bham.bc.components.characters.goals.GoalTypes.goal_get_weapon;
 
 public class Goal_GetItem extends Goal_Composite {
 
-    private ItemType m_iItemToGet;
+    private ItemType targetType;
     private boolean waiting;
-    /**
-     * true if a path to the item has been formulated
-     */
-    private boolean m_bFollowingPath;
-
-    /**
-     * returns true if the bot sees that the item it is heading for has been
-     * picked up by an opponent
-     */
-    public boolean hasItemBeenStolen() {
-        //TODO:I WANT TRIGGER ITSELF RATHER THAN THROUGH NS
-        if (!agent.getNavigationService().isTriggerActive()) {
-            return true;
-        }
-        return false;
-    }
 
     public Goal_GetItem(GameCharacter pBot, ItemType item) {
         super(pBot, ItemTypeToGoalType(item));
-        m_iItemToGet = item;
-        m_bFollowingPath = false;
+        targetType = item;
         waiting=false;
     }
 
@@ -41,7 +25,7 @@ public class Goal_GetItem extends Goal_Composite {
         status = active;
 
         //request a path to the item
-        agent.getNavigationService().createRequest(m_iItemToGet);
+        agent.getNavigationService().createRequest(targetType);
 
         AddSubgoal(new Goal_WaitForPath(agent));
         waiting = true;
@@ -53,18 +37,23 @@ public class Goal_GetItem extends Goal_Composite {
         ActivateIfInactive();
 
         status = ProcessSubgoals();
-        if (status == completed) {
-            if (waiting==true){ //we finished waiting for path
-                waiting=false;
-                RemoveAllSubgoals();
-                AddSubgoal(new Goal_FollowPath(agent,
-                        agent.getNavigationService().getPath()));
-            } else {
-                if (hasItemBeenStolen()) {
+
+            if (waiting==true){ //we are waiting for path
+                if (status == completed) {
+                    status=active;
+                    waiting=false;
+                    RemoveAllSubgoals();
+                    AddSubgoal(new Goal_FollowPath(agent,
+                            agent.getNavigationService().getPath()));
+                }
+            } else { //we are finding item
+                System.out.println(agent.getNavigationService().isTriggerActive());
+                if (!agent.getNavigationService().isTriggerActive()) {
                     Terminate();
                 }
             }
-        }
+
+
 
         return status;
     }
@@ -93,5 +82,16 @@ public class Goal_GetItem extends Goal_Composite {
                 throw new RuntimeException("Only heath and weapon");
 
         }//end switch
+    }
+
+    @Override
+    public String toString() {
+        String s = "";
+        s += "Get Item "+targetType+" {";
+        for (Goal m_subGoal : m_SubGoals) {
+            s += m_subGoal.toString()+" ";
+        }
+        s += "}"+status;
+        return s;
     }
 }

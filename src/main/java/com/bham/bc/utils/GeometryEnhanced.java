@@ -2,7 +2,11 @@ package com.bham.bc.utils;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 import java.util.Random;
@@ -154,6 +158,31 @@ public class GeometryEnhanced {
                                                double visionAngle) {
         Point2D toTarget = testPos.subtract(curPos).normalize();
         return curHeading.dotProduct(toTarget) >= Math.cos(visionAngle / 2.0);
+    }
+
+    public static void renderHitBox(GraphicsContext gc, Shape box) {
+        if (box instanceof Rectangle){
+            Rectangle rect = (Rectangle)box;
+            Point2D p1 = new Point2D(rect.getX(), rect.getY());
+            Point2D p2 = new Point2D(rect.getX() + rect.getWidth(), rect.getY());
+            Point2D p3 = new Point2D(rect.getX(), rect.getY() + rect.getHeight());
+            Point2D p4 = new Point2D(rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+
+            p1 = box.localToParent(p1);
+            p2 = box.localToParent(p2);
+            p3 = box.localToParent(p3);
+            p4 = box.localToParent(p4);
+
+
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1.0);
+            gc.strokeLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+            gc.strokeLine(p1.getX(), p1.getY(), p3.getX(), p3.getY());
+            gc.strokeLine(p4.getX(), p4.getY(), p2.getX(), p2.getY());
+            gc.strokeLine(p4.getX(), p4.getY(), p3.getX(), p3.getY());
+        } else {
+            System.out.println("not supported hitbox type");
+        }
     }
 
 

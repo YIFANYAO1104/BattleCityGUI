@@ -289,16 +289,6 @@ public abstract class Controller extends BaseGameEntity implements Services {
     }
 
     @Override
-    public void renderHitBoxes(AnchorPane hitBoxPane) {
-        hitBoxPane.getChildren().clear();
-
-        // Add map hit-box
-        for (GameCharacter character : characters) {
-            character.renderHitBoxes(hitBoxPane);
-        }
-    }
-
-    @Override
     public void clear() {
         triggers.clear();
         characters.clear();

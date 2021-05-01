@@ -7,6 +7,7 @@ public enum MapType {
     TEST("/test.json"),
     MAP2("/162x162.json"),
     S("/surr.json"),
+    Trigger162("/Trigger162x162.json"),
     EmptyMap(null);
 
     MapType(String name) {

@@ -148,7 +148,6 @@ public interface Services {
      * @param gc graphics context where things will be rendered
      */
     void render(GraphicsContext gc);
-    void renderHitBoxes(AnchorPane hitBoxPane);
 
 
     /**

@@ -11,9 +11,9 @@ import com.bham.bc.components.Controller;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
@@ -30,11 +30,8 @@ public class TargetingSystem {
 	private GameCharacter agent;
 	private GameCharacter targetBot;
 
-	public List<Rectangle> getBoxes() {
-		return boxes;
-	}
-
-	private List<Rectangle> boxes = new LinkedList<>();
+	private List<Rectangle> visionBoxes = new LinkedList<>();
+	private List<Rectangle> obstacleBoxes = new LinkedList<>();
 
 	public Obstacle getTargetObstacle() {
 		return targetObstacle;
@@ -67,7 +64,7 @@ public class TargetingSystem {
 				}
 			}
 		}
-		System.out.println("TargetBot="+ targetBot);
+		if (targetBot!=null)System.out.println("TargetBot="+ targetBot+targetBot.getID());
 		return targetBot;
 	}
 
@@ -86,7 +83,7 @@ public class TargetingSystem {
 				}
 			}
 		}
-		System.out.println("TargetObs="+ targetObstacle);
+		if (targetObstacle!=null)System.out.println("TargetObs="+ targetObstacle+targetObstacle.getID());
 		return targetObstacle;
 	}
 
@@ -128,14 +125,24 @@ public class TargetingSystem {
 	public boolean isTargetBotShootable() {
 		Point2D start = agent.getCenterPosition();
 		Point2D end = targetBot.getCenterPosition();
-		double angle = Math.atan2(end.getY() - start.getY(), end.getX() - start.getX());
-		Rectangle path = new Rectangle(start.getX(), start.getY(), start.distance(end), agent.getHitBoxRadius() * 2);
-		path.getTransforms().add(new Rotate(Math.toDegrees(angle), start.getX(), start.getY()));
-		boxes.add(path);
+		Point2D agentSize = agent.getSize();
+		double rayCastWidth = agentSize.getX()-15;
+
+		double angle = GeometryEnhanced.clockWiseAngle(end.subtract(start),new Point2D(0,1));
+		double dis = start.distance(end);
+
+		Point2D center = start.midpoint(end);
+		Point2D topLeft = center.subtract(rayCastWidth*0.5,dis/2);
+		Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), rayCastWidth, dis);
+		hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
+
+
+//		visionBoxes.add(hitBox);
 		List<BaseGameEntity> baseGameEntities = services.getMapDivision()
-				.calculateNeighborsArray(path);
+				.calculateNeighborsArray(hitBox);
 		for (BaseGameEntity b : baseGameEntities) {
 			if (b instanceof Obstacle){
+				obstacleBoxes.add(((Obstacle) b).getHitBox());
 				return false;
 			} else if (b==agent){
 				continue;
@@ -148,8 +155,44 @@ public class TargetingSystem {
 		return true;
 	}
 
-	public boolean isTargetBotWithinFOV() {
-//		return agent.GetSensoryMem().isOpponentWithinFOV(m_pCurrentTarget);
+	public boolean isTargetBotWalkable() {
+		Point2D start = agent.getCenterPosition();
+		Point2D end = targetBot.getCenterPosition();
+		Point2D agentSize = agent.getSize();
+		double rayCastWidth = agentSize.getX();
+
+		double angle = GeometryEnhanced.clockWiseAngle(end.subtract(start),new Point2D(0,1));
+		double dis = start.distance(end);
+
+		Point2D center = start.midpoint(end);
+		Point2D topLeft = center.subtract(rayCastWidth*0.5,dis/2);
+		Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), rayCastWidth, dis);
+		hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
+
+
+		visionBoxes.add(hitBox);
+		List<BaseGameEntity> baseGameEntities = services.getMapDivision()
+				.calculateNeighborsArray(hitBox);
+		for (BaseGameEntity b : baseGameEntities) {
+			if (b instanceof Obstacle){
+				obstacleBoxes.add(((Obstacle) b).getHitBox());
+				return false;
+			} else if (b==agent){
+				continue;
+			} else if (b instanceof GameCharacter){
+				if (((GameCharacter)b).getSide()==agent.side){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public boolean isReachingSafeDistance(){
+		return agent.getCenterPosition().distance(targetBot.getCenterPosition())<=100;
+	}
+
+	public boolean isTargetBotVisable() {
 		return isTargetBotShootable()&&
 				agent.getCenterPosition().distance(targetBot.getCenterPosition())<=100;
 	}
@@ -176,23 +219,26 @@ public class TargetingSystem {
 	}
 
 	public void render(GraphicsContext gc) {
-		Point2D t1 = targetBot.getCenterPosition();
-		gc.setFill(Color.WHITE);
-		gc.fillRoundRect(t1.getX(),t1.getY(),4,4,1,1);
-
-		Point2D t2 = targetObstacle.getCenterPosition();
-		gc.setFill(Color.BLUE);
-		gc.fillRoundRect(t2.getX(),t2.getY(),4,4,1,1);
-
-
-	}
-
-	public void renderHitBoxes(AnchorPane hitBoxPane){
-		for (Rectangle box : boxes) {
-			box.setStroke(Color.RED);
-			box.setStrokeWidth(5);
-			hitBoxPane.getChildren().add(box);
+		if (targetBot!=null){
+			Point2D t1 = targetBot.getCenterPosition();
+			gc.setFill(Color.WHITE);
+			gc.fillRoundRect(t1.getX(),t1.getY(),4,4,1,1);
 		}
-	}
 
+		if (targetObstacle!=null){
+			Point2D t2 = targetObstacle.getCenterPosition();
+			gc.setFill(Color.BLUE);
+			gc.fillRoundRect(t2.getX(),t2.getY(),4,4,1,1);
+		}
+
+		for (Rectangle box : visionBoxes) {
+			GeometryEnhanced.renderHitBox(gc,box);
+		}
+		visionBoxes.clear();
+
+		for (Rectangle box : obstacleBoxes) {
+			GeometryEnhanced.renderHitBox(gc,box);
+		}
+		obstacleBoxes.clear();
+	}
 }

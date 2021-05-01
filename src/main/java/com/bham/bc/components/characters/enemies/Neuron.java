@@ -198,14 +198,7 @@ public class Neuron extends Enemy {
 
     @Override
     public void render(GraphicsContext gc) {
-        drawRotatedImage(gc, entityImages[0], getAngle());
-
+        super.render(gc);
         targetingSystem.render(gc);
-    }
-
-    @Override
-    public void renderHitBoxes(AnchorPane hitBoxPane){
-        targetingSystem.renderHitBoxes(hitBoxPane);
-        return;
     }
 }

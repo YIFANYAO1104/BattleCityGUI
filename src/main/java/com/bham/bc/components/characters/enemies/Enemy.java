@@ -247,10 +247,6 @@ public abstract class Enemy extends GameCharacter {
         Point2D acceleration = force.multiply(1. / mass);
         //debug
         this.acceleration = acceleration;
-        if (this instanceof Neuron){
-            System.out.println(acceleration);
-        }
-
         velocity = velocity.add(acceleration);
         if (velocity.magnitude() > maxSpeed) {
             velocity = velocity.normalize().multiply(maxSpeed);
