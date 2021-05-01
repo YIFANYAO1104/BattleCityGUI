@@ -1,8 +1,8 @@
 package com.bham.bc.components;
 
+import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.enemies.EnemyType;
-import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
@@ -16,7 +16,6 @@ import com.bham.bc.entity.physics.MapDivision;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -59,14 +58,23 @@ public interface Services {
     MapDivision<BaseGameEntity> getMapDivision();
     ArrayList<GameCharacter> getCharacters();
     /**
-     * Gets {@link com.bham.bc.entity.graph.SparseGraph} of a currently active map
-     * @return SparseGraph object used for searching algorithms
+     * Gets the graph of a currently active map
+     * @return {@link SparseGraph} object used for searching algorithms
      */
     SparseGraph<NavNode, GraphEdge> getGraph();
 
+    /**
+     * Gets the search algorithm runner of a currently active game session
+     * @return {@link AlgorithmDriver} object used for pathfinding
+     */
     AlgorithmDriver getDriver();
 
-    GameMap getMap();
+    /**
+     * Gets all the characters of the requested side contained in the active game session
+     * @param side {@code ALLY} or {@code ENEMY} side the characters belong to
+     * @return a list of characters belonging to the requested side
+     */
+    ArrayList<GameCharacter> getCharacters(Side side);
 
     /**
      * Gets all enemy areas initialized by the {@link com.bham.bc.components.environment.GameMap}
@@ -79,6 +87,12 @@ public interface Services {
      * @return Circle object representing the home territory enemies can attack
      */
     Circle getHomeArea();
+
+    /**
+     * Gets all the active bullets in the game for testing purposes
+     * @return a list of active bullets in the game
+     */
+    ArrayList<Bullet> getBullets();
     //-------------------------------------------------------------
 
 
@@ -93,8 +107,6 @@ public interface Services {
      *         position if there is no closest point
      */
     Point2D getClosestCenter(Point2D position, ItemType item);
-
-    GameCharacter getClosestALLY(Point2D position);
 
     /**
      * Gets a random position of a free area requested around some center point
@@ -139,7 +151,7 @@ public interface Services {
 
     // FRAME ITERATIONS -------------------------------------------
     /**
-     * Updates all the entities: map, characters and armory elements
+     * Updates all the entities: map, characters and shooting elements
      */
     void update();
 
@@ -148,7 +160,6 @@ public interface Services {
      * @param gc graphics context where things will be rendered
      */
     void render(GraphicsContext gc);
-
 
     /**
      * Clears all objects in the game
@@ -159,7 +170,6 @@ public interface Services {
 
 
     // LOGIC ------------------------------------------------------
-
     /**
      * Changes the score of the game
      * @param score value to be added to the overall score
@@ -201,15 +211,21 @@ public interface Services {
     double getScore();
 
     /**
-     * Gets the remaining home "HP" indicating how much territory is not yet taken over by the enemies
-     * @return home "HP" value
-     */
-    double getHomeHp();
-
-    /**
      * Gets the remaining home "HP" fraction indicating how much territory is not yet taken over by the enemies
      * @return home "HP" fraction value
      */
     double getHomeHpFraction();
+
+    /**
+     * Gets the remaining player "HP" fraction showing how much health the player has left
+     * @return player "HP" fraction value
+     */
+    double getPlayerHpFraction();
+
+    /**
+     * Checks if the player has reached a game over state
+     * @return {@code true} if the user has lost and {@code false} otherwise
+     */
+    boolean gameOver();
     //-------------------------------------------------------------
 }

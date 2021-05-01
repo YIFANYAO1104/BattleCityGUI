@@ -2,13 +2,14 @@ package com.bham.bc.components.environment;
 
 public enum MapType {
 
-    Map1("/64x64.json"),
-    TESTMap1("/com.bham.bc/floodMap1.json"),
-    TEST("/test.json"),
-    MAP2("/162x162.json"),
+    SMALL("/model/maps/64x64.json"),
+    MEDIUM("/model/maps/86x86.json"),
+    LARGE("/model/maps/162x162.json"),
+    TEST1("/model/maps/floodMap1.json"),
+    TEST2("/model/maps/test.json"),
     S("/surr.json"),
     Trigger162("/Trigger162x162.json"),
-    EmptyMap(null);
+    EMPTY(null);
 
     MapType(String name) {
         this.name = name;

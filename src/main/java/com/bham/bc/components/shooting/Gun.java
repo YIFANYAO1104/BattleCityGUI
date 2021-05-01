@@ -3,10 +3,10 @@ package com.bham.bc.components.shooting;
 import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.utils.GeometryEnhanced;
+
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -89,13 +89,12 @@ public class Gun {
 
         // Return an instance which corresponds to the bullet type
         switch(bulletType) {
-            case IceBullet:
-                return  new IceBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
+            case ICE:
+                return  new IceBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
             case EXPLOSIVE:
-                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-
+                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
             default:
-                return new DefaultBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
+                return new DefaultBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
         }
     }
     public LaserType testLaser(){

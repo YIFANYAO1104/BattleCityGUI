@@ -20,27 +20,7 @@ public class LaserGun extends Bullet {
     int time;
 
 
-    public LaserGun(double x, double y, double speed, Point2D heading, BulletType laser, Side side, double damage) {
-        super(x, y, speed, heading, laser, side, damage);
 
-        this.entityImages = new Image[]{
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l4.png")),
-                (new Image("file:src/main/resources/img/shooting/l5.png")),
-                (new Image("file:src/main/resources/img/shooting/l6.png")),
-                (new Image("file:src/main/resources/img/shooting/l7.png")),
-                (new Image("file:src/main/resources/img/shooting/l6.png")),
-                (new Image("file:src/main/resources/img/shooting/l5.png")),
-                (new Image("file:src/main/resources/img/shooting/l4.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-        };
-    }
 
 
 

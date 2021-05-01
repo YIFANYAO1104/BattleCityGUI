@@ -1,16 +1,11 @@
 package com.bham.bc.components;
 
-import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.environment.Attribute;
-import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.shooting.LaserGun;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.Constants;
-import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.director.Director;
 import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
@@ -22,18 +17,13 @@ import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.GameCharacter;
 
-import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
 
 import java.util.*;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 /**
  * Class defining the common elements and behavior for any controller
@@ -42,20 +32,17 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
     public static Services services;
 
+    protected double homeFullHp;
     protected double homeHp;
     protected double score;
     protected GameMap gameMap;
     protected ArrayList<Trigger> triggers;
     protected ArrayList<Bullet> bullets;
     protected ArrayList<GameCharacter> characters;
+    protected Director director;
 
     protected MapDivision<BaseGameEntity> mapDivision;
     protected AlgorithmDriver driver;
-
-    //temp
-    protected Player player;
-
-
 
     /**
      * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
@@ -65,8 +52,10 @@ public abstract class Controller extends BaseGameEntity implements Services {
         triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
+        director = new Director();
         driver = new AlgorithmDriver(500);
-        homeHp = Constants.MAX_HOME_HP;
+        homeHp = 1000;
+        homeFullHp = 1000;
         score = 0;
     }
 
@@ -78,114 +67,24 @@ public abstract class Controller extends BaseGameEntity implements Services {
         Controller controller = new SurvivalController();
         services = controller;
 
-        controller.loadMap(mapType);
-        controller.startGame();
+        controller.loadGame(mapType);
     }
 
-    // TEMPORARY METHODS -------------------------------------------
-    protected abstract void loadMap(MapType mapType);
-    protected abstract void startGame();
 
-    public void changeScore(double score) {
-        this.score = Math.max(0, this.score + score);
+    private Player getPlayer() {
+        return (Player) characters.stream().filter(c ->  c instanceof Player ).findFirst().orElse(null);
     }
 
-    public double getScore() {
-        return score;
-    }
+    /**
+     * Loads and starts the game
+     *
+     * <p>Loads the game by providing the type of map to load. It initializes the player and any additional tools,
+     * such map division and graph.</p>
+     *
+     * @param mapType type of map the game will be played on
+     */
+    protected abstract void loadGame(MapType mapType);
 
-    @Override
-    public double getHomeHp() {
-        return homeHp;
-    }
-
-    @Override
-    public double getHomeHpFraction() {
-        return Math.max(0, homeHp/Constants.MAX_HOME_HP);
-    }
-
-    public void occupyHome(Enemy enemy) {
-        if(enemy.intersects(gameMap.getHomeTerritory())) {
-            homeHp -= Constants.MAX_HOME_DAMAGE;
-        }
-    }
-
-    public Circle[] getEnemyAreas() {
-        return gameMap.getEnemySpawnAreas();
-    }
-
-    public Circle getHomeArea() {
-        return gameMap.getHomeTerritory();
-    }
-
-    @Override
-    public Point2D getClosestCenter(Point2D position, ItemType item) {
-        Stream<Point2D> closestPoints;
-
-        switch(item) {
-            case ALLY:
-                closestPoints = characters.stream().filter(c -> c.getSide() == Side.ALLY).map(GameCharacter::getCenterPosition);
-                break;
-            case SOFT:
-                Stream<BaseGameEntity> obstacles = mapDivision.calculateNeighborsArray(position, 90).stream().filter(entity -> entity instanceof Obstacle);
-                closestPoints = obstacles.filter(entity -> ((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)).map(BaseGameEntity::getCenterPosition);
-                break;
-            case ENEMY_AREA:
-                closestPoints = Arrays.stream(gameMap.getEnemySpawnAreas()).map(circle -> new Point2D(circle.getCenterX(), circle.getCenterY()));
-                break;
-            case HOME:
-                return new Point2D(gameMap.getHomeTerritory().getCenterX(), gameMap.getHomeTerritory().getCenterY());
-            default:
-                return position;
-        }
-
-        return closestPoints.min(Comparator.comparing(point -> point.distance(position))).orElse(position);
-    }
-
-    @Override
-    public GameCharacter getClosestALLY(Point2D position){
-        GameCharacter gc = null;
-        double min = Double.MAX_VALUE;
-
-        for (GameCharacter character : characters) {
-            if (character.getSide() == Side.ALLY){
-                double temp = character.getCenterPosition().distance(position);
-                if (temp<min){
-                    gc = character;
-                    min = temp;
-                }
-            }
-        }
-        if (gc == null){
-            System.out.println("no ally!!!!!!!!!!!!");
-            System.out.println("no ally!!!!!!!!!!!!");
-            System.out.println("no ally!!!!!!!!!!!!");
-        }
-        return gc;
-    }
-
-    public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
-        return null;
-    }
-
-    @Override
-    public boolean intersectsObstacles(Rectangle path) {
-        return gameMap.getInteractiveObstacles().stream().anyMatch(o -> o.intersects(path));
-    }
-    // ------------------------------------------------------------
-
-
-    // UI ---------------------------------------------------------
-    @Override
-    public void keyPressed(KeyEvent e) {
-        player.keyPressed(e);
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-        player.keyReleased(e);
-    }
-    // ------------------------------------------------------------
 
     // ADDERS -----------------------------------------------------
     @Override
@@ -206,6 +105,8 @@ public abstract class Controller extends BaseGameEntity implements Services {
     }
     // ------------------------------------------------------------
 
+
+
     // GETTERS ----------------------------------------------------
     @Override
     public SparseGraph<NavNode, GraphEdge> getGraph() {
@@ -218,33 +119,33 @@ public abstract class Controller extends BaseGameEntity implements Services {
     }
 
     @Override
-    public GameMap getMap(){
-        return gameMap;
+    public ArrayList<GameCharacter> getCharacters(Side side) {
+        return characters.stream().filter(c -> c.getSide() == side).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public Circle[] getEnemyAreas() {
+        return gameMap.getEnemySpawnAreas();
+    }
+
+    public Circle getHomeArea() {
+        return gameMap.getHomeTerritory();
+    }
+
+    public ArrayList<Bullet> getBullets(){
+    	return bullets;
     }
     // ------------------------------------------------------------
 
-    // OTHER ------------------------------------------------------
-    @Override
-    public boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array) {
-        double angle = end.subtract(start).angle(new Point2D(0,-1));
-        //angle between vectors are [0,180), so we need add extra direction info
-        if (end.subtract(start).getX()<0) angle = -angle;
-        double dis = start.distance(end);
 
-        Point2D center = start.midpoint(end);
-        Point2D topLeft = center.subtract(radius.multiply(0.5)).subtract(0,dis/2);
-        Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), radius.getX()+10, radius.getY()+dis+5);
-        hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
-        array.add(hitBox);
 
-        return !intersectsObstacles(hitBox);
-    }
-
+    // FRAME ITERATIONS -------------------------------------------
     @Override
     public void update() {
         driver.runAlgorithm();
         mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
+
+        director.update();
 
         characters.forEach(GameCharacter::update);
         characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character)));
@@ -269,23 +170,20 @@ public abstract class Controller extends BaseGameEntity implements Services {
     public void render(GraphicsContext gc) {
         gameMap.renderBottomLayer(gc);
 
-        triggers.forEach(trigger -> trigger.render(gc));
         bullets.forEach(bullet -> bullet.render(gc));
-
         characters.forEach(character -> character.render(gc));
+        triggers.forEach(trigger -> trigger.render(gc));
 
         // TODO: remove
-        triggers.forEach(trigger -> trigger.renderHitBox(gc));
-        bullets.forEach(bullet -> bullet.renderHitBox(gc));
-        characters.forEach(character -> character.renderHitBox(gc));
+        // triggers.forEach(trigger -> trigger.renderHitBox(gc));
+        // bullets.forEach(bullet -> bullet.renderHitBox(gc));
+        // characters.forEach(character -> character.renderHitBox(gc));
 
+        // gameMap.renderTopLayer(gc);
 
-        gameMap.renderTopLayer(gc);
-
-        gameMap.renderGraph(gc, new ArrayList<>(characters));
-        mapDivision.render(gc);
-//        System.out.println(mapDivision.sizeOfCells());
-        gameMap.renderTerritories(gc);
+        // gameMap.renderGraph(gc, characters);
+        // gameMap.renderTerritories(gc);
+        // mapDivision.render(gc);
     }
 
     @Override
@@ -295,7 +193,47 @@ public abstract class Controller extends BaseGameEntity implements Services {
         bullets.clear();
         gameMap.clear();
     }
+    //-------------------------------------------------------------
+
+
+
+    // UI ---------------------------------------------------------
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(getPlayer() != null) {
+            getPlayer().keyPressed(e);
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(getPlayer() != null) {
+            getPlayer().keyReleased(e);
+        }
+    }
+
+    @Override
+    public double getScore() {
+        return score;
+    }
+
+    @Override
+    public double getHomeHpFraction() {
+        return homeHp / homeFullHp;
+    }
+
+    @Override
+    public double getPlayerHpFraction() {
+        return getPlayer() == null ? 0 : getPlayer().getHp() / getPlayer().getFullHp();
+    }
+
+    @Override
+    public boolean gameOver() {
+        return getHomeHpFraction() <= 0 || getPlayerHpFraction() <= 0;
+    }
     // ------------------------------------------------------------
+
+
 
     // INHERITED --------------------------------------------------
     @Override

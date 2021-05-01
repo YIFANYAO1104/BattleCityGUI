@@ -6,6 +6,7 @@ import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
 import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.List;
 
 import static com.bham.bc.components.Controller.services;
+import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -53,13 +55,12 @@ public class Player extends GameCharacter {
 	/**
 	 * Used For testing
 	 */
-	public void  testDIRECTION_SET(){
+	public void testDIRECTION_SET(){
 		this.DIRECTION_SET.add(Direction.L);
 	}
 	public void testDIRECTION_SET1(){
 		this.DIRECTION_SET.clear();
 	}
-
 	/**
 	 * Constructs a player instance with directionSet initialized to empty
 	 *
@@ -131,6 +132,9 @@ public class Player extends GameCharacter {
 	public void setInverseKeys(boolean val) {
 		inverseKeys = val;
 	}
+	public boolean getInverseKeys() {
+		return inverseKeys;
+	}
 	public void toState1(){
 		this.entityImages =  new Image[] { new Image(IMAGE_PATH2, SIZE, 0, true, false) };
 
@@ -168,6 +172,9 @@ public class Player extends GameCharacter {
 	}
 	public Gun testGun(){
 		return this.GUN;
+	}
+	public void testFire() {
+		fire();
 	}
 
 	/**
@@ -262,14 +269,20 @@ public class Player extends GameCharacter {
 		TRACKABLE_Y.set(getCenterPosition().getY());
 	}
 
-	@Override
-	public void render(GraphicsContext gc) {
-		if(navigationService!=null) navigationService.render(gc);
-		drawRotatedImage(gc, entityImages[0], getAngle());
-	}
+//	@Override
+//	public void render(GraphicsContext gc) {
+//		if(navigationService!=null) navigationService.render(gc);
+//		drawRotatedImage(gc, entityImages[0], getAngle());
+//	}
 
 	@Override
-	protected void destroy() { }
+	protected void destroy() {
+		entityManager.removeEntity(this);
+		exists = false;
+
+		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+		services.addTrigger(dissolve);
+	}
 
 	@Override
 	public String toString() {

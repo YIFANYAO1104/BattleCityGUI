@@ -13,13 +13,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
 
-import static com.bham.bc.components.Controller.services;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.bham.bc.components.Controller.services;
 
 /**
  * <h1>Game Map</h1>
@@ -109,7 +109,7 @@ public class GameMap {
             System.out.println("This map does not have a home spawn center defined! Setting it in the middle of the map...");
         }
 
-        Point2D[] enemySpawnCenters = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.ENEMY_SPAWN_CENTER)).map(Obstacle::getCenterPosition).toArray(Point2D[]::new);
+        Point2D[] enemySpawnCenters = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.ENEMY_SPAWN_CENTER)).map(Obstacle::getPosition).toArray(Point2D[]::new);
 
         if(enemySpawnCenters.length == 0) {
             System.out.println("This map does not have any enemy spawn centers defined! Setting one in the middle of the map...");
@@ -127,7 +127,7 @@ public class GameMap {
             if(allObstacles.stream().anyMatch(o -> !o.getAttributes().contains(Attribute.HOME_AREA) && o.intersects(homeTerritory))) break;
         }
         // Apply padding to home territory
-        homeTerritory.setRadius(Math.max(1, homeTerritory.getRadius() - GameCharacter.MAX_SIZE));
+        homeTerritory.setRadius(Math.max(1, homeTerritory.getRadius() - GameCharacter.MAX_SIZE*.5));
 
         // Find enemy spawn areas for each spawn block by incrementing its radius and checking if it intersects with non-enemy-spawn obstacles
         for(int i = 0; i < enemySpawnCenters.length; i++) {
@@ -141,7 +141,7 @@ public class GameMap {
                 if((allObstacles.stream().anyMatch(o -> !o.getAttributes().contains(Attribute.ENEMY_SPAWN_AREA) && o.intersects(enemySpawnAreas[finalI])))) break;
             }
             // Apply padding to enemy spawn territory
-            enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - GameCharacter.MAX_SIZE));
+            enemySpawnAreas[i].setRadius(Math.max(1, enemySpawnAreas[i].getRadius() - GameCharacter.MAX_SIZE*.5));
         }
     }
 

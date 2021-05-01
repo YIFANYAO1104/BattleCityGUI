@@ -3,6 +3,8 @@ package com.bham.bc.view.menu;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.view.MenuSession;
 import com.bham.bc.view.model.*;
+import com.bham.bc.view.tools.GameFlowEvent;
+import com.bham.bc.view.tools.RecordsHandler;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -24,10 +26,22 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  */
 public class MainMenu extends AnchorPane {
 
+    /**
+     * use custom {@link SubMenu} to create Main Menu
+     */
     private SubMenu subMenuMain;
+    /**
+     * use custom {@link SubMenu} to create Scores Menu
+     */
     private SubMenu subMenuScores;
+    /**
+     * use custom {@link SubMenu} to create Settings Mneu
+     */
     private SubMenu subMenuSettings;
 
+    /**
+     * create new_game_event
+     */
     private final GameFlowEvent NEW_GAME_EVENT;
 
     /**
@@ -58,6 +72,7 @@ public class MainMenu extends AnchorPane {
     /**
      * Creates the primary sub-menu for the main menu. This defines the behavior of all the
      * necessary buttons to control the GUI actions and create corresponding sub-menus.
+     * <p>use custom menu button ({@link MenuButton})</p>
      */
     private void createSubMenuMain() {
         MenuButton btnStart = new MenuButton("START GAME");
@@ -66,7 +81,7 @@ public class MainMenu extends AnchorPane {
         MenuButton btnQuit = new MenuButton("QUIT");
 
 
-        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.MAP2); btnStart.fireEvent(NEW_GAME_EVENT); });
+        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.MEDIUM); btnStart.fireEvent(NEW_GAME_EVENT); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
@@ -79,6 +94,7 @@ public class MainMenu extends AnchorPane {
     /**
      * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
+     * <p>Create the leaderboard table and initialize the leaderboard table.</p>
      */
     private void createSubMenuScores() {
         subMenuScores = new SubMenu(this);
@@ -126,7 +142,8 @@ public class MainMenu extends AnchorPane {
 
     /**
      * Creates a sub-menu for settings. This menu is observed whenever "SETTINGS" is clicked
-     * and allows the user to configure UI parameters, such as SFX or MUSIC volume
+     * and allows the user to configure UI parameters, such as SFX or MUSIC volume.
+     * <p>settings have  {@link MenuSlider} for control of volume.</p>
      */
     private void createSubMenuSettings() {
         MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));

@@ -11,10 +11,18 @@ import static com.bham.bc.entity.graph.NodeTypeEnum.invalid_node_index;
  */
 public class GraphEdge {
 
-    //An edge connects two nodes. Valid node indices are always positive.
+    /**
+     * The index{@link Integer} of the start node
+     */
     protected int from;
+
+    /**
+     * The index{@link Integer} of the destination node
+     */
     protected int to;
-    //the cost of traversing the edge
+    /**
+     * the cost{@link Double} of traveling the edge
+     */
     protected double cost;
 
     final public static int normal = 0;

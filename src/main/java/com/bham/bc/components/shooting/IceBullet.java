@@ -9,7 +9,6 @@ import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Rotate;
 
@@ -20,7 +19,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * Represents a default bullet the player starts with
  */
 public class IceBullet extends Bullet {
-    public static final BulletType TYPE = BulletType.IceBullet;
+    public static final BulletType TYPE = BulletType.ICE;
     public static final double SPEED = 5;
     public static final double DAMAGE = 10;
 
@@ -63,8 +62,6 @@ public class IceBullet extends Bullet {
     public void handle(BaseGameEntity entity) {
 
         if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
-            System.out.println("!!!!!!!!!!\n!!!!!!!!!!!!!!!\n!!!!!!!!!!!!!");
-            ((Enemy) entity).toFreeze(11);
             ((GameCharacter) entity).changeHp(-DAMAGE);
             destroy();
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {

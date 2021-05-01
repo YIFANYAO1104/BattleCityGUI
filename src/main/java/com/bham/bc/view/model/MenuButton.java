@@ -28,7 +28,13 @@ import static com.bham.bc.audio.SoundEffect.SELECT;
  */
 public class MenuButton extends StackPane {
 
+    /**
+     * width of button background
+     */
     public static final double WIDTH = 300;
+    /**
+     * height of button background
+     */
     public static final double HEIGHT = 50;
 
     private final String FG_1 = "#135ADD";  // -fx-primary-color (foreground primary)
@@ -38,7 +44,7 @@ public class MenuButton extends StackPane {
     private final String HIGH = "#B0CAFF";  // -fx-lighten-color (highlight)
 
     /**
-     * Constructs a custom animated menu button
+     * Constructs a custom animated menu button.
      * @param name text the button should contain
      */
     public MenuButton(String name) {
@@ -66,7 +72,7 @@ public class MenuButton extends StackPane {
 
         // Set up button text
         Text text = new Text(name);
-        Font font = Font.loadFont("file:src/main/resources/Ubuntu-Medium.ttf", 26);
+        Font font = Font.loadFont("file:src/main/resources/model/Ubuntu-Medium.ttf", 26);
         text.setFont(font);
         text.fillProperty().bind(Bindings.when(hoverProperty()).then(Color.web(FG_2)).otherwise(Color.web(FG_1)));
 

@@ -10,7 +10,9 @@ import static com.bham.bc.utils.Timer.CLOCK;
 
 import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.PauseMenu;
-import com.bham.bc.view.model.GameFlowEvent;
+import com.bham.bc.view.model.CustomStage;
+import com.bham.bc.view.tools.GameFlowEvent;
+import com.bham.bc.view.tools.Camera;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -34,21 +36,39 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 /**
+ * <h1>GameSession</h1>
+ *
  * Class managing the animations of a running game
  */
 public class GameSession {
 
+    /**
+     * width of game window
+     */
     public static final int WIDTH = 800;
+    /**
+     * height of game window
+     */
     public static final int HEIGHT = 600;
     public static final int FRAME_RATE = 24;
     public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.REVOLUTION, SoundTrack.CORRUPTION, SoundTrack.TAKE_LEAD };
 
+    /**
+     * instance of Pause Menu
+     */
     private final PauseMenu PAUSE_MENU;
 
+    /**
+     * instance of Camera
+     */
     private Camera camera;
     private GraphicsContext gc;
     private AnchorPane gamePane;
+    /**
+     * stage of game
+     */
     private Stage gameStage;
+
     private Stage menuStage;
     private AnimationTimer gameTimer;
 
@@ -58,7 +78,7 @@ public class GameSession {
     private DoubleProperty healthFraction;
 
     /**
-     * Constructs the game session
+     * Constructs the game session.
      */
     public GameSession(MapType mapType) {
         PAUSE_MENU = new PauseMenu();
@@ -70,7 +90,7 @@ public class GameSession {
     }
 
     /**
-     * Initializes the layout of the game session, i.e., sets up the root pane and event filters
+     * Initializes the layout of the game session, i.e., sets up the root pane and event filters.
      */
     private void initLayout() {
         Canvas canvas = new Canvas(GameMap.getWidth(), GameMap.getHeight());
@@ -82,14 +102,14 @@ public class GameSession {
         gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, this::leaveGame);
 
         try {
-            gamePane.getStylesheets().add(getClass().getClassLoader().getResource("style.css").toExternalForm());
+            gamePane.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage
+     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage.
      */
     private void initWindow() {
         Scene gameScene = new Scene(gamePane, WIDTH, HEIGHT);
@@ -97,12 +117,12 @@ public class GameSession {
         gameStage.setScene(gameScene);
         gameStage.setResizable(false);
         gameStage.setTitle("Blueland Defenders");
-        CustomStage customStage=new CustomStage(gameStage, gameScene,gamePane);
-        customStage.createTitleBar(gamePane, WIDTH);
+        CustomStage customStage=new CustomStage(gameStage);
+        customStage.createGameTitleBar(gamePane, WIDTH);
     }
 
     /**
-     * Initializes the progress pane, i.e., sets up the home health bar, score and time labels
+     * Initializes the progress pane, i.e., sets up the home health bar, score and time labels.
      */
     private void initProgressPane() {
         // Declare the global colors used in the CSS file
@@ -169,9 +189,7 @@ public class GameSession {
      */
     private void createKeyListeners() {
         gamePane.getScene().setOnKeyPressed(e -> {
-            if(e.getCode() == KeyCode.Q) {  // TODO: remove
-                endGame();
-            } else if(e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) {
+            if((e.getCode() == KeyCode.P || e.getCode() == KeyCode.ESCAPE) && !services.gameOver()) {
                 gamePane.fireEvent(new GameFlowEvent(GameFlowEvent.PAUSE_GAME));
             } else {
                 services.keyPressed(e);
@@ -206,7 +224,7 @@ public class GameSession {
      * <p>This method stops the <i>gameTimer</i> and the background music, clears the content present in services,
      * attaches end menu to game session's root pane and passes the final game score the player acquired.</p>
      */
-    private void endGame() {
+    public void endGame() {
         gameTimer.stop();
         services.clear();
         audioManager.stopMusic();
@@ -248,12 +266,15 @@ public class GameSession {
     private void updateGameState() {
         long currentTime = CLOCK.getCurrentTime() - startTimestamp;
 
-
         DateFormat timeFormat = new SimpleDateFormat("mm:ss");
         timeSurvived.set(timeFormat.format(currentTime));
 
         scoreAchieved.set(String.format("%.0f", services.getScore()));
         healthFraction.set(services.getHomeHpFraction());
+
+        if(services.gameOver()){
+            endGame();
+        }
     }
 
     /**
@@ -274,11 +295,10 @@ public class GameSession {
      */
     private void tick() {
         gc.clearRect(0, 0, gc.getCanvas().getWidth(), gc.getCanvas().getHeight());
-        updateGameState();
         services.render(gc);
-
         camera.update();
         services.update();
+        updateGameState();
     }
 
     /**

@@ -25,7 +25,7 @@ public class StateTrigger extends RespawnTrigger {
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
             ((Player) entity).toState1();
-            ((Player) entity).gunChange(BulletType.IceBullet);
+            ((Player) entity).gunChange(BulletType.ICE);
             ((Player) entity).laserChange(LaserType.ThunderLaser);
             deactivate();
         }

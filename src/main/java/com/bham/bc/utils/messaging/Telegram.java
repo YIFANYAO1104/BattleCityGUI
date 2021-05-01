@@ -14,13 +14,14 @@ public class Telegram implements Comparable {
      * GameEntity receive this telegram
      */
     public int Receiver;
-    /**The message itself.
-     * These are all enumerated in the file "MessageTypes.h"
+
+    /**
+     * messages can be dispatched immediately or delayed for a specified amount
+     * of time. If a delay is necessary this field is stamped with the time
+     * the message should be dispatched.
      */
     public MessageTypes Msg;
-    //messages can be dispatched immediately or delayed for a specified amount
-    //of time. If a delay is necessary this field is stamped with the time
-    //the message should be dispatched.
+
     /**
      * The DispatchTime of Message (Immediately Or Delayed)
      * If message is delayed, then this attribute is the time message should be dispatched.
@@ -145,8 +146,13 @@ public class Telegram implements Comparable {
                 + "   Receiver: " + Receiver + "   Msg: " + Msg;
     }
 
-    //handy helper function for dereferencing the ExtraInfo field of the Telegram
-//to the required type.
+    /**
+     * handy helper function for dereferencing the ExtraInfo field of the Telegram
+     * to the required type.
+     * @param p
+     * @param <T>
+     * @return
+     */
     public static <T> T DereferenceToType(Object p) {
         return (T) (p);
     }

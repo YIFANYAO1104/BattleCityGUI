@@ -3,9 +3,10 @@ package com.bham.bc.components.characters;
 import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
-import com.bham.bc.components.triggers.powerups.Weapon;
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.HitMarker;
+
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.Constants;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.physics.CollisionHandler;
@@ -14,6 +15,10 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.CycleMethod;
+import javafx.scene.paint.LinearGradient;
+import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
@@ -27,13 +32,18 @@ import static com.bham.bc.components.Controller.services;
  */
 abstract public class GameCharacter extends MovingEntity {
     public static final int MAX_SIZE = 32;
+    public static final double MAX_HP = 300;
+    public static final double MAX_SPEED = 5;
 
-    private double MAX_HP;
+    protected double fullHp;
     protected double hp;
     protected Side side;
     protected TargetingSystem targetingSystem;
 
-
+    /**
+     * Trigger(s) activation time
+     * <p> if it's 0 meaning trigger is not active or character is not in corresponding trigger state <p>
+     */
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
 
     /**
@@ -45,14 +55,41 @@ abstract public class GameCharacter extends MovingEntity {
      */
     protected GameCharacter(double x, double y, double speed, double hp, Side side) {
         super(x, y, speed);
-        assert (speed <= Constants.MAX_CHARACTER_SPEED) : "<GameCharacter::Constructor>: invalid speed";
-        assert (hp <= Constants.MAX_CHARACTER_HEALTH) : "<GameCharacter::Constructor>: invalid hp";
-        MAX_HP = hp;
+        assert -MAX_SPEED <= speed && speed <= MAX_SPEED : "<GameCharacter::Constructor>: invalid speed";
+        assert 0 <= hp && hp <= MAX_HP : "<GameCharacter::Constructor>: invalid hp";
+        fullHp = hp;
         this.hp = hp;
         this.side = side;
         targetingSystem = new TargetingSystem(this);
 
         mass = 3;
+    }
+
+    /**
+     * Renders the health bar below character
+     * @param gc graphics context to render the hp bar
+     */
+    protected void renderHp(GraphicsContext gc) {
+        // Declare the global colors used in the CSS file
+        String FG_1 = "#135ADD";  // -fx-primary-color (foreground primary)
+        String BG_1 = "#080A1E";  // -fx-bg-color (background primary)
+
+        // Set the current active health of the character
+        Stop[] healthBarStops = new Stop[]{ new Stop(hp/ fullHp, Color.web(FG_1)), new Stop(hp/ fullHp, Color.web(BG_1)) };
+        LinearGradient healthBarGradient = new LinearGradient(0, 0, 1, 0, true, CycleMethod.NO_CYCLE, healthBarStops);
+
+        // Set the fill nad the stroke of the health bar
+        gc.setFill(healthBarGradient);
+        gc.setStroke(Color.web(BG_1));
+        gc.setLineWidth(1);
+
+        // Set the width (e.g. dependent on hp or on character's width)
+        // double barWidth = MAX_SIZE;
+        double barWidth = fullHp /3;
+
+        // Draw the health bar
+        gc.fillRect(getCenterPosition().getX() - barWidth*.5, getCenterPosition().getY() + MAX_SIZE*.5, barWidth, 3);
+        gc.strokeRect(getCenterPosition().getX() - barWidth*.5, getCenterPosition().getY() + MAX_SIZE*.5, barWidth, 3);
     }
 
     public NavigationService getNavigationService(){
@@ -73,11 +110,11 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     /**
-     * Gets the MAX HP of the character
-     * @return initial HP (which is MAX) the character was assigned with
+     * Gets the full possible HP of the character
+     * @return initial HP (which is full) the character was assigned with
      */
-    public double getMaxHp() {
-        return MAX_HP;
+    public double getFullHp() {
+        return fullHp;
     }
 
     /**
@@ -93,7 +130,9 @@ abstract public class GameCharacter extends MovingEntity {
      * @param health amount by which the character's HP is changed
      */
     public void changeHp(double health) {
-        hp = Math.min(hp + health, MAX_HP);
+        hp = Math.min(hp + health, fullHp);
+        Trigger hitMarker = new HitMarker(this, entityImages[0], getAngle());
+        services.addTrigger(hitMarker);
 
         if(hp <= 0) {
             audioManager.playEffect(SoundEffect.DESTROY_CHARACTER);
@@ -103,8 +142,8 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     /**
-     * Get immune activation time
-     * @return immune activation time (if it's 0 meaning character is not in immune state)
+     * Get immune activation time or {@link #immuneTicks}
+     * @return immune activation time
      */
     public int getImmuneTicks() {
         return immuneTicks;
@@ -114,23 +153,8 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     // TEMP: DOCUMENT ------------------------------------------------
-    @Deprecated
-    public void switchWeapon(Weapon w) {}
 
-    public void toTriple(int numTicks) {
-        tripleTicks = numTicks;
-    }
-    public void toFreeze(int numTicks) {
-        this.freezeTicks = numTicks;
-    }
-    public void toImmune(int numTicks) {
-        immuneTicks = numTicks;
-    }
-    protected void updateTriggers() {
-        if(immuneTicks!=0) --immuneTicks;
-        if(freezeTicks!=0) --freezeTicks;
-        if(tripleTicks!=0) --tripleTicks;
-    }
+
     public void destroyed(){
         this.hp-=200;
     }
@@ -187,10 +211,10 @@ abstract public class GameCharacter extends MovingEntity {
      * Unregisters and prepares to remove the character. Also runs any destruction effects
      */
     protected abstract void destroy();
+
     public void armorUP(double max){
-        this.MAX_HP =max;
+        this.fullHp =max;
         this.hp = max;
-        System.out.println("The max HP of character has been changed to " + hp);
     }
 
     /**
@@ -212,12 +236,11 @@ abstract public class GameCharacter extends MovingEntity {
     @Override
     public void render(GraphicsContext gc) {
         drawRotatedImage(gc, entityImages[0], getAngle());
+        renderHp(gc);
     }
 
     @Override
     public abstract Circle getHitBox();
-
-
 
     @Override
     public boolean handleMessage(Telegram msg) {

@@ -10,8 +10,15 @@ public class Floodfill {
 
 
     private ArrayList<GraphNode> startNodes = new ArrayList<GraphNode>();
+
+    /**
+     * use the set{@link HashSet} to register the nodes has been traveled
+     */
     private HashSet<GraphNode> registerset = new HashSet<GraphNode>();
 
+    /**
+     * use startNode{@link GraphNode} as the starting node
+     */
     private GraphNode startpoint;
 
     public Floodfill(GraphNode gh){
@@ -20,6 +27,11 @@ public class Floodfill {
         registerset.add(gh);
     }
 
+    /**
+     * Use flood fill algorithm to mark valid nodes and invalid nodes
+     * @param graph {@link SparseGraph}
+     * @return the graph {@link SparseGraph}  that make unreachable nodes inalid
+     */
     public SparseGraph stratFLood(SparseGraph graph){
 
         for(int i = 0; i<startNodes.size();i++){

@@ -16,14 +16,22 @@ import javafx.scene.layout.StackPane;
  * slider body (track), slider ball (thumb), slider label (name) and its value label (%).</p>
  */
 public class MenuSlider extends HBox {
-
+    /**
+     * width of custom slider
+     */
     public static final int WIDTH = 480;
+    /**
+     * height of custom slider
+     */
     public static final int HEIGHT = 50;
 
+    /**
+     * instance of Slider
+     */
     private final Slider SLIDER;
 
     /**
-     * Constructs a slider with its name and initial value
+     * Constructs a slider with its name and initial value.
      *
      * @param name         label's name to the left of the slider
      * @param initialValue value the slider should be set to initially
@@ -75,7 +83,7 @@ public class MenuSlider extends HBox {
     }
 
     /**
-     * Gets slider's value property which is used to change the audio volume
+     * Returns slider's value property which is used to change the audio volume.
      * @return DoubleProperty object to be bind with audio volume changes
      */
     public DoubleProperty getValueProperty() {

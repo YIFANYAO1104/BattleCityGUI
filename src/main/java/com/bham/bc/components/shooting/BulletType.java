@@ -6,9 +6,9 @@ import javafx.scene.image.Image;
  * Enum class defining unmodifiable properties of any bullet type. These are used by bullet classes and the {@link Gun} class.
  */
 public enum BulletType {
-    DEFAULT(200, 6, 12, "file:src/main/resources/img/shooting/defaultBullet.png"),
-    EXPLOSIVE(2000, 6, 12, "file:src/main/resources/img/shooting/defaultBullet.png"),
-    IceBullet(2000, 6, 12, "file:src/main/resources/img/shooting/2.png"),
+    DEFAULT(200, 6, 12, "file:src/main/resources/img/shooting/default-bullet.png"),
+    EXPLOSIVE(2000, 6, 12, "file:src/main/resources/img/shooting/default-bullet.png"),
+    ICE(2000, 6, 12, "file:src/main/resources/img/shooting/2.png"),
     DefaultLaser(200,20,10,
         new Image[]{
                 (new Image("file:src/main/resources/img/shooting/l0.png")),

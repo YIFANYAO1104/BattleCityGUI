@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 public enum EnemyType {
     KAMIKAZE(),
     SHOOTER(),
-    SUMMONER(),
+    SPLITTER(),
     TANK(),
     TEASER(),
     TRAPPER();

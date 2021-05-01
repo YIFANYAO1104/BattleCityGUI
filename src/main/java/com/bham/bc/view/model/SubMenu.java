@@ -16,13 +16,22 @@ import javafx.util.Duration;
 public class SubMenu extends VBox {
 
     // Note: must be lower than MenuSession and GameSession size
+    /**
+     * width of sub-menu
+     */
     public static final int WIDTH = 700;
+    /**
+     * height of sub-menu
+     */
     public static final int HEIGHT = 384;
 
+    /**
+     * parent node to which the sub-menu will be attached (detached)
+     */
     private final AnchorPane PARENT;
 
     /**
-     * Constructs an AnchorPane as layout for the sub-menu
+     * Constructs an AnchorPane as layout for the sub-menu.
      * @param parent node to which the sub-menu will be attached (detached)
      */
     public SubMenu(AnchorPane parent) {
@@ -39,7 +48,7 @@ public class SubMenu extends VBox {
     }
 
     /**
-     * Aligns itself at the center of the parent node
+     * Aligns itself at the center of the parent node.
      */
     public void alignCenter() {
         setTranslateX(PARENT.getMinWidth()*.5 - getMinWidth()*.5);
@@ -47,7 +56,8 @@ public class SubMenu extends VBox {
     }
 
     /**
-     * Animates the appearance of the sub-menu
+     * Animates the appearance of the sub-menu.
+     * <p>show sub-menu with fade in transition</p>
      */
     public void show() {
         if(!PARENT.getChildren().contains(this)) {
@@ -77,7 +87,8 @@ public class SubMenu extends VBox {
     }
 
     /**
-     * Animates the disappearance of the sub-menu
+     * Animates the disappearance of the sub-menu.
+     * <p>show sub-menu with fade out transition</p>
      */
     public void hide() {
         if(PARENT.getChildren().contains(this)) {

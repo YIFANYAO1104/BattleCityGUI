@@ -89,7 +89,8 @@ public abstract class Enemy extends GameCharacter {
                     navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
                     break;
                 case ALLY:
-                    navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
+                    // navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
+                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                     break;
             }
             nextSearch=false;
@@ -184,7 +185,7 @@ public abstract class Enemy extends GameCharacter {
 
     /**
      * Shoots a bullet at an obstacle from a distance of at max 4 nodes to the obstacle
-     * @return true if it is needed to shoot to at an obstacle and false otherwise
+     * @return true if it is needed to shoot at an obstacle and false otherwise
      */
     protected boolean shootObstacle() {
         int numNodesToObstacle = 4;
@@ -216,30 +217,30 @@ public abstract class Enemy extends GameCharacter {
         return navigationService.getSmoothingBoxes();
     }
 
-    @Override
-    public void render(GraphicsContext gc) {
-        if (navigationService!=null) navigationService.render(gc);
-        for (PathEdge graphEdge : pathEdges) {
-            Point2D n1 = graphEdge.getSource();
-            Point2D n2 = graphEdge.getDestination();
-            switch (graphEdge.getBehavior()){
-                case GraphEdge.normal:
-                    gc.setStroke(Color.RED);
-                    gc.setLineWidth(2.0);break;
-                case GraphEdge.shoot:
-                    gc.setStroke(Color.GOLD);
-                    gc.setLineWidth(10.0);break;
-            }
-            gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
-        }
-        drawRotatedImage(gc, entityImages[0], getAngle());
-
-//        gc.setStroke(Color.WHITE);
-//        gc.setLineWidth(2.0);
-//        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
+//    @Override
+//    public void render(GraphicsContext gc) {
+////        if (navigationService!=null) navigationService.render(gc);
+//        for (PathEdge graphEdge : pathEdges) {
+//            Point2D n1 = graphEdge.getSource();
+//            Point2D n2 = graphEdge.getDestination();
+//            switch (graphEdge.getBehavior()){
+//                case GraphEdge.normal:
+//                    gc.setStroke(Color.RED);
+//                    gc.setLineWidth(2.0);break;
+//                case GraphEdge.shoot:
+//                    gc.setStroke(Color.GOLD);
+//                    gc.setLineWidth(10.0);break;
+//            }
+//            gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
+//        }
+//        drawRotatedImage(gc, entityImages[0], getAngle());
 //
-//        steering.render(gc);
-    }
+////        gc.setStroke(Color.WHITE);
+////        gc.setLineWidth(2.0);
+////        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
+////
+////        steering.render(gc);
+//    }
 
     @Override
     public void move() {

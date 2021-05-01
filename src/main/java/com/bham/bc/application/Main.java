@@ -4,6 +4,11 @@ import com.bham.bc.view.MenuSession;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * <h1>Main</h1>
+ *
+ * <p>This is the class for start of game from Main interface</p>
+ */
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {

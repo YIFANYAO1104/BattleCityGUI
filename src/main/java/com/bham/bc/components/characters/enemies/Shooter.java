@@ -24,7 +24,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  *
  *     <li><b>Attack Ally</b> - shoots at any ally if there are no obstacles in between and if its HP
  *     is over 20%. If the bullets are slow and the target is far, it kinda wastes its energy but
- *     ¯\_(ツ)_/¯</li>
+ *     doee not matter</li>
  *
  *     <li><b>Retreat</b> - turns on "run away" property and searches for the enemy spawn area to
  *     retreat to. While it retreats, it gradually regenerates its HP and once if it manages to reach
@@ -89,11 +89,7 @@ public class Shooter extends Enemy {
 
     @Override
     public void update() {
-        if(freezeTicks!=0){
-            System.out.println("\n -----------"+ freezeTicks);
-            freezeTicks--;
-            return;
-        }
+    	
         noObstCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();

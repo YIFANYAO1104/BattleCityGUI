@@ -6,7 +6,6 @@ import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
-import com.bham.bc.entity.Constants;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,11 +16,13 @@ import java.util.List;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
 
-
 /**
  * Represents any bullet and defines common bullet properties
  */
 abstract public class Bullet extends MovingEntity {
+    public static final double MAX_SPEED = 10;
+    public static final double MAX_DAMAGE = 100;
+
     private final BulletType TYPE;
     private final Side SIDE;
     private double damage;
@@ -40,26 +41,18 @@ abstract public class Bullet extends MovingEntity {
      */
     public Bullet(double x, double y, double speed, Point2D heading, BulletType type, Side side, double damage) {
         super(x, y, speed, heading);
-        assert (speed <= Constants.MAX_BULLET_SPEED) : "<Bullet::Constructor>: invalid speed";
-        assert (damage <= Constants.MAX_BULLET_HURT) : "<Bullet::Constructor>: invalid damage";
+        assert -MAX_SPEED <= speed && speed <= MAX_SPEED : "<Bullet::Constructor>: invalid speed";
+        assert -MAX_DAMAGE <= damage && damage <= MAX_DAMAGE : "<Bullet::Constructor>: invalid damage";
         this.TYPE = type;
         this.SIDE = side;
         this.damage = damage;
 
         entityImages = new Image[] { TYPE.getImage() };
     }
-//    public Bullet(double x, double y, double speed, Point2D heading, LaserType type, Side side, double damage) {
-//        super(x, y, speed, heading);
-//        this.LaserType = type;
-//        this.SIDE = side;
-//        this.damage = damage;
-//
-//        entityImages = new Image[] { LaserType.getImage() };
-//    }
 
     /**
      * Gets bullet's type
-     * @return DEFAULT or EXPLOSIVE type the bullet belongs to
+     * @return DEFAULT, EXPLOSIVE or ICE type the bullet belongs to
      */
     public BulletType getType() {
         return TYPE;
@@ -131,6 +124,8 @@ abstract public class Bullet extends MovingEntity {
      */
     public abstract void destroy();
 
+    public abstract void setTime();
+
     @Override
     public void render(GraphicsContext gc) {
         drawRotatedImage(gc, entityImages[0], getAngle());
@@ -145,6 +140,4 @@ abstract public class Bullet extends MovingEntity {
     public String toString() {
         return "Bullet";
     }
-
-    public abstract void setTime();
 }
