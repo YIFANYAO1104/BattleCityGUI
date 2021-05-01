@@ -6,6 +6,7 @@ public enum MapType {
     TESTMap1("/com.bham.bc/floodMap1.json"),
     TEST("/test.json"),
     MAP2("/162x162.json"),
+    S("/surr.json"),
     EmptyMap(null);
 
     MapType(String name) {

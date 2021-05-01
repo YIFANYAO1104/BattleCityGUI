@@ -5,6 +5,7 @@ import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.GraphNode;
 import com.bham.bc.entity.graph.node.NavNode;
+import com.bham.bc.utils.RandomEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -682,6 +683,27 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
 
     public void setRealContrustPercentage(double realContrustPercentage) {
         this.realContrustPercentage = realContrustPercentage;
+    }
+
+    /**
+     * returns the position of a graph node selected at random
+     */
+    public Point2D getRandomNodeLocation() {
+        int validNum = 0;
+        for (GraphNode graphNode : nodeVector) {
+            if (graphNode.isValid()){
+                validNum++;
+            }
+        }
+        int randomIndex = RandomEnhanced.randInt(0,validNum);
+
+        for (GraphNode graphNode : nodeVector) {
+            if (graphNode.isValid()){
+                randomIndex--;
+                if (randomIndex==0) return ((NavNode)graphNode).getPosition();
+            }
+        }
+        return null;
     }
 
 }

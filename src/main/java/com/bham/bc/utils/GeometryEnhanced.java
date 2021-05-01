@@ -145,6 +145,17 @@ public class GeometryEnhanced {
         return new Point2D(x,y);
     }
 
+    /**
+     * @return true if the target Pos is in the vision
+     */
+    public static boolean isInVision(Point2D curPos,
+                                               Point2D curHeading,
+                                               Point2D testPos,
+                                               double visionAngle) {
+        Point2D toTarget = testPos.subtract(curPos).normalize();
+        return curHeading.dotProduct(toTarget) >= Math.cos(visionAngle / 2.0);
+    }
+
 
     //rotate a point around center point, anti-clockwise angle, 31ms in test
 //    static public Point2D rotate(Point2D center, Point2D p, double antiDegrees){

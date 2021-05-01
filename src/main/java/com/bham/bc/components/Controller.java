@@ -25,6 +25,8 @@ import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -146,8 +148,12 @@ public abstract class Controller extends BaseGameEntity implements Services {
         double min = Double.MAX_VALUE;
 
         for (GameCharacter character : characters) {
-            if (character.getSide() == Side.ALLY && character.getCenterPosition().distance(position)<min){
-                gc = character;
+            if (character.getSide() == Side.ALLY){
+                double temp = character.getCenterPosition().distance(position);
+                if (temp<min){
+                    gc = character;
+                    min = temp;
+                }
             }
         }
         if (gc == null){
@@ -283,6 +289,16 @@ public abstract class Controller extends BaseGameEntity implements Services {
     }
 
     @Override
+    public void renderHitBoxes(AnchorPane hitBoxPane) {
+        hitBoxPane.getChildren().clear();
+
+        // Add map hit-box
+        for (GameCharacter character : characters) {
+            character.renderHitBoxes(hitBoxPane);
+        }
+    }
+
+    @Override
     public void clear() {
         triggers.clear();
         characters.clear();
@@ -317,4 +333,13 @@ public abstract class Controller extends BaseGameEntity implements Services {
         return "Controller";
     }
     // ------------------------------------------------------------
+
+    @Override
+    public ArrayList<GameCharacter> getCharacters() {
+        return characters;
+    }
+
+    public MapDivision<BaseGameEntity> getMapDivision() {
+        return mapDivision;
+    }
 }

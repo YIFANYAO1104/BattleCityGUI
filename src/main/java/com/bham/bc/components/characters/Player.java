@@ -77,6 +77,11 @@ public class Player extends GameCharacter {
 		steering.setKeysOn(true);
 	}
 
+	@Override
+	public NavigationService getNavigationService() {
+		return this.navigationService;
+	}
+
 	/**
 	 * Assign activation time of Triple Bullet trigger
 	 * @param numTicks activation time in ticks

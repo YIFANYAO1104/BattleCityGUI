@@ -33,6 +33,7 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
 public abstract class Enemy extends GameCharacter {
 
     protected final Gun GUN;
+
     protected NavigationService navigationService;
     protected LinkedList<PathEdge> pathEdges;
 
@@ -217,7 +218,7 @@ public abstract class Enemy extends GameCharacter {
 
     @Override
     public void render(GraphicsContext gc) {
-//        if (navigationService!=null) navigationService.render(gc);
+        if (navigationService!=null) navigationService.render(gc);
         for (PathEdge graphEdge : pathEdges) {
             Point2D n1 = graphEdge.getSource();
             Point2D n2 = graphEdge.getDestination();
@@ -246,6 +247,9 @@ public abstract class Enemy extends GameCharacter {
         Point2D acceleration = force.multiply(1. / mass);
         //debug
         this.acceleration = acceleration;
+        if (this instanceof Neuron){
+            System.out.println(acceleration);
+        }
 
         velocity = velocity.add(acceleration);
         if (velocity.magnitude() > maxSpeed) {
@@ -265,5 +269,10 @@ public abstract class Enemy extends GameCharacter {
     @Override
     public String toString() {
         return "Enemy";
+    }
+
+    @Override
+    public NavigationService getNavigationService() {
+        return navigationService;
     }
 }

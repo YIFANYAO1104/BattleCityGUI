@@ -265,6 +265,22 @@ public class MapDivision<entity extends BaseGameEntity>{
         return surround_entities;
     }
 
+    public List<entity> calculateNeighborsArray(Rectangle hitbox){
+        surround_entities.clear();
+
+        Bounds b = hitbox.getBoundsInParent();
+        List<Integer> idxes = getCellIndexes(new Point2D(b.getMinX(), b.getMinY()), new Point2D(b.getWidth(), b.getHeight()));
+
+        for (Integer idx : idxes) {
+            Cell<entity> curCell = m_Cells.get(idx);
+            for(entity ent :curCell.Unites){
+                if(ent.intersects(hitbox))
+                    surround_entities.add(ent);
+            }
+        }
+        return surround_entities;
+    }
+
     /**
      * Get the List of the Entity that should be consider if interacting with target the location.
      * @param centerPos Point2D the location should be check collision

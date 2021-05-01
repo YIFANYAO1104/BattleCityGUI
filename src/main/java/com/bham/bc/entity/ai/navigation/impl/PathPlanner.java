@@ -2,6 +2,7 @@ package com.bham.bc.entity.ai.navigation.impl;
 
 import com.bham.bc.components.characters.enemies.Tank;
 import com.bham.bc.components.characters.enemies.Teaser;
+import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.PathEdge;
@@ -361,5 +362,12 @@ public class PathPlanner implements NavigationService {
     public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition) {
         if (curSearchTask!=null) curSearchTask.setExpandCondition(expandCondition);
         this.expandCondition = expandCondition;
+    }
+
+    public boolean isTriggerActive(){
+        if (taskStatus==SearchStatus.target_found){
+            return curSearchTask.isTriggerActive();
+        }
+        return false;
     }
 }

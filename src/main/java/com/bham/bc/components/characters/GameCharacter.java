@@ -7,9 +7,13 @@ import com.bham.bc.components.triggers.powerups.Weapon;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.Constants;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.physics.CollisionHandler;
+import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
@@ -27,6 +31,7 @@ abstract public class GameCharacter extends MovingEntity {
     private double MAX_HP;
     protected double hp;
     protected Side side;
+    protected TargetingSystem targetingSystem;
 
 
     protected int immuneTicks, freezeTicks, tripleTicks = 0;
@@ -45,8 +50,18 @@ abstract public class GameCharacter extends MovingEntity {
         MAX_HP = hp;
         this.hp = hp;
         this.side = side;
+        targetingSystem = new TargetingSystem(this);
 
         mass = 3;
+    }
+
+    public NavigationService getNavigationService(){
+        return null;
+    }
+
+
+    public TargetingSystem getTargetingSystem() {
+        return targetingSystem;
     }
 
     /**
@@ -217,5 +232,18 @@ abstract public class GameCharacter extends MovingEntity {
                 System.out.println("no match");
                 return false;
         }
+    }
+
+    public boolean isReached(Point2D target){
+//        return getCenterPosition().distance(target) < 1;
+        return intersects(new Circle(target.getX(), target.getY(), 3));
+    }
+
+    public void brake(){
+        velocity=new Point2D(0,0);
+    }
+
+    public void renderHitBoxes(AnchorPane hitBoxPane){
+        return;
     }
 }

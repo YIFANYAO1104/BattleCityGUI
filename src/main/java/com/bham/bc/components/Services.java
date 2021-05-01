@@ -6,11 +6,13 @@ import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
+import com.bham.bc.entity.physics.MapDivision;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -19,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -53,6 +56,8 @@ public interface Services {
 
 
     // GETTERS ----------------------------------------------------
+    MapDivision<BaseGameEntity> getMapDivision();
+    ArrayList<GameCharacter> getCharacters();
     /**
      * Gets {@link com.bham.bc.entity.graph.SparseGraph} of a currently active map
      * @return SparseGraph object used for searching algorithms
@@ -143,7 +148,7 @@ public interface Services {
      * @param gc graphics context where things will be rendered
      */
     void render(GraphicsContext gc);
-
+    void renderHitBoxes(AnchorPane hitBoxPane);
 
 
     /**
