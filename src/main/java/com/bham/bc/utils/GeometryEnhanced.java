@@ -30,8 +30,8 @@ public class GeometryEnhanced {
      * @return a rotated Point2D object
      */
     public static Point2D rotate(Point2D point, double angle) {
-        double x = point.getX() * Math.cos(angle) - point.getY() * Math.sin(angle);
-        double y = point.getX() * Math.sin(angle) + point.getY() * Math.cos(angle);
+        double x = point.getX() * Math.cos(Math.toRadians(angle)) - point.getY() * Math.sin(Math.toRadians(angle));
+        double y = point.getX() * Math.sin(Math.toRadians(angle)) + point.getY() * Math.cos(Math.toRadians(angle));
 
         return new Point2D(x, y);
     }

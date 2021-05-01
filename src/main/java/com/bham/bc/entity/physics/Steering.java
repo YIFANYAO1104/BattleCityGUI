@@ -95,7 +95,7 @@ public class Steering {
      * @return Point2D object representing a velocity change vector needed to accelerate/decelerate to a desired max/min speed (or 0 if that speed is reached)
      */
     public Point2D validateAcceleration(Point2D deltaVelocity, boolean isForward) {
-        double minSpeed = 1E-8;
+        double minSpeed = 1E-16;
         double maxSpeed = agent.getMaxSpeed();
         double nowSpeed = agent.getVelocity().magnitude();
 

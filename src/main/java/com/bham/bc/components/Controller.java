@@ -130,6 +130,10 @@ public abstract class Controller extends BaseGameEntity implements Services {
     public Circle getHomeArea() {
         return gameMap.getHomeTerritory();
     }
+    
+    public ArrayList<Bullet> getBullets(){
+    	return bullets;
+    }
     // ------------------------------------------------------------
 
 

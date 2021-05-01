@@ -61,7 +61,6 @@ public class Player extends GameCharacter {
 	public void testDIRECTION_SET1(){
 		this.DIRECTION_SET.clear();
 	}
-
 	/**
 	 * Constructs a player instance with directionSet initialized to empty
 	 *
@@ -128,6 +127,9 @@ public class Player extends GameCharacter {
 	public void setInverseKeys(boolean val) {
 		inverseKeys = val;
 	}
+	public boolean getInverseKeys() {
+		return inverseKeys;
+	}
 	public void toState1(){
 		this.entityImages =  new Image[] { new Image(IMAGE_PATH2, SIZE, 0, true, false) };
 
@@ -165,6 +167,9 @@ public class Player extends GameCharacter {
 	}
 	public Gun testGun(){
 		return this.GUN;
+	}
+	public void testFire() {
+		fire();
 	}
 
 	/**

@@ -83,6 +83,12 @@ public interface Services {
      * @return Circle object representing the home territory enemies can attack
      */
     Circle getHomeArea();
+    
+    /**
+     * Gets all the active bullets in the game for testing purposes
+     * @return a list of active bullets in the game
+     */
+    ArrayList<Bullet> getBullets();
     //-------------------------------------------------------------
 
 
