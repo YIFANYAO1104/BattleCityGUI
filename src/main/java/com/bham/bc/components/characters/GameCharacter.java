@@ -5,7 +5,7 @@ import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.HitMarker;
-import com.bham.bc.components.triggers.powerups.Weapon;
+
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.physics.CollisionHandler;
@@ -138,8 +138,7 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     // TEMP: DOCUMENT ------------------------------------------------
-    @Deprecated
-    public void switchWeapon(Weapon w) {}
+
 
     public void destroyed(){
         this.hp-=200;
