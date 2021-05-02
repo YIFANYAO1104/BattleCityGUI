@@ -7,9 +7,9 @@ import javafx.scene.image.Image;
 
 import static com.bham.bc.view.GameSession.FRAME_RATE;
 
-public class UntrappedTrigger extends RespawnTrigger {
+public class BombTrigger extends RespawnTrigger {
 
-    public UntrappedTrigger(int x, int y, int Respwan){
+    public BombTrigger(int x, int y, int Respwan){
         super(x,y);
         setCooldown(FRAME_RATE*Respwan);
     }
@@ -23,7 +23,7 @@ public class UntrappedTrigger extends RespawnTrigger {
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).setInverseKeys(false);
+            ((Player) entity).toBomb();
             deactivate();
         }
     }

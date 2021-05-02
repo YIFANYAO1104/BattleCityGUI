@@ -167,26 +167,31 @@ public class TriggerTest {
         }
 
     }
+    
     @Test
-    public void UntrappedTest() throws Exception{
-        new JFXPanel();
+    public void BombTriggerTest() throws Exception{
+    	new JFXPanel();
         Controller.setMode(MapType.SMALL);
         Player player = new Player(410, 400);
         GameMap gameMap = new GameMap(MapType.SMALL);
-        UntrappedTrigger ut= new UntrappedTrigger(440,400,20);
+        BombTrigger bt= new BombTrigger(440,400,20);
+        
         //PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         player.testDIRECTION_SET();
         player.setVelocity(new Point2D(5,0));
         for(;;){
             player.move();
-            if(player.intersects(ut)){
-                System.out.println("Untrapped Trigger touched");
-                ut.handle(player);
-                assertFalse(player.getInverseKeys());
+            if(player.intersects(bt)){
+            	
+                System.out.println("Bomb Trigger touched");
+                bt.handle(player);
+                assert(player.testBomb());
+                player.testBomb();
+                assertFalse(player.testBomb());
                 break;
             }
         }
-    
+
     }
     
     //---------------------------------TRAPS---------------------------------//
@@ -216,21 +221,23 @@ public class TriggerTest {
 
     }
     @Test
-    public void TrappedTest() throws Exception{
+    public void InverseTrapTest() throws Exception{
     	new JFXPanel();
         Controller.setMode(MapType.SMALL);
         Player player = new Player(410, 400);
         GameMap gameMap = new GameMap(MapType.SMALL);
-        TrappedTrigger t= new TrappedTrigger(440,400,20);
+        InverseTrap t= new InverseTrap(380,400,20);
         //PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         player.testDIRECTION_SET();
         player.setVelocity(new Point2D(5,0));
         for(;;){
-            player.move();
+            player.update();
             if(player.intersects(t)){
-                System.out.println("Trapped Trigger");
+                System.out.println("Inverse Trap touched");
                 t.handle(player);
-                assertTrue(player.getInverseKeys());
+                player.update();
+                assertEquals(player.getHeading().getX(),1,0);
+                assertEquals(player.getHeading().getY(),0,0);
                 break;
             }
         }

@@ -95,8 +95,8 @@ abstract public class Bullet extends MovingEntity {
      */
     public void handle(BaseGameEntity entity) {
 
-        if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
-            ((GameCharacter) entity).changeHp(-damage);
+        if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide()) {
+            if(((GameCharacter) entity).isImmune() == 0) ((GameCharacter) entity).changeHp(-damage);
             audioManager.playEffect(SoundEffect.HIT_CHARACTER);
             destroy();
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {

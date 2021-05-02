@@ -29,7 +29,7 @@ public class TeleportTrigger extends RespawnTrigger{
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
             if(destination != null){
-                ((Player) entity).teleport(destX,destY);
+                ((Player) entity).teleport();
             }
             deactivate();
         }

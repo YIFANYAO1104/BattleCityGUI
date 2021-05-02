@@ -28,12 +28,12 @@ public class Immune extends RespawnTrigger {
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).toImmune(activationTime * FRAME_RATE);
+            ((Player) entity).activateImmune(activationTime * FRAME_RATE);
             deactivate();
         }
     }
 
-    //draws a box with a red cross at the trigger's location
+    //draws a box with a red cross at the trigger's location 
     @Override
     public void render(GraphicsContext gc) {
         if (active) {

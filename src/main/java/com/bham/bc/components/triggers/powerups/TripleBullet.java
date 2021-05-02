@@ -29,7 +29,7 @@ public class TripleBullet extends RespawnTrigger {
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).toTriple(activationTime * FRAME_RATE);
+            ((Player) entity).activateTriple(activationTime * FRAME_RATE);
             deactivate();
         }
     }
