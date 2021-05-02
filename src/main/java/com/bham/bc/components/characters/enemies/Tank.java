@@ -34,7 +34,7 @@ public class Tank extends Enemy {
     public static final int SIZE = 30;
 
     // Configurable
-    public static final double HP = 300;
+    public static final double HP = 150;
     public static final double SPEED = 2;
 
     // Behavior

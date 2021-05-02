@@ -31,7 +31,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 public class Kamikaze extends Enemy {
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/kamikaze.png";
     public static final int SIZE = 30;
-    public static final int HP = 100;
+    public static final int HP = 50;
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;

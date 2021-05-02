@@ -54,8 +54,8 @@ public abstract class Controller extends BaseGameEntity implements Services {
         characters = new ArrayList<>();
         director = new Director();
         driver = new AlgorithmDriver(500);
-        homeHp = 1000;
-        homeFullHp = 1000;
+        homeHp = 10000;
+        homeFullHp = 10000;
         score = 0;
     }
 

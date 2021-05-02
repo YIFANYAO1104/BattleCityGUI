@@ -30,7 +30,7 @@ public class Trapper extends Enemy {
     public static final int SIZE = 30;
 
     // Configurable
-    public static final double HP = 100;
+    public static final double HP = 50;
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;

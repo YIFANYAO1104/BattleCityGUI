@@ -35,7 +35,7 @@ public class Shooter extends Enemy {
 
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/shooter.png";
     public static final int SIZE = 30;
-    public static final double HP = 100;
+    public static final double HP = 50;
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
@@ -53,7 +53,7 @@ public class Shooter extends Enemy {
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
 
-        GUN.setRate(600);
+        GUN.setRate(1200);
         GUN.setDamageFactor(3);
     }
 
@@ -110,6 +110,7 @@ public class Shooter extends Enemy {
                 case RETREAT:
                     search(ItemType.ENEMY_AREA);
                     if(Arrays.stream(services.getEnemyAreas()).anyMatch(this::intersects)) {
+                        System.out.println("found area");
                         changeHp(HP);
                         goBackCondition.setTestValue(false);
                     }
@@ -118,11 +119,11 @@ public class Shooter extends Enemy {
                     changeHp(HP * .003);
                     goBackCondition.setTestValue(hp < HP * .8);
                 case SET_RATE:
-                    GUN.setRate(500);
+                    GUN.setRate(1000);
                     GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
-                    GUN.setRate(1000);
+                    GUN.setRate(2000);
                     GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:

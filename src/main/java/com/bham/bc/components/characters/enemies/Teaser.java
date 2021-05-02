@@ -38,7 +38,7 @@ public class Teaser extends Enemy {
     public static final EnemyType TRIBE = EnemyType.TEASER;
 
     // Configurable
-    public static final double HP = 100;
+    public static final double HP = 50;
     public static final double SPEED = 5;
 
     // Behavior
@@ -59,7 +59,7 @@ public class Teaser extends Enemy {
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
 
-        GUN.setRate(600);
+        GUN.setRate(1200);
         GUN.setDamageFactor(3);
     }
 
@@ -149,12 +149,12 @@ public class Teaser extends Enemy {
                     break;
                 case SET_RATE:
 //                    System.out.println("SET_RATE");
-                    GUN.setRate(500);
+                    GUN.setRate(1000);
                     GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
 //                    System.out.println("RESET_RATE");
-                    GUN.setRate(1000);
+                    GUN.setRate(2000);
                     GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
