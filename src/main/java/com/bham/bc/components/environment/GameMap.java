@@ -80,7 +80,7 @@ public class GameMap {
     private void initElements(MapLoader mapLoader) {
         interactiveObstacles = mapLoader.getObstacles().stream().filter(o -> !o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toCollection(ArrayList::new));
         noninteractiveObstacles = mapLoader.getObstacles().stream().filter(o -> o.getAttributes().contains(Attribute.WALKABLE)).collect(Collectors.toCollection(ArrayList::new));
-        mapLoader.getTriggers().forEach(t -> services.addInteractiveTrigger(t));
+        mapLoader.getTriggers().forEach(t -> services.addTrigger(t));
     }
 
     /**

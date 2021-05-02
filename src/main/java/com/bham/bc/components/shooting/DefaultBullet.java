@@ -37,7 +37,7 @@ public class DefaultBullet extends Bullet {
 		exists = false;
 
 		Dissolve dissolve = new Dissolve(getPosition(), entityImages[0], getAngle(), 2, 2);
-		services.addEffectTrigger(dissolve);
+		services.addTrigger(dissolve);
 	}
 
 	@Override

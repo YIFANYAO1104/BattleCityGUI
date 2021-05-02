@@ -53,7 +53,7 @@ public class Obstacle extends BaseGameEntity {
         entityManager.removeEntity(this);
 
         Dissolve dissolve = new Dissolve(getPosition(), entityImages[currentFrame], 0);
-        services.addEffectTrigger(dissolve);
+        services.addTrigger(dissolve);
         audioManager.playEffect(SoundEffect.DESTROY_SOFT);
     }
 

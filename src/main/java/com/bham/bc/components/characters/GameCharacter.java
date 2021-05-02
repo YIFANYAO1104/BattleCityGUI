@@ -130,7 +130,7 @@ abstract public class GameCharacter extends MovingEntity {
     public void changeHp(double health) {
         hp = Math.min(hp + health, fullHp);
         Trigger hitMarker = new HitMarker(this, entityImages[0], getAngle());
-        services.addEffectTrigger(hitMarker);
+        services.addTrigger(hitMarker);
 
         if(hp <= 0) {
             audioManager.playEffect(SoundEffect.DESTROY_CHARACTER);

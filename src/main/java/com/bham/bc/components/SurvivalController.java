@@ -75,7 +75,7 @@ public class SurvivalController extends Controller {
 
         mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), 10, 10);
         mapDivision.addCrossZoneEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
-        mapDivision.addCrossZoneEntities(new ArrayList<>(interactiveTriggers));
+        mapDivision.addCrossZoneEntities(new ArrayList<>(triggers));
         mapDivision.addEntities(new ArrayList<>(characters));
 
         loadGraph();

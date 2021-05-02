@@ -45,17 +45,12 @@ public interface Services {
      */
     void addCharacter(GameCharacter character);
 
-    /**
-     * Adds {@link Trigger} to the game
-     * @param trigger effect trigger like dissolve
-     */
-    void addEffectTrigger(Trigger trigger);
 
     /**
      * Adds {@link Trigger} to the game
-     * @param trigger interactive trigger like health giver
+     * @param trigger
      */
-    void addInteractiveTrigger(Trigger trigger);
+    void addTrigger(Trigger trigger);
     //-------------------------------------------------------------
 
 

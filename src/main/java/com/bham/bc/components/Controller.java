@@ -4,6 +4,9 @@ import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
+import com.bham.bc.components.triggers.effects.Dissolve;
+import com.bham.bc.components.triggers.effects.HitMarker;
+import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.director.Director;
 import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
@@ -155,7 +158,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         triggers.forEach(Trigger::update);
         triggers.stream().filter(t -> !(t instanceof Dissolve) && !(t instanceof HitMarker) && !(t instanceof RingExplosion)).collect(Collectors.toList())
-                .stream().forEach(t -> t.handle(mapDivision.calculateNeighborsArray(t.getCenterPosition(), t.getHitBoxRadius() * 4)));
+                .stream().forEach(t -> t.handle(mapDivision.getRelevantEntities(t)));
 
         // Performed before removals
         bullets.forEach(b -> mapDivision.updateMovingEntityZone(b));
@@ -185,7 +188,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         // gameMap.renderGraph(gc, characters);
         // gameMap.renderTerritories(gc);
-        // mapDivision.render(gc);
+         mapDivision.render(gc);
     }
 
     @Override

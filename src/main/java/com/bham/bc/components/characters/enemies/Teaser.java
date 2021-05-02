@@ -177,7 +177,7 @@ public class Teaser extends Enemy {
         exists = false;
 
         Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-        services.addEffectTrigger(dissolve);
+        services.addTrigger(dissolve);
     }
 
     @Override

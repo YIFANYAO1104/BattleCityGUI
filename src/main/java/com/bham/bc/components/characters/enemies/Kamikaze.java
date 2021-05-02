@@ -129,10 +129,10 @@ public class Kamikaze extends Enemy {
         exists = false;
         entityManager.removeEntity(this);
         Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-        services.addEffectTrigger(explosion);
+        services.addTrigger(explosion);
 
         Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-        services.addEffectTrigger(dissolve);
+        services.addTrigger(dissolve);
     }
 
     @Override

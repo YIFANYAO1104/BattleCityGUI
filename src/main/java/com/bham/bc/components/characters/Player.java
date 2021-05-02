@@ -120,7 +120,7 @@ public class Player extends GameCharacter {
 	// TODO: remove, this is another example of bomb()
 	public void ring() {
 		Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-		services.addEffectTrigger(explosion);
+		services.addTrigger(explosion);
 	}
 
 	public void bomb() {
@@ -282,7 +282,7 @@ public class Player extends GameCharacter {
 		exists = false;
 
 		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-		services.addEffectTrigger(dissolve);
+		services.addTrigger(dissolve);
 	}
 
 	@Override
