@@ -5,6 +5,7 @@ import com.bham.bc.components.characters.goals.composite.Goal_Think;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.ai.behavior.*;
+import com.bham.bc.utils.Regulator;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -22,6 +23,7 @@ public class Neuron extends Enemy {
     public static final double SPEED = 3;
 
     private Goal_Think brain;
+    private Regulator brainRegulator;
 
     /**
      * Constructs an enemy instance with initial speed value set to 1
@@ -34,6 +36,7 @@ public class Neuron extends Enemy {
         mass=1;
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         brain = new Goal_Think(this);
+        brainRegulator = new Regulator(1);
 
         GUN.setRate(600);
         GUN.setDamageFactor(3);
@@ -105,7 +108,7 @@ public class Neuron extends Enemy {
         //process the currently active goal. Note this is required even if the bot
         //is under user control. This is because a goal is created whenever a user
         //clicks on an area of the map that necessitates a path planning request.
-        brain.Process();
+        brain.process();
 
         //Calculate the steering force and update the bot's velocity and position
         move();
@@ -114,8 +117,10 @@ public class Neuron extends Enemy {
         targetingSystem.update();
 
         //appraise and arbitrate between all possible high level goals
-//        brain.Arbitrate();
-
+        if (brainRegulator.isReady()){
+            System.out.println("r"+System.currentTimeMillis());
+            brain.decideOnGoals();
+        }
 
         //parallel with any seek, follow path
         //agent will shoot whenever it see a target
@@ -138,36 +143,31 @@ public class Neuron extends Enemy {
 
     @Override
     public String toString() {
-        return "Shooter";
+        return "Neuron";
     }
 
 
     public void TakeAimAndShoot() {
-        if (targetingSystem.isTargetBotShootable()) {
-            //the position the weapon will be aimed at
-            Point2D futurePos = targetingSystem.getTargetBot().getCenterPosition();
+        if (targetingSystem.isAttackTargetOn()) {
+            if (targetingSystem.isTargetBotShootable()){
+                if (GUN.getBulletType()==DEFAULT) {
+                    Point2D futurePos = predictTargetPosition(targetingSystem.getTargetBot());
 
-            //if the current weapon is not an instant hit type gun the target position
-            //must be adjusted to take into account the predicted movement of the 
-            //target
-            if (GUN.getBulletType()==DEFAULT) {
-                futurePos = PredictFuturePositionOfTarget(targetingSystem.getTargetBot());
-
-                face(futurePos);
-                shoot(0.8);
-            } //no need to predict movement, aim directly at target
-            else {
-                System.out.println("laser is undercons");
-            }
-
-        } //no target to shoot at so rotate facing to be parallel with the bot's
-        //heading direction
-        else {
-            if (targetingSystem.isHitObsOn()){
-                if (targetingSystem.getTargetObstacle()!=null){
-                    face(targetingSystem.getTargetObstacle().getCenterPosition());
-                    GUN.shoot();
+                    face(futurePos);
+                    shoot(0.8);
+                    return;
                 }
+                else {
+                    System.out.println("laser is undercons");
+                }
+            }
+        }
+
+        if (targetingSystem.isHitObsOn()){
+            if (targetingSystem.getTargetObstacle()!=null){
+                face(targetingSystem.getTargetObstacle().getCenterPosition());
+                GUN.shoot();
+                return;
             }
         }
     }
@@ -177,15 +177,11 @@ public class Neuron extends Enemy {
      * projectile to reach it. This uses a similar logic to the Pursuit steering
      * behavior. Used by TakeAimAndShoot.
      */
-    private Point2D PredictFuturePositionOfTarget(GameCharacter target) {
+    private Point2D predictTargetPosition(GameCharacter target) {
         //if the target is ahead and facing the agent shoot at its current pos
         Point2D ToEnemy = target.getCenterPosition().subtract(this.getCenterPosition());
 
-        //the lookahead time is proportional to the distance between the enemy
-        //and the pursuer; and is inversely proportional to the sum of the
-        //agent's velocities
-        double perdictTime = ToEnemy.magnitude()
-                / (GUN.getBulletSpeed() + target.getMaxSpeed());
+        double perdictTime = ToEnemy.magnitude() / (GUN.getBulletSpeed() + target.getMaxSpeed());
 
         //return the predicted future position of the enemy
         return target.getVelocity()

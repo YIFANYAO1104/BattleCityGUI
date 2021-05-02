@@ -35,7 +35,7 @@ public class Goal_TraverseEdge extends Goal {
 
     //the usual suspects
     @Override
-    public void Activate() {
+    public void activate() {
         status = active;
 
         //the edge behavior flag may specify a type of movement that necessitates a 
@@ -64,9 +64,9 @@ public class Goal_TraverseEdge extends Goal {
     }
 
     @Override
-    public int Process() {
+    public int process() {
         //if status is inactive, call Activate()
-        ActivateIfInactive();
+        activateIfInactive();
 
         if (agent.isReached(m_Edge.getDestination())) {
             status = completed;
@@ -76,7 +76,7 @@ public class Goal_TraverseEdge extends Goal {
     }
 
     @Override
-    public void Terminate() {
+    public void terminate() {
         //turn off steering behaviors.
         agent.getSteering().seekOff();
         agent.getTargetingSystem().hitObsOff();
@@ -84,17 +84,6 @@ public class Goal_TraverseEdge extends Goal {
 //        agent.getSteering().arriveOff();
 
 //        agent.setMaxSpeed(script.GetDouble("Bot_MaxSpeed"));
-    }
-
-    @Override
-    public void Render() {
-//        if (status == active) {
-//            gdi.BluePen();
-//            gdi.Line(agent.Pos(), m_Edge.Destination());
-//            gdi.GreenBrush();
-//            gdi.BlackPen();
-//            gdi.Circle(m_Edge.Destination(), 3);
-//        }
     }
 
     @Override

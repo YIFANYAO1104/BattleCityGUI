@@ -21,7 +21,7 @@ public class Goal_SeekToPosition extends Goal {
 
     //the usual suspects
     @Override
-    public void Activate() {
+    public void activate() {
         status = active;
 
         agent.getSteering().setTarget(targetPos);
@@ -31,9 +31,9 @@ public class Goal_SeekToPosition extends Goal {
 
 
     @Override
-    public int Process() {
+    public int process() {
         //if status is inactive, call Activate()
-        ActivateIfInactive();
+        activateIfInactive();
 
 
         if (agent.isReached(targetPos)) {
@@ -44,27 +44,10 @@ public class Goal_SeekToPosition extends Goal {
     }
 
     @Override
-    public void Terminate() {
+    public void terminate() {
         agent.getSteering().seekOff();
         agent.brake();
-        //TODO: ADD ARRIVE
-//        agent.getSteering().arriveOff();
-
         status = completed;
-    }
-
-    @Override
-    public void Render() {
-//        if (status == active) {
-//            gdi.GreenBrush();
-//            gdi.BlackPen();
-//            gdi.Circle(targetPos, 3);
-//        } else if (status == inactive) {
-//
-//            gdi.RedBrush();
-//            gdi.BlackPen();
-//            gdi.Circle(targetPos, 3);
-//        }
     }
 
 

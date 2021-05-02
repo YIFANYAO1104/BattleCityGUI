@@ -1,10 +1,10 @@
-package com.bham.bc.components.characters.goals.composite;
+package com.bham.bc.components.characters.goals.composite.helper;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.goals.atomic.Goal;
 import com.bham.bc.components.characters.goals.atomic.Goal_TraverseEdge;
+import com.bham.bc.components.characters.goals.composite.Goal_Composite;
 import com.bham.bc.entity.ai.navigation.PathEdge;
-import com.bham.bc.entity.graph.edge.GraphEdge;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class Goal_FollowPath extends Goal_Composite {
     }
 
     @Override
-    public void Activate() {
+    public void activate() {
         status = active;
 
         //get a reference to the next edge
@@ -38,47 +38,27 @@ public class Goal_FollowPath extends Goal_Composite {
         //some edges specify that the bot should use a specific behavior when
         //following them. This switch statement queries the edge behavior flag and
         //adds the appropriate goals/s to the subgoal list.
-        AddSubgoal(new Goal_TraverseEdge(agent, edge, pathList.isEmpty()));
+        addSubgoal(new Goal_TraverseEdge(agent, edge, pathList.isEmpty()));
     }
 
     @Override
-    public int Process() {
+    public int process() {
         //if status is inactive, call Activate()
-        ActivateIfInactive();
+        activateIfInactive();
 
-        status = ProcessSubgoals();
+        status = processSubgoals();
 
         //if there are no subgoals present check to see if the path still has edges.
         //remaining. If it does then call activate to grab the next edge.
         if (status == completed && !pathList.isEmpty()) {
-            Activate();
+            activate();
         }
 
         return status;
     }
 
     @Override
-    public void Render() {
-//        //render all the path waypoints remaining on the path list
-//
-//        Iterator<PathEdge> it = m_Path.iterator();
-//
-//        while (it.hasNext()) {
-//            PathEdge path = it.next();
-//            gdi.BlackPen();
-//            gdi.LineWithArrow(path.Source(), path.Destination(), 5);
-//
-//            gdi.RedBrush();
-//            gdi.BlackPen();
-//            gdi.Circle(path.Destination(), 3);
-//        }
-//
-//        //forward the request to the subgoals
-//        super.Render();
-    }
-
-    @Override
-    public void Terminate() {
+    public void terminate() {
 		RemoveAllSubgoals();
 		agent.brake();
     }
@@ -87,7 +67,7 @@ public class Goal_FollowPath extends Goal_Composite {
     public String toString() {
         String s = "";
         s += "Follow Path {";
-        for (Goal m_subGoal : m_SubGoals) {
+        for (Goal m_subGoal : subGoalList) {
             s += m_subGoal.toString()+" ";
         }
         s += "}"+status;

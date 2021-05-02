@@ -27,27 +27,48 @@ import static com.bham.bc.components.Controller.services;
 
 public class TargetingSystem {
 
-
+	private TargetingPolices.TargetEvaluator targetEvaluator;
 	private GameCharacter agent;
 	private GameCharacter targetBot;
+	private Obstacle targetObstacle;
+	private boolean hitObsOn = false;
+	private boolean attackTargetOn = false;
 
 	private List<Rectangle> visionBoxes = new LinkedList<>();
 	private List<Rectangle> obstacleBoxes = new LinkedList<>();
+
+	public boolean isHitObsOn() {
+		return hitObsOn;
+	}
+	public void hitObsOn(){
+		hitObsOn = true;
+	}
+	public void hitObsOff(){
+		hitObsOn = false;
+	}
+
+	public boolean isAttackTargetOn() {
+		return attackTargetOn;
+	}
+	public void attackTargetOn(){
+		attackTargetOn = true;
+	}
+	public void attackTargetOff(){
+		attackTargetOn = false;
+	}
 
 	public Obstacle getTargetObstacle() {
 		return targetObstacle;
 	}
 
-	private Obstacle targetObstacle;
-
-
 	public TargetingSystem(GameCharacter owner) {
 		agent = owner;
 		targetBot = null;
 		targetObstacle = null;
+		targetEvaluator = null;
 	}
 
-	private GameCharacter pickCharacter(){
+	private GameCharacter pickCharacter(TargetingPolices.TargetEvaluator evaluator){
 		double minDist = Double.MAX_VALUE;
 		GameCharacter targetBot = null;
 
@@ -57,7 +78,7 @@ public class TargetingSystem {
 		for (GameCharacter character : characters) {
 			//make sure the bot is alive and that it is not the owner
 			if (character.exists()  && (character.getSide() != agent.getSide())) {
-				double dist = character.getCenterPosition().distance(agent.getCenterPosition());
+				double dist = evaluator.evaluate(agent,character);
 
 				if (dist < minDist) {
 					minDist = dist;
@@ -89,7 +110,9 @@ public class TargetingSystem {
 	}
 
 	public void update() {
-		targetBot = pickCharacter();
+		if (attackTargetOn) {
+			targetBot = pickCharacter(targetEvaluator);
+		}
 		if (hitObsOn) {
 			targetObstacle=pickObstacle();
 		}
@@ -117,6 +140,7 @@ public class TargetingSystem {
 	 */
 	public void clearTarget() {
 		targetBot = null;
+		targetObstacle = null;
 	}
 
 	/**
@@ -210,18 +234,13 @@ public class TargetingSystem {
 		return targetObstacle != null;
 	}
 
-	public boolean isHitObsOn() {
-		return hitObsOn;
-	}
 
-	private boolean hitObsOn = false;
 
-	public void hitObsOn(){
-		hitObsOn = true;
-	}
-	public void hitObsOff(){
-		hitObsOn = false;
-	}
+
+
+
+
+
 
 	public void render(GraphicsContext gc) {
 		if (targetBot!=null){
@@ -231,6 +250,7 @@ public class TargetingSystem {
 		}
 
 		if (targetObstacle!=null){
+			GeometryEnhanced.renderHitBox(gc,targetObstacle.getHitBox());
 			Point2D t2 = targetObstacle.getCenterPosition();
 			gc.setFill(Color.BLUE);
 			gc.fillRoundRect(t2.getX(),t2.getY(),4,4,1,1);
@@ -279,5 +299,13 @@ public class TargetingSystem {
 		System.out.println("enemyNum = "+enemyNum);
 		System.out.println("allyNum = "+allyNum);
 		System.out.println("healthTriggerNum = "+healthTriggerNum);
+	}
+
+	public TargetingPolices.TargetEvaluator getTargetEvaluator() {
+		return targetEvaluator;
+	}
+
+	public void setTargetEvaluator(TargetingPolices.TargetEvaluator targetEvaluator) {
+		this.targetEvaluator = targetEvaluator;
 	}
 }

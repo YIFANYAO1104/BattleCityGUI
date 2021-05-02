@@ -1,10 +1,12 @@
-package com.bham.bc.components.characters.goals.composite;
+package com.bham.bc.components.characters.goals.composite.big;
 
 
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.goals.atomic.Goal;
 import com.bham.bc.components.characters.goals.atomic.Goal_WaitForPath;
+import com.bham.bc.components.characters.goals.composite.Goal_Composite;
+import com.bham.bc.components.characters.goals.composite.helper.Goal_FollowPath;
 import javafx.geometry.Point2D;
 
 import static com.bham.bc.components.characters.goals.GoalTypes.goal_explore;
@@ -21,7 +23,7 @@ public class Goal_Explore extends Goal_Composite {
     }
 
     @Override
-    public void Activate() {
+    public void activate() {
         status = active;
 
         //if this goal is reactivated then there may be some existing subgoals that
@@ -36,27 +38,27 @@ public class Goal_Explore extends Goal_Composite {
 
         //and request a path to that position
         agent.getNavigationService().createRequest(pos);
-        AddSubgoal(new Goal_WaitForPath(agent));
+        addSubgoal(new Goal_WaitForPath(agent));
         waiting = true;
     }
 
     @Override
-    public int Process() {
+    public int process() {
         //if status is inactive, call Activate()
-        ActivateIfInactive();
+        activateIfInactive();
 
         //process the subgoals
-        status = ProcessSubgoals();
+        status = processSubgoals();
 
         if (status == completed) {
             if (waiting==true){ //we finished waiting for path
                 waiting=false;
                 status=active;
                 RemoveAllSubgoals();
-                AddSubgoal(new Goal_FollowPath(agent,
+                addSubgoal(new Goal_FollowPath(agent,
                         agent.getNavigationService().getPath()));
             } else { //we finished follow path and request another location to explore
-                Activate();
+                activate();
             }
         }
 
@@ -64,7 +66,7 @@ public class Goal_Explore extends Goal_Composite {
     }
 
     @Override
-    public void Terminate() {
+    public void terminate() {
 		RemoveAllSubgoals();
     }
 
@@ -72,7 +74,7 @@ public class Goal_Explore extends Goal_Composite {
     public String toString() {
         String s = "";
         s += "Explore {";
-        for (Goal m_subGoal : m_SubGoals) {
+        for (Goal m_subGoal : subGoalList) {
             s += m_subGoal.toString()+" ";
         }
         s += "}"+status;

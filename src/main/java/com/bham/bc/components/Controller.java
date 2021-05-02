@@ -157,8 +157,10 @@ public abstract class Controller extends BaseGameEntity implements Services {
         bullets.forEach(bullet -> bullet.handle(mapDivision.getRelevantEntities(bullet)));
 
         triggers.forEach(Trigger::update);
+        //Moving entity has one zone only. We have no time to fix this. So we use bigger hitbox
+        //by this, more entity could be tested, the biggest enemy size is 150 so far
         triggers.stream().filter(t -> !(t instanceof Dissolve) && !(t instanceof HitMarker) && !(t instanceof RingExplosion)).collect(Collectors.toList())
-                .stream().forEach(t -> t.handle(mapDivision.getRelevantEntities(t)));
+                .stream().forEach(t -> t.handle(mapDivision.getIntersectedEntities(t.getCenterPosition(),150)));
 
         // Performed before removals
         bullets.forEach(b -> mapDivision.updateMovingEntityZone(b));

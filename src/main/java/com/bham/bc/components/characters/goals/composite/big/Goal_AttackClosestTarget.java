@@ -1,22 +1,28 @@
-package com.bham.bc.components.characters.goals.composite;
+package com.bham.bc.components.characters.goals.composite.big;
 
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.TargetingPolices;
 import com.bham.bc.components.characters.goals.atomic.Goal;
 import com.bham.bc.components.characters.goals.atomic.Goal_SeekToPosition;
+import com.bham.bc.components.characters.goals.composite.Goal_Composite;
+import com.bham.bc.components.characters.goals.composite.helper.Goal_NavigateToEntity;
 
-import static com.bham.bc.components.characters.goals.GoalTypes.goal_attack_target;
+import static com.bham.bc.components.characters.goals.GoalTypes.goal_attack_cloest_target;
 
 
-public class Goal_AttackTarget extends Goal_Composite {
+public class Goal_AttackClosestTarget extends Goal_Composite {
 
-    public Goal_AttackTarget(GameCharacter pOwner) {
-        super(pOwner, goal_attack_target);
+    public Goal_AttackClosestTarget(GameCharacter pOwner) {
+        super(pOwner, goal_attack_cloest_target);
     }
 
     @Override
-    public void Activate() {
+    public void activate() {
         status = active;
 
+        agent.getTargetingSystem().setTargetEvaluator(new TargetingPolices.DistanceEvaluator());
+        agent.getTargetingSystem().attackTargetOn();
+        agent.getTargetingSystem().update();
         //if this goal is reactivated then there may be some existing subgoals that
         //must be removed
         RemoveAllSubgoals();
@@ -30,21 +36,21 @@ public class Goal_AttackTarget extends Goal_Composite {
         //if we could see our target, we approach it
         if (agent.getTargetingSystem().isTargetBotWalkable()) {
             if (!agent.getTargetingSystem().isReachingSafeDistance()){
-                AddSubgoal(new Goal_SeekToPosition(agent, agent.getTargetingSystem().getTargetBot().getCenterPosition()));
+                addSubgoal(new Goal_SeekToPosition(agent, agent.getTargetingSystem().getTargetBot().getCenterPosition()));
             }
         } //if the target is not visible, go hunt it.
         else {
-            AddSubgoal(new Goal_NavigateToPosition(agent, agent.getTargetingSystem().getTargetBot().getCenterPosition()));
+            addSubgoal(new Goal_NavigateToEntity(agent, agent.getTargetingSystem().getTargetBot()));
         }
     }
 
     @Override
-    public int Process() {
+    public int process() {
         //if status is inactive, call Activate()
-        ActivateIfInactive();
+        activateIfInactive();
 
         //process the subgoals
-        status = ProcessSubgoals();
+        status = processSubgoals();
 
         //if bot alive/within checking range
         if (agent.getTargetingSystem().isTargetBotPresent()){
@@ -59,22 +65,23 @@ public class Goal_AttackTarget extends Goal_Composite {
             status = completed;
         }
 
-        ReactivateIfFailed();
+        reactivateIfFailed();
 
         return status;
     }
 
     @Override
-    public void Terminate() {
+    public void terminate() {
 		RemoveAllSubgoals();
+        agent.getTargetingSystem().attackTargetOff();
         status = completed;
     }
 
     @Override
     public String toString() {
         String s = "";
-        s += "Attack Target {";
-        for (Goal m_subGoal : m_SubGoals) {
+        s += "Attack Closest Target {";
+        for (Goal m_subGoal : subGoalList) {
             s += m_subGoal.toString()+" ";
         }
         s += "}"+status;

@@ -1,11 +1,8 @@
 package com.bham.bc.components.characters.goals.atomic;
 
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.components.characters.goals.composite.Goal_FollowPath;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
-import javafx.geometry.Point2D;
 
-import static com.bham.bc.components.characters.goals.GoalTypes.goal_seek_to_position;
 import static com.bham.bc.components.characters.goals.GoalTypes.goal_wait_for_path;
 
 public class Goal_WaitForPath extends Goal {
@@ -19,15 +16,15 @@ public class Goal_WaitForPath extends Goal {
 
     //the usual suspects
     @Override
-    public void Activate() {
+    public void activate() {
         status = active;
     }
 
 
     @Override
-    public int Process() {
+    public int process() {
         //if status is inactive, call Activate()
-        ActivateIfInactive();
+        activateIfInactive();
 
         SearchStatus searchStatus = agent.getNavigationService().peekRequestStatus();
         if (searchStatus==SearchStatus.target_found){
@@ -40,21 +37,14 @@ public class Goal_WaitForPath extends Goal {
     }
 
     @Override
-    public void Terminate() {
+    public void terminate() {
         status = completed;
     }
 
     @Override
-    public void Render() {
-//        if (status == active) {
-//            gdi.GreenBrush();
-//            gdi.BlackPen();
-//            gdi.Circle(targetPos, 3);
-//        } else if (status == inactive) {
-//
-//            gdi.RedBrush();
-//            gdi.BlackPen();
-//            gdi.Circle(targetPos, 3);
-//        }
+    public String toString() {
+        String s = "";
+        s += "WaitForPath "+status;
+        return s;
     }
 }

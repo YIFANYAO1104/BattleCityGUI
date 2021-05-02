@@ -8,9 +8,7 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
-
-import java.util.Random;
+import static com.bham.bc.utils.RandomEnhanced.rand;
 
 public class GeometryEnhanced {
 
@@ -105,14 +103,6 @@ public class GeometryEnhanced {
 
     static public Point2D perp(Point2D p) {
         return new Point2D(-p.getY(), p.getX());
-    }
-
-
-    static private Random rand = new Random();
-
-
-    public static double randDouble(double rangeMin, double rangeMax){
-        return rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
     }
 
     //https://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly

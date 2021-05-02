@@ -1,10 +1,10 @@
-package com.bham.bc.components.characters.goals.composite;
+package com.bham.bc.components.characters.goals.composite.helper;
 
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.goals.atomic.Goal;
-import com.bham.bc.components.characters.goals.atomic.Goal_SeekToPosition;
 import com.bham.bc.components.characters.goals.atomic.Goal_WaitForPath;
+import com.bham.bc.components.characters.goals.composite.Goal_Composite;
 import javafx.geometry.Point2D;
 
 import static com.bham.bc.components.characters.goals.GoalTypes.goal_move_to_position;
@@ -14,26 +14,26 @@ public class Goal_NavigateToPosition extends Goal_Composite {
     /**
      * the position the bot wants to reach
      */
-    private Point2D m_vDestination;
+    private Point2D targetPos;
     private boolean waiting;
 
     public Goal_NavigateToPosition(GameCharacter pBot,
                                    Point2D pos) {
 
         super(pBot, goal_move_to_position);
-        m_vDestination = pos;
+        targetPos = pos;
     }
 
     //the usual suspects
     @Override
-    public void Activate() {
+    public void activate() {
         status = active;
 
         //make sure the subgoal list is clear.
         RemoveAllSubgoals();
 
-        if (agent.getNavigationService().createRequest(m_vDestination)) {
-            AddSubgoal(new Goal_WaitForPath(agent));
+        if (agent.getNavigationService().createRequest(targetPos)) {
+            addSubgoal(new Goal_WaitForPath(agent));
             waiting = true;
         } else {
             status = failed;
@@ -41,56 +41,39 @@ public class Goal_NavigateToPosition extends Goal_Composite {
     }
 
     @Override
-    public int Process() {
+    public int process() {
         //if status is inactive, call Activate()
-        ActivateIfInactive();
+        activateIfInactive();
 
         //process the subgoals
-        status = ProcessSubgoals();
+        status = processSubgoals();
 
         if (status == completed) {
             if (waiting==true){ //we finished waiting for path
                 status=active;
                 waiting=false;
                 RemoveAllSubgoals();
-                AddSubgoal(new Goal_FollowPath(agent,
+                addSubgoal(new Goal_FollowPath(agent,
                         agent.getNavigationService().getPath()));
             }
         }
 
         //if any of the subgoals have failed then this goal re-plans
-        ReactivateIfFailed();
+        reactivateIfFailed();
 
         return status;
     }
 
     @Override
-    public void Terminate() {
+    public void terminate() {
 		RemoveAllSubgoals();
-    }
-
-    @Override
-    public void Render() {
-//        //forward the request to the subgoals
-//        super.Render();
-//
-//        //draw a bullseye
-//        gdi.BlackPen();
-//        gdi.BlueBrush();
-//        gdi.Circle(m_vDestination, 6);
-//        gdi.RedBrush();
-//        gdi.RedPen();
-//        gdi.Circle(m_vDestination, 4);
-//        gdi.YellowBrush();
-//        gdi.YellowPen();
-//        gdi.Circle(m_vDestination, 2);
     }
 
     @Override
     public String toString() {
         String s = "";
         s += "NVG to Pos {";
-        for (Goal m_subGoal : m_SubGoals) {
+        for (Goal m_subGoal : subGoalList) {
             s += m_subGoal.toString()+" ";
         }
         s += "}"+status;

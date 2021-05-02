@@ -7,6 +7,7 @@ package com.bham.bc.components.triggers;
 
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -47,6 +48,7 @@ abstract public class RespawnTrigger extends Trigger {
 
     @Override
     public void render(GraphicsContext gc) {
+        GeometryEnhanced.renderHitBox(gc,this.getHitBox());
         if(active) {
             gc.drawImage(entityImages[0], x, y);
         }
