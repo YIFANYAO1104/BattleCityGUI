@@ -1,3 +1,6 @@
+/**
+ * Desc: If player runs over an instance of this class it will be able to use bomb (only once)
+ */
 package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.characters.Player;
@@ -23,7 +26,7 @@ public class BombTrigger extends RespawnTrigger {
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).toBomb();
+            ((Player) entity).activateBomb();
             deactivate();
         }
     }

@@ -122,9 +122,8 @@ public class Player extends GameCharacter {
     
     /**
 	 * Assign activation time of Bomb trigger
-	 * @param numTicks activation time in ticks
 	 */
-    public void toBomb() {
+    public void activateBomb() {
     	bomb = true;
     }
 

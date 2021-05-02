@@ -1,3 +1,6 @@
+/**
+ * Desc: If player runs over an instance of this class it will teleport to home base
+ */
 package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.characters.Player;
@@ -7,19 +10,12 @@ import javafx.scene.image.Image;
 
 import static com.bham.bc.view.GameSession.FRAME_RATE;
 public class TeleportTrigger extends RespawnTrigger{
-    private double destX;
-    private double destY;
-    RespawnTrigger destination;
+
     public TeleportTrigger(int x, int y, int Respawn){
         super(x,y);
         setCooldown(FRAME_RATE*Respawn);
     }
-    public void setDestination(RespawnTrigger dest){
-        this.destination = dest;
-        //this.destX = destination.getX();
-        //this.destY = destination.getY();
 
-    }
 
     protected Image[] getDefaultImage() {
         return new  Image[]{ new Image("file:src/main/resources/img/triggers/powerups/teleport.png")};
@@ -28,9 +24,7 @@ public class TeleportTrigger extends RespawnTrigger{
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            if(destination != null){
-                ((Player) entity).teleport();
-            }
+            ((Player) entity).teleport();
             deactivate();
         }
     }

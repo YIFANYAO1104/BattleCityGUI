@@ -185,9 +185,32 @@ public class TriggerTest {
             	
                 System.out.println("Bomb Trigger touched");
                 bt.handle(player);
-                assert(player.testBomb());
+                assertTrue(player.testBomb());
                 player.testBomb();
                 assertFalse(player.testBomb());
+                break;
+            }
+        }
+
+    }
+    
+    public void TeleportTriggerTest() throws Exception{
+    	new JFXPanel();
+        Controller.setMode(MapType.SMALL);
+        Player player = new Player(410, 400);
+        GameMap gameMap = new GameMap(MapType.SMALL);
+        TeleportTrigger tt= new TeleportTrigger(440,400,20);
+        
+        //PathPlanner p = new PathPlanner(player, gameMap.getGraph());
+        player.testDIRECTION_SET();
+        player.setVelocity(new Point2D(5,0));
+        for(;;){
+            player.move();
+            if(player.intersects(tt)){
+            	
+                System.out.println("Teleport Trigger touched");
+                tt.handle(player);
+                assertTrue(player.intersects(gameMap.getHomeTerritory()));
                 break;
             }
         }

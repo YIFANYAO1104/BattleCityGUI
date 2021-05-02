@@ -22,11 +22,13 @@ abstract public class RespawnTrigger extends Trigger {
 
     /**
      * sets the trigger to be inactive for m_iNumUpdatesBetweenRespawns
+     * destroy non respawning triggers which has no cooling down value
      * update-steps
      */
     protected void deactivate() {
         active = false;
-        timeTillRespawn = cooldown;
+        if (cooldown == 0) destroy();
+        else timeTillRespawn = cooldown;
     }
 
     public RespawnTrigger(int x, int y) {
