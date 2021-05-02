@@ -36,8 +36,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
     protected double homeHp;
     protected double score;
     protected GameMap gameMap;
-    protected ArrayList<Trigger> effectTriggers;
-    protected ArrayList<Trigger> interactiveTriggers;
+    protected ArrayList<Trigger> triggers;
     protected ArrayList<Bullet> bullets;
     protected ArrayList<GameCharacter> characters;
     protected Director director;
@@ -50,8 +49,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
      */
     public Controller() {
         super(getNextValidID(),-1,-1);
-        effectTriggers = new ArrayList<>();
-        interactiveTriggers = new ArrayList<>();
+        triggers = new ArrayList<>();
         bullets = new ArrayList<>();
         characters = new ArrayList<>();
         director = new Director();
@@ -102,13 +100,8 @@ public abstract class Controller extends BaseGameEntity implements Services {
     }
 
     @Override
-    public void addEffectTrigger(Trigger trigger) {
-        effectTriggers.add(trigger);
-    }
-
-    @Override
-    public void addInteractiveTrigger(Trigger trigger) {
-        interactiveTriggers.add(trigger);
+    public void addTrigger(Trigger trigger) {
+        triggers.add(trigger);
     }
     // ------------------------------------------------------------
 
@@ -152,7 +145,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 //        mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
 
-//        director.update();
+        director.update();
 
         characters.forEach(GameCharacter::update);
         characters.forEach(character -> character.handle(mapDivision.getRelevantEntities(character)));
@@ -160,9 +153,9 @@ public abstract class Controller extends BaseGameEntity implements Services {
         bullets.forEach(Bullet::update);
         bullets.forEach(bullet -> bullet.handle(mapDivision.getRelevantEntities(bullet)));
 
-        effectTriggers.forEach(Trigger::update);
-        interactiveTriggers.forEach(Trigger::update);
-        interactiveTriggers.forEach(trigger -> trigger.handle(mapDivision.getRelevantEntities(trigger)));
+        triggers.forEach(Trigger::update);
+        triggers.stream().filter(t -> !(t instanceof Dissolve) && !(t instanceof HitMarker) && !(t instanceof RingExplosion)).collect(Collectors.toList())
+                .stream().forEach(t -> t.handle(mapDivision.calculateNeighborsArray(t.getCenterPosition(), t.getHitBoxRadius() * 4)));
 
         // Performed before removals
         bullets.forEach(b -> mapDivision.updateMovingEntityZone(b));
@@ -172,8 +165,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         // Performed last
         bullets.removeIf(b -> !b.exists());
         characters.removeIf(c -> !c.exists());
-        effectTriggers.removeIf(t -> !t.exists());
-        interactiveTriggers.removeIf(t -> !t.exists());
+        triggers.removeIf(t -> !t.exists());
     }
 
     @Override
@@ -182,8 +174,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         bullets.forEach(bullet -> bullet.render(gc));
         characters.forEach(character -> character.render(gc));
-        effectTriggers.forEach(trigger -> trigger.render(gc));
-        interactiveTriggers.forEach(trigger -> trigger.render(gc));
+        triggers.forEach(trigger -> trigger.render(gc));
 
         // TODO: remove
         // triggers.forEach(trigger -> trigger.renderHitBox(gc));
@@ -192,15 +183,14 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         // gameMap.renderTopLayer(gc);
 
-//         gameMap.renderGraph(gc, characters);
+        // gameMap.renderGraph(gc, characters);
         // gameMap.renderTerritories(gc);
-         mapDivision.render(gc);
+        // mapDivision.render(gc);
     }
 
     @Override
     public void clear() {
-        effectTriggers.clear();
-        interactiveTriggers.clear();
+        triggers.clear();
         characters.clear();
         bullets.clear();
         gameMap.clear();
