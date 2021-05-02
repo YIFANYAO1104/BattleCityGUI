@@ -148,7 +148,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 //        mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
 
-        director.update();
+//        director.update();
 
         characters.forEach(GameCharacter::update);
         characters.forEach(character -> character.handle(mapDivision.getRelevantEntities(character)));

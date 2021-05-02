@@ -70,8 +70,8 @@ public class SurvivalController extends Controller {
         double playerX = gameMap.getHomeTerritory().getCenterX() - Player.SIZE/2.0;
         double playerY = gameMap.getHomeTerritory().getCenterY() - Player.SIZE;
         characters.add(new Player(playerX, playerY));
-//        characters.add(new Neuron(16*60, 16*60));
         characters.add(new Neuron(16*60, 16*60));
+//        characters.add(new Shooter(16*60, 16*60));
 
         mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), 10, 10);
         mapDivision.addCrossZoneEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
@@ -104,6 +104,22 @@ public class SurvivalController extends Controller {
         }
 
         return closestPoints.min(Comparator.comparing(point -> point.distance(position))).orElse(position);
+    }
+
+    @Override
+    public GameCharacter getClosestALLY(Point2D position){
+        GameCharacter gc = null;
+        double min = Double.MAX_VALUE;
+
+        for (GameCharacter character : characters) {
+            if (character.getSide() == Side.ALLY && character.getCenterPosition().distance(position)<min){
+                gc = character;
+            }
+        }
+        if (gc == null){
+            System.out.println("Could not find target even if with node recording");
+        }
+        return gc;
     }
 
     public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {

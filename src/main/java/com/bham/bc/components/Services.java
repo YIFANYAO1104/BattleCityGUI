@@ -110,6 +110,13 @@ public interface Services {
     Point2D getClosestCenter(Point2D position, ItemType item);
 
     /**
+     * Gets the closest ALLY side character coordinate determined by the straight distance to it from a provided point
+     * @param position point from where the closest cen position will be looked for
+     * @return closest GameCharacter from Side ALLY
+     */
+    GameCharacter getClosestALLY(Point2D position);
+
+    /**
      * Gets a random position of a free area requested around some center point
      *
      * <p>This method checks if there is a free area of the the requested radius withing a constrained area.

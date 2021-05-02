@@ -89,8 +89,10 @@ public abstract class Enemy extends GameCharacter {
                     navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
                     break;
                 case ALLY:
-                    // navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
-                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+                    //createRequest(entity) takes advantage of node recording in sparse graph
+                    //in other words, you will find an entity even if there been no closet node around target
+                     navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
+//                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                     break;
             }
             nextSearch=false;

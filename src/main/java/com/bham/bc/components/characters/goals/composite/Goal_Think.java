@@ -25,18 +25,17 @@ public class Goal_Think extends Goal_Composite {
      * has the highest score as the current goal
      */
     public void Arbitrate() {
-        int index = RandomEnhanced.randInt(0,4);
+        int index = RandomEnhanced.randInt(0,2);
 
-//        switch (index){
-//            case 0:AddGoal_GetItem(ItemType.WEAPON);break;
-//            case 1:AddGoal_GetItem(ItemType.HEALTH);break;
-//            case 2:AddGoal_AttackTarget();break;
-//            case 3:AddGoal_Explore();break;
-//        }
+        switch (index){
+            case 0:AddGoal_GetItem(ItemType.HEALTH);break;
+            case 1:AddGoal_AttackTarget();break;
+            case 2:AddGoal_Explore();break;
+        }
 //        AddGoal_AttackTarget();
 //        AddGoal_Explore();
-        AddGoal_GetItem(ItemType.HEALTH);
-        assert (index >=0 && index<4) : "<Goal_Think::Arbitrate>: no evaluator selected";
+//        AddGoal_GetItem(ItemType.HEALTH);
+        assert (index >=0 && index<=2) : "<Goal_Think::Arbitrate>: no evaluator selected";
     }
 
     /**
@@ -59,7 +58,7 @@ public class Goal_Think extends Goal_Composite {
     public int Process() {
         ActivateIfInactive();
 
-//        System.out.println(m_SubGoals);
+        System.out.println(m_SubGoals);
         int SubgoalStatus = ProcessSubgoals();
 
         if (SubgoalStatus == completed || SubgoalStatus == failed) {
