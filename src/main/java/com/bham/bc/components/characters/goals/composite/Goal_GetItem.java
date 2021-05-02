@@ -47,7 +47,7 @@ public class Goal_GetItem extends Goal_Composite {
                             agent.getNavigationService().getPath()));
                 }
             } else { //we are finding item
-                System.out.println(agent.getNavigationService().isTriggerActive());
+//                System.out.println(agent.getNavigationService().isTriggerActive());
                 if (!agent.getNavigationService().isTriggerActive()) {
                     Terminate();
                 }

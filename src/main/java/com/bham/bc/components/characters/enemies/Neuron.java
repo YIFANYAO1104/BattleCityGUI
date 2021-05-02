@@ -5,12 +5,9 @@ import com.bham.bc.components.characters.goals.composite.Goal_Think;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.ai.behavior.*;
-import com.bham.bc.entity.ai.navigation.ItemType;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
 import static com.bham.bc.components.Controller.services;
@@ -131,7 +128,7 @@ public class Neuron extends Enemy {
         exists = false;
 
         Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-        services.addTrigger(dissolve);
+        services.addEffectTrigger(dissolve);
     }
 
     @Override

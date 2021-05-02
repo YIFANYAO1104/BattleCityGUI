@@ -16,7 +16,6 @@ import com.bham.bc.view.GameSession;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
@@ -121,7 +120,7 @@ public class Player extends GameCharacter {
 	// TODO: remove, this is another example of bomb()
 	public void ring() {
 		Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-		services.addTrigger(explosion);
+		services.addEffectTrigger(explosion);
 	}
 
 	public void bomb() {
@@ -211,6 +210,8 @@ public class Player extends GameCharacter {
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
 			case H: testDijistra();		System.out.println(getCenterPosition());break;
+			case K: targetingSystem.statatat();break;
+			case L: services.getMapDivision().cleanHB();break;
 		}
 	}
 
@@ -281,7 +282,7 @@ public class Player extends GameCharacter {
 		exists = false;
 
 		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-		services.addTrigger(dissolve);
+		services.addEffectTrigger(dissolve);
 	}
 
 	@Override

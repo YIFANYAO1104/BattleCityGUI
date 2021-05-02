@@ -10,11 +10,9 @@ import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.physics.CollisionHandler;
-import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
@@ -132,7 +130,7 @@ abstract public class GameCharacter extends MovingEntity {
     public void changeHp(double health) {
         hp = Math.min(hp + health, fullHp);
         Trigger hitMarker = new HitMarker(this, entityImages[0], getAngle());
-        services.addTrigger(hitMarker);
+        services.addEffectTrigger(hitMarker);
 
         if(hp <= 0) {
             audioManager.playEffect(SoundEffect.DESTROY_CHARACTER);

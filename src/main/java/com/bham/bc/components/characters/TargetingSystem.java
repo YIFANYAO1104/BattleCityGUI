@@ -10,6 +10,7 @@ package com.bham.bc.components.characters;
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.components.triggers.powerups.HealthGiver;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
@@ -64,7 +65,7 @@ public class TargetingSystem {
 				}
 			}
 		}
-		if (targetBot!=null)System.out.println("TargetBot="+ targetBot+targetBot.getID());
+//		if (targetBot!=null)System.out.println("TargetBot="+ targetBot+targetBot.getID());
 		return targetBot;
 	}
 
@@ -72,7 +73,7 @@ public class TargetingSystem {
 		double minDist = Double.MAX_VALUE;
 		Obstacle targetObstacle = null;
 		List<BaseGameEntity> baseGameEntities = services.getMapDivision()
-				.calculateNeighborsArray(agent.getCenterPosition(), 25);
+				.getIntersectedEntities(agent.getCenterPosition(), 25);
 		for (BaseGameEntity b : baseGameEntities) {
 			if (b instanceof Obstacle && ((Obstacle) b).getAttributes().contains(Attribute.BREAKABLE)){
 				double dist = b.getCenterPosition().distance(agent.getCenterPosition());
@@ -83,7 +84,7 @@ public class TargetingSystem {
 				}
 			}
 		}
-		if (targetObstacle!=null)System.out.println("TargetObs="+ targetObstacle+targetObstacle.getID());
+//		if (targetObstacle!=null)System.out.println("TargetObs="+ targetObstacle+targetObstacle.getID());
 		return targetObstacle;
 	}
 
@@ -123,6 +124,7 @@ public class TargetingSystem {
 	 * and the owner
 	 */
 	public boolean isTargetBotShootable() {
+		if (targetBot==null) return false;
 		Point2D start = agent.getCenterPosition();
 		Point2D end = targetBot.getCenterPosition();
 		Point2D agentSize = agent.getSize();
@@ -137,9 +139,9 @@ public class TargetingSystem {
 		hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
 
 
-//		visionBoxes.add(hitBox);
+		visionBoxes.add(hitBox);
 		List<BaseGameEntity> baseGameEntities = services.getMapDivision()
-				.calculateNeighborsArray(hitBox);
+				.getIntersectedEntities(hitBox);
 		for (BaseGameEntity b : baseGameEntities) {
 			if (b instanceof Obstacle){
 				obstacleBoxes.add(((Obstacle) b).getHitBox());
@@ -156,6 +158,7 @@ public class TargetingSystem {
 	}
 
 	public boolean isTargetBotWalkable() {
+		if (targetBot==null) return false;
 		Point2D start = agent.getCenterPosition();
 		Point2D end = targetBot.getCenterPosition();
 		Point2D agentSize = agent.getSize();
@@ -172,7 +175,7 @@ public class TargetingSystem {
 
 		visionBoxes.add(hitBox);
 		List<BaseGameEntity> baseGameEntities = services.getMapDivision()
-				.calculateNeighborsArray(hitBox);
+				.getIntersectedEntities(hitBox);
 		for (BaseGameEntity b : baseGameEntities) {
 			if (b instanceof Obstacle){
 				obstacleBoxes.add(((Obstacle) b).getHitBox());
@@ -189,10 +192,12 @@ public class TargetingSystem {
 	}
 
 	public boolean isReachingSafeDistance(){
+		if (targetBot==null) return false;
 		return agent.getCenterPosition().distance(targetBot.getCenterPosition())<=100;
 	}
 
 	public boolean isTargetBotVisable() {
+		if (targetBot==null) return false;
 		return isTargetBotShootable()&&
 				agent.getCenterPosition().distance(targetBot.getCenterPosition())<=100;
 	}
@@ -240,5 +245,39 @@ public class TargetingSystem {
 			GeometryEnhanced.renderHitBox(gc,box);
 		}
 		obstacleBoxes.clear();
+	}
+
+	public void statatat(){
+		List<BaseGameEntity> ents = services.getMapDivision()
+				.getIntersectedEntities(agent.getCenterPosition(), 300);
+		int enemyNum = 0;
+		int allyNum = 0;
+		int softNum = 0;
+		int hardNum = 0;
+		int healthTriggerNum = 0;
+		for (BaseGameEntity ent : ents) {
+			if (ent instanceof Obstacle){
+				Obstacle temp = (Obstacle)ent;
+				if (temp.getAttributes().contains(Attribute.BREAKABLE)) {
+					softNum++;
+				} else {
+					hardNum++;
+				}
+			} else if (ent instanceof GameCharacter){
+				GameCharacter temp = (GameCharacter)ent;
+				if(temp.getSide()==Side.ENEMY){
+					enemyNum++;
+				} else {
+					allyNum++;
+				}
+			} else if (ent instanceof HealthGiver && ((HealthGiver)ent).active()){
+				healthTriggerNum++;
+			}
+		}
+		System.out.println("softNum = "+softNum);
+		System.out.println("hardNum = "+hardNum);
+		System.out.println("enemyNum = "+enemyNum);
+		System.out.println("allyNum = "+allyNum);
+		System.out.println("healthTriggerNum = "+healthTriggerNum);
 	}
 }

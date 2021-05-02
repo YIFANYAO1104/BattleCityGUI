@@ -18,8 +18,6 @@ import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -53,7 +51,7 @@ public class SurvivalController extends Controller {
         for (int i = 0; i < allNodePositions.size(); i++) {
             Point2D nodePosition = allNodePositions.get(i);
             double maxCharacterRadius = Math.hypot(GameCharacter.MAX_SIZE/2.0, GameCharacter.MAX_SIZE/2.0);
-            List<BaseGameEntity> surroundingEntities = mapDivision.calculateNeighborsArray(nodePosition, maxCharacterRadius);
+            List<BaseGameEntity> surroundingEntities = mapDivision.getIntersectedEntities(nodePosition, maxCharacterRadius);
 
             for(BaseGameEntity entity : surroundingEntities) {
                 if(entity instanceof Obstacle) {
@@ -72,10 +70,12 @@ public class SurvivalController extends Controller {
         double playerX = gameMap.getHomeTerritory().getCenterX() - Player.SIZE/2.0;
         double playerY = gameMap.getHomeTerritory().getCenterY() - Player.SIZE;
         characters.add(new Player(playerX, playerY));
+//        characters.add(new Neuron(16*60, 16*60));
         characters.add(new Neuron(16*60, 16*60));
 
-        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), 10, 10, 500);
-        mapDivision.addObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
+        mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), 10, 10);
+        mapDivision.addCrossZoneEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
+        mapDivision.addCrossZoneEntities(new ArrayList<>(interactiveTriggers));
         mapDivision.addEntities(new ArrayList<>(characters));
 
         loadGraph();
@@ -91,7 +91,7 @@ public class SurvivalController extends Controller {
                 closestPoints = characters.stream().filter(c -> c.getSide() == Side.ALLY).map(GameCharacter::getCenterPosition);
                 break;
             case SOFT:
-                Stream<BaseGameEntity> obstacles = mapDivision.calculateNeighborsArray(position, 90).stream().filter(entity -> entity instanceof Obstacle);
+                Stream<BaseGameEntity> obstacles = mapDivision.getIntersectedEntities(position, 90).stream().filter(entity -> entity instanceof Obstacle);
                 closestPoints = obstacles.filter(entity -> ((Obstacle) entity).getAttributes().contains(Attribute.BREAKABLE)).map(BaseGameEntity::getCenterPosition);
                 break;
             case ENEMY_AREA:
@@ -108,22 +108,6 @@ public class SurvivalController extends Controller {
 
     public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
         return null;
-    }
-
-    @Override
-    public boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array) {
-        double angle = end.subtract(start).angle(new Point2D(0,-1));
-        //angle between vectors are [0,180), so we need add extra direction info
-        if (end.subtract(start).getX()<0) angle = -angle;
-        double dis = start.distance(end);
-
-        Point2D center = start.midpoint(end);
-        Point2D topLeft = center.subtract(radius.multiply(0.5)).subtract(0,dis/2);
-        Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), radius.getX()+10, radius.getY()+dis+5);
-        hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
-        array.add(hitBox);
-
-        return !intersectsObstacles(hitBox);
     }
 
     @Override

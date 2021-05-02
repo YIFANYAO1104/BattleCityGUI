@@ -59,7 +59,7 @@ public class Goal_Think extends Goal_Composite {
     public int Process() {
         ActivateIfInactive();
 
-        System.out.println(m_SubGoals);
+//        System.out.println(m_SubGoals);
         int SubgoalStatus = ProcessSubgoals();
 
         if (SubgoalStatus == completed || SubgoalStatus == failed) {

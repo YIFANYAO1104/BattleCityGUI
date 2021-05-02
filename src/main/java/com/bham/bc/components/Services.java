@@ -47,9 +47,15 @@ public interface Services {
 
     /**
      * Adds {@link Trigger} to the game
-     * @param trigger Trigger objects to be added to the list of triggers
+     * @param trigger effect trigger like dissolve
      */
-    void addTrigger(Trigger trigger);
+    void addEffectTrigger(Trigger trigger);
+
+    /**
+     * Adds {@link Trigger} to the game
+     * @param trigger interactive trigger like health giver
+     */
+    void addInteractiveTrigger(Trigger trigger);
     //-------------------------------------------------------------
 
 
@@ -127,17 +133,6 @@ public interface Services {
      * @return Point2D coordinate of a free area or (-1, -1) point if no area is found
      */
     //Point2D getFreeArea(Point2D center, double constraint, double areaRadius, Pos pos, boolean checkObstacles);
-
-    /**
-     * Checks if a path from <i>start</i> to <i>end</i> intersects any obstacles
-     *
-     * @param start  position where the path starts
-     * @param end    position where the path ends
-     * @param radius radius of an entity which should fit
-     * @param array  list to which a straight rectangular path is added regardless if it intersects any obstacles
-     * @return true if the calculated straight path intersects any obstacles and false otherwise
-     */
-    boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array);
 
     /**
      * Checks if a given rectangular shape intersects any non-walkable obstacles

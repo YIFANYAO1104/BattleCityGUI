@@ -145,7 +145,7 @@ public class Shooter extends Enemy {
         exists = false;
 
         Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-        services.addTrigger(dissolve);
+        services.addEffectTrigger(dissolve);
     }
 
     @Override

@@ -4,6 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -180,7 +181,13 @@ public class GeometryEnhanced {
             gc.strokeLine(p1.getX(), p1.getY(), p3.getX(), p3.getY());
             gc.strokeLine(p4.getX(), p4.getY(), p2.getX(), p2.getY());
             gc.strokeLine(p4.getX(), p4.getY(), p3.getX(), p3.getY());
-        } else {
+        } else if (box instanceof Circle) {
+            Circle hb = (Circle) box;
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1);
+            gc.strokeArc(hb.getCenterX() - hb.getRadius(), hb.getCenterY() - hb.getRadius(), hb.getRadius()*2, hb.getRadius()*2, 0, 360, ArcType.OPEN);
+        }
+        else {
             System.out.println("not supported hitbox type");
         }
     }

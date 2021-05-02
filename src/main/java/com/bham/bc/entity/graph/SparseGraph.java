@@ -1,5 +1,6 @@
 package com.bham.bc.entity.graph;
 
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.graph.edge.GraphEdge;
@@ -177,7 +178,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      * @param entities List of the BaseGameEntity
      * @param gc GraphicsContext
      */
-    public void renderTankPoints(List<BaseGameEntity> entities, GraphicsContext gc){
+    public void renderTankPoints(List<GameCharacter> entities, GraphicsContext gc){
         for(BaseGameEntity e1: entities) renderTankPoint(e1,gc);
     }
 

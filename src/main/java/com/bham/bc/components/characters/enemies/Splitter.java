@@ -113,10 +113,10 @@ public class Splitter extends Enemy {
         entityManager.removeEntity(this);
 
         Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-        services.addTrigger(explosion);
+        services.addEffectTrigger(explosion);
 
         Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-        services.addTrigger(dissolve);
+        services.addEffectTrigger(dissolve);
 
         services.addCharacter(new MiniSplitter(getCenterPosition().getX()-8, getCenterPosition().getY()-8));
         services.addCharacter(new MiniSplitter(getCenterPosition().getX()+8, getCenterPosition().getY()+8));
@@ -224,7 +224,7 @@ public class Splitter extends Enemy {
             exists = false;
             entityManager.removeEntity(this);
             Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-            services.addTrigger(explosion);
+            services.addEffectTrigger(explosion);
         }
 
         @Override
