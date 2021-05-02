@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
 
 /* GLOBAL COLOR VARIABLES */
 * {
@@ -12,7 +11,7 @@
 /* CUSTOM UBUNTU FONT */
 @font-face {
     font-family: 'Zen Dots', cursive;
-    src: url('Ubuntu-Medium.ttf');
+    src: url('ZenDots-Regular.ttf');
 }
 
 /* SUB-MENU */
@@ -36,7 +35,7 @@
 .slider-label {
     -fx-font-size: 20px;
     -fx-text-fill: -fx-lighten-color;
-    -fx-font-family: 'Zen Dots', cursive;
+    -fx-font-family: 'Zen Dots', cursive;;
     -fx-font-weight: bold;
 }
 .value-label {
