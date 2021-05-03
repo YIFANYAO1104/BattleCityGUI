@@ -148,17 +148,19 @@ public abstract class Controller extends BaseGameEntity implements Services {
 //        mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
 
-//        director.update();
+        director.update();
 
         characters.forEach(GameCharacter::update);
         characters.forEach(character -> character.handle(mapDivision.getRelevantEntities(character)));
 
         bullets.forEach(Bullet::update);
-        bullets.forEach(bullet -> bullet.handle(mapDivision.getRelevantEntities(bullet)));
+        bullets.forEach(bullet -> bullet.handle(mapDivision.getIntersectedEntities(bullet.getCenterPosition(),150)));
 
         triggers.forEach(Trigger::update);
-        //Moving entity has one zone only. We have no time to fix this. So we use bigger hitbox
-        //by this, more entity could be tested, the biggest enemy size is 150 so far
+        //Moving entity has one zone only. But in fact they are cross zone.
+        // We have no time to fix this. So we use bigger hitbox.
+        //by this, more entity could be tested, the biggest enemy size is 150 so far.
+        //for bullet, it's also like that
         triggers.stream().filter(t -> !(t instanceof Dissolve) && !(t instanceof HitMarker) && !(t instanceof RingExplosion)).collect(Collectors.toList())
                 .stream().forEach(t -> t.handle(mapDivision.getIntersectedEntities(t.getCenterPosition(),150)));
 

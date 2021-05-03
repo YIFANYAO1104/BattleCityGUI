@@ -1,5 +1,6 @@
 package com.bham.bc.utils;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
 import javafx.scene.canvas.GraphicsContext;
@@ -180,6 +181,23 @@ public class GeometryEnhanced {
         else {
             System.out.println("not supported hitbox type");
         }
+    }
+
+    public static void renderBounds(GraphicsContext gc, Shape box) {
+        Bounds b = box.getBoundsInParent();
+
+
+        Point2D p1 = new Point2D(b.getMinX(), b.getMinY());
+        Point2D p2 = new Point2D(b.getMinX() + b.getWidth(), b.getMinY());
+        Point2D p3 = new Point2D(b.getMinX(), b.getMinY() + b.getHeight());
+        Point2D p4 = new Point2D(b.getMinX() + b.getWidth(), b.getMinY() + b.getHeight());
+
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(1.0);
+        gc.strokeLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        gc.strokeLine(p1.getX(), p1.getY(), p3.getX(), p3.getY());
+        gc.strokeLine(p4.getX(), p4.getY(), p2.getX(), p2.getY());
+        gc.strokeLine(p4.getX(), p4.getY(), p3.getX(), p3.getY());
     }
 
 
