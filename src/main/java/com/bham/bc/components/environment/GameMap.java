@@ -1,7 +1,6 @@
 package com.bham.bc.components.environment;
 
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.physics.MapDivision;
 import com.bham.bc.entity.graph.HandyGraphFunctions;
@@ -104,7 +103,7 @@ public class GameMap {
         // Get the center points of each territory
         Point2D homeCenter = new Point2D(getWidth()/2., getHeight()/2.);
         try {
-            homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(Obstacle::getPosition).toArray(Point2D[]::new)[0];  // use first match
+            homeCenter = allObstacles.stream().filter(o -> o.getAttributes().contains(Attribute.HOME_CENTER)).map(Obstacle::getPosition).findFirst().get();
         } catch(ArrayIndexOutOfBoundsException e) {
             System.out.println("This map does not have a home spawn center defined! Setting it in the middle of the map...");
         }
@@ -297,7 +296,7 @@ public class GameMap {
      * @param gc       graphics context on which the nodes will be rendered
      * @param entities entities which will allow active nodes (red) to be rendered at their location
      */
-    public void renderGraph(GraphicsContext gc, ArrayList<BaseGameEntity> entities){
+    public void renderGraph(GraphicsContext gc, ArrayList<GameCharacter> entities){
         graphSystem.render(gc);
         graphSystem.renderTankPoints(entities,gc);
 

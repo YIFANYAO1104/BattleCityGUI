@@ -30,7 +30,7 @@ public class Freeze extends RespawnTrigger {
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).toFreeze(activationTime * FRAME_RATE);
+            ((Player) entity).activateFreeze(activationTime * FRAME_RATE);
             deactivate();
         }
     }

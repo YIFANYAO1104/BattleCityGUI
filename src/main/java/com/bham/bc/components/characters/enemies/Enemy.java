@@ -33,6 +33,7 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
 public abstract class Enemy extends GameCharacter {
 
     protected final Gun GUN;
+
     protected NavigationService navigationService;
     protected LinkedList<PathEdge> pathEdges;
 
@@ -88,8 +89,10 @@ public abstract class Enemy extends GameCharacter {
                     navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
                     break;
                 case ALLY:
-                    // navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
-                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
+                    //createRequest(entity) takes advantage of node recording in sparse graph
+                    //in other words, you will find an entity even if there been no closet node around target
+                     navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
+//                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                     break;
             }
             nextSearch=false;
@@ -216,9 +219,9 @@ public abstract class Enemy extends GameCharacter {
         return navigationService.getSmoothingBoxes();
     }
 
-//    @Override
-//    public void render(GraphicsContext gc) {
-////        if (navigationService!=null) navigationService.render(gc);
+    @Override
+    public void render(GraphicsContext gc) {
+        if (navigationService!=null) navigationService.render(gc);
 //        for (PathEdge graphEdge : pathEdges) {
 //            Point2D n1 = graphEdge.getSource();
 //            Point2D n2 = graphEdge.getDestination();
@@ -232,14 +235,14 @@ public abstract class Enemy extends GameCharacter {
 //            }
 //            gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
 //        }
-//        drawRotatedImage(gc, entityImages[0], getAngle());
+        drawRotatedImage(gc, entityImages[0], getAngle());
+
+//        gc.setStroke(Color.WHITE);
+//        gc.setLineWidth(2.0);
+//        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
 //
-////        gc.setStroke(Color.WHITE);
-////        gc.setLineWidth(2.0);
-////        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
-////
-////        steering.render(gc);
-//    }
+//        steering.render(gc);
+    }
 
     @Override
     public void move() {
@@ -247,7 +250,6 @@ public abstract class Enemy extends GameCharacter {
         Point2D acceleration = force.multiply(1. / mass);
         //debug
         this.acceleration = acceleration;
-
         velocity = velocity.add(acceleration);
         if (velocity.magnitude() > maxSpeed) {
             velocity = velocity.normalize().multiply(maxSpeed);
@@ -266,5 +268,10 @@ public abstract class Enemy extends GameCharacter {
     @Override
     public String toString() {
         return "Enemy";
+    }
+
+    @Override
+    public NavigationService getNavigationService() {
+        return navigationService;
     }
 }

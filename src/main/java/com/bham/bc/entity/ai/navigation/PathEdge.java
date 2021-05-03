@@ -18,6 +18,11 @@ public class PathEdge {
 
     private Point2D source;
     private Point2D destination;
+
+    public void setBehavior(int behavior) {
+        this.behavior = behavior;
+    }
+
     /**
      * The behavior might be followed by an agent when passing through this path edge
      * see {@link GraphEdge}

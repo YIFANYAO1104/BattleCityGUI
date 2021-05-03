@@ -20,6 +20,15 @@ import static com.bham.bc.utils.Timer.CLOCK;
  */
 public class Gun {
     private final GameCharacter CHARACTER;
+
+    public BulletType getBulletType() {
+        return bulletType;
+    }
+
+    public double getBulletSpeed() {
+        return DefaultBullet.SPEED;
+    }
+
     private BulletType bulletType;
     private LaserType laserType;
     private double damageFactor;

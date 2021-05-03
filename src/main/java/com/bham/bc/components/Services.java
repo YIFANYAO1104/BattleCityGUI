@@ -6,11 +6,13 @@ import com.bham.bc.components.characters.enemies.EnemyType;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
+import com.bham.bc.entity.physics.MapDivision;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
@@ -43,9 +45,10 @@ public interface Services {
      */
     void addCharacter(GameCharacter character);
 
+
     /**
      * Adds {@link Trigger} to the game
-     * @param trigger Trigger objects to be added to the list of triggers
+     * @param trigger
      */
     void addTrigger(Trigger trigger);
     //-------------------------------------------------------------
@@ -53,6 +56,8 @@ public interface Services {
 
 
     // GETTERS ----------------------------------------------------
+    MapDivision<BaseGameEntity> getMapDivision();
+    ArrayList<GameCharacter> getCharacters();
     /**
      * Gets the graph of a currently active map
      * @return {@link SparseGraph} object used for searching algorithms
@@ -83,7 +88,7 @@ public interface Services {
      * @return Circle object representing the home territory enemies can attack
      */
     Circle getHomeArea();
-    
+
     /**
      * Gets all the active bullets in the game for testing purposes
      * @return a list of active bullets in the game
@@ -105,6 +110,13 @@ public interface Services {
     Point2D getClosestCenter(Point2D position, ItemType item);
 
     /**
+     * Gets the closest ALLY side character coordinate determined by the straight distance to it from a provided point
+     * @param position point from where the closest cen position will be looked for
+     * @return closest GameCharacter from Side ALLY
+     */
+    GameCharacter getClosestALLY(Point2D position);
+
+    /**
      * Gets a random position of a free area requested around some center point
      *
      * <p>This method checks if there is a free area of the the requested radius withing a constrained area.
@@ -123,17 +135,6 @@ public interface Services {
      * @return Point2D coordinate of a free area or (-1, -1) point if no area is found
      */
     //Point2D getFreeArea(Point2D center, double constraint, double areaRadius, Pos pos, boolean checkObstacles);
-
-    /**
-     * Checks if a path from <i>start</i> to <i>end</i> intersects any obstacles
-     *
-     * @param start  position where the path starts
-     * @param end    position where the path ends
-     * @param radius radius of an entity which should fit
-     * @param array  list to which a straight rectangular path is added regardless if it intersects any obstacles
-     * @return true if the calculated straight path intersects any obstacles and false otherwise
-     */
-    boolean canPass(Point2D start, Point2D end, Point2D radius, List<Shape> array);
 
     /**
      * Checks if a given rectangular shape intersects any non-walkable obstacles

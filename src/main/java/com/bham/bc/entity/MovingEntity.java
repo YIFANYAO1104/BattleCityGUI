@@ -15,7 +15,7 @@ import javafx.scene.transform.Rotate;
  * Represents any entity that can move at any angle
  */
 public abstract class MovingEntity extends BaseGameEntity {
-    public static final double STANDARD_FORCE = 10;
+    public static final double STANDARD_FORCE = 100;
     protected double mass;
     protected double maxSpeed;
     protected double maxForce;
@@ -79,6 +79,10 @@ public abstract class MovingEntity extends BaseGameEntity {
         gc.transform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
         gc.drawImage(image, x, y);
         gc.restore();
+    }
+
+    public Steering getSteering() {
+        return steering;
     }
 
     /**

@@ -7,6 +7,8 @@ public enum MapType {
     LARGE("/model/maps/162x162.json"),
     TEST1("/model/maps/floodMap1.json"),
     TEST2("/model/maps/test.json"),
+    S("/surr.json"),
+    Trigger162("/Trigger162x162.json"),
     EMPTY(null);
 
     MapType(String name) {

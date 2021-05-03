@@ -1,15 +1,18 @@
 package com.bham.bc.entity.physics;
 
 
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 
 import java.util.*;
 
@@ -21,16 +24,19 @@ import java.util.*;
 
 class Cell <entity extends Object>{
 
+
+
     public List<entity> Unites = new LinkedList<>();        // Store all game entites.
 
-    public Hitbox cBox;
+    public Rectangle cBox;
 
     public Cell(Point2D topleft, Point2D bottomright){
-        cBox = new Hitbox(topleft,bottomright);
+        Point2D size = bottomright.subtract(topleft);
+        cBox = new Rectangle(topleft.getX(),topleft.getY(), size.getY(),size.getY());
     }
 
     public void render(GraphicsContext gc, double cellWidth, double cellHeight,int NumCellsX){
-        Point2D p = cBox.getTopLeft();
+        Point2D p = new Point2D(cBox.getX(),cBox.getY());
         int idx = (int) (p.getX() / cellWidth)
                 + ((int) (p.getY() / cellHeight) * NumCellsX);
         gc.setFill(Color.GOLD);
@@ -40,15 +46,13 @@ class Cell <entity extends Object>{
 }
 
 public class MapDivision<entity extends BaseGameEntity>{
-    private List<Cell<entity>> m_Cells = new ArrayList<>();             // List of all cell on map
+    private List<Cell<entity>> cellList = new ArrayList<>();             // List of all cell on map
 
-    private List<entity> surround_entities;                             //Record all the entities surround with the target
-    private ListIterator<entity> m_curSurr;
-
-    private double m_Width;                                             //Map width
-    private double m_Height;                                            //Map Height
-    private int m_NumCellsX;                                            //The number of Cells on the row
-    private int m_NumCellsY;                                            //The number of Cells on the column
+    List<Shape> hb = new LinkedList<>();
+    private double mapWidth;                                             //Map width
+    private double mapHeight;                                            //Map Height
+    private int horizontalCellNum;                                            //The number of Cells on the row
+    private int verticalCellNum;                                            //The number of Cells on the column
     private double cellWidth, cellHeight;                               //The fundamental cell width and height. It depands the m_NumCellsX, m_NumCellsY
 
     // record the moving entities old index of Cell
@@ -62,17 +66,23 @@ public class MapDivision<entity extends BaseGameEntity>{
     private int PositionToIndex(Point2D pos) {
 
         int idx = (int) (pos.getX() / cellWidth)
-                + ((int) (pos.getY() / cellHeight) * m_NumCellsX);
+                + ((int) (pos.getY() / cellHeight) * horizontalCellNum);
 
         //if the entity's position is equal to Point2d(m_Width, m_Height)
         //then the index will overshoot. We need to check for this and adjust
-        if (idx > (int) m_Cells.size() - 1) {
-            idx = (int) m_Cells.size() - 1;
+        if (idx > (int) cellList.size() - 1) {
+            idx = (int) cellList.size() - 1;
         }
 
         return idx;
     }
 
+    /**
+     * return a list of cell zone id given a rectangle
+     * @param pos the top left position
+     * @param size the rectangle size
+     * @return List of cell zone id
+     */
     private List<Integer> getCellIndexes(Point2D pos,Point2D size) {
 
         int ix1 = (int) (pos.getX() / cellWidth);
@@ -91,8 +101,8 @@ public class MapDivision<entity extends BaseGameEntity>{
         List<Integer> idxes = new ArrayList<>();
         for (int i = ix1; i <= ix2; i++) {
             for (int j = iy1; j <= iy2; j++) {
-                int idx = i + j*m_NumCellsX;
-                if (idx < m_Cells.size()){
+                int idx = i + j* horizontalCellNum;
+                if (idx < cellList.size()){
                     idxes.add(idx);
                 }
             }
@@ -102,51 +112,49 @@ public class MapDivision<entity extends BaseGameEntity>{
     }
 
     /**
-     *
-     * @param m_Width1 Map width
-     * @param m_Height1 Map Height
+     * Constructor for MapDivision
+     * @param mapWidth Map width
+     * @param mapHeight Map Height
      * @param cellsX    The number of cell on the row
      * @param cellsY    The number of cell on the column
-     * @param MaxEntities  The MaxEntities on the cell
      */
 
-    public MapDivision(double m_Width1,
-                       double m_Height1,
+    public MapDivision(double mapWidth,
+                       double mapHeight,
                        int cellsX,
-                       int cellsY,
-                       int MaxEntities){
-        m_Width = m_Width1;
-        m_Height = m_Height1;
-        m_NumCellsX = cellsX;
-        m_NumCellsY = cellsY;
+                       int cellsY){
+        this.mapWidth = mapWidth;
+        this.mapHeight = mapHeight;
+        this.horizontalCellNum = cellsX;
+        this.verticalCellNum = cellsY;
 
-        surround_entities = new ArrayList<entity>(MaxEntities);
         // calculate the height and width of the cell
-        cellWidth = m_Width/m_NumCellsX;
-        cellHeight = m_Height/m_NumCellsY;
+        this.cellWidth =  this.mapWidth / this.horizontalCellNum;
+        this.cellHeight = this.mapHeight/ this.verticalCellNum;
 
         //create the cells
-        for (int y = 0; y < m_NumCellsY; ++y) {
-            for (int x = 0; x < m_NumCellsX; ++x) {
+        for (int y = 0; y < verticalCellNum; ++y) {
+            for (int x = 0; x < horizontalCellNum; ++x) {
                 double left = x * cellWidth;
                 double right = left + cellWidth;
                 double top = y * cellHeight;
                 double bot = top + cellHeight;
 
-                m_Cells.add(new Cell<entity>(new Point2D(left, top), new Point2D(right, bot)));
+                cellList.add(new Cell<entity>(new Point2D(left, top), new Point2D(right, bot)));
             }
         }
     }
 
     /**
-     * Used to add the entities to the cells
+     * Add the entities to the cells
+     * @param ent the entity
      */
     public void addEntity(entity ent){
         assert (ent != null);
 
         int idx = PositionToIndex(ent.getPosition());
 
-        m_Cells.get(idx).Unites.add(ent);
+        cellList.get(idx).Unites.add(ent);
         if(ent instanceof MovingEntity){
             register.put((MovingEntity)ent,idx);
         }
@@ -154,28 +162,27 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     /**
      * Add the list of entities into the cells
-     * @param m1 List of entities.
+     * @param entityList List of entities
      */
-
-    public void addEntities(List<entity> m1){
-        for(entity b1:m1){
+    public void addEntities(List<entity> entityList){
+        for(entity b1:entityList){
             addEntity(b1);
         }
     }
 
     //test update
-    public void addObstacles(List<entity> m1){
+    public void addCrossZoneEntities(List<entity> m1){
         for(entity b1:m1){
             assert (b1 != null);
             List<Integer> idxes = getCellIndexes(b1.getPosition(),b1.getSize());
             for (Integer idx : idxes) {
-                m_Cells.get(idx).Unites.add(b1);
+                cellList.get(idx).Unites.add(b1);
             }
         }
     }
 
     public void updateMovingEntities(List<entity> n1){
-        n1.forEach(this::updateMovingEntity);
+        n1.forEach(this::updateMovingEntityZone);
     }
 
     /**
@@ -184,7 +191,7 @@ public class MapDivision<entity extends BaseGameEntity>{
      * when they moved to another cell, it will be added in new cell and removed in old cell.
      * @param ent BaseGameEntity
      */
-    public void updateMovingEntity(entity ent){
+    public void updateMovingEntityZone(entity ent){
         if(!register.containsKey((MovingEntity) ent)){
             System.out.println("Two possible errors:\n1. It is not a MovingEntity\n2. The division does not contain this entity. Make sure to add it first");
             return;
@@ -193,15 +200,15 @@ public class MapDivision<entity extends BaseGameEntity>{
         int newIdx = PositionToIndex(ent.getPosition());
 
         //----------------------------remove-------if it is not exist----------------
-        if(!((MovingEntity) ent).exists()){
-            removedEntity(ent,oldIdx);
-            register.remove(ent);
-            return;
-        }
+//        if(!((MovingEntity) ent).exists()){
+//            removeEntity(ent,oldIdx);
+//            register.remove(ent);
+//            return;
+//        }
         //---------------------------replace new idx to old poistion----------------
         if(newIdx != oldIdx){
-            m_Cells.get(oldIdx).Unites.remove(ent);
-            m_Cells.get(newIdx).Unites.add(ent);
+            cellList.get(oldIdx).Unites.remove(ent);
+            cellList.get(newIdx).Unites.add(ent);
             register.replace((MovingEntity) ent,newIdx);
         }
         return;
@@ -213,56 +220,62 @@ public class MapDivision<entity extends BaseGameEntity>{
      * @param ent Entity
      * @param idx Cell's idx
      */
-    public void removedEntity(entity ent, int idx){
-        m_Cells.get(idx).Unites.remove(ent);
+    public void removeEntity(entity ent, int idx){
+        cellList.get(idx).Unites.remove(ent);
     }
 
     /**
-     * update a List of genericObstacle.
-     * @param a1
+     * remove all the non existing entities
      */
-    public void updateObstacles(List<entity> a1){
-        a1.forEach(b1-> updateObstacle(b1));
-    }
-
-    /**
-     * Update the genericObstacle,
-     * when it should not exist. it would be removed from cell.
-     * @param genericObstacle
-     */
-    public void updateObstacle(entity genericObstacle){
-        if(! (genericObstacle instanceof Obstacle)) System.out.println("it is not a genericObstacle,but I will delete it");
-        try {
-            Obstacle g1 = (Obstacle) genericObstacle;
-            if(!g1.exists()){
-                List<Integer> idxes = getCellIndexes(genericObstacle.getPosition(),genericObstacle.getSize());
-                for (Integer idx : idxes) {
-                    removedEntity(genericObstacle, idx);
+    public void cleanNonExistingEntities(){
+        for (Cell<entity> entityCell : cellList) {
+            Iterator<entity> iterator = entityCell.Unites.iterator();
+            while (iterator.hasNext()){
+                entity next = iterator.next();
+                if (!next.exists()){
+                    iterator.remove();
                 }
-//                int idx = PositionToIndex(genericObstacle.getPosition());
-//                removedEntity(genericObstacle, idx);
             }
-        }catch (Exception e){}
+        }
     }
 
     /**
-     * Get the List of the Entity that should be consider if interacting with target.
+     * Get the List of the Entity that should be considered when doing collision test.
+     * This method does not do collision test. It only return an entity list in relevant zones
      * @param entity the entity should be check collision
+     * @return List of entity in relevant zones except the entity itself
      */
-    public List<entity> calculateNeighborsArray(entity entity){
-        surround_entities.clear();
+    public List<entity> getRelevantEntities(entity entity){
+//        surround_entities.clear();
+        Set<entity> surr = new HashSet<>();
 
         Bounds b = entity.getHitBox().getBoundsInParent();
         List<Integer> idxes = getCellIndexes(new Point2D(b.getMinX(), b.getMinY()), new Point2D(b.getWidth(), b.getHeight()));
 
         for (Integer idx : idxes) {
-            Cell<entity> curCell = m_Cells.get(idx);
+            Cell<entity> curCell = cellList.get(idx);
             for(entity ent :curCell.Unites){
-                if(ent != entity &&  ent.intersects(entity))
-                    surround_entities.add(ent);
+                if(ent != entity)
+                    surr.add(ent);
             }
         }
-        return surround_entities;
+        return new ArrayList<entity>(surr);
+    }
+
+    public List<entity> getIntersectedEntities(Rectangle hitbox){
+        Set<entity> surr = new HashSet<>();
+
+        Bounds b = hitbox.getBoundsInParent();
+        List<Integer> idxes = getCellIndexes(new Point2D(b.getMinX(), b.getMinY()), new Point2D(b.getWidth(), b.getHeight()));
+
+        for (Integer idx : idxes) {
+            Cell<entity> curCell = cellList.get(idx);
+            for(entity ent :curCell.Unites){
+                if(ent.intersects(hitbox))
+                    surr.add(ent);
+            }
+        }
+        return new ArrayList<entity>(surr);
     }
 
     /**
@@ -270,67 +283,58 @@ public class MapDivision<entity extends BaseGameEntity>{
      * @param centerPos Point2D the location should be check collision
      * @param radius is the raidus of Hitbox
      */
-    public List<entity> calculateNeighborsArray(Point2D centerPos, double radius){
-        surround_entities.clear();
+    public List<entity> getIntersectedEntities(Point2D centerPos, double radius){
+        Set<entity> surr = new HashSet<>();
         // creat the hitbox whcih is the interact test box of the target area
         Point2D tl = centerPos.subtract(radius,radius);
         Point2D size = new Point2D(2*radius,2*radius);
         List<Integer> idxes = getCellIndexes(tl, size);
 
         for (Integer idx : idxes) {
-            Cell<entity> curCell = m_Cells.get(idx);
+            Cell<entity> curCell = cellList.get(idx);
             for(entity ent :curCell.Unites){
                 if(ent.getCenterPosition().distance(centerPos) < radius+ent.getHitBoxRadius())
-                    surround_entities.add(ent);
+                    surr.add(ent);
             }
         }
-        return surround_entities;
-
-
-//        surround_entities.clear();
-//        // creat the hitbox whcih is the interact test box of the target area
-//        Hitbox targetBox = new Hitbox(centerPos.subtract(radius,radius),centerPos.add(radius,radius));
-//
-//
-//        ListIterator<Cell<entity>> c_iter = m_Cells.listIterator();
-//        while (c_iter.hasNext()){
-//            Cell<entity> curCell = c_iter.next();
-//
-//            if(!curCell.Unites.isEmpty() && curCell.cBox.isInteractedWith(targetBox)){
-//                for(entity ent :curCell.Unites){
-//                    if(ent.getPosition().distance(centerPos) < radius)
-//                        surround_entities.add(ent);
-//                }
-//            }
-//        }
-//        return surround_entities;
+        if (radius==300){
+            for (entity entity1 : surr) {
+                hb.add(entity1.getHitBox());
+            }
+            hb.add(new Circle(centerPos.getX(),centerPos.getY(),radius));
+        }
+        return new ArrayList<entity>(surr);
     }
 
     /**
      * Empty all cells' linklist on BaseGameEntities.
      */
-    public void EmptyCells(){
-        for(Cell cc: m_Cells){
+    public void clearCells(){
+        for(Cell cc: cellList){
             cc.Unites.clear();
         }
     }
 
     public void render(GraphicsContext gc){
 
+        for (Shape shape : hb) {
+            GeometryEnhanced.renderHitBox(gc,shape);
+        }
+//        hb.clear();
 //        renderNode(gc, Color.RED,new Point2D(400,400),7);
 //        System.out.println(cellWidth);
 //        System.out.println(cellHeight);
 //        renderline(gc, Color.RED, new Point2D(cellWidth,0), new Point2D(cellWidth, m_Height));
-        for(double i = 0; i<m_Height;i = i + cellHeight){
+        for(double i = 0; i< mapHeight; i = i + cellHeight){
 //            System.out.println("rendering");
-            renderline(gc,Color.BISQUE,new Point2D(0,i),new Point2D(m_Width,i));
+            renderline(gc,Color.BISQUE,new Point2D(0,i),new Point2D(mapWidth,i));
         }
-        for(double i = 0; i<m_Width;i = i + cellWidth){
-            renderline(gc,Color.BISQUE,new Point2D(i,0),new Point2D(i,m_Height));
+        for(double i = 0; i< mapWidth; i = i + cellWidth){
+            renderline(gc,Color.BISQUE,new Point2D(i,0),new Point2D(i, mapHeight));
         }
 
-        for (Cell<entity> m_cell : m_Cells) {
-            m_cell.render(gc,cellWidth,cellHeight,m_NumCellsX);
+        for (Cell<entity> m_cell : cellList) {
+            m_cell.render(gc,cellWidth,cellHeight, horizontalCellNum);
         }
 
     }
@@ -349,11 +353,15 @@ public class MapDivision<entity extends BaseGameEntity>{
     }
 
     public int sizeOfCells(){
-        return m_Cells.size();
+        return cellList.size();
     }
 
     public double getCellWidth(){
         return cellWidth;
+    }
+
+    public void cleanHB(){
+        hb.clear();
     }
 
 }

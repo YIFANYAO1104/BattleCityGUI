@@ -1,6 +1,7 @@
 package com.bham.bc.entity.physics;
 
 import com.bham.bc.components.characters.Player;
+import com.bham.bc.components.characters.enemies.Neuron;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;

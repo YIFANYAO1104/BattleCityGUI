@@ -4,6 +4,9 @@ import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
+import com.bham.bc.components.triggers.effects.Dissolve;
+import com.bham.bc.components.triggers.effects.HitMarker;
+import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.director.Director;
 import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
@@ -130,7 +133,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
     public Circle getHomeArea() {
         return gameMap.getHomeTerritory();
     }
-    
+
     public ArrayList<Bullet> getBullets(){
     	return bullets;
     }
@@ -142,23 +145,29 @@ public abstract class Controller extends BaseGameEntity implements Services {
     @Override
     public void update() {
         driver.runAlgorithm();
-        mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
+//        mapDivision.updateObstacles(new ArrayList<>(gameMap.getInteractiveObstacles()));
         gameMap.update();
 
         director.update();
 
         characters.forEach(GameCharacter::update);
-        characters.forEach(character -> character.handle(mapDivision.calculateNeighborsArray(character)));
+        characters.forEach(character -> character.handle(mapDivision.getRelevantEntities(character)));
 
         bullets.forEach(Bullet::update);
-        bullets.forEach(bullet -> bullet.handle(mapDivision.calculateNeighborsArray(bullet)));
+        bullets.forEach(bullet -> bullet.handle(mapDivision.getIntersectedEntities(bullet.getCenterPosition(),150)));
 
         triggers.forEach(Trigger::update);
-        triggers.forEach(trigger -> trigger.handle(mapDivision.calculateNeighborsArray(trigger.getCenterPosition(), trigger.getHitBoxRadius() * 4)));
+        //Moving entity has one zone only. But in fact they are cross zone.
+        // We have no time to fix this. So we use bigger hitbox.
+        //by this, more entity could be tested, the biggest enemy size is 150 so far.
+        //for bullet, it's also like that
+        triggers.stream().filter(t -> !(t instanceof Dissolve) && !(t instanceof HitMarker) && !(t instanceof RingExplosion)).collect(Collectors.toList())
+                .stream().forEach(t -> t.handle(mapDivision.getIntersectedEntities(t.getCenterPosition(),150)));
 
         // Performed before removals
-        bullets.forEach(b -> mapDivision.updateMovingEntity(b));
-        characters.forEach(c -> mapDivision.updateMovingEntity(c));
+        bullets.forEach(b -> mapDivision.updateMovingEntityZone(b));
+        characters.forEach(c -> mapDivision.updateMovingEntityZone(c));
+        mapDivision.cleanNonExistingEntities();
 
         // Performed last
         bullets.removeIf(b -> !b.exists());
@@ -183,7 +192,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         // gameMap.renderGraph(gc, characters);
         // gameMap.renderTerritories(gc);
-        // mapDivision.render(gc);
+         mapDivision.render(gc);
     }
 
     @Override
@@ -261,4 +270,13 @@ public abstract class Controller extends BaseGameEntity implements Services {
         return "Controller";
     }
     // ------------------------------------------------------------
+
+    @Override
+    public ArrayList<GameCharacter> getCharacters() {
+        return characters;
+    }
+
+    public MapDivision<BaseGameEntity> getMapDivision() {
+        return mapDivision;
+    }
 }

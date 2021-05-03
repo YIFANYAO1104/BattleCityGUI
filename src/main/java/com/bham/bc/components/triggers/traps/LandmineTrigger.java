@@ -23,7 +23,7 @@ public class LandmineTrigger extends RespawnTrigger{
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof GameCharacter && intersects(entity)) {
-            ((GameCharacter) entity).destroyed();
+            ((GameCharacter) entity).changeHp(-200);
             deactivate();
         }
     }

@@ -7,6 +7,7 @@ package com.bham.bc.components.triggers;
 
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -22,11 +23,13 @@ abstract public class RespawnTrigger extends Trigger {
 
     /**
      * sets the trigger to be inactive for m_iNumUpdatesBetweenRespawns
+     * destroy non respawning triggers which has no cooling down value
      * update-steps
      */
     protected void deactivate() {
         active = false;
-        timeTillRespawn = cooldown;
+        if (cooldown == 0) destroy();
+        else timeTillRespawn = cooldown;
     }
 
     public RespawnTrigger(int x, int y) {
@@ -47,6 +50,7 @@ abstract public class RespawnTrigger extends Trigger {
 
     @Override
     public void render(GraphicsContext gc) {
+        GeometryEnhanced.renderHitBox(gc,this.getHitBox());
         if(active) {
             gc.drawImage(entityImages[0], x, y);
         }

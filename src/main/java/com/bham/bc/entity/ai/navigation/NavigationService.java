@@ -59,6 +59,7 @@ public interface NavigationService {
      */
     void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
 
+    boolean isTriggerActive();
 
 
     //for testing--------------------------------------------

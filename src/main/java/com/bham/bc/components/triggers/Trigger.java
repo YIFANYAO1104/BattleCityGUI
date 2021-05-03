@@ -8,6 +8,8 @@ import com.bham.bc.utils.messaging.Telegram;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Shape;
 
+import static com.bham.bc.entity.EntityManager.entityManager;
+
 import java.util.List;
 
 /**
@@ -55,6 +57,14 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
     public abstract void handle(BaseGameEntity entity);
 
     protected abstract Image[] getDefaultImage();
+    
+    /**
+     * Removes the obstacle from the entity list
+     */
+    public void destroy() {
+        exists = false;
+        entityManager.removeEntity(this);
+    }
 
     @Override
     public boolean intersects(Shape shape) {
