@@ -1,4 +1,7 @@
-package com.bham.bc.components.triggers.traps;
+/**
+ * Desc: If player runs over an instance of this class it will be able to use bomb (only once)
+ */
+package com.bham.bc.components.triggers.powerups;
 
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.triggers.RespawnTrigger;
@@ -7,21 +10,23 @@ import javafx.scene.image.Image;
 
 import static com.bham.bc.view.GameSession.FRAME_RATE;
 
-public class TrappedTrigger extends RespawnTrigger{
+public class BombTrigger extends RespawnTrigger {
 
-    public TrappedTrigger(int x, int y, int Respawn){
+    public BombTrigger(int x, int y, int Respwan){
         super(x,y);
-        setCooldown(Respawn*FRAME_RATE*2);
+        setCooldown(FRAME_RATE*Respwan);
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[]{ new Image("file:src/main/resources/img/triggers/traps/trap.png")};
+        return new Image[]{
+                new Image("file:src/main/resources/img/triggers/powerups/clear.png")
+        };
     }
 
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).setInverseKeys(true);
+            ((Player) entity).activateBomb();
             deactivate();
         }
     }

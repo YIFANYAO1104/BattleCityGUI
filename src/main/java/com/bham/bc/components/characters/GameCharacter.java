@@ -41,9 +41,9 @@ abstract public class GameCharacter extends MovingEntity {
 
     /**
      * Trigger(s) activation time
-     * <p> if it's 0 meaning trigger is not active or character is not in corresponding trigger state <p>
+     * <p> 0 means trigger is not active or character is not in corresponding trigger state <p>
      */
-    protected int immuneTicks, freezeTicks, tripleTicks = 0;
+    protected int isImmune, isFreeze, isTriple, isInverse = 0;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -141,27 +141,24 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     /**
-     * Get immune activation time or {@link #immuneTicks}
-     * @return immune activation time
+     * Get immune activation time
+     * @return {@link #isImmune}
      */
-    public int getImmuneTicks() {
-        return immuneTicks;
+    public int isImmune() {
+        return isImmune;
     }
+    
+    /**
+    * Increase maximum speed
+    * @param x maximum speed to be set
+    */
     public void speedUp(double x){
         this.maxSpeed=x;
     }
 
+
     // TEMP: DOCUMENT ------------------------------------------------
 
-
-    public void destroyed(){
-        this.hp-=200;
-    }
-
-    public void teleport(double x,double y){
-        this.x = x;
-        this.y = y;
-    }
     // -----------------------------------------------------------
 
     /**
@@ -211,6 +208,10 @@ abstract public class GameCharacter extends MovingEntity {
      */
     protected abstract void destroy();
 
+    /**
+     * Increase character health and maximum health
+     * @param max new character maximum healt
+     */
     public void armorUP(double max){
         this.fullHp =max;
         this.hp = max;
