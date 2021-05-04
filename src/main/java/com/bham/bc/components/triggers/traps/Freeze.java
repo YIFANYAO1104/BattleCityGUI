@@ -17,7 +17,7 @@ public class Freeze extends RespawnTrigger {
     public Freeze(int x, int y, int activationTime, int respawnCooldown) {
 
         super(x, y);
-        this.activationTime = activationTime;
+        this.activationTime = activationTime * FRAME_RATE;
 
         //create this trigger's region of fluence
         setCooldown(respawnCooldown * FRAME_RATE);
@@ -30,7 +30,7 @@ public class Freeze extends RespawnTrigger {
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).activateFreeze(activationTime * FRAME_RATE);
+            ((Player) entity).activateFreeze(activationTime);
             deactivate();
         }
     }

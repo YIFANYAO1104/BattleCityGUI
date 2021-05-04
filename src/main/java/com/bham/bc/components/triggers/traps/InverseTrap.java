@@ -13,7 +13,7 @@ public class InverseTrap extends RespawnTrigger{
 
     public InverseTrap(int x, int y, int activationTime, int respawnCooldown){
         super(x,y);
-        this.activationTime = activationTime;
+        this.activationTime = activationTime * FRAME_RATE;
         setCooldown(respawnCooldown*FRAME_RATE);
     }
 

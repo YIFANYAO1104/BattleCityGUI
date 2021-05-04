@@ -206,10 +206,10 @@ public class SurvivalController extends Controller {
                 addTrigger(new TripleBullet((int) spawnPoint.getX(), (int) spawnPoint.getY(), 20, 0));
                 break;
             case FREEZE:
-                addTrigger(new Freeze((int) spawnPoint.getX(), (int) spawnPoint.getY(), 10, 0));
+                addTrigger(new Freeze((int) spawnPoint.getX(), (int) spawnPoint.getY(), 5, 0));
                 break;
             case INVERSE_TRAP:
-                addTrigger(new InverseTrap((int) spawnPoint.getX(), (int) spawnPoint.getY(), 20, 0));
+                addTrigger(new InverseTrap((int) spawnPoint.getX(), (int) spawnPoint.getY(), 10, 0));
         }
 
         return true;

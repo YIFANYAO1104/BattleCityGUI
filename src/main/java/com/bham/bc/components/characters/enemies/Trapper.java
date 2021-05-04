@@ -1,12 +1,17 @@
 package com.bham.bc.components.characters.enemies;
 
+import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.ai.behavior.*;
+import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.Arrays;
 
+import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
@@ -14,30 +19,24 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  *
  * <p>This type of enemy has 3 main states determined by time and location</p>
  * <ul>
- *     <li><b>Search and Lay Trap</b> - in this state the enemy navigates around the map and
- *     lays a trap for the player </li>
+ *     <li><b>Search Home</b> - navigates to the home base and lays traps for allies</li>
  *
- *     <li><b>Retreat</b> - in this state the enemy runs away from Allies
- *     if they get close enough </li>
- *
- *     <li><b>Regenerate</b> - in this the enemy will stop and regenerate it's
- *     health if it below 20% health and is far enough away from the enemy</li>
+ *     <li><b>Attack Home</b> - takes over the home base</li>
  * </ul>
  */
 public class Trapper extends Enemy {
     // Constant
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/trapper.png";
-    public static final int SIZE = 30;
+    public static final int SIZE = 28;
 
     // Configurable
     public static final double HP = 50;
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
-    private IntCondition badHealthCondition;
-    private IntCondition closeToAlly;
-    private AndCondition regenerateCondition;
-    private AndCondition searchAndTrapCondition;
+    private IntCondition nearToHomeCondition;
+
+    private int timeTillTrap;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -48,62 +47,77 @@ public class Trapper extends Enemy {
     public Trapper(double x, double y) {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
+        timeTillTrap = 100;
         this.stateMachine = createFSM();
+        steering.seekOn();
     }
 
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
-        State searchAndTrapState = new State(new Action[]{ Action.SEARCH_HOME }, null);
-        State retreatState = new State(new Action[]{ Action.RETREAT }, null);
-        State regenerateState = new State(new Action[]{ Action.REGENERATE }, null);
+        State searchHomeState = new State(new Action[]{ Action.SEARCH_HOME, Action.LAY_TRAP }, null);
+        State attackHomeState = new State(new Action[]{ Action.ATTACK_HOME }, null);
+
+        // Set up entry/exit actions
+        searchHomeState.setEntryActions(new Action[]{ Action.SET_SEARCH });
+        searchHomeState.setExitActions(new Action[]{ Action.RESET_SEARCH });
 
         // Define all conditions required to change any state
-        closeToAlly = new IntCondition(0, 50);
-        badHealthCondition = new IntCondition(0, 20);
-        regenerateCondition = new AndCondition(new NotCondition(closeToAlly), badHealthCondition);
-        searchAndTrapCondition = new AndCondition(new NotCondition(closeToAlly), new NotCondition(badHealthCondition));
+        nearToHomeCondition = new IntCondition(0, (int) (services.getHomeArea().getRadius() * .8));
 
         // Define all state transitions that could happen
-        Transition searchAndTrapPossibility = new Transition(searchAndTrapState, searchAndTrapCondition);
-        Transition retreatPossibility = new Transition(retreatState, closeToAlly);
-        Transition regeneratePossibility = new Transition(regenerateState, regenerateCondition);
+        Transition searchHomePossibility = new Transition(searchHomeState, new NotCondition(nearToHomeCondition));
+        Transition attackHomePossibility = new Transition(attackHomeState, nearToHomeCondition);
 
         // Define how the states can transit from one another
-        searchAndTrapState.setTransitions(new Transition[]{ retreatPossibility, regeneratePossibility });
-        retreatState.setTransitions(new Transition[]{ searchAndTrapPossibility, regeneratePossibility });
-        regenerateState.setTransitions(new Transition[]{ retreatPossibility, searchAndTrapPossibility});
+        searchHomeState.setTransitions(new Transition[]{ attackHomePossibility });
+        attackHomeState.setTransitions(new Transition[]{ searchHomePossibility });
 
-        return new StateMachine(searchAndTrapState);
+        return new StateMachine(searchHomeState);
     }
 
     @Override
     public void update() {
-        // TODO: double distanceToAlly = find distance to nearest ally
-        // TODO: closeToAlly.setTestValue((int) distanceToAlly);
-        badHealthCondition.setTestValue((int) this.hp);
+        double distanceToHome = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
+        nearToHomeCondition.setTestValue((int) distanceToHome);
 
         Action[] actions = stateMachine.update();
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case SEARCH_HOME:
-                    //TODO: searchAndTrap();
+                    search(ItemType.HOME);
                     break;
-                case RETREAT:
-                    //TODO: retreat();
+                case LAY_TRAP:
+                    if(--timeTillTrap <= 0) {
+                        layRandomTrap(50);
+                        timeTillTrap = 100;
+                    }
                     break;
-                case REGENERATE:
-                    // TODO: regenerate();
+                case ATTACK_HOME:
+                    takeOver();
+                    break;
+                case SET_SEARCH:
+                    steering.setDecelerate(false);
+                    steering.seekOn();
+                    break;
+                case RESET_SEARCH:
+                    steering.seekOff();
+                    steering.setDecelerate(true);
+                    pathEdges.clear();
                     break;
             }
         });
-
+        move();
     }
 
     @Override
     public void destroy() {
         entityManager.removeEntity(this);
         exists = false;
+
+        Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+        services.addTrigger(dissolve);
     }
 
     @Override
