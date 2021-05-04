@@ -46,7 +46,11 @@ public class Trapper extends Enemy {
      */
     public Trapper(double x, double y) {
         super(x, y, SPEED, HP);
+        try{
         entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         timeTillTrap = 100;
         this.stateMachine = createFSM();

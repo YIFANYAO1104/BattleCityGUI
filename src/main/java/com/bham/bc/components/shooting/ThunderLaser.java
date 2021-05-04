@@ -21,6 +21,7 @@ public class ThunderLaser extends Bullet{
 
     public ThunderLaser(double x, double y, Point2D heading, Side side) {
         super(x, y, 10, heading, BulletType.DefaultLaser, side, 10);
+        try{
         this.entityImages = new Image[]{
                 (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/tl0.png"))),
                 (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/tl0.png"))),
@@ -60,7 +61,9 @@ public class ThunderLaser extends Bullet{
                 (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/tl12.png"))),
 
 
-        };
+        };}catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
 
     }
 

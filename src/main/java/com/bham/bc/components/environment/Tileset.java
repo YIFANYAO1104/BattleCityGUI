@@ -32,9 +32,17 @@ public enum Tileset {
      * @param tileHeight height of one tile
      */
     Tileset(String path, int tileWidth, int tileHeight) {
+
         OFFSET_Y = tileHeight-16;
-        Image tileset = new Image(getClass().getClassLoader().getResourceAsStream(path));
+        Image tileset = null;
+        try{
+        tileset = new Image(getClass().getClassLoader().getResourceAsStream(path));
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         TILES = toSubImages(tileset, tileWidth, tileHeight);
+
+
     }
 
     /**

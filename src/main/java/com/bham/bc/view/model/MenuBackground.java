@@ -34,11 +34,17 @@ public class MenuBackground extends AnchorPane {
      * TODO: surround with try-catch
      */
     private void initBackgroundAnimation() {
+        try {
+
         ImageView bgImage = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(BG_PATH)));
         bgImage.setFitWidth(getWidth());
         bgImage.setFitHeight(getHeight());
 
         getChildren().add(bgImage);
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
+
     }
 
     /**

@@ -48,8 +48,12 @@ public class Kamikaze extends Enemy {
      */
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, HP);
+        try{
         entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();
         steering.seekOn();

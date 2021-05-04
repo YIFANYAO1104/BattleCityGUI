@@ -26,6 +26,7 @@ public class LaserGun extends Bullet {
 
     public LaserGun(double x, double y, Point2D heading, Side side) {
         super(x, y, 10, heading, BulletType.DefaultLaser, side, 10);
+        try{
         this.entityImages = new Image[]{
                 (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
                 (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
@@ -63,6 +64,9 @@ public class LaserGun extends Bullet {
                 (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
                 (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
         };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
 
     }
 

@@ -7,6 +7,7 @@ import javafx.scene.image.Image;
  */
 public enum LaserType {
 
+
     Default(2000,10,200,
                 new Image[]{
                     (new Image(LaserType.class.getClassLoader().getResourceAsStream("img/shooting/l0.png"))),

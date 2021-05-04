@@ -20,8 +20,11 @@ public class EnemyTestDemo extends GameCharacter {
      */
     public EnemyTestDemo(double x, double y) {
         super(x, y, 10, 100, Side.ENEMY);
+        try{
         entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

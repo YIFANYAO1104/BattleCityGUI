@@ -77,7 +77,11 @@ public class Player extends GameCharacter {
 	 */
 	public Player(double x, double y) {
 		super(x, y, SPEED, HP, Side.ALLY);
+		try{
 		entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+		}catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
 
@@ -161,8 +165,11 @@ public class Player extends GameCharacter {
 	}
 	
 	public void toState1(){
-		this.entityImages =  new Image[] { new Image(IMAGE_PATH2, SIZE, 0, true, false) };
-
+    	try{
+		this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH2), SIZE, 0, true, false) };
+		}catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
 	}
 	public List<Shape> getSmoothingBoxes(){
 		return navigationService.getSmoothingBoxes();

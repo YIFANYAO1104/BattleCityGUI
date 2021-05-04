@@ -41,8 +41,12 @@ public class RingExplosion extends Trigger {
 
         for(int i = 1; i <= 19; i++) {
             String url = baseUrl + i + ".png";
+            try{
             entityImages[i-1] = new Image(getClass().getClassLoader().getResourceAsStream(url), SIZE, SIZE, false, false);
-        }
+            }catch (IllegalArgumentException | NullPointerException e){
+                e.printStackTrace();
+            }
+            }
         return entityImages;
     }
 

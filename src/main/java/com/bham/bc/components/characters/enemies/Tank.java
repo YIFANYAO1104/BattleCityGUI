@@ -51,7 +51,11 @@ public class Tank extends Enemy {
      */
     public Tank(double x, double y) {
         super(x, y, SPEED, HP);
+        try{
         entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         stateMachine = createFSM();
         GUN.setRate(1000);
         GUN.setDamageFactor(3);

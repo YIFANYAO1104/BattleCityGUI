@@ -49,8 +49,12 @@ public enum BulletType {
         this.minRate = minRate;
         this.width = width;
         this.height = height;
-        image = new Image(getClass().getClassLoader().getResourceAsStream(imagePath), width, height, false, false);
-    }
+        try{
+            image = new Image(getClass().getClassLoader().getResourceAsStream(imagePath), width, height, false, false);
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
+        }
     BulletType(long minRate, int width, int height, Image[] images) {
         this.minRate = minRate;
         this.width = width;
