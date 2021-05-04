@@ -22,12 +22,22 @@ import java.util.stream.Collectors;
  * <p><b>NB</b> Each layer must be of the same length and of similar metadata</p>
  */
 class ParallelAudioPlayer implements AudioPlayer {
+    /** List of media players that are played in parallel */
     private final List<MediaPlayer> PLAYERS;
+
+    /** List of analysers each media player possesses */
     private final List<AudioAnalyser> ANALYSERS;
+
+    /** Gate which prevents any player to be started/paused/stopped before each of them are synchronized */
     private final CyclicBarrier GATE;
+
+    /** On end property indicating what method will be run after all tracks finish playing */
     private final ObjectProperty<Runnable> ON_END;
 
+    /** Number of players to wait before some action could happen (e.g., before <i>ON_END</i> could be fired) */
     private int countdown;
+
+    /** Indicates whether this audio player is playing */
     private boolean isPlaying;
 
     /**

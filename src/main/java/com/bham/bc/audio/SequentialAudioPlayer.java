@@ -17,10 +17,16 @@ import java.util.stream.Collectors;
  * does not start paying again.</p>
  */
 class SequentialAudioPlayer implements AudioPlayer {
+    /** List of media players that are played in sequence */
     private final ArrayList<MediaPlayer> PLAYERS;
+
+    /** On end property indicating what method will be run after all tracks finish playing */
     private final ObjectProperty<Runnable> ON_END;
 
+    /** The current media player that is being played as per sequence order */
     private MediaPlayer currentTrack;
+
+    /** Indicates whether this audio player is playing */
     private boolean isPlaying;
 
     /**
