@@ -33,8 +33,8 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  */
 public class Player extends GameCharacter {
 
-	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
-	public static final String IMAGE_PATH2 ="file:src/main/resources/img/characters/state1.png";
+	public static final String IMAGE_PATH = "img/characters/player.png";
+	public static final String IMAGE_PATH2 ="img/characters/state1.png";
 	public static final int SIZE = 25;
 	public static double HP = 100;
 	public static final double SPEED = 5;
@@ -77,7 +77,7 @@ public class Player extends GameCharacter {
 	 */
 	public Player(double x, double y) {
 		super(x, y, SPEED, HP, Side.ALLY);
-		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+		entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
 

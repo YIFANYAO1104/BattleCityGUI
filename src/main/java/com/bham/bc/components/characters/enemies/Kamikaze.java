@@ -30,7 +30,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * </ul>
  */
 public class Kamikaze extends Enemy {
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/kamikaze.png";
+    public static final String IMAGE_PATH = "img/characters/kamikaze.png";
     public static final int SIZE = 30;
     public static final int HP = 50;
     public static final double SPEED = 4;
@@ -48,6 +48,7 @@ public class Kamikaze extends Enemy {
      */
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, HP);
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();

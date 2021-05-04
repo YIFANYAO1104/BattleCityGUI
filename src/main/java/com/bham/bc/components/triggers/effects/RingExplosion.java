@@ -36,12 +36,12 @@ public class RingExplosion extends Trigger {
      * Initializes all the images for the explosion
      */
     protected Image[] getDefaultImage() {
-        String baseUrl = "file:src/main/resources/img/triggers/effects/blueRingExplosion";
+        String baseUrl = "img/triggers/effects/blueRingExplosion";
         entityImages = new Image[19];
 
         for(int i = 1; i <= 19; i++) {
             String url = baseUrl + i + ".png";
-            entityImages[i-1] = new Image(url, SIZE, SIZE, false, false);
+            entityImages[i-1] = new Image(getClass().getClassLoader().getResourceAsStream(url), SIZE, SIZE, false, false);
         }
         return entityImages;
     }

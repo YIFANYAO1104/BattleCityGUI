@@ -10,7 +10,7 @@ import javafx.scene.shape.Shape;
 import java.util.List;
 
 public class EnemyTestDemo extends GameCharacter {
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/tank.png";
+    public static final String IMAGE_PATH = "img/characters/tank.png";
     public static final int SIZE = 30;
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -20,7 +20,7 @@ public class EnemyTestDemo extends GameCharacter {
      */
     public EnemyTestDemo(double x, double y) {
         super(x, y, 10, 100, Side.ENEMY);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
 
     }
 

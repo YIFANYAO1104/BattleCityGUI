@@ -33,7 +33,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  */
 public class Shooter extends Enemy {
 
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/shooter.png";
+    public static final String IMAGE_PATH = "img/characters/shooter.png";
     public static final int SIZE = 30;
     public static final double HP = 50;
     public static final double SPEED = 3;
@@ -50,7 +50,7 @@ public class Shooter extends Enemy {
      */
     public Shooter(double x, double y) {
         super(x, y, SPEED, HP);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
         stateMachine = createFSM();
         steering.seekOn();
 
