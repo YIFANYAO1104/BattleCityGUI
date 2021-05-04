@@ -30,7 +30,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 public class Splitter extends Enemy {
     // Constant parameters
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/splitter.png";
-    public static final int SIZE = 30;
+    public static final int SIZE = 28;
 
     // Configurable
     public static final double HP = 150;
@@ -51,6 +51,7 @@ public class Splitter extends Enemy {
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();
+        steering.seekOn();
     }
 
     @Override
@@ -94,12 +95,12 @@ public class Splitter extends Enemy {
                     takeOver();
                     break;
                 case SET_SEARCH:
-                    steering.setDecelerateOn(false);
+                    steering.setDecelerate(false);
                     steering.seekOn();
                     break;
                 case RESET_SEARCH:
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
+                    steering.setDecelerate(true);
                     pathEdges.clear();
                     break;
             }
@@ -166,6 +167,7 @@ public class Splitter extends Enemy {
             navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
             entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
             stateMachine = createFSM();
+            steering.seekOn();
         }
 
         @Override
@@ -206,12 +208,12 @@ public class Splitter extends Enemy {
                         destroy();
                         break;
                     case SET_SEARCH:
-                        steering.setDecelerateOn(false);
+                        steering.setDecelerate(false);
                         steering.seekOn();
                         break;
                     case RESET_SEARCH:
                         steering.seekOff();
-                        steering.setDecelerateOn(true);
+                        steering.setDecelerate(true);
                         pathEdges.clear();
                         break;
                 }

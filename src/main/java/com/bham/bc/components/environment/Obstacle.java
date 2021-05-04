@@ -36,7 +36,7 @@ public class Obstacle extends BaseGameEntity {
      */
     public Obstacle(int x, int y, ArrayList<Attribute> attributes, Tileset tileset, int... tileIDs) {
         super(getNextValidID(), x, y);
-        hp = 50;
+        hp = 30;
         currentFrame = 0;
         ATTRIBUTES = EnumSet.noneOf(Attribute.class);
         if(attributes != null) ATTRIBUTES.addAll(attributes);

@@ -77,6 +77,12 @@ public class SurvivalController extends Controller {
         mapDivision.addEntities(new ArrayList<>(characters));
 
         loadGraph();
+
+        //spawnEnemyRandomly(EnemyType.KAMIKAZE);
+        // spawnEnemyRandomly(EnemyType.TEASER);
+        // spawnEnemyRandomly(EnemyType.SHOOTER);spawnEnemyRandomly(EnemyType.SHOOTER);
+        //spawnEnemyRandomly(EnemyType.TANK);
+
     }
 
     // CALCULATIONS -----------------------------------------------
@@ -112,6 +118,7 @@ public class SurvivalController extends Controller {
         for (GameCharacter character : characters) {
             if (character.getSide() == Side.ALLY && character.getCenterPosition().distance(position)<min){
                 gc = character;
+                min = character.getCenterPosition().distance(position);
             }
         }
         if (gc == null){

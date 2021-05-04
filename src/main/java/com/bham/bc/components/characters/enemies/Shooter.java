@@ -52,6 +52,7 @@ public class Shooter extends Enemy {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
+        steering.seekOn();
 
         GUN.setRate(1200);
         GUN.setDamageFactor(3);
@@ -89,7 +90,6 @@ public class Shooter extends Enemy {
 
     @Override
     public void update() {
-    	
         noObstCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
@@ -127,12 +127,12 @@ public class Shooter extends Enemy {
                     GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
-                    steering.setDecelerateOn(false);
                     steering.seekOn();
+                    steering.setDecelerate(false);
                     break;
                 case RESET_SEARCH:
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
+                    steering.setDecelerate(true);
                     pathEdges.clear();
                     break;
             }

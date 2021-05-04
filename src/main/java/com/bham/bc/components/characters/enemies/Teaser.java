@@ -61,6 +61,7 @@ public class Teaser extends Enemy {
 
         GUN.setRate(1200);
         GUN.setDamageFactor(3);
+        steering.seekOn();
     }
 
     @Override
@@ -118,52 +119,41 @@ public class Teaser extends Enemy {
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case SEARCH_ALLY:
-//                    System.out.println("SEARCH_ALLY");
                     search(ItemType.ALLY);
+                    steering.seekOn();
                     break;
                 case SEARCH_HOME:
-//                    System.out.println("SEARCH_HOME");
                     search(ItemType.HOME);
+                    steering.seekOn();
                     break;
                 case ATTACK_ALLY:
-//                    System.out.println("ATTACK_ALLY");
                     face(ItemType.ALLY);
-                    //shoot(.8);
                     GUN.shoot();
                     break;
                 case ATTACK_HOME:
-//                    System.out.println("ATTACK_HOME");
                     takeOver();
                     break;
                 case ATTACK_OBST:
-//                    System.out.println("ATTACK_OBST");
                     setMaxSpeed(shootObstacle() ? SPEED * .5 : SPEED);
                     break;
                 case SET_SPEED:
-//                    System.out.println("SET_SPEED");
                     setMaxSpeed(SPEED * 3);
                     break;
                 case RESET_SPEED:
-//                    System.out.println("RESET_SPEED");
                     setMaxSpeed(SPEED);
                     break;
                 case SET_RATE:
-//                    System.out.println("SET_RATE");
                     GUN.setRate(1000);
-                    GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
-//                    System.out.println("RESET_RATE");
                     GUN.setRate(2000);
-                    GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
-//                    System.out.println("SET_SEARCH");
-                    steering.setDecelerateOn(false);
+                    steering.seekOn();
+                    steering.setDecelerate(false);
                 case RESET_SEARCH:
-//                    System.out.println("RESET_SEARCH");
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
+                    steering.setDecelerate(true);
                     pathEdges.clear();
                     break;
             }

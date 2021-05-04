@@ -6,6 +6,7 @@ import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
@@ -48,15 +49,16 @@ public class Kamikaze extends Enemy {
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-        stateMachine = createFSM();
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
+        stateMachine = createFSM();
+        steering.seekOn();
     }
 
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
         State searchState = new State(new Action[]{ Action.SEARCH_ALLY }, null);
-        State chargeState = new State(new Action[]{ Action.SEARCH_ALLY }, null);
+        State chargeState = new State(new Action[]{ Action.CHARGE_ALLY }, null);
         State attackState = new State(new Action[]{ Action.ATTACK_ALLY }, null);
 
         // Set up required entry/exit actions
@@ -68,7 +70,7 @@ public class Kamikaze extends Enemy {
         // Define all conditions required to change any state
         noObstacleCondition = new FreePathCondition(getHitBoxRadius());
         chargeAllyCondition = new IntCondition(0, 150);
-        attackAllyCondition = new IntCondition(0, 60);
+        attackAllyCondition = new IntCondition(0, 40);
 
         // Define all state transitions that could happen
         Transition searchPossibility = new Transition(searchState, new NotCondition(new AndCondition(chargeAllyCondition, noObstacleCondition)));
@@ -85,7 +87,6 @@ public class Kamikaze extends Enemy {
 
     @Override
     public void update() {
-    	
         double distanceToAlly = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         attackAllyCondition.setTestValue((int) distanceToAlly);
@@ -97,9 +98,11 @@ public class Kamikaze extends Enemy {
             switch(action) {
                 case SEARCH_ALLY:
                     search(ItemType.ALLY);
+                    steering.seekOn();
                     break;
                 case CHARGE_ALLY:
                     face(ItemType.ALLY);
+                    velocity = heading.multiply(maxSpeed);
                     break;
                 case ATTACK_ALLY:
                     destroy();
@@ -111,12 +114,10 @@ public class Kamikaze extends Enemy {
                     setMaxSpeed(SPEED);
                     break;
                 case SET_SEARCH:
-                    steering.setDecelerateOn(false);
                     steering.seekOn();
                     break;
                 case RESET_SEARCH:
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
                     pathEdges.clear();
                     break;
             }

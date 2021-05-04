@@ -55,6 +55,7 @@ public class Tank extends Enemy {
         stateMachine = createFSM();
         GUN.setRate(600);
         GUN.setDamageFactor(3);
+        steering.seekOn();
     }
 
     @Override
@@ -125,12 +126,12 @@ public class Tank extends Enemy {
                     GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
-                    steering.setDecelerateOn(false);
+                    steering.setDecelerate(false);
                     steering.seekOn();
                     break;
                 case RESET_SEARCH:
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
+                    steering.setDecelerate(true);
                     pathEdges.clear();
                     break;
             }

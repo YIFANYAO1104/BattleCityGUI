@@ -6,7 +6,6 @@ import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
 import com.bham.bc.components.triggers.Trigger;
-import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
@@ -27,7 +26,6 @@ import java.util.Optional;
 import java.util.List;
 
 import static com.bham.bc.components.Controller.services;
-import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -84,7 +82,7 @@ public class Player extends GameCharacter {
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
 
 		navigationService = new PathPlanner(this, services.getGraph());
-		steering.setKeysOn(true);
+		steering.setKeys(true);
 	}
 
 	@Override
@@ -301,11 +299,11 @@ public class Player extends GameCharacter {
 
 	@Override
 	protected void destroy() {
-		entityManager.removeEntity(this);
-		exists = false;
-
-		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-		services.addTrigger(dissolve);
+//		entityManager.removeEntity(this);
+//		exists = false;
+//
+//		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+//		services.addTrigger(dissolve);
 	}
 
 	@Override

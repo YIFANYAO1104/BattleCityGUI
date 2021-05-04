@@ -192,7 +192,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         // gameMap.renderGraph(gc, characters);
         // gameMap.renderTerritories(gc);
-         mapDivision.render(gc);
+        // mapDivision.render(gc);
     }
 
     @Override
@@ -238,7 +238,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
     @Override
     public boolean gameOver() {
-        return getHomeHpFraction() <= 0 || getPlayerHpFraction() <= 0;
+        return getHomeHpFraction() <= 0 || getPlayer() == null;
     }
     // ------------------------------------------------------------
 
