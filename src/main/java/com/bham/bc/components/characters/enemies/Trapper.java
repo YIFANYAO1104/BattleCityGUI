@@ -26,7 +26,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  */
 public class Trapper extends Enemy {
     // Constant
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/trapper.png";
+    public static final String IMAGE_PATH = "img/characters/trapper.png";
     public static final int SIZE = 30;
 
     // Configurable
@@ -47,7 +47,7 @@ public class Trapper extends Enemy {
      */
     public Trapper(double x, double y) {
         super(x, y, SPEED, HP);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
         this.stateMachine = createFSM();
     }
 

@@ -19,7 +19,7 @@ public class BombTrigger extends RespawnTrigger {
 
     protected Image[] getDefaultImage() {
         return new Image[]{
-                new Image("file:src/main/resources/img/triggers/powerups/clear.png")
+                new Image(getClass().getClassLoader().getResourceAsStream("img/triggers/powerups/clear.png"))
         };
     }
 

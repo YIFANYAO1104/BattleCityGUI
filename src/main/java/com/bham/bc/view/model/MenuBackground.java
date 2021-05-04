@@ -17,7 +17,7 @@ public class MenuBackground extends AnchorPane {
     /**
      * path of background
      */
-    private static final String BG_PATH = "file:src/main/resources/img/menu/FB6.gif";
+    private static final String BG_PATH = "img/menu/FB6.gif";
 
     /**
      * Constructs a Stack Pane node with an animated background and particles and initialize.
@@ -34,7 +34,7 @@ public class MenuBackground extends AnchorPane {
      * TODO: surround with try-catch
      */
     private void initBackgroundAnimation() {
-        ImageView bgImage = new ImageView(new Image(BG_PATH));
+        ImageView bgImage = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(BG_PATH)));
         bgImage.setFitWidth(getWidth());
         bgImage.setFitHeight(getHeight());
 

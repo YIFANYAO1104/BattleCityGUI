@@ -29,7 +29,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  */
 public class Splitter extends Enemy {
     // Constant parameters
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/splitter.png";
+    public static final String IMAGE_PATH = "img/characters/splitter.png";
     public static final int SIZE = 30;
 
     // Configurable
@@ -48,7 +48,7 @@ public class Splitter extends Enemy {
      */
     public Splitter(double x, double y) {
         super(x, y, SPEED, HP);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();
     }
@@ -144,7 +144,7 @@ public class Splitter extends Enemy {
      */
     public static class MiniSplitter extends Enemy {
         // Constant parameters
-        public static final String IMAGE_PATH = "file:src/main/resources/img/characters/splitter.png";
+        public static final String IMAGE_PATH = "img/characters/splitter.png";
         public static final int SIZE = 15;
 
         // Configurable
@@ -164,7 +164,7 @@ public class Splitter extends Enemy {
         protected MiniSplitter(double x, double y) {
             super(x, y, SPEED, HP);
             navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
-            entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+            entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
             stateMachine = createFSM();
         }
 

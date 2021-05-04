@@ -28,8 +28,9 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  *     and dealing area damage to anything but allies and obstacles</li>
  * </ul>
  */
+
 public class Kamikaze extends Enemy {
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/kamikaze.png";
+    public static final String IMAGE_PATH = "img/characters/kamikaze.png";
     public static final int SIZE = 30;
     public static final int HP = 100;
     public static final double SPEED = 3;
@@ -47,7 +48,7 @@ public class Kamikaze extends Enemy {
      */
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, HP);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
         stateMachine = createFSM();
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
     }

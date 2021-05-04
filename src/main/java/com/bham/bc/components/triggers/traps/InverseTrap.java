@@ -18,7 +18,7 @@ public class InverseTrap extends RespawnTrigger{
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[]{ new Image("file:src/main/resources/img/triggers/traps/trap.png")};
+        return new Image[]{ new Image(getClass().getClassLoader().getResourceAsStream("img/triggers/traps/trap.png"))};
     }
 
     @Override

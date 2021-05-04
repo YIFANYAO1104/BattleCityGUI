@@ -5,27 +5,28 @@ import javafx.scene.image.Image;
 /**
  * Enum class defining unmodifiable properties of any bullet type. These are used by bullet classes and the {@link Gun} class.
  */
+
 public enum BulletType {
-    DEFAULT(200, 6, 12, "file:src/main/resources/img/shooting/default-bullet.png"),
-    EXPLOSIVE(2000, 6, 12, "file:src/main/resources/img/shooting/default-bullet.png"),
-    ICE(2000, 6, 12, "file:src/main/resources/img/shooting/2.png"),
+    DEFAULT(200, 6, 12, "img/shooting/default-bullet.png"),
+    EXPLOSIVE(2000, 6, 12, "img/shooting/default-bullet.png"),
+    ICE(2000, 6, 12, "img/shooting/2.png"),
     DefaultLaser(200,20,10,
         new Image[]{
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l4.png")),
-                (new Image("file:src/main/resources/img/shooting/l5.png")),
-                (new Image("file:src/main/resources/img/shooting/l6.png")),
-                (new Image("file:src/main/resources/img/shooting/l7.png")),
-                (new Image("file:src/main/resources/img/shooting/l6.png")),
-                (new Image("file:src/main/resources/img/shooting/l5.png")),
-                (new Image("file:src/main/resources/img/shooting/l4.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l0.png")),}
+                (new Image("img/shooting/l0.png")),
+                (new Image("img/shooting/l1.png")),
+                (new Image("img/shooting/l2.png")),
+                (new Image("img/shooting/l3.png")),
+                (new Image("img/shooting/l4.png")),
+                (new Image("img/shooting/l5.png")),
+                (new Image("img/shooting/l6.png")),
+                (new Image("img/shooting/l7.png")),
+                (new Image("img/shooting/l6.png")),
+                (new Image("img/shooting/l5.png")),
+                (new Image("img/shooting/l4.png")),
+                (new Image("img/shooting/l3.png")),
+                (new Image("img/shooting/l2.png")),
+                (new Image("img/shooting/l2.png")),
+                (new Image("img/shooting/l0.png")),}
             );
 
     private long minRate;
@@ -48,7 +49,7 @@ public enum BulletType {
         this.minRate = minRate;
         this.width = width;
         this.height = height;
-        image = new Image(imagePath, width, height, false, false);
+        image = new Image(getClass().getClassLoader().getResourceAsStream(imagePath), width, height, false, false);
     }
     BulletType(long minRate, int width, int height, Image[] images) {
         this.minRate = minRate;
