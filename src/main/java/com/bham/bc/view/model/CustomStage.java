@@ -143,7 +143,7 @@ public class CustomStage extends Stage{
         btnMin = new Label();
         btnMin.setPrefWidth(33);
         btnMin.setPrefHeight(26);
-        BackgroundImage image2=new BackgroundImage(new Image("file:src/main/resources/img/menu/minimize.png",24,10,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        BackgroundImage image2=new BackgroundImage(new Image(getClass().getClassLoader().getResourceAsStream("img/menu/minimize.png"),24,10,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         btnMin.setBackground(new Background(image2));
         btnClose = new Label();
         btnClose.setPrefWidth(33);
@@ -180,7 +180,7 @@ public class CustomStage extends Stage{
         changeSkin.setId("changeSkin");
         changeSkin.setMaxSize(25,22);
         changeSkin.setMinSize(25,22);
-        BackgroundImage image3=new BackgroundImage(new Image("file:src/main/resources/img/menu/skin.png",25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        BackgroundImage image3=new BackgroundImage(new Image(getClass().getClassLoader().getResourceAsStream("img/menu/skin.png"),25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         changeSkin.setBackground(new Background(image3));
         changeSkin.setEffect(glow1);
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
@@ -317,8 +317,8 @@ public class CustomStage extends Stage{
      */
 
     public void createMainTitlebar(AnchorPane root, int Width){
-           titleBar(root,Width,-310,changeMainSkin);
-           changeMainSkin.getSelectionModel().select(selected);
+        titleBar(root,Width,-310,changeMainSkin);
+        changeMainSkin.getSelectionModel().select(selected);
 
 
     }
