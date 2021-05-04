@@ -181,7 +181,7 @@ public class Splitter extends Enemy {
             searchAllyState.setExitActions(new Action[]{ Action.RESET_SEARCH });
 
             // Define all conditions required to change any state
-            nearToAllyCondition = new IntCondition(0, 50);
+            nearToAllyCondition = new IntCondition(0, 40);
 
             // Define all state transitions that could happen
             Transition attackAllyPossibility = new Transition(attackAllyState, nearToAllyCondition);

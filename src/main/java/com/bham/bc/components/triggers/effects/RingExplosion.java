@@ -14,7 +14,7 @@ import javafx.scene.shape.Circle;
  */
 public class RingExplosion extends Trigger {
 
-    public static final int SIZE = 60;
+    public static final int SIZE = 80;
     private int currentFrame;
     private double damage;
     private Side side;
@@ -22,8 +22,8 @@ public class RingExplosion extends Trigger {
     /**
      * Constructs explosion at a given location
      * @param centerPosition x and y coordinates of the trigger image
-     * @param damage amount of damage that will be dealt to specific side
-     * @param side ALLY or ENEMY side trigger belongs to
+     * @param damage         amount of damage that will be dealt to specific side
+     * @param side           ALLY or ENEMY side trigger belongs to
      */
     public RingExplosion(Point2D centerPosition, double damage, Side side) {
         super((int) (centerPosition.getX() - SIZE/2), (int) (centerPosition.getY() - SIZE/2));

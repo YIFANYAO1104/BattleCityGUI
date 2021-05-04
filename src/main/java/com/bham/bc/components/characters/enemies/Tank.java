@@ -53,7 +53,7 @@ public class Tank extends Enemy {
         super(x, y, SPEED, HP);
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
-        GUN.setRate(600);
+        GUN.setRate(1000);
         GUN.setDamageFactor(3);
         steering.seekOn();
     }
@@ -94,7 +94,6 @@ public class Tank extends Enemy {
     @Override
     public void update() {
         double distanceToHome = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
-
         highHealthCondition.setTestValue((int) hp);
         nearToHomeCondition.setTestValue((int) distanceToHome);
 
@@ -111,18 +110,16 @@ public class Tank extends Enemy {
                     noObstacleCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                     if(noObstacleCondition.test()) {
                         face(ItemType.ALLY);
-                        shoot(.7);
+                        GUN.shoot();
                     }
                     break;
                 case ATTACK_OBST:
                     setMaxSpeed(shootObstacle() ? SPEED * .5 : SPEED);
                     break;
                 case SET_RATE:
-                    GUN.setRate(600);
                     GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
-                    GUN.setRate(1000);
                     GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:

@@ -33,7 +33,7 @@ public class Kamikaze extends Enemy {
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/kamikaze.png";
     public static final int SIZE = 30;
     public static final int HP = 50;
-    public static final double SPEED = 3;
+    public static final double SPEED = 4;
 
     private final StateMachine stateMachine;
     private FreePathCondition noObstacleCondition;
@@ -69,7 +69,7 @@ public class Kamikaze extends Enemy {
 
         // Define all conditions required to change any state
         noObstacleCondition = new FreePathCondition(getHitBoxRadius());
-        chargeAllyCondition = new IntCondition(0, 150);
+        chargeAllyCondition = new IntCondition(0, 200);
         attackAllyCondition = new IntCondition(0, 40);
 
         // Define all state transitions that could happen
@@ -88,7 +88,6 @@ public class Kamikaze extends Enemy {
     @Override
     public void update() {
         double distanceToAlly = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
-
         attackAllyCondition.setTestValue((int) distanceToAlly);
         chargeAllyCondition.setTestValue((int) distanceToAlly);
         noObstacleCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
@@ -129,11 +128,11 @@ public class Kamikaze extends Enemy {
     public void destroy() {
         exists = false;
         entityManager.removeEntity(this);
-        Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-        services.addTrigger(explosion);
 
+        Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
         Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
         services.addTrigger(dissolve);
+        services.addTrigger(explosion);
     }
 
     @Override

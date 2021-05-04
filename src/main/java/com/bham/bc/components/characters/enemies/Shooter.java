@@ -18,13 +18,13 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * <p>This type of enemy has 3 main states determined by free path condition and its HP</p>
  *
  * <ul>
- *     <li><b>Search Ally</b> - searches for the closest ally if its HP is over 20% and it does not
+ *     <li><b>Search Ally</b> - searches for the closest ally if its HP is over 30% and it does not
  *     have "go back" property on. If there are obstacles in a way, it shoots them with increased
  *     fire rate</li>
  *
  *     <li><b>Attack Ally</b> - shoots at any ally if there are no obstacles in between and if its HP
- *     is over 20%. If the bullets are slow and the target is far, it kinda wastes its energy but
- *     doee not matter</li>
+ *     is over 30%. If the bullets are slow and the target is far, it kinda wastes its energy but
+ *     does not matter</li>
  *
  *     <li><b>Retreat</b> - turns on "run away" property and searches for the enemy spawn area to
  *     retreat to. While it retreats, it gradually regenerates its HP and once if it manages to reach
@@ -54,7 +54,7 @@ public class Shooter extends Enemy {
         stateMachine = createFSM();
         steering.seekOn();
 
-        GUN.setRate(1200);
+        GUN.setRate(1000);
         GUN.setDamageFactor(3);
     }
 
@@ -68,8 +68,8 @@ public class Shooter extends Enemy {
         // Set up necessary entry actions for certain states
         searchState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_RATE });
         searchState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_RATE });
-        retreatState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_RATE });
-        retreatState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_RATE });
+        retreatState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_SPEED });
+        retreatState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_SPEED });
 
         // Define all conditions required to change any state
         noObstCondition = new FreePathCondition();
@@ -97,12 +97,13 @@ public class Shooter extends Enemy {
             switch(action) {
                 case SEARCH_ALLY:
                     search(ItemType.ALLY);
-                    goBackCondition.setTestValue(hp <= HP * .2);
+                    steering.seekOn();
+                    goBackCondition.setTestValue(hp <= HP * .3);
                     break;
                 case ATTACK_ALLY:
                     face(ItemType.ALLY);
-                    shoot(0.8);
-                    goBackCondition.setTestValue(hp <= HP * .2);
+                    GUN.shoot();
+                    goBackCondition.setTestValue(hp <= HP * .3);
                     break;
                 case ATTACK_OBST:
                     setMaxSpeed(shootObstacle() ? SPEED * .3 : SPEED);
@@ -110,7 +111,6 @@ public class Shooter extends Enemy {
                 case RETREAT:
                     search(ItemType.ENEMY_AREA);
                     if(Arrays.stream(services.getEnemyAreas()).anyMatch(this::intersects)) {
-                        System.out.println("found area");
                         changeHp(HP);
                         goBackCondition.setTestValue(false);
                     }
@@ -119,12 +119,16 @@ public class Shooter extends Enemy {
                     changeHp(HP * .003);
                     goBackCondition.setTestValue(hp < HP * .8);
                 case SET_RATE:
-                    GUN.setRate(1000);
                     GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
-                    GUN.setRate(2000);
                     GUN.setDamageFactor(1);
+                    break;
+                case SET_SPEED:
+                    setMaxSpeed(SPEED * 2);
+                    break;
+                case RESET_SPEED:
+                    setMaxSpeed(SPEED);
                     break;
                 case SET_SEARCH:
                     steering.seekOn();

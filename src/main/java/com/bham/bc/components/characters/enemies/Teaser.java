@@ -35,7 +35,6 @@ public class Teaser extends Enemy {
     // Constant
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/teaser.png";
     public static final int SIZE = 30;
-    public static final EnemyType TRIBE = EnemyType.TEASER;
 
     // Configurable
     public static final double HP = 50;
@@ -59,7 +58,7 @@ public class Teaser extends Enemy {
         entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
         stateMachine = createFSM();
 
-        GUN.setRate(1200);
+        GUN.setRate(2000);
         GUN.setDamageFactor(3);
         steering.seekOn();
     }
@@ -84,7 +83,7 @@ public class Teaser extends Enemy {
 
         // Define all conditions required to change any state
         noObstacleCondition = new FreePathCondition();
-        highHealthCondition = new IntCondition((int) (HP * .2), (int) HP);
+        highHealthCondition = new IntCondition((int) (HP * .3), (int) HP);
         nearToAllyCondition = new IntCondition(0, 200);
         nearToHomeCondition = new IntCondition(0, (int) (services.getHomeArea().getRadius() * .8));
         attackAllyCondition = new AndCondition(new AndCondition(noObstacleCondition, nearToAllyCondition), highHealthCondition);
@@ -143,10 +142,10 @@ public class Teaser extends Enemy {
                     setMaxSpeed(SPEED);
                     break;
                 case SET_RATE:
-                    GUN.setRate(1000);
+                    GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
-                    GUN.setRate(2000);
+                    GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
                     steering.seekOn();
