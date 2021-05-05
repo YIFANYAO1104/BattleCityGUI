@@ -5,11 +5,14 @@ import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.HitMarker;
-import com.bham.bc.components.triggers.powerups.Weapon;
+
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.physics.CollisionHandler;
+import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -34,12 +37,13 @@ abstract public class GameCharacter extends MovingEntity {
     protected double fullHp;
     protected double hp;
     protected Side side;
+    protected TargetingSystem targetingSystem;
 
     /**
      * Trigger(s) activation time
-     * <p> if it's 0 meaning trigger is not active or character is not in corresponding trigger state <p>
+     * <p> 0 means trigger is not active or character is not in corresponding trigger state <p>
      */
-    protected int immuneTicks, freezeTicks, tripleTicks = 0;
+    protected int isImmune, isFreeze, isTriple, isInverse = 0;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -55,6 +59,7 @@ abstract public class GameCharacter extends MovingEntity {
         fullHp = hp;
         this.hp = hp;
         this.side = side;
+        targetingSystem = new TargetingSystem(this);
 
         mass = 3;
     }
@@ -84,6 +89,15 @@ abstract public class GameCharacter extends MovingEntity {
         // Draw the health bar
         gc.fillRect(getCenterPosition().getX() - barWidth*.5, getCenterPosition().getY() + MAX_SIZE*.5, barWidth, 3);
         gc.strokeRect(getCenterPosition().getX() - barWidth*.5, getCenterPosition().getY() + MAX_SIZE*.5, barWidth, 3);
+    }
+
+    public NavigationService getNavigationService(){
+        return null;
+    }
+
+
+    public TargetingSystem getTargetingSystem() {
+        return targetingSystem;
     }
 
     /**
@@ -127,28 +141,24 @@ abstract public class GameCharacter extends MovingEntity {
     }
 
     /**
-     * Get immune activation time or {@link #immuneTicks}
-     * @return immune activation time
+     * Get immune activation time
+     * @return {@link #isImmune}
      */
-    public int getImmuneTicks() {
-        return immuneTicks;
+    public int isImmune() {
+        return isImmune;
     }
+    
+    /**
+    * Increase maximum speed
+    * @param x maximum speed to be set
+    */
     public void speedUp(double x){
         this.maxSpeed=x;
     }
 
+
     // TEMP: DOCUMENT ------------------------------------------------
-    @Deprecated
-    public void switchWeapon(Weapon w) {}
 
-    public void destroyed(){
-        this.hp-=200;
-    }
-
-    public void teleport(double x,double y){
-        this.x = x;
-        this.y = y;
-    }
     // -----------------------------------------------------------
 
     /**
@@ -198,6 +208,10 @@ abstract public class GameCharacter extends MovingEntity {
      */
     protected abstract void destroy();
 
+    /**
+     * Increase character health and maximum health
+     * @param max new character maximum healt
+     */
     public void armorUP(double max){
         this.fullHp =max;
         this.hp = max;
@@ -223,6 +237,7 @@ abstract public class GameCharacter extends MovingEntity {
     public void render(GraphicsContext gc) {
         drawRotatedImage(gc, entityImages[0], getAngle());
         renderHp(gc);
+        //GeometryEnhanced.renderHitBox(gc,this.getHitBox());
     }
 
     @Override
@@ -241,5 +256,14 @@ abstract public class GameCharacter extends MovingEntity {
                 System.out.println("no match");
                 return false;
         }
+    }
+
+    public boolean isReached(Point2D target){
+//        return getCenterPosition().distance(target) < 1;
+        return intersects(new Circle(target.getX(), target.getY(), 3));
+    }
+
+    public void brake(){
+        velocity=new Point2D(0,0);
     }
 }

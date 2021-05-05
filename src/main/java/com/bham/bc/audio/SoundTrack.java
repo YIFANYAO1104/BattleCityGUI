@@ -13,6 +13,7 @@ public enum SoundTrack {
     DEEP_SPACE("audio/music/deep-space.mp3"),
     RHYTHMIC_BOUNCE("audio/music/rhythmic-bounce.mp3");
 
+    /** Path to audio file */
     private final String PATH;
 
     /**

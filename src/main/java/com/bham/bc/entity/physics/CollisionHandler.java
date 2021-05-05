@@ -23,6 +23,8 @@ public class CollisionHandler {
      *
      * @param entity1 1st entity colliding
      * @param entity2 2nd entity colliding
+     *
+     * @see <a href="https://simple.wikipedia.org/wiki/Elastic_collision">wikipedia.org/wiki/Elastic_collision</a>
      */
     public static void resolveElasticCollision(MovingEntity entity1, MovingEntity entity2) {
         Point2D deltaVelocity = entity1.getVelocity().subtract(entity2.getVelocity());
@@ -51,10 +53,15 @@ public class CollisionHandler {
     /**
      * Performs continuous collision modification
      *
-     * <p>This method appends acceleration to the 2nd entity to move it from the colliding point. It checks for the direction
-     * the center positions of both entities and pushes the second entity from the 1st entity's center (the same can happen
-     * for the 1st entity with respect to the 2nd one). This is useful when an impulse has ended but entities are pushing one
-     * another.</p>
+     * <p>This method checks for the direction from the first entity's center position to the second one and adds acceleration
+     * to either of the entities depending on the situation <b>while both are intercepting</b>:</p>
+     * <ul>
+     *     <li>If the first entity is moving towards the second entity (or at least some part of its velocity), it pushes the
+     *     second entity away from its center by appending acceleration to that entity's velocity.</li>
+     *     <li>If the first entity is moving away the second entity (or at least some part of its velocity) or is standing still,
+     *     it pushes itself from that entity's center by appending acceleration to itself's velocity.</li>
+     * </ul>
+     * <p>This is useful when an impulse has ended but entities are still colliding.</p>
      *
      * @param entity1 1st entity colliding
      * @param entity2 2nd entity colliding
@@ -62,8 +69,13 @@ public class CollisionHandler {
     public static void resolveContinuousCollision(MovingEntity entity1, MovingEntity entity2) {
         Point2D deltaDistance = entity2.getCenterPosition().subtract(entity1.getCenterPosition());
         Point2D force = deltaDistance.normalize().multiply(-3 * Steering.FRICTION);
-        Point2D acceleration = force.multiply(1/entity2.getMass());
 
-        entity2.setVelocity(entity2.getVelocity().add(acceleration));
+        if(entity1.getVelocity().magnitude() == 0 || entity1.getVelocity().dotProduct(force) < 0) {
+            Point2D acceleration = force.multiply(-1/entity1.getMass());
+            entity1.setVelocity(entity1.getVelocity().add(acceleration));
+        } else {
+            Point2D acceleration = force.multiply(1/entity2.getMass());
+            entity2.setVelocity(entity2.getVelocity().add(acceleration));
+        }
     }
 }

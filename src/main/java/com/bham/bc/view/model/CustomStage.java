@@ -114,7 +114,11 @@ public class CustomStage extends Stage{
 
         // set the original stage transparent
         stage.initStyle(StageStyle.TRANSPARENT);
-
+        try {
+            stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/characters/icon1.png")));
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         //set the title bar
         gpTitle = new HBox();
         gpTitle.setId("title");
@@ -123,7 +127,8 @@ public class CustomStage extends Stage{
         gpTitle.setMinWidth(Width);
         gpTitle.setMinHeight(35);
         gpTitle.setMaxHeight(35);
-        gpTitle.getStylesheets().add(CustomStage.class.getResource("../../../../../model/style.css").toExternalForm());
+        gpTitle.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
+
         gpTitle.setLayoutX(0);
         gpTitle.setLayoutY(0);
         gpTitle.setAlignment(Pos.CENTER_RIGHT);
@@ -141,8 +146,14 @@ public class CustomStage extends Stage{
         btnMin = new Label();
         btnMin.setPrefWidth(33);
         btnMin.setPrefHeight(26);
-        BackgroundImage image2=new BackgroundImage(new Image("file:src/main/resources/img/menu/minimize.png",24,10,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        try {
+
+        BackgroundImage image2=new BackgroundImage(new Image(getClass().getClassLoader().getResourceAsStream("img/menu/minimize.png"),24,10,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+
         btnMin.setBackground(new Background(image2));
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         btnClose = new Label();
         btnClose.setPrefWidth(33);
         btnClose.setPrefHeight(26);
@@ -178,8 +189,12 @@ public class CustomStage extends Stage{
         changeSkin.setId("changeSkin");
         changeSkin.setMaxSize(25,22);
         changeSkin.setMinSize(25,22);
-        BackgroundImage image3=new BackgroundImage(new Image("file:src/main/resources/img/menu/skin.png",25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
+        try{
+        BackgroundImage image3=new BackgroundImage(new Image(getClass().getClassLoader().getResourceAsStream("img/menu/skin.png"),25,22,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,null);
         changeSkin.setBackground(new Background(image3));
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         changeSkin.setEffect(glow1);
         changeSkin.getSelectionModel().selectedIndexProperty().addListener((ObservableValue<? extends Number> ov,Number old_val,Number new_val)->{
 
@@ -315,8 +330,8 @@ public class CustomStage extends Stage{
      */
 
     public void createMainTitlebar(AnchorPane root, int Width){
-           titleBar(root,Width,-310,changeMainSkin);
-           changeMainSkin.getSelectionModel().select(selected);
+        titleBar(root,Width,-310,changeMainSkin);
+        changeMainSkin.getSelectionModel().select(selected);
 
 
     }

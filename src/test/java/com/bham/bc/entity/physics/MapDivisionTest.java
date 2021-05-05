@@ -17,7 +17,7 @@ public class MapDivisionTest {
     @Test
     public void mapDivTest(){
         new JFXPanel();
-        MapDivision<BaseGameEntity> m1 = new MapDivision<>(128,128,4,4,10);
+        MapDivision<BaseGameEntity> m1 = new MapDivision<>(128,128,4,4);
         assertEquals (16,m1.sizeOfCells());
         assertEquals(32.0,m1.getCellWidth(),1.0);
         assertEquals(32.0,m1.getCellWidth(),1.0);
@@ -26,7 +26,7 @@ public class MapDivisionTest {
     @Test
     public void test01(){
         new JFXPanel();
-        MapDivision<BaseGameEntity> m1 = new MapDivision<>(128,128,4,4,10);
+        MapDivision<BaseGameEntity> m1 = new MapDivision<>(128,128,4,4);
 
         EnemyTestDemo en1 =  new EnemyTestDemo(12.0,12.0);
         EnemyTestDemo en2 =  new EnemyTestDemo(46,23);
@@ -36,7 +36,7 @@ public class MapDivisionTest {
         m1.addEntity(en2);
         m1.addEntity(en3);
 
-        List<BaseGameEntity> b1 = m1.calculateNeighborsArray(en1);
+        List<BaseGameEntity> b1 = m1.getRelevantEntities(en1);
         List<BaseGameEntity> ans1 = new ArrayList<>();
 
         assertEquals(ans1, b1);
@@ -47,7 +47,7 @@ public class MapDivisionTest {
     @Test
     public void test02(){
         new JFXPanel();
-        MapDivision<BaseGameEntity> m1 = new MapDivision<>(128,128,4,4,10);
+        MapDivision<BaseGameEntity> m1 = new MapDivision<>(128,128,4,4);
 
         EnemyTestDemo en1 =  new EnemyTestDemo(12.0,12.0);
         EnemyTestDemo en2 =  new EnemyTestDemo(12.0,40);
@@ -57,7 +57,7 @@ public class MapDivisionTest {
         m1.addEntity(en2);
         m1.addEntity(en3);
 
-        List<BaseGameEntity> b1 = m1.calculateNeighborsArray(en1);
+        List<BaseGameEntity> b1 = m1.getRelevantEntities(en1);
         List<BaseGameEntity> ans1 = new ArrayList<>();
         ans1.add(en2);
         HashSet<BaseGameEntity> ss1 = new HashSet<>(b1);

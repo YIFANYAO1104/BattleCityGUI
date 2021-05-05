@@ -30,11 +30,11 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  */
 public class Tank extends Enemy {
     // Constant parameters
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/tank.png";
+    public static final String IMAGE_PATH = "img/characters/tank.png";
     public static final int SIZE = 30;
 
     // Configurable
-    public static final double HP = 300;
+    public static final double HP = 150;
     public static final double SPEED = 2;
 
     // Behavior
@@ -51,10 +51,15 @@ public class Tank extends Enemy {
      */
     public Tank(double x, double y) {
         super(x, y, SPEED, HP);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        try{
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         stateMachine = createFSM();
-        GUN.setRate(600);
+        GUN.setRate(1000);
         GUN.setDamageFactor(3);
+        steering.seekOn();
     }
 
     @Override
@@ -93,7 +98,6 @@ public class Tank extends Enemy {
     @Override
     public void update() {
         double distanceToHome = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
-
         highHealthCondition.setTestValue((int) hp);
         nearToHomeCondition.setTestValue((int) distanceToHome);
 
@@ -110,27 +114,25 @@ public class Tank extends Enemy {
                     noObstacleCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
                     if(noObstacleCondition.test()) {
                         face(ItemType.ALLY);
-                        shoot(.7);
+                        GUN.shoot();
                     }
                     break;
                 case ATTACK_OBST:
                     setMaxSpeed(shootObstacle() ? SPEED * .5 : SPEED);
                     break;
                 case SET_RATE:
-                    GUN.setRate(600);
                     GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
-                    GUN.setRate(1000);
                     GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
-                    steering.setDecelerateOn(false);
+                    steering.setDecelerate(false);
                     steering.seekOn();
                     break;
                 case RESET_SEARCH:
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
+                    steering.setDecelerate(true);
                     pathEdges.clear();
                     break;
             }

@@ -6,12 +6,14 @@ import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.entity.BaseGameEntity;
+import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.entity.MovingEntity;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.geometry.Point2D;
 
+import java.awt.geom.GeneralPath;
 import java.util.List;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
@@ -95,8 +97,8 @@ abstract public class Bullet extends MovingEntity {
      */
     public void handle(BaseGameEntity entity) {
 
-        if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
-            ((GameCharacter) entity).changeHp(-damage);
+        if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide()) {
+            if(((GameCharacter) entity).isImmune() == 0) ((GameCharacter) entity).changeHp(-damage);
             audioManager.playEffect(SoundEffect.HIT_CHARACTER);
             destroy();
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {

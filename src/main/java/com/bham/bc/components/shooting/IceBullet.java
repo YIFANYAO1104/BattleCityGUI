@@ -33,23 +33,25 @@ public class IceBullet extends Bullet {
      */
     public IceBullet(double x, double y, Point2D heading, Side side) {
         super(x, y, SPEED, heading, TYPE, side, DAMAGE);
+
+        // use getClass().getClassLoader().getResourceAsStream()
 //        this.entityImages=
 //                new Image[]{
-//                        (new Image("\"file:src/main/resources/img/shooting/l0.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l1.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l2.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l3.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l4.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l5.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l6.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l7.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l6.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l5.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l4.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l3.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l2.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l2.png")),
-//                        (new Image("\"file:src/main/resources/img/shooting/l0.png")),
+//                        (new Image("\"img/shooting/l0.png")),
+//                        (new Image("\"img/shooting/l1.png")),
+//                        (new Image("\"img/shooting/l2.png")),
+//                        (new Image("\"img/shooting/l3.png")),
+//                        (new Image("\"img/shooting/l4.png")),
+//                        (new Image("\"img/shooting/l5.png")),
+//                        (new Image("\"img/shooting/l6.png")),
+//                        (new Image("\"img/shooting/l7.png")),
+//                        (new Image("\"img/shooting/l6.png")),
+//                        (new Image("\"img/shooting/l5.png")),
+//                        (new Image("\"img/shooting/l4.png")),
+//                        (new Image("\"img/shooting/l3.png")),
+//                        (new Image("\"img/shooting/l2.png")),
+//                        (new Image("\"img/shooting/l2.png")),
+//                        (new Image("\"img/shooting/l0.png")),
 //                };
     }
 
@@ -61,8 +63,8 @@ public class IceBullet extends Bullet {
     @Override
     public void handle(BaseGameEntity entity) {
 
-        if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide() && ((GameCharacter) entity).getImmuneTicks() == 0) {
-            ((GameCharacter) entity).changeHp(-DAMAGE);
+        if(entity instanceof GameCharacter && intersects(entity) && getSide() != ((GameCharacter) entity).getSide()) {
+            if (((GameCharacter) entity).isImmune() == 0)((GameCharacter) entity).changeHp(-DAMAGE);
             destroy();
         } else if(entity instanceof Obstacle && ((Obstacle) entity).getAttributes().contains(Attribute.WALL) && intersects(entity)) {
             destroy();

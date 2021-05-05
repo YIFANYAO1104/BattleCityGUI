@@ -20,69 +20,53 @@ public class LaserGun extends Bullet {
     int time;
 
 
-    public LaserGun(double x, double y, double speed, Point2D heading, BulletType laser, Side side, double damage) {
-        super(x, y, speed, heading, laser, side, damage);
 
-        this.entityImages = new Image[]{
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l4.png")),
-                (new Image("file:src/main/resources/img/shooting/l5.png")),
-                (new Image("file:src/main/resources/img/shooting/l6.png")),
-                (new Image("file:src/main/resources/img/shooting/l7.png")),
-                (new Image("file:src/main/resources/img/shooting/l6.png")),
-                (new Image("file:src/main/resources/img/shooting/l5.png")),
-                (new Image("file:src/main/resources/img/shooting/l4.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-        };
-    }
 
 
 
     public LaserGun(double x, double y, Point2D heading, Side side) {
         super(x, y, 10, heading, BulletType.DefaultLaser, side, 10);
+        try{
         this.entityImages = new Image[]{
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                //(new Image("file:src/main/resources/img/tiles/triggers/flash.png")),
-                (new Image("file:src/main/resources/img/shooting/l4.png")),
-                (new Image("file:src/main/resources/img/shooting/l5.png")),
-                (new Image("file:src/main/resources/img/shooting/l6.png")),
-                (new Image("file:src/main/resources/img/shooting/l6.png")),
-                (new Image("file:src/main/resources/img/shooting/l7.png")),
-                (new Image("file:src/main/resources/img/shooting/l7.png")),
-               // (new Image("file:src/main/resources/img/tiles/triggers/flash.png")),
-                (new Image("file:src/main/resources/img/shooting/l5.png")),
-                (new Image("file:src/main/resources/img/shooting/l4.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l3.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l2.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l1.png")),
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
-                (new Image("file:src/main/resources/img/shooting/l0.png")),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l1.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l1.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l1.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l1.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l2.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l2.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l2.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l3.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l3.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l3.png"))),
+                //(new Image(getClass().getClassLoader().getResourceAsStream("img/tiles/triggers/flash.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l4.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l5.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l6.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l6.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l7.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l7.png"))),
+               // (new Image(getClass().getClassLoader().getResourceAsStream("img/tiles/triggers/flash.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l5.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l4.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l3.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l3.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l3.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l2.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l2.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l1.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l1.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l1.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l1.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
+                (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),
         };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
 
     }
 

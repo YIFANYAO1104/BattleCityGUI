@@ -1,6 +1,7 @@
 package com.bham.bc.entity.ai.navigation.algorithms.astar;
 
 
+import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
@@ -178,6 +179,10 @@ public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristi
 
     public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition){
         this.expandCondition = expandCondition;
+    }
+
+    public boolean isTriggerActive(){
+        return false;
     }
 
 

@@ -17,13 +17,13 @@ public class LandmineTrigger extends RespawnTrigger{
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[]{ new Image("file:src/main/resources/img/triggers/traps/Landmine.png")};
+        return new Image[]{ new Image(getClass().getClassLoader().getResourceAsStream("img/triggers/traps/Landmine.png"))};
     }
 
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof GameCharacter && intersects(entity)) {
-            ((GameCharacter) entity).destroyed();
+            ((GameCharacter) entity).changeHp(-200);
             deactivate();
         }
     }

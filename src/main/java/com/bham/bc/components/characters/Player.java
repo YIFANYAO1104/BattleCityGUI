@@ -6,7 +6,6 @@ import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
 import com.bham.bc.components.triggers.Trigger;
-import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
@@ -16,7 +15,6 @@ import com.bham.bc.view.GameSession;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
@@ -28,7 +26,6 @@ import java.util.Optional;
 import java.util.List;
 
 import static com.bham.bc.components.Controller.services;
-import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -36,8 +33,8 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  */
 public class Player extends GameCharacter {
 
-	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
-	public static final String IMAGE_PATH2 ="file:src/main/resources/img/characters/state1.png";
+	public static final String IMAGE_PATH = "img/characters/player.png";
+	public static final String IMAGE_PATH2 ="img/characters/state1.png";
 	public static final int SIZE = 25;
 	public static double HP = 100;
 	public static final double SPEED = 5;
@@ -49,8 +46,8 @@ public class Player extends GameCharacter {
 	private final Gun GUN;
 
 	// TODO: remove, player doesn't need
-	private boolean inverseKeys;
 	private NavigationService navigationService;
+	private boolean bomb;
 
 	/**
 	 * Used For testing
@@ -61,7 +58,17 @@ public class Player extends GameCharacter {
 	public void testDIRECTION_SET1(){
 		this.DIRECTION_SET.clear();
 	}
-
+	public Gun testGun(){
+		return this.GUN;
+	}
+	public void testFire() {
+		fire();
+	}
+	public boolean testBomb() {
+		boolean b = bomb;
+		bomb();
+		return b;
+	}
 	/**
 	 * Constructs a player instance with directionSet initialized to empty
 	 *
@@ -70,48 +77,77 @@ public class Player extends GameCharacter {
 	 */
 	public Player(double x, double y) {
 		super(x, y, SPEED, HP, Side.ALLY);
-		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+		try{
+		entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+		}catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
-		inverseKeys = false;
 
 		navigationService = new PathPlanner(this, services.getGraph());
-		steering.setKeysOn(true);
+		steering.setKeys(true);
+	}
+
+	@Override
+	public NavigationService getNavigationService() {
+		return this.navigationService;
 	}
 
 	/**
 	 * Assign activation time of Triple Bullet trigger
 	 * @param numTicks activation time in ticks
 	 */
-    public void toTriple(int numTicks) {
-        tripleTicks = numTicks;
+    public void activateTriple(int numTicks) {
+        isTriple = numTicks;
     }
 
     /**
 	 * Assign activation time of Freeze trigger
 	 * @param numTicks activation time in ticks
 	 */
-    public void toFreeze(int numTicks) {
-        freezeTicks = numTicks;
+    public void activateFreeze(int numTicks) {
+        isFreeze = numTicks;
     }
 
     /**
 	 * Assign activation time of Immune trigger
 	 * @param numTicks activation time in ticks
 	 */
-    public void toImmune(int numTicks) {
-        immuneTicks = numTicks;
+    public void activateImmune(int numTicks) {
+        isImmune = numTicks;
+    }
+    
+    /**
+	 * Assign activation time of Inverse Trap trigger
+	 * @param numTicks activation time in ticks
+	 */
+    public void activateInverse(int numTicks) {
+		isInverse = numTicks;
+    }
+    
+    /**
+	 * Assign activation time of Bomb trigger
+	 */
+    public void activateBomb() {
+    	bomb = true;
     }
 
     /**
 	 * Update trigger(s) activation time
 	 */
     protected void updateTriggers() {
-        if(immuneTicks!=0) --immuneTicks;
-        if(freezeTicks!=0) --freezeTicks;
-        if(tripleTicks!=0) --tripleTicks;
+        if(isImmune!=0) --isImmune;
+        if(isFreeze!=0) --isFreeze;
+        if(isTriple!=0) --isTriple;
+        if(isInverse!=0) --isInverse;
     }
 
+    public void teleport(){
+    	x = GameMap.getWidth()/2.0;
+		y = GameMap.getHeight()/2.0;
+    }
+    
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
 	// TODO: remove, this is another example of bomb()
@@ -121,16 +157,19 @@ public class Player extends GameCharacter {
 	}
 
 	public void bomb() {
+		if (!bomb) return;
 		Point2D center = getPosition().add(getSize().multiply(0.5));
 		ExplosiveBullet b = new ExplosiveBullet(center.getX(), center.getY(), heading, side);
 		services.addBullet(b);
+		bomb = false;
 	}
-	public void setInverseKeys(boolean val) {
-		inverseKeys = val;
-	}
+	
 	public void toState1(){
-		this.entityImages =  new Image[] { new Image(IMAGE_PATH2, SIZE, 0, true, false) };
-
+    	try{
+		this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH2), SIZE, 0, true, false) };
+		}catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
 	}
 	public List<Shape> getSmoothingBoxes(){
 		return navigationService.getSmoothingBoxes();
@@ -150,23 +189,21 @@ public class Player extends GameCharacter {
 	 * adds them up to get a final direction vector and normalizes it to set the heading param.</p>
 	 */
 	private void updateAngle() {
-		Optional<Point2D> directionPoint = DIRECTION_SET.stream().map(Direction::toPoint).map(p -> p.multiply(inverseKeys ? -1 : 1)).reduce(Point2D::add);
+		Optional<Point2D> directionPoint = DIRECTION_SET.stream().map(Direction::toPoint).map(p -> p.multiply(isInverse!=0 ? -1 : 1)).reduce(Point2D::add);
 
 		directionPoint.ifPresent(p -> {
 			if(!isZero(p)) heading = p.normalize();
 			velocity = p.normalize().multiply(velocity.magnitude());
 		});
 	}
+	
 	public void gunChange(BulletType bullet){
 		this.GUN.setBulletType(bullet);
 	}
 	public void laserChange(LaserType laser){
 		this.GUN.setLaserType(laser);
 	}
-	public Gun testGun(){
-		return this.GUN;
-	}
-
+	
 	/**
 	 * Shoots a default bullet (or multiple)
 	 *
@@ -174,7 +211,7 @@ public class Player extends GameCharacter {
 	 * based on player's position and angle.</p>
 	 */
 	private void fire() {
-		if(tripleTicks == 0) GUN.shoot();
+		if(isTriple == 0) GUN.shoot();
 		else GUN.shoot(-45, 0, 45);
 	}
 	private  void FireLaser(){
@@ -201,6 +238,8 @@ public class Player extends GameCharacter {
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
 			case H: testDijistra();		System.out.println(getCenterPosition());break;
+			case K: targetingSystem.statatat();break;
+			case L: services.getMapDivision().cleanHB();break;
 		}
 	}
 
@@ -251,7 +290,7 @@ public class Player extends GameCharacter {
 	@Override
 	public void update() {
 		updateTriggers();
-		if (freezeTicks == 0) {
+		if (isFreeze == 0) {
 			updateAngle();
 			move();
 		}
@@ -267,11 +306,11 @@ public class Player extends GameCharacter {
 
 	@Override
 	protected void destroy() {
-		entityManager.removeEntity(this);
-		exists = false;
-
-		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-		services.addTrigger(dissolve);
+//		entityManager.removeEntity(this);
+//		exists = false;
+//
+//		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+//		services.addTrigger(dissolve);
 	}
 
 	@Override

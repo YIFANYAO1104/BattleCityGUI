@@ -2,6 +2,7 @@ package com.bham.bc.entity.ai.navigation.impl;
 
 import com.bham.bc.components.characters.enemies.Tank;
 import com.bham.bc.components.characters.enemies.Teaser;
+import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.PathEdge;
@@ -222,37 +223,6 @@ public class PathPlanner implements NavigationService {
     }
 
     /**
-     * smooths a path by removing extraneous edges. (may not remove all
-     * extraneous edges)
-     */
-    private void quickSmooth(List<PathEdge> path) {
-        //we need at least 2 path edges
-        if (path.size()<=1) return;
-
-        List<Shape> array = new ArrayList<>();
-
-//        System.out.println("Before: "+path);
-        ListIterator<PathEdge> iterator = path.listIterator();
-
-        //0th element in the list
-        PathEdge e1 = iterator.next();
-
-        while (iterator.hasNext()) {
-            //increment e2 so it points to the edge following e1 (and futher)
-            PathEdge e2 = iterator.next();
-            //check for obstruction, adjust and remove the edges accordingly
-            if (e2.getBehavior()==GraphEdge.normal && services.canPass(e1.getSource(), e2.getDestination(),owner.getSize(),array)) {
-                e1.setDestination(e2.getDestination());
-                iterator.remove(); //remove e2 from the list
-            } else {
-                e1 = e2;
-            }
-        }
-        this.array = array;
-//        System.out.println("After: "+path);
-    }
-
-    /**
      * called by an agent after it has been notified that a search has
      * terminated successfully.
      * @return a list of PathEdges
@@ -358,8 +328,20 @@ public class PathPlanner implements NavigationService {
         }
     }
 
+    @Override
+    public void resetToNoTask() {
+        taskStatus = SearchStatus.no_task;
+    }
+
     public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition) {
         if (curSearchTask!=null) curSearchTask.setExpandCondition(expandCondition);
         this.expandCondition = expandCondition;
+    }
+
+    public boolean isTriggerActive(){
+        if (taskStatus==SearchStatus.target_found){
+            return curSearchTask.isTriggerActive();
+        }
+        return false;
     }
 }

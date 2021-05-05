@@ -21,7 +21,7 @@ public class TripleBullet extends RespawnTrigger {
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[] {new Image("file:src/main/resources/img/triggers/powerups/three.png"), };
+        return new Image[] {new Image(getClass().getClassLoader().getResourceAsStream("img/triggers/powerups/three.png")), };
     }
 
     //if triggered, the bot's bullet will split into 3 for few seconds only
@@ -29,7 +29,7 @@ public class TripleBullet extends RespawnTrigger {
     @Override
     public void handle(BaseGameEntity entity) {
         if(active && entity instanceof Player && intersects(entity)) {
-            ((Player) entity).toTriple(activationTime * FRAME_RATE);
+            ((Player) entity).activateTriple(activationTime * FRAME_RATE);
             deactivate();
         }
     }

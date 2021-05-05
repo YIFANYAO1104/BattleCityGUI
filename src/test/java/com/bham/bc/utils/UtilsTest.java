@@ -105,6 +105,5 @@ public class UtilsTest {
             Point2D p = GeometryEnhanced.randomPointInCircle(center,radius);
             assertTrue(p.distance(center)<=radius);
         }
-
     }
 }

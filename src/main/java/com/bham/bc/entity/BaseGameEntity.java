@@ -1,11 +1,14 @@
 package com.bham.bc.entity;
 
+import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+
+import java.util.ArrayList;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
 

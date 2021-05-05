@@ -1,5 +1,6 @@
 package com.bham.bc.entity.ai.navigation.algorithms;
 
+import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.PathEdge;
@@ -32,6 +33,8 @@ abstract public class TimeSlicedAlgorithm {
      * @param expandCondition see{@link ExpandPolicies}
      */
     public abstract void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
+
+    public abstract boolean isTriggerActive();
 
     //under construction----------------------------------------------------------------------------------
     /**

@@ -38,6 +38,12 @@ public class RecordsHandler {
      */
     private static JSONArray albums;
 
+    /**
+     * path of json file
+     */
+    private static String path;
+
+
 
     public RecordsHandler() {
 
@@ -45,6 +51,8 @@ public class RecordsHandler {
     }
     static {
 
+        String root = System.getProperty("user.dir");
+        path = root +"/scores.json";
         jsonArrayToFile=new JSONArray();
     }
 
@@ -54,10 +62,10 @@ public class RecordsHandler {
      * @return list of Records to be fitted into table
      */
     public static ObservableList<Records> initTable(){
-        File file = new File("src/main/resources/model/scores.json");
+        File file = new File(path);
         if (!file.exists()) {
             try {
-                FileOutputStream fileOutputStream=new FileOutputStream("src/main/resources/model/scores.json");
+                FileOutputStream fileOutputStream=new FileOutputStream(path);
                 byte[] data="[]".getBytes();
                 fileOutputStream.write(data);
                 fileOutputStream.flush();
@@ -69,7 +77,7 @@ public class RecordsHandler {
         }
 
         //read from Json file
-        parseJsonFile("src/main/resources/model/scores.json");
+        parseJsonFile(path);
         ObservableList<Records> data = FXCollections.observableArrayList(records);
         //System.out.println("data len="+data.size());
 
@@ -110,13 +118,13 @@ public class RecordsHandler {
         sort();
 
         try {
-            writeJsonToFile("src/main/resources/model/scores.json");
+            writeJsonToFile(path);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         //read from Json file
-        parseJsonFile("src/main/resources/model/scores.json");
+        parseJsonFile(path);
         ObservableList<Records> data = FXCollections.observableArrayList(records);
 
 
@@ -223,7 +231,7 @@ public class RecordsHandler {
 
 
     /**
-     * Returns a JSONArray after sort that JSONArray according to score.
+     * Returns a {@link JSONArray} after sort that {@link JSONArray} according to score.
      * @param jsonArr json array to be sorted
      * @return return the sorted json array
      */
@@ -312,6 +320,10 @@ public class RecordsHandler {
         }
 
 
+        /**
+         * Returns the rank of Record Object
+         * @return rank
+         */
         public String getRank() {
             return rank.get();
         }
@@ -320,10 +332,18 @@ public class RecordsHandler {
             return rank;
         }
 
+        /**
+         * set tne rank of Record Object
+         * @param rank of Record Object
+         */
         public void setRank(String rank) {
             this.rank.set(rank);
         }
 
+        /**
+         * Returns the name of Record Object
+         * @return name
+         */
         public String getName() {
             return name.get();
         }
@@ -332,10 +352,18 @@ public class RecordsHandler {
             return name;
         }
 
+        /**
+         * set tne name of Record Object
+         * @param name of Record Object
+         */
         public void setName(String name) {
             this.name.set(name);
         }
 
+        /**
+         * Returns the score of Record Object
+         * @return rank
+         */
         public String getScore() {
             return score.get();
         }
@@ -344,10 +372,18 @@ public class RecordsHandler {
             return score;
         }
 
+        /**
+         * set tne score of Record Object
+         * @param score of Record Object
+         */
         public void setScore(String score) {
             this.score.set(score);
         }
 
+        /**
+         * Returns the date of Record Object
+         * @return date
+         */
         public String getDate() {
             return date.get();
         }
@@ -356,6 +392,10 @@ public class RecordsHandler {
             return date;
         }
 
+        /**
+         * set tne date of Record Object
+         * @param date of Record Object
+         */
         public void setDate(String date) {
             this.date.set(date);
         }

@@ -3,6 +3,7 @@ package com.bham.bc.components.characters.enemies;
 import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.Gun;
 import com.bham.bc.components.characters.Side;
+import com.bham.bc.components.triggers.TriggerType;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
@@ -18,8 +19,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
@@ -33,6 +36,7 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
 public abstract class Enemy extends GameCharacter {
 
     protected final Gun GUN;
+
     protected NavigationService navigationService;
     protected LinkedList<PathEdge> pathEdges;
 
@@ -40,7 +44,6 @@ public abstract class Enemy extends GameCharacter {
     private int timeTillSearch;
     private int edgeBehavior;
     private boolean isAiming;
-    private boolean nextSearch;
 
     /**
      * Constructs a character instance with directionSet initialized to empty
@@ -59,7 +62,6 @@ public abstract class Enemy extends GameCharacter {
         edgeBehavior = GraphEdge.normal;
         GUN = new Gun(this, BulletType.DEFAULT,null);
         isAiming = false;
-        nextSearch=true;
     }
 
     /**
@@ -69,51 +71,42 @@ public abstract class Enemy extends GameCharacter {
     protected void navigate(ItemType itemType) {
         // If we don't have any points to follow, we need to navigate (it may return 0 edges if it's close)
         // Otherwise, if we have points to follow, we still need to update the search if the target is dynamic
-        if(itemType == ItemType.ALLY && (--timeTillSearch <= 0)) {
-            destination = new Point2D(0, 0);
-            pathEdges.clear();
-            nextSearch=true;
-            timeTillSearch = 20;
-        }
-        if(nextSearch==true) {
-//            if (this instanceof Teaser)System.out.println("nextSearch==true");
-            switch (itemType) {
-                case HEALTH:
-                    navigationService.createRequest(ItemType.HEALTH);
-                    break;
-                case HOME:
-                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
-                    break;
-                case ENEMY_AREA:
-                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
-                    break;
-                case ALLY:
-                    // navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
-                    navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
-                    break;
-            }
-            nextSearch=false;
+        if(pathEdges.isEmpty() && navigationService.peekRequestStatus() == SearchStatus.no_task) {
+                switch (itemType) {
+                    case HEALTH:
+                        navigationService.createRequest(ItemType.HEALTH);
+                        break;
+                    case HOME:
+                        navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.HOME));
+                        break;
+                    case ENEMY_AREA:
+                        navigationService.createRequest(services.getClosestCenter(getCenterPosition(), ItemType.ENEMY_AREA));
+                        break;
+                    case ALLY:
+                        navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
+                        break;
+                }
+        } else if(itemType == ItemType.ALLY && (--timeTillSearch <= 0) && navigationService.peekRequestStatus() == SearchStatus.no_task) {
+            navigationService.createRequest(services.getClosestALLY(getCenterPosition()));
         }
 
-
-        //-----test
-//         if(itemType == ItemType.ALLY && timeTillSearch % 5 == 0) System.out.println("Time left till new navigation request for ally: " + timeTillSearch);
-        //---------
+        // If the target was not found we need to reset the search status
+        if(navigationService.peekRequestStatus() == SearchStatus.target_not_found) {
+            navigationService.resetToNoTask();
+        }
 
         // Due to checks on each frame of whether the search is complete or not we always need get the list of points if it is empty
-        // If the search status is completed, we fill our lists with points to follow (if it is empty or we need to update the search for dynamic target)
-//        if (this instanceof Teaser)System.out.println(pathEdges.isEmpty());
-//        if (this instanceof Teaser)System.out.println(navigationService.peekRequestStatus());
-        if(pathEdges.isEmpty()  && navigationService.peekRequestStatus() == SearchStatus.target_found) {
+        // If the search status is completed, we fill our list with points to follow (if it is empty or we need to update the search for dynamic target)
+        if((pathEdges.isEmpty() || (itemType == ItemType.ALLY && timeTillSearch <= 0)) && navigationService.peekRequestStatus() == SearchStatus.target_found) {
             pathEdges = navigationService.getPath();
 
             // If the target is very close we might have no path edges to follow
-            // Otherwise if we have path edges, do not remove the last edge to keep the list not empty for proper search() functionality
+            // Otherwise if we have path edges, do not remove the first edge to keep the list not empty for proper search() functionality
             destination = pathEdges.isEmpty() ? getCenterPosition() : pathEdges.getFirst().getDestination();
             steering.setTarget(destination);
 
-//            timeTillSearch = 20;
-//            navigationService.resetTaskStatus();
+            timeTillSearch = 20;
+            navigationService.resetToNoTask();
         }
     }
 
@@ -127,29 +120,16 @@ public abstract class Enemy extends GameCharacter {
         // Checks if the enemy intersects the point in the list of path edges and gets the next target point if so
         if(intersects(new Circle(destination.getX(), destination.getY(), 3))) {
             if(!pathEdges.isEmpty()) {
-//                if (this instanceof Teaser)System.out.println("getting next target");
                 PathEdge nextEdge = pathEdges.removeFirst();
                 edgeBehavior = nextEdge.getBehavior();
                 destination = nextEdge.getDestination();
                 steering.setTarget(destination);
-            } else {
-//                if (this instanceof Teaser)System.out.println("pathEdges.isEmpty()");
-                nextSearch = true;
             }
         }
-
-        // If the list of pathEdges is not empty we need to move forward
-//        if(!pathEdges.isEmpty()) {
-//            //steering.seekOn();
-//            steering.arriveOn();
-//            move();
-//        }
-        steering.seekOn();
     }
 
     /**
      * Changes angle to align with a specified point
-     *
      * @param toward position to face
      */
     protected void face(Point2D toward) {
@@ -187,7 +167,7 @@ public abstract class Enemy extends GameCharacter {
      * @return true if it is needed to shoot at an obstacle and false otherwise
      */
     protected boolean shootObstacle() {
-        int numNodesToObstacle = 4;
+        int numNodesToObstacle = 3;
         boolean canShoot = edgeBehavior == GraphEdge.shoot || pathEdges.stream().limit(numNodesToObstacle).anyMatch(edge -> edge.getBehavior() == GraphEdge.shoot);
 
         if(canShoot) {
@@ -196,6 +176,16 @@ public abstract class Enemy extends GameCharacter {
         }
 
         return canShoot;
+    }
+
+    /**
+     * Lays a random trap trigger defined in {@link TriggerType}
+     * @param outerRadius radius within which the trap should be placed
+     */
+    protected void layRandomTrap(double outerRadius) {
+        TriggerType[] trapTypes = Arrays.stream(TriggerType.values()).filter(t -> t.GROUP == TriggerType.TriggerGroup.TRAP).toArray(TriggerType[]::new);
+        int randomI = new Random().nextInt(trapTypes.length);
+        services.spawnTriggerAroundPoint(trapTypes[randomI], getCenterPosition(), 0, outerRadius);
     }
 
     /**
@@ -216,38 +206,12 @@ public abstract class Enemy extends GameCharacter {
         return navigationService.getSmoothingBoxes();
     }
 
-//    @Override
-//    public void render(GraphicsContext gc) {
-////        if (navigationService!=null) navigationService.render(gc);
-//        for (PathEdge graphEdge : pathEdges) {
-//            Point2D n1 = graphEdge.getSource();
-//            Point2D n2 = graphEdge.getDestination();
-//            switch (graphEdge.getBehavior()){
-//                case GraphEdge.normal:
-//                    gc.setStroke(Color.RED);
-//                    gc.setLineWidth(2.0);break;
-//                case GraphEdge.shoot:
-//                    gc.setStroke(Color.GOLD);
-//                    gc.setLineWidth(10.0);break;
-//            }
-//            gc.strokeLine(n1.getX(), n1.getY(), n2.getX(), n2.getY());
-//        }
-//        drawRotatedImage(gc, entityImages[0], getAngle());
-//
-////        gc.setStroke(Color.WHITE);
-////        gc.setLineWidth(2.0);
-////        gc.strokeLine(x, y, x+acceleration.getX()*10,x+acceleration.getY()*10 );
-////
-////        steering.render(gc);
-//    }
-
     @Override
     public void move() {
         Point2D force = steering.calculate();
         Point2D acceleration = force.multiply(1. / mass);
         //debug
         this.acceleration = acceleration;
-
         velocity = velocity.add(acceleration);
         if (velocity.magnitude() > maxSpeed) {
             velocity = velocity.normalize().multiply(maxSpeed);
@@ -266,5 +230,10 @@ public abstract class Enemy extends GameCharacter {
     @Override
     public String toString() {
         return "Enemy";
+    }
+
+    @Override
+    public NavigationService getNavigationService() {
+        return navigationService;
     }
 }

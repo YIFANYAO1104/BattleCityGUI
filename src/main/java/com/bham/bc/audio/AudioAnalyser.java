@@ -6,7 +6,10 @@ import javafx.scene.media.MediaPlayer;
  * Class to analyse any music using spectrum listener
  */
 public class AudioAnalyser {
+    /** Media player whose media can be analyzed */
     MediaPlayer player;
+
+    /** Array of float values representing frequencies of every band */
     float[] frequencies;
 
     /**
@@ -25,7 +28,7 @@ public class AudioAnalyser {
     }
 
     /**
-     * updates frequency values
+     * Updates frequency values
      * @param magnitudes values acquired from spectrum listener
      */
     private void updateFrequencies(float[] magnitudes) {
@@ -35,7 +38,7 @@ public class AudioAnalyser {
     }
 
     /**
-     * gets current frequency values
+     * Gets current frequency values
      * @return array of frequencies
      */
     public float[] getFrequencies() { return frequencies; }

@@ -1,11 +1,15 @@
 package com.bham.bc.utils;
 
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Circle;
-import javafx.scene.transform.Rotate;
-
-import java.util.Random;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
+import static com.bham.bc.utils.RandomEnhanced.rand;
 
 public class GeometryEnhanced {
 
@@ -30,8 +34,8 @@ public class GeometryEnhanced {
      * @return a rotated Point2D object
      */
     public static Point2D rotate(Point2D point, double angle) {
-        double x = point.getX() * Math.cos(angle) - point.getY() * Math.sin(angle);
-        double y = point.getX() * Math.sin(angle) + point.getY() * Math.cos(angle);
+        double x = point.getX() * Math.cos(Math.toRadians(angle)) - point.getY() * Math.sin(Math.toRadians(angle));
+        double y = point.getX() * Math.sin(Math.toRadians(angle)) + point.getY() * Math.cos(Math.toRadians(angle));
 
         return new Point2D(x, y);
     }
@@ -102,14 +106,6 @@ public class GeometryEnhanced {
         return new Point2D(-p.getY(), p.getX());
     }
 
-
-    static private Random rand = new Random();
-
-
-    public static double randDouble(double rangeMin, double rangeMax){
-        return rangeMin + (rangeMax - rangeMin) * rand.nextDouble();
-    }
-
     //https://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly
     public static Point2D randomPointInCircle(Point2D centerPos, double radius) {
         Double theta = 2*Math.PI*rand.nextDouble();
@@ -143,6 +139,65 @@ public class GeometryEnhanced {
             y = spaceHeight-size.getY();
         }
         return new Point2D(x,y);
+    }
+
+    /**
+     * @return true if the target Pos is in the vision
+     */
+    public static boolean isInVision(Point2D curPos,
+                                               Point2D curHeading,
+                                               Point2D testPos,
+                                               double visionAngle) {
+        Point2D toTarget = testPos.subtract(curPos).normalize();
+        return curHeading.dotProduct(toTarget) >= Math.cos(visionAngle / 2.0);
+    }
+
+    public static void renderHitBox(GraphicsContext gc, Shape box) {
+        if (box instanceof Rectangle){
+            Rectangle rect = (Rectangle)box;
+            Point2D p1 = new Point2D(rect.getX(), rect.getY());
+            Point2D p2 = new Point2D(rect.getX() + rect.getWidth(), rect.getY());
+            Point2D p3 = new Point2D(rect.getX(), rect.getY() + rect.getHeight());
+            Point2D p4 = new Point2D(rect.getX() + rect.getWidth(), rect.getY() + rect.getHeight());
+
+            p1 = box.localToParent(p1);
+            p2 = box.localToParent(p2);
+            p3 = box.localToParent(p3);
+            p4 = box.localToParent(p4);
+
+
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1.0);
+            gc.strokeLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+            gc.strokeLine(p1.getX(), p1.getY(), p3.getX(), p3.getY());
+            gc.strokeLine(p4.getX(), p4.getY(), p2.getX(), p2.getY());
+            gc.strokeLine(p4.getX(), p4.getY(), p3.getX(), p3.getY());
+        } else if (box instanceof Circle) {
+            Circle hb = (Circle) box;
+            gc.setStroke(Color.RED);
+            gc.setLineWidth(1);
+            gc.strokeArc(hb.getCenterX() - hb.getRadius(), hb.getCenterY() - hb.getRadius(), hb.getRadius()*2, hb.getRadius()*2, 0, 360, ArcType.OPEN);
+        }
+        else {
+            System.out.println("not supported hitbox type");
+        }
+    }
+
+    public static void renderBounds(GraphicsContext gc, Shape box) {
+        Bounds b = box.getBoundsInParent();
+
+
+        Point2D p1 = new Point2D(b.getMinX(), b.getMinY());
+        Point2D p2 = new Point2D(b.getMinX() + b.getWidth(), b.getMinY());
+        Point2D p3 = new Point2D(b.getMinX(), b.getMinY() + b.getHeight());
+        Point2D p4 = new Point2D(b.getMinX() + b.getWidth(), b.getMinY() + b.getHeight());
+
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(1.0);
+        gc.strokeLine(p1.getX(), p1.getY(), p2.getX(), p2.getY());
+        gc.strokeLine(p1.getX(), p1.getY(), p3.getX(), p3.getY());
+        gc.strokeLine(p4.getX(), p4.getY(), p2.getX(), p2.getY());
+        gc.strokeLine(p4.getX(), p4.getY(), p3.getX(), p3.getY());
     }
 
 

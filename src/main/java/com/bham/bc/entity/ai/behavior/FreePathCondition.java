@@ -1,5 +1,6 @@
 package com.bham.bc.entity.ai.behavior;
 
+import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -93,11 +94,20 @@ public class FreePathCondition implements Condition {
      * @return a properly rotated Rectangle object connecting start and end points
      */
     public Rectangle getPath() {
-        double angle = Math.atan2(end.getY() - start.getY(), end.getX() - start.getX());
-        Rectangle path = new Rectangle(start.getX(), start.getY(), start.distance(end), radius * 2);
-        path.getTransforms().add(new Rotate(Math.toDegrees(angle), start.getX(), start.getY()));
+//        double angle = Math.atan2(end.getY() - start.getY(), end.getX() - start.getX());
+//        Rectangle path = new Rectangle(start.getX(), start.getY(), start.distance(end), radius * 2);
+//        path.getTransforms().add(new Rotate(Math.toDegrees(angle), start.getX(), start.getY()));
+        double rayCastWidth = radius*2;
 
-        return path;
+        double angle = GeometryEnhanced.clockWiseAngle(end.subtract(start),new Point2D(0,1));
+        double dis = start.distance(end);
+
+        Point2D center = start.midpoint(end);
+        Point2D topLeft = center.subtract(rayCastWidth*0.5,dis/2);
+        Rectangle hitBox = new Rectangle(topLeft.getX(), topLeft.getY(), rayCastWidth, dis);
+        hitBox.getTransforms().add(new Rotate(angle, center.getX(),center.getY()));
+
+        return hitBox;
     }
 
     /**
