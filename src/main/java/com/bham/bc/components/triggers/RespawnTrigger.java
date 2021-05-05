@@ -1,5 +1,5 @@
 /**
- *  Desc:     base class to create a trigger that is capable of respawning
+ *  Base class to create a trigger that is capable of respawning
  *            after a period of inactivity
  */
 package com.bham.bc.components.triggers;
@@ -12,12 +12,15 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * The category of trigger that  it is triggered
+ * but then becomes inactive for a specified amount of time. These values
+ * control the amount of time required to pass before the trigger becomes
+ * active once more.
+ */
 abstract public class RespawnTrigger extends Trigger {
 
-    //When a bot comes within this trigger's area of influence it is triggered
-    //but then becomes inactive for a specified amount of time. These values
-    //control the amount of time required to pass before the trigger becomes 
-    //active once more.
+
     protected int cooldown;
     protected int timeTillRespawn;
 
@@ -32,6 +35,11 @@ abstract public class RespawnTrigger extends Trigger {
         else timeTillRespawn = cooldown;
     }
 
+    /**
+     * Construct a respawnTrigger in a specific position.
+     * @param x the x coordinates of respawn trigger
+     * @param y the y coordinates of respawn trigger
+     */
     public RespawnTrigger(int x, int y) {
         super(x,y);
         cooldown = 0;
