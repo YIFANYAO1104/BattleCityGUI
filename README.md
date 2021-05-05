@@ -99,7 +99,7 @@
 
 - A tank game built by java and focusing on Game AI component.
 - The idea about this game coms from three typical game "Battle City", Geometry Wars", Blox Head"
-- The main mode,  "SURVIVAL", the player would be asked to fight with many other enemy tanks which controlled by AI. Of course the aim is surviving as long as you can.
+- The main mode,  "SURVIVAL", the player would be asked to fight with many other agent tanks which controlled by AI. Of course the aim is surviving as long as you can.
 ### Built With
 * java 1.8
 * javafx (liberica_1.8)
@@ -136,9 +136,45 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
 
 ## Acknowledgements
 
-* []()
-* []()
-* []()
+* [The music elements we used](https://incompetech.com/)
+  
+* The image we used:
+  
+  - Tilesets:
+  
+    - [ashlands.png](https://finalbossblues.itch.io/ashlands-tileset])
+    - [atlantis.png](https://finalbossblues.itch.io/atlantis-tileset)
+    - [basic.png]()
+  - Shooting:
+  
+    - [default-bullet.png]( https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
+    -
+  - Characters
+  
+    - [kamikaze, player, shooter, splitter, tank, teaser, trapper](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
+    - [state1.png](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package )
+    - []
+  - Menu
+    
+    - FB6.gif (designed by Najd)
+    - [Others](https://www.aigei.com/s?q=%E6%8E%92%E8%A1%8C%E6%A6%9C&type=game)
+  - Triggers
+  
+    - [blue ring explosion in effects](https://opengameart.org/content/animated-blue-ring-explosion)
+    - [others](https://www.emojidex.com/)
+  - Fonts(From Google)
+  
+
+* The whole project is created by
+  - Cameron Webley
+  - Najd
+  - Mantas
+  - Xiao Yan - xxy869@student.bham.ac.uk
+  - Yifan Yao - yxy977@student.bham.ac.uk
+  - Zhicheng Zhou
+  - Junyu Chen
+  - Muhammad
+  
 
 
 
