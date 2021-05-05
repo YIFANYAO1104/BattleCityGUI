@@ -1,7 +1,7 @@
 package com.bham.bc.entity.ai.director;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.enemies.EnemyType;
+import com.bham.bc.components.characters.agents.enemies.EnemyType;
 import com.bham.bc.components.triggers.TriggerType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.behavior.*;

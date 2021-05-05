@@ -81,6 +81,7 @@ public class SurvivalController extends Controller {
         double playerX = gameMap.getHomeTerritory().getCenterX() - Player.SIZE/2.0;
         double playerY = gameMap.getHomeTerritory().getCenterY() - Player.SIZE;
         characters.add(new Player(playerX, playerY));
+        characters.add(new Neuron(playerX-20, playerY-20));
 
         mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), 10, 10);
         mapDivision.addCrossZoneEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
