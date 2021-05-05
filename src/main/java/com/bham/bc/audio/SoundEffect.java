@@ -18,6 +18,7 @@ public enum SoundEffect {
     POWERUP("audio/sfx/powerup.mp3"),
     TRAP("audio/sfx/trap.mp3");
 
+    /** Path to audio file */
     private final String PATH;
 
     /**

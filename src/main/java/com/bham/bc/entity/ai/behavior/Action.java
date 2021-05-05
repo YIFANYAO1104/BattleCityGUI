@@ -13,6 +13,7 @@ public enum Action{
     SEARCH_ALLY,
     SEARCH_HOME,
     CHARGE_ALLY,
+    LAY_TRAP,
     RETREAT,
     REGENERATE,
 

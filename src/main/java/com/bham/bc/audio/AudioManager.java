@@ -20,13 +20,20 @@ import java.util.stream.Stream;
  * play sequential batches of songs parallel, therefore this class does not support that.</p>
  */
 public class AudioManager {
+    /** Static object to be used to quickly control music and effects in the entire game */
     public static AudioManager audioManager = new AudioManager();
 
+    /** Map from sound effect enum to audio clip object */
     private final EnumMap<SoundEffect, AudioClip> SFX;
-    private static AudioPlayer player;
-    private double effectsVolume;
-    private double musicVolume;
 
+    /** A single music player this manager can manage */
+    private AudioPlayer player;
+
+    /** Loudness of every effect */
+    private double effectsVolume;
+
+    /** Loudness of any music track */
+    private double musicVolume;
 
     /**
      * Constructs audio manager and sets initial volume to 100%

@@ -4,6 +4,7 @@ import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
+import com.bham.bc.components.triggers.TriggerType;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.HitMarker;
 import com.bham.bc.components.triggers.effects.RingExplosion;
@@ -20,8 +21,11 @@ import com.bham.bc.utils.messaging.Telegram;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.GameCharacter;
 
+import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
@@ -47,6 +51,9 @@ public abstract class Controller extends BaseGameEntity implements Services {
     protected MapDivision<BaseGameEntity> mapDivision;
     protected AlgorithmDriver driver;
 
+    int time = 50;
+    Point2D myP = new Point2D(0, 0);
+
     /**
      * Constructs center controller as a {@link com.bham.bc.entity.BaseGameEntity} object
      */
@@ -57,8 +64,8 @@ public abstract class Controller extends BaseGameEntity implements Services {
         characters = new ArrayList<>();
         director = new Director();
         driver = new AlgorithmDriver(500);
-        homeHp = 1000;
-        homeFullHp = 1000;
+        homeHp = 10000;
+        homeFullHp = 10000;
         score = 0;
     }
 
@@ -71,11 +78,6 @@ public abstract class Controller extends BaseGameEntity implements Services {
         services = controller;
 
         controller.loadGame(mapType);
-    }
-
-
-    private Player getPlayer() {
-        return (Player) characters.stream().filter(c ->  c instanceof Player ).findFirst().orElse(null);
     }
 
     /**
@@ -117,13 +119,29 @@ public abstract class Controller extends BaseGameEntity implements Services {
     }
 
     @Override
+    public MapDivision<BaseGameEntity> getMapDivision() {
+        return mapDivision;
+    }
+
+    @Override
     public AlgorithmDriver getDriver() {
         return driver;
+    }
+
+
+    @Override
+    public ArrayList<GameCharacter> getCharacters() {
+        return characters;
     }
 
     @Override
     public ArrayList<GameCharacter> getCharacters(Side side) {
         return characters.stream().filter(c -> c.getSide() == side).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    @Override
+    public Player getPlayer() {
+        return (Player) characters.stream().filter(c ->  c instanceof Player ).findFirst().orElse(null);
     }
 
     public Circle[] getEnemyAreas() {
@@ -184,7 +202,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         triggers.forEach(trigger -> trigger.render(gc));
 
         // TODO: remove
-        // triggers.forEach(trigger -> trigger.renderHitBox(gc));
+        triggers.forEach(trigger -> trigger.renderHitBox(gc));
         // bullets.forEach(bullet -> bullet.renderHitBox(gc));
         // characters.forEach(character -> character.renderHitBox(gc));
 
@@ -192,7 +210,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
         // gameMap.renderGraph(gc, characters);
         // gameMap.renderTerritories(gc);
-         mapDivision.render(gc);
+        // mapDivision.render(gc);
     }
 
     @Override
@@ -238,7 +256,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
 
     @Override
     public boolean gameOver() {
-        return getHomeHpFraction() <= 0 || getPlayerHpFraction() <= 0;
+        return getHomeHpFraction() <= 0 || getPlayer() == null;
     }
     // ------------------------------------------------------------
 
@@ -270,13 +288,4 @@ public abstract class Controller extends BaseGameEntity implements Services {
         return "Controller";
     }
     // ------------------------------------------------------------
-
-    @Override
-    public ArrayList<GameCharacter> getCharacters() {
-        return characters;
-    }
-
-    public MapDivision<BaseGameEntity> getMapDivision() {
-        return mapDivision;
-    }
 }

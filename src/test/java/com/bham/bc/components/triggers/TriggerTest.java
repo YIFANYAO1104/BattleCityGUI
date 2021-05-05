@@ -249,7 +249,7 @@ public class TriggerTest {
         Controller.setMode(MapType.SMALL);
         Player player = new Player(410, 400);
         GameMap gameMap = new GameMap(MapType.SMALL);
-        InverseTrap t= new InverseTrap(380,400,20);
+        InverseTrap t= new InverseTrap(380,400,20, 20);
         //PathPlanner p = new PathPlanner(player, gameMap.getGraph());
         player.testDIRECTION_SET();
         player.setVelocity(new Point2D(5,0));

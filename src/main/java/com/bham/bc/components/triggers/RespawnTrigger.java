@@ -50,7 +50,7 @@ abstract public class RespawnTrigger extends Trigger {
 
     @Override
     public void render(GraphicsContext gc) {
-        GeometryEnhanced.renderHitBox(gc,this.getHitBox());
+        // GeometryEnhanced.renderHitBox(gc,this.getHitBox());
         if(active) {
             gc.drawImage(entityImages[0], x, y);
         }

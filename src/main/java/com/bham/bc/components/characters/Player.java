@@ -6,7 +6,6 @@ import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
 import com.bham.bc.components.triggers.Trigger;
-import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
@@ -27,7 +26,6 @@ import java.util.Optional;
 import java.util.List;
 
 import static com.bham.bc.components.Controller.services;
-import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -35,8 +33,8 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  */
 public class Player extends GameCharacter {
 
-	public static final String IMAGE_PATH = "file:src/main/resources/img/characters/player.png";
-	public static final String IMAGE_PATH2 ="file:src/main/resources/img/characters/state1.png";
+	public static final String IMAGE_PATH = "img/characters/player.png";
+	public static final String IMAGE_PATH2 ="img/characters/state1.png";
 	public static final int SIZE = 25;
 	public static double HP = 100;
 	public static final double SPEED = 5;
@@ -79,12 +77,16 @@ public class Player extends GameCharacter {
 	 */
 	public Player(double x, double y) {
 		super(x, y, SPEED, HP, Side.ALLY);
-		entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+		try{
+		entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+		}catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
 
 		navigationService = new PathPlanner(this, services.getGraph());
-		steering.setKeysOn(true);
+		steering.setKeys(true);
 	}
 
 	@Override
@@ -163,8 +165,11 @@ public class Player extends GameCharacter {
 	}
 	
 	public void toState1(){
-		this.entityImages =  new Image[] { new Image(IMAGE_PATH2, SIZE, 0, true, false) };
-
+    	try{
+		this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH2), SIZE, 0, true, false) };
+		}catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
 	}
 	public List<Shape> getSmoothingBoxes(){
 		return navigationService.getSmoothingBoxes();
@@ -301,11 +306,11 @@ public class Player extends GameCharacter {
 
 	@Override
 	protected void destroy() {
-		entityManager.removeEntity(this);
-		exists = false;
-
-		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-		services.addTrigger(dissolve);
+//		entityManager.removeEntity(this);
+//		exists = false;
+//
+//		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+//		services.addTrigger(dissolve);
 	}
 
 	@Override

@@ -11,14 +11,14 @@ import static com.bham.bc.view.GameSession.FRAME_RATE;
 public class InverseTrap extends RespawnTrigger{
 	private int activationTime;
 
-    public InverseTrap(int x, int y, int Respawn){
+    public InverseTrap(int x, int y, int activationTime, int respawnCooldown){
         super(x,y);
-        this.activationTime = Respawn*FRAME_RATE*2;
-        setCooldown(Respawn*FRAME_RATE*2);
+        this.activationTime = activationTime * FRAME_RATE;
+        setCooldown(respawnCooldown*FRAME_RATE);
     }
 
     protected Image[] getDefaultImage() {
-        return new Image[]{ new Image("file:src/main/resources/img/triggers/traps/trap.png")};
+        return new Image[]{ new Image(getClass().getClassLoader().getResourceAsStream("img/triggers/traps/trap.png"))};
     }
 
     @Override
