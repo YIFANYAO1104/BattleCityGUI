@@ -161,7 +161,7 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
   - Triggers
   
     - [blue ring explosion in effects](https://opengameart.org/content/animated-blue-ring-explosion)
-    - []
+    - [others](https://www.emojidex.com/)
   - Fonts(From Google)
   
 
