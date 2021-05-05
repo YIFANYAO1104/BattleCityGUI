@@ -1,8 +1,5 @@
 package com.bham.bc.entity.ai.navigation.impl;
 
-import com.bham.bc.components.characters.enemies.Tank;
-import com.bham.bc.components.characters.enemies.Teaser;
-import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.PathEdge;
@@ -10,7 +7,6 @@ import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedDijkstras;
 import com.bham.bc.entity.ai.navigation.algorithms.astar.TimeSlicedAStar;
-import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.TerminationPolices;
 import com.bham.bc.entity.graph.SparseGraph;
@@ -25,7 +21,6 @@ import javafx.scene.shape.Shape;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 import static com.bham.bc.components.Controller.services;
 

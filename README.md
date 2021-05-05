@@ -99,7 +99,7 @@
 
 - A tank game built by java and focusing on Game AI component.
 - The idea about this game coms from three typical game "Battle City", Geometry Wars", Blox Head"
-- The main mode,  "SURVIVAL", the player would be asked to fight with many other enemy tanks which controlled by AI. Of course the aim is surviving as long as you can.
+- The main mode,  "SURVIVAL", the player would be asked to fight with many other agent tanks which controlled by AI. Of course the aim is surviving as long as you can.
 ### Built With
 * java 1.8
 * javafx (liberica_1.8)

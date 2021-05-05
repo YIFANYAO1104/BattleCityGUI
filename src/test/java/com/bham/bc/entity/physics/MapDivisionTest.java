@@ -1,7 +1,7 @@
 package com.bham.bc.entity.physics;
 
 
-import com.bham.bc.components.characters.enemies.EnemyTestDemo;
+import com.bham.bc.components.characters.agents.enemies.EnemyTestDemo;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.embed.swing.JFXPanel;
 import org.junit.Test;

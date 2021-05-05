@@ -2,7 +2,6 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.Obstacle;

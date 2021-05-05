@@ -8,9 +8,9 @@ import com.bham.bc.components.triggers.effects.HitMarker;
 
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.entity.ai.TargetingSystem;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.physics.CollisionHandler;
-import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -237,7 +237,7 @@ abstract public class GameCharacter extends MovingEntity {
     public void render(GraphicsContext gc) {
         drawRotatedImage(gc, entityImages[0], getAngle());
         renderHp(gc);
-        GeometryEnhanced.renderHitBox(gc,this.getHitBox());
+//        GeometryEnhanced.renderHitBox(gc,this.getHitBox());
     }
 
     @Override

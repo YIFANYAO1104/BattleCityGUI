@@ -3,7 +3,9 @@ package com.bham.bc.components;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.enemies.*;
+import com.bham.bc.components.characters.agents.Agent;
+import com.bham.bc.components.characters.agents.allies.Neuron;
+import com.bham.bc.components.characters.agents.enemies.*;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
@@ -70,7 +72,7 @@ public class SurvivalController extends Controller {
         double playerX = gameMap.getHomeTerritory().getCenterX() - Player.SIZE/2.0;
         double playerY = gameMap.getHomeTerritory().getCenterY() - Player.SIZE;
         characters.add(new Player(playerX, playerY));
-        characters.add(new Neuron(16*60, 16*60));
+//        characters.add(new Neuron(16*60, 16*60));
 //        characters.add(new Shooter(16*60, 16*60));
 
         mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), 10, 10);
@@ -138,8 +140,8 @@ public class SurvivalController extends Controller {
     }
 
     @Override
-    public void occupyHome(Enemy enemy) {
-        if(enemy.intersects(gameMap.getHomeTerritory())) {
+    public void occupyHome(Agent agent) {
+        if(agent.intersects(gameMap.getHomeTerritory())) {
             homeHp -= SurvivalController.MAX_HOME_DAMAGE;
         }
     }

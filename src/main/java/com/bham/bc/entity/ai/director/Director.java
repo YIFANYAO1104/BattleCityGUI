@@ -1,6 +1,6 @@
 package com.bham.bc.entity.ai.director;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.enemies.EnemyType;
+import com.bham.bc.components.characters.agents.enemies.EnemyType;
 import com.bham.bc.entity.ai.behavior.*;
 
 import java.util.Arrays;
