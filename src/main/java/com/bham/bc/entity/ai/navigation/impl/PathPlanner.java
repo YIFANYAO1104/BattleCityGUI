@@ -323,6 +323,11 @@ public class PathPlanner implements NavigationService {
         }
     }
 
+    @Override
+    public void resetToNoTask() {
+        taskStatus = SearchStatus.no_task;
+    }
+
     public void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition) {
         if (curSearchTask!=null) curSearchTask.setExpandCondition(expandCondition);
         this.expandCondition = expandCondition;

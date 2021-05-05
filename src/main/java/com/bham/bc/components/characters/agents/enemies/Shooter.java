@@ -20,13 +20,13 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * <p>This type of enemy has 3 main states determined by free path condition and its HP</p>
  *
  * <ul>
- *     <li><b>Search Ally</b> - searches for the closest ally if its HP is over 20% and it does not
+ *     <li><b>Search Ally</b> - searches for the closest ally if its HP is over 30% and it does not
  *     have "go back" property on. If there are obstacles in a way, it shoots them with increased
  *     fire rate</li>
  *
  *     <li><b>Attack Ally</b> - shoots at any ally if there are no obstacles in between and if its HP
- *     is over 20%. If the bullets are slow and the target is far, it kinda wastes its energy but
- *     doee not matter</li>
+ *     is over 30%. If the bullets are slow and the target is far, it kinda wastes its energy but
+ *     does not matter</li>
  *
  *     <li><b>Retreat</b> - turns on "run away" property and searches for the enemy spawn area to
  *     retreat to. While it retreats, it gradually regenerates its HP and once if it manages to reach
@@ -35,9 +35,9 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  */
 public class Shooter extends Agent {
 
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/shooter.png";
+    public static final String IMAGE_PATH = "img/characters/shooter.png";
     public static final int SIZE = 30;
-    public static final double HP = 100;
+    public static final double HP = 50;
     public static final double SPEED = 3;
 
     private final StateMachine stateMachine;
@@ -52,10 +52,15 @@ public class Shooter extends Agent {
      */
     public Shooter(double x, double y) {
         super(x, y, SPEED, HP, Side.ENEMY);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        try{
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         stateMachine = createFSM();
+        steering.seekOn();
 
-        GUN.setRate(600);
+        GUN.setRate(1000);
         GUN.setDamageFactor(3);
     }
 
@@ -69,8 +74,8 @@ public class Shooter extends Agent {
         // Set up necessary entry actions for certain states
         searchState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_RATE });
         searchState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_RATE });
-        retreatState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_RATE });
-        retreatState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_RATE });
+        retreatState.setEntryActions(new Action[]{ Action.SET_SEARCH, Action.SET_SPEED });
+        retreatState.setExitActions(new Action[]{ Action.RESET_SEARCH, Action.RESET_SPEED });
 
         // Define all conditions required to change any state
         noObstCondition = new FreePathCondition();
@@ -91,7 +96,6 @@ public class Shooter extends Agent {
 
     @Override
     public void update() {
-    	
         noObstCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
 
         Action[] actions = stateMachine.update();
@@ -99,12 +103,13 @@ public class Shooter extends Agent {
             switch(action) {
                 case SEARCH_ALLY:
                     search(ItemType.ALLY);
-                    goBackCondition.setTestValue(hp <= HP * .2);
+                    steering.seekOn();
+                    goBackCondition.setTestValue(hp <= HP * .3);
                     break;
                 case ATTACK_ALLY:
                     face(ItemType.ALLY);
-                    shoot(0.8);
-                    goBackCondition.setTestValue(hp <= HP * .2);
+                    GUN.shoot();
+                    goBackCondition.setTestValue(hp <= HP * .3);
                     break;
                 case ATTACK_OBST:
                     setMaxSpeed(shootObstacle() ? SPEED * .3 : SPEED);
@@ -120,20 +125,24 @@ public class Shooter extends Agent {
                     changeHp(HP * .003);
                     goBackCondition.setTestValue(hp < HP * .8);
                 case SET_RATE:
-                    GUN.setRate(500);
                     GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
-                    GUN.setRate(1000);
                     GUN.setDamageFactor(1);
                     break;
+                case SET_SPEED:
+                    setMaxSpeed(SPEED * 2);
+                    break;
+                case RESET_SPEED:
+                    setMaxSpeed(SPEED);
+                    break;
                 case SET_SEARCH:
-                    steering.setDecelerateOn(false);
                     steering.seekOn();
+                    steering.setDecelerate(false);
                     break;
                 case RESET_SEARCH:
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
+                    steering.setDecelerate(true);
                     pathEdges.clear();
                     break;
             }

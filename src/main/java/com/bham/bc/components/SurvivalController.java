@@ -10,6 +10,13 @@ import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
 import com.bham.bc.components.environment.Obstacle;
+import com.bham.bc.components.triggers.TriggerType;
+import com.bham.bc.components.triggers.powerups.HealthGiver;
+import com.bham.bc.components.triggers.powerups.Immune;
+import com.bham.bc.components.triggers.powerups.SpeedTrigger;
+import com.bham.bc.components.triggers.powerups.TripleBullet;
+import com.bham.bc.components.triggers.traps.Freeze;
+import com.bham.bc.components.triggers.traps.InverseTrap;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.graph.SparseGraph;
@@ -18,11 +25,13 @@ import com.bham.bc.entity.graph.node.NavNode;
 import com.bham.bc.entity.physics.MapDivision;
 import com.bham.bc.utils.GeometryEnhanced;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -72,8 +81,6 @@ public class SurvivalController extends Controller {
         double playerX = gameMap.getHomeTerritory().getCenterX() - Player.SIZE/2.0;
         double playerY = gameMap.getHomeTerritory().getCenterY() - Player.SIZE;
         characters.add(new Player(playerX, playerY));
-//        characters.add(new Neuron(16*60, 16*60));
-//        characters.add(new Shooter(16*60, 16*60));
 
         mapDivision = new MapDivision<>(GameMap.getWidth(), GameMap.getHeight(), 10, 10);
         mapDivision.addCrossZoneEntities(new ArrayList<>(gameMap.getInteractiveObstacles()));
@@ -81,6 +88,12 @@ public class SurvivalController extends Controller {
         mapDivision.addEntities(new ArrayList<>(characters));
 
         loadGraph();
+
+        //spawnEnemyRandomly(EnemyType.KAMIKAZE);
+        // spawnEnemyRandomly(EnemyType.TEASER);
+        // spawnEnemyRandomly(EnemyType.SHOOTER);spawnEnemyRandomly(EnemyType.SHOOTER);
+        //spawnEnemyRandomly(EnemyType.TANK);
+
     }
 
     // CALCULATIONS -----------------------------------------------
@@ -116,6 +129,7 @@ public class SurvivalController extends Controller {
         for (GameCharacter character : characters) {
             if (character.getSide() == Side.ALLY && character.getCenterPosition().distance(position)<min){
                 gc = character;
+                min = character.getCenterPosition().distance(position);
             }
         }
         if (gc == null){
@@ -124,7 +138,26 @@ public class SurvivalController extends Controller {
         return gc;
     }
 
-    public Point2D getFreeArea(Point2D pivot, double pivotRadius, double areaRadius) {
+    @Override
+    public Point2D getFreeArea(Point2D center, double innerRadius, double outerRadius, double areaSize, Pos pos) {
+        Circle innerArea = new Circle(center.getX(), center.getY(), innerRadius);
+        List<BaseGameEntity> entities = mapDivision.getIntersectedEntities(center, outerRadius);
+        List<Obstacle> obstacles = entities.stream().filter(e -> e instanceof Obstacle && !e.intersects(innerArea)).map(e -> (Obstacle) e).collect(Collectors.toList());
+
+        for(int i = 0; i < 50; i++) {
+            double areaRadius = Math.hypot(areaSize/2, areaSize/2);
+            Point2D freeCenter = GeometryEnhanced.randomPointInCircle(center, outerRadius);
+            Circle freeArea = new Circle(freeCenter.getX(), freeCenter.getY(), areaRadius);
+
+            if(!innerArea.intersects(freeArea.getBoundsInLocal()) && obstacles.stream().noneMatch(o -> o.intersects(freeArea))) {
+                if(pos == Pos.TOP_LEFT) {
+                    return freeCenter.subtract(new Point2D(areaSize/2, areaSize/2));
+                } else {
+                    return freeCenter;
+                }
+            }
+        }
+
         return null;
     }
 
@@ -135,6 +168,7 @@ public class SurvivalController extends Controller {
     // ------------------------------------------------------------
 
     // LOGIC ------------------------------------------------------
+    @Override
     public void changeScore(double score) {
         this.score = Math.max(0, this.score + score);
     }
@@ -156,6 +190,31 @@ public class SurvivalController extends Controller {
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public boolean spawnTriggerAroundPoint(TriggerType triggerType, Point2D center, double innerConstraint, double outerConstraint) {
+        Point2D spawnPoint = getFreeArea(center, innerConstraint, outerConstraint, 32, Pos.TOP_LEFT);
+        if(spawnPoint == null) return false;
+
+        switch (triggerType) {
+            case HEALTH_GIVER:
+                addTrigger(new HealthGiver((int) spawnPoint.getX(), (int) spawnPoint.getY(), 20, 0));
+                break;
+            case IMMUNE:
+                addTrigger(new Immune((int) spawnPoint.getX(), (int) spawnPoint.getY(), 20, 0));
+                break;
+            case TRIPLE_BULLETS:
+                addTrigger(new TripleBullet((int) spawnPoint.getX(), (int) spawnPoint.getY(), 20, 0));
+                break;
+            case FREEZE:
+                addTrigger(new Freeze((int) spawnPoint.getX(), (int) spawnPoint.getY(), 5, 0));
+                break;
+            case INVERSE_TRAP:
+                addTrigger(new InverseTrap((int) spawnPoint.getX(), (int) spawnPoint.getY(), 10, 0));
+        }
+
+        return true;
     }
     //-------------------------------------------------------------
 }

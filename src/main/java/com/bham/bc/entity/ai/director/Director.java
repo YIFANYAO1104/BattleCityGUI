@@ -1,10 +1,16 @@
 package com.bham.bc.entity.ai.director;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.agents.enemies.EnemyType;
+import com.bham.bc.components.characters.enemies.EnemyType;
+import com.bham.bc.components.triggers.TriggerType;
+import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.behavior.*;
+import javafx.geometry.Point2D;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.lang.Math;
+import java.util.stream.Collectors;
 
 import static com.bham.bc.utils.Timer.CLOCK;
 import static com.bham.bc.components.Controller.services;
@@ -12,8 +18,8 @@ import static com.bham.bc.components.Controller.services;
 public class Director {
 
     private final StateMachine stateMachine; // The State Machine that the director uses
-    private final int STATETIMELENGTH = 30; // The base length at which each state lasts in the game
-    private final int MAXSTATETIMEMOD = 30; // The maximum change in the length of each state
+    private final int STATETIMELENGTH = 30000; // The base length at which each state lasts in the game
+    private final int MAXSTATETIMEMOD = 30000; // The maximum change in the length of each state
     private int stateTimeModifier; // The time at which states are increased/decreased. This value is incremented each loop of the FSM
     private BooleanCondition stateTimeLimitUp; // Condition for counting a state's time limit that gets longer as the game goes on
     private BooleanCondition stateTimeLimitDown; // Condition for counting a state's time limit that gets shorter as the game goes on
@@ -58,15 +64,15 @@ public class Director {
 
         // Create Transitions of the Finite State Machine
         Transition buildUpToPeak = new Transition(new Action[]{ Action.RESETTIMELIMIT },peakState, endBuildUp);
-        Transition peakToRelax = new Transition(new Action[]{ Action.RESETTIMELIMIT },relaxState, stateTimeLimitDown);
-        Transition relaxToBuildUp = new Transition(new Action[]{ Action.INCREMENTLOOP, Action.RESETTIMELIMIT }, buildUpState, stateTimeLimitDown);
+        Transition peakToRelax = new Transition(new Action[]{ Action.INCREMENTLOOP, Action.RESETTIMELIMIT },relaxState, stateTimeLimitDown);
+        Transition relaxToBuildUp = new Transition(new Action[]{ Action.RESETTIMELIMIT }, buildUpState, stateTimeLimitDown);
 
         // Set the created transitions
         buildUpState.setTransitions(new Transition[]{ buildUpToPeak });
         peakState.setTransitions(new Transition[]{ peakToRelax });
         relaxState.setTransitions(new Transition[]{ relaxToBuildUp });
 
-        return new StateMachine(buildUpState);
+        return new StateMachine(relaxState);
     }
 
     /**
@@ -113,11 +119,13 @@ public class Director {
     private void buildUp() {
         // Checks if it's been 5 seconds since an enemy has spawned
         if(CLOCK.getCurrentTime() - lastTick >= 5000) {
+            System.out.println("I am in Build state");
             lastTick = CLOCK.getCurrentTime();
 
             // Calculate change in enemy count
             int newEnemyCount = services.getCharacters(Side.ENEMY).size();
             int changeInEnemyCount = newEnemyCount - enemyCount;
+            System.out.println("change in enemy: " + changeInEnemyCount);
 
             // Calculate change in ally hp fraction
             double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getFullHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
@@ -144,24 +152,42 @@ public class Director {
      */
     private int findNumEnemies2Spawn(int changeInEnemy, double percentageChangeInHealth){
         int numOfEnemies2Spawn;
-        if (changeInEnemy <= 0){
-            //Case where the player has killed no enemies
-            if (percentageChangeInHealth <= .1){
-                // Case where the player hasn't taken much or at all any damage
-                // So that the player does not get any lee-way
+        if (changeInEnemy >= 0){
+            //Case where the number of enemies has stayed the same or increased
+            // meaning the player hasn't killed enough enemies to stay on top
+            if (percentageChangeInHealth >= -.05) {
+                // Case where the player has taken a small amount of damage so the number of enemies isn't reduced
                 numOfEnemies2Spawn = 2;
-            } else if (percentageChangeInHealth <= .3) {
+            } else if (percentageChangeInHealth >= -.3) {
                 // Case where the player has taken some damage so the number of enemies spawned is reduced
                 numOfEnemies2Spawn = 1;
             } else{
                 // Case where the player has taken a lot of damage so that no enemies are spawned
                 numOfEnemies2Spawn = 0;
-                //TODO: spawnPowerups();
+                spawnRandomPowerups(1);
             }
         } else {
-            numOfEnemies2Spawn = changeInEnemy + 1;
+            System.out.println("spawning else");
+            numOfEnemies2Spawn = Math.abs(changeInEnemy) + 1;
         }
         return numOfEnemies2Spawn;
+    }
+
+    /**
+     * Spawns a provided number of random powerups defined in {@link TriggerType}
+     * @param numPowerupsToSpawn amount of powerups to be spawned
+     */
+    private void spawnRandomPowerups(int numPowerupsToSpawn) {
+        System.out.println("Spawning " + numPowerupsToSpawn + " Powerups");
+
+        TriggerType[] powerupTypes = Arrays.stream(TriggerType.values()).filter(t -> t.GROUP == TriggerType.TriggerGroup.POWERUP).toArray(TriggerType[]::new);
+        Player player = services.getPlayer();
+        if(player == null) return;
+
+        for(int i = 0; i < numPowerupsToSpawn; i++) {
+            int randomI = new Random().nextInt(powerupTypes.length);
+            services.spawnTriggerAroundPoint(powerupTypes[randomI], player.getCenterPosition(), player.getHitBoxRadius(), 200);
+        }
     }
 
     /**
@@ -169,6 +195,7 @@ public class Director {
      * @param numEnemiesToSpawn amount of enemies to be spawned
      */
     private void spawnRandomEnemies(int numEnemiesToSpawn) {
+        System.out.println("Spawning " + numEnemiesToSpawn + " Enemies");
         for(int i = 0; i < numEnemiesToSpawn; i++) {
             int randomI = new Random().nextInt(EnemyType.values().length);
             services.spawnEnemyRandomly(EnemyType.values()[randomI]);
@@ -182,6 +209,7 @@ public class Director {
      */
     private void peak(){
         if (lastTick == -1 || (CLOCK.getCurrentTime() - lastTick) >= 10000) {
+            System.out.println("I am in the Peak state");
             lastTick = CLOCK.getCurrentTime();
 
             // Calculate change in ally hp fraction
@@ -193,7 +221,7 @@ public class Director {
             double changeInHomeHpFraction = newHomeHpFraction - homeHpFraction;
 
             if((changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5){
-                //TODO: spawnPowerups();
+                spawnRandomPowerups(1);
             }
         }
     }
@@ -205,8 +233,9 @@ public class Director {
      * And will spawn powerups if the player is still struggling
      */
     private void relax() {
-        if(CLOCK.getCurrentTime() - lastTick >= 10000) {
+        if(CLOCK.getCurrentTime() - lastTick >= 5000) {
             lastTick = CLOCK.getCurrentTime();
+            System.out.println("I am in relax state");
 
             // Calculate change in ally hp fraction
             double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getFullHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
@@ -218,7 +247,7 @@ public class Director {
 
             // Ensures the player isn't struggling too much and gives help if so
             if ((changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5) {
-                //TODO: spawnPowerups();
+                spawnRandomPowerups(1);
             } else {
                 spawnRandomEnemies(1);
             }
@@ -250,7 +279,6 @@ public class Director {
             stateTime = CLOCK.getCurrentTime();
             return false;
         }
-
         return CLOCK.getCurrentTime() - stateTime >= STATETIMELENGTH + stateTimeModifier;
     }
 

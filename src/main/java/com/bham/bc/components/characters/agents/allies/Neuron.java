@@ -19,7 +19,7 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 
 public class Neuron extends Agent {
 
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/Neuron.png";
+    public static final String IMAGE_PATH = "img/characters/Neuron.png";
     public static final int SIZE = 30;
     public static final double HP = 100;
     public static final double SPEED = 3;
@@ -36,7 +36,11 @@ public class Neuron extends Agent {
     public Neuron(double x, double y) {
         super(x, y, SPEED, HP, Side.ALLY);
         mass=1;
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        try{
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         brain = new Goal_Think(this);
         brainRegulator = new Regulator(1);
 

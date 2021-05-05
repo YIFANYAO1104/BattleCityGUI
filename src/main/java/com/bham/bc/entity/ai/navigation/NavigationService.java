@@ -40,10 +40,12 @@ public interface NavigationService {
 
     boolean isComplete();
 
-    /**
-     * Resets the search status to <i>no_task</i>. This is useful to not repeat the searches
-     */
     void resetTaskStatus();
+
+    /**
+     * Resets the search status to <i>no_task</i>. This is useful to not repeat the searches after target was found
+     */
+    void resetToNoTask();
 
     /**
      * called by an agent after it has been notified that a search has

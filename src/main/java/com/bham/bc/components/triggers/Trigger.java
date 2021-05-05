@@ -13,14 +13,19 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 import java.util.List;
 
 /**
- *  Desc:   base class for a trigger. A trigger is an object that is
- *          activated when an entity moves within its region of influence.
+ * Base class for a trigger. A trigger is an object that is activated when an entity moves within its region of influence.
  */
+
 abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
 
     protected boolean active;
     protected int currentFrame;
 
+    /**
+     * Construct the Trigger in a specific position
+     * @param x the x coordinates of respawn trigger
+     * @param y the x coordinates of respawn trigger
+     */
     public Trigger(int x, int y) {
         super(getNextValidID(), x, y);
         active = true;
@@ -66,11 +71,20 @@ abstract public class Trigger extends BaseGameEntity implements ExtraInfo {
         entityManager.removeEntity(this);
     }
 
+    /**
+     * Handle the intersection
+     * @param shape shape of intersecting entity
+     * @return true if two objects intersects, otherwise false.
+     */
     @Override
     public boolean intersects(Shape shape) {
         return shape.intersects(getHitBox().getBoundsInLocal());
     }
-
+    /**
+     * Handle the intersection
+     * @param entity the intersecting entity
+     * @return true if two objects intersects, otherwise false.
+     */
     @Override
     public boolean intersects(BaseGameEntity entity) {
         return intersects(entity.getHitBox());

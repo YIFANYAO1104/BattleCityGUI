@@ -14,7 +14,7 @@ import javafx.scene.shape.Circle;
  */
 public class RingExplosion extends Trigger {
 
-    public static final int SIZE = 60;
+    public static final int SIZE = 80;
     private int currentFrame;
     private double damage;
     private Side side;
@@ -22,8 +22,8 @@ public class RingExplosion extends Trigger {
     /**
      * Constructs explosion at a given location
      * @param centerPosition x and y coordinates of the trigger image
-     * @param damage amount of damage that will be dealt to specific side
-     * @param side ALLY or ENEMY side trigger belongs to
+     * @param damage         amount of damage that will be dealt to specific side
+     * @param side           ALLY or ENEMY side trigger belongs to
      */
     public RingExplosion(Point2D centerPosition, double damage, Side side) {
         super((int) (centerPosition.getX() - SIZE/2), (int) (centerPosition.getY() - SIZE/2));
@@ -36,13 +36,17 @@ public class RingExplosion extends Trigger {
      * Initializes all the images for the explosion
      */
     protected Image[] getDefaultImage() {
-        String baseUrl = "file:src/main/resources/img/triggers/effects/blueRingExplosion";
+        String baseUrl = "img/triggers/effects/blueRingExplosion";
         entityImages = new Image[19];
 
         for(int i = 1; i <= 19; i++) {
             String url = baseUrl + i + ".png";
-            entityImages[i-1] = new Image(url, SIZE, SIZE, false, false);
-        }
+            try{
+            entityImages[i-1] = new Image(getClass().getClassLoader().getResourceAsStream(url), SIZE, SIZE, false, false);
+            }catch (IllegalArgumentException | NullPointerException e){
+                e.printStackTrace();
+            }
+            }
         return entityImages;
     }
 

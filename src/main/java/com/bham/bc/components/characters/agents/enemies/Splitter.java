@@ -31,11 +31,11 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  */
 public class Splitter extends Agent {
     // Constant parameters
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/splitter.png";
+    public static final String IMAGE_PATH = "img/characters/splitter.png";
     public static final int SIZE = 30;
 
     // Configurable
-    public static final double HP = 300;
+    public static final double HP = 150;
     public static final double SPEED = 2;
 
     // Behavior
@@ -50,9 +50,10 @@ public class Splitter extends Agent {
      */
     public Splitter(double x, double y) {
         super(x, y, SPEED, HP, Side.ENEMY);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
         stateMachine = createFSM();
+        steering.seekOn();
     }
 
     @Override
@@ -96,12 +97,12 @@ public class Splitter extends Agent {
                     takeOver();
                     break;
                 case SET_SEARCH:
-                    steering.setDecelerateOn(false);
+                    steering.setDecelerate(false);
                     steering.seekOn();
                     break;
                 case RESET_SEARCH:
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
+                    steering.setDecelerate(true);
                     pathEdges.clear();
                     break;
             }
@@ -146,7 +147,7 @@ public class Splitter extends Agent {
      */
     public static class MiniSplitter extends Agent {
         // Constant parameters
-        public static final String IMAGE_PATH = "file:src/main/resources/img/characters/splitter.png";
+        public static final String IMAGE_PATH = "img/characters/splitter.png";
         public static final int SIZE = 15;
 
         // Configurable
@@ -166,8 +167,9 @@ public class Splitter extends Agent {
         protected MiniSplitter(double x, double y) {
             super(x, y, SPEED, HP,Side.ENEMY);
             navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
-            entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
+            entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
             stateMachine = createFSM();
+            steering.seekOn();
         }
 
         @Override
@@ -181,7 +183,7 @@ public class Splitter extends Agent {
             searchAllyState.setExitActions(new Action[]{ Action.RESET_SEARCH });
 
             // Define all conditions required to change any state
-            nearToAllyCondition = new IntCondition(0, 50);
+            nearToAllyCondition = new IntCondition(0, 40);
 
             // Define all state transitions that could happen
             Transition attackAllyPossibility = new Transition(attackAllyState, nearToAllyCondition);
@@ -208,12 +210,12 @@ public class Splitter extends Agent {
                         destroy();
                         break;
                     case SET_SEARCH:
-                        steering.setDecelerateOn(false);
+                        steering.setDecelerate(false);
                         steering.seekOn();
                         break;
                     case RESET_SEARCH:
                         steering.seekOff();
-                        steering.setDecelerateOn(true);
+                        steering.setDecelerate(true);
                         pathEdges.clear();
                         break;
                 }

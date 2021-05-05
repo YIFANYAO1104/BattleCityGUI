@@ -237,7 +237,7 @@ abstract public class GameCharacter extends MovingEntity {
     public void render(GraphicsContext gc) {
         drawRotatedImage(gc, entityImages[0], getAngle());
         renderHp(gc);
-//        GeometryEnhanced.renderHitBox(gc,this.getHitBox());
+        //GeometryEnhanced.renderHitBox(gc,this.getHitBox());
     }
 
     @Override

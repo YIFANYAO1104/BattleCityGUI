@@ -14,7 +14,7 @@ public class QuickLaunch extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            GameSession manager = new GameSession(MapType.Trigger162);
+            GameSession manager = new GameSession(MapType.MEDIUM);
             manager.startGame(primaryStage);
         } catch(Exception e) {
             e.printStackTrace();

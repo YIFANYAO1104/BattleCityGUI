@@ -35,12 +35,11 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  */
 public class Teaser extends Agent {
     // Constant
-    public static final String IMAGE_PATH = "file:src/main/resources/img/characters/teaser.png";
+    public static final String IMAGE_PATH = "img/characters/teaser.png";
     public static final int SIZE = 30;
-    public static final EnemyType TRIBE = EnemyType.TEASER;
 
     // Configurable
-    public static final double HP = 100;
+    public static final double HP = 50;
     public static final double SPEED = 5;
 
     // Behavior
@@ -58,11 +57,16 @@ public class Teaser extends Agent {
      */
     public Teaser(double x, double y) {
         super(x, y, SPEED, HP, Side.ENEMY);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-        stateMachine = createFSM();
+        try{
+            entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
+            stateMachine = createFSM();
 
-        GUN.setRate(600);
+        GUN.setRate(2000);
         GUN.setDamageFactor(3);
+        steering.seekOn();
     }
 
     @Override
@@ -85,7 +89,7 @@ public class Teaser extends Agent {
 
         // Define all conditions required to change any state
         noObstacleCondition = new FreePathCondition();
-        highHealthCondition = new IntCondition((int) (HP * .2), (int) HP);
+        highHealthCondition = new IntCondition((int) (HP * .3), (int) HP);
         nearToAllyCondition = new IntCondition(0, 200);
         nearToHomeCondition = new IntCondition(0, (int) (services.getHomeArea().getRadius() * .8));
         attackAllyCondition = new AndCondition(new AndCondition(noObstacleCondition, nearToAllyCondition), highHealthCondition);
@@ -120,52 +124,41 @@ public class Teaser extends Agent {
         Arrays.stream(actions).forEach(action -> {
             switch(action) {
                 case SEARCH_ALLY:
-//                    System.out.println("SEARCH_ALLY");
                     search(ItemType.ALLY);
+                    steering.seekOn();
                     break;
                 case SEARCH_HOME:
-//                    System.out.println("SEARCH_HOME");
                     search(ItemType.HOME);
+                    steering.seekOn();
                     break;
                 case ATTACK_ALLY:
-//                    System.out.println("ATTACK_ALLY");
                     face(ItemType.ALLY);
-                    //shoot(.8);
                     GUN.shoot();
                     break;
                 case ATTACK_HOME:
-//                    System.out.println("ATTACK_HOME");
                     takeOver();
                     break;
                 case ATTACK_OBST:
-//                    System.out.println("ATTACK_OBST");
                     setMaxSpeed(shootObstacle() ? SPEED * .5 : SPEED);
                     break;
                 case SET_SPEED:
-//                    System.out.println("SET_SPEED");
                     setMaxSpeed(SPEED * 3);
                     break;
                 case RESET_SPEED:
-//                    System.out.println("RESET_SPEED");
                     setMaxSpeed(SPEED);
                     break;
                 case SET_RATE:
-//                    System.out.println("SET_RATE");
-                    GUN.setRate(500);
                     GUN.setDamageFactor(3);
                     break;
                 case RESET_RATE:
-//                    System.out.println("RESET_RATE");
-                    GUN.setRate(1000);
                     GUN.setDamageFactor(1);
                     break;
                 case SET_SEARCH:
-//                    System.out.println("SET_SEARCH");
-                    steering.setDecelerateOn(false);
+                    steering.seekOn();
+                    steering.setDecelerate(false);
                 case RESET_SEARCH:
-//                    System.out.println("RESET_SEARCH");
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
+                    steering.setDecelerate(true);
                     pathEdges.clear();
                     break;
             }

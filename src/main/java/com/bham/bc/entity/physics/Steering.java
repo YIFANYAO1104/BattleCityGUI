@@ -27,10 +27,10 @@ public class Steering {
     private boolean decelerateOn = false;
     private boolean seekOn = false;
 
-    public void setKeysOn(boolean val) {
+    public void setKeys(boolean val) {
         keysOn = val;
     }
-    public void setDecelerateOn(boolean val) {
+    public void setDecelerate(boolean val) {
         decelerateOn = val;
     }
     public void seekOn() {
@@ -87,7 +87,7 @@ public class Steering {
      * <p>Checks if acceleration exceeds the bounds of a preferred min/max speed and returns a new delta velocity
      * vector which will ensure, once it is added to the current speed, it won't exceed the boundary.</p>
      *
-     * <p><b>Note: </b> only works when force is perpendicular to velocity, i.e., we can't check for sideways
+     * <p><b>Note:</b> only works when force is parallel to velocity, i.e., we can't check for sideways
      * acceleration/deceleration.</p>
      *
      * @param deltaVelocity velocity change we would like to apply to agent's current velocity

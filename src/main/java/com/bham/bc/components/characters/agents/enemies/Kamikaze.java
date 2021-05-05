@@ -8,6 +8,7 @@ import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
+import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
@@ -33,8 +34,8 @@ import static com.bham.bc.entity.EntityManager.entityManager;
 public class Kamikaze extends Agent {
     public static final String IMAGE_PATH = "file:src/main/resources/img/characters/kamikaze.png";
     public static final int SIZE = 30;
-    public static final int HP = 100;
-    public static final double SPEED = 3;
+    public static final int HP = 50;
+    public static final double SPEED = 4;
 
     private final StateMachine stateMachine;
     private FreePathCondition noObstacleCondition;
@@ -49,16 +50,22 @@ public class Kamikaze extends Agent {
      */
     public Kamikaze(double x, double y) {
         super(x, y, SPEED, HP, Side.ENEMY);
-        entityImages = new Image[] { new Image(IMAGE_PATH, SIZE, 0, true, false) };
-        stateMachine = createFSM();
+        try{
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
+        stateMachine = createFSM();
+        steering.seekOn();
     }
 
     @Override
     protected StateMachine createFSM() {
         // Define possible states the enemy can be in
         State searchState = new State(new Action[]{ Action.SEARCH_ALLY }, null);
-        State chargeState = new State(new Action[]{ Action.SEARCH_ALLY }, null);
+        State chargeState = new State(new Action[]{ Action.CHARGE_ALLY }, null);
         State attackState = new State(new Action[]{ Action.ATTACK_ALLY }, null);
 
         // Set up required entry/exit actions
@@ -69,8 +76,8 @@ public class Kamikaze extends Agent {
 
         // Define all conditions required to change any state
         noObstacleCondition = new FreePathCondition(getHitBoxRadius());
-        chargeAllyCondition = new IntCondition(0, 150);
-        attackAllyCondition = new IntCondition(0, 60);
+        chargeAllyCondition = new IntCondition(0, 200);
+        attackAllyCondition = new IntCondition(0, 40);
 
         // Define all state transitions that could happen
         Transition searchPossibility = new Transition(searchState, new NotCondition(new AndCondition(chargeAllyCondition, noObstacleCondition)));
@@ -87,9 +94,7 @@ public class Kamikaze extends Agent {
 
     @Override
     public void update() {
-    	
         double distanceToAlly = getCenterPosition().distance(services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
-
         attackAllyCondition.setTestValue((int) distanceToAlly);
         chargeAllyCondition.setTestValue((int) distanceToAlly);
         noObstacleCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
@@ -99,9 +104,11 @@ public class Kamikaze extends Agent {
             switch(action) {
                 case SEARCH_ALLY:
                     search(ItemType.ALLY);
+                    steering.seekOn();
                     break;
                 case CHARGE_ALLY:
                     face(ItemType.ALLY);
+                    velocity = heading.multiply(maxSpeed);
                     break;
                 case ATTACK_ALLY:
                     destroy();
@@ -113,12 +120,10 @@ public class Kamikaze extends Agent {
                     setMaxSpeed(SPEED);
                     break;
                 case SET_SEARCH:
-                    steering.setDecelerateOn(false);
                     steering.seekOn();
                     break;
                 case RESET_SEARCH:
                     steering.seekOff();
-                    steering.setDecelerateOn(true);
                     pathEdges.clear();
                     break;
             }
@@ -130,11 +135,11 @@ public class Kamikaze extends Agent {
     public void destroy() {
         exists = false;
         entityManager.removeEntity(this);
-        Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-        services.addTrigger(explosion);
 
+        Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
         Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
         services.addTrigger(dissolve);
+        services.addTrigger(explosion);
     }
 
     @Override
