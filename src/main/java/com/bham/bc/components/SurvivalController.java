@@ -3,6 +3,7 @@ package com.bham.bc.components;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
+import com.bham.bc.components.characters.allies.AllyType;
 import com.bham.bc.components.characters.enemies.*;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.GameMap;
@@ -185,6 +186,20 @@ public class SurvivalController extends Controller {
 
         try {
             addCharacter(enemyType.newInstance(spawnPoint.getX(), spawnPoint.getY()));
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void spawnAlly() {
+        Circle homeArea = getHomeArea();
+        Point2D spawnPoint = GeometryEnhanced.randomPointInCircle(homeArea).subtract(GameCharacter.MAX_SIZE*.5, GameCharacter.MAX_SIZE*.5);
+        AllyType allyType = AllyType.NEURON;
+
+        try {
+            System.out.println("Spawn ally");
+            addCharacter(allyType.newInstance(spawnPoint.getX(), spawnPoint.getY()));
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
         }

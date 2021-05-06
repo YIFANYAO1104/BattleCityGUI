@@ -1,16 +1,14 @@
 package com.bham.bc.entity.ai.director;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
+import com.bham.bc.components.characters.allies.Neuron;
 import com.bham.bc.components.characters.enemies.EnemyType;
 import com.bham.bc.components.triggers.TriggerType;
-import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.behavior.*;
-import javafx.geometry.Point2D;
 
 import java.util.Arrays;
 import java.util.Random;
 import java.lang.Math;
-import java.util.stream.Collectors;
 
 import static com.bham.bc.utils.Timer.CLOCK;
 import static com.bham.bc.components.Controller.services;
@@ -105,6 +103,7 @@ public class Director {
                     break;
                 case SPAWNPOWERUPS:
                     spawnRandomPowerups(2);
+                    break;
                 case SPAWNALLY:
                     spawnAllies(1);
             }
@@ -168,7 +167,7 @@ public class Director {
             } else{
                 // Case where the player has taken a lot of damage so that no enemies are spawned
                 numOfEnemies2Spawn = 0;
-                spawnRandomPowerups(2);
+                spawnRandomPowerups(1);
             }
         } else {
             System.out.println("spawning else");
@@ -207,11 +206,11 @@ public class Director {
     }
 
     /**
-     * Spawns a provided number of allies defined in {@link Neuron}
-     * @param numAlliesToSpawn amount of allies to be spawned
+     * Spawns a provided number of random enemies defined in {@link Neuron}
+     * @param numAlliesToSpawn amount of enemies to be spawned
      */
     private void spawnAllies(int numAlliesToSpawn) {
-        System.out.println("Spawning " + numAlliesToSpawn + " Allies");
+        System.out.println("Spawning " + numAlliesToSpawn + " Enemies");
         for(int i = 0; i < numAlliesToSpawn; i++) {
             services.spawnAlly();
         }
@@ -236,7 +235,7 @@ public class Director {
             double changeInHomeHpFraction = newHomeHpFraction - homeHpFraction;
 
             if((changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5){
-                spawnRandomPowerups(2);
+                spawnRandomPowerups(1);
             }
         }
     }
@@ -262,7 +261,7 @@ public class Director {
 
             // Ensures the player isn't struggling too much and gives help if so
             if ((changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5) {
-                spawnRandomPowerups(2);
+                spawnRandomPowerups(1);
             } else {
                 spawnRandomEnemies(1);
             }

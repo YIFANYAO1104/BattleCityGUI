@@ -1,6 +1,7 @@
-package com.bham.bc.components.characters.enemies;
+package com.bham.bc.components.characters.allies;
 
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.characters.goals.composite.Goal_Think;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.Dissolve;
@@ -15,11 +16,11 @@ import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.components.shooting.BulletType.DEFAULT;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
-public class Neuron extends Enemy {
+public class Neuron extends Ally {
 
     public static final String IMAGE_PATH = "img/characters/Neuron.png";
     public static final int SIZE = 30;
-    public static final double HP = 100;
+    public static final double HP = 50;
     public static final double SPEED = 3;
 
     private Goal_Think brain;
