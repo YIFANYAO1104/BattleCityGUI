@@ -33,4 +33,5 @@ public enum Action{
     RELAX,
     INCREMENTLOOP,
     RESETTIMELIMIT,
+    SPAWNPOWERUPS,
 }

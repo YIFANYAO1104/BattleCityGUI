@@ -63,9 +63,9 @@ public class Director {
         endBuildUp = new OrCondition(playerStressLimit, stateTimeLimitUp);
 
         // Create Transitions of the Finite State Machine
-        Transition buildUpToPeak = new Transition(new Action[]{ Action.RESETTIMELIMIT },peakState, endBuildUp);
-        Transition peakToRelax = new Transition(new Action[]{ Action.INCREMENTLOOP, Action.RESETTIMELIMIT },relaxState, stateTimeLimitDown);
-        Transition relaxToBuildUp = new Transition(new Action[]{ Action.RESETTIMELIMIT }, buildUpState, stateTimeLimitDown);
+        Transition buildUpToPeak = new Transition(new Action[]{ Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS },peakState, endBuildUp);
+        Transition peakToRelax = new Transition(new Action[]{ Action.INCREMENTLOOP, Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS },relaxState, stateTimeLimitDown);
+        Transition relaxToBuildUp = new Transition(new Action[]{ Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS }, buildUpState, stateTimeLimitDown);
 
         // Set the created transitions
         buildUpState.setTransitions(new Transition[]{ buildUpToPeak });
@@ -103,6 +103,8 @@ public class Director {
                 case RESETTIMELIMIT:
                     resetTimeLimit();
                     break;
+                case SPAWNPOWERUPS:
+                    spawnRandomPowerups(2);
             }
         });
     }
@@ -164,7 +166,7 @@ public class Director {
             } else{
                 // Case where the player has taken a lot of damage so that no enemies are spawned
                 numOfEnemies2Spawn = 0;
-                spawnRandomPowerups(1);
+                spawnRandomPowerups(2);
             }
         } else {
             System.out.println("spawning else");
@@ -221,7 +223,7 @@ public class Director {
             double changeInHomeHpFraction = newHomeHpFraction - homeHpFraction;
 
             if((changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5){
-                spawnRandomPowerups(1);
+                spawnRandomPowerups(2);
             }
         }
     }
@@ -247,7 +249,7 @@ public class Director {
 
             // Ensures the player isn't struggling too much and gives help if so
             if ((changeInAllyHpFraction + changeInHomeHpFraction) * .5 >= .5) {
-                spawnRandomPowerups(1);
+                spawnRandomPowerups(2);
             } else {
                 spawnRandomEnemies(1);
             }
