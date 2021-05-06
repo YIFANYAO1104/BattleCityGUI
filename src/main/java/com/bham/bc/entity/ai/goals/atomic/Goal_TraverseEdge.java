@@ -11,55 +11,35 @@ import static com.bham.bc.entity.graph.edge.GraphEdge.shoot;
 public class Goal_TraverseEdge extends Goal {
 
     /**
-     * the edge the bot will follow
+     * the edge that the agent is following
      */
     private PathEdge edge;
+
     /**
-     * true if m_Edge is the last in the path.
+     * constructor
+     * @param agent the owner of the goal
+     * @param edge the edge that the agent is following
      */
-    private boolean isLast;
+    public Goal_TraverseEdge(GameCharacter agent, PathEdge edge) {
 
-
-
-    //---------------------------- ctor -------------------------------------------
-    //-----------------------------------------------------------------------------
-    public Goal_TraverseEdge(GameCharacter gameCharacter,
-                             PathEdge edge,
-                             boolean isLast) {
-
-        super(gameCharacter, goal_traverse_edge);
+        super(agent, goal_traverse_edge);
         this.edge = new PathEdge(edge);
-        this.isLast = isLast;
-
     }
 
-    //the usual suspects
+
     @Override
     public void activate() {
         status = active;
-
-        //the edge behavior flag may specify a type of movement that necessitates a 
-        //change in the bot's max possible speed as it follows this edge
         switch (edge.getBehavior()) {
-            case shoot://TODO:ADD SHOOTING
+            case shoot:
                 agent.getTargetingSystem().hitObsOn();
             break;
             case normal:break;
             default:
-                throw new RuntimeException("<Goal_FollowPath::Activate>: Unrecognized edge type");
+                throw new RuntimeException("behavior not supported");
         }
-
-        //set the steering target
         agent.getSteering().setTarget(edge.getDestination());
-
-        //Set the appropriate steering behavior. If this is the last edge in the path
-        //the bot should arrive at the position it points to, else it should seek
-        if (isLast) {
-//            agent.getSteering().arriveOn();
-            agent.getSteering().seekOn();
-        } else {
-            agent.getSteering().seekOn();
-        }
+        agent.getSteering().seekOn();
     }
 
     @Override
@@ -76,12 +56,8 @@ public class Goal_TraverseEdge extends Goal {
 
     @Override
     public void terminate() {
-        //turn off steering behaviors.
         agent.getSteering().seekOff();
         agent.getTargetingSystem().hitObsOff();
-//        agent.getSteering().arriveOff();
-
-//        agent.setMaxSpeed(script.GetDouble("Bot_MaxSpeed"));
     }
 
     @Override

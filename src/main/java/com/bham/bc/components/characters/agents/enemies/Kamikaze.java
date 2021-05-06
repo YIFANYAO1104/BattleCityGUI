@@ -151,4 +151,9 @@ public class Kamikaze extends Agent {
     public String toString() {
         return "Kamikaze";
     }
+
+    @Override
+    public double getMaxDamage() {
+        return 50;//explosion
+    }
 }

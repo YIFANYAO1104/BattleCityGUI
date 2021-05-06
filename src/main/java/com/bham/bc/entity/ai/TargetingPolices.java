@@ -3,8 +3,7 @@ package com.bham.bc.entity.ai;
 import com.bham.bc.components.characters.GameCharacter;
 
 /**
- * A class contains many sub classes for Dijkstra Algorithm
- * Sub classes define conditions that when will Dijkstra Algorithm end
+ * A class contains many sub classes to define how you select a target
  */
 public class TargetingPolices {
 
@@ -13,7 +12,7 @@ public class TargetingPolices {
     }
 
     /**
-     * a condition class to check whether a node contains the desired active trigger
+     * an evaluation class for distance
      */
     public static class DistanceEvaluator implements TargetEvaluator {
         @Override
@@ -22,6 +21,9 @@ public class TargetingPolices {
         }
     }
 
+    /**
+     * an evaluation class for distance
+     */
     public static class HealthEvaluator implements TargetEvaluator {
         @Override
         public double evaluate(GameCharacter agent1, GameCharacter agent2){

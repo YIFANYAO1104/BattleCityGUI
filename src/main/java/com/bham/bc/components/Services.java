@@ -10,7 +10,7 @@ import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.TriggerType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
-import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
+import com.bham.bc.entity.ai.navigation.AlgorithmDriver;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;

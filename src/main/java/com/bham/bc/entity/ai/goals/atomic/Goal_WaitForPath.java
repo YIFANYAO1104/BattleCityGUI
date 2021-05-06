@@ -5,16 +5,21 @@ import com.bham.bc.entity.ai.navigation.SearchStatus;
 
 import static com.bham.bc.entity.ai.goals.GoalTypes.goal_wait_for_path;
 
+/**
+ * class to define behavior when an agent is waiting for path
+ */
 public class Goal_WaitForPath extends Goal {
 
 
-    //---------------------------- ctor -------------------------------------------
-    //-----------------------------------------------------------------------------
-    public Goal_WaitForPath(GameCharacter pBot) {
-        super(pBot, goal_wait_for_path);
+    /**
+     * constructor
+     * @param agent the owner of the goal
+     */
+    public Goal_WaitForPath(GameCharacter agent) {
+        super(agent, goal_wait_for_path);
     }
 
-    //the usual suspects
+
     @Override
     public void activate() {
         status = active;

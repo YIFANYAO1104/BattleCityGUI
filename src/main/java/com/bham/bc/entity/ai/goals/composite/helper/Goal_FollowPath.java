@@ -11,11 +11,13 @@ import java.util.List;
 
 import static com.bham.bc.entity.ai.goals.GoalTypes.goal_follow_path;
 
-
+/**
+ * The class to define how an agent follow a path
+ */
 public class Goal_FollowPath extends Goal_Composite {
 
     /**
-     * a local copy of the path returned by the path planner
+     * a copy of the path
      */
     private LinkedList<PathEdge> pathList;
 
@@ -29,16 +31,9 @@ public class Goal_FollowPath extends Goal_Composite {
     public void activate() {
         status = active;
 
-        //get a reference to the next edge
         PathEdge edge = pathList.getFirst();
-
-        //remove the edge from the path
         pathList.removeFirst();
-
-        //some edges specify that the bot should use a specific behavior when
-        //following them. This switch statement queries the edge behavior flag and
-        //adds the appropriate goals/s to the subgoal list.
-        addSubgoal(new Goal_TraverseEdge(agent, edge, pathList.isEmpty()));
+        addSubgoal(new Goal_TraverseEdge(agent, edge));
     }
 
     @Override
@@ -48,8 +43,6 @@ public class Goal_FollowPath extends Goal_Composite {
 
         status = processSubgoals();
 
-        //if there are no subgoals present check to see if the path still has edges.
-        //remaining. If it does then call activate to grab the next edge.
         if (status == completed && !pathList.isEmpty()) {
             activate();
         }
@@ -59,7 +52,7 @@ public class Goal_FollowPath extends Goal_Composite {
 
     @Override
     public void terminate() {
-		RemoveAllSubgoals();
+		removeAllSubgoals();
 		agent.brake();
     }
 

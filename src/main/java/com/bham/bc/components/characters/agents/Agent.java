@@ -14,8 +14,6 @@ import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
@@ -235,5 +233,10 @@ public abstract class Agent extends GameCharacter {
     @Override
     public NavigationService getNavigationService() {
         return navigationService;
+    }
+
+    @Override
+    public double getMaxDamage() {
+        return GUN.getMaxDamage();
     }
 }

@@ -266,4 +266,12 @@ abstract public class GameCharacter extends MovingEntity {
     public void brake(){
         velocity=new Point2D(0,0);
     }
+
+    public double getMaxDamage() {
+        return 0;
+    }
+
+    public double getMinDamage(){
+        return 0;
+    }
 }

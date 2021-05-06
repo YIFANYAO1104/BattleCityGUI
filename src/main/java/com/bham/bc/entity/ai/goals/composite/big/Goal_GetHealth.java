@@ -7,16 +7,17 @@ import com.bham.bc.entity.ai.goals.atomic.Goal_WaitForPath;
 import com.bham.bc.entity.ai.goals.composite.Goal_Composite;
 import com.bham.bc.entity.ai.goals.composite.helper.Goal_FollowPath;
 import com.bham.bc.entity.ai.navigation.ItemType;
+import com.bham.bc.entity.ai.navigation.SearchStatus;
 
 import static com.bham.bc.entity.ai.goals.GoalTypes.goal_get_health;
 
-public class Goal_GetItem extends Goal_Composite {
+public class Goal_GetHealth extends Goal_Composite {
 
     private ItemType targetType;
     private boolean waiting;
 
-    public Goal_GetItem(GameCharacter pBot, ItemType item) {
-        super(pBot, ItemTypeToGoalType(item));
+    public Goal_GetHealth(GameCharacter pBot, ItemType item) {
+        super(pBot, goal_get_health);
         targetType = item;
         waiting=false;
     }
@@ -30,7 +31,7 @@ public class Goal_GetItem extends Goal_Composite {
 
         addSubgoal(new Goal_WaitForPath(agent));
         waiting = true;
-
+        System.out.println("waiting");
     }
 
     @Override
@@ -39,22 +40,23 @@ public class Goal_GetItem extends Goal_Composite {
 
         status = processSubgoals();
 
-            if (waiting==true){ //we are waiting for path
-                if (status == completed) {
+        if (waiting==true){ //we are waiting for path
+            if (status == completed) {
+                if (agent.getNavigationService().peekRequestStatus()== SearchStatus.target_found) {
                     status=active;
                     waiting=false;
-                    RemoveAllSubgoals();
+                    removeAllSubgoals();
                     addSubgoal(new Goal_FollowPath(agent,
                             agent.getNavigationService().getPath()));
-                }
-            } else { //we are finding item
-//                System.out.println(agent.getNavigationService().isTriggerActive());
-                if (!agent.getNavigationService().isTriggerActive()) {
-                    terminate();
+                } else {
+                    status=failed;
                 }
             }
-
-
+        } else { //we are finding item
+            if (!agent.getNavigationService().isTriggerActive()) {
+                terminate();
+            }
+        }
 
         return status;
     }
@@ -62,21 +64,8 @@ public class Goal_GetItem extends Goal_Composite {
 
     @Override
     public void terminate() {
-		RemoveAllSubgoals();
+		removeAllSubgoals();
         status = completed;
-    }
-
-    /**
-     * helper function to change an item type enumeration into a goal type
-     */
-    public static int ItemTypeToGoalType(ItemType gt) {
-        switch (gt) {
-            case HEALTH:
-                return goal_get_health;
-            default:
-                throw new RuntimeException("Only heath");
-
-        }//end switch
     }
 
     @Override

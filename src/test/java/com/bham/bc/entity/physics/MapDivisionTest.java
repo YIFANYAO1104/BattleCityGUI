@@ -1,9 +1,14 @@
 package com.bham.bc.entity.physics;
 
 
+import com.bham.bc.components.Controller;
+import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.agents.allies.Neuron;
 import com.bham.bc.components.characters.agents.enemies.EnemyTestDemo;
+import com.bham.bc.components.environment.MapType;
 import com.bham.bc.entity.BaseGameEntity;
 import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Point2D;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -67,6 +72,20 @@ public class MapDivisionTest {
 
     }
 
+    @Test
+    public void randomNodeTest(){
+        new JFXPanel();
+        Controller.setMode(MapType.LARGE);
+        GameCharacter agent = new Neuron(100,100);
+        for (int i = 0; i < 5000; i++) {
+            Point2D pos = Controller.services.getGraph().getRandomNodeLocation();
+            if (pos==null){
+                System.out.println("wrong with getRandomNodeLocation()");
+            }
 
+            //and request a path to that position
+            agent.getNavigationService().createRequest(pos);
+        }
+    }
 
 }

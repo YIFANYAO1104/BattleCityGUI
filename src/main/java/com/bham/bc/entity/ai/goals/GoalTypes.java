@@ -4,7 +4,10 @@
  */
 package com.bham.bc.entity.ai.goals;
 
-
+/**
+ * class to define all the goal types
+ * including atomic and composite
+ */
 public class GoalTypes {
 
     public static final int goal_think = 0;
@@ -14,7 +17,6 @@ public class GoalTypes {
     public static final int goal_traverse_edge = 4;
     public static final int goal_move_to_position = 5;
     public static final int goal_get_health = 6;
-    public static final int goal_attack_cloest_target = 7;
+    public static final int goal_attack_closest_target = 7;
     public static final int goal_wait_for_path = 8;
-    public static final int goal_attack_weakest_target = 9;
 }

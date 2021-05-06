@@ -3,13 +3,12 @@ package com.bham.bc.components.characters.agents.allies;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.characters.agents.Agent;
-import com.bham.bc.entity.ai.goals.composite.Goal_Think;
+import com.bham.bc.entity.ai.goals.Goal_Think;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.utils.Regulator;
 import javafx.geometry.Point2D;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
@@ -42,10 +41,10 @@ public class Neuron extends Agent {
             e.printStackTrace();
         }
         brain = new Goal_Think(this);
-        brainRegulator = new Regulator(1);
+        brainRegulator = new Regulator(5);
 
         GUN.setRate(600);
-        GUN.setDamageFactor(3);
+        GUN.setDamageFactor(5);
     }
 
     @Override
@@ -53,84 +52,19 @@ public class Neuron extends Agent {
         return null;
     }
 
-//    @Override
-//    public void update() {
-//        if(freezeTicks!=0){
-//            System.out.println("\n -----------"+ freezeTicks);
-//            freezeTicks--;
-//            return;
-//        }
-//        noObstCondition.setTestValues(getCenterPosition(), services.getClosestCenter(getCenterPosition(), ItemType.ALLY));
-//
-//        Action[] actions = stateMachine.update();
-//        Arrays.stream(actions).forEach(action -> {
-//            switch(action) {
-//                case SEARCH_ALLY:
-//                    search(ItemType.ALLY);
-//                    goBackCondition.setTestValue(hp <= HP * .2);
-//                    break;
-//                case ATTACK_ALLY:
-//                    face(ItemType.ALLY);
-//                    shoot(0.8);
-//                    goBackCondition.setTestValue(hp <= HP * .2);
-//                    break;
-//                case ATTACK_OBST:
-//                    setMaxSpeed(shootObstacle() ? SPEED * .3 : SPEED);
-//                    break;
-//                case RETREAT:
-//                    search(ItemType.ENEMY_AREA);
-//                    if(Arrays.stream(services.getEnemyAreas()).anyMatch(this::intersects)) {
-//                        changeHp(HP);
-//                        goBackCondition.setTestValue(false);
-//                    }
-//                    break;
-//                case REGENERATE:
-//                    changeHp(HP * .003);
-//                    goBackCondition.setTestValue(hp < HP * .8);
-//                case SET_RATE:
-//                    GUN.setRate(500);
-//                    GUN.setDamageFactor(3);
-//                    break;
-//                case RESET_RATE:
-//                    GUN.setRate(1000);
-//                    GUN.setDamageFactor(1);
-//                    break;
-//                case SET_SEARCH:
-//                    steering.setDecelerateOn(false);
-//                    steering.seekOn();
-//                    break;
-//                case RESET_SEARCH:
-//                    steering.seekOff();
-//                    steering.setDecelerateOn(true);
-//                    pathEdges.clear();
-//                    break;
-//            }
-//        });
-//        move();
-//    }
-
     @Override
     public void update() {
-        //process the currently active goal. Note this is required even if the bot
-        //is under user control. This is because a goal is created whenever a user
-        //clicks on an area of the map that necessitates a path planning request.
         brain.process();
-
-        //Calculate the steering force and update the bot's velocity and position
         move();
-
-        //if the bot is under AI control but not scripted
         targetingSystem.update();
 
-        //appraise and arbitrate between all possible high level goals
         if (brainRegulator.isReady()){
-            System.out.println("r"+System.currentTimeMillis());
             brain.decideOnGoals();
         }
 
         //parallel with any seek, follow path
         //agent will shoot whenever it see a target
-        TakeAimAndShoot();
+        takeAimAndShoot();
     }
 
     @Override
@@ -153,12 +87,11 @@ public class Neuron extends Agent {
     }
 
 
-    public void TakeAimAndShoot() {
+    public void takeAimAndShoot() {
         if (targetingSystem.isAttackTargetOn()) {
             if (targetingSystem.isTargetBotShootable()){
                 if (GUN.getBulletType()==DEFAULT) {
                     Point2D futurePos = predictTargetPosition(targetingSystem.getTargetBot());
-
                     face(futurePos);
                     shoot(0.8);
                     return;
@@ -195,9 +128,10 @@ public class Neuron extends Agent {
                 .add(target.getCenterPosition());
     }
 
-    @Override
-    public void render(GraphicsContext gc) {
-        super.render(gc);
+//    @Override
+//    public void render(GraphicsContext gc) {
+//        super.render(gc);
+//        if (navigationService!=null) navigationService.render(gc);
 //        targetingSystem.render(gc);
-    }
+//    }
 }

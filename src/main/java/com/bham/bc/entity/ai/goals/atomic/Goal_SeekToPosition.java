@@ -5,6 +5,9 @@ import javafx.geometry.Point2D;
 
 import static com.bham.bc.entity.ai.goals.GoalTypes.goal_seek_to_position;
 
+/**
+ * class for definning behavior for seek to position
+ */
 public class Goal_SeekToPosition extends Goal {
 
     /**
@@ -12,20 +15,20 @@ public class Goal_SeekToPosition extends Goal {
      */
     private Point2D targetPos;
 
-    //---------------------------- ctor -------------------------------------------
-    //-----------------------------------------------------------------------------
-    public Goal_SeekToPosition(GameCharacter pBot, Point2D target) {
-        super(pBot, goal_seek_to_position);
+    /**
+     * constructor
+     * @param agent the owner of the goal
+     * @param target the target that the agent want to reach using seek steering behavior
+     */
+    public Goal_SeekToPosition(GameCharacter agent, Point2D target) {
+        super(agent, goal_seek_to_position);
         this.targetPos = target;
     }
 
-    //the usual suspects
     @Override
     public void activate() {
         status = active;
-
         agent.getSteering().setTarget(targetPos);
-
         agent.getSteering().seekOn();
     }
 
@@ -34,7 +37,6 @@ public class Goal_SeekToPosition extends Goal {
     public int process() {
         //if status is inactive, call Activate()
         activateIfInactive();
-
 
         if (agent.isReached(targetPos)) {
             status = completed;

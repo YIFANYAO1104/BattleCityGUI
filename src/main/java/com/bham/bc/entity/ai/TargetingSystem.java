@@ -19,6 +19,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 import java.util.ArrayList;
@@ -27,16 +28,38 @@ import java.util.List;
 
 import static com.bham.bc.components.Controller.services;
 
+/**
+ * This class takes care of how agent select it's current target
+ */
 public class TargetingSystem {
 
+	/**
+	 * selection policy, by distance or by health
+	 */
 	private TargetingPolices.TargetEvaluator targetEvaluator;
+	/**
+	 * the host of target system
+	 */
 	private GameCharacter agent;
+	/**
+	 * the selected agent to be attacked
+	 */
 	private GameCharacter targetBot;
+	/**
+	 * the selected obstacle to be attacked
+	 */
 	private Obstacle targetObstacle;
+	/**
+	 * The switch for targeting obstacle behavior update
+	 */
 	private boolean hitObsOn = false;
+	/**
+	 * The switch for targeting agent behavior update
+	 */
 	private boolean attackTargetOn = false;
 
-	private List<Rectangle> visionBoxes = new LinkedList<>();
+	//debug---------------------------------------------
+	private List<Shape> visionBoxes = new LinkedList<>();
 	private List<Rectangle> obstacleBoxes = new LinkedList<>();
 
 	public boolean isHitObsOn() {
@@ -70,7 +93,7 @@ public class TargetingSystem {
 		targetEvaluator = null;
 	}
 
-	private GameCharacter pickCharacter(TargetingPolices.TargetEvaluator evaluator){
+	private GameCharacter pickCharacter(){
 		double minDist = Double.MAX_VALUE;
 		GameCharacter targetBot = null;
 
@@ -80,13 +103,16 @@ public class TargetingSystem {
 		for (GameCharacter character : characters) {
 			//make sure the bot is alive and that it is not the owner
 			if (character.exists()  && (character.getSide() != agent.getSide())) {
-				double dist = evaluator.evaluate(agent,character);
+				double dist = new TargetingPolices.DistanceEvaluator().evaluate(agent,character);
 
 				if (dist < minDist) {
 					minDist = dist;
 					targetBot = character;
 				}
 			}
+		}
+		if (targetBot!=null){
+			visionBoxes.add(targetBot.getHitBox());
 		}
 //		if (targetBot!=null)System.out.println("TargetBot="+ targetBot+targetBot.getID());
 		return targetBot;
@@ -112,12 +138,8 @@ public class TargetingSystem {
 	}
 
 	public void update() {
-		if (attackTargetOn) {
-			targetBot = pickCharacter(targetEvaluator);
-		}
-		if (hitObsOn) {
-			targetObstacle=pickObstacle();
-		}
+		targetBot = pickCharacter();
+		targetObstacle=pickObstacle();
 	}
 
 	/**
@@ -183,6 +205,10 @@ public class TargetingSystem {
 		return true;
 	}
 
+	/**
+	 * To check whether there is an obstacle between agent and it's target
+	 * @return true if no obstacle
+	 */
 	public boolean isTargetBotWalkable() {
 		if (targetBot==null) return false;
 		Point2D start = agent.getCenterPosition();
@@ -217,12 +243,20 @@ public class TargetingSystem {
 		return true;
 	}
 
+	/**
+	 * To check whether the agent is close enough to the target
+	 * @return true if the distance is smaller than 100
+	 */
 	public boolean isReachingSafeDistance(){
 		if (targetBot==null) return false;
 		return agent.getCenterPosition().distance(targetBot.getCenterPosition())<=100;
 	}
 
-	public boolean isTargetBotVisable() {
+	/**
+	 * To check whether the agent is close enough to the target and is close enough to agent
+	 * @return true if the target is close enough and there is a path for shooting out a bullet
+	 */
+	public boolean isTargetBotVisiable() {
 		if (targetBot==null) return false;
 		return isTargetBotShootable()&&
 				agent.getCenterPosition().distance(targetBot.getCenterPosition())<=100;
@@ -235,14 +269,6 @@ public class TargetingSystem {
 	public boolean isTargetObstaclePresent() {
 		return targetObstacle != null;
 	}
-
-
-
-
-
-
-
-
 
 	public void render(GraphicsContext gc) {
 		if (targetBot!=null){
@@ -258,7 +284,7 @@ public class TargetingSystem {
 			gc.fillRoundRect(t2.getX(),t2.getY(),4,4,1,1);
 		}
 
-		for (Rectangle box : visionBoxes) {
+		for (Shape box : visionBoxes) {
 			GeometryEnhanced.renderHitBox(gc,box);
 		}
 		visionBoxes.clear();
@@ -267,47 +293,5 @@ public class TargetingSystem {
 			GeometryEnhanced.renderHitBox(gc,box);
 		}
 		obstacleBoxes.clear();
-	}
-
-	public void statatat(){
-		List<BaseGameEntity> ents = services.getMapDivision()
-				.getIntersectedEntities(agent.getCenterPosition(), 300);
-		int enemyNum = 0;
-		int allyNum = 0;
-		int softNum = 0;
-		int hardNum = 0;
-		int healthTriggerNum = 0;
-		for (BaseGameEntity ent : ents) {
-			if (ent instanceof Obstacle){
-				Obstacle temp = (Obstacle)ent;
-				if (temp.getAttributes().contains(Attribute.BREAKABLE)) {
-					softNum++;
-				} else {
-					hardNum++;
-				}
-			} else if (ent instanceof GameCharacter){
-				GameCharacter temp = (GameCharacter)ent;
-				if(temp.getSide()== Side.ENEMY){
-					enemyNum++;
-				} else {
-					allyNum++;
-				}
-			} else if (ent instanceof HealthGiver && ((HealthGiver)ent).active()){
-				healthTriggerNum++;
-			}
-		}
-		System.out.println("softNum = "+softNum);
-		System.out.println("hardNum = "+hardNum);
-		System.out.println("enemyNum = "+enemyNum);
-		System.out.println("allyNum = "+allyNum);
-		System.out.println("healthTriggerNum = "+healthTriggerNum);
-	}
-
-	public TargetingPolices.TargetEvaluator getTargetEvaluator() {
-		return targetEvaluator;
-	}
-
-	public void setTargetEvaluator(TargetingPolices.TargetEvaluator targetEvaluator) {
-		this.targetEvaluator = targetEvaluator;
 	}
 }

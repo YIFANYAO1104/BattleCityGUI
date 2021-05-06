@@ -126,6 +126,11 @@ public class Splitter extends Agent {
     }
 
     @Override
+    public double getMaxDamage() {
+        return 50;//explosion
+    }
+
+    @Override
     public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }

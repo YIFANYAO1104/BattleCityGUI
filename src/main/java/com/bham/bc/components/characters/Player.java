@@ -237,8 +237,6 @@ public class Player extends GameCharacter {
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
-			case H: testDijistra();		System.out.println(getCenterPosition());break;
-			case K: targetingSystem.statatat();break;
 			case L: services.getMapDivision().cleanHB();break;
 		}
 	}
@@ -289,6 +287,7 @@ public class Player extends GameCharacter {
 
 	@Override
 	public void update() {
+		hp = getFullHp();
 		updateTriggers();
 		if (isFreeze == 0) {
 			updateAngle();
@@ -316,5 +315,10 @@ public class Player extends GameCharacter {
 	@Override
 	public String toString() {
 		return "Player";
+	}
+
+	@Override
+	public double getMaxDamage() {
+		return 100;//Explosive Bullet
 	}
 }

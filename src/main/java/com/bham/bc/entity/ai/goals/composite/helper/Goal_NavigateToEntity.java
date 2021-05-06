@@ -29,7 +29,7 @@ public class Goal_NavigateToEntity extends Goal_Composite {
         status = active;
 
         //make sure the subgoal list is clear.
-        RemoveAllSubgoals();
+        removeAllSubgoals();
 
         if (agent.getNavigationService().createRequest(target)) {
             addSubgoal(new Goal_WaitForPath(agent));
@@ -51,7 +51,7 @@ public class Goal_NavigateToEntity extends Goal_Composite {
             if (waiting==true){ //we finished waiting for path
                 status=active;
                 waiting=false;
-                RemoveAllSubgoals();
+                removeAllSubgoals();
                 addSubgoal(new Goal_FollowPath(agent,
                         agent.getNavigationService().getPath()));
             }
@@ -65,7 +65,7 @@ public class Goal_NavigateToEntity extends Goal_Composite {
 
     @Override
     public void terminate() {
-		RemoveAllSubgoals();
+		removeAllSubgoals();
     }
 
     @Override

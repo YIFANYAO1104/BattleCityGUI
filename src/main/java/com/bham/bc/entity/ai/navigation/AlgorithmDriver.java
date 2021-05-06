@@ -4,7 +4,7 @@
  *
  * @author Petr (http://www.sallyx.org/)
  */
-package com.bham.bc.entity.ai.navigation.algorithms;
+package com.bham.bc.entity.ai.navigation;
 
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.impl.PathPlanner;
@@ -13,6 +13,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Time Sliced Algorithm Runner
+ */
 public class AlgorithmDriver {
 
 	/**
@@ -26,11 +29,18 @@ public class AlgorithmDriver {
 	 */
 	private int cycleTimesPerUpdate;
 
+	/**
+	 * constructor
+	 * @param cycleTimesPerUpdate the maximum time steps the driver would run on each game update
+	 */
 	public AlgorithmDriver(int cycleTimesPerUpdate) {
 		this.cycleTimesPerUpdate = cycleTimesPerUpdate;
 	}
 
 
+	/**
+	 * execute cycleTimesPerUpdate steps searching algorithms
+	 */
 	public void runAlgorithm() {
 		int remainCycles = cycleTimesPerUpdate;
 
@@ -65,6 +75,10 @@ public class AlgorithmDriver {
 		}
 	}
 
+	/**
+	 * unregister a path planner from the driver
+	 * @param p the path planner going to be unregistered
+	 */
 	public void unRegister(PathPlanner p) {
 		requests.remove(p);
 	}

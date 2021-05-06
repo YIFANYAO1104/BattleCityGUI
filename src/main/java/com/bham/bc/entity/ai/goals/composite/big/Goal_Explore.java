@@ -11,14 +11,21 @@ import javafx.geometry.Point2D;
 
 import static com.bham.bc.entity.ai.goals.GoalTypes.goal_explore;
 
+/**
+ * a goal to lead an agent to random location
+ */
 public class Goal_Explore extends Goal_Composite {
     /**
      * set to true when the destination for the exploration has been established
      */
     private boolean waiting;
 
-    public Goal_Explore(GameCharacter pOwner) {
-        super(pOwner, goal_explore);
+    /**
+     * constructor
+     * @param agent the owner of the goal
+     */
+    public Goal_Explore(GameCharacter agent) {
+        super(agent, goal_explore);
         waiting = false;
     }
 
@@ -28,12 +35,12 @@ public class Goal_Explore extends Goal_Composite {
 
         //if this goal is reactivated then there may be some existing subgoals that
         //must be removed
-        RemoveAllSubgoals();
+        removeAllSubgoals();
 
         //grab a random location
         Point2D pos = Controller.services.getGraph().getRandomNodeLocation();
         if (pos==null){
-            System.out.println("wrong with getRandomNodeLocation()");
+            throw new RuntimeException("wrong with getRandomNodeLocation()");
         }
 
         //and request a path to that position
@@ -54,7 +61,7 @@ public class Goal_Explore extends Goal_Composite {
             if (waiting==true){ //we finished waiting for path
                 waiting=false;
                 status=active;
-                RemoveAllSubgoals();
+                removeAllSubgoals();
                 addSubgoal(new Goal_FollowPath(agent,
                         agent.getNavigationService().getPath()));
             } else { //we finished follow path and request another location to explore
@@ -67,7 +74,7 @@ public class Goal_Explore extends Goal_Composite {
 
     @Override
     public void terminate() {
-		RemoveAllSubgoals();
+		removeAllSubgoals();
     }
 
     @Override

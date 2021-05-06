@@ -1,31 +1,34 @@
 package com.bham.bc.entity.ai.goals.composite.big;
 
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.entity.ai.TargetingPolices;
 import com.bham.bc.entity.ai.goals.atomic.Goal;
 import com.bham.bc.entity.ai.goals.atomic.Goal_SeekToPosition;
 import com.bham.bc.entity.ai.goals.composite.Goal_Composite;
 import com.bham.bc.entity.ai.goals.composite.helper.Goal_NavigateToEntity;
 
-import static com.bham.bc.entity.ai.goals.GoalTypes.goal_attack_cloest_target;
+import static com.bham.bc.entity.ai.goals.GoalTypes.goal_attack_closest_target;
 
-
+/**
+ * class to define how an agent could attack target
+ */
 public class Goal_AttackClosestTarget extends Goal_Composite {
 
-    public Goal_AttackClosestTarget(GameCharacter pOwner) {
-        super(pOwner, goal_attack_cloest_target);
+    /**
+     * constructor
+     * @param agent the owner of the goal
+     */
+    public Goal_AttackClosestTarget(GameCharacter agent) {
+        super(agent, goal_attack_closest_target);
     }
 
     @Override
     public void activate() {
         status = active;
 
-        agent.getTargetingSystem().setTargetEvaluator(new TargetingPolices.DistanceEvaluator());
         agent.getTargetingSystem().attackTargetOn();
-        agent.getTargetingSystem().update();
         //if this goal is reactivated then there may be some existing subgoals that
         //must be removed
-        RemoveAllSubgoals();
+        removeAllSubgoals();
 
         //if target dead, time to get off work
         if (!agent.getTargetingSystem().isTargetBotPresent()) {
@@ -38,7 +41,7 @@ public class Goal_AttackClosestTarget extends Goal_Composite {
             if (!agent.getTargetingSystem().isReachingSafeDistance()){
                 addSubgoal(new Goal_SeekToPosition(agent, agent.getTargetingSystem().getTargetBot().getCenterPosition()));
             }
-        } //if the target is not visible, go hunt it.
+        } //if the target is not visible, ask for a path
         else {
             addSubgoal(new Goal_NavigateToEntity(agent, agent.getTargetingSystem().getTargetBot()));
         }
@@ -55,7 +58,7 @@ public class Goal_AttackClosestTarget extends Goal_Composite {
         //if bot alive/within checking range
         if (agent.getTargetingSystem().isTargetBotPresent()){
             //brake to avoid collision
-            if (agent.getTargetingSystem().isTargetBotVisable()) {
+            if (agent.getTargetingSystem().isTargetBotVisiable()) {
                 agent.getSteering().seekOff();
                 agent.brake();
             } else {//If target evade, we chase again
@@ -72,8 +75,9 @@ public class Goal_AttackClosestTarget extends Goal_Composite {
 
     @Override
     public void terminate() {
-		RemoveAllSubgoals();
+		removeAllSubgoals();
         agent.getTargetingSystem().attackTargetOff();
+        agent.getSteering().seekOff();
         status = completed;
     }
 

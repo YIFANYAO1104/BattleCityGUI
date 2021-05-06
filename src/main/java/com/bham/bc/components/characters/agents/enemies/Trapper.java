@@ -129,4 +129,9 @@ public class Trapper extends Agent {
     public Circle getHitBox() {
         return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }
+
+    @Override
+    public double getMaxDamage() {
+        return 0;
+    }
 }

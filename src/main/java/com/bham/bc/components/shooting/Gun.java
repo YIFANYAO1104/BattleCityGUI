@@ -4,9 +4,11 @@ import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.utils.GeometryEnhanced;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -250,5 +252,22 @@ public class Gun {
             default:
                 return SoundEffect.SHOT_DEFAULT;
         }
+    }
+
+
+    public double getMaxDamage() {
+        List<Double> damageList = new ArrayList<>();
+        damageList.add(IceBullet.DAMAGE);
+        damageList.add(ExplosiveBullet.DAMAGE);
+        damageList.add(DefaultBullet.DAMAGE);
+
+        double max = Double.MIN_VALUE;
+        for (Double d : damageList) {
+            if (d>max){
+                max=d;
+            }
+        }
+
+        return max*damageFactor;
     }
 }
