@@ -170,7 +170,7 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
   - Najd
   - Mantas
   - Xiao Yan - xxy869@student.bham.ac.uk
-  - Yifan Yao
+  - Yifan Yao - yxy977@student.bham.ac.uk
   - Zhicheng Zhou
   - Junyu Chen
   - Muhammad
