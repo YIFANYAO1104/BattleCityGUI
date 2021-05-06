@@ -32,11 +32,6 @@ public class EnemyTestDemo extends GameCharacter {
     }
 
     @Override
-    public List<Shape> getSmoothingBoxes() {
-        return null;
-    }
-
-    @Override
     public Circle getHitBox() {
         return  new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE * .5);
     }

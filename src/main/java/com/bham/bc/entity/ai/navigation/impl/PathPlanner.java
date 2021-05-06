@@ -55,7 +55,7 @@ public class PathPlanner implements NavigationService {
     List<PathEdge> curPath = new ArrayList<PathEdge>();
     List<PathEdge> smoothedPath = new ArrayList<PathEdge>();
 
-    private List<Shape> array = new ArrayList<>();
+//    private List<Shape> array = new ArrayList<>();
 
     public PathPlanner(GameCharacter owner, SparseGraph navGraph) {
         this.owner = owner;
@@ -293,9 +293,9 @@ public class PathPlanner implements NavigationService {
         }
     }
 
-    public List<Shape> getSmoothingBoxes(){
-        return array;
-    }
+//    public List<Shape> getSmoothingBoxes(){
+//        return array;
+//    }
 
     /**
      * called by time slice service manager

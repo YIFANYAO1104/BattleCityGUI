@@ -226,13 +226,6 @@ abstract public class GameCharacter extends MovingEntity {
         return getHitBox().getRadius();
     }
 
-    /**
-     * TODO: remove?
-     * Gets a list of path areas (used for path smoothing)
-     * @return a list of areas of type Shape
-     */
-    abstract public List<Shape> getSmoothingBoxes();
-
     @Override
     public void render(GraphicsContext gc) {
         drawRotatedImage(gc, entityImages[0], getAngle());
@@ -258,19 +251,37 @@ abstract public class GameCharacter extends MovingEntity {
         }
     }
 
+    /**
+     * judege whether an agent is close enough to a position
+     * @param target the position an agent want to reach
+     * @return true if close enough
+     */
     public boolean isReached(Point2D target){
 //        return getCenterPosition().distance(target) < 1;
         return intersects(new Circle(target.getX(), target.getY(), 3));
     }
 
+    /**
+     * set a character's velocity to zero vector
+     */
     public void brake(){
         velocity=new Point2D(0,0);
     }
 
+    /**
+     * get the max damage from a character
+     * should be constant
+     * @return the max damage
+     */
     public double getMaxDamage() {
         return 0;
     }
 
+    /**
+     * get the min damage from a character
+     * should be constant
+     * @return the min damage
+     */
     public double getMinDamage(){
         return 0;
     }

@@ -200,11 +200,6 @@ public abstract class Agent extends GameCharacter {
     protected abstract StateMachine createFSM();
 
     @Override
-    public List<Shape> getSmoothingBoxes(){
-        return navigationService.getSmoothingBoxes();
-    }
-
-    @Override
     public void move() {
         Point2D force = steering.calculate();
         Point2D acceleration = force.multiply(1. / mass);

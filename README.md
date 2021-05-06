@@ -172,7 +172,7 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
   - Xiao Yan - xxy869@student.bham.ac.uk
   - Yifan Yao - yxy977@student.bham.ac.uk
   - Zhicheng Zhou
-  - Junyu Chen
+  - Junyu Chen - jxc1259@student.bham.ac.uk
   - Muhammad
   
 

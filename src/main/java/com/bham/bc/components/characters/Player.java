@@ -171,9 +171,6 @@ public class Player extends GameCharacter {
 			e.printStackTrace();
 		}
 	}
-	public List<Shape> getSmoothingBoxes(){
-		return navigationService.getSmoothingBoxes();
-	}
 	private void testDijistra(){
 		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
 		System.out.println(navigationService.createRequest(new Point2D(850,758)));;
