@@ -27,126 +27,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="added email">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/GameCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/GameCharacter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/Agent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/NavigationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/NavigationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/characters/agents/enemies/EnemyTestDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/characters/agents/enemies/EnemyTestDemo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Trigger162x162.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/corruption.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/deep-space.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/night-break.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/rhythmic-bounce.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/take-the-lead.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/voxel-revolution.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/destroy-character.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/destroy-soft.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/explode.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/hit-character.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/hit-hard.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/hit-soft.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/powerup.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/select.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/shot-default.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/shot-rapid.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/trap.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/Game.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/Menu.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/Neuron.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/icon1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/kamikaze.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/player.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/shooter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/splitter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/state1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/tank.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/teaser.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/trapper.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/FB6.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/close.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/leaderboard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/minimize.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/skin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/default-bullet.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl12.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/Zwater1(80x32).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/ashlands.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/atlantis.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/basic-blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/basic.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/bricks2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/floor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/greenIron.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/mockup.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/oldTileset.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/pimples.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/rocks.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/triggers.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion12.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion14.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion15.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion17.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion18.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion19.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/armor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/clear.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/flash.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/green_heart.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/hp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/state1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/teleport.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/three.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/traps/Landmine.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/traps/snowflake.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/traps/trap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Ubuntu-Medium.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/ZenDots-Regular.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/maps/162x162.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/maps/64x64.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/maps/86x86.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/surr.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/model/maps/floodMap1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/model/maps/test.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/SparseGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/SparseGraph.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -156,7 +38,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="ai" />
+        <entry key="$PROJECT_DIR$" value="characters" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -179,7 +61,20 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Unnamed">
+    <configuration name="QuickLaunch" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.bham.bc.application.QuickLaunch" />
+      <module name="BluelandDefenders" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.bham.bc.application.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Unnamed" type="Application" factoryName="Application" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.bham.bc.application.Main" />
       <module name="BluelandDefenders" />
@@ -187,6 +82,28 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MapDivisionTest.randomNodeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="BluelandDefenders" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.bham.bc.entity.physics.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.bham.bc.entity.physics" />
+      <option name="MAIN_CLASS_NAME" value="com.bham.bc.entity.physics.MapDivisionTest" />
+      <option name="METHOD_NAME" value="randomNodeTest" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.MapDivisionTest.randomNodeTest" />
+        <item itemvalue="Application.QuickLaunch" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
@@ -265,10 +182,30 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="93" y="93" width="1350" height="638" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1620315125719" />
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1620319829619">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1620319829619" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1620319829619">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1620319829619" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1620319829619">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1620319829619" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1620319829619">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1620319829619" />
     <state x="403" y="172" key="MultipleFileMergeDialog" timestamp="1620314637731">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="403" y="172" key="MultipleFileMergeDialog/0.0.1536.824@0.0.1536.824" timestamp="1620314637731" />
+    <state x="249" y="0" key="SettingsEditor" timestamp="1620319808606">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="249" y="0" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1620319808606" />
     <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1620314659468">
       <screen x="0" y="0" width="1536" height="824" />
     </state>

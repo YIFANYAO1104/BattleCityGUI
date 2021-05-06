@@ -720,12 +720,12 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 validNum++;
             }
         }
-        int randomIndex = RandomEnhanced.randInt(1,validNum);
+        int randomIndex = RandomEnhanced.randInt(0,validNum-1);
 
         for (GraphNode graphNode : nodeVector) {
             if (graphNode.isValid()){
-                randomIndex--;
                 if (randomIndex==0) return ((NavNode)graphNode).getPosition();
+                randomIndex--;
             }
         }
         return null;
