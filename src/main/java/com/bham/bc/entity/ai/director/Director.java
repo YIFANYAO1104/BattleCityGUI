@@ -63,9 +63,9 @@ public class Director {
         endBuildUp = new OrCondition(playerStressLimit, stateTimeLimitUp);
 
         // Create Transitions of the Finite State Machine
-        Transition buildUpToPeak = new Transition(new Action[]{ Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS },peakState, endBuildUp);
-        Transition peakToRelax = new Transition(new Action[]{ Action.INCREMENTLOOP, Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS },relaxState, stateTimeLimitDown);
-        Transition relaxToBuildUp = new Transition(new Action[]{ Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS }, buildUpState, stateTimeLimitDown);
+        Transition buildUpToPeak = new Transition(new Action[]{ Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS, Action.SPAWNALLY },peakState, endBuildUp);
+        Transition peakToRelax = new Transition(new Action[]{ Action.INCREMENTLOOP, Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS, Action.SPAWNALLY },relaxState, stateTimeLimitDown);
+        Transition relaxToBuildUp = new Transition(new Action[]{ Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS, Action.SPAWNALLY }, buildUpState, stateTimeLimitDown);
 
         // Set the created transitions
         buildUpState.setTransitions(new Transition[]{ buildUpToPeak });
@@ -105,6 +105,8 @@ public class Director {
                     break;
                 case SPAWNPOWERUPS:
                     spawnRandomPowerups(2);
+                case SPAWNALLY:
+                    spawnAllies(1);
             }
         });
     }
@@ -201,6 +203,17 @@ public class Director {
         for(int i = 0; i < numEnemiesToSpawn; i++) {
             int randomI = new Random().nextInt(EnemyType.values().length);
             services.spawnEnemyRandomly(EnemyType.values()[randomI]);
+        }
+    }
+
+    /**
+     * Spawns a provided number of allies defined in {@link Neuron}
+     * @param numAlliesToSpawn amount of allies to be spawned
+     */
+    private void spawnAllies(int numAlliesToSpawn) {
+        System.out.println("Spawning " + numAlliesToSpawn + " Allies");
+        for(int i = 0; i < numAlliesToSpawn; i++) {
+            services.spawnAlly();
         }
     }
 
