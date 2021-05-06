@@ -21,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.EnumSet;
+import java.util.Date;
 import java.util.Optional;
 
 import java.util.List;
@@ -38,6 +39,8 @@ public class Player extends GameCharacter {
 	public static final int SIZE = 25;
 	public static double HP = 100;
 	public static final double SPEED = 5;
+	public static long initialTime;
+	public boolean laserFlag;
 
 	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
 	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(GameSession.HEIGHT/2.0);
@@ -84,7 +87,8 @@ public class Player extends GameCharacter {
 		}
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
-
+		initialTime=System.currentTimeMillis();
+		this.laserFlag=false;
 		navigationService = new PathPlanner(this, services.getGraph());
 		steering.setKeys(true);
 	}
@@ -289,6 +293,11 @@ public class Player extends GameCharacter {
 
 	@Override
 	public void update() {
+		long currentTIme = System.currentTimeMillis();
+		if(currentTIme -initialTime >=10000){
+			this.laserFlag=!laserFlag;
+			initialTime = System.currentTimeMillis();
+		}
 		updateTriggers();
 		if (isFreeze == 0) {
 			updateAngle();

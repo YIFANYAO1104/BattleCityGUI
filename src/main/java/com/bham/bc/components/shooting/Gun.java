@@ -2,6 +2,7 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.utils.GeometryEnhanced;
 
 import javafx.geometry.Point2D;
@@ -163,7 +164,9 @@ public class Gun {
     }
     public void shootLaser() {
         if(laserType == null || CLOCK.getCurrentTime() - lastTick < rate) return;
-
+        if(CHARACTER instanceof Player && !((Player) CHARACTER).laserFlag){
+            return;
+        }
         Bullet bullet = spawnLaser(0);
         bullet.setDamage(bullet.getDamage() * damageFactor*3);
         bullet.setTime();
