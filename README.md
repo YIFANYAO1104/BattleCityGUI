@@ -166,14 +166,15 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
   
 
 * The whole project is created by
+  
   - Cameron Webley
-  - Najd
+  - Junyu Chen - jxc1259@student.bham.ac.uk
   - Mantas
+  - Muhammad
+  - Najd
   - Xiao Yan - xxy869@student.bham.ac.uk
   - Yifan Yao - yxy977@student.bham.ac.uk
   - Zhicheng Zhou
-  - Junyu Chen - jxc1259@student.bham.ac.uk
-  - Muhammad
   
 
 
