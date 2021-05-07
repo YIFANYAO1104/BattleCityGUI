@@ -175,9 +175,7 @@ public class Player extends GameCharacter {
 			e.printStackTrace();
 		}
 	}
-	public List<Shape> getSmoothingBoxes(){
-		return navigationService.getSmoothingBoxes();
-	}
+
 	private void testDijistra(){
 		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
 		System.out.println(navigationService.createRequest(new Point2D(850,758)));;
@@ -241,8 +239,6 @@ public class Player extends GameCharacter {
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
-			case H: testDijistra();		System.out.println(getCenterPosition());break;
-			case K: targetingSystem.statatat();break;
 			case L: services.getMapDivision().cleanHB();break;
 		}
 	}

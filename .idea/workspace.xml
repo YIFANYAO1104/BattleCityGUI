@@ -27,183 +27,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="optimize laser system of time limitation">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/Goal_Think.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/UtilityCalculator.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/Goal_TraverseEdge.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/Goal_Composite.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/big/Goal_GetHealth.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/BluelandDefenders.iml" beforeDir="false" afterPath="$PROJECT_DIR$/BluelandDefenders.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/Services.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/Services.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/SurvivalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/SurvivalController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/GameCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/GameCharacter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/TargetingPolices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/TargetingPolices.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/TargetingSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/TargetingSystem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/Enemy.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/Agent.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/EnemyType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/EnemyType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/Kamikaze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Kamikaze.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/Neuron.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/allies/Neuron.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/Shooter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Shooter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/Splitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Splitter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/Tank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Tank.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/Teaser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Teaser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/enemies/Trapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Trapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/GoalTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/GoalTypes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/atomic/Goal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/Goal.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/atomic/Goal_SeekToPosition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/Goal_SeekToPosition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/atomic/Goal_TraverseEdge.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/atomic/Goal_WaitForPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/Goal_WaitForPath.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/Goal_Composite.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/Goal_Think.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/big/Goal_AttackClosestTarget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/big/Goal_AttackClosestTarget.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/big/Goal_AttackWeakestTarget.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/big/Goal_Explore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/big/Goal_Explore.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/big/Goal_GetItem.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/helper/Goal_FollowPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/helper/Goal_FollowPath.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/helper/Goal_NavigateToEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/helper/Goal_NavigateToEntity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/goals/composite/helper/Goal_NavigateToPosition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/helper/Goal_NavigateToPosition.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Gun.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Gun.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/IceBullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/IceBullet.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/LaserGun.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/LaserGun.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/LaserType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/LaserType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/ThunderLaser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/ThunderLaser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/RespawnTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/RespawnTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/Trigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/Trigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/TriggerType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/TriggerType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/SpeedTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/SpeedTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/StateTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/StateTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/TeleportTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/TeleportTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/traps/InverseTrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/traps/InverseTrap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/traps/LandmineTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/traps/LandmineTrigger.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/director/Director.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/director/Director.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/NavigationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/NavigationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/AlgorithmDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/AlgorithmDriver.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/TimeSlicedAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/TimeSlicedAlgorithm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/astar/TimeSlicedAStar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/astar/TimeSlicedAStar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/Steering.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/Steering.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/Trigger162x162.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/surr.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/characters/enemies/EnemyTestDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/characters/agents/enemies/EnemyTestDemo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/shooting/armoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/shooting/armoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/graph/GraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/graph/GraphTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/physics/MapDivisionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/physics/MapDivisionTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Trigger162x162.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/corruption.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/deep-space.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/night-break.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/rhythmic-bounce.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/take-the-lead.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/music/voxel-revolution.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/destroy-character.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/destroy-soft.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/explode.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/hit-character.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/hit-hard.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/hit-soft.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/powerup.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/select.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/shot-default.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/shot-rapid.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/audio/sfx/trap.mp3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/Game.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/Menu.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/Neuron.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/icon1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/kamikaze.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/player.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/shooter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/splitter.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/state1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/tank.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/teaser.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/characters/trapper.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/FB6.gif" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/close.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/leaderboard.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/minimize.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/menu/skin.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/default-bullet.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/l7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl0.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl12.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/shooting/tl9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/Zwater1(80x32).png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/ashlands.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/atlantis.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/basic-blue.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/basic.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/bricks2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/floor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/greenIron.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/mockup.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/oldTileset.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/pimples.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/rocks.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/tilesets/triggers.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion10.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion11.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion12.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion13.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion14.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion15.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion16.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion17.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion18.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion19.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion4.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion5.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion6.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion7.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion8.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/effects/blueRingExplosion9.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/armor.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/clear.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/flash.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/green_heart.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/hp.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/state1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/teleport.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/powerups/three.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/traps/Landmine.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/traps/snowflake.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/img/triggers/traps/trap.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/Ubuntu-Medium.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/ZenDots-Regular.ttf" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/maps/162x162.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/maps/64x64.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/maps/86x86.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/model/style.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/surr.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/model/maps/floodMap1.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/model/maps/test.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -314,7 +138,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620244860714</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="optimize laser system of time limitation">
+      <created>1620346486255</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1620346486255</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
