@@ -40,6 +40,7 @@ public class Player extends GameCharacter {
 	public static double HP = 100;
 	public static final double SPEED = 5;
 	public static long initialTime;
+	public static int stateTime;
 	public boolean laserFlag;
 
 	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
@@ -88,6 +89,7 @@ public class Player extends GameCharacter {
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
 		initialTime=System.currentTimeMillis();
+		stateTime=0;
 		this.laserFlag=false;
 		navigationService = new PathPlanner(this, services.getGraph());
 		steering.setKeys(true);
@@ -171,6 +173,7 @@ public class Player extends GameCharacter {
 	public void toState1(){
     	try{
 		this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH2), SIZE, 0, true, false) };
+		stateTime=1000;
 		}catch (IllegalArgumentException | NullPointerException e){
 			e.printStackTrace();
 		}
@@ -286,7 +289,15 @@ public class Player extends GameCharacter {
 	public Circle getHitBox() {
 		return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
 	}
-
+	public void defaultState(){
+		try{
+			this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+			stateTime=0;
+			this.laserChange(LaserType.Default);
+		}catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void update() {
 		long currentTIme = System.currentTimeMillis();
@@ -294,6 +305,8 @@ public class Player extends GameCharacter {
 			this.laserFlag=!laserFlag;
 			initialTime = System.currentTimeMillis();
 		}
+		if(stateTime>0)stateTime--;
+		if (stateTime < 0) defaultState();
 		hp = getFullHp();
 
 		updateTriggers();
