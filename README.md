@@ -24,9 +24,6 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Issues][issues-shield]][issues-url]
-[![Apache License][license-shield]][license-url]
 
 
 
@@ -76,9 +73,8 @@
     <li>
       <a href="#getting-started">Getting Started</a>
     </li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
+    <li><a href="#license">License</a></li>
   </ol>
 </details>
 
@@ -117,26 +113,15 @@ To get a local copy up and running follow these simple steps.
     - Key: W,S,A,D can mke tank move up, down, left, right respectively
     - Key: F can make tank fire, shoot the bullet
     - Key: R can make laser attack
-    
-
-<!-- CONTRIBUTING -->
-
-## Contributing
-
-
-<!-- LICENSE -->
-
-## License
-
-Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE">`LICENSE` </a>for more information.
-
-
+  
 
 <!-- ACKNOWLEDGEMENTS -->
 
 ## Acknowledgements
 
 * [The music elements we used](https://incompetech.com/)
+
+
   
 * The image we used:
   
@@ -175,8 +160,14 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
   - Xiao Yan - xxy869@student.bham.ac.uk
   - Yifan Yao - yxy977@student.bham.ac.uk
   - Zhicheng Zhou
-  
 
+
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE">`LICENSE` </a>for more information.
 
 
 
@@ -192,7 +183,7 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
 [stars-url]: https://github.com/github_username/repo/stargazers
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
 [issues-url]: https://github.com/github_username/repo/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
+[license-shield]:  https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE
 [license-url]: https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/github_username
