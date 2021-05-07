@@ -1,19 +1,13 @@
 package com.bham.bc.components.shooting;
 
-import com.bham.bc.components.characters.Direction;
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.enemies.Kamikaze;
-import com.bham.bc.components.environment.GameMap;
+import com.bham.bc.components.characters.agents.enemies.Kamikaze;
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.triggers.powerups.SpeedTrigger;
 import javafx.embed.swing.JFXPanel;
 import static org.junit.Assert.*;
-import java.lang.reflect.Field;
-import java.util.EnumSet;
 
-import javafx.geometry.Point2D;
 import org.junit.Test;
 
 public class armoryTest {

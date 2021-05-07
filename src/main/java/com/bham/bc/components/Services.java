@@ -2,15 +2,15 @@ package com.bham.bc.components;
 
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.enemies.Enemy;
-import com.bham.bc.components.characters.enemies.EnemyType;
+import com.bham.bc.components.characters.agents.Agent;
+import com.bham.bc.components.characters.agents.enemies.EnemyType;
 import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.TriggerType;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.navigation.ItemType;
-import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
+import com.bham.bc.entity.ai.navigation.AlgorithmDriver;
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
@@ -21,10 +21,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <h1>Interface defining the required backend services</h1>
@@ -184,9 +182,9 @@ public interface Services {
 
     /**
      * Simulates taking over home territory by decreasing home's "HP"
-     * @param enemy enemy to be checked if it intersects with the home territory to take it over
+     * @param agent enemy to be checked if it intersects with the home territory to take it over
      */
-    void occupyHome(Enemy enemy);
+    void occupyHome(Agent agent);
 
     /**
      * Spawns enemy at a random enemy territory

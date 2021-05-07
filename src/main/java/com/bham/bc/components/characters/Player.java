@@ -298,6 +298,8 @@ public class Player extends GameCharacter {
 			this.laserFlag=!laserFlag;
 			initialTime = System.currentTimeMillis();
 		}
+		hp = getFullHp();
+
 		updateTriggers();
 		if (isFreeze == 0) {
 			updateAngle();
@@ -325,5 +327,10 @@ public class Player extends GameCharacter {
 	@Override
 	public String toString() {
 		return "Player";
+	}
+
+	@Override
+	public double getMaxDamage() {
+		return 100;//Explosive Bullet
 	}
 }

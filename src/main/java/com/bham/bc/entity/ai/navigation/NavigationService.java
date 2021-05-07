@@ -76,7 +76,7 @@ public interface NavigationService {
      * For debug
      * @return a list of hitboxes used during path smoothing
      */
-    List<Shape> getSmoothingBoxes();
+//    List<Shape> getSmoothingBoxes();
 
     //under construction--------------------------------------------
     //utility based AI----------------------------------------------

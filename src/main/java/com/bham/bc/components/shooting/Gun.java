@@ -5,9 +5,11 @@ import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.utils.GeometryEnhanced;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -98,12 +100,32 @@ public class Gun {
                 return new DefaultBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
         }
     }
+
+    /**
+     * test the laser
+     * @return the {@link LaserType} of the current laser
+     */
     public LaserType testLaser(){
         return this.laserType;
     }
+    /**
+     * test the Bullet
+     * @return the {@link Bullet} of the current Bullet
+     */
     public BulletType testBullet(){
         return this.bulletType;
     }
+
+    /**
+     * <p>Creates a new laser object that depends on this class' <b>laserType</b> parameter. If angle offset is set to 0,
+     * this method creates a bullet straightly in front of the character just touching its "nose". Otherwise, the laser is
+     * rotated with respect to <i>its</i> center.</p>
+     *
+     * <p><b>Note:</b> the laser is always spawned aligned with the center of the character's width</p>
+     *
+     * @param angleOffset offset by which the laser should be rotated around its center
+     * @return the created {@link Bullet} object with respect to the character's location
+     */
     private Bullet spawnLaser(double angleOffset) {
         // Define the bullet's center coordinates
         double centerBulletX = CHARACTER.getCenterPosition().getX()-10;
@@ -162,6 +184,9 @@ public class Gun {
         audioManager.playEffect(getShotSoundEffect());
         lastTick = CLOCK.getCurrentTime();
     }
+    /**
+     * Shoots the dynamic laser  in front of the character
+     */
     public void shootLaser() {
         if(laserType == null || CLOCK.getCurrentTime() - lastTick < rate) return;
         if(CHARACTER instanceof Player && !((Player) CHARACTER).laserFlag){
@@ -197,6 +222,10 @@ public class Gun {
     public void setBulletType(BulletType bulletType) {
         this.bulletType = bulletType;
     }
+    /**
+     * Updates the laser type this gun is shooting
+     * @param laser the type of laser this gun will handle
+     */
     public void setLaserType(LaserType laser){
         this.laserType=laser;
     }
@@ -226,5 +255,22 @@ public class Gun {
             default:
                 return SoundEffect.SHOT_DEFAULT;
         }
+    }
+
+
+    public double getMaxDamage() {
+        List<Double> damageList = new ArrayList<>();
+        damageList.add(IceBullet.DAMAGE);
+        damageList.add(ExplosiveBullet.DAMAGE);
+        damageList.add(DefaultBullet.DAMAGE);
+
+        double max = Double.MIN_VALUE;
+        for (Double d : damageList) {
+            if (d>max){
+                max=d;
+            }
+        }
+
+        return max*damageFactor;
     }
 }
