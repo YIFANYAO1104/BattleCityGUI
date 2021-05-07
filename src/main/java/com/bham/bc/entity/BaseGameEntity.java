@@ -13,10 +13,24 @@ import java.util.ArrayList;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 abstract public class BaseGameEntity {
+    /**
+     * prepare the index{@link Integer} of next Entity
+     */
     private static int nextValidID = 0;
+
+    /**
+     * The index {@link Integer} of this Entity
+     */
     private int id;
 
+    /**
+     * The location in map
+     */
     protected double x, y;
+
+    /**
+     * The flag of if it is living in game
+     */
     protected boolean exists;
     protected Image[] entityImages;
 
