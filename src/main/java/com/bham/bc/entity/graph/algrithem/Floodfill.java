@@ -21,6 +21,10 @@ public class Floodfill {
      */
     private GraphNode startpoint;
 
+    /**
+     * Constructs Floodfill Object and initialize it
+     * @param gh startNode{@link GraphNode} as the starting node
+     */
     public Floodfill(GraphNode gh){
         this.startpoint = gh;
         startNodes.add(startpoint);

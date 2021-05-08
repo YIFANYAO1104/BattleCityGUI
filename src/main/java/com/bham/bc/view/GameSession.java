@@ -79,6 +79,7 @@ public class GameSession {
 
     /**
      * Constructs the game session.
+     * @param mapType the type of map
      */
     public GameSession(MapType mapType) {
         PAUSE_MENU = new PauseMenu();

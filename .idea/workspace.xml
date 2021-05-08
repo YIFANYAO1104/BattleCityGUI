@@ -19,13 +19,25 @@
     <select>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="BRANCH:origin/master" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="BRANCH:master" type="e8cecc67:BranchNodeDescriptor" />
       </path>
     </select>
   </component>
   <component name="ChangeListManager">
+    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Bullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Bullet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Gun.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Gun.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/BombTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/BombTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/BaseGameEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/BaseGameEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/TargetingSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/TargetingSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/policies/TerminationPolices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/policies/TerminationPolices.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/MapDivision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/MapDivision.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
+    </list>
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="optimize laser system of time limitation">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/messaging/MessageDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/messaging/MessageDispatcher.java" afterDir="false" />
@@ -39,10 +51,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="characters" />
+        <entry key="$PROJECT_DIR$" value="cosatal" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
   </component>
   <component name="ProjectId" id="1s8AKoTbOZw489JozMNkIeIGara" />
   <component name="ProjectViewState">
@@ -64,11 +77,11 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="Application.Unnamed">
+  <component name="RunManager" selected="JUnit.MapDivisionTest.randomNodeTest">
     <configuration name="QuickLaunch" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.bham.bc.application.QuickLaunch" />
       <module name="BluelandDefenders" />
@@ -117,7 +130,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -140,6 +153,7 @@
       <workItem from="1620394688700" duration="532000" />
       <workItem from="1620428311704" duration="356000" />
       <workItem from="1620458584957" duration="396000" />
+      <workItem from="1620480163428" duration="1641000" />
       <workItem from="1620481596845" duration="715000" />
     </task>
     <task id="LOCAL-00001" summary="fix problems">
@@ -184,12 +198,12 @@
       <option name="project" value="LOCAL" />
       <updated>1620388620867</updated>
     </task>
-    <task id="LOCAL-00007" summary="comments in entity">
-      <created>1620455721188</created>
+    <task id="LOCAL-00007" summary="add javadoc comments to  entity package">
+      <created>1620458695345</created>
       <option name="number" value="00007" />
       <option name="presentableId" value="LOCAL-00007" />
       <option name="project" value="LOCAL" />
-      <updated>1620455721188</updated>
+      <updated>1620458695345</updated>
     </task>
     <task id="LOCAL-00008" summary="add javadoc comments to  entity package">
       <created>1620458840607</created>
@@ -198,6 +212,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620458840607</updated>
     </task>
+    <task id="LOCAL-00009" summary="add javadoc comments to entity package">
+      <created>1620481116290</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1620481116290</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <option name="localTasksCounter" value="8" />
     <servers />
   </component>
@@ -215,7 +237,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/master" />
+                        <option value="master" />
                       </list>
                     </value>
                   </entry>
@@ -233,6 +255,8 @@
     <MESSAGE value="shooting" />
     <MESSAGE value="optimize laser system of time limitation" />
     <MESSAGE value="add javadoc comments to  entity package" />
+    <MESSAGE value="add javadoc comments to entity package" />
+    <option name="LAST_COMMIT_MESSAGE" value="add javadoc comments to entity package" />
     <MESSAGE value="comments in entity" />
     <option name="LAST_COMMIT_MESSAGE" value="comments in entity" />
   </component>

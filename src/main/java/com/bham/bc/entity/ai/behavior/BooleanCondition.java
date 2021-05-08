@@ -7,6 +7,10 @@ public class BooleanCondition implements Condition{
      */
     private boolean testValue;
 
+    /**
+     * Constructs the BooleanCondition
+     * @param testValue value to be tested
+     */
     public BooleanCondition(boolean testValue){
         this.testValue = testValue;
     }

@@ -39,6 +39,7 @@ abstract public class BaseGameEntity {
      * correctly. It verifies that the value passed to the method is greater or
      * equal to the next valid ID, before setting the ID and incrementing the
      * next valid ID
+     * @param id the id of entity
      */
     private void setID(int id) {
         //make sure the val is equal to or greater than the next available ID
@@ -52,6 +53,12 @@ abstract public class BaseGameEntity {
     protected void finalize() throws Throwable{super.finalize();}
 
 
+    /**
+     * Constructs BaseGameEntity Object and initialize it
+     * @param id The index {@link Integer} of this Entity
+     * @param x The location in map
+     * @param y The location in map
+     */
     protected BaseGameEntity(int id, double x, double y) {
         setID(id);
         entityManager.registerEntity(this);
