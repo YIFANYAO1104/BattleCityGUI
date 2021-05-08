@@ -66,6 +66,7 @@ public class PathPlanner implements NavigationService {
     }
 
     /**
+     * @param entity the GameCharacter instance
      * @return node index. -1 if no closest node found
      */
     private int getClosestNode(GameCharacter entity){

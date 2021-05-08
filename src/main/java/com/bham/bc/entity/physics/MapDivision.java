@@ -19,7 +19,7 @@ import java.util.*;
 /**
  * The fundamental section of whole map. It has the list which stores all the base elements.
  * And it also has the Hitbox attribute which will be used to tell if interact with another.
- * @param <entity>
+ *
  */
 
 class Cell <entity extends Object>{

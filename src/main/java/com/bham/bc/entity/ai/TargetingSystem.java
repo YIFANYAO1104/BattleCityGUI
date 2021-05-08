@@ -154,6 +154,7 @@ public class TargetingSystem {
 
 	/**
 	 * returns a pointer to the target. null if no target current.
+	 * @return a pointer to the target
 	 */
 	public GameCharacter getTargetBot() {
 		return targetBot;

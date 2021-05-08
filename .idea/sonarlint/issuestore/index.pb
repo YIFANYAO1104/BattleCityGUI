@@ -23,14 +23,10 @@ o
 ?src/main/java/com/bham/bc/components/environment/Attribute.java,0\0\00dd928c5f1d46ea676660dea3428bcb108831be
 m
 =src/main/java/com/bham/bc/components/environment/GameMap.java,4\f\4fdf14227c1d4da63194e4b707f24bd24e6d52ca
-o
-?src/main/java/com/bham/bc/components/environment/MapLoader.java,b\6\b6e9dd9748cb88912f03af0d9f463e9dd6ceda7e
 m
 =src/main/java/com/bham/bc/components/environment/MapType.java,a\5\a598dde76b346f81953592aa8ebeb033e083bc0c
 m
 =src/main/java/com/bham/bc/components/environment/Tileset.java,9\0\90e2343e2b5e39c9af7cb74e8f935cfe731d45fe
-i
-9src/main/java/com/bham/bc/components/shooting/Bullet.java,c\6\c640843d22f33eee254709a779ed39d2f588f07e
 n
 >src/main/java/com/bham/bc/components/environment/Obstacle.java,4\3\43d108611bd7791567edf3a11b1c12e3f226d3d1
 e
@@ -39,5 +35,3 @@ k
 ;src/main/java/com/bham/bc/entity/ai/behavior/Condition.java,3\e\3ee4f20b33ad241bf06805726628078a28491dd2
 h
 8src/main/java/com/bham/bc/entity/graph/node/NavNode.java,d\d\dd0828baf15a67a18f134a04a9f51f93f15b4787
-j
-:src/main/java/com/bham/bc/entity/graph/node/GraphNode.java,a\f\afb7146126b6999ca17dfbbad5c800ab0b5a0186
