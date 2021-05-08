@@ -21,6 +21,7 @@ import static com.bham.bc.utils.messaging.MessageTypes.*;
  * Class defining common properties for any obstacle
  */
 public class Obstacle extends BaseGameEntity {
+
     private final EnumSet<Attribute> ATTRIBUTES;
     private double hp;
     private int currentFrame;

@@ -9,7 +9,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
 import java.util.ArrayList;
-
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 abstract public class BaseGameEntity {

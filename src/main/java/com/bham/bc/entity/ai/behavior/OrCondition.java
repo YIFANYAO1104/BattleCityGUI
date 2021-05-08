@@ -4,7 +4,13 @@ package com.bham.bc.entity.ai.behavior;
  * Condition for binding two Conditions in an OR statement
  */
 public class OrCondition implements Condition{
+    /**
+     * First Condition
+     */
     private final Condition conditionA;
+    /**
+     * Second Condition
+     */
     private final Condition conditionB;
 
     /**

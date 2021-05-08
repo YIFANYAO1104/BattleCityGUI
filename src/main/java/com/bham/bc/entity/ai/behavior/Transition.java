@@ -2,8 +2,17 @@ package com.bham.bc.entity.ai.behavior;
 
 public class Transition{
 
+    /**
+     * List of actions to be taken during the transition
+     */
     private final Action[] actions;
+    /**
+     * The destination of the state machine after the transition
+     */
     private final State targetState;
+    /**
+     * The condition that causes the transition to occur
+     */
     private final Condition condition;
 
     /**

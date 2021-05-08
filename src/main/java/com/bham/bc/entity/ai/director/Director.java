@@ -17,19 +17,49 @@ import static com.bham.bc.components.Controller.services;
 
 public class Director {
 
-    private final StateMachine stateMachine; // The State Machine that the director uses
-    private final int STATETIMELENGTH = 30000; // The base length at which each state lasts in the game
-    private final int MAXSTATETIMEMOD = 30000; // The maximum change in the length of each state
-    private int stateTimeModifier; // The time at which states are increased/decreased. This value is incremented each loop of the FSM
-    private BooleanCondition stateTimeLimitUp; // Condition for counting a state's time limit that gets longer as the game goes on
-    private BooleanCondition stateTimeLimitDown; // Condition for counting a state's time limit that gets shorter as the game goes on
+    /**
+     * The State Machine that the director uses
+     */
+    private final StateMachine stateMachine;
+    /**
+     * The base length at which each state lasts in the game
+     */
+    private final int STATETIMELENGTH = 30000;
+    /**
+     * The maximum change in the length of each state
+     */
+    private final int MAXSTATETIMEMOD = 30000;
+    /**
+     * The time at which states are increased/decreased. This value is incremented each loop of the FSM
+     */
+    private int stateTimeModifier;
+    /**
+     * Condition for counting a state's time limit that gets longer as the game goes on
+     */
+    private BooleanCondition stateTimeLimitUp;
+    /**
+     * Condition for counting a state's time limit that gets shorter as the game goes on
+     */
+    private BooleanCondition stateTimeLimitDown;
     private BooleanCondition playerStressLimit;
     private OrCondition endBuildUp;
     private int enemyCount;
-    private double allyHpFraction; // Holds the player's health from the last check
-    private double homeHpFraction; // Holds the home's health from the last check
-    private long lastTick; // Holds the time in which the director last checked the game state
-    private long stateTime; // Holds the start time of a state in the state machine
+    /**
+     * Holds the player's health from the last check
+     */
+    private double allyHpFraction;
+    /**
+     * Holds the home's health from the last check
+     */
+    private double homeHpFraction;
+    /**
+     * Holds the time in which the director last checked the game state
+     */
+    private long lastTick;
+    /**
+     * Holds the start time of a state in the state machine
+     */
+    private long stateTime;
 
     /**
      * Constructor for the Director. It sets the initial values and generates the FSM that the Director will use.

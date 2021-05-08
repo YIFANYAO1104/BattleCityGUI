@@ -4,7 +4,13 @@ package com.bham.bc.entity.ai.behavior;
  * Conditions that require testing an integer within a certain threshold
  */
 public class IntCondition implements Condition{
+    /**
+     * minimum value of the threshold
+     */
     private final int minValue;
+    /**
+     * maximum value of the threshold
+     */
     private final int maxValue;
     private int testValue;
 

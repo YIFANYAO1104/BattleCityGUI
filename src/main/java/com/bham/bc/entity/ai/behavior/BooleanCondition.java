@@ -2,6 +2,9 @@ package com.bham.bc.entity.ai.behavior;
 
 public class BooleanCondition implements Condition{
 
+    /**
+     * value to be tested
+     */
     private boolean testValue;
 
     public BooleanCondition(boolean testValue){

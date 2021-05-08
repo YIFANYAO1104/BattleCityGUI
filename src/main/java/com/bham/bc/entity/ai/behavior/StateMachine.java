@@ -4,6 +4,9 @@ import java.util.Objects;
 import java.util.stream.Stream;
 
 public class StateMachine {
+    /**
+     * he beginning state of a machine, which is also its current state
+     */
     protected State initialState;
     protected State currentState;
 

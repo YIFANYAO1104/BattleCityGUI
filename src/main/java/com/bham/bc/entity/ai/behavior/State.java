@@ -2,9 +2,21 @@ package com.bham.bc.entity.ai.behavior;
 
 public class State{
 
+    /**
+     * List of actions to be performed while the State is active
+     */
     private Action[] actions;
+    /**
+     * List of actions to be performed when the State is entered
+     */
     private Action[] entryActions;
+    /**
+     * List of actions to be performed when the State is exited
+     */
     private Action[] exitActions;
+    /**
+     * List of transitions that can occur from this state
+     */
     private Transition[] transitions;
 
     /**
