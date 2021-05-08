@@ -61,8 +61,7 @@ abstract public class BaseGameEntity {
     }
 
     /**
-     *
-     * @return
+     * @return {@link Integer} Give the index to entity
      */
     public static int getNextValidID() {
         return nextValidID;
@@ -150,7 +149,7 @@ abstract public class BaseGameEntity {
 
     /**
      *
-     * @return
+     * @return {@link String}
      */
     abstract public String toString();
 

@@ -26,19 +26,16 @@ public class EntityManager {
 
     public EntityManager() { }
 
-    //copy ctor and assignment should be private
-    private EntityManager(EntityManager cs) {
-    }
-
+    /**
+     *
+     * @return {@link EntityManager}this class is a singleton
+     */
     @Override
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Cloning not allowed");
     }
 
-//--------------------------- Instance ----------------------------------------
-//
-//   this class is a singleton
-//-----------------------------------------------------------------------------
+
     public static EntityManager instance() {
         return entityManager;
     }
@@ -56,7 +53,7 @@ public class EntityManager {
     /**
      * Retrieve Specific BaseGame Entity from HashMap by Entity ID
      * @param id
-     * @return
+     * @return {@link BaseGameEntity} the cooresponding entity
      */
 public BaseGameEntity getEntityFromID(int id) {
         //find the entity
