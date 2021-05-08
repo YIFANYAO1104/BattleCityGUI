@@ -17,7 +17,7 @@ public enum SoundTrack {
     private final String PATH;
 
     /**
-     * Constructs Track enum with a given path to audio file
+     * Constructs {@code SoundTrack} enum with a given path to audio file
      * @param path path to track
      */
     SoundTrack(String path) {

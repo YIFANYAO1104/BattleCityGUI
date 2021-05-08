@@ -34,19 +34,31 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * </ul>
  */
 public class Teaser extends Agent {
-    // Constant
+    /** Path to the image of this enemy */
     public static final String IMAGE_PATH = "img/characters/teaser.png";
+
+    /** The width and the height the enemy's image should have when rendered */
     public static final int SIZE = 30;
 
-    // Configurable
+    /** HP the enemy should start with */
     public static final double HP = 50;
+
+    /** Speed the enemy should start with */
     public static final double SPEED = 5;
 
-    // Behavior
+    /** Finite State Machine which will tell which actions happen on each update */
     private final StateMachine stateMachine;
+
+    /** Condition to check if there are any obstacles in a straight path */
     private FreePathCondition noObstacleCondition;
+
+    /** Condition to check if the health is high enough to pursue attacking */
     private IntCondition highHealthCondition;
+
+    /** Condition to check if the enemy is close enough to ally */
     private IntCondition nearToAllyCondition;
+
+    /** Condition to check if the enemy is close enough to home */
     private IntCondition nearToHomeCondition;
 
     /**

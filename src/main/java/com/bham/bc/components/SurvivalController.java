@@ -89,12 +89,6 @@ public class SurvivalController extends Controller {
         mapDivision.addEntities(new ArrayList<>(characters));
 
         loadGraph();
-
-        //spawnEnemyRandomly(EnemyType.KAMIKAZE);
-        // spawnEnemyRandomly(EnemyType.TEASER);
-        // spawnEnemyRandomly(EnemyType.SHOOTER);spawnEnemyRandomly(EnemyType.SHOOTER);
-        //spawnEnemyRandomly(EnemyType.TANK);
-
     }
 
     // CALCULATIONS -----------------------------------------------

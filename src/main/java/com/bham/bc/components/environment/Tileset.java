@@ -7,7 +7,11 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 
 import java.util.Arrays;
+import java.util.Objects;
 
+/**
+ * Represents a tileset which provides array of tile images
+ */
 public enum Tileset {
     ASHLANDS("img/tilesets/ashlands.png", 16,16),
     ATLANTIS("img/tilesets/atlantis.png", 16,16),
@@ -22,27 +26,31 @@ public enum Tileset {
     ROCKS("img/tilesets/rocks.png", 16,16),
     PIMPLES("img/tilesets/pimples.png",16,16);
 
+    /** Array of tile images. Each position corresponds to the ID of the tile */
     private final Image[] TILES;
-    private final int OFFSET_Y;
 
     /**
      * Constructs Tileset enum
+     *
+     * <p>Initializes an array of images representing every tile of a tileset. If an image object of a
+     * tileset could not be instantiated, an empty array of tiles is created and en error is printed.
+     * Although this is bad practice for an enum, the tests assure every tileset can be converted to
+     * array of tile images.</p>
+     *
      * @param path       path to tileset
      * @param tileWidth  width of one tile
      * @param tileHeight height of one tile
      */
     Tileset(String path, int tileWidth, int tileHeight) {
-
-        OFFSET_Y = tileHeight-16;
         Image tileset = null;
+
         try{
-        tileset = new Image(getClass().getClassLoader().getResourceAsStream(path));
-        }catch (IllegalArgumentException | NullPointerException e){
+            tileset = new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(path)));
+        } catch (IllegalArgumentException | NullPointerException e) {
             e.printStackTrace();
         }
+
         TILES = toSubImages(tileset, tileWidth, tileHeight);
-
-
     }
 
     /**
@@ -50,9 +58,13 @@ public enum Tileset {
      * @param image          picture to be converted to array of sub-images
      * @param subImageWidth  requested width for every sub-image
      * @param subImageHeight requested height for every sub-image
-     * @return Image array that is acquired from converting a given image to smaller ones
+     * @return {@code Image} array that is acquired from converting a given image to smaller ones or an empty array if the image is {@code null}
      */
     public static Image[] toSubImages(Image image, int subImageWidth, int subImageHeight) {
+        if(image == null) {
+            return new Image[]{};
+        }
+
         int rows = (int) image.getHeight() / subImageHeight;
         int cols = (int) image.getWidth() / subImageWidth;
 
@@ -93,13 +105,5 @@ public enum Tileset {
      */
     public Image[] getTiles(int[] a) {
         return Arrays.stream(a).mapToObj(this::getTile).toArray(Image[]::new);
-    }
-
-    /**
-     * Gets y offset
-     * @return y offset
-     */
-    public int getOffsetY() {
-        return OFFSET_Y;
     }
 }

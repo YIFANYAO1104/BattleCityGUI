@@ -1,12 +1,12 @@
 package com.bham.bc.audio;
 
 /**
- * A simple interface to define behaviour of an audio player.
+ * A simple interface to define behaviour of an audio player
  */
 interface AudioPlayer {
     /**
      * Checks if audio player is playing
-     * @return true if player is playing and false if it is paused or stopped
+     * @return {@code true} if player is playing and {@code false} if it is paused or stopped
      */
     boolean isPlaying();
 

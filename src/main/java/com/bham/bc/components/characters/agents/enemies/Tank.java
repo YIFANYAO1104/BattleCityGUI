@@ -31,18 +31,28 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * </ul>
  */
 public class Tank extends Agent {
-    // Constant parameters
+    /** Path to the image of this enemy */
     public static final String IMAGE_PATH = "img/characters/tank.png";
+
+    /** The width and the height the enemy's image should have when rendered */
     public static final int SIZE = 30;
 
-    // Configurable
+    /** HP the enemy should start with */
     public static final double HP = 150;
+
+    /** Speed the enemy should start with */
     public static final double SPEED = 2;
 
-    // Behavior
+    /** Finite State Machine which will tell which actions happen on each update */
     private final StateMachine stateMachine;
+
+    /** Condition to check if there are any obstacles in a straight path */
     private FreePathCondition noObstacleCondition;
+
+    /** Condition to check if the health is high enough to pursue attacking */
     private IntCondition highHealthCondition;
+
+    /** Condition to check if the enemy is close enough to home */
     private IntCondition nearToHomeCondition;
 
     /**
@@ -53,9 +63,10 @@ public class Tank extends Agent {
      */
     public Tank(double x, double y) {
         super(x, y, SPEED, HP, Side.ENEMY);
+
         try{
-        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-        }catch (IllegalArgumentException | NullPointerException e){
+         entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        } catch (IllegalArgumentException | NullPointerException e){
             e.printStackTrace();
         }
         stateMachine = createFSM();

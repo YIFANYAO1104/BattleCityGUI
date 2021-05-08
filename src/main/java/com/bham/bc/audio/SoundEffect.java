@@ -22,7 +22,7 @@ public enum SoundEffect {
     private final String PATH;
 
     /**
-     * Constructs SFX enum with a given path to audio file
+     * Constructs {@code SoundEffect} enum with a given path to audio file
      * @param path path to SFX
      */
     SoundEffect(String path) {

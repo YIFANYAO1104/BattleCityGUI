@@ -14,7 +14,7 @@ public class AudioAnalyser {
 
     /**
      * Constructs 1 analyser for 1 media player
-     * @param player media player to analyse
+     * @param player   media player to analyse
      * @param interval amount of time between checking frequency values
      * @param numBands amount of frequency ranges (usually 128 or 256)
      */
@@ -24,7 +24,6 @@ public class AudioAnalyser {
         this.player.setAudioSpectrumInterval(interval);
         this.player.setAudioSpectrumNumBands(numBands);
         this.player.setAudioSpectrumListener((timestamp, duration, magnitudes, phases) -> updateFrequencies(magnitudes));
-
     }
 
     /**
@@ -41,5 +40,7 @@ public class AudioAnalyser {
      * Gets current frequency values
      * @return array of frequencies
      */
-    public float[] getFrequencies() { return frequencies; }
+    public float[] getFrequencies() {
+        return frequencies;
+    }
 }

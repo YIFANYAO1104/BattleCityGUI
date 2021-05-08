@@ -9,13 +9,16 @@ import java.lang.reflect.InvocationTargetException;
  * Enum describing the type of enemy
  */
 public enum EnemyType {
-    KAMIKAZE(),
+    NOVA(),
     SHOOTER(),
     SPLITTER(),
     TANK(),
     TEASER(),
     TRAPPER();
 
+    /**
+     * Default constructor
+     */
     EnemyType() { }
 
     /**

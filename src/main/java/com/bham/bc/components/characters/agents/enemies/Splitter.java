@@ -30,16 +30,22 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * @see MiniSplitter
  */
 public class Splitter extends Agent {
-    // Constant parameters
+    /** Path to the image of this enemy */
     public static final String IMAGE_PATH = "img/characters/splitter.png";
+
+    /** The width and the height the enemy's image should have when rendered */
     public static final int SIZE = 30;
 
-    // Configurable
+    /** HP the enemy should start with */
     public static final double HP = 150;
+
+    /** Speed the enemy should start with */
     public static final double SPEED = 2;
 
-    // Behavior
+    /** Finite State Machine which will tell which actions happen on each update */
     private final StateMachine stateMachine;
+
+    /** Condition to check if the enemy is close enough to home */
     private IntCondition nearToHomeCondition;
 
     /**
@@ -151,16 +157,22 @@ public class Splitter extends Agent {
      * </ul>
      */
     public static class MiniSplitter extends Agent {
-        // Constant parameters
+        /** Path to the image of this enemy */
         public static final String IMAGE_PATH = "img/characters/splitter.png";
+
+        /** The width and the height the enemy's image should have when rendered */
         public static final int SIZE = 15;
 
-        // Configurable
+        /** HP the enemy should start with */
         public static final double HP = 20;
+
+        /** Speed the enemy should start with */
         public static final double SPEED = 5;
 
-        // Behavior
+        /** Finite State Machine which will tell which actions happen on each update */
         private final StateMachine stateMachine;
+
+        /** Condition to check if the enemy is close enough to ally */
         private IntCondition nearToAllyCondition;
 
         /**

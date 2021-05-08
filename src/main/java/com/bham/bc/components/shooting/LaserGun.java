@@ -1,14 +1,11 @@
 package com.bham.bc.components.shooting;
 
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.environment.GameMap;
-import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 import static com.bham.bc.entity.EntityManager.entityManager;
@@ -30,7 +27,7 @@ public class LaserGun extends Bullet {
      * @param side    ALLY or ENEMY side the laser belongs to
      */
     public LaserGun(double x, double y, Point2D heading, Side side) {
-        super(x, y, 10, heading, BulletType.DefaultLaser, side, 10);
+        super(x, y, 10, heading, BulletType.LASER, side, 10);
         try{
         this.entityImages = new Image[]{
                 (new Image(getClass().getClassLoader().getResourceAsStream("img/shooting/l0.png"))),

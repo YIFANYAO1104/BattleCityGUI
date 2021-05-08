@@ -32,15 +32,25 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  * determined by the state machine each enemy has.</p>
  */
 public abstract class Agent extends GameCharacter {
-
+    /** The sole bullet controller each agent may have **/
     protected final Gun GUN;
 
+    /** Navigation Service used to get path edges which lead to a certain position */
     protected NavigationService navigationService;
+
+    /** List of path edges the agent should follow to get to a certain position */
     protected LinkedList<PathEdge> pathEdges;
 
+    /** Next point the agent should move towards in a straight line */
     private Point2D destination;
+
+    /** Time before a new navigation request if the target is dynamic (e.g., moving character) */
     private int timeTillSearch;
+
+    /** 1 or 0, i.e., {@code shoot} or {@code normal} value the agent should know about when it reaches an edge */
     private int edgeBehavior;
+
+    /** Indicates if the agent should aim to a character regardless if it's moving somewhere else */
     private boolean isAiming;
 
     /**
@@ -194,8 +204,8 @@ public abstract class Agent extends GameCharacter {
     }
 
     /**
-     * Abstract method which all child classes must fill with their own unique Finite State Machine
-     * @return the StateMachine for that specific enemy
+     * Abstract method which all child classes should fill with their own unique Finite State Machine
+     * @return the {@code StateMachine} for that specific enemy/ally
      */
     protected abstract StateMachine createFSM();
 
@@ -203,9 +213,9 @@ public abstract class Agent extends GameCharacter {
     public void move() {
         Point2D force = steering.calculate();
         Point2D acceleration = force.multiply(1. / mass);
-        //debug
         this.acceleration = acceleration;
         velocity = velocity.add(acceleration);
+
         if (velocity.magnitude() > maxSpeed) {
             velocity = velocity.normalize().multiply(maxSpeed);
         }

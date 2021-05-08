@@ -17,7 +17,7 @@ import java.util.stream.Stream;
  * ensure they are instantiated correctly and this class handles that.</p>
  *
  * <p><b>Note:</b> this class can also play parallel batches of songs sequentially but it is never the case we'd want to
- * play sequential batches of songs parallel, therefore this class does not support that.</p>
+ * play sequential batches of songs in parallel, therefore this class does not support that.</p>
  */
 public class AudioManager {
     /** Static object to be used to quickly control music and effects in the entire game */
@@ -36,7 +36,7 @@ public class AudioManager {
     private double musicVolume;
 
     /**
-     * Constructs audio manager and sets initial volume to 100%
+     * Constructs audio manager and sets initial music volume to 30% and initial effects volume to 70%
      */
     public AudioManager() {
         effectsVolume = .7;
@@ -97,6 +97,7 @@ public class AudioManager {
 
     /**
      * Prepares to play a list of audio players in sequence with a possibility to loop indefinitely
+     * @param loop    {@code true} or {@code false} indicating if the player should start over if it has finished
      * @param players list of players that will be put in a sequential loop
      */
     private void loadSequence(boolean loop, List<AudioPlayer> players) {
@@ -117,7 +118,7 @@ public class AudioManager {
 
     /**
      * Prepares to play the provided tracks sequentially
-     * @param loop        true or false indicating if the player should start over if it has finished
+     * @param loop        {@code true} or {@code false} indicating if the player should start over if it has finished
      * @param soundTracks enum values to be converted to media files
      */
     public void loadSequentialPlayer(boolean loop, SoundTrack... soundTracks) {
@@ -140,7 +141,7 @@ public class AudioManager {
      * one batch in a sequence, we would need to pass in an extra empty array. This is redundant, instead we should use a method
      * {@link #loadParallelPlayer(boolean, SoundTrack...)} specifically for just one batch.</p>
      *
-     * @param loop              true or false indicating if the sequence should start playing again after it ended
+     * @param loop              {@code true} or {@code false} indicating if the sequence should start playing again after it ended
      * @param soundTrackBatches arrays of sound tracks to be played one by one (when one bach of tracks ends playing, another starts)
      */
     public void loadSequentialPlayer(boolean loop, SoundTrack[]... soundTrackBatches) {
@@ -152,7 +153,7 @@ public class AudioManager {
 
     /**
      * Prepares to play the provided tracks in parallel
-     * @param loop        true or false indicating if the player should start over if it has finished
+     * @param loop        {@code true} or {@code false} indicating if the player should start over if it has finished
      * @param soundTracks enum values to be converted to media files
      */
     public void loadParallelPlayer(boolean loop, SoundTrack... soundTracks) {
