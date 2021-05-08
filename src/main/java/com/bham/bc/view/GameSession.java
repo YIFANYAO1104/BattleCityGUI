@@ -113,7 +113,7 @@ public class GameSession {
      * Initializes the window of the menu session, i.e., sets up the scene and the custom stage.
      */
     private void initWindow() {
-        Scene gameScene = new Scene(gamePane, WIDTH, HEIGHT);
+        Scene gameScene = new Scene(gamePane, WIDTH, HEIGHT+34);
         gameStage = new Stage();
         gameStage.setScene(gameScene);
         gameStage.setResizable(false);
