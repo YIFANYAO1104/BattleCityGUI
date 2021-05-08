@@ -155,7 +155,7 @@ To get a local copy up and running follow these simple steps.
   - Cameron Webley
   - Junyu Chen - jxc1259@student.bham.ac.uk
   - Mantas
-  - Muhammad
+  - Muhammad - mxu062@student.bham.ac.uk
   - Najd
   - Xiao Yan - xxy869@student.bham.ac.uk
   - Yifan Yao - yxy977@student.bham.ac.uk
