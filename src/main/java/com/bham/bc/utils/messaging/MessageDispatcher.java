@@ -18,6 +18,10 @@ public class MessageDispatcher {
      * Initialization
      */
     final public static double SEND_MSG_IMMEDIATELY = 0.0f;
+
+    /**
+     * null
+     */
     final public static Object NO_ADDITIONAL_INFO = null;
 
     /**
@@ -34,8 +38,8 @@ public class MessageDispatcher {
 
     /**
      * If when BaseGameEntity.HandleMessage(msg) returns false, means the telegram could not be handled
-     * @param pReceiver
-     * @param msg
+     * @param pReceiver {@link BaseGameEntity} the receuve entity
+     * @param msg {@link Telegram} msg itself
      */
     private void Discharge(BaseGameEntity pReceiver, Telegram msg) {
         if (!pReceiver.handleMessage(msg)) {
@@ -49,7 +53,7 @@ public class MessageDispatcher {
 
     /**
      * Copy Constructor for MessageDispatcher and it should be private
-     * @param d
+     * @param d {@link MessageDispatcher} get the messageDispather itself
      */
     private MessageDispatcher(MessageDispatcher d) {
     }
@@ -66,11 +70,11 @@ public class MessageDispatcher {
 
     /**
      * A method to dispatch messages between Entities
-     * @param delay
-     * @param sender
-     * @param receiver
-     * @param msg
-     * @param ExtraInfo
+     * @param delay when send the message
+     * @param sender The index {@link Integer}  of sender
+     * @param receiver The index {@link Integer}  of receiver
+     * @param msg   The msg{@link MessageTypes} itself
+     * @param ExtraInfo the info{@link com.bham.bc.entity.graph.ExtraInfo} itself
      */
     public void dispatchMessage(double delay,
                                 int sender,
