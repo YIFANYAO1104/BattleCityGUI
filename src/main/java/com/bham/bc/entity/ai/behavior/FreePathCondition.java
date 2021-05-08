@@ -94,7 +94,7 @@ public class FreePathCondition implements Condition {
     }
 
     /**
-     * Gets the path from start to end point
+     * Returns the path from start to end point
      *
      * <p>It calculates the angle and the distance between them, creates a rectangle of the same length as the
      * distance and rotates it appropriately to connect the 2 points. The height of the rectangle is defined by
