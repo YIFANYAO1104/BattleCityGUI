@@ -25,9 +25,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="optimize laser system of time limitation">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-    </list>
+    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="optimize laser system of time limitation" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

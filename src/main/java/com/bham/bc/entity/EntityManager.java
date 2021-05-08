@@ -43,7 +43,7 @@ public class EntityManager {
     /**
      * Registering new Entity
      * By create new EntityID-EntityObject paired Entry and put into HashMap
-     * @param NewEntity
+     * @param NewEntity new Entity to be registered
      */
     public void registerEntity(BaseGameEntity NewEntity) {
         m_EntityMap.put(NewEntity.getID(), NewEntity);
@@ -52,7 +52,7 @@ public class EntityManager {
 
     /**
      * Retrieve Specific BaseGame Entity from HashMap by Entity ID
-     * @param id
+     * @param id Entity ID
      * @return {@link BaseGameEntity} the cooresponding entity
      */
 public BaseGameEntity getEntityFromID(int id) {
@@ -67,7 +67,7 @@ public BaseGameEntity getEntityFromID(int id) {
 
     /**
      * Remove the EntityID-EntityObject paired entry from HashMap
-     * @param pEntity
+     * @param pEntity the Entity to be removed
      */
     public void removeEntity(BaseGameEntity pEntity) {
         //m_EntityMap.erase(m_EntityMap.find(pEntity.ID()));
