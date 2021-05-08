@@ -52,6 +52,12 @@ abstract public class BaseGameEntity {
     protected void finalize() throws Throwable{super.finalize();}
 
 
+    /**
+     * Constructs BaseGameEntity Object and initialize it
+     * @param id The index {@link Integer} of this Entity
+     * @param x The location in map
+     * @param y The location in map
+     */
     protected BaseGameEntity(int id, double x, double y) {
         setID(id);
         entityManager.registerEntity(this);

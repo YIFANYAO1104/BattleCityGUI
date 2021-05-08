@@ -28,7 +28,7 @@ abstract public class Goal {
 
 
     /**
-     * constructor
+     * Constructs the goal object and initialize it
      * @param agent the owner of the goal
      * @param type one of active, inactive,completed, failed
      */

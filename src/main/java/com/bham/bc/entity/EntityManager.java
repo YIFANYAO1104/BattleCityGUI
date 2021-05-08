@@ -24,6 +24,9 @@ public class EntityManager {
      */
     private EntityMap m_EntityMap = new EntityMap();
 
+    /**
+     * Constructs EntityManager Object and initialize it
+     */
     public EntityManager() { }
 
     /**

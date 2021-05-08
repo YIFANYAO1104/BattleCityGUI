@@ -18,6 +18,10 @@ public class Goal_Think extends Goal_Composite {
 
     UtilityCalculator uc;
 
+    /**
+     * Constructs the Goal_Think Object and initialize it
+     * @param agent the owner of the goal
+     */
     public Goal_Think(GameCharacter agent) {
         super(agent, goal_think);
         uc = new UtilityCalculator(agent);

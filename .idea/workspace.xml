@@ -25,7 +25,17 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="optimize laser system of time limitation" />
+    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="optimize laser system of time limitation">
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/BaseGameEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/BaseGameEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/EntityManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/BooleanCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/BooleanCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/Goal_Think.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/Goal_Think.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/UtilityCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/UtilityCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/Goal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/Goal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/algrithem/Floodfill.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/algrithem/Floodfill.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -64,7 +74,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
   </component>
-  <component name="RunManager" selected="JUnit.MapDivisionTest.randomNodeTest">
+  <component name="RunManager" selected="Application.Unnamed">
     <configuration name="QuickLaunch" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.bham.bc.application.QuickLaunch" />
       <module name="BluelandDefenders" />
@@ -113,7 +123,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="false" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -136,6 +146,7 @@
       <workItem from="1620394688700" duration="532000" />
       <workItem from="1620428311704" duration="356000" />
       <workItem from="1620458584957" duration="396000" />
+      <workItem from="1620480163428" duration="903000" />
     </task>
     <task id="LOCAL-00001" summary="fix problems">
       <created>1620244817871</created>
