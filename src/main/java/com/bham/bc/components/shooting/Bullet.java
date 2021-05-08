@@ -32,7 +32,7 @@ abstract public class Bullet extends MovingEntity {
     /** {@code ALLY} or {@code ENEMY} side the bullet belongs to */
     private final Side SIDE;
 
-    /** Amount of hp the bullet can take from entity */
+    /** Amount of hp the bullet can take from an entity */
     private double damage;
 
     /**
@@ -84,6 +84,7 @@ abstract public class Bullet extends MovingEntity {
 
     /**
      * Sets bullet's damage
+     * @param damage amount of hp the bullet can take from an entity
      */
     public void setDamage(double damage) {
         this.damage = damage;

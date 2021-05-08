@@ -49,8 +49,8 @@ public class UtilityCalculator {
     private final double HEALTH_SCORE_STEEPNESS = 1.848431643f;  // e * 0.68 where e == Euler's number
 
     /**
-     * constructor
-     * @param agent the owner
+     * Constructs the UtilityCalculator Object and initialize it
+     * @param agent the owner of the goal
      */
     public UtilityCalculator(GameCharacter agent) {
         this.agent= agent;

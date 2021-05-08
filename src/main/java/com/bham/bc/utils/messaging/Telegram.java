@@ -46,10 +46,10 @@ public class Telegram implements Comparable {
     /**
      * Constructor of Telegram with 4 parameters.
      * Set all attributes except Object Info
-     * @param time
-     * @param sender
-     * @param receiver
-     * @param msg
+     * @param time when send the message
+     * @param sender The id{@link Integer} of Sender
+     * @param receiver The id{@link Integer} of Receiver
+     * @param msg The MessageType{@link MessageTypes}
      */
     public Telegram(double time,
                     int sender,
@@ -61,11 +61,11 @@ public class Telegram implements Comparable {
     /**
      * Constructor of Telegram with 5 parameters.
      * Set All attributes to values of parameters
-     * @param time
-     * @param sender
-     * @param receiver
-     * @param msg
-     * @param info
+     * @param time when send the message
+     * @param sender The id{@link Integer} of Sender
+     * @param receiver The id{@link Integer} of Receiver
+     * @param msg The MessageType{@link MessageTypes}
+     * @param info The extraInfo{@link com.bham.bc.entity.graph.ExtraInfo}
      */
     public Telegram(double time,
                     int sender,
@@ -138,7 +138,7 @@ public class Telegram implements Comparable {
 
     /**
      *
-     * @return String info of Full message with time and transmitter
+     * @return String info of Full message with time
      */
     @Override
     public String toString() {
@@ -146,14 +146,14 @@ public class Telegram implements Comparable {
                 + "   Receiver: " + Receiver + "   Msg: " + Msg;
     }
 
-    /**
-     * handy helper function for dereferencing the ExtraInfo field of the Telegram
-     * to the required type.
-     * @param p
-     * @param <T>
-     * @return
-     */
-    public static <T> T DereferenceToType(Object p) {
-        return (T) (p);
-    }
+//    /**
+//     * handy helper function for dereferencing the ExtraInfo field of the Telegram
+//     * to the required type.
+//     * @param p
+//     * @param <T>
+//     * @return the
+//     */
+//    public static <T> T DereferenceToType(Object p) {
+//        return (T) (p);
+//    }
 }

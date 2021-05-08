@@ -16,7 +16,7 @@ public class BombTrigger extends RespawnTrigger {
      * Construct a Bomb Trigger in a position with respawn time
      * @param x x coordinates of the trigger
      * @param y y coordinates of the trigger
-     * @param Respawn the respawn time of trigger
+     * @param Respwan the respawn time of trigger
      */
     public BombTrigger(int x, int y, int Respwan){
         super(x,y);

@@ -58,6 +58,7 @@ public class Gun {
      *
      * @param character  {@link GameCharacter} the gun belongs to
      * @param bulletType type of bullet the gun should control
+     * @param laserType type of laser
      */
     public Gun(GameCharacter character, BulletType bulletType, LaserType laserType) {
         CHARACTER = character;
