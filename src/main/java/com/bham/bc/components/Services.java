@@ -139,7 +139,7 @@ public interface Services {
      * @param outerRadius radius for the center point within which the free area should be looked for
      * @param areaSize    size the free area should have (length of one side of a square)
      * @param pos         TOP_LEFT or CENTER position requested to be returned
-     * @return Point2D coordinate of a free area or (-1, -1) point if no area is found
+     * @return Point2D coordinate of a free area or {@code null} if no area is found
      */
     Point2D getFreeArea(Point2D center, double innerRadius, double outerRadius, double areaSize, Pos pos);
 

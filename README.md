@@ -136,7 +136,7 @@ To get a local copy up and running follow these simple steps.
     -
   - Characters
   
-    - [kamikaze, player, shooter, splitter, tank, teaser, trapper](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
+    - [nova, player, shooter, splitter, tank, teaser, trapper](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
     - [state1.png](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package )
     - []
   - Menu
@@ -154,7 +154,7 @@ To get a local copy up and running follow these simple steps.
   
   - Cameron Webley
   - Junyu Chen - jxc1259@student.bham.ac.uk
-  - Mantas
+  - Mantas Birskus - mxb1138@student.bham.ac.uk
   - Muhammad - mxu062@student.bham.ac.uk
   - Najd
   - Xiao Yan - xxy869@student.bham.ac.uk

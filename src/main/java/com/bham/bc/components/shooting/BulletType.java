@@ -2,6 +2,8 @@ package com.bham.bc.components.shooting;
 
 import javafx.scene.image.Image;
 
+import java.util.Objects;
+
 /**
  * Enum class defining unmodifiable properties of any bullet type. These are used by bullet classes and the {@link Gun} class.
  */
@@ -10,35 +12,26 @@ public enum BulletType {
     DEFAULT(200, 6, 12, "img/shooting/default-bullet.png"),
     EXPLOSIVE(2000, 6, 12, "img/shooting/default-bullet.png"),
     ICE(2000, 6, 12, "img/shooting/2.png"),
-    DefaultLaser(200,20,10,
-        new Image[]{
-                (new Image("img/shooting/l0.png")),
-                (new Image("img/shooting/l1.png")),
-                (new Image("img/shooting/l2.png")),
-                (new Image("img/shooting/l3.png")),
-                (new Image("img/shooting/l4.png")),
-                (new Image("img/shooting/l5.png")),
-                (new Image("img/shooting/l6.png")),
-                (new Image("img/shooting/l7.png")),
-                (new Image("img/shooting/l6.png")),
-                (new Image("img/shooting/l5.png")),
-                (new Image("img/shooting/l4.png")),
-                (new Image("img/shooting/l3.png")),
-                (new Image("img/shooting/l2.png")),
-                (new Image("img/shooting/l2.png")),
-                (new Image("img/shooting/l0.png")),}
-            );
+    LASER(200, 20, 10, "img/shooting/l0.png");
 
-    private long minRate;
-    private int width;
-    private int height;
-    private Image image;
-    private  Image[] images;
+    /** The cool-down (in milliseconds) before the next bullet can be fired */
+    public final long MIN_RATE;
+
+    /** The width of the bullet's image used for rendering */
+    public final int WIDTH;
+
+    /** The height of the bullet's image used for rendering */
+    public final int HEIGHT;
+
+    /** Path to the location of the bullet's image */
+    private final String PATH_TO_IMAGE;
 
     /**
-     * <p>Constructs a specific bullet with the provided image. The width and height properties will be used to render
-     * a correct image on graphics context. The size for the hit-box is configured withing the bullet class itself. We
-     * use rate because we don't have a class for weapons so each bullet is responsible for its own shooting rate.</p>
+     * Constructs a specific bullet with the provided image.
+     *
+     * <p>The width and height properties will be used to render a correct image on graphics context. The size for the
+     * hit-box is configured withing the bullet class itself. We use rate because we don't have a class for weapons so
+     * each bullet is responsible for its own shooting rate.</p>
      *
      * @param minRate   minimum milliseconds gap between each bullet that is shot
      * @param width     width of the bullet image
@@ -46,20 +39,10 @@ public enum BulletType {
      * @param imagePath path to the image the bullet will use for its picture
      */
     BulletType(long minRate, int width, int height, String imagePath) {
-        this.minRate = minRate;
-        this.width = width;
-        this.height = height;
-        try{
-            image = new Image(getClass().getClassLoader().getResourceAsStream(imagePath), width, height, false, false);
-        }catch (IllegalArgumentException | NullPointerException e){
-            e.printStackTrace();
-        }
-        }
-    BulletType(long minRate, int width, int height, Image[] images) {
-        this.minRate = minRate;
-        this.width = width;
-        this.height = height;
-        images = images;
+        this.MIN_RATE = minRate;
+        this.WIDTH = width;
+        this.HEIGHT = height;
+        PATH_TO_IMAGE = imagePath;
     }
 
     /**
@@ -67,34 +50,19 @@ public enum BulletType {
      * @return the cool-down (in milliseconds) before the next bullet can be fired
      */
     public long getMinRate() {
-        return minRate;
-    }
-
-    /**
-     * Gets bullet's width
-     * @return the width of the bullet's image used for rendering
-     */
-    public int getWidth() {
-        return width;
-    }
-
-    /**
-     * Gets bullet's height
-     * @return the height of the bullet's image used for rendering
-     */
-    public int getHeight() {
-        return height;
+        return MIN_RATE;
     }
 
     /**
      * Gets the bullet's image
-     * @return the Image object that can be rendered on graphics context
+     * @return {@link Image} object that can be rendered on graphics context or {@code null} if it cannot be constructed
      */
     public Image getImage() {
-        return image;
-    }
-
-    public Image[] getImages(){
-        return images;
+        try {
+            return new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(PATH_TO_IMAGE)), WIDTH, HEIGHT, false, false);
+        } catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

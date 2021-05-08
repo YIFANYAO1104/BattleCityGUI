@@ -3,7 +3,7 @@ package com.bham.bc.components.shooting;
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.agents.enemies.Kamikaze;
+import com.bham.bc.components.characters.agents.enemies.Nova;
 import com.bham.bc.components.environment.MapType;
 import javafx.embed.swing.JFXPanel;
 import static org.junit.Assert.*;
@@ -19,8 +19,8 @@ public class armoryTest {
         Player x =  new Player(10,10);
         Gun gun =x.testGun();
         assertTrue(gun.testBullet().equals(BulletType.DEFAULT));
-        assertTrue(gun.testBullet().getWidth()==6);
-        assertTrue(gun.testBullet().getHeight()==12);
+        assertTrue(gun.testBullet().WIDTH==6);
+        assertTrue(gun.testBullet().HEIGHT==12);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class armoryTest {
         int i =0;
         Controller.setMode(MapType.SMALL);
         Player player = new Player(510, 480);
-        Kamikaze enemy1 =new Kamikaze(510,470);
+        Nova enemy1 =new Nova(510,470);
         //GameMap gameMap = new GameMap(MapType.SMALL);
         System.out.println(enemy1.getHp());
         System.out.println(enemy1.getFullHp());

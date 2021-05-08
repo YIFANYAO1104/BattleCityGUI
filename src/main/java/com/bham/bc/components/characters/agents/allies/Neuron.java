@@ -17,31 +17,39 @@ import static com.bham.bc.components.shooting.BulletType.DEFAULT;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 public class Neuron extends Agent {
-
+    /** Path to the image of this ally */
     public static final String IMAGE_PATH = "img/characters/Neuron.png";
+
+    /** The width and the height the ally's image should have when rendered */
     public static final int SIZE = 30;
+
+    /** HP the ally should start with */
     public static final double HP = 100;
+
+    /** Speed the ally should start with */
     public static final double SPEED = 3;
 
-    private Goal_Think brain;
-    private Regulator brainRegulator;
+    private final Goal_Think BRAIN;
+    private final Regulator BRAIN_REGULATOR;
 
     /**
      * Constructs an enemy instance with initial speed value set to 1
      *
-     * @param x top left x coordinate of the enemy
-     * @param y top left y coordinate of the enemy
+     * @param x top left x coordinate of the ally
+     * @param y top left y coordinate of the ally
      */
     public Neuron(double x, double y) {
         super(x, y, SPEED, HP, Side.ALLY);
         mass=1;
+
         try{
-        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-        }catch (IllegalArgumentException | NullPointerException e){
+            entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        } catch (IllegalArgumentException | NullPointerException e){
             e.printStackTrace();
         }
-        brain = new Goal_Think(this);
-        brainRegulator = new Regulator(5);
+
+        BRAIN = new Goal_Think(this);
+        BRAIN_REGULATOR = new Regulator(5);
 
         GUN.setRate(600);
         GUN.setDamageFactor(5);
@@ -54,12 +62,12 @@ public class Neuron extends Agent {
 
     @Override
     public void update() {
-        brain.process();
+        BRAIN.process();
         move();
         targetingSystem.update();
 
-        if (brainRegulator.isReady()){
-            brain.decideOnGoals();
+        if (BRAIN_REGULATOR.isReady()){
+            BRAIN.decideOnGoals();
         }
 
         //parallel with any seek, follow path

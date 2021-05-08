@@ -22,20 +22,22 @@ import static com.bham.bc.utils.Timer.CLOCK;
  * This class controls the way the bullet can be fired with respect to the game timer. It must be bind to a character.
  */
 public class Gun {
+    /** The sole character this bullet handler belongs to */
     private final GameCharacter CHARACTER;
 
-    public BulletType getBulletType() {
-        return bulletType;
-    }
-
-    public double getBulletSpeed() {
-        return DefaultBullet.SPEED;
-    }
-
+    /** The type of bullet this gun is spawning */
     private BulletType bulletType;
+
+    /** The type of laser this gun is spawning */
     private LaserType laserType;
+
+    /** Damage multiplier for every bullet upon spawning them */
     private double damageFactor;
+
+    /** Last tick indicating the time passed since the last bullet was shot */
     private long lastTick;
+
+    /** The delay at which this gun may spawn bullets */
     private long rate;
 
     /**
@@ -57,10 +59,9 @@ public class Gun {
      * @param character  {@link GameCharacter} the gun belongs to
      * @param bulletType type of bullet the gun should control
      */
-    public Gun(GameCharacter character, BulletType bulletType,LaserType laserType) {
+    public Gun(GameCharacter character, BulletType bulletType, LaserType laserType) {
         CHARACTER = character;
         this.bulletType = bulletType;
-        //this.laserType=BulletType.DefaultLaser;
         this.laserType=laserType;
         damageFactor = 1;
         lastTick = CLOCK.getCurrentTime();
@@ -68,6 +69,8 @@ public class Gun {
     }
 
     /**
+     * Spawns a bullet at a given angle
+     *
      * <p>Creates a new bullet object that depends on this class' <b>bulletType</b> parameter. If angle offset is set to 0,
      * this method creates a bullet straightly in front of the character just touching its "nose". Otherwise, the bullet is
      * rotated with respect to <i>its</i> center.</p>
@@ -80,24 +83,24 @@ public class Gun {
     private Bullet spawnBullet(double angleOffset) {
         // Define the bullet's center coordinates
         double centerBulletX = CHARACTER.getCenterPosition().getX();
-        double centerBulletY = CHARACTER.getPosition().getY() - bulletType.getHeight() / 2.0;
+        double centerBulletY = CHARACTER.getPosition().getY() - bulletType.HEIGHT / 2.0;
 
         // Rotate bullet's center point around character
         Rotate rotateAroundCharacter = new Rotate(CHARACTER.getAngle()+angleOffset, CHARACTER.getCenterPosition().getX(), CHARACTER.getCenterPosition().getY());
         Point2D transformedCenterXY = rotateAroundCharacter.transform(centerBulletX, centerBulletY);
 
         // Define the bullet's top left coordinates
-        double topLeftBulletX = transformedCenterXY.getX() - bulletType.getWidth() / 2.0;
-        double topLeftBulletY = transformedCenterXY.getY() - bulletType.getHeight() / 2.0;
+        double topLeftBulletX = transformedCenterXY.getX() - bulletType.WIDTH / 2.0;
+        double topLeftBulletY = transformedCenterXY.getY() - bulletType.HEIGHT / 2.0;
 
         // Return an instance which corresponds to the bullet type
         switch(bulletType) {
             case ICE:
-                return  new IceBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
+                return  new IceBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(), Math.toRadians(angleOffset)), CHARACTER.getSide());
             case EXPLOSIVE:
-                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
+                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(), Math.toRadians(angleOffset)), CHARACTER.getSide());
             default:
-                return new DefaultBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
+                return new DefaultBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(), Math.toRadians(angleOffset)), CHARACTER.getSide());
         }
     }
 
@@ -155,21 +158,8 @@ public class Gun {
                 return new ThunderLaser(topLeftBulletXT, topLeftBulletYT, CHARACTER.getHeading(), CHARACTER.getSide());
             default:
                 return new LaserGun(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-
-
         }
-
-//        switch(bulletType) {
-//            case IceBullet:
-//                return  new IceBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-//            case EXPLOSIVE:
-//                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-//
-//            default:
-//                return new DefaultBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-//        }
     }
-
 
     /**
      * Shoots exactly 1 bullet in front of the character
@@ -184,6 +174,7 @@ public class Gun {
         audioManager.playEffect(getShotSoundEffect());
         lastTick = CLOCK.getCurrentTime();
     }
+
     /**
      * Shoots the dynamic laser  in front of the character
      */
@@ -222,12 +213,13 @@ public class Gun {
     public void setBulletType(BulletType bulletType) {
         this.bulletType = bulletType;
     }
+
     /**
      * Updates the laser type this gun is shooting
      * @param laser the type of laser this gun will handle
      */
     public void setLaserType(LaserType laser){
-        this.laserType=laser;
+        this.laserType = laser;
     }
 
     /**
@@ -272,5 +264,13 @@ public class Gun {
         }
 
         return max*damageFactor;
+    }
+
+    public BulletType getBulletType() {
+        return bulletType;
+    }
+
+    public double getBulletSpeed() {
+        return DefaultBullet.SPEED;
     }
 }

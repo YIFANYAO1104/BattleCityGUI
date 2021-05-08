@@ -34,14 +34,25 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * </ul>
  */
 public class Shooter extends Agent {
-
+    /** Path to the image of this enemy */
     public static final String IMAGE_PATH = "img/characters/shooter.png";
+
+    /** The width and the height the enemy's image should have when rendered */
     public static final int SIZE = 30;
+
+    /** HP the enemy should start with */
     public static final double HP = 50;
+
+    /** Speed the enemy should start with */
     public static final double SPEED = 3;
 
+    /** Finite State Machine which will tell which actions happen on each update */
     private final StateMachine stateMachine;
+
+    /** Condition to check if there are any obstacles in a straight path */
     private FreePathCondition noObstCondition;
+
+    /** Condition to check if the enemy is low on HP to retreat */
     private BooleanCondition goBackCondition;
 
     /**

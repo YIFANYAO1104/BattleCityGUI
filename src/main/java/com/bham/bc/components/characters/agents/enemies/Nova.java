@@ -8,7 +8,6 @@ import com.bham.bc.entity.ai.behavior.*;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
-import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 
@@ -18,7 +17,7 @@ import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
- * <h1>Kamikaze - fearless suicider</h1>
+ * <h1>Nova - fearless self-destructor</h1>
  *
  * <p>This type of enemy has 3 states determined by its distance to ally and free path condition</p>
  * <ul>
@@ -31,29 +30,43 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  *     and dealing area damage to anything but allies and obstacles</li>
  * </ul>
  */
-public class Kamikaze extends Agent {
-    public static final String IMAGE_PATH = "img/characters/kamikaze.png";
+public class Nova extends Agent {
+    /** Path to the image of this enemy */
+    public static final String IMAGE_PATH = "img/characters/nova.png";
+
+    /** The width and the height the enemy's image should have when rendered */
     public static final int SIZE = 30;
+
+    /** HP the enemy should start with */
     public static final int HP = 50;
+
+    /** Speed the enemy should start with */
     public static final double SPEED = 4;
 
+    /** Finite State Machine which will tell which actions happen on each update */
     private final StateMachine stateMachine;
+
+    /** Condition to check if there are any obstacles in a straight path */
     private FreePathCondition noObstacleCondition;
+
+    /** Condition to check if the enemy is close enough to be able to charge */
     private IntCondition chargeAllyCondition;
+
+    /** Condition to check if the enemy is close enough to attack */
     private IntCondition attackAllyCondition;
 
     /**
-     * Constructs a kamikaze type enemy
+     * Constructs a nova type enemy
      *
      * @param x top left x coordinate of the enemy
      * @param y top left y coordinate of the enemy
      */
-    public Kamikaze(double x, double y) {
+    public Nova(double x, double y) {
         super(x, y, SPEED, HP, Side.ENEMY);
         try{
-        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-        entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-        }catch (IllegalArgumentException | NullPointerException e){
+            entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+            entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+        } catch (IllegalArgumentException | NullPointerException e){
             e.printStackTrace();
         }
         navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
