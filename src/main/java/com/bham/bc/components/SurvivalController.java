@@ -191,14 +191,7 @@ public class SurvivalController extends Controller {
     public void spawnAlly() {
         Circle homeArea = getHomeArea();
         Point2D spawnPoint = GeometryEnhanced.randomPointInCircle(homeArea).subtract(GameCharacter.MAX_SIZE*.5, GameCharacter.MAX_SIZE*.5);
-        AllyType allyType = AllyType.NEURON;
-
-        try {
-            System.out.println("Spawn ally");
-            addCharacter(allyType.newInstance(spawnPoint.getX(), spawnPoint.getY()));
-        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        addCharacter(new Neuron(spawnPoint.getX(), spawnPoint.getY()));
     }
 
     @Override
