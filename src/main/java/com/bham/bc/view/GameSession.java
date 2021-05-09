@@ -249,8 +249,12 @@ public class GameSession {
      */
     private void leaveGame(GameFlowEvent e) {
         gameStage.hide();
-        MainMenu.musicVolume.getValueProperty().setValue(PauseMenu.musicVolume.getValueProperty().getValue().doubleValue());
-        MainMenu.sfxVolume.getValueProperty().setValue(PauseMenu.sfxVolume.getValueProperty().getValue().doubleValue());
+        if (MainMenu.musicVolume!=null&&MainMenu.sfxVolume!=null){
+            MainMenu.musicVolume.getValueProperty().setValue(PauseMenu.musicVolume.getValueProperty().getValue().doubleValue());
+            MainMenu.sfxVolume.getValueProperty().setValue(PauseMenu.sfxVolume.getValueProperty().getValue().doubleValue());
+
+        }
+
         menuStage.show();
 
         MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
