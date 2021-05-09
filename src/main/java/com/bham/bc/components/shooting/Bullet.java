@@ -133,6 +133,9 @@ abstract public class Bullet extends MovingEntity {
      */
     public abstract void destroy();
 
+    /**
+     * Initialize the dynamic effect time of the bullet
+     */
     public abstract void setTime();
 
     @Override

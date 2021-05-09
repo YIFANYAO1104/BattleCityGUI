@@ -250,7 +250,10 @@ public class Gun {
         }
     }
 
-
+    /**
+     * Gets the maximum damage of the bullet
+     * @return maximum damage of the bullet
+     */
     public double getMaxDamage() {
         List<Double> damageList = new ArrayList<>();
         damageList.add(IceBullet.DAMAGE);
@@ -267,10 +270,18 @@ public class Gun {
         return max*damageFactor;
     }
 
+    /**
+     * Gets the bullet type of the gun
+     * @return {@link #bulletType}
+     */
     public BulletType getBulletType() {
         return bulletType;
     }
 
+    /**
+     * Gets the bullet speed of the gun
+     * @return bullet speed
+     */
     public double getBulletSpeed() {
         return DefaultBullet.SPEED;
     }
