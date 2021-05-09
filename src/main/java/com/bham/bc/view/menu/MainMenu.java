@@ -44,6 +44,9 @@ public class MainMenu extends AnchorPane {
      */
     private final GameFlowEvent NEW_GAME_EVENT;
 
+    public static MenuSlider sfxVolume;
+    public static MenuSlider musicVolume;
+
     /**
      * Constructs an {@link AnchorPane} layout as the Main Menu
      */
@@ -146,8 +149,8 @@ public class MainMenu extends AnchorPane {
      * <p>settings have  {@link MenuSlider} for control of volume.</p>
      */
     private void createSubMenuSettings() {
-        MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));
-        MenuSlider sfxVolume = new MenuSlider("EFFECTS", (int) (audioManager.getEffectsVolume() * 100));
+        musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));
+        sfxVolume = new MenuSlider("EFFECTS", (int) (audioManager.getEffectsVolume() * 100));
         MenuButton btnBack = new MenuButton("BACK");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));

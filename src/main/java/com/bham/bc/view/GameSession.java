@@ -9,6 +9,7 @@ import static com.bham.bc.components.Controller.*;
 import static com.bham.bc.utils.Timer.CLOCK;
 
 import com.bham.bc.view.menu.EndMenu;
+import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.CustomStage;
 import com.bham.bc.view.tools.GameFlowEvent;
@@ -248,6 +249,8 @@ public class GameSession {
      */
     private void leaveGame(GameFlowEvent e) {
         gameStage.hide();
+        MainMenu.musicVolume.getValueProperty().setValue(PauseMenu.musicVolume.getValueProperty().getValue().doubleValue());
+        MainMenu.sfxVolume.getValueProperty().setValue(PauseMenu.sfxVolume.getValueProperty().getValue().doubleValue());
         menuStage.show();
 
         MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
