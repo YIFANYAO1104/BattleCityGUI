@@ -30,7 +30,7 @@
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Gun.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Gun.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -145,6 +145,8 @@
       <workItem from="1620480163428" duration="1641000" />
       <workItem from="1620481596845" duration="715000" />
       <workItem from="1620508910496" duration="318000" />
+      <workItem from="1620565437311" duration="269000" />
+      <workItem from="1620572080896" duration="292000" />
     </task>
     <task id="LOCAL-00001" summary="fix problems">
       <created>1620244817871</created>

@@ -41,7 +41,7 @@ public class Gun {
     private long rate;
 
     /**
-     * A default constructor to create gun with no bullets
+     * Constructs gun with no bullets and initialize it
      *
      * @param character {@link GameCharacter} the gun belongs to
      */
@@ -54,7 +54,7 @@ public class Gun {
     }
 
     /**
-     * Alternate constructor to create a gun with the specified bullet type
+     * Constructs a gun with the specified bullet type
      *
      * @param character  {@link GameCharacter} the gun belongs to
      * @param bulletType type of bullet the gun should control
@@ -106,14 +106,14 @@ public class Gun {
     }
 
     /**
-     * test the laser
+     * Returns the type of laser and test the laser
      * @return the {@link LaserType} of the current laser
      */
     public LaserType testLaser(){
         return this.laserType;
     }
     /**
-     * test the Bullet
+     * Returns the type of bullet and test the Bullet
      * @return the {@link Bullet} of the current Bullet
      */
     public BulletType testBullet(){
@@ -240,7 +240,7 @@ public class Gun {
     }
 
     /**
-     * Gets the sound effect mapped to a requested type of bullet this gun will make when spawning a bullet
+     * Returns the sound effect mapped to a requested type of bullet this gun will make when spawning a bullet
      * @return {@link SoundEffect} value which will provide audio object to play
      */
     public SoundEffect getShotSoundEffect() {
@@ -251,7 +251,7 @@ public class Gun {
     }
 
     /**
-     * Gets the maximum damage of the bullet
+     * Returns the maximum damage of the bullet
      * @return maximum damage of the bullet
      */
     public double getMaxDamage() {
@@ -271,7 +271,7 @@ public class Gun {
     }
 
     /**
-     * Gets the bullet type of the gun
+     * Returns the bullet type of the gun
      * @return {@link #bulletType}
      */
     public BulletType getBulletType() {
@@ -279,7 +279,7 @@ public class Gun {
     }
 
     /**
-     * Gets the bullet speed of the gun
+     * Returns the bullet speed of the gun
      * @return bullet speed
      */
     public double getBulletSpeed() {
