@@ -193,6 +193,11 @@ public interface Services {
     void spawnEnemyRandomly(EnemyType enemyType);
 
     /**
+     * Spawns an ally at the home base
+     */
+    void spawnAlly();
+
+    /**
      * Spawns trigger randomly around a given point
      * @param triggerType     type of trigger to spawn (most power-ups and traps can be spawned)
      * @param center          center position around which the trigger will be spawned
