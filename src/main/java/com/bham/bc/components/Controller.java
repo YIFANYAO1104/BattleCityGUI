@@ -199,7 +199,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         triggers.forEach(trigger -> trigger.render(gc));
 
         // TODO: remove
-        triggers.forEach(trigger -> trigger.renderHitBox(gc));
+        // triggers.forEach(trigger -> trigger.renderHitBox(gc));
         // bullets.forEach(bullet -> bullet.renderHitBox(gc));
         // characters.forEach(character -> character.renderHitBox(gc));
 

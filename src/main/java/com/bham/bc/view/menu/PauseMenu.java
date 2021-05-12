@@ -19,36 +19,23 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  * <p>Represents an in-game menu that is observed whenever a game session asks to pause the game.
  * The menu allows to resume, change the sound settings, and return to the main menu.</p>
  *
- * <b>Note:</b> neither state, nor the score of the game is saved when returning to the main menu.
+ * <p><b>Note:</b> neither state, nor the score of the game is saved when returning to the main menu.</p>
  */
 public class PauseMenu extends AnchorPane {
-
-
-    /**
-     * use custom {@link SubMenu} to create Pause Menu
-     */
-    private SubMenu subMenuPause;
-    /**
-     * use custom {@link SubMenu} to create Settings Menu
-     */
-    public SubMenu subMenuSettings;
-    /**
-     * background dim to the menu
-     */
-    public Rectangle dim;
-
-    /**
-     * create pause_game_event
-     */
+    /** Event to be fired if "Resume" is clicked */
     private final GameFlowEvent PAUSE_GAME_EVENT;
-    /**
-     * create leave_game_event
-     */
+
+    /** Event to be fired if "Return to Menu" is clicked */
     private final GameFlowEvent LEAVE_GAME_EVENT;
 
-    public static MenuSlider musicVolume;
-    public static MenuSlider sfxVolume;
+    /** {@link SubMenu} containing elements to represent the main layout of the pause menu */
+    private SubMenu subMenuPause;
 
+    /** {@link SubMenu} containing elements to represent the settings layout of the pause menu */
+    public SubMenu subMenuSettings;
+
+    /** Background dim to make game layout stand out less and pause menu layout more */
+    public Rectangle dim;
 
     /**
      * Constructs an {@link AnchorPane} layout as the Pause Menu and initialize Pause Menu
@@ -96,8 +83,8 @@ public class PauseMenu extends AnchorPane {
      * <p>settings have  {@link MenuSlider} for control of volume.</p>
      */
     private void createSubMenuSettings() {
-        musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));
-        sfxVolume = new MenuSlider("EFFECTS", (int) (audioManager.getEffectsVolume() * 100));
+        MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));
+        MenuSlider sfxVolume = new MenuSlider("EFFECTS", (int) (audioManager.getEffectsVolume() * 100));
         MenuButton btnBack = new MenuButton("BACK");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));

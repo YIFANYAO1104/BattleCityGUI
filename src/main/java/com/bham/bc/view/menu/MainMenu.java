@@ -25,27 +25,17 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  * a game session is not active.</p>
  */
 public class MainMenu extends AnchorPane {
-
-    /**
-     * use custom {@link SubMenu} to create Main Menu
-     */
-    private SubMenu subMenuMain;
-    /**
-     * use custom {@link SubMenu} to create Scores Menu
-     */
-    private SubMenu subMenuScores;
-    /**
-     * use custom {@link SubMenu} to create Settings Mneu
-     */
-    private SubMenu subMenuSettings;
-
-    /**
-     * create new_game_event
-     */
+    /** Event to be fired if "Start Game" is clicked */
     private final GameFlowEvent NEW_GAME_EVENT;
 
-    public static MenuSlider sfxVolume;
-    public static MenuSlider musicVolume;
+    /** {@link SubMenu} containing elements to represent the main layout of the main menu */
+    private SubMenu subMenuMain;
+
+    /** {@link SubMenu} containing elements to represent the scores layout of the main menu */
+    private SubMenu subMenuScores;
+
+    /** {@link SubMenu} containing elements to represent the settings layout of the main menu */
+    private SubMenu subMenuSettings;
 
     /**
      * Constructs an {@link AnchorPane} layout as the Main Menu
@@ -75,14 +65,12 @@ public class MainMenu extends AnchorPane {
     /**
      * Creates the primary sub-menu for the main menu. This defines the behavior of all the
      * necessary buttons to control the GUI actions and create corresponding sub-menus.
-     * <p>use custom menu button ({@link MenuButton})</p>
      */
     private void createSubMenuMain() {
         MenuButton btnStart = new MenuButton("START GAME");
         MenuButton btnScores = new MenuButton("HIGH-SCORES");
         MenuButton btnSettings = new MenuButton("SETTINGS");
         MenuButton btnQuit = new MenuButton("QUIT");
-
 
         btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.MEDIUM); btnStart.fireEvent(NEW_GAME_EVENT); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
@@ -95,9 +83,8 @@ public class MainMenu extends AnchorPane {
 
 
     /**
-     * Creates a sub-menu to view high-scores of both modes. This menu is observed whenever
+     * Creates a sub-menu to view high-scores. This menu is observed whenever
      * "HIGH-SCORES" is clicked and shows top 10 scores.
-     * <p>Create the leaderboard table and initialize the leaderboard table.</p>
      */
     private void createSubMenuScores() {
         subMenuScores = new SubMenu(this);
@@ -146,16 +133,20 @@ public class MainMenu extends AnchorPane {
     /**
      * Creates a sub-menu for settings. This menu is observed whenever "SETTINGS" is clicked
      * and allows the user to configure UI parameters, such as SFX or MUSIC volume.
-     * <p>settings have  {@link MenuSlider} for control of volume.</p>
      */
     private void createSubMenuSettings() {
-        musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));
-        sfxVolume = new MenuSlider("EFFECTS", (int) (audioManager.getEffectsVolume() * 100));
+        MenuSlider musicVolume = new MenuSlider("MUSIC", (int) (audioManager.getMusicVolume() * 100));
+        MenuSlider sfxVolume = new MenuSlider("EFFECTS", (int) (audioManager.getEffectsVolume() * 100));
         MenuButton btnBack = new MenuButton("BACK");
 
         musicVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setMusicVolume(newVal.doubleValue()/100));
         sfxVolume.getValueProperty().addListener((obsVal, oldVal, newVal) -> audioManager.setEffectsVolume(newVal.doubleValue()/100));
         btnBack.setOnMouseClicked(e -> { subMenuSettings.hide(); subMenuMain.show(); });
+
+        addEventFilter(GameFlowEvent.LEAVE_GAME, e -> {
+            musicVolume.getValueProperty().setValue((int) (audioManager.getMusicVolume() * 100));
+            sfxVolume.getValueProperty().setValue((int) (audioManager.getEffectsVolume() * 100));
+        });
 
         subMenuSettings = new SubMenu(this);
         subMenuSettings.getChildren().addAll(musicVolume, sfxVolume, btnBack);
