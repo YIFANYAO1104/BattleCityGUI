@@ -291,6 +291,8 @@ public class MapDivision<entity extends BaseGameEntity>{
         List<Integer> idxes = getCellIndexes(tl, size);
 
         for (Integer idx : idxes) {
+            if(idx < 0) continue;
+
             Cell<entity> curCell = cellList.get(idx);
             for(entity ent :curCell.Unites){
                 if(ent.getCenterPosition().distance(centerPos) < radius+ent.getHitBoxRadius())

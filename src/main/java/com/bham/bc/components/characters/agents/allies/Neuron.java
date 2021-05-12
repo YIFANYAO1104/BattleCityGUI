@@ -24,7 +24,7 @@ public class Neuron extends Agent {
     public static final int SIZE = 30;
 
     /** HP the ally should start with */
-    public static final double HP = 100;
+    public static final double HP = 30;
 
     /** Speed the ally should start with */
     public static final double SPEED = 3;
