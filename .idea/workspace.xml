@@ -33,16 +33,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/application/QuickLaunch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/application/QuickLaunch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/EndMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/EndMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/PauseMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/PauseMenu.java" afterDir="false" />
-    </list>
+    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -168,7 +159,7 @@
       <workItem from="1620572080896" duration="725000" />
       <workItem from="1620581103694" duration="1740000" />
       <workItem from="1620586695977" duration="3251000" />
-      <workItem from="1620760802606" duration="7311000" />
+      <workItem from="1620760802606" duration="7626000" />
     </task>
     <task id="LOCAL-00001" summary="fix problems">
       <created>1620244817871</created>
@@ -226,14 +217,14 @@
       <option name="project" value="LOCAL" />
       <updated>1620572411273</updated>
     </task>
-    <task id="LOCAL-00009" summary="add javadoc comments to entity package">
-      <created>1620481116290</created>
+    <task id="LOCAL-00009" summary="same window for game and menu">
+      <created>1620812673108</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1620481116290</updated>
+      <updated>1620812673108</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -271,7 +262,8 @@
     <MESSAGE value="add javadoc comments to entity package" />
     <MESSAGE value="comments in entity" />
     <MESSAGE value="formalize javadoc comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="formalize javadoc comments" />
+    <MESSAGE value="same window for game and menu" />
+    <option name="LAST_COMMIT_MESSAGE" value="same window for game and menu" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
