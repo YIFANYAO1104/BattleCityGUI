@@ -63,6 +63,7 @@ public class ExplosiveBullet extends Bullet {
         return hitBox;
     }
 
+
     private Rectangle updateHitBox(int existTime) {
         //get bound rectangle top left pos
         //calculate region radius according to current time
