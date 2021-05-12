@@ -81,7 +81,7 @@ public class MenuSession {
 
         customStage = new CustomStage(mainStage);
         customStage.setTitleAndRoote(titleAndRoot);
-        gpTitle = customStage.createMainTitlebar(WIDTH);
+        gpTitle=customStage.createMainTitlebar(WIDTH);
         titleAndRoot.getChildren().addAll(gpTitle, mainPane);
         menuScene.setRoot(titleAndRoot);
     }

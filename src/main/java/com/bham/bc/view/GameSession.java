@@ -13,6 +13,7 @@ import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.CustomStage;
+import com.bham.bc.view.model.MenuBackground;
 import com.bham.bc.view.tools.GameFlowEvent;
 import com.bham.bc.view.tools.Camera;
 import javafx.animation.AnimationTimer;
@@ -259,13 +260,21 @@ public class GameSession {
      * @param e <i>LEAVE_GAME_EVENT</i> which provides details about the name and the score to be saved in the leaderboard
      */
     private void leaveGame(GameFlowEvent e) {
-        MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
+//        MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
 
         mainStage.setScene(menuScene);
-        menuScene.setRoot(titleAndRoot);
+
+        VBox titleAndRoot3=new VBox();
+        customStage.setTitleAndRoote(titleAndRoot3);
+        menuScene.setRoot(titleAndRoot3);
+
 
         try {
             AnchorPane menuPane = (AnchorPane) ((AnchorPane) titleAndRoot.getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable().get(1);
+
+
+            titleAndRoot3.getChildren().addAll(gpTitle, menuPane);
+
             menuPane.getChildren().get(1).fireEvent(e);
         } catch(ClassCastException | NullPointerException exception) {
             exception.printStackTrace();

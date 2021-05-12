@@ -33,7 +33,12 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="" />
+    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -101,19 +106,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="MapDivisionTest.randomNodeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="BluelandDefenders" />
       <extension name="coverage">
@@ -172,7 +164,9 @@
       <workItem from="1620572080896" duration="725000" />
       <workItem from="1620581103694" duration="1740000" />
       <workItem from="1620586695977" duration="3251000" />
-      <workItem from="1620819474693" duration="2736000" />
+      <workItem from="1620820106097" duration="67000" />
+      <workItem from="1620824195253" duration="1393000" />
+      <workItem from="1620825619271" duration="618000" />
     </task>
     <task id="LOCAL-00001" summary="fix problems">
       <created>1620244817871</created>
@@ -251,14 +245,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620818306184</updated>
     </task>
-    <task id="LOCAL-00012" summary="workspace glitch">
-      <created>1620823085967</created>
+    <task id="LOCAL-00012" summary="fix title bar problem">
+      <created>1620818437699</created>
       <option name="number" value="00012" />
       <option name="presentableId" value="LOCAL-00012" />
       <option name="project" value="LOCAL" />
-      <updated>1620823085967</updated>
+      <updated>1620818437699</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="fix title bar problem">
+      <created>1620819160582</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1620819160582</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -297,8 +298,7 @@
     <MESSAGE value="comments in entity" />
     <MESSAGE value="formalize javadoc comments" />
     <MESSAGE value="fix title bar problem" />
-    <MESSAGE value="workspace glitch" />
-    <option name="LAST_COMMIT_MESSAGE" value="workspace glitch" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix title bar problem" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
