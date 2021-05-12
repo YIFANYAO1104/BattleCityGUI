@@ -34,8 +34,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/CustomStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/CustomStage.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -104,17 +105,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="MapDivisionTest.randomNodeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="BluelandDefenders" />
       <extension name="coverage">
@@ -173,6 +163,7 @@
       <workItem from="1620572080896" duration="725000" />
       <workItem from="1620581103694" duration="1740000" />
       <workItem from="1620586695977" duration="3251000" />
+      <workItem from="1620819474693" duration="2736000" />
     </task>
     <task id="LOCAL-00001" summary="fix problems">
       <created>1620244817871</created>

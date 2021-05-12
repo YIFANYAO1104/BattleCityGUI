@@ -7,8 +7,10 @@ import com.bham.bc.components.environment.MapType;
 import static com.bham.bc.audio.AudioManager.audioManager;
 import static com.bham.bc.components.Controller.*;
 import static com.bham.bc.utils.Timer.CLOCK;
+import static com.bham.bc.view.MenuSession.*;
 
 import com.bham.bc.view.menu.EndMenu;
+import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.CustomStage;
 import com.bham.bc.view.tools.GameFlowEvent;
@@ -91,24 +93,13 @@ public class GameSession {
     /** Property of how much health (fraction) the home territory has remaining */
     private DoubleProperty healthFraction;
 
-    private VBox titleAndRoot=new VBox();
-    private HBox gpTitle;
-    private CustomStage customStage;
-
-
-
-
-
-
     /**
      * Constructs the game session for the provided stage
      * @param mainStage the stage on which the game scene will be loaded
      * @param mapType   the type of map
      */
-    public GameSession(Stage mainStage, MapType mapType,HBox gpTitle,CustomStage customStage) {
+    public GameSession(Stage mainStage, MapType mapType) {
         this.mainStage = mainStage;
-        this.gpTitle=gpTitle;
-        this.customStage=customStage;
 
         PAUSE_MENU = new PauseMenu();
         setMode(mapType);
@@ -116,15 +107,10 @@ public class GameSession {
         initProgressPane();
         createKeyListeners();
 
-
-        gamePane.getScene().setRoot(titleAndRoot);
-        customStage.setTitleAndRoote(titleAndRoot);
-        titleAndRoot.getChildren().addAll(gpTitle,gamePane);
-
-
-
-
-
+        VBox titleAndRoot2=new VBox();
+        customStage.setTitleAndRoote(titleAndRoot2);
+        titleAndRoot2.getChildren().addAll(gpTitle, gamePane);
+        gameScene.setRoot(titleAndRoot2);
     }
 
     /**
@@ -273,18 +259,14 @@ public class GameSession {
      * @param e <i>LEAVE_GAME_EVENT</i> which provides details about the name and the score to be saved in the leaderboard
      */
     private void leaveGame(GameFlowEvent e) {
-        // MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
+        MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
 
         mainStage.setScene(menuScene);
-
-
-
+        menuScene.setRoot(titleAndRoot);
 
         try {
-            // AnchorPane menuPane = (AnchorPane) menuStage.getScene().getRoot().getChildrenUnmodifiable().get(1);
-            VBox titleAndRoot2 = (VBox) menuScene.getRoot();
-
-            titleAndRoot2.getChildren().get(0).fireEvent(e);
+            AnchorPane menuPane = (AnchorPane) ((AnchorPane) titleAndRoot.getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable().get(1);
+            menuPane.getChildren().get(1).fireEvent(e);
         } catch(ClassCastException | NullPointerException exception) {
             exception.printStackTrace();
             System.out.println("Make sure MainMenu is located as follows:\nStage -> Scene -> Root -> (AnchorPane)Child(1) -> Child(1)");
