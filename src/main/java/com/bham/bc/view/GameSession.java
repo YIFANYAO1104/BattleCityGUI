@@ -270,8 +270,8 @@ public class GameSession {
 
 
         try {
-            AnchorPane menuPane = (AnchorPane) ((AnchorPane) titleAndRoot.getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable().get(1);
 
+            AnchorPane menuPane = (AnchorPane) titleAndRoot.getChildrenUnmodifiable().get(0);
 
             titleAndRoot3.getChildren().addAll(gpTitle, menuPane);
 
