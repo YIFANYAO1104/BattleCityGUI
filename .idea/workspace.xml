@@ -311,7 +311,8 @@
     <MESSAGE value="fix title bar problem" />
     <MESSAGE value="workspace glitch" />
     <MESSAGE value="merge" />
-    <option name="LAST_COMMIT_MESSAGE" value="merge" />
+    <MESSAGE value="bug fix" />
+    <option name="LAST_COMMIT_MESSAGE" value="bug fix" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
