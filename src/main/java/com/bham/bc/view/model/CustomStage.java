@@ -89,7 +89,6 @@ public class CustomStage extends Stage{
      */
     public static int selected=0;
 
-    private VBox titleAndRoot;
 
 
     /**
@@ -283,7 +282,7 @@ public class CustomStage extends Stage{
      * @param titleAndRoot the container
      */
     public void setTitleAndRoote(VBox titleAndRoot){
-        this.titleAndRoot=titleAndRoot;
+
         //set event of dragging window
         titleAndRoot.setOnMouseDragged((MouseEvent event) -> {
 
