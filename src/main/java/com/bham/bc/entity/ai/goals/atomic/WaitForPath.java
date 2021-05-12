@@ -3,20 +3,20 @@ package com.bham.bc.entity.ai.goals.atomic;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 
-import static com.bham.bc.entity.ai.goals.GoalTypes.goal_wait_for_path;
+import static com.bham.bc.entity.ai.goals.GoalTypes.wait_for_path;
 
 /**
  * class to define behavior when an agent is waiting for path
  */
-public class Goal_WaitForPath extends Goal {
+public class WaitForPath extends Goal {
 
 
     /**
      * constructor
      * @param agent the owner of the goal
      */
-    public Goal_WaitForPath(GameCharacter agent) {
-        super(agent, goal_wait_for_path);
+    public WaitForPath(GameCharacter agent) {
+        super(agent, wait_for_path);
     }
 
 

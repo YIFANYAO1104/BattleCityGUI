@@ -3,21 +3,24 @@ package com.bham.bc.entity.ai.goals.composite.big;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.ai.goals.atomic.Goal;
-import com.bham.bc.entity.ai.goals.atomic.Goal_WaitForPath;
-import com.bham.bc.entity.ai.goals.composite.Goal_Composite;
-import com.bham.bc.entity.ai.goals.composite.helper.Goal_FollowPath;
+import com.bham.bc.entity.ai.goals.atomic.WaitForPath;
+import com.bham.bc.entity.ai.goals.composite.CompositeGoal;
+import com.bham.bc.entity.ai.goals.composite.helper.FollowPath;
 import com.bham.bc.entity.ai.navigation.ItemType;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 
-import static com.bham.bc.entity.ai.goals.GoalTypes.goal_get_health;
+import static com.bham.bc.entity.ai.goals.GoalTypes.get_health;
 
-public class Goal_GetHealth extends Goal_Composite {
+/**
+ * class to define behavior for getting a health item
+ */
+public class GetHealth extends CompositeGoal {
 
     private ItemType targetType;
     private boolean waiting;
 
-    public Goal_GetHealth(GameCharacter pBot, ItemType item) {
-        super(pBot, goal_get_health);
+    public GetHealth(GameCharacter pBot, ItemType item) {
+        super(pBot, get_health);
         targetType = item;
         waiting=false;
     }
@@ -29,7 +32,7 @@ public class Goal_GetHealth extends Goal_Composite {
         //request a path to the item
         agent.getNavigationService().createRequest(targetType);
 
-        addSubgoal(new Goal_WaitForPath(agent));
+        addSubGoal(new WaitForPath(agent));
         waiting = true;
         System.out.println("waiting");
     }
@@ -46,7 +49,7 @@ public class Goal_GetHealth extends Goal_Composite {
                     status=active;
                     waiting=false;
                     removeAllSubgoals();
-                    addSubgoal(new Goal_FollowPath(agent,
+                    addSubGoal(new FollowPath(agent,
                             agent.getNavigationService().getPath()));
                 } else {
                     status=failed;

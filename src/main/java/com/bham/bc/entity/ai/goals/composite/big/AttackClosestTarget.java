@@ -2,23 +2,23 @@ package com.bham.bc.entity.ai.goals.composite.big;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.ai.goals.atomic.Goal;
-import com.bham.bc.entity.ai.goals.atomic.Goal_SeekToPosition;
-import com.bham.bc.entity.ai.goals.composite.Goal_Composite;
-import com.bham.bc.entity.ai.goals.composite.helper.Goal_NavigateToEntity;
+import com.bham.bc.entity.ai.goals.atomic.SeekToPosition;
+import com.bham.bc.entity.ai.goals.composite.CompositeGoal;
+import com.bham.bc.entity.ai.goals.composite.helper.NavigateToCharacter;
 
-import static com.bham.bc.entity.ai.goals.GoalTypes.goal_attack_closest_target;
+import static com.bham.bc.entity.ai.goals.GoalTypes.attack_closest_target;
 
 /**
  * class to define how an agent could attack target
  */
-public class Goal_AttackClosestTarget extends Goal_Composite {
+public class AttackClosestTarget extends CompositeGoal {
 
     /**
      * constructor
      * @param agent the owner of the goal
      */
-    public Goal_AttackClosestTarget(GameCharacter agent) {
-        super(agent, goal_attack_closest_target);
+    public AttackClosestTarget(GameCharacter agent) {
+        super(agent, attack_closest_target);
     }
 
     @Override
@@ -39,11 +39,11 @@ public class Goal_AttackClosestTarget extends Goal_Composite {
         //if we could see our target, we approach it
         if (agent.getTargetingSystem().isTargetBotWalkable()) {
             if (!agent.getTargetingSystem().isReachingSafeDistance()){
-                addSubgoal(new Goal_SeekToPosition(agent, agent.getTargetingSystem().getTargetBot().getCenterPosition()));
+                addSubGoal(new SeekToPosition(agent, agent.getTargetingSystem().getTargetBot().getCenterPosition()));
             }
         } //if the target is not visible, ask for a path
         else {
-            addSubgoal(new Goal_NavigateToEntity(agent, agent.getTargetingSystem().getTargetBot()));
+            addSubGoal(new NavigateToCharacter(agent, agent.getTargetingSystem().getTargetBot()));
         }
     }
 

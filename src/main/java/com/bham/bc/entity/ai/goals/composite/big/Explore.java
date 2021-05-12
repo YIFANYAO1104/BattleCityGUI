@@ -4,17 +4,17 @@ package com.bham.bc.entity.ai.goals.composite.big;
 import com.bham.bc.components.Controller;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.ai.goals.atomic.Goal;
-import com.bham.bc.entity.ai.goals.atomic.Goal_WaitForPath;
-import com.bham.bc.entity.ai.goals.composite.Goal_Composite;
-import com.bham.bc.entity.ai.goals.composite.helper.Goal_FollowPath;
+import com.bham.bc.entity.ai.goals.atomic.WaitForPath;
+import com.bham.bc.entity.ai.goals.composite.CompositeGoal;
+import com.bham.bc.entity.ai.goals.composite.helper.FollowPath;
 import javafx.geometry.Point2D;
 
-import static com.bham.bc.entity.ai.goals.GoalTypes.goal_explore;
+import static com.bham.bc.entity.ai.goals.GoalTypes.explore;
 
 /**
  * a goal to lead an agent to random location
  */
-public class Goal_Explore extends Goal_Composite {
+public class Explore extends CompositeGoal {
     /**
      * set to true when the destination for the exploration has been established
      */
@@ -24,8 +24,8 @@ public class Goal_Explore extends Goal_Composite {
      * constructor
      * @param agent the owner of the goal
      */
-    public Goal_Explore(GameCharacter agent) {
-        super(agent, goal_explore);
+    public Explore(GameCharacter agent) {
+        super(agent, explore);
         waiting = false;
     }
 
@@ -45,7 +45,7 @@ public class Goal_Explore extends Goal_Composite {
 
         //and request a path to that position
         agent.getNavigationService().createRequest(pos);
-        addSubgoal(new Goal_WaitForPath(agent));
+        addSubGoal(new WaitForPath(agent));
         waiting = true;
     }
 
@@ -62,7 +62,7 @@ public class Goal_Explore extends Goal_Composite {
                 waiting=false;
                 status=active;
                 removeAllSubgoals();
-                addSubgoal(new Goal_FollowPath(agent,
+                addSubGoal(new FollowPath(agent,
                         agent.getNavigationService().getPath()));
             } else { //we finished follow path and request another location to explore
                 activate();

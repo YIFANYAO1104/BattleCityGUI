@@ -3,7 +3,7 @@ package com.bham.bc.components.characters.agents.allies;
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.characters.agents.Agent;
-import com.bham.bc.entity.ai.goals.Goal_Think;
+import com.bham.bc.entity.ai.goals.Brain;
 import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.entity.ai.behavior.*;
@@ -29,7 +29,7 @@ public class Neuron extends Agent {
     /** Speed the ally should start with */
     public static final double SPEED = 3;
 
-    private final Goal_Think BRAIN;
+    private final Brain BRAIN;
     private final Regulator BRAIN_REGULATOR;
 
     /**
@@ -48,7 +48,7 @@ public class Neuron extends Agent {
             e.printStackTrace();
         }
 
-        BRAIN = new Goal_Think(this);
+        BRAIN = new Brain(this);
         BRAIN_REGULATOR = new Regulator(5);
 
         GUN.setRate(600);

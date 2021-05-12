@@ -9,7 +9,7 @@ import java.util.LinkedList;
 /**
  * abstract class to define composite goal
  */
-public abstract class Goal_Composite extends Goal {
+public abstract class CompositeGoal extends Goal {
 
     /**
      * a list of goals that the agent have
@@ -21,7 +21,7 @@ public abstract class Goal_Composite extends Goal {
      * @param agent the owner of the goal
      * @param type one of active, inactive,completed, failed
      */
-    public Goal_Composite(GameCharacter agent, int type) {
+    public CompositeGoal(GameCharacter agent, int type) {
         super(agent, type);
         subGoalList = new LinkedList<>();
     }
@@ -33,7 +33,7 @@ public abstract class Goal_Composite extends Goal {
 
         //remove all completed and failed goals from the front of the subgoal list
         while (!subGoalList.isEmpty()
-                && (subGoalList.getFirst().isComplete() || subGoalList.getFirst().hasFailed())) {
+                && (subGoalList.getFirst().isComplete() || subGoalList.getFirst().isFailed())) {
             subGoalList.getFirst().terminate();
             subGoalList.removeFirst();
         }
@@ -67,7 +67,7 @@ public abstract class Goal_Composite extends Goal {
     public abstract void terminate();
 
     @Override
-    public void addSubgoal(Goal g) {
+    public void addSubGoal(Goal g) {
         subGoalList.addFirst(g);
     }
 
