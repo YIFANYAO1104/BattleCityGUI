@@ -89,6 +89,8 @@ public class CustomStage extends Stage{
      */
     public static int selected=0;
 
+    private VBox titleAndRoot;
+
 
     /**
      *
@@ -110,7 +112,7 @@ public class CustomStage extends Stage{
      * @param offset offset of game name
      */
 
-    public void titleBar(AnchorPane root, int Width,int offset,ChoiceBox changeSkin){
+    public HBox titleBar(AnchorPane root, int Width,int offset,ChoiceBox changeSkin){
 
         // set the original stage transparent
         stage.initStyle(StageStyle.TRANSPARENT);
@@ -253,11 +255,10 @@ public class CustomStage extends Stage{
         hBox=new HBox(5,changeSkin,btnMin,btnClose);
         gpTitle.getChildren().addAll(lbTitle,hBox);
 
-        //add container
-        VBox titleAndRoot = new VBox();
-        root.getScene().setRoot(titleAndRoot);
-        titleAndRoot.getChildren().addAll(gpTitle, root);
-        stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
+
+
+
+//        stage.setMinHeight(root.getScene().getHeight() + gpTitle.getMinHeight());
 
 
 
@@ -270,6 +271,19 @@ public class CustomStage extends Stage{
 
 
 
+
+
+
+        return gpTitle;
+    }
+
+
+    /**
+     * set events for Stage
+     * @param titleAndRoot the container
+     */
+    public void setTitleAndRoote(VBox titleAndRoot){
+        this.titleAndRoot=titleAndRoot;
         //set event of dragging window
         titleAndRoot.setOnMouseDragged((MouseEvent event) -> {
 
@@ -320,39 +334,23 @@ public class CustomStage extends Stage{
             }
         });
 
-
     }
 
+
     /**
-     * create title bar to main interface.
+     * create title bar.
      * @param root root pane title bar will be attached to
      * @param Width width of title bar
      */
 
-    public void createMainTitlebar(AnchorPane root, int Width){
-        titleBar(root,Width,-310,changeMainSkin);
+    public HBox createMainTitlebar(AnchorPane root, int Width){
+        HBox gpTitle=titleBar(root,Width,-310,changeMainSkin);
         changeMainSkin.getSelectionModel().select(selected);
+        return gpTitle;
 
 
     }
 
-    /**
-     * create title bar to game interface.
-     * @param root root pane title bar will be attached to
-     * @param Width width of title bar
-     */
 
-    public void createGameTitleBar(AnchorPane root, int Width){
-
-        titleBar(root,Width,-190,changePauseSkin);
-        changePauseSkin.getSelectionModel().select(selected);
-
-
-
-
-
-
-
-    }
 
 }
