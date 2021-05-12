@@ -19,6 +19,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -282,7 +283,7 @@ public class GameSession {
         try {
             // AnchorPane menuPane = (AnchorPane) menuStage.getScene().getRoot().getChildrenUnmodifiable().get(1);
             VBox titleAndRoot2 = (VBox) menuScene.getRoot();
-            customStage.setTitleAndRoote(titleAndRoot2);
+
             titleAndRoot2.getChildren().get(0).fireEvent(e);
         } catch(ClassCastException | NullPointerException exception) {
             exception.printStackTrace();

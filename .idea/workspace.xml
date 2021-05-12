@@ -33,13 +33,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="formalize javadoc comments">
-      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/CustomStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/CustomStage.java" afterDir="false" />
-    </list>
+    <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -222,14 +216,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620572411273</updated>
     </task>
-    <task id="LOCAL-00009" summary="add javadoc comments to entity package">
-      <created>1620481116290</created>
+    <task id="LOCAL-00009" summary="fix title bar problem">
+      <created>1620817863024</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1620481116290</updated>
+      <updated>1620817863024</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00010" summary="fix title bar problem">
+      <created>1620818084131</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1620818084131</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -267,7 +268,8 @@
     <MESSAGE value="add javadoc comments to entity package" />
     <MESSAGE value="comments in entity" />
     <MESSAGE value="formalize javadoc comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="formalize javadoc comments" />
+    <MESSAGE value="fix title bar problem" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix title bar problem" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
