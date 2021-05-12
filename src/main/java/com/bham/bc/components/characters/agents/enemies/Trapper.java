@@ -26,17 +26,25 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * </ul>
  */
 public class Trapper extends Agent {
-    // Constant
+    /** Path to the image of this enemy */
     public static final String IMAGE_PATH = "img/characters/trapper.png";
+
+    /** The width and the height the enemy's image should have when rendered */
     public static final int SIZE = 30;
 
-    // Configurable
+    /** HP the enemy should start with */
     public static final double HP = 50;
+
+    /** Speed the enemy should start with */
     public static final double SPEED = 3;
 
+    /** Finite State Machine which will tell which actions happen on each update */
     private final StateMachine stateMachine;
+
+    /** Condition to check if the enemy is close enough to home */
     private IntCondition nearToHomeCondition;
 
+    /** Time before the next trap is put */
     private int timeTillTrap;
 
     /**

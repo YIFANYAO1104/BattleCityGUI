@@ -5,9 +5,9 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 
 /**
- * <h1>Main</h1>
+ * <h1>Main Application</h1>
  *
- * <p>This is the class for start of game from Main interface</p>
+ * <p>Represents the main JavaFX application which can be launched by firstly creating a menu session.</p>
  */
 public class Main extends Application {
     @Override
@@ -21,5 +21,11 @@ public class Main extends Application {
         }
     }
 
-    public static void main(String[] args) { launch(args); }
+    /**
+     * Main function to launch the JavaFX application
+     * @param args any additional arguments to be passed when the game is launched
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
 }

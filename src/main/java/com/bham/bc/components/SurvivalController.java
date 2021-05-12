@@ -89,12 +89,6 @@ public class SurvivalController extends Controller {
         mapDivision.addEntities(new ArrayList<>(characters));
 
         loadGraph();
-
-        //spawnEnemyRandomly(EnemyType.KAMIKAZE);
-        // spawnEnemyRandomly(EnemyType.TEASER);
-        // spawnEnemyRandomly(EnemyType.SHOOTER);spawnEnemyRandomly(EnemyType.SHOOTER);
-        //spawnEnemyRandomly(EnemyType.TANK);
-
     }
 
     // CALCULATIONS -----------------------------------------------
@@ -191,6 +185,13 @@ public class SurvivalController extends Controller {
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void spawnAlly() {
+        Circle homeArea = getHomeArea();
+        Point2D spawnPoint = GeometryEnhanced.randomPointInCircle(homeArea).subtract(GameCharacter.MAX_SIZE*.5, GameCharacter.MAX_SIZE*.5);
+        addCharacter(new Neuron(spawnPoint.getX(), spawnPoint.getY()));
     }
 
     @Override

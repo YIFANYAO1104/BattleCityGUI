@@ -33,26 +33,38 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  * Represents a character controlled by the user
  */
 public class Player extends GameCharacter {
-
+	/** Path to the image of the player */
 	public static final String IMAGE_PATH = "img/characters/player.png";
+
+	/** Path to the image of the player's 2nd state */
 	public static final String IMAGE_PATH2 ="img/characters/state1.png";
+
+	/** The width and the height the enemy's image should have when rendered */
 	public static final int SIZE = 25;
+
+	/** HP the player should start with */
 	public static double HP = 100;
+
+	/** Speed the player should start with */
 	public static final double SPEED = 5;
+
+	/** Public double property to check the x coordinate of the player's position */
+	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
+
+	/** Public double property to check the y coordinate of the player's position */
+	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(GameSession.HEIGHT/2.0);
+
+	/** Orthonormal basis vector set used to determine the direction (out of 8 possible) the player is moving to */
+	private final EnumSet<Direction> DIRECTION_SET;
+
+	/** The sole bullet controller the player has **/
+	private final Gun GUN;
+
+	private NavigationService navigationService;
+	private boolean bomb;
 	public static long initialTime;
 	public static int stateTime;
 	public boolean laserFlag;
-
-	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
-	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(GameSession.HEIGHT/2.0);
-
-	private final EnumSet<Direction> DIRECTION_SET;
-	private final Gun GUN;
-
-	// TODO: remove, player doesn't need
-	private NavigationService navigationService;
-	private boolean bomb;
-
 	/**
 	 * Used For testing
 	 */
@@ -81,11 +93,13 @@ public class Player extends GameCharacter {
 	 */
 	public Player(double x, double y) {
 		super(x, y, SPEED, HP, Side.ALLY);
+
 		try{
-		entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-		}catch (IllegalArgumentException | NullPointerException e){
+			entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+		} catch (IllegalArgumentException | NullPointerException e){
 			e.printStackTrace();
 		}
+
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
 		initialTime=System.currentTimeMillis();
@@ -156,7 +170,6 @@ public class Player extends GameCharacter {
     
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
-	// TODO: remove, this is another example of bomb()
 	public void ring() {
 		Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
 		services.addTrigger(explosion);
@@ -317,12 +330,6 @@ public class Player extends GameCharacter {
 		TRACKABLE_X.set(getCenterPosition().getX());
 		TRACKABLE_Y.set(getCenterPosition().getY());
 	}
-
-//	@Override
-//	public void render(GraphicsContext gc) {
-//		if(navigationService!=null) navigationService.render(gc);
-//		drawRotatedImage(gc, entityImages[0], getAngle());
-//	}
 
 	@Override
 	protected void destroy() {

@@ -9,18 +9,19 @@ import javafx.scene.transform.Rotate;
 import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.view.GameSession.FRAME_RATE;
 
+/**
+ * Represents a bomb bullet for the player
+ */
 public class ExplosiveBullet extends Bullet {
     public static final BulletType TYPE = BulletType.EXPLOSIVE;
     public static final double DAMAGE = 100;
-
     public static final int MAX_BOUND_WIDTH = 300;
     public static final int MAX_BOUND_HEIGHT = 300;
-
     public static final int LIFETIME = FRAME_RATE;
-
-    private int existTime;
-
     private Rectangle hitBox;
+
+    /** The exist time limit of the bomb */
+    private int existTime;
 
     /**
      * Constructs a bullet using default bullet's attributes for speed and damage
@@ -63,7 +64,11 @@ public class ExplosiveBullet extends Bullet {
         return hitBox;
     }
 
-
+    /**
+     * Generate the rectangle hitbox of current position.
+     * @param existTime {@link #existTime}
+     * @return the rectangle hitbox
+     */
     private Rectangle updateHitBox(int existTime) {
         //get bound rectangle top left pos
         //calculate region radius according to current time

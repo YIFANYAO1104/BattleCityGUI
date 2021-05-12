@@ -42,7 +42,7 @@ class ParallelAudioPlayer implements AudioPlayer {
 
     /**
      * Constructs a parallel audio player with at least one song playing
-     * @param mediaFiles audio files to be played as 1 audio
+     * @param  mediaFiles audio files to be played as 1 audio
      * @throws IllegalArgumentException thrown when the list of audio files is empty
      */
     ParallelAudioPlayer(ArrayList<Media> mediaFiles) throws IllegalArgumentException {
@@ -69,7 +69,7 @@ class ParallelAudioPlayer implements AudioPlayer {
     }
 
     /**
-     * gets array of arrays of frequencies for each layer for each band
+     * Gets array of arrays of frequencies for each layer for each band
      * @return array of arrays of frequencies
      */
     public float[][] getFrequencies() {

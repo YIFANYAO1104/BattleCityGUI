@@ -11,6 +11,7 @@ public enum Direction {
 	L(-1, 0),
 	R(1, 0);
 
+	/** Orthonormal basis vector of this direction (can be negative) */
 	private final Point2D POINT;
 
 	/**
@@ -25,7 +26,7 @@ public enum Direction {
 
 	/**
 	 * Gets the value of enum as a point (basis vector)
-	 * @return Point2D object with one coordinate in specific direction defined by this enum value
+	 * @return {@code Point2D} object with one coordinate in specific direction defined by this enum value
 	 */
 	public Point2D toPoint() {
 		return POINT;

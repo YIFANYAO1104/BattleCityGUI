@@ -9,6 +9,7 @@ import static com.bham.bc.components.Controller.*;
 import static com.bham.bc.utils.Timer.CLOCK;
 
 import com.bham.bc.view.menu.EndMenu;
+import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.CustomStage;
 import com.bham.bc.view.tools.GameFlowEvent;
@@ -113,7 +114,7 @@ public class GameSession {
      * Initializes the window of the menu session, i.e., sets up the scene and the custom stage.
      */
     private void initWindow() {
-        Scene gameScene = new Scene(gamePane, WIDTH, HEIGHT);
+        Scene gameScene = new Scene(gamePane, WIDTH, HEIGHT+34);
         gameStage = new Stage();
         gameStage.setScene(gameScene);
         gameStage.setResizable(false);
@@ -248,6 +249,12 @@ public class GameSession {
      */
     private void leaveGame(GameFlowEvent e) {
         gameStage.hide();
+        if (MainMenu.musicVolume!=null&&MainMenu.sfxVolume!=null){
+            MainMenu.musicVolume.getValueProperty().setValue(PauseMenu.musicVolume.getValueProperty().getValue().doubleValue());
+            MainMenu.sfxVolume.getValueProperty().setValue(PauseMenu.sfxVolume.getValueProperty().getValue().doubleValue());
+
+        }
+
         menuStage.show();
 
         MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
