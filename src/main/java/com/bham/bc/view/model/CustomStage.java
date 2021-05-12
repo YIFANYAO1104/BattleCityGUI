@@ -107,12 +107,12 @@ public class CustomStage extends Stage{
 
     /**
      * create titler bar template.
-     * @param root
+
      * @param Width width of title bar
      * @param offset offset of game name
      */
 
-    public HBox titleBar(AnchorPane root, int Width,int offset,ChoiceBox changeSkin){
+    public HBox titleBar( int Width,int offset,ChoiceBox changeSkin){
 
         // set the original stage transparent
         stage.initStyle(StageStyle.TRANSPARENT);
@@ -343,8 +343,8 @@ public class CustomStage extends Stage{
      * @param Width width of title bar
      */
 
-    public HBox createMainTitlebar(AnchorPane root, int Width){
-        HBox gpTitle=titleBar(root,Width,-310,changeMainSkin);
+    public HBox createMainTitlebar( int Width){
+        HBox gpTitle=titleBar(Width,-310,changeMainSkin);
         changeMainSkin.getSelectionModel().select(selected);
         return gpTitle;
 
