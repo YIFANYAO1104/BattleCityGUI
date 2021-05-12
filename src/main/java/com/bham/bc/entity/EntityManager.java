@@ -24,21 +24,21 @@ public class EntityManager {
      */
     private EntityMap m_EntityMap = new EntityMap();
 
+    /**
+     * Constructs EntityManager Object and initialize it
+     */
     public EntityManager() { }
 
-    //copy ctor and assignment should be private
-    private EntityManager(EntityManager cs) {
-    }
-
+    /**
+     *
+     * @return {@link EntityManager}this class is a singleton
+     */
     @Override
     protected Object clone() throws CloneNotSupportedException {
         throw new CloneNotSupportedException("Cloning not allowed");
     }
 
-//--------------------------- Instance ----------------------------------------
-//
-//   this class is a singleton
-//-----------------------------------------------------------------------------
+
     public static EntityManager instance() {
         return entityManager;
     }
@@ -46,7 +46,7 @@ public class EntityManager {
     /**
      * Registering new Entity
      * By create new EntityID-EntityObject paired Entry and put into HashMap
-     * @param NewEntity
+     * @param NewEntity new Entity to be registered
      */
     public void registerEntity(BaseGameEntity NewEntity) {
         m_EntityMap.put(NewEntity.getID(), NewEntity);
@@ -55,8 +55,8 @@ public class EntityManager {
 
     /**
      * Retrieve Specific BaseGame Entity from HashMap by Entity ID
-     * @param id
-     * @return
+     * @param id Entity ID
+     * @return {@link BaseGameEntity} the cooresponding entity
      */
 public BaseGameEntity getEntityFromID(int id) {
         //find the entity
@@ -70,7 +70,7 @@ public BaseGameEntity getEntityFromID(int id) {
 
     /**
      * Remove the EntityID-EntityObject paired entry from HashMap
-     * @param pEntity
+     * @param pEntity the Entity to be removed
      */
     public void removeEntity(BaseGameEntity pEntity) {
         //m_EntityMap.erase(m_EntityMap.find(pEntity.ID()));

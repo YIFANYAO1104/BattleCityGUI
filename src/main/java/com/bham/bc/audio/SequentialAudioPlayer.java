@@ -31,7 +31,7 @@ class SequentialAudioPlayer implements AudioPlayer {
 
     /**
      * Constructs a sequential audio player with at least one song playing
-     * @param mediaFiles audio files to be put into playlist
+     * @param  mediaFiles audio files to be put into playlist
      * @throws IllegalArgumentException thrown when the list of audio files is empty
      */
     SequentialAudioPlayer(ArrayList<Media> mediaFiles) throws IllegalArgumentException {

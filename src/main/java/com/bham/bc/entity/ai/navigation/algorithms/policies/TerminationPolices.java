@@ -17,7 +17,7 @@ public class TerminationPolices {
          * @param G SparseGraph where the Dijkstra Algorithm is exploring
          * @param target the item that Dijkstra Algorithm want to find
          * @param curNodeIndex the node that Dijkstra Algorithm want to explore
-         * @return
+         * @return the value representing whether the condition is satisfied
          */
         public boolean isSatisfied(final SparseGraph G, ItemType target, int curNodeIndex);
     }

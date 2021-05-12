@@ -15,8 +15,13 @@ import static com.bham.bc.entity.EntityManager.entityManager;
  * Represents a default bullet the player starts with
  */
 public class DefaultBullet extends Bullet {
+	/** The type of bullet this bullet belongs to */
 	public static final BulletType TYPE = BulletType.DEFAULT;
+
+	/** The speed this bullet should be assigned */
 	public static final double SPEED = 5;
+
+	/** The damage this bullet can deal */
 	public static final double DAMAGE = 10;
 
 	/**

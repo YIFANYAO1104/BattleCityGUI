@@ -29,19 +29,31 @@ import static com.bham.bc.components.Controller.services;
  * class only takes care of their visuals.</p>
  */
 public class GameMap {
-    // Parameters
+    /** The width of any tile (in pixels) */
     private static int tileWidth = 0;
+
+    /** The height of any tile (in pixels) */
     private static int tileHeight = 0;
+
+    /** Number of tiles this map has in x axis */
     private static int numTilesX = 0;
+
+    /** Number of tiles this map has in y axis */
     private static int numTilesY = 0;
 
-    // Obstacles and territories
+    /** {@link Obstacle} list which do not have {@code WALKABLE} attribute */
     private ArrayList<Obstacle> interactiveObstacles;
+
+    /** {@link Obstacle} list which have {@code WALKABLE} attribute */
     private ArrayList<Obstacle> noninteractiveObstacles;
+
+    /** A circle defining the constraints of the home territory which can be attacked */
     private Circle homeTerritory;
+
+    /** An array of circles defining the areas enemies can spawn at or retreat to */
     private Circle[] enemySpawnAreas;
 
-    // Graph
+    /** The graph based on this map's obstacles providing information for pathfinding */
     private SparseGraph<NavNode, GraphEdge> graphSystem;
 
     /**
@@ -49,7 +61,7 @@ public class GameMap {
      * @param mapType type of map to be loaded - it contains a path for the JSON file
      */
     public GameMap(MapType mapType) {
-        MapLoader mapLoader = new MapLoader(mapType.getName());
+        MapLoader mapLoader = new MapLoader(mapType.PATH);
 
         initParams(mapLoader);
         initElements(mapLoader);
@@ -149,27 +161,9 @@ public class GameMap {
      * @param mapLoader map loader that will provide the information about constant triggers the graph can point to
      */
     public void initGraph(MapLoader mapLoader) {
-        HandyGraphFunctions hgf = new HandyGraphFunctions(); //operation class
-        graphSystem = new SparseGraph<>(false); //single direction turn off
-        hgf.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(), getHeight() / (GameCharacter.MAX_SIZE/2), getWidth() / (GameCharacter.MAX_SIZE/2)); //make network
-//        ArrayList<Point2D> allNodesLocations = graphSystem.getAllVector(); //get all nodes location
-//        System.out.println("start");
-//        for (int index = 0; index < allNodesLocations.size(); index++) { //remove invalid nodes
-//            Point2D vv1 = allNodesLocations.get(index);
-//            double maxCharacterRadius = Math.sqrt((GameCharacter.MAX_SIZE/2.0)*(GameCharacter.MAX_SIZE/2.0));
-//
-//            for (int i = 0; i < interactiveObstacles.size(); i++) {
-//                Obstacle w = interactiveObstacles.get(i);
-//                w.interacts(graphSystem.getID(), index, new Rectangle(
-//                        vv1.getX()-maxCharacterRadius,vv1.getY()-maxCharacterRadius,maxCharacterRadius* 2,maxCharacterRadius * 2));
-//            }
-//
-//        }
-//        System.out.println("over");
-        //removed unreachable nodes
-        // Consider multiple players and enemies spawning at unreachable nodes
-        // Player dummyEntity = new Player(mapLoader.getHomeTerritory.getCenterX(), mapLoader.getHomeTerritory.getCenterY());
-        // graphSystem = hgf.FLoodFill(graphSystem,graphSystem.getClosestNodeForEntity(dummyEntity));
+        // HandyGraphFunctions hgf = new HandyGraphFunctions();
+        graphSystem = new SparseGraph<>(false);
+        HandyGraphFunctions.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(), getHeight() / (GameCharacter.MAX_SIZE/2), getWidth() / (GameCharacter.MAX_SIZE/2));
 
         for (Trigger trigger : mapLoader.getTriggers()) {
             NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).Index());
@@ -299,7 +293,6 @@ public class GameMap {
     public void renderGraph(GraphicsContext gc, ArrayList<GameCharacter> entities){
         graphSystem.render(gc);
         graphSystem.renderTankPoints(entities,gc);
-
     }
 
     /**

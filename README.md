@@ -24,9 +24,6 @@
 *** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
-[![Contributors][contributors-shield]][contributors-url]
-[![Issues][issues-shield]][issues-url]
-[![Apache License][license-shield]][license-url]
 
 
 
@@ -76,9 +73,8 @@
     <li>
       <a href="#getting-started">Getting Started</a>
     </li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
     <li><a href="#acknowledgements">Acknowledgements</a></li>
+    <li><a href="#license">License</a></li>
   </ol>
 </details>
 
@@ -99,7 +95,7 @@
 
 - A tank game built by java and focusing on Game AI component.
 - The idea about this game coms from three typical game "Battle City", Geometry Wars", Blox Head"
-- The main mode,  "SURVIVAL", the player would be asked to fight with many other enemy tanks which controlled by AI. Of course the aim is surviving as long as you can.
+- The main mode,  "SURVIVAL", the player would be asked to fight with many other agent tanks which controlled by AI. Of course the aim is surviving as long as you can.
 ### Built With
 * java 1.8
 * javafx (liberica_1.8)
@@ -117,11 +113,50 @@ To get a local copy up and running follow these simple steps.
     - Key: W,S,A,D can mke tank move up, down, left, right respectively
     - Key: F can make tank fire, shoot the bullet
     - Key: R can make laser attack
+  
+
+<!-- ACKNOWLEDGEMENTS -->
+
+## Acknowledgements
+
+* [The music elements we used](https://incompetech.com/)
+
+
+  
+* The image we used:
+  
+  - Tilesets:
+  
+    - [ashlands.png](https://finalbossblues.itch.io/ashlands-tileset])
+    - [atlantis.png](https://finalbossblues.itch.io/atlantis-tileset)
+    - [basic.png]()
+  - Shooting:
+  
+    - [default-bullet.png]( https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
+    -
+  - Characters
+  
+    - [nova, player, shooter, splitter, tank, teaser, trapper](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
+    - [state1.png](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package )
+    - []
+  - Menu
     
+    - FB6.gif (designed by Najd)
+    - [Others](https://www.aigei.com/s?q=%E6%8E%92%E8%A1%8C%E6%A6%9C&type=game)
+  - Triggers
+  
+    - [blue ring explosion in effects](https://opengameart.org/content/animated-blue-ring-explosion)
+    - [others](https://www.emojidex.com/)
+  - Fonts(From Google)
+  
 
-<!-- CONTRIBUTING -->
+* The whole project is created by
+  - Cameron Webley - ctw908@student.bham.ac.uk
+  - Najd
+  - Xiao Yan - xxy869@student.bham.ac.uk
+  - Yifan Yao - yxy977@student.bham.ac.uk
+  - Zhicheng Zhou
 
-## Contributing
 
 
 <!-- LICENSE -->
@@ -129,17 +164,6 @@ To get a local copy up and running follow these simple steps.
 ## License
 
 Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE">`LICENSE` </a>for more information.
-
-
-
-<!-- ACKNOWLEDGEMENTS -->
-
-## Acknowledgements
-
-* []()
-* []()
-* []()
-
 
 
 
@@ -155,7 +179,7 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
 [stars-url]: https://github.com/github_username/repo/stargazers
 [issues-shield]: https://img.shields.io/github/issues/github_username/repo.svg?style=for-the-badge
 [issues-url]: https://github.com/github_username/repo/issues
-[license-shield]: https://img.shields.io/github/license/github_username/repo.svg?style=for-the-badge
+[license-shield]:  https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE
 [license-url]: https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/github_username

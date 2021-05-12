@@ -18,7 +18,7 @@ import java.util.*;
  * a A* class that enables a search to be completed over multiple
  * update-steps
  */
-public class TimeSlicedAStar//<heuristic extends AStarHeuristicPolicies.Heuristic>
+public class TimeSlicedAStar
         extends TimeSlicedAlgorithm {
 
     private Queue<Node> openList = new PriorityQueue<>();

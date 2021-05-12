@@ -1,2 +1,4 @@
 classes/
 out/
+target/
+scores.json

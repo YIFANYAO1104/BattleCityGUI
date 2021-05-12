@@ -21,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
 import java.util.EnumSet;
+import java.util.Date;
 import java.util.Optional;
 
 import java.util.List;
@@ -32,23 +33,38 @@ import static com.bham.bc.utils.GeometryEnhanced.isZero;
  * Represents a character controlled by the user
  */
 public class Player extends GameCharacter {
-
+	/** Path to the image of the player */
 	public static final String IMAGE_PATH = "img/characters/player.png";
+
+	/** Path to the image of the player's 2nd state */
 	public static final String IMAGE_PATH2 ="img/characters/state1.png";
+
+	/** The width and the height the enemy's image should have when rendered */
 	public static final int SIZE = 25;
+
+	/** HP the player should start with */
 	public static double HP = 100;
+
+	/** Speed the player should start with */
 	public static final double SPEED = 5;
 
+	/** Public double property to check the x coordinate of the player's position */
 	public static final DoubleProperty TRACKABLE_X = new SimpleDoubleProperty(GameSession.WIDTH/2.0);
+
+	/** Public double property to check the y coordinate of the player's position */
 	public static final DoubleProperty TRACKABLE_Y = new SimpleDoubleProperty(GameSession.HEIGHT/2.0);
 
+	/** Orthonormal basis vector set used to determine the direction (out of 8 possible) the player is moving to */
 	private final EnumSet<Direction> DIRECTION_SET;
+
+	/** The sole bullet controller the player has **/
 	private final Gun GUN;
 
-	// TODO: remove, player doesn't need
 	private NavigationService navigationService;
 	private boolean bomb;
-
+	public static long initialTime;
+	public static int stateTime;
+	public boolean laserFlag;
 	/**
 	 * Used For testing
 	 */
@@ -77,14 +93,18 @@ public class Player extends GameCharacter {
 	 */
 	public Player(double x, double y) {
 		super(x, y, SPEED, HP, Side.ALLY);
+
 		try{
-		entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-		}catch (IllegalArgumentException | NullPointerException e){
+			entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+		} catch (IllegalArgumentException | NullPointerException e){
 			e.printStackTrace();
 		}
+
 		DIRECTION_SET = EnumSet.noneOf(Direction.class);
 		GUN = new Gun(this, BulletType.DEFAULT,LaserType.Default);
-
+		initialTime=System.currentTimeMillis();
+		stateTime=0;
+		this.laserFlag=false;
 		navigationService = new PathPlanner(this, services.getGraph());
 		steering.setKeys(true);
 	}
@@ -150,7 +170,6 @@ public class Player extends GameCharacter {
     
 	// TEMPORARY -------------------------------------------
 	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
-	// TODO: remove, this is another example of bomb()
 	public void ring() {
 		Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
 		services.addTrigger(explosion);
@@ -167,13 +186,12 @@ public class Player extends GameCharacter {
 	public void toState1(){
     	try{
 		this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH2), SIZE, 0, true, false) };
+		stateTime=1000;
 		}catch (IllegalArgumentException | NullPointerException e){
 			e.printStackTrace();
 		}
 	}
-	public List<Shape> getSmoothingBoxes(){
-		return navigationService.getSmoothingBoxes();
-	}
+
 	private void testDijistra(){
 		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
 		System.out.println(navigationService.createRequest(new Point2D(850,758)));;
@@ -237,8 +255,6 @@ public class Player extends GameCharacter {
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
-			case H: testDijistra();		System.out.println(getCenterPosition());break;
-			case K: targetingSystem.statatat();break;
 			case L: services.getMapDivision().cleanHB();break;
 		}
 	}
@@ -286,9 +302,26 @@ public class Player extends GameCharacter {
 	public Circle getHitBox() {
 		return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
 	}
-
+	public void defaultState(){
+		try{
+			this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+			stateTime=0;
+			this.laserChange(LaserType.Default);
+		}catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
+	}
 	@Override
 	public void update() {
+		long currentTIme = System.currentTimeMillis();
+		if(currentTIme -initialTime >=10000){
+			this.laserFlag=!laserFlag;
+			initialTime = System.currentTimeMillis();
+		}
+		if(stateTime>0)stateTime--;
+		if (stateTime < 0) defaultState();
+		hp = getFullHp();
+
 		updateTriggers();
 		if (isFreeze == 0) {
 			updateAngle();
@@ -297,12 +330,6 @@ public class Player extends GameCharacter {
 		TRACKABLE_X.set(getCenterPosition().getX());
 		TRACKABLE_Y.set(getCenterPosition().getY());
 	}
-
-//	@Override
-//	public void render(GraphicsContext gc) {
-//		if(navigationService!=null) navigationService.render(gc);
-//		drawRotatedImage(gc, entityImages[0], getAngle());
-//	}
 
 	@Override
 	protected void destroy() {
@@ -316,5 +343,10 @@ public class Player extends GameCharacter {
 	@Override
 	public String toString() {
 		return "Player";
+	}
+
+	@Override
+	public double getMaxDamage() {
+		return 100;//Explosive Bullet
 	}
 }

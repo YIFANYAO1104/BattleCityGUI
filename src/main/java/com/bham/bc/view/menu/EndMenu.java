@@ -29,16 +29,13 @@ import org.json.JSONObject;
  *
  */
 public class EndMenu extends AnchorPane {
-
-
-    /**
-     * create leave_game_event
-     */
+    /** Event to be fired if "Submit" is clicked */
     private final GameFlowEvent LEAVE_GAME_EVENT;
-    /**
-     * use custom {@link SubMenu} to create End Menu
-     */
+
+    /** {@link SubMenu} containing elements to represent the main layout of the end menu */
     private SubMenu subMenuEnd;
+
+    /** Background dim to make game layout stand out less and end menu layout more */
     private Rectangle dim;
 
     /**

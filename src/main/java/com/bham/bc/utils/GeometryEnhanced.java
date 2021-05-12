@@ -11,10 +11,21 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import static com.bham.bc.utils.RandomEnhanced.rand;
 
+/**
+ * a util class based on Point2D
+ */
 public class GeometryEnhanced {
 
+    /**
+     * epsilon, when a numember is smaller than this, it's zero
+     */
     static public final double eps = 1E-8;
 
+    /**
+     * check if a vector is zero vector
+     * @param p the vector to be checked
+     * @return true if it is a zero vector
+     */
     static public boolean isZero(Point2D p) {
         return p.dotProduct(p) < eps;
     }
@@ -34,13 +45,19 @@ public class GeometryEnhanced {
      * @return a rotated Point2D object
      */
     public static Point2D rotate(Point2D point, double angle) {
-        double x = point.getX() * Math.cos(Math.toRadians(angle)) - point.getY() * Math.sin(Math.toRadians(angle));
-        double y = point.getX() * Math.sin(Math.toRadians(angle)) + point.getY() * Math.cos(Math.toRadians(angle));
+        double x = point.getX() * Math.cos(angle) - point.getY() * Math.sin(angle);
+        double y = point.getX() * Math.sin(angle) + point.getY() * Math.cos(angle);
 
         return new Point2D(x, y);
     }
 
-    // rotate a point around center point, anti-clockwise angle 15ms in test
+    /**
+     * Rotates a given point (vector) by some angle
+     * @param center the center position
+     * @param p the point going to be rotated
+     * @param antiDegrees the anti-clock wise degree
+     * @return a rotated Point2D object
+     */
     static public Point2D rotate(Point2D center, Point2D p, double antiDegrees){
         Point2D x = p.subtract(center);
         //rotate linear transformation
@@ -50,8 +67,12 @@ public class GeometryEnhanced {
         return b.add(center);
     }
 
-    //return an angle between [0,360]
-    //rotate a with return value in clock wise order will match b
+    /**
+     * calculates an angle between 2 vectors
+     * @param a vector1
+     * @param b vector2
+     * @return the clock-wise angle from vector1 to vector2, value from 0 to 360
+     */
     static public double clockWiseAngle(Point2D a, Point2D b){
         Point3D c = a.crossProduct(b);
         if (c.getZ() < 0) { //b is on the right of a
@@ -60,7 +81,12 @@ public class GeometryEnhanced {
         return 360-a.angle(b);
     }
 
-    //return an angle between [0,360]
+    /**
+     * calculates an angle between 2 vectors
+     * @param a vector1
+     * @param b vector2
+     * @return the anti clock-wise angle from vector1 to vector2, value from 0 to 360
+     */
     static public double antiClockWiseAngle(Point2D a, Point2D b){
         Point3D c = a.crossProduct(b);
         if (c.getZ() > 0) { //b is on the right of a
@@ -70,9 +96,13 @@ public class GeometryEnhanced {
     }
 
 
-    //transfer a local position to global position
-    //return global position
-    //agentDirection will be normalized
+    /**
+     * transfer a global position to local position
+     * @param globalPos the position in global space
+     * @param agentDirection the x axis of local space, non-zero vector
+     * @param agentPos the origin of local space
+     * @return global position
+     */
     public static Point2D globalToLocal(Point2D globalPos,
                                         Point2D agentDirection,
                                         Point2D agentPos) {
@@ -90,9 +120,13 @@ public class GeometryEnhanced {
     }
 
 
-    //transfer a local position to global position
-    //return global position
-    //agentDirection will be normalized
+    /**
+     * transfer a local position to global position
+     * @param localPos the position in local space
+     * @param agentDirection the x axis of local space, non-zero vector
+     * @param agentPos the origin of local space
+     * @return global position
+     */
     public static Point2D localToGlobal(Point2D localPos,
                                              Point2D agentDirection,
                                              Point2D agentPos) {
@@ -102,11 +136,21 @@ public class GeometryEnhanced {
         return ex.multiply(localPos.getX()).add(ey.multiply(localPos.getY())).add(agentPos);
     }
 
+    /**
+     * calculates an orthogonality vector
+     * @param p a non-zero vector
+     * @return an orthogonality vector to p
+     */
     static public Point2D perp(Point2D p) {
         return new Point2D(-p.getY(), p.getX());
     }
 
-    //https://stackoverflow.com/questions/5837572/generate-a-random-point-within-a-circle-uniformly
+    /**
+     * generate a random position in a circle
+     * @param centerPos the center of a circle
+     * @param radius the radius of a circle
+     * @return a position in the circle
+     */
     public static Point2D randomPointInCircle(Point2D centerPos, double radius) {
         Double theta = 2*Math.PI*rand.nextDouble();
         Double r = Math.sqrt(rand.nextDouble())*radius;
@@ -116,10 +160,23 @@ public class GeometryEnhanced {
         return target;
     }
 
+    /**
+     * generate a random position in a circle
+     * @param circle the area which bounds the point
+     * @return a position in the circle
+     */
     public static Point2D randomPointInCircle(Circle circle) {
         return randomPointInCircle(new Point2D(circle.getCenterX(), circle.getCenterY()), circle.getRadius());
     }
 
+    /**
+     * ensure that a position is within a range
+     * @param pos the position to be bounded
+     * @param size the width and height of an agent
+     * @param spaceWidth the width of bounding space
+     * @param spaceHeight the height of bounding space
+     * @return a bounded position
+     */
     public static Point2D bound(Point2D pos,Point2D size, int spaceWidth, int spaceHeight) {
         double x = pos.getX();
         double y = pos.getY();
@@ -142,16 +199,10 @@ public class GeometryEnhanced {
     }
 
     /**
-     * @return true if the target Pos is in the vision
+     * for debug, render the hix box of an entity
+     * @param gc the panel to paint
+     * @param box the hit box going to be rendered
      */
-    public static boolean isInVision(Point2D curPos,
-                                               Point2D curHeading,
-                                               Point2D testPos,
-                                               double visionAngle) {
-        Point2D toTarget = testPos.subtract(curPos).normalize();
-        return curHeading.dotProduct(toTarget) >= Math.cos(visionAngle / 2.0);
-    }
-
     public static void renderHitBox(GraphicsContext gc, Shape box) {
         if (box instanceof Rectangle){
             Rectangle rect = (Rectangle)box;
@@ -183,6 +234,11 @@ public class GeometryEnhanced {
         }
     }
 
+    /**
+     * for debug, render the bound of a hit box
+     * @param gc the panel to paint
+     * @param box the hit box
+     */
     public static void renderBounds(GraphicsContext gc, Shape box) {
         Bounds b = box.getBoundsInParent();
 
@@ -199,14 +255,4 @@ public class GeometryEnhanced {
         gc.strokeLine(p4.getX(), p4.getY(), p2.getX(), p2.getY());
         gc.strokeLine(p4.getX(), p4.getY(), p3.getX(), p3.getY());
     }
-
-
-    //rotate a point around center point, anti-clockwise angle, 31ms in test
-//    static public Point2D rotate(Point2D center, Point2D p, double antiDegrees){
-//        Rotate r = new Rotate();
-//        r.setPivotX(center.getX());
-//        r.setPivotY(center.getY());
-//        r.setAngle(antiDegrees);
-//        return r.transform(p);
-//    }
 }

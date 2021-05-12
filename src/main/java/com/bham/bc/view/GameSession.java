@@ -38,53 +38,68 @@ import java.text.SimpleDateFormat;
 /**
  * <h1>GameSession</h1>
  *
- * Class managing the animations of a running game
+ * <p>Class managing the animations and events of a running game.</p>
  */
 public class GameSession {
 
-    /**
-     * width of game window
-     */
-    public static final int WIDTH = 800;
-    /**
-     * height of game window
-     */
-    public static final int HEIGHT = 600;
+    /** Window's width (in pixels) */
+    public static final int WIDTH = 1024; // old: 800
+
+    /** Window's height (in pixels) */
+    public static final int HEIGHT = 768; // old: 600
+
+    /** Desired number of updates per second */
     public static final int FRAME_RATE = 24;
+
+    /** Songs to be played in sequence during the game session */
     public static final SoundTrack[] PLAYLIST = new SoundTrack[]{ SoundTrack.REVOLUTION, SoundTrack.CORRUPTION, SoundTrack.TAKE_LEAD };
 
-    /**
-     * instance of Pause Menu
-     */
+    /** Pause menu layout to be attached to the game pane whenever the game is paused*/
     private final PauseMenu PAUSE_MENU;
 
-    /**
-     * instance of Camera
-     */
+    /** Camera to follow the player */
     private Camera camera;
-    private GraphicsContext gc;
-    private AnchorPane gamePane;
-    /**
-     * stage of game
-     */
-    private Stage gameStage;
 
-    private Stage menuStage;
+    /** Graphics context to render things on */
+    private GraphicsContext gc;
+
+    /** Root game layout to which all the elements are attached */
+    private AnchorPane gamePane;
+
+    /** Scene to be showed on the window during gameplay */
+    private Scene gameScene;
+
+    /** Scene to be showed on the window after gameplay */
+    private Scene menuScene;
+
+    /** Main stage (window) on which the scenes are loaded */
+    private Stage mainStage;
+
+    /** Game timer to track how much time has passed since the game was started */
     private AnimationTimer gameTimer;
 
+    /** The timestamp at which the game was started */
     private long startTimestamp;
+
+    /** Property of how much time has passed since the game was started */
     private StringProperty timeSurvived;
+
+    /** Property of how much score the player has achieved */
     private StringProperty scoreAchieved;
+
+    /** Property of how much health (fraction) the home territory has remaining */
     private DoubleProperty healthFraction;
 
     /**
-     * Constructs the game session.
+     * Constructs the game session for the provided stage
+     * @param mainStage the stage on which the game scene will be loaded
+     * @param mapType   the type of map
      */
-    public GameSession(MapType mapType) {
+    public GameSession(Stage mainStage, MapType mapType) {
+        this.mainStage = mainStage;
         PAUSE_MENU = new PauseMenu();
         setMode(mapType);
         initLayout();
-        initWindow();
         initProgressPane();
         createKeyListeners();
     }
@@ -101,24 +116,13 @@ public class GameSession {
         gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, this::pauseGame);
         gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, this::leaveGame);
 
+        gameScene = new Scene(gamePane, WIDTH, HEIGHT);
+
         try {
-            gamePane.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
+            gameScene.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Initializes the window of the menu session, i.e., sets up the scene and the custom stage.
-     */
-    private void initWindow() {
-        Scene gameScene = new Scene(gamePane, WIDTH, HEIGHT);
-        gameStage = new Stage();
-        gameStage.setScene(gameScene);
-        gameStage.setResizable(false);
-        gameStage.setTitle("Blueland Defenders");
-        CustomStage customStage=new CustomStage(gameStage);
-        customStage.createGameTitleBar(gamePane, WIDTH);
     }
 
     /**
@@ -235,8 +239,8 @@ public class GameSession {
     /**
      * Handles the event of leaving the game
      *
-     * <p>This method simply closes the game window and returns to the menu window which was passed when the stages were
-     * swapped together in {@link #startGame(Stage)}. It should not be called during the actual gameplay, i.e., when the
+     * <p>This method simply closes the game session and returns to the menu scene which was passed when the scenes were
+     * swapped together in {@link #startGame(Scene)}. It should not be called during the actual gameplay, i.e., when the
      * <i>gameTimer</i> is running. The playlist of menu songs also starts playing.</p>
      *
      * <p><b>Note:</b> this is bad practice but currently <i>LEAVE_GAME_EVENT</i> is handled by MainMenu layout to update
@@ -246,14 +250,14 @@ public class GameSession {
      * @param e <i>LEAVE_GAME_EVENT</i> which provides details about the name and the score to be saved in the leaderboard
      */
     private void leaveGame(GameFlowEvent e) {
-        gameStage.hide();
-        menuStage.show();
+        // MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
 
-        MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
+        mainStage.setScene(menuScene);
 
         try {
-            AnchorPane mainPane = (AnchorPane) menuStage.getScene().getRoot().getChildrenUnmodifiable().get(1);
-            mainPane.getChildren().get(1).fireEvent(e);
+            // AnchorPane menuPane = (AnchorPane) menuStage.getScene().getRoot().getChildrenUnmodifiable().get(1);
+            AnchorPane menuPane = (AnchorPane) menuScene.getRoot();
+            menuPane.getChildren().get(1).fireEvent(e);
         } catch(ClassCastException | NullPointerException exception) {
             exception.printStackTrace();
             System.out.println("Make sure MainMenu is located as follows:\nStage -> Scene -> Root -> (AnchorPane)Child(1) -> Child(1)");
@@ -263,6 +267,17 @@ public class GameSession {
         audioManager.playMusic();
     }
 
+    /**
+     * Updates the state of the game
+     *
+     * <p>Three main things are updated for the user interface:</p>
+     * <ul>
+     *     <li>Home territory's HP</li>
+     *     <li>The total score (based on enemies killed)</li>
+     *     <li>The time passed</li>
+     * </ul>
+     * <p>It also checks if the game is over and ends the session if it is.</p>
+     */
     private void updateGameState() {
         long currentTime = CLOCK.getCurrentTime() - startTimestamp;
 
@@ -278,16 +293,14 @@ public class GameSession {
     }
 
     /**
-     * Starts the game loop and shows the game view
-     * @param menuStage menu stage to be hidden
+     * Starts the game loop and swaps the menu scene with the game scene
+     * @param menuScene menu scene to be hidden and later reloaded when the game finishes
      */
-    public void startGame(Stage menuStage) {
-        this.menuStage = menuStage;
-        this.menuStage.hide();
+    public void startGame(Scene menuScene) {
+        this.menuScene = menuScene;
+        mainStage.setScene(gameScene);
         startTimestamp = CLOCK.getCurrentTime();
-
         createGameLoop();
-        gameStage.show();
     }
 
     /**

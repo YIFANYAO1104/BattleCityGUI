@@ -9,14 +9,27 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 
 import java.util.ArrayList;
-
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 abstract public class BaseGameEntity {
+    /**
+     * prepare the index{@link Integer} of next Entity
+     */
     private static int nextValidID = 0;
+
+    /**
+     * The index {@link Integer} of this Entity
+     */
     private int id;
 
+    /**
+     * The location in map
+     */
     protected double x, y;
+
+    /**
+     * The flag of if it is living in game
+     */
     protected boolean exists;
     protected Image[] entityImages;
 
@@ -26,6 +39,7 @@ abstract public class BaseGameEntity {
      * correctly. It verifies that the value passed to the method is greater or
      * equal to the next valid ID, before setting the ID and incrementing the
      * next valid ID
+     * @param id the id of entity
      */
     private void setID(int id) {
         //make sure the val is equal to or greater than the next available ID
@@ -39,6 +53,12 @@ abstract public class BaseGameEntity {
     protected void finalize() throws Throwable{super.finalize();}
 
 
+    /**
+     * Constructs BaseGameEntity Object and initialize it
+     * @param id The index {@link Integer} of this Entity
+     * @param x The location in map
+     * @param y The location in map
+     */
     protected BaseGameEntity(int id, double x, double y) {
         setID(id);
         entityManager.registerEntity(this);
@@ -48,8 +68,7 @@ abstract public class BaseGameEntity {
     }
 
     /**
-     *
-     * @return
+     * @return {@link Integer} Give the index to entity
      */
     public static int getNextValidID() {
         return nextValidID;
@@ -137,7 +156,7 @@ abstract public class BaseGameEntity {
 
     /**
      *
-     * @return
+     * @return {@link String}
      */
     abstract public String toString();
 

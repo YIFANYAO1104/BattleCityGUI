@@ -21,8 +21,13 @@ import static com.bham.bc.utils.messaging.MessageTypes.*;
  * Class defining common properties for any obstacle
  */
 public class Obstacle extends BaseGameEntity {
+    /** Set of attributes this obstacle has (e.g., <i>WALKABLE</i>, <i>BREAKABLE</i> etc) */
     private final EnumSet<Attribute> ATTRIBUTES;
+
+    /** HP this obstacle has - only valid for breakable obstacles */
     private double hp;
+
+    /** The current frame that should be rendered for the obstacle if it is animated */
     private int currentFrame;
 
     /**

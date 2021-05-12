@@ -15,8 +15,17 @@ import static com.bham.bc.components.Controller.services;
  * check for any character or bullet collision.</p>
  */
 public class FreePathCondition implements Condition {
+    /**
+     * source point a path starts from
+     */
     private Point2D start;
+    /**
+     * destination point a path ends at
+     */
     private Point2D end;
+    /**
+     * radius of an entity that has to fit through the path (i.e., half of the width of the path)
+     */
     private double radius;
 
     /**
@@ -85,7 +94,7 @@ public class FreePathCondition implements Condition {
     }
 
     /**
-     * Gets the path from start to end point
+     * Returns the path from start to end point
      *
      * <p>It calculates the angle and the distance between them, creates a rectangle of the same length as the
      * distance and rotates it appropriately to connect the 2 points. The height of the rectangle is defined by

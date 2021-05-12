@@ -95,7 +95,7 @@
 .progress-pane {
     -fx-pref-columns: 3;
     -fx-pref-tile-height: 35px;
-    -fx-pref-tile-width: 265px;
+    -fx-pref-tile-width: 341px;
     -fx-hgap: 2px;
     -fx-min-height: 35px;
     -fx-alignment: center;

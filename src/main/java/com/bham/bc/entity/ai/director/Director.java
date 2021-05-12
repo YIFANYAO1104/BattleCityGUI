@@ -1,35 +1,62 @@
 package com.bham.bc.entity.ai.director;
 import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.enemies.EnemyType;
+import com.bham.bc.components.characters.agents.enemies.EnemyType;
 import com.bham.bc.components.triggers.TriggerType;
-import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.behavior.*;
-import javafx.geometry.Point2D;
 
 import java.util.Arrays;
 import java.util.Random;
 import java.lang.Math;
-import java.util.stream.Collectors;
 
 import static com.bham.bc.utils.Timer.CLOCK;
 import static com.bham.bc.components.Controller.services;
 
 public class Director {
 
-    private final StateMachine stateMachine; // The State Machine that the director uses
-    private final int STATETIMELENGTH = 30000; // The base length at which each state lasts in the game
-    private final int MAXSTATETIMEMOD = 30000; // The maximum change in the length of each state
-    private int stateTimeModifier; // The time at which states are increased/decreased. This value is incremented each loop of the FSM
-    private BooleanCondition stateTimeLimitUp; // Condition for counting a state's time limit that gets longer as the game goes on
-    private BooleanCondition stateTimeLimitDown; // Condition for counting a state's time limit that gets shorter as the game goes on
+    /**
+     * The State Machine that the director uses
+     */
+    private final StateMachine stateMachine;
+    /**
+     * The base length at which each state lasts in the game
+     */
+    private final int STATETIMELENGTH = 30000;
+    /**
+     * The maximum change in the length of each state
+     */
+    private final int MAXSTATETIMEMOD = 30000;
+    /**
+     * The time at which states are increased/decreased. This value is incremented each loop of the FSM
+     */
+    private int stateTimeModifier;
+    /**
+     * Condition for counting a state's time limit that gets longer as the game goes on
+     */
+    private BooleanCondition stateTimeLimitUp;
+    /**
+     * Condition for counting a state's time limit that gets shorter as the game goes on
+     */
+    private BooleanCondition stateTimeLimitDown;
     private BooleanCondition playerStressLimit;
     private OrCondition endBuildUp;
     private int enemyCount;
-    private double allyHpFraction; // Holds the player's health from the last check
-    private double homeHpFraction; // Holds the home's health from the last check
-    private long lastTick; // Holds the time in which the director last checked the game state
-    private long stateTime; // Holds the start time of a state in the state machine
+    /**
+     * Holds the player's health from the last check
+     */
+    private double allyHpFraction;
+    /**
+     * Holds the home's health from the last check
+     */
+    private double homeHpFraction;
+    /**
+     * Holds the time in which the director last checked the game state
+     */
+    private long lastTick;
+    /**
+     * Holds the start time of a state in the state machine
+     */
+    private long stateTime;
 
     /**
      * Constructor for the Director. It sets the initial values and generates the FSM that the Director will use.
@@ -63,9 +90,9 @@ public class Director {
         endBuildUp = new OrCondition(playerStressLimit, stateTimeLimitUp);
 
         // Create Transitions of the Finite State Machine
-        Transition buildUpToPeak = new Transition(new Action[]{ Action.RESETTIMELIMIT },peakState, endBuildUp);
-        Transition peakToRelax = new Transition(new Action[]{ Action.INCREMENTLOOP, Action.RESETTIMELIMIT },relaxState, stateTimeLimitDown);
-        Transition relaxToBuildUp = new Transition(new Action[]{ Action.RESETTIMELIMIT }, buildUpState, stateTimeLimitDown);
+        Transition buildUpToPeak = new Transition(new Action[]{ Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS, Action.SPAWNALLY },peakState, endBuildUp);
+        Transition peakToRelax = new Transition(new Action[]{ Action.INCREMENTLOOP, Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS, Action.SPAWNALLY },relaxState, stateTimeLimitDown);
+        Transition relaxToBuildUp = new Transition(new Action[]{ Action.RESETTIMELIMIT, Action.SPAWNPOWERUPS, Action.SPAWNALLY }, buildUpState, stateTimeLimitDown);
 
         // Set the created transitions
         buildUpState.setTransitions(new Transition[]{ buildUpToPeak });
@@ -103,6 +130,11 @@ public class Director {
                 case RESETTIMELIMIT:
                     resetTimeLimit();
                     break;
+                case SPAWNPOWERUPS:
+                    spawnRandomPowerups(2);
+                    break;
+                case SPAWNALLY:
+                    spawnAllies(1);
             }
         });
     }
@@ -199,6 +231,17 @@ public class Director {
         for(int i = 0; i < numEnemiesToSpawn; i++) {
             int randomI = new Random().nextInt(EnemyType.values().length);
             services.spawnEnemyRandomly(EnemyType.values()[randomI]);
+        }
+    }
+
+    /**
+     * Spawns a provided number of random enemies defined in {@link Neuron}
+     * @param numAlliesToSpawn amount of enemies to be spawned
+     */
+    private void spawnAllies(int numAlliesToSpawn) {
+        System.out.println("Spawning " + numAlliesToSpawn + " Enemies");
+        for(int i = 0; i < numAlliesToSpawn; i++) {
+            services.spawnAlly();
         }
     }
 

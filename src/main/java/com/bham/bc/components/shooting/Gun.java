@@ -2,11 +2,14 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.GameCharacter;
+import com.bham.bc.components.characters.Player;
 import com.bham.bc.utils.GeometryEnhanced;
 
+import com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Rotate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,24 +22,26 @@ import static com.bham.bc.utils.Timer.CLOCK;
  * This class controls the way the bullet can be fired with respect to the game timer. It must be bind to a character.
  */
 public class Gun {
+    /** The sole character this bullet handler belongs to */
     private final GameCharacter CHARACTER;
 
-    public BulletType getBulletType() {
-        return bulletType;
-    }
-
-    public double getBulletSpeed() {
-        return DefaultBullet.SPEED;
-    }
-
+    /** The type of bullet this gun is spawning */
     private BulletType bulletType;
+
+    /** The type of laser this gun is spawning */
     private LaserType laserType;
+
+    /** Damage multiplier for every bullet upon spawning them */
     private double damageFactor;
+
+    /** Last tick indicating the time passed since the last bullet was shot */
     private long lastTick;
+
+    /** The delay at which this gun may spawn bullets */
     private long rate;
 
     /**
-     * A default constructor to create gun with no bullets
+     * Constructs gun with no bullets and initialize it
      *
      * @param character {@link GameCharacter} the gun belongs to
      */
@@ -49,15 +54,15 @@ public class Gun {
     }
 
     /**
-     * Alternate constructor to create a gun with the specified bullet type
+     * Constructs a gun with the specified bullet type
      *
      * @param character  {@link GameCharacter} the gun belongs to
      * @param bulletType type of bullet the gun should control
+     * @param laserType type of laser
      */
-    public Gun(GameCharacter character, BulletType bulletType,LaserType laserType) {
+    public Gun(GameCharacter character, BulletType bulletType, LaserType laserType) {
         CHARACTER = character;
         this.bulletType = bulletType;
-        //this.laserType=BulletType.DefaultLaser;
         this.laserType=laserType;
         damageFactor = 1;
         lastTick = CLOCK.getCurrentTime();
@@ -65,6 +70,8 @@ public class Gun {
     }
 
     /**
+     * Spawns a bullet at a given angle
+     *
      * <p>Creates a new bullet object that depends on this class' <b>bulletType</b> parameter. If angle offset is set to 0,
      * this method creates a bullet straightly in front of the character just touching its "nose". Otherwise, the bullet is
      * rotated with respect to <i>its</i> center.</p>
@@ -77,32 +84,52 @@ public class Gun {
     private Bullet spawnBullet(double angleOffset) {
         // Define the bullet's center coordinates
         double centerBulletX = CHARACTER.getCenterPosition().getX();
-        double centerBulletY = CHARACTER.getPosition().getY() - bulletType.getHeight() / 2.0;
+        double centerBulletY = CHARACTER.getPosition().getY() - bulletType.HEIGHT / 2.0;
 
         // Rotate bullet's center point around character
         Rotate rotateAroundCharacter = new Rotate(CHARACTER.getAngle()+angleOffset, CHARACTER.getCenterPosition().getX(), CHARACTER.getCenterPosition().getY());
         Point2D transformedCenterXY = rotateAroundCharacter.transform(centerBulletX, centerBulletY);
 
         // Define the bullet's top left coordinates
-        double topLeftBulletX = transformedCenterXY.getX() - bulletType.getWidth() / 2.0;
-        double topLeftBulletY = transformedCenterXY.getY() - bulletType.getHeight() / 2.0;
+        double topLeftBulletX = transformedCenterXY.getX() - bulletType.WIDTH / 2.0;
+        double topLeftBulletY = transformedCenterXY.getY() - bulletType.HEIGHT / 2.0;
 
         // Return an instance which corresponds to the bullet type
         switch(bulletType) {
             case ICE:
-                return  new IceBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
+                return  new IceBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(), Math.toRadians(angleOffset)), CHARACTER.getSide());
             case EXPLOSIVE:
-                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
+                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(), Math.toRadians(angleOffset)), CHARACTER.getSide());
             default:
-                return new DefaultBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(),angleOffset), CHARACTER.getSide());
+                return new DefaultBullet(topLeftBulletX, topLeftBulletY, GeometryEnhanced.rotate(CHARACTER.getHeading(), Math.toRadians(angleOffset)), CHARACTER.getSide());
         }
     }
+
+    /**
+     * Returns the type of laser and test the laser
+     * @return the {@link LaserType} of the current laser
+     */
     public LaserType testLaser(){
         return this.laserType;
     }
+    /**
+     * Returns the type of bullet and test the Bullet
+     * @return the {@link Bullet} of the current Bullet
+     */
     public BulletType testBullet(){
         return this.bulletType;
     }
+
+    /**
+     * <p>Creates a new laser object that depends on this class' <b>laserType</b> parameter. If angle offset is set to 0,
+     * this method creates a bullet straightly in front of the character just touching its "nose". Otherwise, the laser is
+     * rotated with respect to <i>its</i> center.</p>
+     *
+     * <p><b>Note:</b> the laser is always spawned aligned with the center of the character's width</p>
+     *
+     * @param angleOffset offset by which the laser should be rotated around its center
+     * @return the created {@link Bullet} object with respect to the character's location
+     */
     private Bullet spawnLaser(double angleOffset) {
         // Define the bullet's center coordinates
         double centerBulletX = CHARACTER.getCenterPosition().getX()-10;
@@ -132,21 +159,8 @@ public class Gun {
                 return new ThunderLaser(topLeftBulletXT, topLeftBulletYT, CHARACTER.getHeading(), CHARACTER.getSide());
             default:
                 return new LaserGun(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-
-
         }
-
-//        switch(bulletType) {
-//            case IceBullet:
-//                return  new IceBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-//            case EXPLOSIVE:
-//                return new ExplosiveBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-//
-//            default:
-//                return new DefaultBullet(topLeftBulletX, topLeftBulletY, CHARACTER.getHeading(), CHARACTER.getSide());
-//        }
     }
-
 
     /**
      * Shoots exactly 1 bullet in front of the character
@@ -161,9 +175,15 @@ public class Gun {
         audioManager.playEffect(getShotSoundEffect());
         lastTick = CLOCK.getCurrentTime();
     }
+
+    /**
+     * Shoots the dynamic laser  in front of the character
+     */
     public void shootLaser() {
         if(laserType == null || CLOCK.getCurrentTime() - lastTick < rate) return;
-
+        if(CHARACTER instanceof Player && !((Player) CHARACTER).laserFlag){
+            return;
+        }
         Bullet bullet = spawnLaser(0);
         bullet.setDamage(bullet.getDamage() * damageFactor*3);
         bullet.setTime();
@@ -194,8 +214,13 @@ public class Gun {
     public void setBulletType(BulletType bulletType) {
         this.bulletType = bulletType;
     }
+
+    /**
+     * Updates the laser type this gun is shooting
+     * @param laser the type of laser this gun will handle
+     */
     public void setLaserType(LaserType laser){
-        this.laserType=laser;
+        this.laserType = laser;
     }
 
     /**
@@ -215,7 +240,7 @@ public class Gun {
     }
 
     /**
-     * Gets the sound effect mapped to a requested type of bullet this gun will make when spawning a bullet
+     * Returns the sound effect mapped to a requested type of bullet this gun will make when spawning a bullet
      * @return {@link SoundEffect} value which will provide audio object to play
      */
     public SoundEffect getShotSoundEffect() {
@@ -223,5 +248,41 @@ public class Gun {
             default:
                 return SoundEffect.SHOT_DEFAULT;
         }
+    }
+
+    /**
+     * Returns the maximum damage of the bullet
+     * @return maximum damage of the bullet
+     */
+    public double getMaxDamage() {
+        List<Double> damageList = new ArrayList<>();
+        damageList.add(IceBullet.DAMAGE);
+        damageList.add(ExplosiveBullet.DAMAGE);
+        damageList.add(DefaultBullet.DAMAGE);
+
+        double max = Double.MIN_VALUE;
+        for (Double d : damageList) {
+            if (d>max){
+                max=d;
+            }
+        }
+
+        return max*damageFactor;
+    }
+
+    /**
+     * Returns the bullet type of the gun
+     * @return {@link #bulletType}
+     */
+    public BulletType getBulletType() {
+        return bulletType;
+    }
+
+    /**
+     * Returns the bullet speed of the gun
+     * @return bullet speed
+     */
+    public double getBulletSpeed() {
+        return DefaultBullet.SPEED;
     }
 }

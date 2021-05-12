@@ -4,6 +4,9 @@ package com.bham.bc.entity.ai.behavior;
  * Condition for inverting the result of another Condition
  */
 public class NotCondition implements Condition{
+    /**
+     * Condition to be inverted
+     */
     private final Condition conditionA;
 
     /**

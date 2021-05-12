@@ -2,6 +2,7 @@ package com.bham.bc.components.environment;
 
 import com.bham.bc.components.triggers.Trigger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -16,48 +17,67 @@ import java.util.*;
  * @see <a href="https://www.mapeditor.org/">mapeditor.org</a>
  */
 public class MapLoader {
+    /** Number of tiles the loaded map has in x axis */
     private int mapWidth;
-    private int mapHeight;
-    private int tileWidth;
-    private int tileHeight;
 
+    /** Number of tiles the loaded map has in y axis */
+    private int mapHeight;
+
+    /** The width of any tile (in pixels) */
+    private int tileWidth;
+
+    /** The height of any tile (in pixels) */
+    private int tileHeight;
+    
+    /** {@link Obstacle} list the loaded map has (converted from tiles) */
     private final ArrayList<Obstacle> OBSTACLES;
+    
+    /** Map of every tileset and its offset used to load the map (each tileset used has a unique offset from where it starts counting its tiles) */
     private final EnumMap<Tileset, Integer> OFFSETS;
+
+    /** Map of every animated tile and the array of positions of tiles that make up each animation */
     private final HashMap<Integer, int[]> ANIMATIONS;
+
+    /** {@link Trigger} list the loaded map has (converted from tile objects) */
     private final ArrayList<Trigger> TRIGGERS;
+
+    /** Map of trigger positions and corresponding class names */
     private final HashMap<Integer, String> TRIGGER_CLASSES;
 
     /**
      * Constructs Map Loader which loads a map from a JSON file
-     * @param resourceName path to resource
+     * @param pathToMap path to map in JSON format
      */
-    public MapLoader(String resourceName) {
+    public MapLoader(String pathToMap) {
         OBSTACLES = new ArrayList<>();
         OFFSETS = new EnumMap<>(Tileset.class);
         ANIMATIONS = new HashMap<>();
         TRIGGERS = new ArrayList<>();
         TRIGGER_CLASSES = new HashMap<>();
 
-        if (resourceName==null) return;
+        if (pathToMap == null) {
+            System.err.println("The map could not be loaded because the path " + pathToMap + " is null");
+            return;
+        }
+
         try {
-            loadMap(resourceName);
-        } catch (Exception e) {
+            loadMap(pathToMap);
+        } catch(JSONException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Loads map with obstacles
+     * Loads map with obstacles and triggers
      *
-     * @param resourceName path to resource
-     * @throws Exception
+     * <p>This method creates a JSON object from a given JSON file and parses any obstacles and triggers it can provide. If the
+     * constructors for obstacles or triggers could not be located, they are skipped and the errors are printed out.</p>
+     *
+     * @param pathToMap      path to map in JSON format
+     * @throws JSONException thrown if some JSON property is requested but is not found in the actual file
      */
-    private void loadMap(String resourceName) throws Exception {
-        JSONObject jsonObject;
-        InputStream is = MapLoader.class.getResourceAsStream(resourceName);
-
-        assert is != null;
-        jsonObject = new JSONObject(new JSONTokener(is));
+    private void loadMap(String pathToMap) throws JSONException {
+        JSONObject jsonObject = new JSONObject(new JSONTokener(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(pathToMap))));
         initMapProperties(jsonObject);
 
         // Each group contains multiple layers which make up 1 tileset
@@ -80,12 +100,20 @@ public class MapLoader {
                     String className = layer.getString("name");
                     JSONArray obstacleArray = layer.getJSONArray("data");
 
-                    OBSTACLES.addAll(convertToObstacles(tilesetName, className, obstacleArray));
+                    try {
+                        OBSTACLES.addAll(convertToObstacles(tilesetName, className, obstacleArray));
+                    } catch(ClassNotFoundException | NoSuchMethodException e) {
+                        e.printStackTrace();
+                    }
                 } else if(layer.has("objects")) {
                     String packageName = layer.getString("name");
                     JSONArray triggerArray = layer.getJSONArray("objects");
 
-                    TRIGGERS.addAll(convertToTriggers(packageName, triggerArray));
+                    try {
+                        TRIGGERS.addAll(convertToTriggers(packageName, triggerArray));
+                    } catch(ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -94,9 +122,14 @@ public class MapLoader {
     /**
      * Checks the attributes about the map from the given JSON object
      *
+     * <p>Firstly it checks for a unique offset each tileset starts to ident its tile positions and pushes the values to the
+     * <i>OFFSET</i> map. If it is a <i>TRIGGER</i> tileset, tiles' positions are mapped to trigger classes, otherwise, if
+     * it is a tileset defined in {@link Tileset}, tiles' are checked if they are animated. Otherwise, an error is handled
+     * and nothing happens if the tileset is not defined as an enum.</p>
+     *
      * @param jsonObject JSON object to check
      */
-    void initMapProperties(JSONObject jsonObject) {
+    void initMapProperties(JSONObject jsonObject) throws JSONException {
         mapWidth = jsonObject.getInt("width");
         mapHeight = jsonObject.getInt("height");
         tileWidth = jsonObject.getInt("tilewidth");
@@ -146,20 +179,21 @@ public class MapLoader {
     /**
      * Converts JSON object attributes to Obstacles in the map
      *
+     * <p>This method goes through JSON obstacle array and builds an {@code Obstacle} object for every tile based on its position and name.
+     * If, for some reason, the ID of the tile could not be located within the defined tileset picture in {@link Tileset} enum, the tile
+     * is simply skipped and an error is printed. The error is not handled if the constructor of {@link Obstacle} cannot be declared.</p>
+     *
      * @param tilesetName   name of the tileset used to take the tile image from
      * @param tileName      name of the class used to create an obstacle
      * @param obstacleArray array of obstacles in JSON format
-     * @return list of generatable game obstacles
-     * @throws ClassNotFoundException
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
-     * @throws InstantiationException
+     * @return list of obstacles to be added to the game map
+     *
+     * @throws ClassNotFoundException thrown when no constructor method has been found for {@link Obstacle} class
+     * @throws NoSuchMethodException  thrown if {@link Obstacle} cannot be located under {@link com.bham.bc.components.environment} package
      */
-    public ArrayList<Obstacle> convertToObstacles(String tilesetName, String tileName, JSONArray obstacleArray) throws ClassNotFoundException, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public ArrayList<Obstacle> convertToObstacles(String tilesetName, String tileName, JSONArray obstacleArray) throws ClassNotFoundException, NoSuchMethodException {
         // Reflect the names of parameters for constructor
         Tileset tileset = Tileset.valueOf(tilesetName);
-        int yo = tileset.getOffsetY();
         Class<?> cls = Class.forName("com.bham.bc.components.environment.Obstacle");
 
         ArrayList<Attribute> attributes = identifyAttributes(tileName);
@@ -167,22 +201,23 @@ public class MapLoader {
         ArrayList<Obstacle> obstacleInstances = new ArrayList<>();
         Constructor<?> constructor = cls.getConstructor(int.class, int.class, ArrayList.class, Tileset.class, int[].class);
 
-        // Construct a GenericObstacle for each existing tile in obstacleArray
+        // Construct an Obstacle for each existing tile in obstacleArray
         for(int i = 0; i < obstacleArray.length(); i++) {
             if(obstacleArray.getInt(i) > 0) {
                 int x= (i % mapWidth) * tileWidth;
-                int y = (i / mapWidth) * tileHeight - yo;
+                int y = (i / mapWidth) * tileHeight;
 
                 int tileID = obstacleArray.getInt(i) - OFFSETS.get(tileset);
                 int[] tileIDs = ANIMATIONS.containsKey(tileID) ? ANIMATIONS.get(tileID) : new int[] {tileID};
 
                 try{
                     obstacleInstances.add((Obstacle) constructor.newInstance(x, y, attributes, tileset, tileIDs));
-                }catch (Exception e){
-                    System.out.println("Invalid tile under " + tileset + " folder");
-                    System.out.println("tileID is " + obstacleArray.getInt(i));
+                } catch (InvocationTargetException e) {
+                    System.err.println("Invalid tile under " + tileset + " folder");
+                    System.err.println("tileID is " + obstacleArray.getInt(i));
+                } catch (IllegalArgumentException | IllegalAccessException | InstantiationException e) {
+                    e.printStackTrace();
                 }
-
             }
         }
         return obstacleInstances;
@@ -191,11 +226,18 @@ public class MapLoader {
     /**
      * Converts JSON object attributes to Triggers in the map
      *
-     * @param packageName    name of the class used to create a trigger
+     * <p>This method goes through JSON trigger array and builds a {@code Trigger} object for every object based on its ID which is
+     * mapped to the trigger's class name. If, for some reason, the parameters of a trigger object are not defined correctly, the
+     * trigger is simply skipped and an error is printed. The error is not handled if the constructor of a specific trigger cannot
+     * be declared.</p>
+     *
+     * @param packageName  name of the class used to create a trigger
      * @param triggerArray array of triggers in JSON format
-     * @throws Exception   if construction of a class fails
+     * @return list of triggers to be added to the game map
+     *
+     * @throws ClassNotFoundException thrown when no constructor method has been found for a specific {@code Trigger} class
      */
-    public ArrayList<Trigger> convertToTriggers(String packageName, JSONArray triggerArray) throws Exception {
+    public ArrayList<Trigger> convertToTriggers(String packageName, JSONArray triggerArray) throws ClassNotFoundException {
         ArrayList<Trigger> triggerInstances = new ArrayList<>();
 
         for(int i = 0; i < triggerArray.length(); i++) {
@@ -216,7 +258,12 @@ public class MapLoader {
                 if(attribute.get("name").equals("className")) continue;
                 params.add(attribute.getInt("value"));
             }
-            triggerInstances.add((Trigger) constructor.newInstance(params.toArray()));
+
+            try {
+                triggerInstances.add((Trigger) constructor.newInstance(params.toArray()));
+            } catch(IllegalArgumentException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
         }
         return triggerInstances;
     }

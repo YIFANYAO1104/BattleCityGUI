@@ -4,13 +4,12 @@ import com.bham.bc.components.shooting.Bullet;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.MapType;
-import com.bham.bc.components.triggers.TriggerType;
 import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.HitMarker;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.ai.director.Director;
-import com.bham.bc.entity.ai.navigation.algorithms.AlgorithmDriver;
+import com.bham.bc.entity.ai.navigation.AlgorithmDriver;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
 import com.bham.bc.components.triggers.Trigger;
@@ -22,10 +21,8 @@ import com.bham.bc.components.characters.Player;
 import com.bham.bc.components.characters.GameCharacter;
 
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
@@ -202,7 +199,7 @@ public abstract class Controller extends BaseGameEntity implements Services {
         triggers.forEach(trigger -> trigger.render(gc));
 
         // TODO: remove
-        triggers.forEach(trigger -> trigger.renderHitBox(gc));
+        // triggers.forEach(trigger -> trigger.renderHitBox(gc));
         // bullets.forEach(bullet -> bullet.renderHitBox(gc));
         // characters.forEach(character -> character.renderHitBox(gc));
 

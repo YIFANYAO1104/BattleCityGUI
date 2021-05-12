@@ -8,9 +8,9 @@ import com.bham.bc.components.triggers.effects.HitMarker;
 
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
+import com.bham.bc.entity.ai.TargetingSystem;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.physics.CollisionHandler;
-import com.bham.bc.utils.GeometryEnhanced;
 import com.bham.bc.utils.messaging.Telegram;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -19,7 +19,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 import java.util.List;
 
@@ -30,13 +29,25 @@ import static com.bham.bc.components.Controller.services;
  * Represents a character - this includes enemies, players and AI companions
  */
 abstract public class GameCharacter extends MovingEntity {
+    /** Maximum width and height of any character */
     public static final int MAX_SIZE = 32;
+
+    /** Maximum health of any character */
     public static final double MAX_HP = 300;
+
+    /** Maximum speed of any character */
     public static final double MAX_SPEED = 5;
 
+    /** Current <i>full</i> hp value possible for the character (<b>note:</b> not current hp) */
     protected double fullHp;
+
+    /** Current hp value the character has */
     protected double hp;
+
+    /** {@code ALLY} or {@code ENEMY} side the character belongs to */
     protected Side side;
+
+    /** Targeting system to obtain possible targets */
     protected TargetingSystem targetingSystem;
 
     /**
@@ -156,11 +167,6 @@ abstract public class GameCharacter extends MovingEntity {
         this.maxSpeed=x;
     }
 
-
-    // TEMP: DOCUMENT ------------------------------------------------
-
-    // -----------------------------------------------------------
-
     /**
      * Handles collision of one {@link BaseGameEntity} object
      *
@@ -226,18 +232,10 @@ abstract public class GameCharacter extends MovingEntity {
         return getHitBox().getRadius();
     }
 
-    /**
-     * TODO: remove?
-     * Gets a list of path areas (used for path smoothing)
-     * @return a list of areas of type Shape
-     */
-    abstract public List<Shape> getSmoothingBoxes();
-
     @Override
     public void render(GraphicsContext gc) {
         drawRotatedImage(gc, entityImages[0], getAngle());
         renderHp(gc);
-        //GeometryEnhanced.renderHitBox(gc,this.getHitBox());
     }
 
     @Override
@@ -258,12 +256,37 @@ abstract public class GameCharacter extends MovingEntity {
         }
     }
 
+    /**
+     * Judge whether an agent is close enough to a position
+     * @param target the position an agent want to reach
+     * @return true if close enough
+     */
     public boolean isReached(Point2D target){
-//        return getCenterPosition().distance(target) < 1;
         return intersects(new Circle(target.getX(), target.getY(), 3));
     }
 
+    /**
+     * set a character's velocity to zero vector
+     */
     public void brake(){
         velocity=new Point2D(0,0);
+    }
+
+    /**
+     * get the max damage from a character
+     * should be constant
+     * @return the max damage
+     */
+    public double getMaxDamage() {
+        return 0;
+    }
+
+    /**
+     * get the min damage from a character
+     * should be constant
+     * @return the min damage
+     */
+    public double getMinDamage(){
+        return 0;
     }
 }

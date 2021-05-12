@@ -35,26 +35,4 @@ abstract public class TimeSlicedAlgorithm {
     public abstract void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
 
     public abstract boolean isTriggerActive();
-
-    //under construction----------------------------------------------------------------------------------
-    /**
-     * returns the vector of edges that the algorithm has examined
-     */
-    public List<GraphEdge> getSPT(){
-        return null;
-    }
-    /**
-     * returns the total cost to the target
-     */
-    public double getCostToTarget(){
-        return 0;
-    }
-
-    /**
-     * returns a list of node indexes that comprise the shortest path from
-     * the source to the target
-     */
-    public List<Integer> getPathToTarget() {
-        return null;
-    }
 }

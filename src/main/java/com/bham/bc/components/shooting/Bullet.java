@@ -22,16 +22,24 @@ import static com.bham.bc.audio.AudioManager.audioManager;
  * Represents any bullet and defines common bullet properties
  */
 abstract public class Bullet extends MovingEntity {
+    /** Maximum speed any bullet can have */
     public static final double MAX_SPEED = 10;
+
+    /** Maximum damage any bullet can deal */
     public static final double MAX_DAMAGE = 100;
 
+    /** The type of bullet it is */
     private final BulletType TYPE;
+
+    /** {@code ALLY} or {@code ENEMY} side the bullet belongs to */
     private final Side SIDE;
+
+    /** Amount of hp the bullet can take from an entity */
     private double damage;
 
     /**
      * <p>Constructs a bullet using with geometrical properties to determine the position of a bullet on each frame.
-     * SIDE property is used to indicate which team the bullet can damage. </p>
+     * SIDE property is used to indicate which team the bullet can damage.</p>
      *
      * @param x       top left position in x axis
      * @param y       top left position in y axis
@@ -62,7 +70,7 @@ abstract public class Bullet extends MovingEntity {
 
     /**
      * Gets bullet's side
-     * @return ALLY or ENEMY side the bullet belongs to
+     * @return {@code ALLY} or {@code ENEMY} side the bullet belongs to
      */
     public Side getSide() {
         return SIDE;
@@ -78,6 +86,7 @@ abstract public class Bullet extends MovingEntity {
 
     /**
      * Sets bullet's damage
+     * @param damage amount of hp the bullet can take from an entity
      */
     public void setDamage(double damage) {
         this.damage = damage;
@@ -126,6 +135,9 @@ abstract public class Bullet extends MovingEntity {
      */
     public abstract void destroy();
 
+    /**
+     * Initialize the dynamic effect time of the bullet
+     */
     public abstract void setTime();
 
     @Override

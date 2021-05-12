@@ -16,12 +16,30 @@ import javafx.scene.transform.Rotate;
  */
 public abstract class MovingEntity extends BaseGameEntity {
     public static final double STANDARD_FORCE = 100;
+    /**
+     * entity's mass
+     */
     protected double mass;
+    /**
+     *  maximum speed value for the entity
+     */
     protected double maxSpeed;
+    /**
+     * max force the entity can stand
+     */
     protected double maxForce;
+    /**
+     * basis vector indicating the direction the entity is facing
+     */
     protected Point2D heading;
+    /**
+     * Point2D object representing a new velocity vector
+     */
     protected Point2D velocity;
     protected Point2D acceleration;
+    /**
+     * Steering Object of entity
+     */
     protected Steering steering;
 
     /**
@@ -81,6 +99,10 @@ public abstract class MovingEntity extends BaseGameEntity {
         gc.restore();
     }
 
+    /**
+     * Returns the Steering Object of Entity
+     * @return Steering Object of Entity
+     */
     public Steering getSteering() {
         return steering;
     }
@@ -98,7 +120,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
-     * Gets the mass this entity was assigned
+     * Returns the mass this entity was assigned
      * @return entity's mass
      */
     public double getMass() {
@@ -106,7 +128,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
-     * Gets the maximum speed value this entity can reach
+     * Returns the maximum speed value this entity can reach
      * @return maximum speed value of this entity
      */
     public double getMaxSpeed() {
@@ -114,7 +136,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
-     * Gets the maximum force this entity can have (used for acceleration)
+     * Returns the maximum force this entity can have (used for acceleration)
      * @return maximum force value the entity can have
      */
     public double getMaxForce() {
@@ -122,7 +144,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
-     * Gets the normalized vector the entity is facing at
+     * Returns the normalized vector the entity is facing at
      * @return Point2D object representing a direction vector the entity is facing
      */
     public Point2D getHeading() {
@@ -130,7 +152,7 @@ public abstract class MovingEntity extends BaseGameEntity {
     }
 
     /**
-     * Gets the current velocity
+     * Returns the current velocity
      * @return Point2D object representing a velocity vector the entity has
      */
     public Point2D getVelocity() {

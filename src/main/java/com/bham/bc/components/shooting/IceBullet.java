@@ -2,7 +2,6 @@ package com.bham.bc.components.shooting;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.components.characters.Side;
-import com.bham.bc.components.characters.enemies.Enemy;
 import com.bham.bc.components.environment.Attribute;
 import com.bham.bc.components.environment.GameMap;
 import com.bham.bc.components.environment.Obstacle;
@@ -16,7 +15,7 @@ import javafx.scene.transform.Rotate;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
 /**
- * Represents a default bullet the player starts with
+ * Represents a ice bullet the player starts with
  */
 public class IceBullet extends Bullet {
     public static final BulletType TYPE = BulletType.ICE;
@@ -24,42 +23,32 @@ public class IceBullet extends Bullet {
     public static final double DAMAGE = 10;
 
     /**
-     * Constructs a bullet using default bullet's attributes for speed and damage
+     * Constructs a bullet using ice bullet's attributes for speed and damage
      *
      * @param x       top left position in x axis
      * @param y       top left position in y axis
-     * @param heading a normalized vector indicating the direction the bullet is moving
+     * @param heading a normalized vector indicating the direction the ice bullet is moving
      * @param side    ALLY or ENEMY side the bullet belongs to
      */
     public IceBullet(double x, double y, Point2D heading, Side side) {
         super(x, y, SPEED, heading, TYPE, side, DAMAGE);
 
-        // use getClass().getClassLoader().getResourceAsStream()
-//        this.entityImages=
-//                new Image[]{
-//                        (new Image("\"img/shooting/l0.png")),
-//                        (new Image("\"img/shooting/l1.png")),
-//                        (new Image("\"img/shooting/l2.png")),
-//                        (new Image("\"img/shooting/l3.png")),
-//                        (new Image("\"img/shooting/l4.png")),
-//                        (new Image("\"img/shooting/l5.png")),
-//                        (new Image("\"img/shooting/l6.png")),
-//                        (new Image("\"img/shooting/l7.png")),
-//                        (new Image("\"img/shooting/l6.png")),
-//                        (new Image("\"img/shooting/l5.png")),
-//                        (new Image("\"img/shooting/l4.png")),
-//                        (new Image("\"img/shooting/l3.png")),
-//                        (new Image("\"img/shooting/l2.png")),
-//                        (new Image("\"img/shooting/l2.png")),
-//                        (new Image("\"img/shooting/l0.png")),
-//                };
     }
 
+    /**
+     * Bullet get destroyed.
+     */
     @Override
     public void destroy() {
         entityManager.removeEntity(this);
         exists = false;
     }
+
+    /**
+     * The handle method of Bullet, dispose various situations when the bullets collides with other entities.
+     *
+     * @param entity a generic entity that is converted to appropriate child instance the bullet will handle
+     */
     @Override
     public void handle(BaseGameEntity entity) {
 
@@ -73,6 +62,7 @@ public class IceBullet extends Bullet {
             }
         }
     }
+
     @Override
     public void render(GraphicsContext gc) {
         for(int i =0; i< entityImages.length;i++){
@@ -85,6 +75,9 @@ public class IceBullet extends Bullet {
 
     }
 
+    /**
+     * The movement of the bullet.
+     */
     @Override
     public void move() {
         x += velocity.getX();
@@ -96,11 +89,19 @@ public class IceBullet extends Bullet {
         }
     }
 
+    /**
+     * The update of bullet which calls {@link  #move()}
+     */
     @Override
     public void update() {
         move();
     }
 
+    /**
+     * Generate the hitbox of current position.
+     *
+     * @return the rectangle hitbox
+     */
     @Override
     public Rectangle getHitBox() {
         Rectangle hitBox = new Rectangle(x, y, getSize().getX(), getSize().getY());
