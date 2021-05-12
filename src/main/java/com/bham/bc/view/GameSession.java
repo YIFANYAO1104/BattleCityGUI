@@ -19,6 +19,7 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -90,18 +91,40 @@ public class GameSession {
     /** Property of how much health (fraction) the home territory has remaining */
     private DoubleProperty healthFraction;
 
+    private VBox titleAndRoot=new VBox();
+    private HBox gpTitle;
+    private CustomStage customStage;
+
+
+
+
+
+
     /**
      * Constructs the game session for the provided stage
      * @param mainStage the stage on which the game scene will be loaded
      * @param mapType   the type of map
      */
-    public GameSession(Stage mainStage, MapType mapType) {
+    public GameSession(Stage mainStage, MapType mapType,HBox gpTitle,CustomStage customStage) {
         this.mainStage = mainStage;
+        this.gpTitle=gpTitle;
+        this.customStage=customStage;
+
         PAUSE_MENU = new PauseMenu();
         setMode(mapType);
         initLayout();
         initProgressPane();
         createKeyListeners();
+
+
+        gamePane.getScene().setRoot(titleAndRoot);
+        customStage.setTitleAndRoote(titleAndRoot);
+        titleAndRoot.getChildren().addAll(gpTitle,gamePane);
+
+
+
+
+
     }
 
     /**
@@ -116,7 +139,7 @@ public class GameSession {
         gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, this::pauseGame);
         gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, this::leaveGame);
 
-        gameScene = new Scene(gamePane, WIDTH, HEIGHT);
+        gameScene = new Scene(gamePane, WIDTH, HEIGHT+34);
 
         try {
             gameScene.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
@@ -254,10 +277,14 @@ public class GameSession {
 
         mainStage.setScene(menuScene);
 
+
+
+
         try {
             // AnchorPane menuPane = (AnchorPane) menuStage.getScene().getRoot().getChildrenUnmodifiable().get(1);
-            AnchorPane menuPane = (AnchorPane) menuScene.getRoot();
-            menuPane.getChildren().get(1).fireEvent(e);
+            VBox titleAndRoot2 = (VBox) menuScene.getRoot();
+
+            titleAndRoot2.getChildren().get(0).fireEvent(e);
         } catch(ClassCastException | NullPointerException exception) {
             exception.printStackTrace();
             System.out.println("Make sure MainMenu is located as follows:\nStage -> Scene -> Root -> (AnchorPane)Child(1) -> Child(1)");

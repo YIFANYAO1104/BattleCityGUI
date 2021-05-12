@@ -7,6 +7,8 @@ import com.bham.bc.view.model.MenuBackground;
 import com.bham.bc.view.tools.GameFlowEvent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import static com.bham.bc.audio.AudioManager.audioManager;
@@ -41,6 +43,10 @@ public class MenuSession {
     /** Custom stage */
     public static CustomStage customStage;
 
+    private VBox titleAndRoot=new VBox();
+
+    private HBox gpTitle;
+
     /**
      * Constructs the menu session
      */
@@ -74,8 +80,15 @@ public class MenuSession {
         mainStage.setResizable(false);
         mainStage.setTitle("Blueland Defenders");
 
-        // customStage = new CustomStage(mainStage);
-        // customStage.createMainTitlebar(mainPane, WIDTH);
+
+
+
+
+         customStage = new CustomStage(mainStage);
+         customStage.setTitleAndRoote(titleAndRoot);
+         gpTitle =customStage.createMainTitlebar( WIDTH);
+         mainPane.getScene().setRoot(titleAndRoot);
+         titleAndRoot.getChildren().addAll( gpTitle,mainPane);
     }
 
     /**
@@ -100,7 +113,7 @@ public class MenuSession {
      */
     public void createGameSession(GameFlowEvent e) {
         audioManager.loadSequentialPlayer(true, GameSession.PLAYLIST);
-        GameSession gameSession = new GameSession(mainStage, e.getMapType());
+        GameSession gameSession = new GameSession(mainStage, e.getMapType(),gpTitle,customStage);
         gameSession.startGame(menuScene);
 
         audioManager.playMusic();
