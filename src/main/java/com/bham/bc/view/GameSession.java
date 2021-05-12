@@ -138,7 +138,7 @@ public class GameSession {
         gamePane.addEventFilter(GameFlowEvent.PAUSE_GAME, this::pauseGame);
         gamePane.addEventFilter(GameFlowEvent.LEAVE_GAME, this::leaveGame);
 
-        gameScene = new Scene(gamePane, WIDTH, HEIGHT);
+        gameScene = new Scene(gamePane, WIDTH, HEIGHT+34);
 
         try {
             gameScene.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());
