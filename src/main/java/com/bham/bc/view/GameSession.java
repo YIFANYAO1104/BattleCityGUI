@@ -13,6 +13,7 @@ import com.bham.bc.view.menu.EndMenu;
 import com.bham.bc.view.menu.MainMenu;
 import com.bham.bc.view.menu.PauseMenu;
 import com.bham.bc.view.model.CustomStage;
+import com.bham.bc.view.model.MenuBackground;
 import com.bham.bc.view.tools.GameFlowEvent;
 import com.bham.bc.view.tools.Camera;
 import javafx.animation.AnimationTimer;
@@ -263,10 +264,17 @@ public class GameSession {
 
         mainStage.setScene(menuScene);
 
-        // menuScene.setRoot(titleAndRoot);
+        VBox titleAndRoot3=new VBox();
+        customStage.setTitleAndRoote(titleAndRoot3);
+        menuScene.setRoot(titleAndRoot3);
+
 
         try {
-            AnchorPane menuPane = (AnchorPane) ((AnchorPane) titleAndRoot.getChildrenUnmodifiable().get(0)).getChildrenUnmodifiable().get(1);
+
+            AnchorPane menuPane = (AnchorPane) titleAndRoot.getChildrenUnmodifiable().get(0);
+
+            titleAndRoot3.getChildren().addAll(gpTitle, menuPane);
+
             menuPane.getChildren().get(1).fireEvent(e);
         } catch(ClassCastException | NullPointerException exception) {
             exception.printStackTrace();
