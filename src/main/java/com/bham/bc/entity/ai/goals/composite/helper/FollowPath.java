@@ -2,19 +2,19 @@ package com.bham.bc.entity.ai.goals.composite.helper;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.ai.goals.atomic.Goal;
-import com.bham.bc.entity.ai.goals.atomic.Goal_TraverseEdge;
-import com.bham.bc.entity.ai.goals.composite.Goal_Composite;
+import com.bham.bc.entity.ai.goals.atomic.FollowEdge;
+import com.bham.bc.entity.ai.goals.composite.CompositeGoal;
 import com.bham.bc.entity.ai.navigation.PathEdge;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.bham.bc.entity.ai.goals.GoalTypes.goal_follow_path;
+import static com.bham.bc.entity.ai.goals.GoalTypes.follow_path;
 
 /**
  * The class to define how an agent follow a path
  */
-public class Goal_FollowPath extends Goal_Composite {
+public class FollowPath extends CompositeGoal {
 
     /**
      * a copy of the path
@@ -22,8 +22,8 @@ public class Goal_FollowPath extends Goal_Composite {
     private LinkedList<PathEdge> pathList;
 
     //the usual suspects
-    public Goal_FollowPath(GameCharacter pBot, List<PathEdge> path) {
-        super(pBot, goal_follow_path);
+    public FollowPath(GameCharacter pBot, List<PathEdge> path) {
+        super(pBot, follow_path);
         pathList = new LinkedList<>(path);
     }
 
@@ -33,7 +33,7 @@ public class Goal_FollowPath extends Goal_Composite {
 
         PathEdge edge = pathList.getFirst();
         pathList.removeFirst();
-        addSubgoal(new Goal_TraverseEdge(agent, edge));
+        addSubGoal(new FollowEdge(agent, edge));
     }
 
     @Override

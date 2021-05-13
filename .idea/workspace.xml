@@ -34,11 +34,30 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/BluelandDefenders_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/BluelandDefenders_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/PauseMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/PauseMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resource/META-INF/MANIFEST.MF" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/application/TestApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/audio/AudioAutomatedTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/audio/AudioSemiAutomatedTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/components/characters/GameCharacterTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/components/characters/enemies/EnemyTestDemo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/components/environment/MapLoaderTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/components/shooting/armoryTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/components/triggers/TriggerTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/ai/behavior/AndConditionTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/ai/behavior/NotConditionTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/ai/behavior/OrConditionTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/ai/behavior/StateMachineTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/ai/navigation/AlgorithmTime.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/ai/navigation/NavigationFlowTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/graph/GraphTest$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/graph/GraphTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/physics/MapDivisionTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/entity/physics/SteeringTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/utils/UtilsTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/bham/bc/view/model/RecordsHandlerTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/model/maps/floodMap1.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/model/maps/test.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,7 +165,7 @@
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -280,11 +299,38 @@
     <MESSAGE value="formalize javadoc comments" />
     <option name="LAST_COMMIT_MESSAGE" value="formalize javadoc comments" />
   </component>
+  <component name="WindowStateProjectService">
+    <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1620811308722">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1620811308722" />
+    <state width="1493" height="196" key="GridCell.Tab.0.bottom" timestamp="1620811154665">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="196" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1620811154665" />
+    <state width="1493" height="196" key="GridCell.Tab.0.center" timestamp="1620811154665">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="196" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1620811154665" />
+    <state width="1493" height="196" key="GridCell.Tab.0.left" timestamp="1620811154665">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="196" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1620811154665" />
+    <state width="1493" height="196" key="GridCell.Tab.0.right" timestamp="1620811154665">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="196" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1620811154665" />
+    <state x="488" y="230" width="602" height="594" key="find.popup" timestamp="1620811459340">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="488" y="230" width="602" height="594" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1620811459340" />
+  </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
       <pinned-members>
+        <PinnedItemInfo typeName="com.bham.bc.components.characters.goals.composite.Goal_AttackTarget" fieldName="m_SubGoals" />
+        <PinnedItemInfo typeName="com.bham.bc.entity.ai.UtilityCalculator" fieldName="agent" />
         <PinnedItemInfo />
-        <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="value" />
       </pinned-members>
     </pin-to-top-manager>
   </component>

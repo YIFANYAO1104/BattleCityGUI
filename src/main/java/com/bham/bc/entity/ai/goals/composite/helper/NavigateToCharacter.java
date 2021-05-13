@@ -3,25 +3,27 @@ package com.bham.bc.entity.ai.goals.composite.helper;
 
 import com.bham.bc.components.characters.GameCharacter;
 import com.bham.bc.entity.ai.goals.atomic.Goal;
-import com.bham.bc.entity.ai.goals.atomic.Goal_WaitForPath;
-import com.bham.bc.entity.ai.goals.composite.Goal_Composite;
-import javafx.geometry.Point2D;
+import com.bham.bc.entity.ai.goals.atomic.WaitForPath;
+import com.bham.bc.entity.ai.goals.composite.CompositeGoal;
 
-import static com.bham.bc.entity.ai.goals.GoalTypes.goal_move_to_position;
+import static com.bham.bc.entity.ai.goals.GoalTypes.navigate_to_character;
 
-public class Goal_NavigateToPosition extends Goal_Composite {
+/**
+ * class to define a behavior to hunt a game character
+ */
+public class NavigateToCharacter extends CompositeGoal {
 
     /**
      * the position the bot wants to reach
      */
-    private Point2D targetPos;
+    private GameCharacter target;
     private boolean waiting;
 
-    public Goal_NavigateToPosition(GameCharacter pBot,
-                                   Point2D pos) {
+    public NavigateToCharacter(GameCharacter myself,
+                               GameCharacter target) {
 
-        super(pBot, goal_move_to_position);
-        targetPos = pos;
+        super(myself, navigate_to_character);
+        this.target = target;
     }
 
     //the usual suspects
@@ -32,8 +34,8 @@ public class Goal_NavigateToPosition extends Goal_Composite {
         //make sure the subgoal list is clear.
         removeAllSubgoals();
 
-        if (agent.getNavigationService().createRequest(targetPos)) {
-            addSubgoal(new Goal_WaitForPath(agent));
+        if (agent.getNavigationService().createRequest(target)) {
+            addSubGoal(new WaitForPath(agent));
             waiting = true;
         } else {
             status = failed;
@@ -53,7 +55,7 @@ public class Goal_NavigateToPosition extends Goal_Composite {
                 status=active;
                 waiting=false;
                 removeAllSubgoals();
-                addSubgoal(new Goal_FollowPath(agent,
+                addSubGoal(new FollowPath(agent,
                         agent.getNavigationService().getPath()));
             }
         }
@@ -72,7 +74,7 @@ public class Goal_NavigateToPosition extends Goal_Composite {
     @Override
     public String toString() {
         String s = "";
-        s += "NVG to Pos {";
+        s += "NVG to Entity {";
         for (Goal m_subGoal : subGoalList) {
             s += m_subGoal.toString()+" ";
         }

@@ -3,12 +3,12 @@ package com.bham.bc.entity.ai.goals.atomic;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.geometry.Point2D;
 
-import static com.bham.bc.entity.ai.goals.GoalTypes.goal_seek_to_position;
+import static com.bham.bc.entity.ai.goals.GoalTypes.seek_to_position;
 
 /**
- * class for definning behavior for seek to position
+ * class for defining behavior for seek to position
  */
-public class Goal_SeekToPosition extends Goal {
+public class SeekToPosition extends Goal {
 
     /**
      * the position the bot is moving to
@@ -20,8 +20,8 @@ public class Goal_SeekToPosition extends Goal {
      * @param agent the owner of the goal
      * @param target the target that the agent want to reach using seek steering behavior
      */
-    public Goal_SeekToPosition(GameCharacter agent, Point2D target) {
-        super(agent, goal_seek_to_position);
+    public SeekToPosition(GameCharacter agent, Point2D target) {
+        super(agent, seek_to_position);
         this.targetPos = target;
     }
 
