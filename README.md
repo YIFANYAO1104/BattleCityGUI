@@ -118,6 +118,7 @@ To get a local copy up and running follow these simple steps.
     - Key: W,S,A,D can mke tank move up, down, left, right respectively
     - Key: F can make tank fire, shoot the bullet
     - Key: R can make laser attack
+    - Key: Esc can show Pause Menu
   
 
 <!-- ACKNOWLEDGEMENTS -->
