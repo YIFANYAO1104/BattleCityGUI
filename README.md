@@ -48,11 +48,16 @@
     <a href="https://docs.google.com/document/d/1hKQJNrINaL2fYYRq00rvBt7h5N5OeDzkwaSR3GFw8tI/edit#heading=h.2btnxlo9rwxb"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>
+
+[comment]: <> (    <a href="https://github.com/github_username/repo_name">View Demo</a>)
+
+[comment]: <> (    ·)
+
+[comment]: <> (    <a href="https://github.com/github_username/repo_name/issues">Report Bug</a>)
+
+[comment]: <> (    ·)
+
+[comment]: <> (    <a href="https://github.com/github_username/repo_name/issues">Request Feature</a>)
   </p>
 
 
