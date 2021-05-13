@@ -110,6 +110,7 @@ public class GameSession {
 
         VBox titleAndRoot2=new VBox();
         titleAndRoot2.getChildren().addAll(gpTitle, gamePane);
+        customStage.setTitleAndRoote(titleAndRoot2);
         gameScene.setRoot(titleAndRoot2);
     }
 
@@ -267,7 +268,7 @@ public class GameSession {
 
         try {
             AnchorPane menuPane = (AnchorPane) titleAndRoot.getChildrenUnmodifiable().get(0);
-
+            titleAndRoot=titleAndRoot3;
             titleAndRoot3.getChildren().addAll(gpTitle, menuPane);
 
             menuPane.getChildren().get(1).fireEvent(e);
