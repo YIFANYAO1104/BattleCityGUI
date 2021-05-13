@@ -152,10 +152,12 @@ To get a local copy up and running follow these simple steps.
 
 * The whole project is created by
   - Cameron Webley - ctw908@student.bham.ac.uk
-  - Najd
+  - Najd Alotaibi- nma843@student.bham.ac.uk
   - Xiao Yan - xxy869@student.bham.ac.uk
   - Yifan Yao - yxy977@student.bham.ac.uk
-  - Zhicheng Zhou
+  - Zhicheng Zhou - zxz862@student.bham.ac.uk
+  - Junyu Chen - jxc1259@student.bham.ac.uk
+  - Muhammad Seif Robbani Untara - mxu062@student.bham.ac.uk
 
 
 

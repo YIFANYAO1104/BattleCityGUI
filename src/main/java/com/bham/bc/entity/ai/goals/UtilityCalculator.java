@@ -1,7 +1,6 @@
 package com.bham.bc.entity.ai.goals;
 
 import com.bham.bc.components.characters.GameCharacter;
-import com.bham.bc.entity.ai.goals.GoalTypes;
 
 import java.util.AbstractMap;
 import java.util.LinkedList;
@@ -67,7 +66,7 @@ public class UtilityCalculator {
     public int getDecision() {
         GameCharacter opponent = agent.getTargetingSystem().getTargetBot();
         if (opponent==null) {
-            return GoalTypes.goal_explore;
+            return GoalTypes.explore;
         }
         this.agentHealth = agent.getHp();
         double threat = Math.min(opponent.getMaxDamage() / (double) agentHealth, 1.f);
@@ -75,12 +74,12 @@ public class UtilityCalculator {
         List<ScoreGoalPairs> scores = new LinkedList<>();
         // attack
         double score = scoreAttack(opponent.getHp());
-        scores.add(new ScoreGoalPairs(score, GoalTypes.goal_attack_closest_target));
+        scores.add(new ScoreGoalPairs(score, GoalTypes.attack_closest_target));
 //        System.out.println("attack = "+score);
 
         // heal
         score = scoreHealth(threat);
-        scores.add(new ScoreGoalPairs(score, GoalTypes.goal_get_health));
+        scores.add(new ScoreGoalPairs(score, GoalTypes.get_health));
 //        System.out.println("health = "+score);
 
         double max = -1;

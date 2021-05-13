@@ -8,6 +8,9 @@ import com.bham.bc.components.characters.GameCharacter;
  */
 abstract public class Goal {
 
+    /**
+     * execution status for a goal
+     */
     public static final int active = 0;
     public static final int inactive = 1;
     public static final int completed = 2;
@@ -52,7 +55,7 @@ abstract public class Goal {
      * the current goal will be re-planned on the next game loop
      */
     protected void reactivateIfFailed() {
-        if (hasFailed()) {
+        if (isFailed()) {
             status = inactive;
         }
     }
@@ -75,8 +78,8 @@ abstract public class Goal {
     /**
      * add a new goal for composite goal
      */
-    public void addSubgoal(Goal g) {
-        throw new RuntimeException("atomic goal could not have subgoals");
+    public void addSubGoal(Goal g) {
+        throw new RuntimeException("atomic goal could not have sub goals");
     }
 
     public boolean isComplete() {
@@ -91,7 +94,7 @@ abstract public class Goal {
         return status == inactive;
     }
 
-    public boolean hasFailed() {
+    public boolean isFailed() {
         return status == failed;
     }
 
