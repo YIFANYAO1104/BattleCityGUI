@@ -34,11 +34,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/artifacts/BluelandDefenders_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/BluelandDefenders_jar.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/PauseMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/PauseMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/model/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/model/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -267,7 +265,8 @@
     <MESSAGE value="add javadoc comments to entity package" />
     <MESSAGE value="comments in entity" />
     <MESSAGE value="formalize javadoc comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="formalize javadoc comments" />
+    <MESSAGE value="Fixed and added more styles" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed and added more styles" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
