@@ -93,7 +93,8 @@ public class EndMenu extends AnchorPane {
             if(!nameInput.getText().equals("")){
 
             LEAVE_GAME_EVENT.setName(nameInput.getText());
-            btnSubmit.fireEvent(LEAVE_GAME_EVENT);}
+            btnSubmit.fireEvent(LEAVE_GAME_EVENT);
+            }
         });
 
         // Add all elements to the layout (with a bigger than default spacing)

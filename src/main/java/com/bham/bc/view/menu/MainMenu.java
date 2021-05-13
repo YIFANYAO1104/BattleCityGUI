@@ -31,6 +31,9 @@ public class MainMenu extends AnchorPane {
     /** {@link SubMenu} containing elements to represent the main layout of the main menu */
     private SubMenu subMenuMain;
 
+    /** {@link SubMenu} containing elements to represent the map selection layout of the main menu */
+    private SubMenu subMenuMapSelection;
+
     /** {@link SubMenu} containing elements to represent the scores layout of the main menu */
     private SubMenu subMenuScores;
 
@@ -46,6 +49,7 @@ public class MainMenu extends AnchorPane {
 
         initBgDim();
         createSubMenuMain();
+        createSubMenuMapSelection();
         createSubMenuScores();
         createSubMenuSettings();
 
@@ -67,20 +71,36 @@ public class MainMenu extends AnchorPane {
      * necessary buttons to control the GUI actions and create corresponding sub-menus.
      */
     private void createSubMenuMain() {
-        MenuButton btnStart = new MenuButton("START GAME");
+        MenuButton btnSelectMap = new MenuButton("PLAY");
         MenuButton btnScores = new MenuButton("HIGH-SCORES");
         MenuButton btnSettings = new MenuButton("SETTINGS");
         MenuButton btnQuit = new MenuButton("QUIT");
 
-        btnStart.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.MEDIUM); btnStart.fireEvent(NEW_GAME_EVENT); });
+        btnSelectMap.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuMapSelection.show(); });
         btnScores.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuScores.show(); });
         btnSettings.setOnMouseClicked(e -> { subMenuMain.hide(); subMenuSettings.show(); });
         btnQuit.setOnMouseClicked(e -> System.exit(0));
 
         subMenuMain = new SubMenu(this);
-        subMenuMain.getChildren().addAll(btnStart, btnScores, btnSettings, btnQuit);
+        subMenuMain.getChildren().addAll(btnSelectMap, btnScores, btnSettings, btnQuit);
     }
 
+    /**
+     * Creates a sub-menu to view map selection. This menu is observed whenever
+     * "PLAY" is clicked and shows available maps to select and play.
+     */
+    private void createSubMenuMapSelection() {
+        MenuButton btnMedium = new MenuButton("MEDIUM MAP");
+        MenuButton btnLarge = new MenuButton("LARGE MAP");
+        MenuButton btnBack = new MenuButton("BACK");
+
+        btnMedium.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.MEDIUM); btnMedium.fireEvent(NEW_GAME_EVENT); });
+        btnLarge.setOnMouseClicked(e -> { NEW_GAME_EVENT.setMapType(MapType.LARGE); btnLarge.fireEvent(NEW_GAME_EVENT); });
+        btnBack.setOnMouseClicked(e -> { subMenuMapSelection.hide(); subMenuMain.show(); });
+
+        subMenuMapSelection = new SubMenu(this);
+        subMenuMapSelection.getChildren().addAll(btnMedium, btnLarge, btnBack);
+    }
 
     /**
      * Creates a sub-menu to view high-scores. This menu is observed whenever
@@ -120,7 +140,6 @@ public class MainMenu extends AnchorPane {
                 tableView.setItems(recordsHandler.sortAndGetData());
             }
         });
-
 
         // Event handler to go back to the main menu
         subMenuScores.setOnMouseClicked(e -> { subMenuScores.hide(); subMenuMain.show(); });

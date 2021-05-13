@@ -157,7 +157,7 @@ public class Director {
             // Calculate change in enemy count
             int newEnemyCount = services.getCharacters(Side.ENEMY).size();
             int changeInEnemyCount = newEnemyCount - enemyCount;
-            System.out.println("change in enemy: " + changeInEnemyCount);
+            // System.out.println("change in enemy: " + changeInEnemyCount);
 
             // Calculate change in ally hp fraction
             double newAllyHpFraction = services.getCharacters(Side.ALLY).stream().map(c -> c.getHp() / c.getFullHp()).reduce(0.0, Double::sum) / services.getCharacters(Side.ALLY).size();
@@ -199,7 +199,7 @@ public class Director {
                 spawnRandomPowerups(1);
             }
         } else {
-            System.out.println("spawning else");
+            // System.out.println("spawning else");
             numOfEnemies2Spawn = Math.abs(changeInEnemy) + 2;
         }
         return numOfEnemies2Spawn;
@@ -210,7 +210,7 @@ public class Director {
      * @param numPowerupsToSpawn amount of powerups to be spawned
      */
     private void spawnRandomPowerups(int numPowerupsToSpawn) {
-        System.out.println("Spawning " + numPowerupsToSpawn + " Powerups");
+        // System.out.println("Spawning " + numPowerupsToSpawn + " Powerups");
 
         TriggerType[] powerupTypes = Arrays.stream(TriggerType.values()).filter(t -> t.GROUP == TriggerType.TriggerGroup.POWERUP).toArray(TriggerType[]::new);
         Player player = services.getPlayer();
@@ -227,7 +227,7 @@ public class Director {
      * @param numEnemiesToSpawn amount of enemies to be spawned
      */
     private void spawnRandomEnemies(int numEnemiesToSpawn) {
-        System.out.println("Spawning " + numEnemiesToSpawn + " Enemies");
+        // System.out.println("Spawning " + numEnemiesToSpawn + " Enemies");
         for(int i = 0; i < numEnemiesToSpawn; i++) {
             int randomI = new Random().nextInt(EnemyType.values().length);
             services.spawnEnemyRandomly(EnemyType.values()[randomI]);
@@ -235,20 +235,18 @@ public class Director {
     }
 
     /**
-     * Spawns a provided number of random allies defined in {@link Neuron}
+     * Spawns a provided number of random allies defined in {@link com.bham.bc.components.characters.agents.allies.Neuron}
      * If the number of allies is less than 2, then no allies will be spawned
      * @param numAlliesToSpawn amount of enemies to be spawned
      */
     private void spawnAllies(int numAlliesToSpawn) {
         if (services.getCharacters(Side.ALLY).size() < 3){ // Checks if the number of allies is less than 3, which includes 1 player, so ensures a max of 2 neurons to be alive at one time
-            System.out.println("Spawning " + numAlliesToSpawn + " Enemies");
+            // System.out.println("Spawning " + numAlliesToSpawn + " Enemies");
             for(int i = 0; i < numAlliesToSpawn; i++) {
                 services.spawnAlly();
             }
         }
-        else {
-            return; // Case where no allies are spawned because there are already enough
-        }
+        // return if no allies are spawned because there are already enough
     }
 
     /**
@@ -258,7 +256,7 @@ public class Director {
      */
     private void peak(){
         if (lastTick == -1 || (CLOCK.getCurrentTime() - lastTick) >= 10000) {
-            System.out.println("I am in the Peak state");
+            // System.out.println("I am in the Peak state");
             lastTick = CLOCK.getCurrentTime();
 
             // Calculate change in ally hp fraction
@@ -321,7 +319,7 @@ public class Director {
 
     /**
      * Checks if the time limit for a state has been reached
-     * @return
+     * @return {@code true} if time is up
      */
     private boolean checkTimeUp() {
         if (stateTime == -1) { // Case where the stateTime has not been set
@@ -343,7 +341,7 @@ public class Director {
     /**
      * Checks if the player has reached their stress limit
      * This calculated by calculating the damage taken by the player and home in the last 5 seconds
-     * @return
+     * @return {@code true} if limit is reached
      */
     private boolean checkPlayerStressLimit() {
 

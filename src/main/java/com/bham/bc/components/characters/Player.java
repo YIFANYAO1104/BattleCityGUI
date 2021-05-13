@@ -21,11 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 
-import java.util.EnumSet;
-import java.util.Date;
-import java.util.Optional;
-
-import java.util.List;
+import java.util.*;
 
 import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
@@ -67,28 +63,9 @@ public class Player extends GameCharacter {
 	public static long initialTime;
 	public static int stateTime;
 	public boolean laserFlag;
+
 	/**
-	 * Used For testing
-	 */
-	public void testDIRECTION_SET(){
-		this.DIRECTION_SET.add(Direction.L);
-	}
-	public void testDIRECTION_SET1(){
-		this.DIRECTION_SET.clear();
-	}
-	public Gun testGun(){
-		return this.GUN;
-	}
-	public void testFire() {
-		fire();
-	}
-	public boolean testBomb() {
-		boolean b = bomb;
-		bomb();
-		return b;
-	}
-	/**
-	 * Constructs a player instance with directionSet initialized to empty
+	 * Constructs a player instance with <i>DIRECTION_SET</i> initialized to empty
 	 *
 	 * @param x top left x coordinate of the player
 	 * @param y top left y coordinate of the player
@@ -97,7 +74,7 @@ public class Player extends GameCharacter {
 		super(x, y, SPEED, HP, Side.ALLY);
 
 		try{
-			entityImages = new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
+			entityImages = new Image[] { new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH)), SIZE, 0, true, false) };
 		} catch (IllegalArgumentException | NullPointerException e){
 			e.printStackTrace();
 		}
@@ -109,11 +86,6 @@ public class Player extends GameCharacter {
 		this.laserFlag=false;
 		navigationService = new PathPlanner(this, services.getGraph());
 		steering.setKeys(true);
-	}
-
-	@Override
-	public NavigationService getNavigationService() {
-		return this.navigationService;
 	}
 
 	/**
@@ -165,17 +137,20 @@ public class Player extends GameCharacter {
         if(isInverse!=0) --isInverse;
     }
 
+	public void defaultState(){
+		try{
+			this.entityImages =  new Image[] { new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH)), SIZE, 0, true, false) };
+			stateTime=0;
+			this.laserChange(LaserType.Default);
+		} catch (IllegalArgumentException | NullPointerException e){
+			e.printStackTrace();
+		}
+	}
+
     public void teleport(){
     	x = GameMap.getWidth()/2.0;
 		y = GameMap.getHeight()/2.0;
     }
-    
-	// TEMPORARY -------------------------------------------
-	// CAN ALSO BE TEMPORARY IF NOT DOCUMENTED
-	public void ring() {
-		Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
-		services.addTrigger(explosion);
-	}
 
 	public void bomb() {
 		if (!bomb) return;
@@ -187,20 +162,47 @@ public class Player extends GameCharacter {
 	
 	public void toState1(){
     	try{
-		this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH2), SIZE, 0, true, false) };
-		stateTime=1000;
-		}catch (IllegalArgumentException | NullPointerException e){
+			this.entityImages =  new Image[] { new Image(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH2)), SIZE, 0, true, false) };
+			stateTime=1000;
+		} catch (IllegalArgumentException | NullPointerException e){
 			e.printStackTrace();
 		}
 	}
-
-	private void testDijistra(){
-		navigationService.setExpandCondition(new ExpandPolicies.NoShoot());
-		System.out.println(navigationService.createRequest(new Point2D(850,758)));;
-		System.out.println(navigationService.peekRequestStatus());
-		navigationService.getPath();
+	private  void FireLaser(){
+		GUN.shootLaser();
 	}
-	// -----------------------------------------------------------
+	// TEST
+	public void gunChange(BulletType bullet){
+		this.GUN.setBulletType(bullet);
+	}
+	public void laserChange(LaserType laser){
+		this.GUN.setLaserType(laser);
+	}
+	public void testDIRECTION_SET(){
+		this.DIRECTION_SET.add(Direction.L);
+	}
+	public void testDIRECTION_SET1(){
+		this.DIRECTION_SET.clear();
+	}
+	public Gun testGun(){
+		return this.GUN;
+	}
+	public void testFire() {
+		fire();
+	}
+	public boolean testBomb() {
+		boolean b = bomb;
+		bomb();
+		return b;
+	}
+
+	/**
+	 * Causes an explosion effect - adds a ring explosion trigger to the game
+	 */
+	public void ring() {
+		Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
+		services.addTrigger(explosion);
+	}
 
 	/**
 	 * Updates angle at which the player is facing
@@ -217,13 +219,6 @@ public class Player extends GameCharacter {
 		});
 	}
 	
-	public void gunChange(BulletType bullet){
-		this.GUN.setBulletType(bullet);
-	}
-	public void laserChange(LaserType laser){
-		this.GUN.setLaserType(laser);
-	}
-	
 	/**
 	 * Shoots a default bullet (or multiple)
 	 *
@@ -233,9 +228,6 @@ public class Player extends GameCharacter {
 	private void fire() {
 		if(isTriple == 0) GUN.shoot();
 		else GUN.shoot(-45, 0, 45);
-	}
-	private  void FireLaser(){
-		GUN.shootLaser();
 	}
 
 	/**
@@ -257,7 +249,6 @@ public class Player extends GameCharacter {
 			case A: DIRECTION_SET.add(Direction.L); break;
 			case S: DIRECTION_SET.add(Direction.D); break;
 			case D: DIRECTION_SET.add(Direction.R); break;
-			case L: services.getMapDivision().cleanHB();break;
 		}
 	}
 
@@ -304,15 +295,7 @@ public class Player extends GameCharacter {
 	public Circle getHitBox() {
 		return new Circle(getCenterPosition().getX(), getCenterPosition().getY(), SIZE/2.0);
 	}
-	public void defaultState(){
-		try{
-			this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
-			stateTime=0;
-			this.laserChange(LaserType.Default);
-		} catch (IllegalArgumentException | NullPointerException e){
-			e.printStackTrace();
-		}
-	}
+
 	@Override
 	public void update() {
 		long currentTIme = System.currentTimeMillis();
@@ -342,12 +325,17 @@ public class Player extends GameCharacter {
 	}
 
 	@Override
+	public NavigationService getNavigationService() {
+		return this.navigationService;
+	}
+
+	@Override
 	public String toString() {
 		return "Player";
 	}
 
 	@Override
 	public double getMaxDamage() {
-		return 100;//Explosive Bullet
+		return 100;
 	}
 }
