@@ -115,7 +115,7 @@ public class CustomStage extends Stage{
         // set the original stage transparent
         stage.initStyle(StageStyle.TRANSPARENT);
         try {
-            stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/icon.png")));
+            stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("img/characters/GameLogo.png")));
         }catch (IllegalArgumentException | NullPointerException e){
             e.printStackTrace();
         }

@@ -200,7 +200,7 @@ public class Director {
             }
         } else {
             System.out.println("spawning else");
-            numOfEnemies2Spawn = Math.abs(changeInEnemy) + 1;
+            numOfEnemies2Spawn = Math.abs(changeInEnemy) + 2;
         }
         return numOfEnemies2Spawn;
     }
@@ -235,13 +235,19 @@ public class Director {
     }
 
     /**
-     * Spawns a provided number of random enemies defined in {@link Neuron}
+     * Spawns a provided number of random allies defined in {@link Neuron}
+     * If the number of allies is less than 2, then no allies will be spawned
      * @param numAlliesToSpawn amount of enemies to be spawned
      */
     private void spawnAllies(int numAlliesToSpawn) {
-        System.out.println("Spawning " + numAlliesToSpawn + " Enemies");
-        for(int i = 0; i < numAlliesToSpawn; i++) {
-            services.spawnAlly();
+        if (services.getCharacters(Side.ALLY).size() < 3){ // Checks if the number of allies is less than 3, which includes 1 player, so ensures a max of 2 neurons to be alive at one time
+            System.out.println("Spawning " + numAlliesToSpawn + " Enemies");
+            for(int i = 0; i < numAlliesToSpawn; i++) {
+                services.spawnAlly();
+            }
+        }
+        else {
+            return; // Case where no allies are spawned because there are already enough
         }
     }
 

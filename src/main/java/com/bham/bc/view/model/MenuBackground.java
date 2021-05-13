@@ -17,7 +17,7 @@ public class MenuBackground extends AnchorPane {
     /**
      * path of background
      */
-    private static final String BG_PATH = "img/menu/FB6.gif";
+    private static final String BG_PATH = "img/menu/background.gif";
 
     /**
      * Constructs a Stack Pane node with an animated background and particles and initialize.
