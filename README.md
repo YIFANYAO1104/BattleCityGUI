@@ -45,7 +45,7 @@
   <p align="center">
     Tank game Focusing on AI
     <br />
-    <a href="https://docs.google.com/document/d/1hKQJNrINaL2fYYRq00rvBt7h5N5OeDzkwaSR3GFw8tI/edit#heading=h.2btnxlo9rwxb"><strong>Explore the docs »</strong></a>
+    <a href="https://docs.google.com/document/d/1-Uzjw5uegHEzwO8r6kmETtCq_hkZ0DBOirYe6TWE4U0/edit?usp=sharing"><strong>Explore the docs »</strong></a>
     <br />
     <br />
 
