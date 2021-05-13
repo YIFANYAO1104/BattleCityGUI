@@ -138,7 +138,6 @@ To get a local copy up and running follow these simple steps.
   
     - [nova, player, shooter, splitter, tank, teaser, trapper](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
     - [state1.png](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package )
-    - []
   - Menu
     
     - FB6.gif (designed by Najd)
