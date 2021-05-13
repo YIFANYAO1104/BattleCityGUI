@@ -35,8 +35,8 @@
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/allies/Neuron.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/allies/Neuron.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/MapDivision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/MapDivision.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Nova.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Nova.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/effects/RingExplosion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/effects/RingExplosion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -106,19 +106,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="ArquillianTestNG" factoryName="" nameIsGenerated="true">
-      <option name="arquillianRunConfiguration">
-        <value>
-          <option name="containerStateName" value="" />
-        </value>
-      </option>
-      <option name="TEST_OBJECT" value="CLASS" />
-      <properties />
-      <listeners />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="MapDivisionTest.randomNodeTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="BluelandDefenders" />
       <extension name="coverage">
@@ -178,6 +165,7 @@
       <workItem from="1620581103694" duration="1740000" />
       <workItem from="1620586695977" duration="3251000" />
       <workItem from="1620819474693" duration="2736000" />
+      <workItem from="1620885883412" duration="2686000" />
     </task>
     <task id="LOCAL-00001" summary="fix problems">
       <created>1620244817871</created>
@@ -270,7 +258,21 @@
       <option name="project" value="LOCAL" />
       <updated>1620823550302</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="bug fix">
+      <created>1620828003150</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1620828003150</updated>
+    </task>
+    <task id="LOCAL-00015" summary="IDE does weird things to workspace">
+      <created>1620828062040</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1620828062040</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -312,7 +314,8 @@
     <MESSAGE value="workspace glitch" />
     <MESSAGE value="merge" />
     <MESSAGE value="bug fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="bug fix" />
+    <MESSAGE value="IDE does weird things to workspace" />
+    <option name="LAST_COMMIT_MESSAGE" value="IDE does weird things to workspace" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>

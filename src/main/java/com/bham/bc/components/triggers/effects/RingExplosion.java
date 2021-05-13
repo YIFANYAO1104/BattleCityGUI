@@ -8,6 +8,8 @@ import javafx.geometry.Point2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Shape;
 
 /**
  * Represents Kamikaze's explosion effect. This is created as a trigger because it affects player's HP
@@ -41,12 +43,12 @@ public class RingExplosion extends Trigger {
 
         for(int i = 1; i <= 19; i++) {
             String url = baseUrl + i + ".png";
-            try{
-            entityImages[i-1] = new Image(getClass().getClassLoader().getResourceAsStream(url), SIZE, SIZE, false, false);
-            }catch (IllegalArgumentException | NullPointerException e){
+            try {
+                entityImages[i-1] = new Image(getClass().getClassLoader().getResourceAsStream(url), SIZE, SIZE, false, false);
+            } catch (IllegalArgumentException | NullPointerException e){
                 e.printStackTrace();
             }
-            }
+        }
         return entityImages;
     }
 

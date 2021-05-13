@@ -109,7 +109,6 @@ public class GameSession {
         createKeyListeners();
 
         VBox titleAndRoot2=new VBox();
-        // customStage.setTitleAndRoote(titleAndRoot2);
         titleAndRoot2.getChildren().addAll(gpTitle, gamePane);
         gameScene.setRoot(titleAndRoot2);
     }
@@ -260,17 +259,13 @@ public class GameSession {
      * @param e <i>LEAVE_GAME_EVENT</i> which provides details about the name and the score to be saved in the leaderboard
      */
     private void leaveGame(GameFlowEvent e) {
-        //MenuSession.customStage.changeMainSkin.getSelectionModel().select(CustomStage.selected);
-
         mainStage.setScene(menuScene);
 
         VBox titleAndRoot3=new VBox();
         customStage.setTitleAndRoote(titleAndRoot3);
         menuScene.setRoot(titleAndRoot3);
 
-
         try {
-
             AnchorPane menuPane = (AnchorPane) titleAndRoot.getChildrenUnmodifiable().get(0);
 
             titleAndRoot3.getChildren().addAll(gpTitle, menuPane);

@@ -1,5 +1,6 @@
 package com.bham.bc.components.characters.agents.enemies;
 
+import com.bham.bc.audio.SoundEffect;
 import com.bham.bc.components.characters.Side;
 import com.bham.bc.components.characters.agents.Agent;
 import com.bham.bc.components.triggers.effects.Dissolve;
@@ -13,6 +14,7 @@ import javafx.scene.shape.Circle;
 
 import java.util.Arrays;
 
+import static com.bham.bc.audio.AudioManager.audioManager;
 import static com.bham.bc.components.Controller.services;
 import static com.bham.bc.entity.EntityManager.entityManager;
 
@@ -149,10 +151,12 @@ public class Nova extends Agent {
         exists = false;
         entityManager.removeEntity(this);
 
-        Trigger explosion = new RingExplosion(getCenterPosition(), 50, side);
+        Trigger explosion = new RingExplosion(getCenterPosition(), 20, side);
         Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
         services.addTrigger(dissolve);
         services.addTrigger(explosion);
+
+        audioManager.playEffect(SoundEffect.EXPLODE);
     }
 
     @Override
@@ -162,11 +166,11 @@ public class Nova extends Agent {
 
     @Override
     public String toString() {
-        return "Kamikaze";
+        return "Nova";
     }
 
     @Override
     public double getMaxDamage() {
-        return 50;//explosion
+        return 20;
     }
 }
