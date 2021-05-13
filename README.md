@@ -91,12 +91,12 @@
 
 ## About The Project
 
-[comment]: <> (- [![Product Name Screen Shot][product-screenshot]]&#40;src/main/resources/img/Menu.png&#41;)
+[comment]: <> (- [![Product Name Screen Shot][product-screenshot]]&#40;src/main/resources/img/menu.png&#41;)
 
-[comment]: <> (- [![Product Name Screen Shot][product-screenshot]]&#40;src/main/resources/img/Game.png&#41;)
+[comment]: <> (- [![Product Name Screen Shot][product-screenshot]]&#40;src/main/resources/img/game.png&#41;)
 
-  ![this is the pic](src/main/resources/img/Menu.png)
-  ![this is the pic](src/main/resources/img/Game.png)
+  ![menu](src/main/resources/img/menu.png)
+  ![this is the pic](src/main/resources/img/game.png)
 
 - A tank game built by java and focusing on Game AI component.
 - The idea about this game coms from three typical game "Battle City", Geometry Wars", Blox Head"
