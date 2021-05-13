@@ -61,7 +61,7 @@ public class MenuSession {
     private void initLayout() {
         mainPane = new AnchorPane();
         mainPane.addEventFilter(GameFlowEvent.START_GAME, this::createGameSession);
-        menuScene = new Scene(mainPane, WIDTH, HEIGHT);
+        menuScene = new Scene(mainPane, WIDTH, HEIGHT+34);
 
         try {
             menuScene.getStylesheets().add(getClass().getClassLoader().getResource("model/style.css").toExternalForm());

@@ -6,6 +6,7 @@ import com.bham.bc.components.shooting.BulletType;
 import com.bham.bc.components.shooting.ExplosiveBullet;
 import com.bham.bc.components.shooting.Gun;
 import com.bham.bc.components.triggers.Trigger;
+import com.bham.bc.components.triggers.effects.Dissolve;
 import com.bham.bc.components.triggers.effects.RingExplosion;
 import com.bham.bc.entity.ai.navigation.NavigationService;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import java.util.List;
 
 import static com.bham.bc.components.Controller.services;
+import static com.bham.bc.entity.EntityManager.entityManager;
 import static com.bham.bc.utils.GeometryEnhanced.isZero;
 
 /**
@@ -307,7 +309,7 @@ public class Player extends GameCharacter {
 			this.entityImages =  new Image[] { new Image(getClass().getClassLoader().getResourceAsStream(IMAGE_PATH), SIZE, 0, true, false) };
 			stateTime=0;
 			this.laserChange(LaserType.Default);
-		}catch (IllegalArgumentException | NullPointerException e){
+		} catch (IllegalArgumentException | NullPointerException e){
 			e.printStackTrace();
 		}
 	}
@@ -320,7 +322,6 @@ public class Player extends GameCharacter {
 		}
 		if(stateTime>0)stateTime--;
 		if (stateTime < 0) defaultState();
-		hp = getFullHp();
 
 		updateTriggers();
 		if (isFreeze == 0) {
@@ -333,11 +334,11 @@ public class Player extends GameCharacter {
 
 	@Override
 	protected void destroy() {
-//		entityManager.removeEntity(this);
-//		exists = false;
-//
-//		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
-//		services.addTrigger(dissolve);
+		entityManager.removeEntity(this);
+		exists = false;
+
+		Trigger dissolve = new Dissolve(getPosition(), entityImages[0], getAngle());
+		services.addTrigger(dissolve);
 	}
 
 	@Override

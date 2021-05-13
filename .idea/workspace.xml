@@ -35,9 +35,11 @@
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Nova.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Nova.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/effects/RingExplosion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/effects/RingExplosion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/model/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/model/style.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

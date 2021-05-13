@@ -57,7 +57,7 @@ public class MainMenu extends AnchorPane {
      */
     private void initBgDim() {
         Rectangle dim = new Rectangle(getMinWidth(), getMinHeight());
-        dim.setFill(Color.NAVY);
+        dim.setFill(Color.BLACK);
         dim.setOpacity(0.25);
         getChildren().add(dim);
     }
