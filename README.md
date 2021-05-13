@@ -155,7 +155,7 @@ To get a local copy up and running follow these simple steps.
   - Najd
   - Xiao Yan - xxy869@student.bham.ac.uk
   - Yifan Yao - yxy977@student.bham.ac.uk
-  - Zhicheng Zhou
+  - Zhicheng Zhou - zxz862@student.bham.ac.uk
 
 
 
