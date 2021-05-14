@@ -57,34 +57,66 @@ public class GraphEdge {
         behavior = normal;
     }
 
+    /**
+     * getter of start node
+     * @return the start node in an edge
+     */
     public int getFrom() {
         return from;
     }
 
-    public void setFrom(int NewIndex) {
-        from = NewIndex;
+    /**
+     * setter of start node
+     * @param newIndex the new node
+     */
+    public void setFrom(int newIndex) {
+        from = newIndex;
     }
 
+    /**
+     * getter of end node
+     * @return the end node in an edge
+     */
     public int getTo() {
         return to;
     }
 
-    public void setTo(int NewIndex) {
-        to = NewIndex;
+    /**
+     * setter of end node
+     * @param newIndex the new node
+     */
+    public void setTo(int newIndex) {
+        to = newIndex;
     }
 
+    /**
+     * getter of cost
+     * @return the cost in an edge
+     */
     public double getCost() {
         return cost;
     }
 
-    public void setCost(double NewCost) {
-        cost = NewCost;
+    /**
+     * setter of cost
+     * @param newCost the new cost
+     */
+    public void setCost(double newCost) {
+        cost = newCost;
     }
 
+    /**
+     * setter of behavior
+     * @param behavior the behavior to be set
+     */
     public void setBehavior(int behavior) {
         this.behavior = behavior;
     }
 
+    /**
+     * the getter of a behavior
+     * @return the behavior on the edge
+     */
     public int getBehavior() {
         return behavior;
     }
@@ -99,18 +131,5 @@ public class GraphEdge {
         return rhs.from == this.from
                 && rhs.to == this.to
                 && rhs.cost == this.cost;
-    }
-
-    //for reading and writing to streams.
-    public OutputStream print(OutputStream os) {
-        PrintStream ps = new PrintStream(os);
-        ps.print("m_iFrom: ");
-        ps.print(from);
-        ps.print(" m_iTo: ");
-        ps.print(to);
-        ps.print(" m_dCost: ");
-        ps.print(cost);
-        ps.println();
-        return os;
     }
 }

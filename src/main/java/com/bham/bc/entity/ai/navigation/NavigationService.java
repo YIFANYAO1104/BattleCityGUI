@@ -30,6 +30,11 @@ public interface NavigationService {
      */
     boolean createRequest(Point2D targetPos);
 
+    /**
+     * Create a path finding request and register it in the time slice service
+     * @param entity the character an agent wants to reach
+     * @return true if closest nodes exist around both bot and targetPosition, otherwise false
+     */
     boolean createRequest(GameCharacter entity);
 
     /**
@@ -37,10 +42,6 @@ public interface NavigationService {
      * @return {@link SearchStatus} to indicate searching process
      */
     SearchStatus peekRequestStatus();
-
-    boolean isComplete();
-
-    void resetTaskStatus();
 
     /**
      * Resets the search status to <i>no_task</i>. This is useful to not repeat the searches after target was found
@@ -61,6 +62,10 @@ public interface NavigationService {
      */
     void setExpandCondition(ExpandPolicies.ExpandCondition expandCondition);
 
+    /**
+     * check if the item is active or not
+     * @return true if the item is active
+     */
     boolean isTriggerActive();
 
 
@@ -71,26 +76,4 @@ public interface NavigationService {
      * @param gc
      */
     void render(GraphicsContext gc);
-
-    /**
-     * For debug
-     * @return a list of hitboxes used during path smoothing
-     */
-//    List<Shape> getSmoothingBoxes();
-
-    //under construction--------------------------------------------
-    //utility based AI----------------------------------------------
-
-    /**
-     * This method makes use of the pre-calculated lookup table
-     * @param NodeIdx
-     * @return the cost to travel from the bot's current position to a specific graph node.
-     */
-    double getCostToNode(int NodeIdx);
-
-    /**
-     * This method makes use of the pre-calculated lookup table.
-     * @return -1 if no active trigger found, otherwise the cost to the closest instance of the giver type
-     */
-    double getCostToClosestItem(int GiverType);
 }

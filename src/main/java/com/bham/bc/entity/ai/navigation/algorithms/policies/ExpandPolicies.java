@@ -27,7 +27,7 @@ public class ExpandPolicies {
     public static class NoInvalid implements ExpandCondition {
         @Override
         public boolean isSatisfied(final SparseGraph G, GraphEdge target) {
-            return G.getNode(target.getTo()).Index()!=-1;
+            return G.getNode(target.getTo()).getIndex()!=-1;
         }
     }
 
@@ -38,7 +38,7 @@ public class ExpandPolicies {
     public static class NoShoot implements ExpandCondition {
         @Override
         public boolean isSatisfied(final SparseGraph G, GraphEdge target) {
-            return (G.getNode(target.getTo()).Index()!=-1) &&
+            return (G.getNode(target.getTo()).getIndex()!=-1) &&
                     target.getBehavior()!=GraphEdge.shoot;
         }
     }

@@ -149,7 +149,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 renderNode(gc,Color.BLACK,n1,1);
                 for(GraphNode nn1: getAroundNodes(n1)){
 //                    if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).Cost() >= Constants.GRAPH_GRAPH_OBSTACLE_EDGE_COST){
-                    if(nn1.isValid()&& getEdge(n1.Index(),nn1.Index()).getBehavior() == GraphEdge.shoot){
+                    if(nn1.isValid()&& getEdge(n1.getIndex(),nn1.getIndex()).getBehavior() == GraphEdge.shoot){
                         renderNode(gc,Color.BLUE,(NavNode) nn1,2);
                         renderline(gc,Color.BLUE,n1,(NavNode) nn1);
                     }
@@ -297,12 +297,12 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     public edge_type getEdge(int from, int to) {
         assert (from < nodeVector.size())
                 && (from >= 0)
-                && nodeVector.get(from).Index() != invalid_node_index :
+                && nodeVector.get(from).getIndex() != invalid_node_index :
                 "<SparseGraph::GetEdge>: invalid 'from' index";
 
         assert (to < nodeVector.size())
                 && (to >= 0)
-                && nodeVector.get(to).Index() != invalid_node_index :
+                && nodeVector.get(to).getIndex() != invalid_node_index :
                 "<SparseGraph::GetEdge>: invalid 'to' index";
 
         ListIterator<edge_type> it = edgeListVector.get(from).listIterator();
@@ -329,18 +329,18 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      * index matches the next node index before being added to the graph
      */
     public int addNode(node_type node) {
-        if (node.Index() < (int) nodeVector.size()) {
+        if (node.getIndex() < (int) nodeVector.size()) {
             //make sure the client is not trying to add a node with the same ID as
             //a currently active node
-            assert nodeVector.get(node.Index()).Index() == invalid_node_index :
+            assert nodeVector.get(node.getIndex()).getIndex() == invalid_node_index :
                     "<SparseGraph::AddNode>: Attempting to add a node with a duplicate ID";
 
-            nodeVector.set(node.Index(), node);
+            nodeVector.set(node.getIndex(), node);
 
             return nextNodeIndex;
         } else {
             //make sure the new node has been indexed correctly
-            assert node.Index() == nextNodeIndex : "<SparseGraph::AddNode>:invalid index";
+            assert node.getIndex() == nextNodeIndex : "<SparseGraph::AddNode>:invalid index";
 
             nodeVector.add(node);
             edgeListVector.add(new EdgeList());
@@ -367,8 +367,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
                 "<SparseGraph::AddEdge>: invalid node index";
 
         //make sure both nodes are active before adding the edge
-        if ((nodeVector.get(edge.getTo()).Index() != invalid_node_index)
-                && (nodeVector.get(edge.getFrom()).Index() != invalid_node_index)) {
+        if ((nodeVector.get(edge.getTo()).getIndex() != invalid_node_index)
+                && (nodeVector.get(edge.getFrom()).getIndex() != invalid_node_index)) {
             //add the edge, first making sure it is unique
             if (isEdgeNew(edge.getFrom(), edge.getTo())) {
                 edgeListVector.get(edge.getFrom()).add(edge);
@@ -420,8 +420,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
     public void setNodeALlEdagesNormal(int from) {
         for (NavNode n1 : getNodeList(from)) {
             double dis = n1.getPosition().distance(getNode(from).getPosition());
-            setEdgeCost(from, n1.Index(), dis);
-            setEdgeCost(n1.Index(), from, dis);
+            setEdgeCost(from, n1.getIndex(), dis);
+            setEdgeCost(n1.getIndex(), from, dis);
         }
     }
 
@@ -440,7 +440,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         int count = 0;
 
         for (int n = 0; n < nodeVector.size(); ++n) {
-            if (nodeVector.get(n).Index() != invalid_node_index) {
+            if (nodeVector.get(n).getIndex() != invalid_node_index) {
                 ++count;
             }
         }
@@ -480,7 +480,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      * returns true if a node with the given index is present in the graph
      */
     public boolean isNodePresent(int nd) {
-        if ((nd >= (int) nodeVector.size() || (nodeVector.get(nd).Index() == invalid_node_index))) {
+        if ((nd >= (int) nodeVector.size() || (nodeVector.get(nd).getIndex() == invalid_node_index))) {
             return false;
         } else {
             return true;
@@ -517,7 +517,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         ArrayList<GraphNode> temp1 = new ArrayList<GraphNode>();
         if(!n1.isValid())
             return temp1;
-        EdgeList<GraphEdge> m1 = edgeListVector.get(n1.Index());
+        EdgeList<GraphEdge> m1 = edgeListVector.get(n1.getIndex());
 
 
         for(GraphEdge e1:m1){
@@ -665,8 +665,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
      */
     public void setNodeALLEdages(int from, double newCost){
         for(NavNode n1 :getNodeList(from)){
-            setEdgeCost(from,n1.Index(),newCost);
-            setEdgeCost(n1.Index(),from,newCost);
+            setEdgeCost(from,n1.getIndex(),newCost);
+            setEdgeCost(n1.getIndex(),from,newCost);
         }
     }
 
@@ -683,8 +683,8 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
             for(NavNode node: obstacleId.get(id)){
                 node.minesNum();
                 if(node.isValid() && (!node.isHit()) ){
-                    setNodeALlEdagesNormal(node.Index());
-                    setEdgesBehavior(node.Index(), GraphEdge.normal);
+                    setNodeALlEdagesNormal(node.getIndex());
+                    setEdgesBehavior(node.getIndex(), GraphEdge.normal);
                 }
             }
             obstacleId.remove(id);
@@ -693,7 +693,7 @@ public class SparseGraph<node_type extends NavNode, edge_type extends GraphEdge>
         }
     }
 
-    public int ALlNodesNum(){
+    public int getALlNodesNum(){
         return nodeVector.size();
     }
 

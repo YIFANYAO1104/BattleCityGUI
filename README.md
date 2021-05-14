@@ -191,3 +191,13 @@ Distributed under the Apache License. See <a href="https://git-teaching.cs.bham.
 [license-url]: https://git-teaching.cs.bham.ac.uk/mod-team-project-2020/fear/-/blob/master/LICENSE
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://linkedin.com/in/github_username
+
+<!-- REFERENCE -->
+
+## Reference
+In order to make the project more well-designed, we had referenced several books and codes. They are:
+* AI for Games - Ian Millington
+* Game AI Pro - Steve Rabin
+* Programming Game AI by Example - Mat Buckland
+* https://github.com/cl7/BattleCity.git
+* https://www.sallyx.org/sally/en/game-ai/

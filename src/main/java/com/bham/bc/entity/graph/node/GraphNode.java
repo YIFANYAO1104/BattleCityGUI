@@ -5,43 +5,57 @@ import java.io.PrintStream;
 
 import static com.bham.bc.entity.graph.NodeTypeEnum.invalid_node_index;
 
+/**
+ * The base class of graph node
+ */
 public class GraphNode {
 
     /**
      * every node has an index{@link Integer}. a Valid index >= 0
      */
-    protected  int m_index;
+    protected int index;
 
-    public GraphNode(){m_index = invalid_node_index;} // invalid index <0
+    /**
+     * constructor
+     * set index as invalid_node_index by default
+     */
+    public GraphNode(){
+        index = invalid_node_index;
+    } // invalid index <0
 
-    public GraphNode(int ind){m_index = ind;}
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
+    /**
+     * constructor
+     */
+    public GraphNode(int index){
+        this.index = index;
     }
 
-    public int Index() {
-        return m_index;
+    /**
+     * getter of index
+     * @return the index number
+     */
+    public int getIndex() {
+        return index;
     }
 
+    /**
+     * setter of index
+     */
     public void setIndex(int NewIndex) {
-        m_index = NewIndex;
+        index = NewIndex;
     }
 
+    /**
+     * check whether the index is a valid index
+     */
     public boolean isValid(){
-        return m_index>0;
-    }
-    public void setInvalid(){
-        this.m_index = -1;
+        return index >0;
     }
 
-    //for reading and writing to streams.
-    public OutputStream print(OutputStream os) {
-        PrintStream ps = new PrintStream(os);
-        ps.print("Index: ");
-        ps.print(m_index);
-        ps.println();
-        return os;
+    /**
+     * set a node to invalid node
+     */
+    public void setInvalid(){
+        this.index = -1;
     }
 }

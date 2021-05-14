@@ -1,6 +1,6 @@
 package com.bham.bc.entity.graph;
 
-import com.bham.bc.entity.graph.algrithem.Floodfill;
+import com.bham.bc.entity.graph.algorithm.Floodfill;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.GraphNode;
 import com.bham.bc.entity.graph.node.NavNode;
@@ -126,7 +126,7 @@ public class HandyGraphFunctions {
      * @param gn the node which tricking the player
      * @return Sparse graph by using SparseGraph
      */
-    public SparseGraph FLoodFill(SparseGraph sg, GraphNode gn){
+    public SparseGraph floodFill(SparseGraph sg, GraphNode gn){
         Floodfill fl = new Floodfill(gn);
 
         return fl.stratFLood(sg);

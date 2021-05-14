@@ -166,7 +166,7 @@ public class GameMap {
         HandyGraphFunctions.GraphHelper_CreateGrid(graphSystem, getWidth(), getHeight(), getHeight() / (GameCharacter.MAX_SIZE/2), getWidth() / (GameCharacter.MAX_SIZE/2));
 
         for (Trigger trigger : mapLoader.getTriggers()) {
-            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).Index());
+            NavNode node = graphSystem.getNode(graphSystem.getClosestNodeForEntity(trigger).getIndex());
             node.setExtraInfo(trigger);
         }
 

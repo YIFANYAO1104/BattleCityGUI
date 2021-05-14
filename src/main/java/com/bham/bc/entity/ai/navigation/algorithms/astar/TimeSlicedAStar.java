@@ -1,7 +1,6 @@
 package com.bham.bc.entity.ai.navigation.algorithms.astar;
 
 
-import com.bham.bc.components.triggers.Trigger;
 import com.bham.bc.entity.ai.navigation.SearchStatus;
 import com.bham.bc.entity.ai.navigation.algorithms.TimeSlicedAlgorithm;
 import com.bham.bc.entity.ai.navigation.algorithms.policies.ExpandPolicies;
@@ -68,7 +67,7 @@ public class TimeSlicedAStar
     private void expandNode(Node n1){
         SparseGraph.EdgeIterator ConstEdgeItr = new SparseGraph.EdgeIterator(
                 this.sg,
-                n1.getNode().Index(),
+                n1.getNode().getIndex(),
                 expandCondition);
         while (ConstEdgeItr.hasNext()) {
             GraphEdge gn1 = ConstEdgeItr.next();
@@ -112,7 +111,7 @@ public class TimeSlicedAStar
         for(int i = routine.size()-1;i>0;i--){
             NavNode n1 = routine.get(i);
             NavNode n2 = routine.get(i-1);
-            path.add(new PathEdge(n1.getPosition(),n2.getPosition(),sg.getEdge(n1.Index(),n2.Index()).getBehavior()));
+            path.add(new PathEdge(n1.getPosition(),n2.getPosition(),sg.getEdge(n1.getIndex(),n2.getIndex()).getBehavior()));
         }
 
         return path;
@@ -173,7 +172,7 @@ public class TimeSlicedAStar
     }
 
     private double getCost(Node n1 , Node n2){
-        GraphEdge e1 = sg.getEdge(n1.getNode().Index(), n2.getNode().Index());
+        GraphEdge e1 = sg.getEdge(n1.getNode().getIndex(), n2.getNode().getIndex());
         return e1.getCost();
     }
 
@@ -236,7 +235,7 @@ public class TimeSlicedAStar
         @Override
         public String toString() {
             return "Node{" +
-                    "node=" + node.Index() +
+                    "node=" + node.getIndex() +
                     ", parentNode=" + parentNode +
                     ", cost=" + cost +
                     ", diagonalDis=" + diagonalDis +

@@ -18,7 +18,7 @@ public class Brain extends CompositeGoal {
     /**
      * the util class for calculating utility
      */
-    UtilityCalculator uc;
+    private UtilityCalculator uc;
 
     /**
      * Constructs the Goal_Think Object and initialize it

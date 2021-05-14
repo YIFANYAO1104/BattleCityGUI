@@ -1,4 +1,4 @@
-package com.bham.bc.entity.graph.algrithem;
+package com.bham.bc.entity.graph.algorithm;
 
 import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.node.GraphNode;

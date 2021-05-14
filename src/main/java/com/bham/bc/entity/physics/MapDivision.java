@@ -1,8 +1,6 @@
 package com.bham.bc.entity.physics;
 
 
-import com.bham.bc.components.characters.Player;
-import com.bham.bc.components.environment.Obstacle;
 import com.bham.bc.entity.BaseGameEntity;
 import com.bham.bc.entity.MovingEntity;
 import com.bham.bc.utils.GeometryEnhanced;
@@ -23,47 +21,87 @@ import java.util.*;
  */
 
 class Cell <entity extends Object>{
-
-
-
+    /**
+     * list of entities in a cell
+     */
     public List<entity> Unites = new LinkedList<>();        // Store all game entites.
 
+    /**
+     * records the width and height and position of a cell
+     */
     public Rectangle cBox;
 
+    /**
+     * constructor
+     * @param topleft
+     * @param bottomright
+     */
     public Cell(Point2D topleft, Point2D bottomright){
         Point2D size = bottomright.subtract(topleft);
         cBox = new Rectangle(topleft.getX(),topleft.getY(), size.getY(),size.getY());
     }
 
-    public void render(GraphicsContext gc, double cellWidth, double cellHeight,int NumCellsX){
+    /**
+     * for debug, render
+     * @param gc the context to draw on
+     * @param cellWidth the width of a cell
+     * @param cellHeight the height of a cell
+     * @param numCellsX the number of cells on the row
+     */
+    public void render(GraphicsContext gc, double cellWidth, double cellHeight,int numCellsX){
         Point2D p = new Point2D(cBox.getX(),cBox.getY());
         int idx = (int) (p.getX() / cellWidth)
-                + ((int) (p.getY() / cellHeight) * NumCellsX);
+                + ((int) (p.getY() / cellHeight) * numCellsX);
         gc.setFill(Color.GOLD);
         gc.fillText(String.valueOf(idx),p.getX(),p.getY()+15);
     }
 
 }
 
+/**
+ * the class for dividing the map
+ * @param <entity> should extend BaseGameEntity
+ */
 public class MapDivision<entity extends BaseGameEntity>{
-    private List<Cell<entity>> cellList = new ArrayList<>();             // List of all cell on map
-
-    List<Shape> hb = new LinkedList<>();
-    private double mapWidth;                                             //Map width
-    private double mapHeight;                                            //Map Height
-    private int horizontalCellNum;                                            //The number of Cells on the row
-    private int verticalCellNum;                                            //The number of Cells on the column
-    private double cellWidth, cellHeight;                               //The fundamental cell width and height. It depands the m_NumCellsX, m_NumCellsY
-
-    // record the moving entities old index of Cell
+    /**
+     * List of all cell on map
+     */
+    private List<Cell<entity>> cellList = new ArrayList<>();
+    /**
+     * the width of the map
+     */
+    private double mapWidth;
+    /**
+     * the height of the map
+     */
+    private double mapHeight;
+    /**
+     * The number of Cells on the row
+     */
+    private int horizontalCellNum;
+    /**
+     * The number of Cells on the column
+     */
+    private int verticalCellNum;
+    /**
+     * The fundamental cell width and height. It depands the m_NumCellsX, m_NumCellsY
+     */
+    private double cellWidth, cellHeight;
+    /**
+     * record the moving entities old index of Cell
+     */
     private HashMap<MovingEntity,Integer> register = new HashMap<>();
-
+    /**
+     * for debug, render all the hit boxes for collision test
+     */
+    private List<Shape> hb = new LinkedList<>();
 
     /**
-     * Given a Potin2d representing a position within the map, this
+     * Given a Potin2D representing a position within the map, this
      * method calculates an index into its appropriate cell
+     * @param pos position you want to convert to an index
      */
-    private int PositionToIndex(Point2D pos) {
+    private int positionToIndex(Point2D pos) {
 
         int idx = (int) (pos.getX() / cellWidth)
                 + ((int) (pos.getY() / cellHeight) * horizontalCellNum);
@@ -152,7 +190,7 @@ public class MapDivision<entity extends BaseGameEntity>{
     public void addEntity(entity ent){
         assert (ent != null);
 
-        int idx = PositionToIndex(ent.getPosition());
+        int idx = positionToIndex(ent.getPosition());
 
         cellList.get(idx).Unites.add(ent);
         if(ent instanceof MovingEntity){
@@ -181,8 +219,12 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
-    public void updateMovingEntities(List<entity> n1){
-        n1.forEach(this::updateMovingEntityZone);
+    /**
+     * update a list of moving entities on the map
+     * @param entityList the entity list
+     */
+    public void updateMovingEntities(List<entity> entityList){
+        entityList.forEach(this::updateMovingEntityZone);
     }
 
     /**
@@ -197,7 +239,7 @@ public class MapDivision<entity extends BaseGameEntity>{
             return;
         }
         int oldIdx = register.get(ent);
-        int newIdx = PositionToIndex(ent.getPosition());
+        int newIdx = positionToIndex(ent.getPosition());
 
         //----------------------------remove-------if it is not exist----------------
 //        if(!((MovingEntity) ent).exists()){
@@ -262,6 +304,11 @@ public class MapDivision<entity extends BaseGameEntity>{
         return new ArrayList<entity>(surr);
     }
 
+    /**
+     * Get the List of the Entity that should be consider if interacting with target the location.
+     * @param hitbox a rectangle region
+     * @return a list of intersected entities
+     */
     public List<entity> getIntersectedEntities(Rectangle hitbox){
         Set<entity> surr = new HashSet<>();
 
@@ -282,6 +329,7 @@ public class MapDivision<entity extends BaseGameEntity>{
      * Get the List of the Entity that should be consider if interacting with target the location.
      * @param centerPos Point2D the location should be check collision
      * @param radius is the raidus of Hitbox
+     * @return a list of intersected entities
      */
     public List<entity> getIntersectedEntities(Point2D centerPos, double radius){
         Set<entity> surr = new HashSet<>();
@@ -317,6 +365,10 @@ public class MapDivision<entity extends BaseGameEntity>{
         }
     }
 
+    /**
+     * for debug, render all the regions in the division
+     * @param gc the context to be draw on
+     */
     public void render(GraphicsContext gc){
 
         for (Shape shape : hb) {
@@ -341,12 +393,26 @@ public class MapDivision<entity extends BaseGameEntity>{
 
     }
 
+    /**
+     * render a node
+     * @param gc the context to be draw on
+     * @param color the color
+     * @param n1 the position
+     * @param level the radius
+     */
     private void renderNode(GraphicsContext gc,Color color, Point2D n1, int level){
         gc.setFill(color);
         gc.fillRoundRect(
                 n1.getX(),n1.getY(),2*level,2*level,1*level,1*level);
     }
 
+    /**
+     * render a line
+     * @param gc the context to be draw on
+     * @param color the color
+     * @param n1 the position
+     * @param n2 the position
+     */
     private void renderline(GraphicsContext gc, Color color, Point2D n1, Point2D n2){
         gc.setStroke(color);
         gc.setLineWidth(1.5);
@@ -354,14 +420,25 @@ public class MapDivision<entity extends BaseGameEntity>{
                 n1.getX(), n1.getY(), n2.getX(), n2.getY());
     }
 
+    /**
+     * calculates the number of cells in the map dvision
+     * @return the number of cells
+     */
     public int sizeOfCells(){
         return cellList.size();
     }
 
+    /**
+     * getter of cellWidth
+     * @return the width of a cell
+     */
     public double getCellWidth(){
         return cellWidth;
     }
 
+    /**
+     * for debug, clean all the hitbox
+     */
     public void cleanHB(){
         hb.clear();
     }

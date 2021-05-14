@@ -1,13 +1,9 @@
 package com.bham.bc.entity.graph;
 
 
-import com.bham.bc.components.Controller;
-import com.bham.bc.components.environment.MapType;
-import com.bham.bc.entity.graph.SparseGraph;
 import com.bham.bc.entity.graph.edge.GraphEdge;
 import com.bham.bc.entity.graph.node.NavNode;
 
-import javafx.embed.swing.JFXPanel;
 import javafx.geometry.Point2D;
 import junitparams.JUnitParamsRunner;
 import junitparams.Parameters;
@@ -62,9 +58,9 @@ public class GraphTest {
         SparseGraph graph = new SparseGraph<NavNode, GraphEdge>(false);
         addNodes(graph,input);
 
-        System.out.println(graph.ALlNodesNum());
+        System.out.println(graph.getALlNodesNum());
         addEdges(graph,input);
-        System.out.println(graph.ALlNodesNum());
+        System.out.println(graph.getALlNodesNum());
 //        TimeSlicedDijkstras tsdj = new TimeSlicedDijkstras(graph, source, target);
 //        tsdj.cycleOnce();
 //

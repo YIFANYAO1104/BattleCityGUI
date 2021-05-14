@@ -16,7 +16,6 @@ import javafx.geometry.Point2D;
 import com.bham.bc.components.characters.GameCharacter;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -76,7 +75,7 @@ public class PathPlanner implements NavigationService {
             return no_closest_node_found;
         }
         if(n1.isValid()){
-            return n1.Index();
+            return n1.getIndex();
         }
         return no_closest_node_found;
     }
@@ -84,7 +83,7 @@ public class PathPlanner implements NavigationService {
     private int getClosestNode(Point2D location){
         NavNode n1 = navGraph.getClosestNodeByCenterPosition(location);
         if(n1.isValid()){
-            return n1.Index();
+            return n1.getIndex();
         }
         return no_closest_node_found;
     }
@@ -153,6 +152,11 @@ public class PathPlanner implements NavigationService {
         return true;
     }
 
+    /**
+     * Create a path finding request and register it in the time slice service
+     * @param gc the character an agent wants to reach
+     * @return true if closest nodes exist around both bot and targetPosition, otherwise false
+     */
     public boolean createRequest(GameCharacter gc) {
         //unregister current search
         clear();
@@ -180,11 +184,6 @@ public class PathPlanner implements NavigationService {
     @Override
     public SearchStatus peekRequestStatus() {
         return taskStatus;
-    }
-
-    @Override
-    public boolean isComplete(){
-        return (taskStatus == SearchStatus.target_found) || (taskStatus == SearchStatus.target_not_found);
     }
 
     private Point2D getCenter(Point2D topLeft, Point2D radius){
@@ -315,13 +314,6 @@ public class PathPlanner implements NavigationService {
             taskStatus = curSearchTask.cycleOnce();
         }
         return taskStatus;
-    }
-
-    @Override
-    public void resetTaskStatus() {
-        if(taskStatus != SearchStatus.search_incomplete) {
-            clear();
-        }
     }
 
     @Override
