@@ -242,7 +242,7 @@ public class MapLoader {
         for(int i = 0; i < triggerArray.length(); i++) {
             JSONObject trigger = triggerArray.getJSONObject(i);
             String className = TRIGGER_CLASSES.get(trigger.getInt("gid"));
-            Class<?> cls = Class.forName("com.bham.bc.components.triggers." + packageName + "." + className);
+            Class<?> cls = Class.forName("com.bham.bd.components.triggers." + packageName + "." + className);
             Constructor<?> constructor = cls.getConstructors()[0];
 
             ArrayList<Object> params = new ArrayList<>();
