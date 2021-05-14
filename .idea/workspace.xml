@@ -34,23 +34,157 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="66bb8ab0-00bc-432e-95ca-623f35eed529" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/environment/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/environment/GameMap.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/Brain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/Brain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/NavigationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/NavigationService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/astar/TimeSlicedAStar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/astar/TimeSlicedAStar.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/policies/ExpandPolicies.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/policies/ExpandPolicies.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/HandyGraphFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/HandyGraphFunctions.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/SparseGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/SparseGraph.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/algrithem/Floodfill.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/algorithm/Floodfill.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/edge/GraphEdge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/edge/GraphEdge.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/node/GraphNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/node/GraphNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/node/NavNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/node/NavNode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/Hitbox.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/MapDivision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/MapDivision.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/graph/GraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/graph/GraphTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/application/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/application/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/application/QuickLaunch.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/audio/AudioAnalyser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/audio/AudioAnalyser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/audio/AudioManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/audio/AudioManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/audio/AudioPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/audio/AudioPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/audio/ParallelAudioPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/audio/ParallelAudioPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/audio/SequentialAudioPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/audio/SequentialAudioPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/audio/SoundEffect.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/audio/SoundEffect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/audio/SoundTrack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/audio/SoundTrack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/Controller.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/Services.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/Services.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/SurvivalController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/SurvivalController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Direction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/Direction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/GameCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/GameCharacter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/Player.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/Side.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/Side.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/Agent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/Agent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/allies/Neuron.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/allies/Neuron.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/EnemyType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/enemies/EnemyType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Nova.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/enemies/Nova.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Shooter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/enemies/Shooter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Splitter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/enemies/Splitter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Tank.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/enemies/Tank.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Teaser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/enemies/Teaser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/characters/agents/enemies/Trapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/characters/agents/enemies/Trapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/environment/Attribute.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/environment/Attribute.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/environment/GameMap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/environment/GameMap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/environment/MapLoader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/environment/MapLoader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/environment/MapType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/environment/MapType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/environment/Obstacle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/environment/Obstacle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/environment/Tileset.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/environment/Tileset.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Bullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/Bullet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/BulletType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/BulletType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/DefaultBullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/DefaultBullet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/ExplosiveBullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/ExplosiveBullet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/Gun.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/Gun.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/IceBullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/IceBullet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/LaserGun.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/LaserGun.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/LaserType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/LaserType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/shooting/ThunderLaser.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/shooting/ThunderLaser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/RespawnTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/RespawnTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/Trigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/Trigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/TriggerType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/TriggerType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/effects/Dissolve.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/effects/Dissolve.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/effects/HitMarker.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/effects/HitMarker.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/effects/RingExplosion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/effects/RingExplosion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/ArmorTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/powerups/ArmorTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/BombTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/powerups/BombTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/HealthGiver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/powerups/HealthGiver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/Immune.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/powerups/Immune.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/SpeedTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/powerups/SpeedTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/StateTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/powerups/StateTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/TeleportTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/powerups/TeleportTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/powerups/TripleBullet.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/powerups/TripleBullet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/traps/Freeze.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/traps/Freeze.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/traps/InverseTrap.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/traps/InverseTrap.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/components/triggers/traps/LandmineTrigger.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/components/triggers/traps/LandmineTrigger.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/BaseGameEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/BaseGameEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/EntityManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/EntityManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/MovingEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/MovingEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/TargetingPolices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/TargetingPolices.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/TargetingSystem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/TargetingSystem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/Action.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/Action.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/AndCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/AndCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/BooleanCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/BooleanCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/Condition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/Condition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/FreePathCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/FreePathCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/IntCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/IntCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/NotCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/NotCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/OrCondition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/OrCondition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/State.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/State.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/StateMachine.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/StateMachine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/behavior/Transition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/behavior/Transition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/director/Director.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/director/Director.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/Brain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/Brain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/GoalTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/GoalTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/UtilityCalculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/UtilityCalculator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/FollowEdge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/atomic/FollowEdge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/Goal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/atomic/Goal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/SeekToPosition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/atomic/SeekToPosition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/atomic/WaitForPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/atomic/WaitForPath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/CompositeGoal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/composite/CompositeGoal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/big/AttackClosestTarget.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/composite/big/AttackClosestTarget.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/big/Explore.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/composite/big/Explore.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/big/GetHealth.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/composite/big/GetHealth.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/helper/FollowPath.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/composite/helper/FollowPath.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/goals/composite/helper/NavigateToCharacter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/goals/composite/helper/NavigateToCharacter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/AlgorithmDriver.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/AlgorithmDriver.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/ItemType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/ItemType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/NavigationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/NavigationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/PathEdge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/PathEdge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/SearchStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/SearchStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/TimeSlicedAlgorithm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/algorithms/TimeSlicedAlgorithm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/TimeSlicedDijkstras.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/algorithms/TimeSlicedDijkstras.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/astar/TimeSlicedAStar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/algorithms/astar/TimeSlicedAStar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/policies/ExpandPolicies.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/algorithms/policies/ExpandPolicies.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/algorithms/policies/TerminationPolices.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/algorithms/policies/TerminationPolices.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/ai/navigation/impl/PathPlanner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/ai/navigation/impl/PathPlanner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/ExtraInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/graph/ExtraInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/HandyGraphFunctions.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/graph/HandyGraphFunctions.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/NodeTypeEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/graph/NodeTypeEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/SparseGraph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/graph/SparseGraph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/algorithm/Floodfill.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/graph/algorithm/Floodfill.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/edge/GraphEdge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/graph/edge/GraphEdge.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/node/GraphNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/graph/node/GraphNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/graph/node/NavNode.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/graph/node/NavNode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/CollisionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/physics/CollisionHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/MapDivision.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/physics/MapDivision.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/entity/physics/Steering.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/entity/physics/Steering.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/GeometryEnhanced.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/utils/GeometryEnhanced.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/RandomEnhanced.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/utils/RandomEnhanced.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/Regulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/utils/Regulator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/Timer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/utils/Timer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/messaging/MessageDispatcher.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/utils/messaging/MessageDispatcher.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/messaging/MessageTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/utils/messaging/MessageTypes.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/utils/messaging/Telegram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/utils/messaging/Telegram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/GameSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/GameSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/MenuSession.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/MenuSession.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/EndMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/menu/EndMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/MainMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/menu/MainMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/menu/PauseMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/menu/PauseMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/CustomStage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/model/CustomStage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/MenuBackground.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/model/MenuBackground.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/MenuButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/model/MenuButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/MenuSlider.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/model/MenuSlider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/model/SubMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/model/SubMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/tools/Camera.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/tools/Camera.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/tools/GameFlowEvent.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/tools/GameFlowEvent.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/bham/bc/view/tools/RecordsHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/bham/bd/view/tools/RecordsHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/application/TestApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/application/TestApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/audio/AudioAutomatedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/audio/AudioAutomatedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/audio/AudioSemiAutomatedTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/audio/AudioSemiAutomatedTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/characters/GameCharacterTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/components/characters/GameCharacterTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/characters/agents/enemies/EnemyTestDemo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/components/characters/agents/enemies/EnemyTestDemo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/environment/MapLoaderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/components/environment/MapLoaderTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/shooting/armoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/components/shooting/armoryTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/components/triggers/TriggerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/components/triggers/TriggerTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/ai/behavior/AndConditionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/ai/behavior/AndConditionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/ai/behavior/NotConditionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/ai/behavior/NotConditionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/ai/behavior/OrConditionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/ai/behavior/OrConditionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/ai/behavior/StateMachineTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/ai/behavior/StateMachineTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/ai/navigation/AlgorithmTime.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/ai/navigation/AlgorithmTime.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/ai/navigation/NavigationFlowTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/ai/navigation/NavigationFlowTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/graph/GraphTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/graph/GraphTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/physics/MapDivisionTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/physics/MapDivisionTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/entity/physics/SteeringTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/entity/physics/SteeringTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/utils/UtilsTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/utils/UtilsTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/bham/bc/view/model/RecordsHandlerTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/com/bham/bd/view/model/RecordsHandlerTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,20 +221,21 @@
     <property name="SONARLINT_PRECOMMIT_ANALYSIS" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resource" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/META-INF" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="SDKs" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
   <component name="RunManager" selected="Application.Main">
     <configuration name="Main" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="com.bham.bc.application.Main" />
+      <option name="MAIN_CLASS_NAME" value="com.bham.bd.application.Main" />
       <module name="BluelandDefenders" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -111,10 +246,21 @@
       <module name="BluelandDefenders" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.bham.bc.application.*" />
+          <option name="PATTERN" value="com.bham.bd.application.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="ArquillianJUnit" factoryName="" nameIsGenerated="true">
+      <option name="arquillianRunConfiguration">
+        <value>
+          <option name="containerStateName" value="" />
+        </value>
+      </option>
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -123,12 +269,12 @@
       <module name="BluelandDefenders" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.bham.bc.entity.physics.*" />
+          <option name="PATTERN" value="com.bham.bd.entity.physics.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="PACKAGE_NAME" value="com.bham.bc.entity.physics" />
-      <option name="MAIN_CLASS_NAME" value="com.bham.bc.entity.physics.MapDivisionTest" />
+      <option name="PACKAGE_NAME" value="com.bham.bd.entity.physics" />
+      <option name="MAIN_CLASS_NAME" value="com.bham.bd.entity.physics.MapDivisionTest" />
       <option name="METHOD_NAME" value="randomNodeTest" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -142,12 +288,14 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.MapDivisionTest.randomNodeTest" />
         <item itemvalue="Application.QuickLaunch" />
         <item itemvalue="JUnit.MapDivisionTest.randomNodeTest" />
+        <item itemvalue="Application.QuickLaunch" />
       </list>
     </recent_temporary>
   </component>
-  <component name="SpellCheckerSettings" BundledDictionaries="0" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" Dictionaries="0" CorrectionsLimit="5" DefaultDictionary="application-level" UseSingleDictionary="true" />
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -177,6 +325,20 @@
       <workItem from="1620572080896" duration="725000" />
       <workItem from="1620581103694" duration="1740000" />
       <workItem from="1620586695977" duration="3251000" />
+      <workItem from="1620820106097" duration="67000" />
+      <workItem from="1620824195253" duration="1393000" />
+      <workItem from="1620825619271" duration="3979000" />
+      <workItem from="1620834724329" duration="123000" />
+      <workItem from="1620836028389" duration="777000" />
+      <workItem from="1620846869108" duration="154000" />
+      <workItem from="1620847828201" duration="90000" />
+      <workItem from="1620892503863" duration="2261000" />
+      <workItem from="1620902837637" duration="2114000" />
+      <workItem from="1620907227461" duration="1162000" />
+      <workItem from="1620908996581" duration="3236000" />
+      <workItem from="1620992996304" duration="41000" />
+      <workItem from="1620994202340" duration="186000" />
+      <workItem from="1621001171299" duration="297000" />
     </task>
     <task id="LOCAL-00001" summary="fix problems">
       <created>1620244817871</created>
@@ -234,14 +396,77 @@
       <option name="project" value="LOCAL" />
       <updated>1620572411273</updated>
     </task>
-    <task id="LOCAL-00009" summary="add javadoc comments to entity package">
-      <created>1620481116290</created>
+    <task id="LOCAL-00009" summary="fix title bar problem">
+      <created>1620817863024</created>
       <option name="number" value="00009" />
       <option name="presentableId" value="LOCAL-00009" />
       <option name="project" value="LOCAL" />
-      <updated>1620481116290</updated>
+      <updated>1620817863024</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00010" summary="fix title bar problem">
+      <created>1620818084131</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1620818084131</updated>
+    </task>
+    <task id="LOCAL-00011" summary="fix title bar problem">
+      <created>1620818306184</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1620818306184</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix title bar problem">
+      <created>1620818437699</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1620818437699</updated>
+    </task>
+    <task id="LOCAL-00013" summary="fix title bar problem">
+      <created>1620819160582</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1620819160582</updated>
+    </task>
+    <task id="LOCAL-00014" summary="fix title bar problem">
+      <created>1620826254615</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1620826254615</updated>
+    </task>
+    <task id="LOCAL-00015" summary="fix title bar problem">
+      <created>1620827402443</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1620827402443</updated>
+    </task>
+    <task id="LOCAL-00016" summary="fix title bar problem">
+      <created>1620896104299</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1620896104299</updated>
+    </task>
+    <task id="LOCAL-00017" summary="fix title bar problem">
+      <created>1620904246956</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1620904246956</updated>
+    </task>
+    <task id="LOCAL-00018" summary="jar">
+      <created>1620904282244</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1620904282244</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -279,40 +504,15 @@
     <MESSAGE value="add javadoc comments to entity package" />
     <MESSAGE value="comments in entity" />
     <MESSAGE value="formalize javadoc comments" />
-    <option name="LAST_COMMIT_MESSAGE" value="formalize javadoc comments" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1620811308722">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="242" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1536.824@0.0.1536.824" timestamp="1620811308722" />
-    <state width="1493" height="196" key="GridCell.Tab.0.bottom" timestamp="1620811154665">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="196" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1620811154665" />
-    <state width="1493" height="196" key="GridCell.Tab.0.center" timestamp="1620811154665">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="196" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1620811154665" />
-    <state width="1493" height="196" key="GridCell.Tab.0.left" timestamp="1620811154665">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="196" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1620811154665" />
-    <state width="1493" height="196" key="GridCell.Tab.0.right" timestamp="1620811154665">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state width="1493" height="196" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1620811154665" />
-    <state x="488" y="230" width="602" height="594" key="find.popup" timestamp="1620811459340">
-      <screen x="0" y="0" width="1536" height="824" />
-    </state>
-    <state x="488" y="230" width="602" height="594" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1620811459340" />
+    <MESSAGE value="fix title bar problem" />
+    <MESSAGE value="jar" />
+    <option name="LAST_COMMIT_MESSAGE" value="jar" />
   </component>
   <component name="XDebuggerManager">
     <pin-to-top-manager>
       <pinned-members>
-        <PinnedItemInfo typeName="com.bham.bc.components.characters.goals.composite.Goal_AttackTarget" fieldName="m_SubGoals" />
-        <PinnedItemInfo typeName="com.bham.bc.entity.ai.UtilityCalculator" fieldName="agent" />
         <PinnedItemInfo />
+        <PinnedItemInfo parentTag="java.util.HashMap$Node" memberName="value" />
       </pinned-members>
     </pin-to-top-manager>
   </component>

@@ -18,8 +18,6 @@ i
 o
 ?src/main/java/com/bham/bc/components/environment/Attribute.java,0\0\00dd928c5f1d46ea676660dea3428bcb108831be
 m
-=src/main/java/com/bham/bc/components/environment/GameMap.java,4\f\4fdf14227c1d4da63194e4b707f24bd24e6d52ca
-m
 =src/main/java/com/bham/bc/components/environment/MapType.java,a\5\a598dde76b346f81953592aa8ebeb033e083bc0c
 m
 =src/main/java/com/bham/bc/components/environment/Tileset.java,9\0\90e2343e2b5e39c9af7cb74e8f935cfe731d45fe
@@ -41,3 +39,5 @@ N
 .idea/libraries/junit_4_12.xml,8\1\81ba925f571c5f146720f02f3e613467e9b4897e
 Q
 !.idea/libraries/json_20190722.xml,4\c\4c9e0092c51954c683731443fb35a05cd4210a51
+Y
+).idea/artifacts/BluelandDefenders_jar.xml,0\7\0751886a567ee3ed090bb95d91417a4df8cbc72c

@@ -1,0 +1,65 @@
+package com.bham.bd.view.model;
+
+import com.bham.bd.view.MenuSession;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
+
+/**
+ * <h1>Background for the Main Menu</h1>
+ *
+ * <p>By default non of the menus have backgrounds, they only have a darker dim over the scene.
+ * This class, however, is used as a separate JavaFX node as a background for the Main Menu.</p>
+ */
+public class MenuBackground extends AnchorPane {
+
+    /**
+     * path of background
+     */
+    private static final String BG_PATH = "img/menu/background.gif";
+
+    /**
+     * Constructs a Stack Pane node with an animated background and particles and initialize.
+     */
+    public MenuBackground() {
+        setWidth(MenuSession.WIDTH);
+        setHeight(MenuSession.HEIGHT);
+        initBackgroundAnimation();
+        initParticleAnimation();
+    }
+
+    /**
+     * Creates a background image animation and adds it to the background layout.
+     * TODO: surround with try-catch
+     */
+    private void initBackgroundAnimation() {
+        try {
+
+        ImageView bgImage = new ImageView(new Image(getClass().getClassLoader().getResourceAsStream(BG_PATH)));
+        bgImage.setFitWidth(getWidth());
+        bgImage.setFitHeight(getHeight());
+
+        getChildren().add(bgImage);
+        }catch (IllegalArgumentException | NullPointerException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * Creates particle animation and adds it to the background layout.
+     * <b>NOTE:</b> to be implemented
+     */
+    private void initParticleAnimation() {}
+
+    /**
+     * Represents a particle used for background animation.
+     * A bunch of respawning particles will be used to create fancy visual effects.
+     *
+     * <b>NOTE:</b> to be implemented
+     */
+    private static class Particle extends Rectangle {
+
+    }
+}
