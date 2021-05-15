@@ -139,7 +139,6 @@ To get a local copy up and running follow these simple steps.
   - Shooting:
   
     - [default-bullet.png]( https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
-    -
   - Characters
   
     - [nova, player, shooter, splitter, tank, teaser, trapper](https://gamesupply.itch.io/ultimate-space-game-mega-asset-package)
